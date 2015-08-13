@@ -1,0 +1,2 @@
+[DBG_DETAIL]--[test begin]--[test.c:23]
+[DBG_DETAIL]--[test end]--[test.c:44]

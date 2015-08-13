@@ -1,0 +1,29 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  debug_log.h
+ *
+ *    Description:  
+ *
+ *        Version:  1.0
+ *        Created:  06/25/2015 02:42:15 PM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  alan lin (), a1an1in@sina.com
+ *   Organization:  
+ *
+ * =====================================================================================
+ */
+
+#ifndef __DEBUG_LOG_H__
+#define __DEBUG_LOG_H__
+#include <pthread.h>
+
+typedef struct debug_log_prive{
+	int fd;
+	pthread_mutex_t log_file_lock;
+}debug_log_prive_t;
+void log_print_regester();
+
+#endif

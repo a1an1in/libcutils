@@ -1,0 +1,6 @@
+#ifndef __MODULE_REGESTER_H__
+#define __MODULE_REGESTER_H__
+#include "container_modules.h"
+#include "allocator_sysalloc.h"
+void register_modules();
+#endif
