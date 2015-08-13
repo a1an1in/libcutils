@@ -16,7 +16,7 @@ allocator_t *allocator_creator(uint8_t allocator_type)
 
 	return p;
 }
-void allocator_cds_init(allocator_t * alloc,
+void allocator_ctr_init(allocator_t * alloc,
 		uint32_t slab_array_max_num, uint32_t data_min_size,
 		uint32_t mempool_capacity)
 {

@@ -30,8 +30,3 @@
 
 # Debug files
 *.dSYM/
-
-*.swn
-*.swo
-*.c~
-*.cc

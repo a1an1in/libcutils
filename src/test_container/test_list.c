@@ -12,7 +12,7 @@ int test_list(void)
 	 *allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
 	 */
 	allocator = allocator_creator(ALLOCATOR_TYPE_CDS_MALLOC);
-	allocator_cds_init(allocator, 0, 0, 1024);
+	allocator_ctr_init(allocator, 0, 0, 1024);
 
 	dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
 

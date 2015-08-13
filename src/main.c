@@ -29,7 +29,7 @@ void test_container()
 	 */
 	/*
 	 *dbg_str(DBG_DETAIL,"test_cds_alloc");
-	 *test_cds_alloc();
+	 *test_ctr_alloc();
 	 */
 }
 int main()
