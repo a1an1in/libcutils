@@ -1,6 +1,0 @@
-#ifndef __CONTAINER_MODULES__H__
-#define __CONTAINER_MODULES__H__
-#include "container_list.h"
-#include "container_rbtree_map.h"
-#include "container_hashmap.h"
-#endif
