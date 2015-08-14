@@ -3,8 +3,8 @@
 #include "libdbg/libdbg_register_modules.h"
 #include "liballoc/liballoc_register_modules.h"
 #include "libcontainer/libcontainer_register_modules.h"
-#include "test/test_container.h"
-#include "test/test_datastructure.h"
+#include "libcontainer/test_container.h"
+#include "libdatastructure/test_datastructure.h"
 
 debugger_t *debugger_gp;
 
@@ -38,7 +38,10 @@ void test_container()
 }
 void test_datastructure()
 {
-	test_datastructure_hashlist();
+	/*
+	 *test_datastructure_hashlist();
+	 */
+	test_datastructure_link_list();
 }
 int main()
 {

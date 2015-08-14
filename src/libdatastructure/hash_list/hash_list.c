@@ -20,7 +20,7 @@
 #include <assert.h>
 #include "libdbg/debug.h"
 #include "libdatastructure/hash_list.h"
-#include "memory_management.h"
+#include "libdatastructure/memory_management.h"
 
 int hash_map_init(hash_map_t **hmap,
 		uint32_t key_size,
