@@ -29,6 +29,28 @@ typedef struct pair{
 	uint8_t data[1];
 }pair_t;
 
+static inline pair_t * create_pair(int key_len,int value_len)
+{
+	pair_t *p;
+	p = (pair_t *)malloc(sizeof(pair_t) + key_len + value_len);
+	p->key_len = key_len;
+	p->value_len = value_len;
+	p->data_len = key_len + value_len;
+	return p;
+}
+static inline void make_pair(pair_t *p,void *key,void *value)
+{
+	memcpy(p->data,key,p->key_len);
+	memcpy(p->data + p->key_len,value,p->value_len);
+	dbg_buf(DBG_CONTAINER_DETAIL,"make pair:",p->data,p->data_len);
+}
+static inline int destroy_pair(pair_t *p)
+{
+	free(p);
+	p = NULL;
+	return 0;
+}
+
 typedef struct iterator{
 	union{
 		struct list_head *list_head_p;

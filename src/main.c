@@ -3,6 +3,8 @@
 #include "libdbg/libdbg_register_modules.h"
 #include "liballoc/liballoc_register_modules.h"
 #include "libcontainer/libcontainer_register_modules.h"
+#include "test/test_container.h"
+#include "test/test_datastructure.h"
 
 debugger_t *debugger_gp;
 
@@ -14,7 +16,9 @@ void register_all_lib_modules()
 }
 void test_container()
 {
-	test_list();
+	/*
+	 *test_list();
+	 */
 	/*
 	 *dbg_str(DBG_DETAIL,"test_rbtree_map");
 	 *test_rbtree_map();
@@ -32,6 +36,10 @@ void test_container()
 	 *test_ctr_alloc();
 	 */
 }
+void test_datastructure()
+{
+	test_datastructure_hashlist();
+}
 int main()
 {
 	int ret = 0;
@@ -42,6 +50,7 @@ int main()
 	debugger_init(debugger_gp);
 
 	test_container();
+	test_datastructure();
 	dbg_str(DBG_DETAIL,"test begin");
 	dbg_str(DBG_DETAIL,"testlist");
 	dbg_str(DBG_DETAIL,"test end");

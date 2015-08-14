@@ -4,6 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+A	src/test_datastructure/test_hashmap.c	/^struct A{$/;"	s	file:
 ALLOCATOR_TYPE_CDS_MALLOC	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_CDS_MALLOC,$/;"	e	enum:allocator_type
 ALLOCATOR_TYPE_LAST	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_LAST$/;"	e	enum:allocator_type
 ALLOCATOR_TYPE_SYS_MALLOC	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_SYS_MALLOC = 0,$/;"	e	enum:allocator_type
@@ -22,9 +23,11 @@ CC	src/libs/libcontainer/hash_map/Makefile	/^CC = gcc$/;"	m
 CC	src/libs/libcontainer/list/Makefile	/^CC = gcc$/;"	m
 CC	src/libs/libcontainer/rbtree_map/Makefile	/^CC = gcc$/;"	m
 CC	src/libs/libcontainer/vector/Makefile	/^CC = gcc$/;"	m
+CC	src/libs/libdatastructure/hash_list/Makefile	/^CC = gcc$/;"	m
 CC	src/libs/libdbg/Makefile	/^CC = gcc$/;"	m
 CC	src/libs/libini/Makefile	/^CC = gcc$/;"	m
 CC	src/test_container/Makefile	/^CC = gcc$/;"	m
+CC	src/test_datastructure/Makefile	/^CC = gcc$/;"	m
 CONTAINER_TYPE_HASH_MAP	src/include/libcontainer/container.h	/^	CONTAINER_TYPE_HASH_MAP,$/;"	e	enum:container_type
 CONTAINER_TYPE_LIST	src/include/libcontainer/container.h	/^	CONTAINER_TYPE_LIST,$/;"	e	enum:container_type
 CONTAINER_TYPE_MAX_NUM	src/include/libcontainer/container.h	/^	CONTAINER_TYPE_MAX_NUM$/;"	e	enum:container_type
@@ -100,19 +103,24 @@ GetCompilationInfoForFile	.ycm_extra_conf.py	/^def GetCompilationInfoForFile( fi
 HIGHLIGHT_FLAG	src/include/libdbg/debug.h	116;"	d
 HLIST_HEAD	src/include/liballoc/list.h	632;"	d
 HLIST_HEAD	src/include/libcontainer/list.h	641;"	d
+HLIST_HEAD	src/include/libdatastructure/list.h	632;"	d
 HLIST_HEAD	src/include/libdbg/list.h	641;"	d
 HLIST_HEAD_INIT	src/include/liballoc/list.h	631;"	d
 HLIST_HEAD_INIT	src/include/libcontainer/list.h	640;"	d
+HLIST_HEAD_INIT	src/include/libdatastructure/list.h	631;"	d
 HLIST_HEAD_INIT	src/include/libdbg/list.h	640;"	d
 INCLUDES	Makefile	/^export INCLUDES = -I $(PROJECT_PATH)\/src\/include$/;"	m
 INIT_HLIST_HEAD	src/include/liballoc/list.h	633;"	d
 INIT_HLIST_HEAD	src/include/libcontainer/list.h	642;"	d
+INIT_HLIST_HEAD	src/include/libdatastructure/list.h	633;"	d
 INIT_HLIST_HEAD	src/include/libdbg/list.h	642;"	d
 INIT_HLIST_NODE	src/include/liballoc/list.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
 INIT_HLIST_NODE	src/include/libcontainer/list.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
+INIT_HLIST_NODE	src/include/libdatastructure/list.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
 INIT_HLIST_NODE	src/include/libdbg/list.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f
 INIT_LIST_HEAD	src/include/liballoc/list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f
 INIT_LIST_HEAD	src/include/libcontainer/list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f
+INIT_LIST_HEAD	src/include/libdatastructure/list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f
 INIT_LIST_HEAD	src/include/libdbg/list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f
 INI_INVALID_KEY	src/libs/libini/iniparser.c	418;"	d	file:
 IsHeaderFile	.ycm_extra_conf.py	/^def IsHeaderFile( filename ):$/;"	f
@@ -126,20 +134,26 @@ LD	src/libs/libcontainer/hash_map/Makefile	/^LD = ld$/;"	m
 LD	src/libs/libcontainer/list/Makefile	/^LD = ld$/;"	m
 LD	src/libs/libcontainer/rbtree_map/Makefile	/^LD = ld$/;"	m
 LD	src/libs/libcontainer/vector/Makefile	/^LD = ld$/;"	m
+LD	src/libs/libdatastructure/hash_list/Makefile	/^LD = ld$/;"	m
 LD	src/libs/libdbg/Makefile	/^LD = ld$/;"	m
 LD	src/libs/libini/Makefile	/^LD = ld$/;"	m
 LD	src/test_container/Makefile	/^LD = ld$/;"	m
+LD	src/test_datastructure/Makefile	/^LD = ld$/;"	m
 LIST_HEAD	src/include/liballoc/list.h	43;"	d
 LIST_HEAD	src/include/libcontainer/list.h	52;"	d
+LIST_HEAD	src/include/libdatastructure/list.h	43;"	d
 LIST_HEAD	src/include/libdbg/list.h	52;"	d
 LIST_HEAD_INIT	src/include/liballoc/list.h	41;"	d
 LIST_HEAD_INIT	src/include/libcontainer/list.h	50;"	d
+LIST_HEAD_INIT	src/include/libdatastructure/list.h	41;"	d
 LIST_HEAD_INIT	src/include/libdbg/list.h	50;"	d
 LIST_POISON1	src/include/liballoc/list.h	24;"	d
 LIST_POISON1	src/include/libcontainer/list.h	33;"	d
+LIST_POISON1	src/include/libdatastructure/list.h	24;"	d
 LIST_POISON1	src/include/libdbg/list.h	33;"	d
 LIST_POISON2	src/include/liballoc/list.h	25;"	d
 LIST_POISON2	src/include/libcontainer/list.h	34;"	d
+LIST_POISON2	src/include/libdatastructure/list.h	25;"	d
 LIST_POISON2	src/include/libdbg/list.h	34;"	d
 MAXVALSZ	src/libs/libini/iniparser.c	157;"	d	file:
 MAX_BUFFER_STR_LEN	src/libs/libdbg/debug.c	177;"	d	file:
@@ -185,9 +199,11 @@ OBJS	src/libs/libcontainer/hash_map/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS)
 OBJS	src/libs/libcontainer/list/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libs/libcontainer/rbtree_map/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libs/libcontainer/vector/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libs/libdatastructure/hash_list/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libs/libdbg/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libs/libini/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/test_container/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/test_datastructure/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OPEN_DEBUG	src/include/libdbg/debug.h	139;"	d
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
 PURPLE	src/include/libdbg/debug.h	110;"	d
@@ -210,9 +226,11 @@ SRCS	src/libs/libcontainer/hash_map/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libs/libcontainer/list/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libs/libcontainer/rbtree_map/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libs/libcontainer/vector/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libs/libdatastructure/hash_list/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libs/libdbg/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libs/libini/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/test_container/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/test_datastructure/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 TARGET	Makefile	/^TARGET = test$/;"	m
 TARGET	src/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libs/liballoc/Makefile	/^TARGET = build_in.o$/;"	m
@@ -223,14 +241,17 @@ TARGET	src/libs/libcontainer/hash_map/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libs/libcontainer/list/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libs/libcontainer/rbtree_map/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libs/libcontainer/vector/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libs/libdatastructure/hash_list/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libs/libdbg/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libs/libini/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/test_container/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/test_datastructure/Makefile	/^TARGET = build_in.o$/;"	m
 WHITE	src/include/libdbg/debug.h	112;"	d
 YELLOW	src/include/libdbg/debug.h	108;"	d
 _INIPARSER_H_	src/include/libini/iniparser.h	32;"	d
 _LINUX_LIST_H	src/include/liballoc/list.h	2;"	d
 _LINUX_LIST_H	src/include/libcontainer/list.h	2;"	d
+_LINUX_LIST_H	src/include/libdatastructure/list.h	2;"	d
 _LINUX_LIST_H	src/include/libdbg/list.h	2;"	d
 _LINUX_RBTREE_H	src/include/libcontainer/rbtree.h	111;"	d
 __ALLOCATOR_CDS_MEMPOOL_LIST_H__	src/include/liballoc/allocator_ctr_mempool_list.h	19;"	d
@@ -252,33 +273,56 @@ __DEBUG_LOG_H__	src/include/libdbg/debug_log.h	20;"	d
 __DEBUG_NETWORK_H__	src/include/libdbg/debug_network.h	19;"	d
 __DEBUG_STRING_H__	src/include/libdbg/debug_string.h	20;"	d
 __HASHMAP_H__	src/include/libcontainer/container_hash_map.h	19;"	d
+__HASH_LIST_H__	src/include/libdatastructure/hash_list.h	19;"	d
+__HASH_LIST_ST_H__	src/include/libdatastructure/hash_list_struct.h	19;"	d
 __INC_FILES_H__	src/include/libcontainer/inc_files.h	2;"	d
 __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
 __KEY_CMP_FPT__	src/include/libcontainer/container_hash_map.h	25;"	d
 __KEY_CMP_FPT__	src/include/libcontainer/container_rbtree_map.h	8;"	d
+__KEY_CMP_FPT__	src/include/libdatastructure/hash_list_struct.h	35;"	d
+__MEMORY_MANAGEMENT__	src/libs/libdatastructure/hash_list/memory_management.h	2;"	d
 __MODULE_REGESTER_H__	src/include/liballoc/liballoc_register_modules.h	2;"	d
 __MODULE_REGESTER_H__	src/include/libcontainer/libcontainer_register_modules.h	2;"	d
-__TEST_H__	src/include/libcontainer/test.h	19;"	d
+__TEST_H__	src/include/test/test_container.h	19;"	d
+__hash_map_begin	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_begin(container_t *ct)$/;"	f
+__hash_map_delete	src/libs/libcontainer/hash_map/container_hash_map.c	/^int __hash_map_delete(container_t *ct, iterator_t it)$/;"	f
+__hash_map_destroy	src/libs/libcontainer/hash_map/container_hash_map.c	/^int __hash_map_destroy(container_t *ct)$/;"	f
+__hash_map_end	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_end(container_t *ct)$/;"	f
+__hash_map_init	src/libs/libcontainer/hash_map/container_hash_map.c	/^int __hash_map_init(container_t *ct)$/;"	f
+__hash_map_insert	src/libs/libcontainer/hash_map/container_hash_map.c	/^int __hash_map_insert(container_t *ct, void *data)$/;"	f
+__hash_map_iterator_equal	src/libs/libcontainer/hash_map/container_hash_map.c	/^int __hash_map_iterator_equal(iterator_t it1,iterator_t it2)$/;"	f
+__hash_map_iterator_get_pointer	src/libs/libcontainer/hash_map/container_hash_map.c	/^void *__hash_map_iterator_get_pointer(iterator_t it)$/;"	f
+__hash_map_iterator_init	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_iterator_init(iterator_t *it,$/;"	f
+__hash_map_iterator_next	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_iterator_next(iterator_t it)$/;"	f
+__hash_map_iterator_prev	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_iterator_prev(iterator_t it)$/;"	f
+__hash_map_search	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_search(container_t *ct, void *key)$/;"	f
 __hlist_del	src/include/liballoc/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f
 __hlist_del	src/include/libcontainer/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f
+__hlist_del	src/include/libdatastructure/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f
 __hlist_del	src/include/libdbg/list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f
 __list_add	src/include/liballoc/list.h	/^static inline void __list_add(struct list_head *new,$/;"	f
 __list_add	src/include/libcontainer/list.h	/^static inline void __list_add(struct list_head *new,$/;"	f
+__list_add	src/include/libdatastructure/list.h	/^static inline void __list_add(struct list_head *new,$/;"	f
 __list_add	src/include/libdbg/list.h	/^static inline void __list_add(struct list_head *new,$/;"	f
 __list_add_rcu	src/include/liballoc/list.h	/^static inline void __list_add_rcu(struct list_head * new,$/;"	f
 __list_add_rcu	src/include/libcontainer/list.h	/^static inline void __list_add_rcu(struct list_head * new,$/;"	f
+__list_add_rcu	src/include/libdatastructure/list.h	/^static inline void __list_add_rcu(struct list_head * new,$/;"	f
 __list_add_rcu	src/include/libdbg/list.h	/^static inline void __list_add_rcu(struct list_head * new,$/;"	f
 __list_del	src/include/liballoc/list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f
 __list_del	src/include/libcontainer/list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f
+__list_del	src/include/libdatastructure/list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f
 __list_del	src/include/libdbg/list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f
 __list_for_each	src/include/liballoc/list.h	406;"	d
 __list_for_each	src/include/libcontainer/list.h	415;"	d
+__list_for_each	src/include/libdatastructure/list.h	406;"	d
 __list_for_each	src/include/libdbg/list.h	415;"	d
 __list_for_each_rcu	src/include/liballoc/list.h	561;"	d
 __list_for_each_rcu	src/include/libcontainer/list.h	570;"	d
+__list_for_each_rcu	src/include/libdatastructure/list.h	561;"	d
 __list_for_each_rcu	src/include/libdbg/list.h	570;"	d
 __list_splice	src/include/liballoc/list.h	/^static inline void __list_splice(struct list_head *list,$/;"	f
 __list_splice	src/include/libcontainer/list.h	/^static inline void __list_splice(struct list_head *list,$/;"	f
+__list_splice	src/include/libdatastructure/list.h	/^static inline void __list_splice(struct list_head *list,$/;"	f
 __list_splice	src/include/libdbg/list.h	/^static inline void __list_splice(struct list_head *list,$/;"	f
 __rb_erase_color	src/libs/libcontainer/rbtree_map/rbtree.c	/^static void __rb_erase_color(struct rb_node *node, struct rb_node *parent,$/;"	f	file:
 __rb_rotate_left	src/libs/libcontainer/rbtree_map/rbtree.c	/^static void __rb_rotate_left(struct rb_node *node, struct rb_root *root)$/;"	f	file:
@@ -292,17 +336,21 @@ _offsetof	src/include/liballoc/list.h	14;"	d
 _offsetof	src/include/libcontainer/list.h	11;"	d
 _offsetof	src/include/libcontainer/list.h	12;"	d
 _offsetof	src/include/libcontainer/list.h	14;"	d
+_offsetof	src/include/libdatastructure/list.h	11;"	d
+_offsetof	src/include/libdatastructure/list.h	12;"	d
+_offsetof	src/include/libdatastructure/list.h	14;"	d
 _offsetof	src/include/libdbg/list.h	11;"	d
 _offsetof	src/include/libdbg/list.h	12;"	d
 _offsetof	src/include/libdbg/list.h	14;"	d
+a	src/test_datastructure/test_hashmap.c	/^	int a;$/;"	m	struct:A	file:
 alloc	src/include/liballoc/allocator.h	/^	void *(*alloc)(allocator_t *alloc,uint32_t size);$/;"	m	struct:allocator_operations
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations *alloc_ops;$/;"	m	struct:allocator	typeref:struct:allocator::allocator_operations
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations alloc_ops;$/;"	m	struct:allocator_module	typeref:struct:allocator_module::allocator_operations
 allocator	src/include/liballoc/allocator.h	/^typedef struct allocator{$/;"	s
 allocator	src/include/libcontainer/container.h	/^	allocator_t *allocator;$/;"	m	struct:container
-allocator_cds_alloc_register	src/libs/liballoc/container_alloc/allocator_cds_alloc.c	/^int allocator_cds_alloc_register(){$/;"	f
-allocator_cds_init	src/libs/liballoc/allocator.c	/^void allocator_cds_init(allocator_t * alloc,$/;"	f
+allocator_cds_alloc_register	src/libs/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_cds_alloc_register(){$/;"	f
 allocator_creator	src/libs/liballoc/allocator.c	/^allocator_t *allocator_creator(uint8_t allocator_type)$/;"	f
+allocator_ctr_init	src/libs/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f
 allocator_destroy	src/libs/liballoc/allocator.c	/^void allocator_destroy(allocator_t * alloc)$/;"	f
 allocator_mem_alloc	src/libs/liballoc/allocator.c	/^void *allocator_mem_alloc(allocator_t * alloc,uint32_t size)$/;"	f
 allocator_mem_free	src/libs/liballoc/allocator.c	/^void allocator_mem_free(allocator_t * alloc,void *addr)$/;"	f
@@ -316,22 +364,26 @@ allocator_t	src/include/liballoc/allocator.h	/^}allocator_t;$/;"	t	typeref:struc
 allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m	struct:allocator
 allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m	struct:allocator_module
 allocator_type	src/include/liballoc/allocator.h	/^enum allocator_type{$/;"	g
+b	src/test_datastructure/test_hashmap.c	/^	int b;$/;"	m	struct:A	file:
 begin	src/include/libcontainer/container.h	/^	iterator_t (*begin)(container_t *ct);$/;"	m	struct:container_operations
 begin	src/include/libcontainer/container.h	/^	struct iterator begin,end,cur;$/;"	m	struct:container	typeref:struct:container::iterator
 begin	src/include/libcontainer/container.h	/^	struct iterator begin,end;$/;"	m	struct:container_module	typeref:struct:container_module::iterator
+begin	src/include/libdatastructure/hash_list_struct.h	/^	hash_map_pos_t begin,end;$/;"	m	struct:hash_map_s
 bucket_pos	src/include/libcontainer/container_hash_map.h	/^	uint32_t bucket_pos;\/\/bucket pos$/;"	m	struct:hash_map_pos_info
+bucket_pos	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t bucket_pos;\/\/bucket pos$/;"	m	struct:hash_map_pos_info
 bucket_size	src/include/libcontainer/container_hash_map.h	/^	uint32_t bucket_size;$/;"	m	struct:hash_map_priv_info
+bucket_size	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t bucket_size;$/;"	m	struct:hash_map_s
 business_debug_level	src/include/libdbg/debug.h	/^	uint8_t business_debug_level;$/;"	m	struct:debug_business
 business_switch	src/include/libdbg/debug.h	/^	uint8_t business_switch;$/;"	m	struct:debug_business
 c_ops	src/include/libcontainer/container.h	/^	struct container_operations c_ops;$/;"	m	struct:container_module	typeref:struct:container_module::container_operations
 c_ops_p	src/include/libcontainer/container.h	/^	struct container_operations *c_ops_p;$/;"	m	struct:container	typeref:struct:container::container_operations
 capacity	src/include/libcontainer/container_vector.h	/^	uint32_t capacity;$/;"	m	struct:vector_priv_info
 cds_alloc	src/include/liballoc/allocator.h	/^		cds_alloc_t cds_alloc;$/;"	m	union:allocator::__anon1
-cds_alloc_alloc	src/libs/liballoc/container_alloc/allocator_cds_alloc.c	/^void *cds_alloc_alloc(allocator_t *alloc,uint32_t size)$/;"	f
-cds_alloc_destroy	src/libs/liballoc/container_alloc/allocator_cds_alloc.c	/^void cds_alloc_destroy(allocator_t *alloc)$/;"	f
-cds_alloc_free	src/libs/liballoc/container_alloc/allocator_cds_alloc.c	/^void cds_alloc_free(allocator_t *alloc,void *addr)$/;"	f
-cds_alloc_info	src/libs/liballoc/container_alloc/allocator_cds_alloc.c	/^void cds_alloc_info(allocator_t *alloc)$/;"	f
-cds_alloc_init	src/libs/liballoc/container_alloc/allocator_cds_alloc.c	/^int cds_alloc_init(allocator_t *alloc)$/;"	f
+cds_alloc_alloc	src/libs/liballoc/container_alloc/allocator_ctr_alloc.c	/^void *cds_alloc_alloc(allocator_t *alloc,uint32_t size)$/;"	f
+cds_alloc_destroy	src/libs/liballoc/container_alloc/allocator_ctr_alloc.c	/^void cds_alloc_destroy(allocator_t *alloc)$/;"	f
+cds_alloc_free	src/libs/liballoc/container_alloc/allocator_ctr_alloc.c	/^void cds_alloc_free(allocator_t *alloc,void *addr)$/;"	f
+cds_alloc_info	src/libs/liballoc/container_alloc/allocator_ctr_alloc.c	/^void cds_alloc_info(allocator_t *alloc)$/;"	f
+cds_alloc_init	src/libs/liballoc/container_alloc/allocator_ctr_alloc.c	/^int cds_alloc_init(allocator_t *alloc)$/;"	f
 cds_alloc_s	src/include/liballoc/allocator_ctr_alloc.h	/^typedef struct cds_alloc_s{$/;"	s
 cds_alloc_t	src/include/liballoc/allocator_ctr_alloc.h	/^}cds_alloc_t;$/;"	t	typeref:struct:cds_alloc_s
 cds_mem_pool	src/include/liballoc/allocator_ctr_alloc.h	/^typedef struct cds_mem_pool{$/;"	s
@@ -368,6 +420,7 @@ container_of	src/include/liballoc/list.h	18;"	d
 container_of	src/include/libcontainer/list.h	18;"	d
 container_of	src/include/libcontainer/list.h	19;"	d
 container_of	src/include/libcontainer/list.h	23;"	d
+container_of	src/include/libdatastructure/list.h	18;"	d
 container_of	src/include/libdbg/list.h	18;"	d
 container_of	src/include/libdbg/list.h	19;"	d
 container_of	src/include/libdbg/list.h	23;"	d
@@ -387,19 +440,24 @@ container_vector_init	src/libs/libcontainer/container.c	/^int container_vector_i
 container_vector_register	src/libs/libcontainer/vector/container_vector.c	/^int container_vector_register(){$/;"	f
 count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct:cds_mem_pool_head_list
 count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct:slab_head_list
+create_pair	src/include/libdatastructure/hash_list.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
 create_pair	src/libs/libcontainer/container.c	/^pair_t * create_pair(int key_len,int value_len)$/;"	f
 cur	src/include/libcontainer/container.h	/^	struct iterator begin,end,cur;$/;"	m	struct:container	typeref:struct:container::
 d	src/include/libdbg/debug.h	/^	dictionary *d;$/;"	m	struct:debugger
 data	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t data[0];$/;"	m	struct:slab
 data	src/include/libcontainer/container.h	/^	uint8_t data[1];$/;"	m	struct:pair
 data	src/include/libcontainer/container_list.h	/^	uint8_t data[1];$/;"	m	struct:container_list
+data	src/include/libdatastructure/hash_list_struct.h	/^	uint8_t data[1];$/;"	m	struct:pair
 data_len	src/include/libcontainer/container.h	/^	uint16_t data_len;$/;"	m	struct:pair
+data_len	src/include/libdatastructure/hash_list_struct.h	/^	uint16_t data_len;$/;"	m	struct:pair
 data_min_size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t data_min_size;$/;"	m	struct:cds_alloc_s
 data_size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t data_size;$/;"	m	struct:slab
 data_size	src/include/libcontainer/container_hash_map.h	/^	uint32_t data_size;$/;"	m	struct:hash_map_priv_info
 data_size	src/include/libcontainer/container_list.h	/^	uint32_t data_size; \/\/the size of data in list$/;"	m	struct:list_priv_info
 data_size	src/include/libcontainer/container_rbtree_map.h	/^	uint32_t data_size;$/;"	m	struct:rbtree_map_priv_info
 data_size	src/include/libcontainer/container_vector.h	/^	uint32_t data_size;$/;"	m	struct:vector_priv_info
+data_size	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t data_size;$/;"	m	struct:hash_map_node
+data_size	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t data_size;$/;"	m	struct:hash_map_s
 database	.ycm_extra_conf.py	/^  database = None$/;"	v
 database	.ycm_extra_conf.py	/^  database = ycm_core.CompilationDatabase( compilation_database_folder )$/;"	v
 dbg_buf	src/include/libdbg/debug.h	143;"	d
@@ -451,7 +509,9 @@ debugger_set_level_infos	src/libs/libdbg/debug.c	/^void debugger_set_level_infos
 debugger_t	src/include/libdbg/debug.h	/^typedef struct debugger debugger_t;$/;"	t	typeref:struct:debugger
 debugger_type	src/include/libdbg/debug.h	/^	uint8_t debugger_type;$/;"	m	struct:debugger
 debugger_type	src/include/libdbg/debug.h	/^enum debugger_type{$/;"	g
-default_hash_func	src/libs/libcontainer/hash_map/container_hash_map.c	/^uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)$/;"	f
+default_hash_func	src/include/libdatastructure/hash_list.h	/^static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)$/;"	f
+default_hash_func	src/libs/libcontainer/hash_map/container_hash_map.c	/^static uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)$/;"	f	file:
+default_key_cmp_func	src/include/libdatastructure/hash_list.h	/^static inline int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f
 default_key_cmp_func	src/libs/libcontainer/hash_map/container_hash_map.c	/^static int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f	file:
 default_key_cmp_func	src/libs/libcontainer/rbtree_map/container_rbtree_map.c	/^static int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f	file:
 del	src/include/libcontainer/container.h	/^	int (*del)(container_t *ct, iterator_t it);$/;"	m	struct:container_operations
@@ -459,6 +519,7 @@ depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t depth;$/;"	m	struct
 destroy	src/include/liballoc/allocator.h	/^	void (*destroy)(allocator_t * alloc);$/;"	m	struct:allocator_operations
 destroy	src/include/libcontainer/container.h	/^	int (*destroy)(container_t *ct);$/;"	m	struct:container_operations
 destroy	src/include/libdbg/debug.h	/^	void (*destroy)(debugger_t *debugger);$/;"	m	struct:debugger_opperations
+destroy_pair	src/include/libdatastructure/hash_list.h	/^static inline int destroy_pair(pair_t *p)$/;"	f
 destroy_pair	src/libs/libcontainer/container.c	/^int destroy_pair(pair_t *p)$/;"	f
 dictionary	src/include/libini/iniparser.h	/^} dictionary ;$/;"	t	typeref:struct:_dictionary_
 dictionary_del	src/libs/libini/iniparser.c	/^static void dictionary_del(dictionary * d)$/;"	f	file:
@@ -472,109 +533,146 @@ empty_pool	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head *empty
 end	src/include/libcontainer/container.h	/^	iterator_t (*end)(container_t *ct);$/;"	m	struct:container_operations
 end	src/include/libcontainer/container.h	/^	struct iterator begin,end,cur;$/;"	m	struct:container	typeref:struct:container::
 end	src/include/libcontainer/container.h	/^	struct iterator begin,end;$/;"	m	struct:container_module	typeref:struct:container_module::
+end	src/include/libdatastructure/hash_list_struct.h	/^	hash_map_pos_t begin,end;$/;"	m	struct:hash_map_s
 equal	src/include/libcontainer/container.h	/^	int (*equal)(iterator_t it1,iterator_t it2);$/;"	m	struct:iterator_operations
 first	src/include/liballoc/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
 first	src/include/libcontainer/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
+first	src/include/libdatastructure/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
 first	src/include/libdbg/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
 flags	.ycm_extra_conf.py	/^flags = [$/;"	v
 fp	src/include/libdbg/debug_log.h	/^	FILE *fp;$/;"	m	struct:debug_log_prive
 free	src/include/liballoc/allocator.h	/^	void (*free)(allocator_t *alloc,void *addr);$/;"	m	struct:allocator_operations
 free_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **free_slabs;$/;"	m	struct:cds_alloc_s	typeref:struct:cds_alloc_s::list_head
-get_real_alloc_mem_size	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)$/;"	f
+get_real_alloc_mem_size	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)$/;"	f
 hash	src/include/libini/iniparser.h	/^	unsigned *hash;$/;"	m	struct:_dictionary_
 hash_func	src/include/libcontainer/container_hash_map.h	/^	hash_func_fpt hash_func;$/;"	m	struct:hash_map_priv_info
+hash_func	src/include/libdatastructure/hash_list_struct.h	/^	hash_func_fpt hash_func;$/;"	m	struct:hash_map_s
 hash_func_fpt	src/include/libcontainer/container_hash_map.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
-hash_map_begin	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t hash_map_begin(container_t *ct)$/;"	f
-hash_map_delete	src/libs/libcontainer/hash_map/container_hash_map.c	/^int hash_map_delete(container_t *ct, iterator_t it)$/;"	f
-hash_map_destroy	src/libs/libcontainer/hash_map/container_hash_map.c	/^int hash_map_destroy(container_t *ct)$/;"	f
-hash_map_end	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t hash_map_end(container_t *ct)$/;"	f
-hash_map_init	src/libs/libcontainer/hash_map/container_hash_map.c	/^int hash_map_init(container_t *ct)$/;"	f
-hash_map_insert	src/libs/libcontainer/hash_map/container_hash_map.c	/^int hash_map_insert(container_t *ct, void *data)$/;"	f
-hash_map_iterator_equal	src/libs/libcontainer/hash_map/container_hash_map.c	/^int hash_map_iterator_equal(iterator_t it1,iterator_t it2)$/;"	f
-hash_map_iterator_get_pointer	src/libs/libcontainer/hash_map/container_hash_map.c	/^void *hash_map_iterator_get_pointer(iterator_t it)$/;"	f
-hash_map_iterator_init	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t hash_map_iterator_init(iterator_t *it,$/;"	f
-hash_map_iterator_next	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t hash_map_iterator_next(iterator_t it)$/;"	f
-hash_map_iterator_prev	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t hash_map_iterator_prev(iterator_t it)$/;"	f
+hash_func_fpt	src/include/libdatastructure/hash_list_struct.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
+hash_map_begin	src/libs/libdatastructure/hash_list/hash_list.c	/^hash_map_pos_t hash_map_begin(hash_map_t *hmap)$/;"	f
+hash_map_delete	src/libs/libdatastructure/hash_list/hash_list.c	/^int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)$/;"	f
+hash_map_destroy	src/libs/libdatastructure/hash_list/hash_list.c	/^int hash_map_destroy(hash_map_t *hmap)$/;"	f
+hash_map_end	src/libs/libdatastructure/hash_list/hash_list.c	/^hash_map_pos_t hash_map_end(hash_map_t *hmap)$/;"	f
+hash_map_for_each	src/libs/libdatastructure/hash_list/hash_list.c	/^void hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))$/;"	f
+hash_map_init	src/libs/libdatastructure/hash_list/hash_list.c	/^int hash_map_init(hash_map_t **hmap,$/;"	f
+hash_map_insert	src/libs/libdatastructure/hash_list/hash_list.c	/^int hash_map_insert(hash_map_t *hmap,void *data)$/;"	f
 hash_map_node	src/include/libcontainer/container_hash_map.h	/^struct hash_map_node {$/;"	s
+hash_map_node	src/include/libdatastructure/hash_list_struct.h	/^struct hash_map_node {$/;"	s
 hash_map_pos	src/include/libcontainer/container.h	/^		hash_map_pos_t hash_map_pos;$/;"	m	union:iterator::__anon2
+hash_map_pos_equal	src/libs/libdatastructure/hash_list/hash_list.c	/^int hash_map_pos_equal(hash_map_pos_t pos1,hash_map_pos_t pos2)$/;"	f
+hash_map_pos_get_pointer	src/libs/libdatastructure/hash_list/hash_list.c	/^void *hash_map_pos_get_pointer(hash_map_pos_t pos)$/;"	f
 hash_map_pos_info	src/include/libcontainer/container_hash_map.h	/^typedef struct hash_map_pos_info{$/;"	s
+hash_map_pos_info	src/include/libdatastructure/hash_list_struct.h	/^typedef struct hash_map_pos_info{$/;"	s
+hash_map_pos_init	src/libs/libdatastructure/hash_list/hash_list.c	/^hash_map_pos_t hash_map_pos_init(hash_map_pos_t *pos,$/;"	f
+hash_map_pos_next	src/libs/libdatastructure/hash_list/hash_list.c	/^hash_map_pos_t hash_map_pos_next(hash_map_pos_t pos)$/;"	f
 hash_map_pos_t	src/include/libcontainer/container_hash_map.h	/^}hash_map_pos_t;$/;"	t	typeref:struct:hash_map_pos_info
+hash_map_pos_t	src/include/libdatastructure/hash_list_struct.h	/^}hash_map_pos_t;$/;"	t	typeref:struct:hash_map_pos_info
+hash_map_print_mnode	src/libs/libdatastructure/hash_list/hash_list.c	/^void hash_map_print_mnode(struct hash_map_node *mnode)$/;"	f
 hash_map_priv	src/include/libcontainer/container.h	/^		hash_map_priv_t hash_map_priv;$/;"	m	union:container::__anon3
 hash_map_priv_info	src/include/libcontainer/container_hash_map.h	/^typedef struct hash_map_priv_info{$/;"	s
 hash_map_priv_t	src/include/libcontainer/container_hash_map.h	/^}hash_map_priv_t;$/;"	t	typeref:struct:hash_map_priv_info
-hash_map_search	src/libs/libcontainer/hash_map/container_hash_map.c	/^iterator_t hash_map_search(container_t *ct, void *key)$/;"	f
+hash_map_s	src/include/libdatastructure/hash_list_struct.h	/^typedef struct hash_map_s{$/;"	s
+hash_map_search	src/libs/libdatastructure/hash_list/hash_list.c	/^hash_map_pos_t hash_map_search(hash_map_t *hmap, void *key)$/;"	f
+hash_map_t	src/include/libdatastructure/hash_list_struct.h	/^}hash_map_t;$/;"	t	typeref:struct:hash_map_s
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	pthread_rwlock_t head_lock;$/;"	m	struct:cds_mem_pool_head_list
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	pthread_rwlock_t head_lock;$/;"	m	struct:slab_head_list
 head_lock	src/include/libcontainer/container.h	/^	pthread_rwlock_t head_lock;    $/;"	m	struct:container
 hlist	src/include/libcontainer/container_hash_map.h	/^	struct hlist_head *hlist;\/\/hash table head addr$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hlist_head
+hlist	src/include/libdatastructure/hash_list_struct.h	/^	struct hlist_head *hlist;$/;"	m	struct:hash_map_s	typeref:struct:hash_map_s::hlist_head
+hlist	src/include/libdatastructure/hash_list_struct.h	/^	struct hlist_head *hlist;\/\/hash table head addr$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hlist_head
 hlist_add_after	src/include/liballoc/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f
 hlist_add_after	src/include/libcontainer/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f
+hlist_add_after	src/include/libdatastructure/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f
 hlist_add_after	src/include/libdbg/list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f
 hlist_add_after_rcu	src/include/liballoc/list.h	/^static inline void hlist_add_after_rcu(struct hlist_node *prev,$/;"	f
 hlist_add_after_rcu	src/include/libcontainer/list.h	/^static inline void hlist_add_after_rcu(struct hlist_node *prev,$/;"	f
+hlist_add_after_rcu	src/include/libdatastructure/list.h	/^static inline void hlist_add_after_rcu(struct hlist_node *prev,$/;"	f
 hlist_add_after_rcu	src/include/libdbg/list.h	/^static inline void hlist_add_after_rcu(struct hlist_node *prev,$/;"	f
 hlist_add_before	src/include/liballoc/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f
 hlist_add_before	src/include/libcontainer/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f
+hlist_add_before	src/include/libdatastructure/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f
 hlist_add_before	src/include/libdbg/list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f
 hlist_add_before_rcu	src/include/liballoc/list.h	/^static inline void hlist_add_before_rcu(struct hlist_node *n,$/;"	f
 hlist_add_before_rcu	src/include/libcontainer/list.h	/^static inline void hlist_add_before_rcu(struct hlist_node *n,$/;"	f
+hlist_add_before_rcu	src/include/libdatastructure/list.h	/^static inline void hlist_add_before_rcu(struct hlist_node *n,$/;"	f
 hlist_add_before_rcu	src/include/libdbg/list.h	/^static inline void hlist_add_before_rcu(struct hlist_node *n,$/;"	f
 hlist_add_head	src/include/liballoc/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
 hlist_add_head	src/include/libcontainer/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
+hlist_add_head	src/include/libdatastructure/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
 hlist_add_head	src/include/libdbg/list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f
 hlist_add_head_rcu	src/include/liballoc/list.h	/^static inline void hlist_add_head_rcu(struct hlist_node *n,$/;"	f
 hlist_add_head_rcu	src/include/libcontainer/list.h	/^static inline void hlist_add_head_rcu(struct hlist_node *n,$/;"	f
+hlist_add_head_rcu	src/include/libdatastructure/list.h	/^static inline void hlist_add_head_rcu(struct hlist_node *n,$/;"	f
 hlist_add_head_rcu	src/include/libdbg/list.h	/^static inline void hlist_add_head_rcu(struct hlist_node *n,$/;"	f
 hlist_del	src/include/liballoc/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f
 hlist_del	src/include/libcontainer/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f
+hlist_del	src/include/libdatastructure/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f
 hlist_del	src/include/libdbg/list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f
 hlist_del_init	src/include/liballoc/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f
 hlist_del_init	src/include/libcontainer/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f
+hlist_del_init	src/include/libdatastructure/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f
 hlist_del_init	src/include/libdbg/list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f
 hlist_del_rcu	src/include/liballoc/list.h	/^static inline void hlist_del_rcu(struct hlist_node *n)$/;"	f
 hlist_del_rcu	src/include/libcontainer/list.h	/^static inline void hlist_del_rcu(struct hlist_node *n)$/;"	f
+hlist_del_rcu	src/include/libdatastructure/list.h	/^static inline void hlist_del_rcu(struct hlist_node *n)$/;"	f
 hlist_del_rcu	src/include/libdbg/list.h	/^static inline void hlist_del_rcu(struct hlist_node *n)$/;"	f
 hlist_empty	src/include/liballoc/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f
 hlist_empty	src/include/libcontainer/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f
+hlist_empty	src/include/libdatastructure/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f
 hlist_empty	src/include/libdbg/list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f
 hlist_entry	src/include/liballoc/list.h	840;"	d
 hlist_entry	src/include/libcontainer/list.h	849;"	d
+hlist_entry	src/include/libdatastructure/list.h	840;"	d
 hlist_entry	src/include/libdbg/list.h	849;"	d
 hlist_for_each	src/include/liballoc/list.h	842;"	d
 hlist_for_each	src/include/libcontainer/list.h	851;"	d
+hlist_for_each	src/include/libdatastructure/list.h	842;"	d
 hlist_for_each	src/include/libdbg/list.h	851;"	d
 hlist_for_each_entry	src/include/liballoc/list.h	857;"	d
 hlist_for_each_entry	src/include/libcontainer/list.h	866;"	d
+hlist_for_each_entry	src/include/libdatastructure/list.h	857;"	d
 hlist_for_each_entry	src/include/libdbg/list.h	866;"	d
 hlist_for_each_entry_continue	src/include/liballoc/list.h	869;"	d
 hlist_for_each_entry_continue	src/include/libcontainer/list.h	878;"	d
+hlist_for_each_entry_continue	src/include/libdatastructure/list.h	869;"	d
 hlist_for_each_entry_continue	src/include/libdbg/list.h	878;"	d
 hlist_for_each_entry_from	src/include/liballoc/list.h	881;"	d
 hlist_for_each_entry_from	src/include/libcontainer/list.h	890;"	d
+hlist_for_each_entry_from	src/include/libdatastructure/list.h	881;"	d
 hlist_for_each_entry_from	src/include/libdbg/list.h	890;"	d
 hlist_for_each_entry_rcu	src/include/liballoc/list.h	911;"	d
 hlist_for_each_entry_rcu	src/include/libcontainer/list.h	920;"	d
+hlist_for_each_entry_rcu	src/include/libdatastructure/list.h	911;"	d
 hlist_for_each_entry_rcu	src/include/libdbg/list.h	920;"	d
 hlist_for_each_entry_safe	src/include/liballoc/list.h	894;"	d
 hlist_for_each_entry_safe	src/include/libcontainer/list.h	903;"	d
+hlist_for_each_entry_safe	src/include/libdatastructure/list.h	894;"	d
 hlist_for_each_entry_safe	src/include/libdbg/list.h	903;"	d
 hlist_for_each_safe	src/include/liballoc/list.h	846;"	d
 hlist_for_each_safe	src/include/libcontainer/list.h	855;"	d
+hlist_for_each_safe	src/include/libdatastructure/list.h	846;"	d
 hlist_for_each_safe	src/include/libdbg/list.h	855;"	d
 hlist_head	src/include/liballoc/list.h	/^struct hlist_head {$/;"	s
 hlist_head	src/include/libcontainer/list.h	/^struct hlist_head {$/;"	s
+hlist_head	src/include/libdatastructure/list.h	/^struct hlist_head {$/;"	s
 hlist_head	src/include/libdbg/list.h	/^struct hlist_head {$/;"	s
 hlist_node	src/include/liballoc/list.h	/^struct hlist_node {$/;"	s
 hlist_node	src/include/libcontainer/container_hash_map.h	/^	struct hlist_node hlist_node;$/;"	m	struct:hash_map_node	typeref:struct:hash_map_node::hlist_node
 hlist_node	src/include/libcontainer/list.h	/^struct hlist_node {$/;"	s
+hlist_node	src/include/libdatastructure/hash_list_struct.h	/^	struct hlist_node hlist_node;$/;"	m	struct:hash_map_node	typeref:struct:hash_map_node::hlist_node
+hlist_node	src/include/libdatastructure/list.h	/^struct hlist_node {$/;"	s
 hlist_node	src/include/libdbg/list.h	/^struct hlist_node {$/;"	s
 hlist_node_p	src/include/libcontainer/container_hash_map.h	/^	struct hlist_node *hlist_node_p; \/\/node addr$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hlist_node
+hlist_node_p	src/include/libdatastructure/hash_list_struct.h	/^	struct hlist_node *hlist_node_p; \/\/node addr$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hlist_node
 hlist_replace_rcu	src/include/liballoc/list.h	/^static inline void hlist_replace_rcu(struct hlist_node *old,$/;"	f
 hlist_replace_rcu	src/include/libcontainer/list.h	/^static inline void hlist_replace_rcu(struct hlist_node *old,$/;"	f
+hlist_replace_rcu	src/include/libdatastructure/list.h	/^static inline void hlist_replace_rcu(struct hlist_node *old,$/;"	f
 hlist_replace_rcu	src/include/libdbg/list.h	/^static inline void hlist_replace_rcu(struct hlist_node *old,$/;"	f
 hlist_unhashed	src/include/liballoc/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
 hlist_unhashed	src/include/libcontainer/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
+hlist_unhashed	src/include/libdatastructure/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
 hlist_unhashed	src/include/libdbg/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
+hmap	src/include/libdatastructure/hash_list_struct.h	/^	struct hash_map_s *hmap;$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hash_map_s
 info	src/include/liballoc/allocator.h	/^	void (*info)(allocator_t * alloc);$/;"	m	struct:allocator_operations
 ini_file_name	src/include/libdbg/debug.h	/^	char ini_file_name[MAX_INI_FILE_NAME_LEN];$/;"	m	struct:debugger
 iniparser_add_entry	src/libs/libini/iniparser.c	/^static void iniparser_add_entry($/;"	f	file:
@@ -609,15 +707,20 @@ iterator_prev	src/libs/libcontainer/container.c	/^iterator_t iterator_prev(itera
 iterator_t	src/include/libcontainer/container.h	/^}iterator_t;$/;"	t	typeref:struct:iterator
 key	src/include/libcontainer/container_hash_map.h	/^  	char key[1];$/;"	m	struct:hash_map_node
 key	src/include/libcontainer/container_rbtree_map.h	/^  	char key[1];$/;"	m	struct:rbtree_map_node
+key	src/include/libdatastructure/hash_list_struct.h	/^	char key[1];$/;"	m	struct:hash_map_node
 key	src/include/libini/iniparser.h	/^	char **key ;$/;"	m	struct:_dictionary_
 key_cmp_fpt	src/include/libcontainer/container_hash_map.h	/^	key_cmp_fpt key_cmp_fpt;$/;"	m	struct:hash_map_priv_info
 key_cmp_fpt	src/include/libcontainer/container_hash_map.h	/^typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);$/;"	t
 key_cmp_fpt	src/include/libcontainer/container_rbtree_map.h	/^typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);$/;"	t
+key_cmp_fpt	src/include/libdatastructure/hash_list_struct.h	/^typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);$/;"	t
 key_cmp_func	src/include/libcontainer/container_rbtree_map.h	/^	key_cmp_fpt key_cmp_func;$/;"	m	struct:rbtree_map_priv_info
+key_cmp_func	src/include/libdatastructure/hash_list_struct.h	/^	key_cmp_fpt key_cmp_func;$/;"	m	struct:hash_map_s
 key_len	src/include/libcontainer/container.h	/^	uint32_t key_len;$/;"	m	struct:pair
+key_len	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t key_len;$/;"	m	struct:pair
 key_size	src/include/libcontainer/container_hash_map.h	/^	uint32_t key_size;$/;"	m	struct:hash_map_priv_info
 key_size	src/include/libcontainer/container_rbtree_map.h	/^	uint32_t key_size;$/;"	m	struct:rbtree_map_priv_info
-len	src/include/libcontainer/test.h	/^	char len;$/;"	m	struct:test
+key_size	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t key_size;$/;"	m	struct:hash_map_s
+len	src/include/test/test_container.h	/^	char len;$/;"	m	struct:test
 level	src/include/libdbg/debug.h	/^	uint8_t level;$/;"	m	struct:debugger
 level_str	src/include/libdbg/debug.h	/^	uint8_t level_str[MAX_PRINT_LEVEL_NAME_LEN];$/;"	m	struct:debug_level_info
 liballoc_register_modules	src/libs/liballoc/liballoc_register_modules.c	/^void liballoc_register_modules()$/;"	f
@@ -625,82 +728,107 @@ libcontainer_register_modules	src/libs/libcontainer/libcontainer_register_module
 libdbg_register_modules	src/libs/libdbg/libdbg_register_modules.c	/^void libdbg_register_modules()$/;"	f
 list_add	src/include/liballoc/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f
 list_add	src/include/libcontainer/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f
+list_add	src/include/libdatastructure/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f
 list_add	src/include/libdbg/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f
 list_add_rcu	src/include/liballoc/list.h	/^static inline void list_add_rcu(struct list_head *new, struct list_head *head)$/;"	f
 list_add_rcu	src/include/libcontainer/list.h	/^static inline void list_add_rcu(struct list_head *new, struct list_head *head)$/;"	f
+list_add_rcu	src/include/libdatastructure/list.h	/^static inline void list_add_rcu(struct list_head *new, struct list_head *head)$/;"	f
 list_add_rcu	src/include/libdbg/list.h	/^static inline void list_add_rcu(struct list_head *new, struct list_head *head)$/;"	f
 list_add_tail	src/include/liballoc/list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f
 list_add_tail	src/include/libcontainer/list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f
+list_add_tail	src/include/libdatastructure/list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f
 list_add_tail	src/include/libdbg/list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f
 list_add_tail_rcu	src/include/liballoc/list.h	/^static inline void list_add_tail_rcu(struct list_head *new,$/;"	f
 list_add_tail_rcu	src/include/libcontainer/list.h	/^static inline void list_add_tail_rcu(struct list_head *new,$/;"	f
+list_add_tail_rcu	src/include/libdatastructure/list.h	/^static inline void list_add_tail_rcu(struct list_head *new,$/;"	f
 list_add_tail_rcu	src/include/libdbg/list.h	/^static inline void list_add_tail_rcu(struct list_head *new,$/;"	f
 list_begin	src/libs/libcontainer/list/container_list.c	/^iterator_t list_begin(container_t *ct)$/;"	f
 list_del	src/include/liballoc/list.h	/^static inline void list_del(struct list_head *entry)$/;"	f
 list_del	src/include/libcontainer/list.h	/^static inline void list_del(struct list_head *entry)$/;"	f
+list_del	src/include/libdatastructure/list.h	/^static inline void list_del(struct list_head *entry)$/;"	f
 list_del	src/include/libdbg/list.h	/^static inline void list_del(struct list_head *entry)$/;"	f
 list_del_init	src/include/liballoc/list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f
 list_del_init	src/include/libcontainer/list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f
+list_del_init	src/include/libdatastructure/list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f
 list_del_init	src/include/libdbg/list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f
 list_del_rcu	src/include/liballoc/list.h	/^static inline void list_del_rcu(struct list_head *entry)$/;"	f
 list_del_rcu	src/include/libcontainer/list.h	/^static inline void list_del_rcu(struct list_head *entry)$/;"	f
+list_del_rcu	src/include/libdatastructure/list.h	/^static inline void list_del_rcu(struct list_head *entry)$/;"	f
 list_del_rcu	src/include/libdbg/list.h	/^static inline void list_del_rcu(struct list_head *entry)$/;"	f
 list_delete	src/libs/libcontainer/list/container_list.c	/^int list_delete(container_t *ct, iterator_t it)$/;"	f
 list_destroy	src/libs/libcontainer/list/container_list.c	/^int list_destroy(container_t *ct)$/;"	f
 list_empty	src/include/liballoc/list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f
 list_empty	src/include/libcontainer/list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f
+list_empty	src/include/libdatastructure/list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f
 list_empty	src/include/libdbg/list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f
 list_empty_careful	src/include/liballoc/list.h	/^static inline int list_empty_careful(const struct list_head *head)$/;"	f
 list_empty_careful	src/include/libcontainer/list.h	/^static inline int list_empty_careful(const struct list_head *head)$/;"	f
+list_empty_careful	src/include/libdatastructure/list.h	/^static inline int list_empty_careful(const struct list_head *head)$/;"	f
 list_empty_careful	src/include/libdbg/list.h	/^static inline int list_empty_careful(const struct list_head *head)$/;"	f
 list_end	src/libs/libcontainer/list/container_list.c	/^iterator_t list_end(container_t *ct)$/;"	f
 list_entry	src/include/liballoc/list.h	384;"	d
 list_entry	src/include/libcontainer/list.h	393;"	d
+list_entry	src/include/libdatastructure/list.h	384;"	d
 list_entry	src/include/libdbg/list.h	393;"	d
 list_for_each	src/include/liballoc/list.h	392;"	d
 list_for_each	src/include/libcontainer/list.h	401;"	d
+list_for_each	src/include/libdatastructure/list.h	392;"	d
 list_for_each	src/include/libdbg/list.h	401;"	d
 list_for_each_continue_rcu	src/include/liballoc/list.h	611;"	d
 list_for_each_continue_rcu	src/include/libcontainer/list.h	620;"	d
+list_for_each_continue_rcu	src/include/libdatastructure/list.h	611;"	d
 list_for_each_continue_rcu	src/include/libdbg/list.h	620;"	d
 list_for_each_entry	src/include/liballoc/list.h	434;"	d
 list_for_each_entry	src/include/libcontainer/list.h	443;"	d
+list_for_each_entry	src/include/libdatastructure/list.h	434;"	d
 list_for_each_entry	src/include/libdbg/list.h	443;"	d
 list_for_each_entry_continue	src/include/liballoc/list.h	470;"	d
 list_for_each_entry_continue	src/include/libcontainer/list.h	479;"	d
+list_for_each_entry_continue	src/include/libdatastructure/list.h	470;"	d
 list_for_each_entry_continue	src/include/libdbg/list.h	479;"	d
 list_for_each_entry_from	src/include/liballoc/list.h	483;"	d
 list_for_each_entry_from	src/include/libcontainer/list.h	492;"	d
+list_for_each_entry_from	src/include/libdatastructure/list.h	483;"	d
 list_for_each_entry_from	src/include/libdbg/list.h	492;"	d
 list_for_each_entry_rcu	src/include/liballoc/list.h	593;"	d
 list_for_each_entry_rcu	src/include/libcontainer/list.h	602;"	d
+list_for_each_entry_rcu	src/include/libdatastructure/list.h	593;"	d
 list_for_each_entry_rcu	src/include/libdbg/list.h	602;"	d
 list_for_each_entry_reverse	src/include/liballoc/list.h	445;"	d
 list_for_each_entry_reverse	src/include/libcontainer/list.h	454;"	d
+list_for_each_entry_reverse	src/include/libdatastructure/list.h	445;"	d
 list_for_each_entry_reverse	src/include/libdbg/list.h	454;"	d
 list_for_each_entry_safe	src/include/liballoc/list.h	494;"	d
 list_for_each_entry_safe	src/include/libcontainer/list.h	503;"	d
+list_for_each_entry_safe	src/include/libdatastructure/list.h	494;"	d
 list_for_each_entry_safe	src/include/libdbg/list.h	503;"	d
 list_for_each_entry_safe_continue	src/include/liballoc/list.h	510;"	d
 list_for_each_entry_safe_continue	src/include/libcontainer/list.h	519;"	d
+list_for_each_entry_safe_continue	src/include/libdatastructure/list.h	510;"	d
 list_for_each_entry_safe_continue	src/include/libdbg/list.h	519;"	d
 list_for_each_entry_safe_from	src/include/liballoc/list.h	526;"	d
 list_for_each_entry_safe_from	src/include/libcontainer/list.h	535;"	d
+list_for_each_entry_safe_from	src/include/libdatastructure/list.h	526;"	d
 list_for_each_entry_safe_from	src/include/libdbg/list.h	535;"	d
 list_for_each_entry_safe_reverse	src/include/liballoc/list.h	541;"	d
 list_for_each_entry_safe_reverse	src/include/libcontainer/list.h	550;"	d
+list_for_each_entry_safe_reverse	src/include/libdatastructure/list.h	541;"	d
 list_for_each_entry_safe_reverse	src/include/libdbg/list.h	550;"	d
 list_for_each_prev	src/include/liballoc/list.h	414;"	d
 list_for_each_prev	src/include/libcontainer/list.h	423;"	d
+list_for_each_prev	src/include/libdatastructure/list.h	414;"	d
 list_for_each_prev	src/include/libdbg/list.h	423;"	d
 list_for_each_rcu	src/include/liballoc/list.h	556;"	d
 list_for_each_rcu	src/include/libcontainer/list.h	565;"	d
+list_for_each_rcu	src/include/libdatastructure/list.h	556;"	d
 list_for_each_rcu	src/include/libdbg/list.h	565;"	d
 list_for_each_safe	src/include/liballoc/list.h	424;"	d
 list_for_each_safe	src/include/libcontainer/list.h	433;"	d
+list_for_each_safe	src/include/libdatastructure/list.h	424;"	d
 list_for_each_safe	src/include/libdbg/list.h	433;"	d
 list_for_each_safe_rcu	src/include/liballoc/list.h	578;"	d
 list_for_each_safe_rcu	src/include/libcontainer/list.h	587;"	d
+list_for_each_safe_rcu	src/include/libdatastructure/list.h	578;"	d
 list_for_each_safe_rcu	src/include/libdbg/list.h	587;"	d
 list_head	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head list_head;$/;"	m	struct:cds_mem_pool	typeref:struct:cds_mem_pool::list_head
 list_head	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head list_head;$/;"	m	struct:cds_mem_pool_head_list	typeref:struct:cds_mem_pool_head_list::list_head
@@ -709,12 +837,14 @@ list_head	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head list_he
 list_head	src/include/liballoc/list.h	/^struct list_head {$/;"	s
 list_head	src/include/libcontainer/container_list.h	/^	struct list_head list_head;$/;"	m	struct:container_list	typeref:struct:container_list::list_head
 list_head	src/include/libcontainer/list.h	/^struct list_head {$/;"	s
+list_head	src/include/libdatastructure/list.h	/^struct list_head {$/;"	s
 list_head	src/include/libdbg/list.h	/^struct list_head {$/;"	s
 list_head_p	src/include/libcontainer/container.h	/^		struct list_head *list_head_p;$/;"	m	union:iterator::__anon2	typeref:struct:iterator::__anon2::list_head
 list_init	src/libs/libcontainer/list/container_list.c	/^int list_init(container_t *ct)$/;"	f
 list_insert	src/libs/libcontainer/list/container_list.c	/^int list_insert(container_t *ct, iterator_t it, void *data)$/;"	f
 list_is_last	src/include/liballoc/list.h	/^static inline int list_is_last(const struct list_head *list,$/;"	f
 list_is_last	src/include/libcontainer/list.h	/^static inline int list_is_last(const struct list_head *list,$/;"	f
+list_is_last	src/include/libdatastructure/list.h	/^static inline int list_is_last(const struct list_head *list,$/;"	f
 list_is_last	src/include/libdbg/list.h	/^static inline int list_is_last(const struct list_head *list,$/;"	f
 list_iterator_equal	src/libs/libcontainer/list/container_list.c	/^int list_iterator_equal(iterator_t it1,iterator_t it2)$/;"	f
 list_iterator_get_pointer	src/libs/libcontainer/list/container_list.c	/^void *list_iterator_get_pointer(iterator_t it)$/;"	f
@@ -723,14 +853,17 @@ list_iterator_next	src/libs/libcontainer/list/container_list.c	/^iterator_t list
 list_iterator_prev	src/libs/libcontainer/list/container_list.c	/^iterator_t list_iterator_prev(iterator_t it)$/;"	f
 list_move	src/include/liballoc/list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f
 list_move	src/include/libcontainer/list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f
+list_move	src/include/libdatastructure/list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f
 list_move	src/include/libdbg/list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f
 list_move_tail	src/include/liballoc/list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f
 list_move_tail	src/include/libcontainer/list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f
+list_move_tail	src/include/libdatastructure/list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f
 list_move_tail	src/include/libdbg/list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f
 list_pop_back	src/libs/libcontainer/list/container_list.c	/^int list_pop_back(container_t *ct)$/;"	f
 list_pop_front	src/libs/libcontainer/list/container_list.c	/^int list_pop_front(container_t *ct)$/;"	f
 list_prepare_entry	src/include/liballoc/list.h	458;"	d
 list_prepare_entry	src/include/libcontainer/list.h	467;"	d
+list_prepare_entry	src/include/libdatastructure/list.h	458;"	d
 list_prepare_entry	src/include/libdbg/list.h	467;"	d
 list_priv	src/include/libcontainer/container.h	/^		list_priv_t list_priv;$/;"	m	union:container::__anon3
 list_priv_info	src/include/libcontainer/container_list.h	/^typedef struct list_priv_info{$/;"	s
@@ -739,18 +872,23 @@ list_push_back	src/libs/libcontainer/list/container_list.c	/^int list_push_back(
 list_push_front	src/libs/libcontainer/list/container_list.c	/^int list_push_front(container_t *ct,void *data)$/;"	f
 list_replace	src/include/liballoc/list.h	/^static inline void list_replace(struct list_head *old,$/;"	f
 list_replace	src/include/libcontainer/list.h	/^static inline void list_replace(struct list_head *old,$/;"	f
+list_replace	src/include/libdatastructure/list.h	/^static inline void list_replace(struct list_head *old,$/;"	f
 list_replace	src/include/libdbg/list.h	/^static inline void list_replace(struct list_head *old,$/;"	f
 list_replace_init	src/include/liballoc/list.h	/^static inline void list_replace_init(struct list_head *old,$/;"	f
 list_replace_init	src/include/libcontainer/list.h	/^static inline void list_replace_init(struct list_head *old,$/;"	f
+list_replace_init	src/include/libdatastructure/list.h	/^static inline void list_replace_init(struct list_head *old,$/;"	f
 list_replace_init	src/include/libdbg/list.h	/^static inline void list_replace_init(struct list_head *old,$/;"	f
 list_replace_rcu	src/include/liballoc/list.h	/^static inline void list_replace_rcu(struct list_head *old,$/;"	f
 list_replace_rcu	src/include/libcontainer/list.h	/^static inline void list_replace_rcu(struct list_head *old,$/;"	f
+list_replace_rcu	src/include/libdatastructure/list.h	/^static inline void list_replace_rcu(struct list_head *old,$/;"	f
 list_replace_rcu	src/include/libdbg/list.h	/^static inline void list_replace_rcu(struct list_head *old,$/;"	f
 list_splice	src/include/liballoc/list.h	/^static inline void list_splice(struct list_head *list, struct list_head *head)$/;"	f
 list_splice	src/include/libcontainer/list.h	/^static inline void list_splice(struct list_head *list, struct list_head *head)$/;"	f
+list_splice	src/include/libdatastructure/list.h	/^static inline void list_splice(struct list_head *list, struct list_head *head)$/;"	f
 list_splice	src/include/libdbg/list.h	/^static inline void list_splice(struct list_head *list, struct list_head *head)$/;"	f
 list_splice_init	src/include/liballoc/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_splice_init	src/include/libcontainer/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
+list_splice_init	src/include/libdatastructure/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_splice_init	src/include/libdbg/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 log	src/include/libdbg/debug.h	/^		debug_log_prive_t log;$/;"	m	union:debugger::debugger_priv
 log_file_lock	src/include/libdbg/debug_log.h	/^	pthread_mutex_t log_file_lock;$/;"	m	struct:debug_log_prive
@@ -764,31 +902,34 @@ log_print_write_log	src/libs/libdbg/debug_log.c	/^uint32_t log_print_write_log(F
 main	src/libs/libdbg/test_debugger.cc	/^int main()$/;"	f
 main	src/main.c	/^int main()$/;"	f
 main_switch	src/include/libdbg/debug.h	/^	uint8_t main_switch;$/;"	m	struct:debugger
+make_pair	src/include/libdatastructure/hash_list.h	/^static inline void make_pair(pair_t *p,void *key,void *value)$/;"	f
 make_pair	src/libs/libcontainer/container.c	/^void make_pair(pair_t *p,void *key,void *value)$/;"	f
 map_init	src/include/libcontainer/container.h	/^	int (*map_init)(container_t *ct, uint32_t key_size, uint32_t value_size, key_cmp_fpt key_cmp_func);$/;"	m	struct:container_operations
 map_insert	src/include/libcontainer/container.h	/^	int (*map_insert)(container_t *ct,void *value);$/;"	m	struct:container_operations
+map_lock	src/include/libdatastructure/hash_list_struct.h	/^	pthread_rwlock_t map_lock;$/;"	m	struct:hash_map_s
 map_search	src/include/libcontainer/container.h	/^	iterator_t (*map_search)(container_t *ct, void *key);$/;"	m	struct:container_operations
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
+mem_alloc_pck	src/libs/libdatastructure/hash_list/memory_management.c	/^void *mem_alloc_pck(void *from,uint32_t size,uint32_t flag)$/;"	f
 mem_double	src/libs/libini/iniparser.c	/^static void * mem_double(void * ptr, int size)$/;"	f	file:
-mempool_alloc_slab_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^cds_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)$/;"	f
-mempool_attach_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
+mempool_alloc_slab_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^cds_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)$/;"	f
+mempool_attach_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
 mempool_capacity	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t mempool_capacity;$/;"	m	struct:cds_alloc_s
-mempool_create_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^cds_mempool_t *mempool_create_list(allocator_t *alloc)$/;"	f
-mempool_destroy_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
-mempool_destroy_lists	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_destroy_lists(struct list_head *hl_head)$/;"	f
-mempool_detach_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
-mempool_find_appropriate_pool	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^cds_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)$/;"	f
-mempool_init_head_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_init_head_list(struct list_head **hl_head)$/;"	f
-mempool_print_head_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_print_head_list(struct list_head *hl_head)$/;"	f
-mempool_print_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_print_list(cds_mempool_t *mempool_list)$/;"	f
-mempool_print_list_for_each	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void mempool_print_list_for_each(struct list_head *hl_head)$/;"	f
-mempool_release_list	src/libs/liballoc/container_alloc/allocator_cds_mempool_list.c	/^void *mempool_release_list(cds_mempool_t *mempool)$/;"	f
+mempool_create_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^cds_mempool_t *mempool_create_list(allocator_t *alloc)$/;"	f
+mempool_destroy_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
+mempool_destroy_lists	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_destroy_lists(struct list_head *hl_head)$/;"	f
+mempool_detach_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
+mempool_find_appropriate_pool	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^cds_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)$/;"	f
+mempool_init_head_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_init_head_list(struct list_head **hl_head)$/;"	f
+mempool_print_head_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_print_head_list(struct list_head *hl_head)$/;"	f
+mempool_print_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_print_list(cds_mempool_t *mempool_list)$/;"	f
+mempool_print_list_for_each	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_print_list_for_each(struct list_head *hl_head)$/;"	f
+mempool_release_list	src/libs/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void *mempool_release_list(cds_mempool_t *mempool)$/;"	f
 min_depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t min_depth;$/;"	m	struct:cds_mem_pool
 n	src/include/libini/iniparser.h	/^	int n;$/;"	m	struct:_dictionary_
 name	src/include/liballoc/allocator.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:allocator
 name	src/include/libcontainer/container.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:container
 name	src/include/libcontainer/container.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:container_module
-name	src/include/libcontainer/test.h	/^	char name[10];$/;"	m	struct:test
+name	src/include/test/test_container.h	/^	char name[10];$/;"	m	struct:test
 net	src/include/libdbg/debug.h	/^		debug_network_prive_t net;$/;"	m	union:debugger::debugger_priv
 network_print_destroy	src/libs/libdbg/debug_network.c	/^void network_print_destroy(debugger_t *debugger)$/;"	f
 network_print_init	src/libs/libdbg/debug_network.c	/^void network_print_init(debugger_t *debugger)$/;"	f
@@ -801,6 +942,8 @@ next	src/include/liballoc/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:
 next	src/include/libcontainer/container.h	/^	iterator_t (*next)(iterator_t it);$/;"	m	struct:iterator_operations
 next	src/include/libcontainer/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
 next	src/include/libcontainer/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::list_head
+next	src/include/libdatastructure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
+next	src/include/libdatastructure/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::list_head
 next	src/include/libdbg/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
 next	src/include/libdbg/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::list_head
 node	src/include/libcontainer/container_rbtree_map.h	/^  	struct rb_node node;$/;"	m	struct:rbtree_map_node	typeref:struct:rbtree_map_node::rb_node
@@ -809,7 +952,9 @@ offsetof	src/include/libcontainer/rbtree.h	128;"	d
 offsetof	src/include/libcontainer/rbtree.h	130;"	d
 os	.ycm_extra_conf.py	/^import os$/;"	i
 pair	src/include/libcontainer/container.h	/^typedef struct pair{$/;"	s
+pair	src/include/libdatastructure/hash_list_struct.h	/^typedef struct pair{$/;"	s
 pair_t	src/include/libcontainer/container.h	/^}pair_t;$/;"	t	typeref:struct:pair
+pair_t	src/include/libdatastructure/hash_list_struct.h	/^}pair_t;$/;"	t	typeref:struct:pair
 pool	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head *pool;$/;"	m	struct:cds_alloc_s	typeref:struct:cds_alloc_s::list_head
 pop_back	src/include/libcontainer/container.h	/^	int (*pop_back)(container_t *ct);$/;"	m	struct:container_operations
 pop_front	src/include/libcontainer/container.h	/^	int (*pop_front)(container_t *ct);$/;"	m	struct:container_operations
@@ -817,13 +962,16 @@ port	src/include/libdbg/debug_network.h	/^	unsigned int port;$/;"	m	struct:debug
 pos	src/include/libcontainer/container.h	/^	}pos;$/;"	m	struct:iterator	typeref:union:iterator::__anon2
 pprev	src/include/liballoc/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libcontainer/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
+pprev	src/include/libdatastructure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libdbg/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 prefetch	src/include/liballoc/list.h	/^static inline void prefetch(const void *x) {;}$/;"	f
 prefetch	src/include/libcontainer/list.h	/^static inline void prefetch(const void *x) {;}$/;"	f
+prefetch	src/include/libdatastructure/list.h	/^static inline void prefetch(const void *x) {;}$/;"	f
 prefetch	src/include/libdbg/list.h	/^static inline void prefetch(const void *x) {;}$/;"	f
 prev	src/include/liballoc/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::
 prev	src/include/libcontainer/container.h	/^	iterator_t (*prev)(iterator_t it);$/;"	m	struct:iterator_operations
 prev	src/include/libcontainer/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::
+prev	src/include/libdatastructure/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::
 prev	src/include/libdbg/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::
 print_test	src/test_container/test.c	/^void print_test(struct test *t)$/;"	f
 priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon1
@@ -888,20 +1036,20 @@ size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t size;$/;"	m	struct:c
 size	src/include/libini/iniparser.h	/^	int size;$/;"	m	struct:_dictionary_
 slab	src/include/liballoc/allocator_ctr_alloc.h	/^typedef struct slab{$/;"	s
 slab_array_max_num	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t slab_array_max_num;$/;"	m	struct:cds_alloc_s
-slab_attach_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_attach_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
-slab_attach_list_to_free_slabs	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_head,uint32_t size)$/;"	f
-slab_attach_list_to_used_slabs	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_attach_list_to_used_slabs(allocator_t *alloc,struct list_head *new_head,uint32_t size)$/;"	f
-slab_detach_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_detach_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
-slab_detach_list_from_used_slabs	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_detach_list_from_used_slabs(allocator_t *alloc,struct list_head *del_head,uint32_t size)$/;"	f
-slab_get_first_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^cds_slab_t *slab_get_first_list(struct list_head *hl_head)$/;"	f
-slab_get_first_list_from_free_slabs	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^cds_slab_t* slab_get_first_list_from_free_slabs(allocator_t *alloc,uint32_t size)$/;"	f
-slab_get_slab_index	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^uint32_t slab_get_slab_index(allocator_t *alloc,uint32_t size)$/;"	f
+slab_attach_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_attach_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
+slab_attach_list_to_free_slabs	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_head,uint32_t size)$/;"	f
+slab_attach_list_to_used_slabs	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_attach_list_to_used_slabs(allocator_t *alloc,struct list_head *new_head,uint32_t size)$/;"	f
+slab_detach_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_detach_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
+slab_detach_list_from_used_slabs	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_detach_list_from_used_slabs(allocator_t *alloc,struct list_head *del_head,uint32_t size)$/;"	f
+slab_get_first_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^cds_slab_t *slab_get_first_list(struct list_head *hl_head)$/;"	f
+slab_get_first_list_from_free_slabs	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^cds_slab_t* slab_get_first_list_from_free_slabs(allocator_t *alloc,uint32_t size)$/;"	f
+slab_get_slab_index	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^uint32_t slab_get_slab_index(allocator_t *alloc,uint32_t size)$/;"	f
 slab_head_list	src/include/liballoc/allocator_ctr_alloc.h	/^typedef struct slab_head_list{$/;"	s
-slab_init_head_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_init_head_list(struct list_head **hl_head)$/;"	f
-slab_print_head_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_print_head_list(struct list_head *hl_head)$/;"	f
-slab_print_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_print_list(cds_slab_t *slab_list)$/;"	f
-slab_print_list_for_each	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_print_list_for_each(struct list_head *hl_head)$/;"	f
-slab_release_head_list	src/libs/liballoc/container_alloc/allocator_cds_slab_list.c	/^void slab_release_head_list(struct list_head *hl_head)$/;"	f
+slab_init_head_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_init_head_list(struct list_head **hl_head)$/;"	f
+slab_print_head_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_print_head_list(struct list_head *hl_head)$/;"	f
+slab_print_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_print_list(cds_slab_t *slab_list)$/;"	f
+slab_print_list_for_each	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_print_list_for_each(struct list_head *hl_head)$/;"	f
+slab_release_head_list	src/libs/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_release_head_list(struct list_head *hl_head)$/;"	f
 slab_size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t slab_size;$/;"	m	struct:slab
 start	src/include/liballoc/allocator_ctr_alloc.h	/^	void *start;$/;"	m	struct:cds_mem_pool
 stat_flag	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t stat_flag;$/;"	m	struct:slab
@@ -913,13 +1061,15 @@ strstrip	src/libs/libini/iniparser.c	/^static char * strstrip(char * s)$/;"	f	fi
 strupc	src/libs/libini/iniparser.c	/^static char * strupc(char * s)$/;"	f	file:
 sys_alloc_alloc	src/libs/liballoc/sys_alloc/allocator_sys_alloc.c	/^void *sys_alloc_alloc(allocator_t *alloc,uint8_t size)$/;"	f
 sys_alloc_free	src/libs/liballoc/sys_alloc/allocator_sys_alloc.c	/^void sys_alloc_free(allocator_t *alloc,void *addr)$/;"	f
-test	src/include/libcontainer/test.h	/^struct test{$/;"	s
+test	src/include/test/test_container.h	/^struct test{$/;"	s
 test	src/test_container/test.c	/^struct test test={$/;"	v	typeref:struct:test
 test2	src/test_container/test.c	/^struct test test2={$/;"	v	typeref:struct:test
 test3	src/test_container/test.c	/^struct test test3={$/;"	v	typeref:struct:test
 test4	src/test_container/test.c	/^struct test test4={$/;"	v	typeref:struct:test
-test_cds_alloc	src/test_container/test_cds_alloc.c	/^void test_cds_alloc()$/;"	f
 test_container	src/main.c	/^void test_container()$/;"	f
+test_ctr_alloc	src/test_container/test_ctr_alloc.c	/^void test_ctr_alloc()$/;"	f
+test_datastructure	src/main.c	/^void test_datastructure()$/;"	f
+test_datastructure_hashlist	src/test_datastructure/test_hashmap.c	/^void test_datastructure_hashlist()$/;"	f
 test_hash_func	src/test_container/test.c	/^uint32_t test_hash_func(void *key,uint32_t key_size)$/;"	f
 test_hash_map	src/test_container/test_hashmap.c	/^int test_hash_map(void)$/;"	f
 test_key_cmp_func	src/test_container/test.c	/^uint32_t test_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f
@@ -929,27 +1079,35 @@ test_vector	src/test_container/test_vector.c	/^int test_vector(void)$/;"	f
 tree_root	src/include/libcontainer/container_rbtree_map.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_priv_info	typeref:struct:rbtree_map_priv_info::rb_root
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libcontainer/list.h	/^typedef unsigned short    u16;$/;"	t
+u16	src/include/libdatastructure/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdbg/list.h	/^typedef unsigned short    u16;$/;"	t
 u32	src/include/liballoc/list.h	/^typedef unsigned int      u32;$/;"	t
 u32	src/include/libcontainer/list.h	/^typedef unsigned int      u32;$/;"	t
+u32	src/include/libdatastructure/list.h	/^typedef unsigned int      u32;$/;"	t
 u32	src/include/libdbg/list.h	/^typedef unsigned int      u32;$/;"	t
 u8	src/include/liballoc/list.h	/^typedef unsigned char     u8;$/;"	t
 u8	src/include/libcontainer/list.h	/^typedef unsigned char     u8;$/;"	t
+u8	src/include/libdatastructure/list.h	/^typedef unsigned char     u8;$/;"	t
 u8	src/include/libdbg/list.h	/^typedef unsigned char     u8;$/;"	t
 uint16_t	src/include/liballoc/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libcontainer/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
+uint16_t	src/include/libdatastructure/hash_list_struct.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libdbg/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint32_t	src/include/liballoc/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libcontainer/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
+uint32_t	src/include/libdatastructure/hash_list_struct.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libdbg/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint8_t	src/include/liballoc/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libcontainer/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
+uint8_t	src/include/libdatastructure/hash_list_struct.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdbg/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 used_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **used_slabs;$/;"	m	struct:cds_alloc_s	typeref:struct:cds_alloc_s::list_head
 val	src/include/libini/iniparser.h	/^	char **val;$/;"	m	struct:_dictionary_
 value_len	src/include/libcontainer/container.h	/^	uint32_t value_len;$/;"	m	struct:pair
+value_len	src/include/libdatastructure/hash_list_struct.h	/^	uint32_t value_len;$/;"	m	struct:pair
 value_pos	src/include/libcontainer/container_hash_map.h	/^	uint8_t value_pos;\/\/value's pos at key array$/;"	m	struct:hash_map_node
 value_pos	src/include/libcontainer/container_rbtree_map.h	/^	uint8_t value_pos;$/;"	m	struct:rbtree_map_node
+value_pos	src/include/libdatastructure/hash_list_struct.h	/^	uint8_t value_pos;\/\/value's pos at key array$/;"	m	struct:hash_map_node
 value_size	src/include/libcontainer/container_rbtree_map.h	/^	uint32_t value_size;$/;"	m	struct:rbtree_map_priv_info
 vector_begin	src/libs/libcontainer/vector/container_vector.c	/^iterator_t vector_begin(container_t *ct)$/;"	f
 vector_copy	src/libs/libcontainer/vector/container_vector.c	/^int vector_copy(container_t *ct,iterator_t to,iterator_t from,int32_t count)$/;"	f

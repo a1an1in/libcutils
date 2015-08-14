@@ -1,0 +1,18 @@
+TARGET =rcv 
+#COMOBJS = ../common/proto.o   #公共模块
+LIBS = -lpthread
+#CC = armv5l-linux-g++
+#CCFLAGS += -c -mapcs -march=armv5te -mtune=arm926ej-s
+CC = gcc
+CCFLAGS += -c 
+SRCS = $(wildcard *.c)
+OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj
+
+$(TARGET) : $(OBJS) $(COMOBJS)
+	$(CC)  $^ -o ../bin/$@ $(LIBS)
+%.o : %.c
+	$(CC) $< -o $@ $(CCFLAGS) $(INCLUDES)
+.PHONY:clean
+clean:
+	rm -rf *.o
+	rm -rf $(TARGET) 
