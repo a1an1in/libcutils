@@ -52,10 +52,13 @@ int main()
 	debugger_gp = debugger_creator("dbg.ini");
 	debugger_init(debugger_gp);
 
+
+	dbg_str(DBG_DETAIL,"test begin");
+
 	test_container();
 	test_datastructure();
-	dbg_str(DBG_DETAIL,"test begin");
-	dbg_str(DBG_DETAIL,"testlist");
+
 	dbg_str(DBG_DETAIL,"test end");
+
 	return ret;
 }

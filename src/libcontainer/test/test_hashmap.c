@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "libcontainer/inc_files.h"
-#include "test/test_container.h"
+#include "libcontainer/test_container.h"
 
 int test_hash_map(void)
 {

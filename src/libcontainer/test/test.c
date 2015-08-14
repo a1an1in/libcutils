@@ -2,7 +2,7 @@
 #include <string.h>
 #include "libdbg/debug.h"
 #include "libcontainer/basic_types.h"
-#include "test/test_container.h"
+#include "libcontainer/test_container.h"
 
 struct test test={
 	.name = "abc",
