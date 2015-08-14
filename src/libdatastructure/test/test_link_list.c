@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libdbg/debug.h"
+#include "liballoc/allocator.h"
 #include "libdatastructure/link_list.h"
 
 struct test{
@@ -34,13 +35,24 @@ void print_list_data(list_t *list)
 int test_datastructure_link_list()
 {
 	llist_t *llist;
+	allocator_t *allocator;
+
 	struct test t1={1,2};
 	struct test t2={2,2};
 	struct test t3={3,2};
 	struct test t4={4,2};
 	int ret = 0;
 
-	llist = llist_create();
+	/*
+	 *allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
+	 *allocator_ctr_init(allocator, 0, 0, 1024);
+	 *dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
+	 */
+
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+
+	//ct = container_creator(CONTAINER_TYPE_LIST,allocator);
+	llist = llist_create(allocator);
 	llist_init(llist,sizeof(struct test));
 	llist_push_front(llist,&t1);
 	llist_push_front(llist,&t2);

@@ -20,10 +20,13 @@
 
 #include <pthread.h>
 #include "libdatastructure/list.h"
+#include "liballoc/allocator.h"
 
-typedef unsigned int uint32_t;
-typedef unsigned short uint16_t;
-typedef unsigned char uint8_t;
+/*
+ *typedef unsigned int uint32_t;
+ *typedef unsigned short uint16_t;
+ *typedef unsigned char uint8_t;
+ */
 
 typedef struct pair{
 	uint16_t data_len;
@@ -60,6 +63,7 @@ typedef struct hash_map_s{
 	struct hlist_head *hlist;
 	hash_map_pos_t begin,end;
 	pthread_rwlock_t map_lock;
+	allocator_t *allocator;
 }hash_map_t;
 
 #endif

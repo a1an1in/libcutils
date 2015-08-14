@@ -60,13 +60,14 @@ int llist_pos_equal(list_pos_t pos1,list_pos_t pos2)
 {
 	return pos1.list_head_p == pos2.list_head_p;
 }
-llist_t *llist_create()
+llist_t *llist_create(allocator_t *allocator)
 {
 	llist_t *ret = NULL;
-	ret = (llist_t *)mem_alloc_pck(NULL,sizeof(llist_t),0);
+	ret = (llist_t *)allocator_mem_alloc(allocator,sizeof(llist_t));
 	if(ret == NULL){
 		dbg_str(DBG_ERROR,"allock err");
 	}
+	ret->allocator = allocator;
 	return ret;
 }
 int llist_init(llist_t *llist,uint32_t data_size)
@@ -77,7 +78,7 @@ int llist_init(llist_t *llist,uint32_t data_size)
 	llist->data_size = data_size;
 	llist->list_count = 0;
 	//only assigned head,if without head,llist is hard to distinguish head or end;
-	p = (struct list_head *)mem_alloc_pck(NULL,sizeof(struct list_head),0);
+	p = (struct list_head *)allocator_mem_alloc(llist->allocator, sizeof(struct list_head));
 	if(p == NULL){
 		dbg_str(DBG_ERROR,"allock err");
 	}
@@ -96,7 +97,7 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	uint32_t data_size = llist->data_size; 
 
 	dbg_str(DBG_IMPORTANT,"insert llist");
-	p = (list_t *)mem_alloc_pck(NULL,sizeof(list_t) + data_size,0);
+	p = (list_t *)allocator_mem_alloc(llist->allocator,sizeof(list_t) + data_size);
 	memcpy(p->data,data,data_size);
 
 	pthread_rwlock_wrlock(&llist->list_lock);
@@ -127,7 +128,7 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	list_del(pos.list_head_p);
 	pthread_rwlock_unlock(&llist->list_lock);
 
-	free(p);
+	allocator_mem_free(llist->allocator,p);
 	return 0;
 }
 int llist_push_front(llist_t *llist,void *data)
@@ -162,7 +163,7 @@ int llist_destroy(llist_t *llist)
 	}
 	if(llist_pos_equal(llist->head,llist->begin)){
 		dbg_str(DBG_WARNNING,"llist_destroy,llist is NULL,free llist head");
-		free(llist->head.list_head_p);
+		allocator_mem_free(llist->allocator,llist->head.list_head_p);
 		pthread_rwlock_destroy(&llist->list_lock);
 	}
 

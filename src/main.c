@@ -6,6 +6,8 @@
 #include "libcontainer/test_container.h"
 #include "libdatastructure/test_datastructure.h"
 
+#define LIBCDF_VERSION "1.1.1.2"
+
 debugger_t *debugger_gp;
 
 void register_all_lib_modules()
@@ -47,13 +49,13 @@ int main()
 {
 	int ret = 0;
 
+	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
 	register_all_lib_modules();
 
 	debugger_gp = debugger_creator("dbg.ini");
 	debugger_init(debugger_gp);
 
-
-	dbg_str(DBG_DETAIL,"test begin");
+	dbg_str(DBG_DETAIL,"debugger is start up");
 
 	test_container();
 	test_datastructure();

@@ -30,7 +30,7 @@ void test_ctr_alloc()
 	 *alloc_p->data_min_size = 8;
 	 *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
 	 */
-	allocator = allocator_creator(ALLOCATOR_TYPE_CDS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
 	allocator_ctr_init(allocator, 0, 0, 1024);
 	/*
 	 *allocator_cds_init(allocator,0,0,0);

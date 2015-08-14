@@ -184,7 +184,7 @@ void cds_alloc_destroy(allocator_t *alloc)
 
 int allocator_cds_alloc_register(){
 	allocator_module_t salloc = {
-		.allocator_type = ALLOCATOR_TYPE_CDS_MALLOC,
+		.allocator_type = ALLOCATOR_TYPE_CTR_MALLOC,
 		.alloc_ops = {
 			.init    = cds_alloc_init,
 			.alloc   = cds_alloc_alloc,
@@ -193,6 +193,6 @@ int allocator_cds_alloc_register(){
 			.info    = cds_alloc_info
 		}
 	};
-	memcpy(&allocator_modules[ALLOCATOR_TYPE_CDS_MALLOC],&salloc,sizeof(allocator_module_t));
+	memcpy(&allocator_modules[ALLOCATOR_TYPE_CTR_MALLOC],&salloc,sizeof(allocator_module_t));
 	return 0;
 }

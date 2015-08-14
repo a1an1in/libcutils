@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libdatastructure/hash_list.h"
+#include "liballoc/allocator.h"
 
 struct A{
 	int a;
@@ -29,6 +30,7 @@ void test_datastructure_hashlist()
 	pair_t *pair;
 	hash_map_pos_t pos;
 	struct hash_map_node *mnode;
+	allocator_t *allocator;
 
 	struct A t1 = {1,2};
 	struct A t2 = {2,2};
@@ -36,8 +38,12 @@ void test_datastructure_hashlist()
 	struct A t4 = {4,2};
 	struct A t5 = {5,2};
 
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+
 	pair = create_pair(2,sizeof(struct A));
-	hash_map_init(&hmap,
+
+	hmap = hash_map_create(allocator);
+	hash_map_init(hmap,
 			2,//uint32_t key_size,
 			sizeof(struct A)+ 2,
 			10,

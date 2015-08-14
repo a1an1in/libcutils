@@ -20,6 +20,8 @@
 
 #include "pthread.h"
 #include "list.h"
+#include "liballoc/allocator.h"
+
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
@@ -38,5 +40,6 @@ typedef struct llist_s{
 	uint32_t data_size;
 	list_pos_t begin,end,head;
 	list_t *list;
+	allocator_t *allocator;
 }llist_t;
 #endif

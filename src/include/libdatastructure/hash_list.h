@@ -18,7 +18,7 @@
 #ifndef __HASH_LIST_H__
 #define __HASH_LIST_H__
 
-#include "hash_list_struct.h"
+#include "libdatastructure/hash_list_struct.h"
 
 static inline pair_t * create_pair(int key_len,int value_len)
 {
@@ -61,7 +61,8 @@ int destroy_pair(pair_t *p);
 int default_key_cmp_func(void *key1,void *key2,uint32_t size);
 uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size);
 
-int hash_map_init(hash_map_t **hmap, uint32_t key_size, uint32_t data_size, uint32_t bucket_size, hash_func_fpt hash_func, key_cmp_fpt key_cmp_func);
+hash_map_t * hash_map_create(allocator_t *allocator);
+int hash_map_init(hash_map_t *hmap, uint32_t key_size, uint32_t data_size, uint32_t bucket_size, hash_func_fpt hash_func, key_cmp_fpt key_cmp_func);
 hash_map_pos_t hash_map_pos_init(hash_map_pos_t *pos, struct hlist_node *hlist_node_p, uint32_t bucket_pos, struct hlist_head *hlist_head_p, struct hash_map_s *hmap);
 hash_map_pos_t hash_map_begin(hash_map_t *hmap);
 hash_map_pos_t hash_map_end(hash_map_t *hmap);

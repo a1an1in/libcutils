@@ -20,34 +20,40 @@
 #include <assert.h>
 #include "libdbg/debug.h"
 #include "libdatastructure/hash_list.h"
-#include "libdatastructure/memory_management.h"
 
-int hash_map_init(hash_map_t **hmap,
+hash_map_t * hash_map_create(allocator_t *allocator)
+{
+	hash_map_t *map;
+	map = allocator_mem_alloc(allocator,sizeof(hash_map_t));
+	if(map == NULL){
+		dbg_str(DBG_ERROR,"allocator_mem_alloc(map->allocator err");
+	}
+	map->allocator = allocator;
+	
+	return 0;
+}
+int hash_map_init(hash_map_t *hmap,
 		uint32_t key_size,
 		uint32_t data_size,
 		uint32_t bucket_size,
 		hash_func_fpt hash_func,
 		key_cmp_fpt key_cmp_func)
 {
-	hash_map_t *map;
-	map = mem_alloc_pck(NULL,sizeof(hash_map_t),0);
-	if(map == NULL){
-		dbg_str(DBG_ERROR,"malloc err");
-	}
+	hash_map_t *map = hmap;
 	map->data_size = data_size;
 	map->key_size = key_size;
 	map->bucket_size = bucket_size;
 	map->hash_func = hash_func;
 	map->key_cmp_func = key_cmp_func;
 
-	map->hlist = malloc(sizeof(struct hlist_head)*bucket_size);
+	map->hlist = allocator_mem_alloc(map->allocator,
+			sizeof(struct hlist_head)*bucket_size);
 	memset(map->hlist,0,sizeof(struct hlist_head)*bucket_size);
 
 	hash_map_pos_init(&map->begin,NULL,0,map->hlist,map);
 	hash_map_pos_init(&map->end,NULL,bucket_size - 1,map->hlist,map);
 
 	pthread_rwlock_init(&map->map_lock,NULL);
-	*hmap = map;
 	
 	return 0;
 }
@@ -85,9 +91,10 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 
 	dbg_str(DBG_DETAIL,"hash_map_insert");
 
-	mnode = (struct hash_map_node *)mem_alloc_pck(NULL, sizeof(struct hash_map_node) + data_size, 0);
+	mnode = (struct hash_map_node *)allocator_mem_alloc(hmap->allocator,
+			sizeof(struct hash_map_node) + data_size);
 	if(mnode == NULL){
-		dbg_str(DBG_ERROR,"hash_map_insert,malloc err");
+		dbg_str(DBG_ERROR,"hash_map_insert,allocator_mem_alloc(map->allocator err");
 		return -1;
 	}
 
@@ -169,7 +176,7 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)
 
 	mnode = container_of(pos.hlist_node_p,struct hash_map_node,hlist_node);
 	if (mnode != NULL) {
-		free(mnode);
+		allocator_mem_free(hmap->allocator,mnode);
 		mnode = NULL;
 	}
 	return 0;
@@ -187,7 +194,7 @@ int hash_map_destroy(hash_map_t *hmap)
 	 }
 	 if(hash_map_pos_equal(hmap->end,it)){
 		 dbg_str(DBG_WARNNING,"hash_map_destroy,hash_map is NULL");
-		 free(hmap->hlist);
+		 allocator_mem_free(hmap->allocator,hmap->hlist);
 	 }
 }
 hash_map_pos_t hash_map_pos_next(hash_map_pos_t pos)
