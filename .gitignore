@@ -33,5 +33,6 @@
 
 *.swn
 *.swo
+*.swp
 *.c~
 *.cc
