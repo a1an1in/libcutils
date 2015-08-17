@@ -4,7 +4,7 @@
 #include "liballoc/liballoc_register_modules.h"
 #include "libcontainer/libcontainer_register_modules.h"
 #include "libcontainer/test_container.h"
-#include "libdatastructure/test_datastructure.h"
+#include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_pdt_proto_analyzer.h"
 
 #define LIBCDF_VERSION "1.1.2.1"

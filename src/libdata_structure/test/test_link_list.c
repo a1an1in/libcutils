@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
-#include "libdatastructure/link_list.h"
+#include "libdata_structure/link_list.h"
 
 struct test{
 	int a;

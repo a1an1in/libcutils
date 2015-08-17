@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "libdbg/debug.h"
-#include "libdatastructure/hash_list.h"
+#include "libdata_structure/hash_list.h"
 
 hash_map_t * hash_map_create(allocator_t *allocator)
 {

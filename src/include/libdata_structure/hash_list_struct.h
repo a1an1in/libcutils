@@ -19,7 +19,7 @@
 #define __HASH_LIST_ST_H__
 
 #include <pthread.h>
-#include "libdatastructure/list.h"
+#include "libdata_structure/list.h"
 #include "liballoc/allocator.h"
 
 /*

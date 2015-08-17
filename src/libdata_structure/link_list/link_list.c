@@ -19,8 +19,7 @@
 #include <string.h>
 #include <pthread.h>
 #include "libdbg/debug.h"
-#include "libdatastructure/link_list.h"
-#include "libdatastructure/memory_management.h"
+#include "libdata_structure/link_list.h"
 
 
 int llist_pos_init(list_pos_t *pos,struct list_head *lh,llist_t *llist)

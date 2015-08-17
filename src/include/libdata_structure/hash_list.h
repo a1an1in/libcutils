@@ -18,7 +18,7 @@
 #ifndef __HASH_LIST_H__
 #define __HASH_LIST_H__
 
-#include "libdatastructure/hash_list_struct.h"
+#include "libdata_structure/hash_list_struct.h"
 
 static inline pair_t * create_pair(int key_len,int value_len)
 {

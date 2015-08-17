@@ -17,7 +17,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "libdatastructure/hash_list.h"
+#include "libdata_structure/hash_list.h"
 #include "liballoc/allocator.h"
 
 struct A{
