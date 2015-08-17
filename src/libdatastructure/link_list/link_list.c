@@ -96,7 +96,6 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	list_t *p = NULL;
 	uint32_t data_size = llist->data_size; 
 
-	dbg_str(DBG_IMPORTANT,"insert llist");
 	p = (list_t *)allocator_mem_alloc(llist->allocator,sizeof(list_t) + data_size);
 	memcpy(p->data,data,data_size);
 
@@ -108,6 +107,8 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	if(llist_pos_equal(pos,llist->end)){
 		llist_pos_init(&llist->end,&p->list_head,llist);
 	}
+	llist->list_count++;
+	dbg_str(DBG_IMPORTANT,"insert llist,listcount=%d",llist->list_count);
 	pthread_rwlock_unlock(&llist->list_lock);
 
 	return 0;
@@ -117,7 +118,6 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	list_t *p;
 
 	p = container_of(pos.list_head_p,list_t,list_head);
-	dbg_str(DBG_IMPORTANT,"delete llist");
 
 	pthread_rwlock_wrlock(&llist->list_lock);
 	if(llist_pos_equal(pos,llist->begin)){
@@ -126,10 +126,31 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 		llist_pos_init(&llist->end,pos.list_head_p->prev,llist);
 	}
 	list_del(pos.list_head_p);
+	llist->list_count--;
+	dbg_str(DBG_IMPORTANT,"delete llist,listcount=%d",llist->list_count);
 	pthread_rwlock_unlock(&llist->list_lock);
 
 	allocator_mem_free(llist->allocator,p);
 	return 0;
+}
+list_t *llist_detach(llist_t *llist, list_pos_t pos)
+{
+	list_t *p;
+
+	p = container_of(pos.list_head_p,list_t,list_head);
+
+	pthread_rwlock_wrlock(&llist->list_lock);
+	if(llist_pos_equal(pos,llist->begin)){
+		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
+	}else if(llist_pos_equal(pos,llist->end)){
+		llist_pos_init(&llist->end,pos.list_head_p->prev,llist);
+	}
+	list_del(pos.list_head_p);
+	llist->list_count--;
+	dbg_str(DBG_IMPORTANT,"detach llist,listcount=%d",llist->list_count);
+	pthread_rwlock_unlock(&llist->list_lock);
+
+	return p;
 }
 int llist_push_front(llist_t *llist,void *data)
 {
@@ -149,6 +170,14 @@ int llist_pop_front(llist_t *llist)
 	return llist_delete(llist, llist->begin);
 }
 
+list_t *llist_detach_back(llist_t *llist)
+{
+	return llist_detach(llist, llist->end);
+}
+list_t *llist_detach_front(llist_t *llist)
+{
+	return llist_detach(llist, llist->begin);
+}
 int llist_destroy(llist_t *llist)
 {
 	list_pos_t pos,next;
