@@ -19,9 +19,9 @@
 #include <pthread.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
-#include "libbyte_proto_analyzer/protocol_format_set.h"
-#include "libbyte_proto_analyzer/memory_management.h"
-#include "libbyte_proto_analyzer/pdt_proto_format.h"
+#include "libproto_analyzer/protocol_format_set.h"
+#include "libproto_analyzer/memory_management.h"
+#include "libproto_analyzer/pdt_proto_format.h"
 
 
 int hexstr2num(const char* const_str)

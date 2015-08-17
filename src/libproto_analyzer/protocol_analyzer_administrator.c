@@ -18,8 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libdbg/debug.h"
-#include "libbyte_proto_analyzer/protocol_analyzer.h"
-#include "libbyte_proto_analyzer/protocol_analyzer_administrator.h"
+#include "libproto_analyzer/protocol_analyzer.h"
+#include "libproto_analyzer/protocol_analyzer_administrator.h"
 
 /*
  *#define LIST(type) \

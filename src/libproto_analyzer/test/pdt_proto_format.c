@@ -16,8 +16,8 @@
  * =====================================================================================
  */
 #include "libdbg/debug.h"
-#include "libbyte_proto_analyzer/protocol_format_set.h"
-#include "libbyte_proto_analyzer/pdt_proto_format.h"
+#include "libproto_analyzer/protocol_format_set.h"
+#include "libproto_analyzer/pdt_proto_format.h"
 
 int pfs_set_proto_format_3008(protocol_format_set_t *pfs_p)
 {

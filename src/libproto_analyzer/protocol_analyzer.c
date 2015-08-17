@@ -17,8 +17,8 @@
 #include <math.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
-#include "libbyte_proto_analyzer/protocol_format_set.h"
-#include "libbyte_proto_analyzer/protocol_analyzer.h"
+#include "libproto_analyzer/protocol_format_set.h"
+#include "libproto_analyzer/protocol_analyzer.h"
 
 int pa_check_protocol_num(struct protocol_analyzer_s *pa)
 {

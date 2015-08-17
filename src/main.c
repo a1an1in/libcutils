@@ -5,9 +5,9 @@
 #include "libcontainer/libcontainer_register_modules.h"
 #include "libcontainer/test_container.h"
 #include "libdatastructure/test_datastructure.h"
-#include "libbyte_proto_analyzer/test_pdt_proto_analyzer.h"
+#include "libproto_analyzer/test_pdt_proto_analyzer.h"
 
-#define LIBCDF_VERSION "1.1.2.2"
+#define LIBCDF_VERSION "1.1.2.1"
 
 debugger_t *debugger_gp;
 

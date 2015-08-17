@@ -3,11 +3,11 @@
 #include <math.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
-#include "libbyte_proto_analyzer/protocol_format_set.h"
-#include "libbyte_proto_analyzer/protocol_analyzer.h"
-#include "libbyte_proto_analyzer/pdt_proto_format.h"
-#include "libbyte_proto_analyzer/pdt_init_proto.h"
-#include "libbyte_proto_analyzer/protocol_analyzer_administrator.h"
+#include "libproto_analyzer/protocol_format_set.h"
+#include "libproto_analyzer/protocol_analyzer.h"
+#include "libproto_analyzer/pdt_proto_format.h"
+#include "libproto_analyzer/pdt_init_proto.h"
+#include "libproto_analyzer/protocol_analyzer_administrator.h"
 
 debugger_t *debugger_gp;
 allocator_t *allocator;
