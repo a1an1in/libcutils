@@ -3,7 +3,6 @@
 
 #include "liballoc/allocator.h"
 #include "protocol_format_set.h"
-#include "protocol_analyzer_administrator.h"
 
 typedef struct protocol_analyzer_s{
 #define MAX_PROTO_DATA_LEN 100

@@ -7,7 +7,6 @@
 #include "libproto_analyzer/protocol_analyzer.h"
 #include "libproto_analyzer/pdt_proto_format.h"
 #include "libproto_analyzer/pdt_init_proto.h"
-#include "libproto_analyzer/protocol_analyzer_administrator.h"
 
 debugger_t *debugger_gp;
 allocator_t *allocator;
@@ -42,9 +41,6 @@ int test_pdt_proto_analyzer()
 	 *pfs_print_proto_link_lists(pfs_p);
 	 */
 
-	/*
-	 *proto_analyzer_admin_init(&pa_admin,pfs_p);
-	 */
 	/*set and parse test*/
 	pa = pa_create_protocol_analyzer(allocator);
 	pa_init_protocol_analyzer(0x3008, pfs_p, pa);
