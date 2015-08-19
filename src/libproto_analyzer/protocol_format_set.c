@@ -20,7 +20,9 @@
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
 #include "libproto_analyzer/protocol_format_set.h"
-#include "libproto_analyzer/pdt_proto_format.h"
+/*
+ *#include "libproto_analyzer/pdt_proto_format.h"
+ */
 
 
 int hexstr2num(const char* const_str)
@@ -412,10 +414,6 @@ void init_proto_format_set(int proto_base_addr,
 	//not realse
 	pfs_p->proto_total_num = 0;
 	pfs_p->proto_max_num = max_proto_num;
-	/*
-	 *pfs_set_proto_format_3008(pfs_p);
-	 */
-	pfs_set_pdu_format_ackd(pfs_p);
 }
 /*
  *int main()

@@ -5,8 +5,8 @@
 #include "liballoc/allocator.h"
 #include "libproto_analyzer/protocol_format_set.h"
 #include "libproto_analyzer/protocol_analyzer.h"
-#include "libproto_analyzer/pdt_proto_format.h"
-#include "libproto_analyzer/pdt_init_proto.h"
+#include "libproto_analyzer/pdt_drv_proto_init.h"
+#include "libproto_analyzer/pdt_drv_proto_format.h"
 
 debugger_t *debugger_gp;
 allocator_t *allocator;
@@ -36,6 +36,7 @@ int test_pdt_proto_analyzer()
 
 	pfs_p = pfs_create_proto_format_set(allocator);
 	init_proto_format_set(0x3000,100,pfs_p);
+	pfs_set_proto_format_3008(pfs_p);
 
 	/*
 	 *pfs_print_proto_link_lists(pfs_p);

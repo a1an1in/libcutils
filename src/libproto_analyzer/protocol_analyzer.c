@@ -387,22 +387,25 @@ void pa_set_protocol_bit_data(uint32_t data,
 {
 	int i;
 	short t_len = len;
-	uint8_t t_pos_set = bit_pos;
+	char t_pos_set = bit_pos;
 	uint8_t t_data_get;
-	uint8_t t_len_get,t_len_get_total = 0;
+	uint8_t t_len_get;
 
 	dbg_str(DBG_DETAIL,"byte_pos=%d,bit_pos=%d,t_len=%d,data=%x",byte_pos,bit_pos,t_len,data);
 
 	for(i = 0; t_len > 0; i++){
+		/* get data len you wana set */
 		t_len_get = (t_len > t_pos_set % 8 + 1)?(t_pos_set % 8 + 1):t_len;
+		/*get data you want to set*/
 		t_data_get = get_bit_data(data, t_len - t_len_get, t_len_get);
+		/* set data */
 		set_bit_data(&dp[byte_pos + i],t_data_get,t_pos_set % 8 + 1 - t_len_get,t_len_get);
 		dbg_str(DBG_DETAIL,"-------t_data_get=%x,t_data_set=%x,t_len_get=%d,t_pos_set=%d",
 				t_data_get,dp[byte_pos + i],t_len_get,t_pos_set);
-		t_len_get_total += t_len_get;
 		t_len -= t_len_get;
 		t_pos_set -= t_len_get;
-		if(t_pos_set == 0xff){
+		/* if t_pos_set is less than zero,it must be set 7 */
+		if(t_pos_set < 0){
 			t_pos_set = 7;
 		}
 	}
@@ -471,22 +474,21 @@ void pa_get_protocol_bit_data(proto_info_list_t *info_list,
 	int i;
 	short t_len = info_list->len;
 	uint8_t t_pos_get = info_list->bit_pos;
-	uint8_t byte_pos = info_list->byte_pos;
+	char byte_pos = info_list->byte_pos;
 	uint8_t t_len_get;
 	uint8_t *dp = pa->protocol_data;
 	uint32_t data = 0,t_data_get;
-	uint8_t t_len_get_total = 0;
 
 	for(i = 0; t_len > 0; i++){
+		/* get data len you want to get */
 		t_len_get = (t_len > t_pos_get % 8 + 1)?(t_pos_get % 8 + 1):t_len;
+		/* get data you want to get */
 		t_data_get = get_bit_data(dp[byte_pos + i], t_pos_get % 8 + 1 - t_len_get, t_len_get);
-		data |= (t_data_get << t_len - t_len_get);
+		/* restore data to data var*/
+		data |= (t_data_get << (t_len - t_len_get));
 		dbg_str(DBG_DETAIL,"get_data=%x,set_data=%x",t_data_get,data);
-		/*
-		 *t_len_get_total += t_len_get;
-		 */
 		t_pos_get -= t_len_get;
-		if(t_pos_get == 0xff){
+		if(t_pos_get < 0){
 			t_pos_get = 7;
 		}
 		t_len -= t_len_get;
@@ -565,7 +567,7 @@ int pa_generate_protocol_data(struct protocol_analyzer_s *pa)
 			info_list->vlenth_flag = 0;
 		}
 
-		if(len_unit == 8){
+		if(len_unit == 8){//if operate byte data
 			if(len <= 4){
 				pa_set_protocol_byte_data(data,//uint32_t data,
 						byte_pos,//uint8_t byte_pos, 
@@ -576,7 +578,7 @@ int pa_generate_protocol_data(struct protocol_analyzer_s *pa)
 				pa_set_protocol_buf(info_list->buf.data_p,len,
 						byte_pos, bit_pos,dp);
 			}
-		}else if(len_unit == 1){
+		}else if(len_unit == 1){//if operate bit data
 			/*
 			 *dbg_str(DBG_WARNNING,"bit data,not expand yet");
 			 */

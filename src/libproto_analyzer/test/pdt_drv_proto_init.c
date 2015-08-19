@@ -21,7 +21,7 @@
 #include "libdbg/debug.h"
 #include "libproto_analyzer/protocol_format_set.h"
 #include "libproto_analyzer/protocol_analyzer.h"
-#include "libproto_analyzer/pdt_proto_format.h"
+#include "libproto_analyzer/pdt_drv_proto_format.h"
 
 void pdt_init_proto_3008(uint16_t lab,uint16_t slot_info,
 		uint16_t sync_info,uint8_t tact_info,uint8_t slc_info,
