@@ -34,7 +34,9 @@ typedef struct proto_info_list_s{
 	uint8_t vlenth_value_assigned_flag:1;
 	uint8_t byte_pos;
 	uint8_t bit_pos;
-	uint16_t len;
+	uint16_t len;//len value
+	uint8_t len_unit;//len unit
+	uint32_t bit_len;//len of bit
 	//char data[MAX_DATA_LEN];
 	uint32_t data;
 	/*
@@ -96,8 +98,13 @@ void init_proto_format_set(int proto_base_addr, int max_proto_num, protocol_form
 protocol_format_set_t *pfs_create_proto_format_set(allocator_t *allocator);
 void pfs_destroy_protocol_format_set(protocol_format_set_t *pfp);
 
-#define PFS_SET_PROTO_INFO(name,byte_pos,len,vlenth_index,hl_head) \
-	pfs_set_proto_info("name",name,"byte_pos",byte_pos, "len",len,\
-			"vlenth_index",vlenth_index,hl_head)
+#define PFS_SET_PROTO_INFO(name,byte_pos,bit_pos,len,len_unit,vlenth_index,hl_head) \
+	pfs_set_proto_info("name",name,\
+			"byte_pos",byte_pos,\
+			"bit_pos",bit_pos,\
+			"len",len,\
+			"len_unit",len_unit,\
+			"vlenth_index",vlenth_index,\
+			hl_head)
 
 #endif

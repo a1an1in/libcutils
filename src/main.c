@@ -5,9 +5,9 @@
 #include "libcontainer/libcontainer_register_modules.h"
 #include "libcontainer/test_container.h"
 #include "libdata_structure/test_datastructure.h"
-#include "libproto_analyzer/test_pdt_proto_analyzer.h"
+#include "libproto_analyzer/test_proto_analyzer.h"
 
-#define LIBCDF_VERSION "1.1.2.1"
+#define LIBCDF_VERSION "1.1.3.1"
 
 debugger_t *debugger_gp;
 
@@ -50,7 +50,10 @@ void test_datastructure()
 }
 void test_analyzer()
 {
-	test_pdt_proto_analyzer();
+	/*
+	 *test_pdt_proto_analyzer();
+	 */
+	test_pdu_proto_analyzer();
 }
 int main()
 {

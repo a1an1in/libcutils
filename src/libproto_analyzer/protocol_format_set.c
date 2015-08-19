@@ -20,7 +20,6 @@
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
 #include "libproto_analyzer/protocol_format_set.h"
-#include "libproto_analyzer/memory_management.h"
 #include "libproto_analyzer/pdt_proto_format.h"
 
 
@@ -80,7 +79,37 @@ void print_info_list(proto_info_list_t *info_list)
 {
 	if(info_list == NULL)
 		return;
-	if(info_list->len <= 4)
+	if(info_list->len_unit == 8){
+		if(info_list->len <= 4)
+			printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
+					"vlenth_flag=%d,vlenth_value_flag=%d,"
+					"vlenth_value_assigned_flag=%d,value=0x%x,vl_index=%s\n",
+					info_list->name,
+					info_list->byte_pos,
+					info_list->bit_pos,
+					info_list->len,
+					info_list->vlenth_flag,
+					info_list->vlenth_value_flag,
+					info_list->vlenth_value_assigned_flag,
+					info_list->data,
+					info_list->vlenth_index);
+		else{
+			printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
+					"vlenth_flag=%d,vlenth_value_flag=%d,"
+					"vlenth_value_assigned_flag=%d,vl_index=%s\n",
+					info_list->name,
+					info_list->byte_pos,
+					info_list->bit_pos,
+					info_list->len,
+					info_list->vlenth_flag,
+					info_list->vlenth_value_flag,
+					info_list->vlenth_value_assigned_flag,
+					info_list->vlenth_index);
+			if(info_list->buf.data_p != NULL)
+				dbg_buf(DBG_DETAIL,"buf:",info_list->buf.data_p,info_list->len);
+		}
+
+	}else{
 		printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
 				"vlenth_flag=%d,vlenth_value_flag=%d,"
 				"vlenth_value_assigned_flag=%d,value=0x%x,vl_index=%s\n",
@@ -93,22 +122,7 @@ void print_info_list(proto_info_list_t *info_list)
 				info_list->vlenth_value_assigned_flag,
 				info_list->data,
 				info_list->vlenth_index);
-	else{
-		printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
-				"vlenth_flag=%d,vlenth_value_flag=%d,"
-				"vlenth_value_assigned_flag=%d,vl_index=%s\n",
-				info_list->name,
-				info_list->byte_pos,
-				info_list->bit_pos,
-				info_list->len,
-				info_list->vlenth_flag,
-				info_list->vlenth_value_flag,
-				info_list->vlenth_value_assigned_flag,
-				info_list->vlenth_index);
-		if(info_list->buf.data_p != NULL)
-			dbg_buf(DBG_DETAIL,"buf:",info_list->buf.data_p,info_list->len);
 	}
-
 
 }
 struct list_head *pfs_create_head_list(allocator_t *allocator)
@@ -270,6 +284,9 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 		 *dbg_str(DBG_DETAIL,"len=%d",info_list->len);
 		 */
 		//dbg_str(DBG_DETAIL,"len =%d",info_list->len);
+		
+	}else if(!strcmp(name,"len_unit")){
+		info_list->len_unit = atoi((char *)(attr_value));
 	}else if(!strcmp(name,"vlenth_index")){
 		if(attr_value == NULL){
 			return;
@@ -284,7 +301,8 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 			strcpy(info_list->vlenth_index,"N/A");
 		}
 	}else if(!strcmp(name,"value")){
-		if(info_list->len <= 4){
+		info_list->bit_len = info_list->len * info_list->len_unit;
+		if(info_list->bit_len / 8 <= 4){
 			info_list->data = atoi((char *)(attr_value));
 			//dbg_str(DBG_DETAIL,"data =%x",info_list->data);
 		}else {
@@ -317,10 +335,11 @@ proto_info_list_t *
 pfs_set_proto_info(
 		char *name,char *name_value,
 		char *byte_pos,char *byte_pos_value,
+		char *bit_pos,char *bit_pos_value,
 		char *len,char *len_value,
+		char *len_unit,char *len_unit_value,
 		char *vlenth_index,char *vlenth_index_value,
-		struct list_head *hl_head
-		)
+		struct list_head *hl_head)
 {
 	proto_head_list_t *head_list;
 	proto_info_list_t *info_list;
@@ -332,7 +351,9 @@ pfs_set_proto_info(
 	}
 	set_proto_info_attribs(name, name_value,info_list);
 	set_proto_info_attribs(byte_pos, byte_pos_value,info_list);
+	set_proto_info_attribs(bit_pos, bit_pos_value,info_list);
 	set_proto_info_attribs(len, len_value,info_list);
+	set_proto_info_attribs(len_unit, len_unit_value,info_list);
 	set_proto_info_attribs(vlenth_index, vlenth_index_value,info_list);
 
 	pfs_add_list(&info_list->list_head,hl_head);
@@ -391,7 +412,10 @@ void init_proto_format_set(int proto_base_addr,
 	//not realse
 	pfs_p->proto_total_num = 0;
 	pfs_p->proto_max_num = max_proto_num;
-	pfs_set_proto_format_3008(pfs_p);
+	/*
+	 *pfs_set_proto_format_3008(pfs_p);
+	 */
+	pfs_set_pdu_format_ackd(pfs_p);
 }
 /*
  *int main()

@@ -26,12 +26,12 @@ include ./mk/Makefile.funcs
 all :
 	@$(call build_obj);\
 	$(call check_output_dir);\
-	$(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread;\
+	$(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm;\
 	if [ $$? -ne 0 ]; then \
 		echo "Building $(TARGET) is failed !"; \
 		exit 12; \
 	else\
-		echo $(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread;\
+		echo $(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm;\
 		echo ;\
 		echo $(TARGET) has been created!;\
 		echo ;\
