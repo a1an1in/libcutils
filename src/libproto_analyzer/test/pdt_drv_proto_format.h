@@ -3,6 +3,7 @@
 
 #define PROTO_NUM  "proto_num"
 #define LAB        "lab"
+#define COUNT      "count"
 #define SLOT_INFO  "slot_info"
 #define SYNC_INFO  "sync_info"
 #define TACT_INFO  "tact_info"

@@ -7,7 +7,7 @@
 #               then open an shell and change dir to top Makefile's dir and key make.
 #  Version:     2.0
 #  Created:     11/05/2015 11:27:03 PM
-#  Author:      alan lin , 490832748@qq.com
+#  Author:      alan lin , a1an1in@sina.com
 #  Company:     vigor
 #=====================================================================================
 #
