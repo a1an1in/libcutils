@@ -16,7 +16,7 @@
  * =====================================================================================
  */
 /*  
- * Copyright (c) 2015-2010 alan lin <a1an1in@sina.com>
+ * Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
  *  
  *  
  * Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,7 @@
 #include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_proto_analyzer.h"
 
-#define LIBCDF_VERSION "1.1.3.1"
+#define LIBCDF_VERSION "1.1.4.1"
 
 debugger_t *debugger_gp;
 

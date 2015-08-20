@@ -13,7 +13,7 @@
  * =====================================================================================
  */
 /*  
- * Copyright (c) 2015-2010 alan lin <a1an1in@sina.com>
+ * Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
  *  
  *  
  * Redistribution and use in source and binary forms, with or without
