@@ -324,9 +324,10 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 		/*
 		 *dbg_buf(DBG_DETAIL,"vlenth_index:",(char *)attr_value,sizeof(attr_value));
 		 */
-		if(strlen(info_list->vlenth_index) > 0)//need trim space
+		if(strlen(info_list->vlenth_index) > 0){
 			info_list->vlenth_flag = 1;
-		else{
+			info_list->vlenth_flag_bak = 1;
+		}else{
 			strcpy(info_list->vlenth_index,"N/A");
 		}
 	}else if(!strcmp(name,"value")){

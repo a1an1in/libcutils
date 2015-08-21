@@ -60,12 +60,13 @@ int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p)
 	 */
 	PFS_SET_PROTO_INFO( PROTO_NUM,    "0", "0", "2", "8",  NULL,     hl_head);
 	PFS_SET_PROTO_INFO( LAB,          "2", "0", "2", "8",  NULL,     hl_head);
+	PFS_SET_PROTO_INFO( LEN,          "5", "0", "1", "8",  NULL,     hl_head);
 
 	PFS_SET_PROTO_INFO( SLOT_INFO,    "6", "0", "2", "8",  NULL,     hl_head);
-	PFS_SET_PROTO_INFO( SYNC_INFO,    "8", "0", "2", "8",  NULL,     hl_head);
-	PFS_SET_PROTO_INFO( ST_INFO,      "10","0", "1", "8",  NULL,     hl_head);
-	PFS_SET_PROTO_INFO( DC_INFO,      "11","0", "1", "8",  NULL,     hl_head);
-	PFS_SET_PROTO_INFO( DC_DATA,      "12","0", "0", "8",  DC_INFO,  hl_head);
+	PFS_SET_PROTO_INFO( SYNC_INDEX,   "8", "0", "1", "8",  NULL,     hl_head);
+	PFS_SET_PROTO_INFO( ST_INFO,      "9","0", "1", "8",  NULL,     hl_head);
+	PFS_SET_PROTO_INFO( DC_INFO,      "10","0", "1", "8",  NULL,     hl_head);
+	PFS_SET_PROTO_INFO( DC_DATA,      "11","0", "0", "8",  DC_INFO,  hl_head);
 
 	llist_num =0x3019 - pfs_p->proto_base_addr;
 	pfs_add_proto_link_list(llist_num,

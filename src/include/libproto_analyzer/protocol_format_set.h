@@ -30,6 +30,7 @@ typedef struct proto_info_list_s{
 	char name[MAX_NAME_LEN];
 	char vlenth_index[MAX_NAME_LEN];
 	uint8_t vlenth_flag:1;
+	uint8_t vlenth_flag_bak:1;
 	uint8_t vlenth_value_flag:1;
 	uint8_t vlenth_value_assigned_flag:1;
 	uint8_t byte_pos;

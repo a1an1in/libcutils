@@ -213,7 +213,7 @@ int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyz
 			info_list->buf.data_p =(uint8_t *)allocator_mem_alloc(pa->allocator,len);
 			info_list->buf.len = len;
 			memcpy(info_list->buf.data_p,data,len);
-		}else if(len < info_list->buf.len){
+		}else if(len <= info_list->buf.len){
 			memcpy(info_list->buf.data_p,data,len);
 		}else{
 			dbg_str(DBG_WARNNING,"prev buffer len is small,release it and new a buffer");
@@ -448,7 +448,16 @@ void pa_get_protocol_buf(proto_info_list_t *info_list,
 		memcpy(info_list->buf.data_p,pa->protocol_data + info_list->byte_pos,info_list->len);
 		info_list->buf.len = info_list->len;
 	}else{
-		dbg_str(DBG_WARNNING,"mem has malloc before,not get data");
+		if(info_list->len <= info_list->buf.len){
+			memcpy(info_list->buf.data_p,pa->protocol_data + info_list->byte_pos,info_list->len);
+			info_list->buf.len = info_list->len;
+		}else{
+			dbg_str(DBG_WARNNING,"mem has malloc before,but too small,release and realloc");
+			allocator_mem_free(pa->allocator,info_list->buf.data_p);
+			info_list->buf.data_p = (uint8_t *)allocator_mem_alloc(pa->allocator,info_list->len);
+			memcpy(info_list->buf.data_p,pa->protocol_data + info_list->byte_pos,info_list->len);
+			info_list->buf.len = info_list->len;
+		}
 	}
 
 }
@@ -681,5 +690,32 @@ int pa_parse_protocol_data(struct protocol_analyzer_s *pa)
 	/*
 	 *pthread_rwlock_unlock(&head_list->head_lock);
 	 */
+	return ret;
+}
+int pa_reset_vlen_flag(struct protocol_analyzer_s *pa)
+{
+	int ret = 0;
+	struct list_head *list_head_p;
+	proto_head_list_t *head_list;
+	proto_info_list_t *info_list;
+	struct list_head *pos,*n;
+
+	if(pa == NULL){
+		dbg_str(DBG_ERROR,"pa is NULL");
+		return -1;
+	}
+	list_head_p = pa->pa_list_head_p;
+	if(list_head_p == NULL){
+		dbg_str(DBG_ERROR,"pa_list_head_p is NULL");
+		return -1;
+	}
+
+	head_list = container_of(list_head_p,proto_head_list_t,list_head);
+	list_for_each_safe(pos, n,list_head_p) {
+		info_list = container_of(pos,proto_info_list_t,list_head);
+		if(info_list->vlenth_flag_bak == 1){
+			info_list->vlenth_flag = 1;
+		}
+	}
 	return ret;
 }
