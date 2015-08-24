@@ -44,7 +44,6 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 #include <sys/time.h>
 #include <assert.h>
 #include <unistd.h>
@@ -64,7 +63,10 @@ void mempool_init_head_list(struct list_head **hl_head)
 		dbg_str(DBG_ALLOC_ERROR,"malloc mempool list_head_list");
 		return;
 	}
-	pthread_rwlock_init(&head_list->head_lock,NULL);
+	/*
+	 *pthread_rwlock_init(&head_list->head_lock,NULL);
+	 */
+	sync_lock_init(&head_list->head_lock,PTHREAD_RWLOCK);
 	head_list->count = 0;
 	INIT_LIST_HEAD(&head_list->list_head);
 	*hl_head = &head_list->list_head;
@@ -75,10 +77,16 @@ void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head)
 
 	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
 
-	pthread_rwlock_wrlock(&head_list->head_lock);
+	sync_lock(&head_list->head_lock,0);
+	/*
+	 *pthread_rwlock_wrlock(&head_list->head_lock);
+	 */
 	list_add(new_head,hl_head);
 	head_list->count++;
-	pthread_rwlock_unlock(&head_list->head_lock);
+	sync_unlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&head_list->head_lock);
+	 */
 
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"add head:%p hl_head:%p",new_head,hl_head);
@@ -94,7 +102,10 @@ void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)
 
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_detach_list");
 	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
-	pthread_rwlock_wrlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&head_list->head_lock);
+	 */
+	sync_lock(&head_list->head_lock,0);
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del head:%p, hl_head:%p",del_head,hl_head);
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del heads next:%p, prev:%p",del_head->next,del_head->prev);
@@ -102,7 +113,10 @@ void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)
 	list_del(del_head);
 	head_list->count--;
 	mempool_list = container_of(del_head,cds_mempool_t,list_head);
-	pthread_rwlock_unlock(&head_list->head_lock);
+	sync_unlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&head_list->head_lock);
+	 */
 
 	dbg_str(DBG_ALLOC_DETAIL,"del_mempool list,list count =%d",head_list->count);
 }
@@ -113,7 +127,10 @@ void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)
 
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_detach_list");
 	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
-	pthread_rwlock_wrlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&head_list->head_lock);
+	 */
+	sync_lock(&head_list->head_lock,0);
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del head:%p, hl_head:%p",del_head,hl_head);
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del heads next:%p, prev:%p",del_head->next,del_head->prev);
@@ -122,7 +139,10 @@ void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)
 	head_list->count--;
 	mempool_list = container_of(del_head,cds_mempool_t,list_head);
 	mempool_release_list(mempool_list); 
-	pthread_rwlock_unlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&head_list->head_lock);
+	 */
+	sync_unlock(&head_list->head_lock);
 
 	dbg_str(DBG_ALLOC_DETAIL,"del_mempool list,list count =%d",head_list->count);
 }
@@ -151,12 +171,18 @@ void mempool_print_list_for_each(struct list_head *hl_head)
 
 	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
 
-	pthread_rwlock_rdlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_rdlock(&head_list->head_lock);
+	 */
+	sync_lock(&head_list->head_lock,0);
 	list_for_each_safe(pos, n, hl_head) {
 		mempool_list = container_of(pos,cds_mempool_t,list_head);
 		mempool_print_list(mempool_list);
 	}
-	pthread_rwlock_unlock(&head_list->head_lock);
+	sync_unlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&head_list->head_lock);
+	 */
 }
 
 cds_mempool_t *mempool_create_list(allocator_t *alloc)
@@ -191,6 +217,7 @@ void *mempool_release_list(cds_mempool_t *mempool)
 	free(mempool->start);
 	free(mempool);
 }
+//not release lock
 void mempool_destroy_lists(struct list_head *hl_head)
 {
 	struct list_head *pos,*n;
@@ -212,22 +239,37 @@ cds_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)
 
 	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
 
-	pthread_rwlock_rdlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_rdlock(&head_list->head_lock);
+	 */
+	sync_lock(&head_list->head_lock,0);
 	list_for_each_safe(pos, n, hl_head) {
 		mempool_list = container_of(pos,cds_mempool_t,list_head);
 		if(mempool_list->depth >= size + sizeof(cds_slab_t)){
 			dbg_str(DBG_ALLOC_DETAIL,"find an appropriate_pool");
-			pthread_rwlock_unlock(&head_list->head_lock);
+			/*
+			 *pthread_rwlock_unlock(&head_list->head_lock);
+			 */
+			sync_unlock(&head_list->head_lock);
 			return mempool_list;
 		}else if(mempool_list->depth < mempool_list->min_depth){
 			dbg_str(DBG_ALLOC_WARNNING,"this mempool is empty");
-			pthread_rwlock_unlock(&head_list->head_lock);
+			/*
+			 *pthread_rwlock_unlock(&head_list->head_lock);
+			 */
+			sync_unlock(&head_list->head_lock);
 			mempool_detach_list(pos,hl_head);
 			mempool_attach_list(pos,empty_pool_hl_head);
-			pthread_rwlock_rdlock(&head_list->head_lock);
+			/*
+			 *pthread_rwlock_rdlock(&head_list->head_lock);
+			 */
+			sync_lock(&head_list->head_lock,0);
 		}
 	}
-	pthread_rwlock_unlock(&head_list->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&head_list->head_lock);
+	 */
+	sync_unlock(&head_list->head_lock);
 	return NULL;
 }
 uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)

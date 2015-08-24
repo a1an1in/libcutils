@@ -44,7 +44,6 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 #include "libcontainer/container_list.h"
 #include "libcontainer/inc_files.h"
 
@@ -75,10 +74,16 @@ int list_push_front(container_t *ct,void *data)
 	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
 	memcpy(p->data,data,data_size);
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	list_add(&p->list_head, ct->end.pos.list_head_p);//end can be regrad as head list
 	list_iterator_init(&ct->begin,&p->list_head,ct);
-	pthread_rwlock_unlock(&ct->head_lock);
+	sync_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
 
 	return 0;
 }
@@ -90,10 +95,16 @@ int list_push_back(container_t *ct,void *data)
 	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
 	memcpy(p->data,data,data_size);
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	list_add_tail(&p->list_head, ct->end.pos.list_head_p);
 	list_iterator_init(&ct->begin,ct->end.pos.list_head_p->next,ct);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }
@@ -106,9 +117,15 @@ int list_pop_back(container_t *ct)
 	p = container_of(head->prev,struct container_list,list_head);
 	dbg_str(DBG_CONTAINER_DETAIL,"pop back");
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	list_del(head->prev);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	allocator_mem_free(ct->allocator,p);
 
@@ -122,10 +139,16 @@ int list_pop_front(container_t *ct)
 	p = container_of(head->next,struct container_list,list_head);
 	dbg_str(DBG_CONTAINER_DETAIL,"pop front");
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	list_del(head->next);
 	list_iterator_init(&ct->begin,head->next,ct);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	allocator_mem_free(ct->allocator,p);
 
@@ -140,10 +163,16 @@ int list_insert(container_t *ct, iterator_t it, void *data)
 	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
 	memcpy(p->data,data,data_size);
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	list_add(&p->list_head, it.pos.list_head_p);
 	list_iterator_init(&ct->begin,ct->end.pos.list_head_p->next,ct);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }
@@ -154,12 +183,18 @@ int list_delete(container_t *ct, iterator_t it)
 	p = container_of(it.pos.list_head_p,struct container_list,list_head);
 	dbg_str(DBG_CONTAINER_IMPORTANT,"delete list");
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	if(list_iterator_equal(it,ct->begin)){
 		list_iterator_init(&ct->begin,it.pos.list_head_p->next,ct);
 	}
 	list_del(it.pos.list_head_p);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	allocator_mem_free(ct->allocator,p);
 	return 0;

@@ -52,8 +52,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <pthread.h>
 #include "libdbg/debug.h"
+#include "libcre/sync_lock/sync_lock.h"
 
 
 /*
@@ -109,13 +109,13 @@ void network_print_init(debugger_t *debugger)
 	char buf[MAX_NETWORK_INIT_BUF_LEN];
 	char default_dbg_ip[] = "127.0.0.1";
 
+	printf("network print init\n");
 	net_priv->port = iniparser_getint(d, (char *)"network:debug_port",default_dbg_port);
 	ip = iniparser_getstr(d, (char *)"network:debug_ip");
 	if(ip == NULL){
 		/*
 		 *memcpy(debug_ip,get_ipaddr(),strlen(get_ipaddr()));
 		 */
-		dbg_str(DBG_ERROR,"iniparser_getstr err");
 		memcpy(net_priv->ip_str,default_dbg_ip,strlen(default_dbg_ip));
 		iniparser_setstr(d, (char *)"network", NULL); 
 		debug_string_itoa(default_dbg_port,buf,10);
@@ -139,7 +139,10 @@ void network_print_init(debugger_t *debugger)
 		printf("setsocgketopt error\n");
 		exit(1);
 	}      
-	pthread_mutex_init(&debugger->priv.net.send_dgram_lock,NULL);
+	/*
+	 *pthread_mutex_init(&debugger->priv.net.send_dgram_lock,NULL);
+	 */
+	sync_lock_init(&debugger->priv.net.send_dgram_lock,PTHREAD_RWLOCK);
 	debugger->priv.net.sd = sd;
 
 	raddr = &debugger->priv.net.raddr;
@@ -150,21 +153,29 @@ void network_print_init(debugger_t *debugger)
 }
 void network_print_destroy(debugger_t *debugger)
 {
-	pthread_mutex_destroy(&debugger->priv.net.send_dgram_lock);
+	/*
+	 *pthread_mutex_destroy(&debugger->priv.net.send_dgram_lock);
+	 */
+	sync_lock_destroy(&debugger->priv.net.send_dgram_lock);
 }
 int network_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_list vl)
 {
 	char dest[1024];
 	size_t ret,offset=0;
 	uint16_t slen = 1024;
-	pthread_mutex_t *lock = &debugger->priv.net.send_dgram_lock;
-
-	pthread_mutex_lock(lock);
+	/*
+	 *pthread_mutex_t *lock = &debugger->priv.net.send_dgram_lock;
+	 *pthread_mutex_lock(lock);
+	 */
+	sync_lock(&debugger->priv.net.send_dgram_lock,0);
 	memset(dest,'\0',slen);
 	offset = vsnprintf(dest,slen,fmt,vl);
 	offset += snprintf(dest + offset,slen,"\n");
 	ret = network_print_sendto(debugger,dest,offset);
-	pthread_mutex_unlock(lock);
+	sync_unlock(&debugger->priv.net.send_dgram_lock);
+	/*
+	 *pthread_mutex_unlock(lock);
+	 */
 
 	return ret;
 }

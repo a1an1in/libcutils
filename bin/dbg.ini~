@@ -1,6 +1,6 @@
 
 [debugger]
-type                           = 2
+type                           = 1
 
 [businesses]
 business_num                   = 3
@@ -13,8 +13,4 @@ business2_level                = 9
 
 [log]
 log_file_name                  = dbg_log.txt
-
-[network]
-debug_port                     = 10276
-debug_ip                       = 127.0.0.1
 

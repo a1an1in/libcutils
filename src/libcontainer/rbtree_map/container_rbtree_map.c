@@ -46,7 +46,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <pthread.h>
 #include "libcontainer/container_rbtree_map.h"
 #include "libcontainer/inc_files.h"
 
@@ -182,11 +181,17 @@ int rbtree_map_insert(container_t *ct, void *value)
 	memcpy(mnode->key,value,data_size);
 	mnode->value_pos = key_size;
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	__rbtree_map_insert(ct,tree_root, mnode);
 
 	ct->begin.pos.rb_node_p = rb_first(tree_root);
-	pthread_rwlock_unlock(&ct->head_lock);
+	sync_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
 
 	return 0;
 }
@@ -200,12 +205,18 @@ int rbtree_map_delete(container_t *ct, iterator_t it)
 
 	dbg_str(DBG_CONTAINER_DETAIL,"delete node");
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	if(rbtree_map_iterator_equal(it,ct->begin)){
 		rbtree_map_iterator_init(&ct->begin,rb_next(rb_node_p),ct);
 	}
 	rb_erase(rb_node_p, tree_root);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	if (mnode != NULL) {
 		allocator_mem_free(ct->allocator,mnode);
@@ -221,9 +232,15 @@ iterator_t rbtree_map_search(container_t *ct, void *key)
 
 	dbg_str(DBG_CONTAINER_DETAIL,"rbtree_map_search");
 
-	pthread_rwlock_rdlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_rdlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	mnode = __rbtree_map_search(ct,tree_root, key);
-	pthread_rwlock_unlock(&ct->head_lock);
+	sync_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
 
 	if(mnode == NULL){
 		ret.pos.rb_node_p = NULL;

@@ -18,18 +18,21 @@
 #ifndef __ALLOCATOR_SGI_ALLOC_H__
 #define __ALLOCATOR_SGI_ALLOC_H__
 
-#include <pthread.h>
+#include "libcre/sync_lock/sync_lock.h"
 #include "basic_types.h"
 #include "liballoc/list.h"
 
-#define SLAB_ARRAY_MAX_NUM 20
+#define SLAB_ARRAY_MAX_NUM 24
 #define MEM_POOL_MAX_SIZE 1024*4
 #define MEM_POOL_MIN_DEPTH 8
 
 typedef struct cds_mem_pool_head_list{
 	uint32_t size;
 	uint32_t count;
-	pthread_rwlock_t head_lock;
+	/*
+	 *pthread_rwlock_t head_lock;
+	 */
+	sync_lock_t head_lock;    
 	struct list_head list_head;
 }cds_mempool_head_list_t;
 typedef struct cds_mem_pool{
@@ -44,7 +47,10 @@ typedef struct cds_mem_pool{
 typedef struct slab_head_list{
 	uint16_t size;
 	uint32_t count;
-	pthread_rwlock_t head_lock;
+	/*
+	 *pthread_rwlock_t head_lock;
+	 */
+	sync_lock_t head_lock;    
 	struct list_head list_head;
 }cds_slab_head_list_t;
 typedef struct slab{

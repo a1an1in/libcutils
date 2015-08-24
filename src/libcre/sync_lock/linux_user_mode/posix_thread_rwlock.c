@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  test_cds_alloc.c
+ *       Filename:  linux_user_mode_rwlock.c
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  06/15/2015 11:18:21 AM
+ *        Created:  08/24/2015 03:32:06 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,7 +16,7 @@
  * =====================================================================================
  */
 /*  
- * Copyright (c) 2015-2010 alan lin <a1an1in@sina.com>
+ * Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
  *  
  *  
  * Redistribution and use in source and binary forms, with or without
@@ -44,53 +44,44 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "libcontainer/inc_files.h"
+#include <string.h>
+#include <pthread.h>
+#include "libcre/sync_lock/sync_lock.h"
+#include "libdbg/debug.h"
 
-void test_ctr_alloc()
+int posix_thread_rwlock_init(struct sync_lock_s *slock)
 {
-	allocator_t *allocator;
-	void *p ,*p2,*p3;
-	uint32_t size = 8;
-
-	/*
-	 *alloc_p->slab_max_num = SLAB_ARRAY_MAX_NUM;
-	 *alloc_p->data_min_size = 8;
-	 *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
-	 */
-	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
-	allocator_ctr_init(allocator, 0, 0, 1024);
-	/*
-	 *allocator_cds_init(allocator,0,0,0);
-	 */
-
-	p = allocator_mem_alloc(allocator,7);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p);
-
-	allocator_mem_free(allocator,p);
-
-	p2 = allocator_mem_alloc(allocator,8);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p2);
-
-	/*
-	 *p3 = allocator_mem_alloc(allocator,200);
-	 *dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p3);
-	 */
-
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
-	allocator_mem_info(allocator);
-
-	allocator_mem_free(allocator,p);
-	allocator_mem_free(allocator,p2);
-	allocator_mem_free(allocator,p3);
-
-	dbg_str(DBG_CONTAINER_DETAIL,"batch alloc");
-	int i;
-	for(size = 8,i = 0; i< 20; i++,size += 8){
-		p = allocator_mem_alloc(allocator,size);
-	}
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
-	allocator_mem_info(allocator);
-
-	allocator_destroy(allocator);
-	dbg_str(DBG_CONTAINER_DETAIL,"test cds alloc end");
+	return pthread_rwlock_init(&slock->lock.rwlock,NULL);
 }
+int posix_thread_rwlock_lock(struct sync_lock_s *slock,uint32_t flag)
+{
+	return pthread_rwlock_wrlock(&slock->lock.rwlock);
+}
+int posix_thread_rwlock_trylock(struct sync_lock_s *slock,uint32_t flag)
+{
+	return pthread_rwlock_trywrlock(&slock->lock.rwlock);
+}
+int posix_thread_rwlock_unlock(struct sync_lock_s *slock)
+{
+	return pthread_rwlock_unlock(&slock->lock.rwlock);
+}
+int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)
+{
+	return pthread_rwlock_destroy(&slock->lock.rwlock);
+}
+int  linux_user_mode_pthread_rwlock_register(){
+	sync_lock_module_t slm = {
+		.name = "pthread_rwlock",
+		.sync_lock_type = PTHREAD_RWLOCK,
+		.sl_ops                = {
+			.sync_lock_init    = posix_thread_rwlock_init,
+			.sync_lock         = posix_thread_rwlock_lock,
+			.sync_trylock      = posix_thread_rwlock_trylock,
+			.sync_unlock       = posix_thread_rwlock_unlock,
+			.sync_lock_destroy = posix_thread_rwlock_lock_destroy,
+		},
+	};
+	memcpy(&sync_lock_modules[PTHREAD_RWLOCK],&slm,sizeof(sync_lock_module_t));
+	return 0;
+}
+

@@ -107,6 +107,7 @@ void debugger_set_businesses(debugger_t *debugger)
 	char level_str[MAX_STRING_LEN];
 	int sw,lv;
 
+	printf("debugger_set_businesses\n");
 	bussiness_num = iniparser_getint(d, (char *)"businesses:business_num",0);
 	if(bussiness_num == 0){
 		iniparser_setstr(d, (char *)"businesses", NULL); 

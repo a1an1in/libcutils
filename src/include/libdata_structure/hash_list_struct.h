@@ -18,9 +18,9 @@
 #ifndef __HASH_LIST_ST_H__
 #define __HASH_LIST_ST_H__
 
-#include <pthread.h>
 #include "libdata_structure/list.h"
 #include "liballoc/allocator.h"
+#include "libcre/sync_lock/sync_lock.h"
 
 /*
  *typedef unsigned int uint32_t;
@@ -62,7 +62,10 @@ typedef struct hash_map_s{
 	key_cmp_fpt key_cmp_func;
 	struct hlist_head *hlist;
 	hash_map_pos_t begin,end;
-	pthread_rwlock_t map_lock;
+	/*
+	 *pthread_rwlock_t map_lock;
+	 */
+	sync_lock_t map_lock;
 	allocator_t *allocator;
 }hash_map_t;
 

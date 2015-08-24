@@ -24,6 +24,9 @@ CC	src/libcontainer/list/Makefile	/^CC = gcc$/;"	m
 CC	src/libcontainer/rbtree_map/Makefile	/^CC = gcc$/;"	m
 CC	src/libcontainer/test/Makefile	/^CC = gcc$/;"	m
 CC	src/libcontainer/vector/Makefile	/^CC = gcc$/;"	m
+CC	src/libcre/Makefile	/^CC = gcc$/;"	m
+CC	src/libcre/sync_lock/Makefile	/^CC = gcc$/;"	m
+CC	src/libcre/sync_lock/linux_user_mode/Makefile	/^CC = gcc$/;"	m
 CC	src/libdata_structure/hash_map/Makefile	/^CC = gcc$/;"	m
 CC	src/libdata_structure/link_list/Makefile	/^CC = gcc$/;"	m
 CC	src/libdata_structure/test/Makefile	/^CC = gcc$/;"	m
@@ -141,6 +144,9 @@ LD	src/libcontainer/list/Makefile	/^LD = ld$/;"	m
 LD	src/libcontainer/rbtree_map/Makefile	/^LD = ld$/;"	m
 LD	src/libcontainer/test/Makefile	/^LD = ld$/;"	m
 LD	src/libcontainer/vector/Makefile	/^LD = ld$/;"	m
+LD	src/libcre/Makefile	/^LD = ld$/;"	m
+LD	src/libcre/sync_lock/Makefile	/^LD = ld$/;"	m
+LD	src/libcre/sync_lock/linux_user_mode/Makefile	/^LD = ld$/;"	m
 LD	src/libdata_structure/hash_map/Makefile	/^LD = ld$/;"	m
 LD	src/libdata_structure/link_list/Makefile	/^LD = ld$/;"	m
 LD	src/libdata_structure/test/Makefile	/^LD = ld$/;"	m
@@ -149,7 +155,8 @@ LD	src/libini/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/test/Makefile	/^LD = ld$/;"	m
 LEN	src/libproto_analyzer/test/pdt_drv_proto_format.h	6;"	d
-LIBCDF_VERSION	src/main.c	54;"	d	file:
+LIBCDF_VERSION	src/main.c	57;"	d	file:
+LINUX_USER_MODE	src/include/libcre/libcre.h	21;"	d
 LIST_HEAD	src/include/liballoc/list.h	43;"	d
 LIST_HEAD	src/include/libcontainer/list.h	52;"	d
 LIST_HEAD	src/include/libdata_structure/list.h	43;"	d
@@ -175,7 +182,7 @@ MAX_BUFFER_STR_LEN	src/libdbg/debug.c	205;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	229;"	d	file:
 MAX_BUSINESSES_SETTING_LEN	src/libdbg/debug.c	134;"	d	file:
 MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	29;"	d
-MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	50;"	d
+MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	51;"	d
 MAX_DEBUGGER_MODULES_NUM	src/include/libdbg/debug.h	91;"	d
 MAX_DEBUG_BUSINESS_NUM	src/include/libdbg/debug.h	72;"	d
 MAX_DEBUG_BUSINESS_NUM	src/include/libdbg/debug.h	86;"	d
@@ -193,16 +200,16 @@ MAX_IP_LEN	src/include/libdbg/debug_network.h	29;"	d
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	114;"	d	file:
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	99;"	d	file:
 MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	28;"	d
-MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	49;"	d
-MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	54;"	d
-MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	61;"	d
+MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	50;"	d
+MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	55;"	d
+MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	62;"	d
 MAX_NETWORK_INIT_BUF_LEN	src/libdbg/debug_network.c	102;"	d	file:
 MAX_NETWORK_INIT_BUF_LEN	src/libdbg/debug_network.c	149;"	d	file:
 MAX_PRINT_LEVEL_NAME_LEN	src/include/libdbg/debug.h	60;"	d
 MAX_PRINT_LEVEL_NAME_LEN	src/include/libdbg/debug.h	63;"	d
-MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	344;"	d	file:
-MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	119;"	d	file:
-MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	122;"	d	file:
+MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	345;"	d	file:
+MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	120;"	d	file:
+MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	123;"	d	file:
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	80;"	d	file:
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	82;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	23;"	d
@@ -226,6 +233,9 @@ OBJS	src/libcontainer/list/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子�
 OBJS	src/libcontainer/rbtree_map/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcontainer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcontainer/vector/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libcre/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libcre/sync_lock/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libcre/sync_lock/linux_user_mode/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libdata_structure/hash_map/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libdata_structure/link_list/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libdata_structure/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -234,7 +244,7 @@ OBJS	src/libini/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"
 OBJS	src/libproto_analyzer/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OPEN_DEBUG	src/include/libdbg/debug.h	139;"	d
-PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	101;"	d
+PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	102;"	d
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
 PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon4
 PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon4
@@ -249,6 +259,8 @@ PROTO_0x3009	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3009
 PROTO_0x300A	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300A,	$/;"	e	enum:__anon4
 PROTO_0x300B	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300B,	$/;"	e	enum:__anon4
 PROTO_NUM	src/libproto_analyzer/test/pdt_drv_proto_format.h	4;"	d
+PTHREAD_MUTEX_LOCK	src/include/libcre/sync_lock/sync_lock.h	/^	PTHREAD_MUTEX_LOCK = 0,$/;"	e	enum:sync_lock_type
+PTHREAD_RWLOCK	src/include/libcre/sync_lock/sync_lock.h	/^	PTHREAD_RWLOCK,$/;"	e	enum:sync_lock_type
 PURPLE	src/include/libdbg/debug.h	110;"	d
 RB_BLACK	src/include/libcontainer/rbtree.h	144;"	d
 RB_CLEAR_NODE	src/include/libcontainer/rbtree.h	177;"	d
@@ -273,6 +285,9 @@ SRCS	src/libcontainer/list/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcontainer/rbtree_map/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcontainer/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcontainer/vector/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libcre/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libcre/sync_lock/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libcre/sync_lock/linux_user_mode/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdata_structure/hash_map/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdata_structure/link_list/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdata_structure/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -283,6 +298,9 @@ SRCS	src/libproto_analyzer/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 ST_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	14;"	d
 SYNC_INDEX	src/libproto_analyzer/test/pdt_drv_proto_format.h	13;"	d
 SYNC_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	9;"	d
+SYNC_LOCK_NAME_MAX_LEN	src/include/libcre/sync_lock/sync_lock.h	55;"	d
+SYNC_LOCK_NAME_MAX_LEN	src/include/libcre/sync_lock/sync_lock.h	59;"	d
+SYNC_LOCK_TYPE_MAX_NUM	src/include/libcre/sync_lock/sync_lock.h	/^	SYNC_LOCK_TYPE_MAX_NUM,$/;"	e	enum:sync_lock_type
 TACT_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	10;"	d
 TARGET	Makefile	/^TARGET = test$/;"	m
 TARGET	src/Makefile	/^TARGET = build_in.o$/;"	m
@@ -295,6 +313,9 @@ TARGET	src/libcontainer/list/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcontainer/rbtree_map/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcontainer/test/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcontainer/vector/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libcre/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libcre/sync_lock/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libcre/sync_lock/linux_user_mode/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdata_structure/hash_map/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdata_structure/link_list/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdata_structure/test/Makefile	/^TARGET = build_in.o$/;"	m
@@ -318,6 +339,7 @@ __ALLOCATOR_SGI_ALLOC_H__	src/include/liballoc/allocator_ctr_alloc.h	19;"	d
 __ALLOCATOR_SYSALLOC_H__	src/include/liballoc/allocator_sys_alloc.h	2;"	d
 __BASIC_TYPES_H__	src/include/liballoc/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libcontainer/basic_types.h	2;"	d
+__BASIC_TYPES_H__	src/include/libcre/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libdbg/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libproto_analyzer/my_types.h	2;"	d
 __CONTAINER_LIST__	src/include/libcontainer/container_list.h	2;"	d
@@ -338,6 +360,7 @@ __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
 __KEY_CMP_FPT__	src/include/libcontainer/container_hash_map.h	25;"	d
 __KEY_CMP_FPT__	src/include/libcontainer/container_rbtree_map.h	8;"	d
 __KEY_CMP_FPT__	src/include/libdata_structure/hash_list_struct.h	39;"	d
+__LIBCRE_H__	src/include/libcre/libcre.h	19;"	d
 __LINK_LIST_H__	src/include/libdata_structure/link_list.h	19;"	d
 __LINK_LIST_STRUCT_H__	src/include/libdata_structure/link_list_struct.h	19;"	d
 __MODULE_REGESTER_H__	src/include/liballoc/liballoc_register_modules.h	2;"	d
@@ -345,6 +368,7 @@ __MODULE_REGESTER_H__	src/include/libcontainer/libcontainer_register_modules.h	2
 __PDT_PROTO_FORMAT__	src/libproto_analyzer/test/pdt_drv_proto_format.h	2;"	d
 __PROTOCOLO_ANALYZER__	src/include/libproto_analyzer/protocol_analyzer.h	2;"	d
 __PROTOCOL_FORMAT_SET__	src/include/libproto_analyzer/protocol_format_set.h	2;"	d
+__SYNC_LOCK_H__	src/include/libcre/sync_lock/sync_lock.h	19;"	d
 __TEST_H__	src/include/libcontainer/test_container.h	19;"	d
 __hash_map_begin	src/libcontainer/hash_map/container_hash_map.c	/^iterator_t __hash_map_begin(container_t *ct)$/;"	f
 __hash_map_delete	src/libcontainer/hash_map/container_hash_map.c	/^int __hash_map_delete(container_t *ct, iterator_t it)$/;"	f
@@ -441,6 +465,7 @@ allocator_t	src/include/liballoc/allocator.h	/^}allocator_t;$/;"	t	typeref:struc
 allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m	struct:allocator
 allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m	struct:allocator_module
 allocator_type	src/include/liballoc/allocator.h	/^enum allocator_type{$/;"	g
+b	src/include/libcre/sync_lock/sync_lock.h	/^		int b;$/;"	m	union:sync_lock_s::lock
 b	src/libdata_structure/test/test_hashmap.c	/^	int b;$/;"	m	struct:A	file:
 b	src/libdata_structure/test/test_link_list.c	/^	int b;$/;"	m	struct:test	file:
 begin	src/include/libcontainer/container.h	/^	iterator_t (*begin)(container_t *ct);$/;"	m	struct:container_operations
@@ -530,6 +555,7 @@ count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct
 count	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^	int count;$/;"	m	struct:pa_array_s	file:
 create_pair	src/include/libcontainer/container.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
 create_pair	src/include/libdata_structure/hash_list.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
+cs	src/include/libcre/sync_lock/sync_lock.h	/^		CRITIACAL_SECTION cs;$/;"	m	union:sync_lock_s::lock
 cur	src/include/libcontainer/container.h	/^	struct iterator begin,end,cur;$/;"	m	struct:container	typeref:struct:container::
 d	src/include/libdbg/debug.h	/^	dictionary *d;$/;"	m	struct:debugger
 data	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t data[0];$/;"	m	struct:slab
@@ -834,7 +860,10 @@ level	src/include/libdbg/debug.h	/^	uint8_t level;$/;"	m	struct:debugger
 level_str	src/include/libdbg/debug.h	/^	uint8_t level_str[MAX_PRINT_LEVEL_NAME_LEN];$/;"	m	struct:debug_level_info
 liballoc_register_modules	src/liballoc/liballoc_register_modules.c	/^void liballoc_register_modules()$/;"	f
 libcontainer_register_modules	src/libcontainer/libcontainer_register_modules.c	/^void libcontainer_register_modules()$/;"	f
+libcre_register_modules	src/libcre/libcre_register_modules.c	/^void libcre_register_modules()$/;"	f
 libdbg_register_modules	src/libdbg/libdbg_register_modules.c	/^void libdbg_register_modules()$/;"	f
+linux_user_mode_pthread_mutex_register	src/libcre/sync_lock/linux_user_mode/posix_thread_mutex.c	/^int  linux_user_mode_pthread_mutex_register(){$/;"	f
+linux_user_mode_pthread_rwlock_register	src/libcre/sync_lock/linux_user_mode/posix_thread_rwlock.c	/^int  linux_user_mode_pthread_rwlock_register(){$/;"	f
 list	src/include/libdata_structure/link_list_struct.h	/^	list_t *list;$/;"	m	struct:llist_s
 list_add	src/include/liballoc/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f
 list_add	src/include/libcontainer/list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f
@@ -1067,6 +1096,10 @@ llist_push_back	src/libdata_structure/link_list/link_list.c	/^int llist_push_bac
 llist_push_front	src/libdata_structure/link_list/link_list.c	/^int llist_push_front(llist_t *llist,void *data)$/;"	f
 llist_s	src/include/libdata_structure/link_list_struct.h	/^typedef struct llist_s{$/;"	s
 llist_t	src/include/libdata_structure/link_list_struct.h	/^}llist_t;$/;"	t	typeref:struct:llist_s
+lock	src/include/libcre/sync_lock/sync_lock.h	/^	union lock{$/;"	u	struct:sync_lock_s
+lock	src/include/libcre/sync_lock/sync_lock.h	/^	}lock;$/;"	m	struct:sync_lock_s	typeref:union:sync_lock_s::lock
+lock_ops	src/include/libcre/sync_lock/sync_lock.h	/^	struct sync_lock_operations *lock_ops;$/;"	m	struct:sync_lock_s	typeref:struct:sync_lock_s::sync_lock_operations
+lock_type	src/include/libcre/sync_lock/sync_lock.h	/^	uint8_t lock_type;$/;"	m	struct:sync_lock_s
 log	src/include/libdbg/debug.h	/^		debug_log_prive_t log;$/;"	m	union:debugger::debugger_priv
 log_file_lock	src/include/libdbg/debug_log.h	/^	pthread_mutex_t log_file_lock;$/;"	m	struct:debug_log_prive
 log_file_name	src/include/libdbg/debug_log.h	/^	char log_file_name[MAX_DEBUG_LOG_FILE_NAME_LEN];$/;"	m	struct:debug_log_prive
@@ -1101,11 +1134,13 @@ mempool_print_list	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^v
 mempool_print_list_for_each	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void mempool_print_list_for_each(struct list_head *hl_head)$/;"	f
 mempool_release_list	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^void *mempool_release_list(cds_mempool_t *mempool)$/;"	f
 min_depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t min_depth;$/;"	m	struct:cds_mem_pool
+mutex	src/include/libcre/sync_lock/sync_lock.h	/^		pthread_mutex_t mutex;$/;"	m	union:sync_lock_s::lock
 n	src/include/libini/iniparser.h	/^	int n;$/;"	m	struct:_dictionary_
 name	src/include/liballoc/allocator.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:allocator
 name	src/include/libcontainer/container.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:container
 name	src/include/libcontainer/container.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:container_module
 name	src/include/libcontainer/test_container.h	/^	char name[10];$/;"	m	struct:test
+name	src/include/libcre/sync_lock/sync_lock.h	/^	char name[SYNC_LOCK_NAME_MAX_LEN];$/;"	m	struct:sync_lock_module
 name	src/include/libproto_analyzer/protocol_format_set.h	/^	char name[MAX_NAME_LEN];$/;"	m	struct:proto_info_list_s
 net	src/include/libdbg/debug.h	/^		debug_network_prive_t net;$/;"	m	union:debugger::debugger_priv
 network_print_destroy	src/libdbg/debug_network.c	/^void network_print_destroy(debugger_t *debugger)$/;"	f
@@ -1148,6 +1183,7 @@ pa_list_head_p	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_
 pa_p2	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^	struct protocol_analyzer_s **pa_p2;$/;"	m	struct:pa_array_s	typeref:struct:pa_array_s::protocol_analyzer_s	file:
 pa_parse_protocol_data	src/libproto_analyzer/protocol_analyzer.c	/^int pa_parse_protocol_data(struct protocol_analyzer_s *pa)$/;"	f
 pa_recompute_byte_pos	src/libproto_analyzer/protocol_analyzer.c	/^int pa_recompute_byte_pos(struct list_head *cur,struct protocol_analyzer_s *pa)$/;"	f
+pa_reset_vlen_flag	src/libproto_analyzer/protocol_analyzer.c	/^int pa_reset_vlen_flag(struct protocol_analyzer_s *pa)$/;"	f
 pa_set_buf	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyzer_s *pa)$/;"	f
 pa_set_protocol_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^void pa_set_protocol_bit_data(uint32_t data,$/;"	f
 pa_set_protocol_buf	src/libproto_analyzer/protocol_analyzer.c	/^void pa_set_protocol_buf(uint8_t *data,uint32_t len,$/;"	f
@@ -1186,6 +1222,16 @@ pop_back	src/include/libcontainer/container.h	/^	int (*pop_back)(container_t *ct
 pop_front	src/include/libcontainer/container.h	/^	int (*pop_front)(container_t *ct);$/;"	m	struct:container_operations
 port	src/include/libdbg/debug_network.h	/^	unsigned int port;$/;"	m	struct:debug_network_prive
 pos	src/include/libcontainer/container.h	/^	}pos;$/;"	m	struct:iterator	typeref:union:iterator::__anon2
+posix_thread_mutex_init	src/libcre/sync_lock/linux_user_mode/posix_thread_mutex.c	/^int posix_thread_mutex_init(struct sync_lock_s *slock)$/;"	f
+posix_thread_mutex_lock	src/libcre/sync_lock/linux_user_mode/posix_thread_mutex.c	/^int posix_thread_mutex_lock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+posix_thread_mutex_lock_destroy	src/libcre/sync_lock/linux_user_mode/posix_thread_mutex.c	/^int posix_thread_mutex_lock_destroy(struct sync_lock_s *slock)$/;"	f
+posix_thread_mutex_trylock	src/libcre/sync_lock/linux_user_mode/posix_thread_mutex.c	/^int posix_thread_mutex_trylock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+posix_thread_mutex_unlock	src/libcre/sync_lock/linux_user_mode/posix_thread_mutex.c	/^int posix_thread_mutex_unlock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+posix_thread_rwlock_init	src/libcre/sync_lock/linux_user_mode/posix_thread_rwlock.c	/^int posix_thread_rwlock_init(struct sync_lock_s *slock)$/;"	f
+posix_thread_rwlock_lock	src/libcre/sync_lock/linux_user_mode/posix_thread_rwlock.c	/^int posix_thread_rwlock_lock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+posix_thread_rwlock_lock_destroy	src/libcre/sync_lock/linux_user_mode/posix_thread_rwlock.c	/^int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)$/;"	f
+posix_thread_rwlock_trylock	src/libcre/sync_lock/linux_user_mode/posix_thread_rwlock.c	/^int posix_thread_rwlock_trylock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+posix_thread_rwlock_unlock	src/libcre/sync_lock/linux_user_mode/posix_thread_rwlock.c	/^int posix_thread_rwlock_unlock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
 pprev	src/include/liballoc/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libcontainer/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libdata_structure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
@@ -1271,6 +1317,7 @@ rbtree_map_priv_info	src/include/libcontainer/container_rbtree_map.h	/^typedef s
 rbtree_map_priv_t	src/include/libcontainer/container_rbtree_map.h	/^}rbtree_map_priv_t;$/;"	t	typeref:struct:rbtree_map_priv_info
 rbtree_map_search	src/libcontainer/rbtree_map/container_rbtree_map.c	/^iterator_t rbtree_map_search(container_t *ct, void *key)$/;"	f
 register_all_lib_modules	src/main.c	/^void register_all_lib_modules()$/;"	f
+rwlock	src/include/libcre/sync_lock/sync_lock.h	/^		pthread_rwlock_t rwlock;$/;"	m	union:sync_lock_s::lock
 sd	src/include/libdbg/debug_network.h	/^	int sd;$/;"	m	struct:debug_network_prive
 send_dgram_lock	src/include/libdbg/debug_network.h	/^	pthread_mutex_t send_dgram_lock;$/;"	m	struct:debug_network_prive
 set_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t set_bit_data(uint8_t *buf,uint8_t data,uint8_t bit_pos,uint8_t len)$/;"	f
@@ -1281,6 +1328,7 @@ size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t size;$/;"	m	struct:s
 size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t size;$/;"	m	struct:cds_mem_pool
 size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t size;$/;"	m	struct:cds_mem_pool_head_list
 size	src/include/libini/iniparser.h	/^	int size;$/;"	m	struct:_dictionary_
+sl_ops	src/include/libcre/sync_lock/sync_lock.h	/^	struct sync_lock_operations sl_ops;$/;"	m	struct:sync_lock_module	typeref:struct:sync_lock_module::sync_lock_operations
 slab	src/include/liballoc/allocator_ctr_alloc.h	/^typedef struct slab{$/;"	s
 slab_array_max_num	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t slab_array_max_num;$/;"	m	struct:cds_alloc_s
 slab_attach_list	src/liballoc/container_alloc/allocator_ctr_slab_list.c	/^void slab_attach_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
@@ -1307,6 +1355,24 @@ strlwc	src/libini/iniparser.c	/^static char * strlwc(char * s)$/;"	f	file:
 strskp	src/libini/iniparser.c	/^static char * strskp(char * s)$/;"	f	file:
 strstrip	src/libini/iniparser.c	/^static char * strstrip(char * s)$/;"	f	file:
 strupc	src/libini/iniparser.c	/^static char * strupc(char * s)$/;"	f	file:
+sync_lock	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_lock)(struct sync_lock_s *slock,uint32_t flag);$/;"	m	struct:sync_lock_operations
+sync_lock	src/libcre/sync_lock/sync_lock.c	/^inline int sync_lock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+sync_lock_destroy	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_lock_destroy)(struct sync_lock_s *slock);$/;"	m	struct:sync_lock_operations
+sync_lock_destroy	src/libcre/sync_lock/sync_lock.c	/^inline int sync_lock_destroy(struct sync_lock_s *slock)$/;"	f
+sync_lock_init	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_lock_init)(struct sync_lock_s *slock);$/;"	m	struct:sync_lock_operations
+sync_lock_init	src/libcre/sync_lock/sync_lock.c	/^inline int sync_lock_init(struct sync_lock_s *slock,uint32_t sync_lock_type)$/;"	f
+sync_lock_module	src/include/libcre/sync_lock/sync_lock.h	/^typedef struct sync_lock_module{$/;"	s
+sync_lock_module_t	src/include/libcre/sync_lock/sync_lock.h	/^}sync_lock_module_t;$/;"	t	typeref:struct:sync_lock_module
+sync_lock_modules	src/libcre/sync_lock/sync_lock.c	/^sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];$/;"	v
+sync_lock_operations	src/include/libcre/sync_lock/sync_lock.h	/^struct sync_lock_operations{$/;"	s
+sync_lock_register_modules	src/libcre/sync_lock/sync_lock_register_modules.c	/^void sync_lock_register_modules()$/;"	f
+sync_lock_s	src/include/libcre/sync_lock/sync_lock.h	/^struct sync_lock_s{$/;"	s
+sync_lock_type	src/include/libcre/sync_lock/sync_lock.h	/^	uint8_t sync_lock_type;$/;"	m	struct:sync_lock_module
+sync_lock_type	src/include/libcre/sync_lock/sync_lock.h	/^enum sync_lock_type{$/;"	g
+sync_trylock	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_trylock)(struct sync_lock_s *slock,uint32_t flag);$/;"	m	struct:sync_lock_operations
+sync_trylock	src/libcre/sync_lock/sync_lock.c	/^inline int sync_trylock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
+sync_unlock	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_unlock)(struct sync_lock_s *slock,uint32_t flag);$/;"	m	struct:sync_lock_operations
+sync_unlock	src/libcre/sync_lock/sync_lock.c	/^inline int sync_unlock(struct sync_lock_s *slock,uint32_t flag)$/;"	f
 sys_alloc_alloc	src/liballoc/sys_alloc/allocator_sys_alloc.c	/^void *sys_alloc_alloc(allocator_t *alloc,uint32_t size)$/;"	f
 sys_alloc_free	src/liballoc/sys_alloc/allocator_sys_alloc.c	/^void sys_alloc_free(allocator_t *alloc,void *addr)$/;"	f
 test	src/include/libcontainer/test_container.h	/^struct test{$/;"	s
@@ -1350,16 +1416,19 @@ u8	src/include/libdbg/list.h	/^typedef unsigned char     u8;$/;"	t
 u8	src/include/libproto_analyzer/list.h	/^typedef unsigned char     u8;$/;"	t
 uint16_t	src/include/liballoc/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libcontainer/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
+uint16_t	src/include/libcre/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libdata_structure/link_list_struct.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libdbg/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint32_t	src/include/liballoc/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libcontainer/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
+uint32_t	src/include/libcre/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libdata_structure/link_list_struct.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libdbg/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint8_t	src/include/liballoc/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libcontainer/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
+uint8_t	src/include/libcre/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdata_structure/link_list_struct.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdbg/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned char uint8_t;$/;"	t
@@ -1395,6 +1464,7 @@ vector_priv_t	src/include/libcontainer/container_vector.h	/^}vector_priv_t;$/;"	
 vector_push_back	src/libcontainer/vector/container_vector.c	/^int vector_push_back(container_t *ct,void *data)$/;"	f
 vector_push_front	src/libcontainer/vector/container_vector.c	/^int vector_push_front(container_t *ct,void *data)$/;"	f
 vlenth_flag	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_flag:1;$/;"	m	struct:proto_info_list_s
+vlenth_flag_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_flag_bak:1;$/;"	m	struct:proto_info_list_s
 vlenth_index	src/include/libproto_analyzer/protocol_format_set.h	/^	char vlenth_index[MAX_NAME_LEN];$/;"	m	struct:proto_info_list_s
 vlenth_value_assigned_flag	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_value_assigned_flag:1;$/;"	m	struct:proto_info_list_s
 vlenth_value_flag	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_value_flag:1;$/;"	m	struct:proto_info_list_s

@@ -44,7 +44,6 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 #include "libcontainer/container_list.h"
 #include "libcontainer/inc_files.h"
 
@@ -88,7 +87,10 @@ int vector_push_back(container_t *ct,void *data)
 	uint32_t capacity  = vp_p->capacity;
 	uint32_t push_pos  = ct->end.pos.vector_pos;
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	dbg_str(DBG_CONTAINER_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,capacity);
 	if(push_pos < capacity){
 		memcpy(vector_head + (push_pos++)*step,data,data_size);
@@ -106,7 +108,10 @@ int vector_push_back(container_t *ct,void *data)
 		vector_iterator_init(&ct->end,push_pos,ct);
 		allocator_mem_free(ct->allocator,vector_head);
 	}
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }
@@ -122,13 +127,19 @@ int vector_pop_back(container_t *ct)
 	
 	dbg_str(DBG_CONTAINER_DETAIL,"pop back");
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	sync_lock(&ct->head_lock,0);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
 	if(!vector_iterator_equal(ct->begin,ct->end)){
 		vector_iterator_init(&ct->end,--pop_pos,ct);
 	} else{
 		dbg_str(DBG_CONTAINER_WARNNING,"vector is NULL");
 	}
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }
@@ -199,11 +210,17 @@ int vector_insert(container_t *ct, iterator_t it, void *data)
 	vector_iterator_init(&to,insert_pos + 1,ct);
 	dbg_str(DBG_CONTAINER_DETAIL,"insert_pos=%d,to_pos=%d",insert_pos,to.pos.vector_pos);
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	vector_copy(ct,to,it,count);
 	memcpy(vector_head + insert_pos * step,data,step);
 	vector_iterator_init(&ct->end,end_pos + 1,ct);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }
@@ -216,7 +233,10 @@ int vector_delete(container_t *ct, iterator_t it)
 
 	vector_iterator_init(&from,delete_pos + 1,ct);
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	if(vector_iterator_equal(it,ct->end)){
 		dbg_str(DBG_CONTAINER_WARNNING,"can't del end iterator");
 	}else if(vector_iterator_equal(it,ct->begin)&&vector_iterator_equal(from,ct->end)){
@@ -225,7 +245,10 @@ int vector_delete(container_t *ct, iterator_t it)
 		vector_copy(ct,it,from,count);
 		vector_iterator_init(&ct->end,end_pos - 1,ct);
 	}
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }

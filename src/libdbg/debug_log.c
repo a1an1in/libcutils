@@ -56,6 +56,7 @@ void log_print_init(debugger_t *debugger)
 	char *file_name;
 	char default_log_name[] = "dbg_log.txt";
 
+	printf("debug log init\n");
 	file_name = iniparser_getstr(d, (char *)"log:log_file_name");
 	if(file_name){
 		memcpy(log_priv->log_file_name,file_name,strlen(file_name));
@@ -77,7 +78,12 @@ void log_print_init(debugger_t *debugger)
 	}
 	log_priv->fp = fp;
 
-	pthread_mutex_init(&log_priv->log_file_lock,NULL);
+	/*
+	 *pthread_mutex_init(&log_priv->log_file_lock,NULL);
+	 */
+	printf("run at here.\n");
+	sync_lock_init(&log_priv->log_file_lock,PTHREAD_RWLOCK);
+	printf("debug log init end\n");
 }
 uint32_t log_print_write_log(FILE *fp,char *str)
 {
@@ -91,7 +97,10 @@ uint32_t log_print_write_log(FILE *fp,char *str)
 void log_print_destroy(debugger_t *debugger)
 {
 	debug_log_prive_t *log_priv = &debugger->priv.log;
-	pthread_mutex_destroy(&log_priv->log_file_lock);
+	/*
+	 *pthread_mutex_destroy(&log_priv->log_file_lock);
+	 */
+	sync_lock_destroy(&log_priv->log_file_lock);
 	fclose(log_priv->fp);
 }
 int log_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_list vl)
@@ -102,13 +111,15 @@ int log_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_
 	debug_log_prive_t *log_priv = &debugger->priv.log;
 
 	level = 0;
-	pthread_mutex_t *lock = &log_priv->log_file_lock;
-
-	pthread_mutex_lock(lock);
+	/*
+	 *pthread_mutex_t *lock = &log_priv->log_file_lock;
+	 *pthread_mutex_lock(lock);
+	 */
+	sync_lock(&log_priv->log_file_lock,0);
 	memset(buffer_str,'\0',MAX_LOG_PRINT_BUFFER_LEN);
 	offset = vsnprintf(buffer_str,MAX_LOG_PRINT_BUFFER_LEN,fmt,vl);
 	ret = log_print_write_log(log_priv->fp,buffer_str);
-	pthread_mutex_unlock(lock);
+	pthread_mutex_unlock(&log_priv->log_file_lock);
 
 	return ret;
 #undef MAX_LOG_PRINT_BUFFER_LEN 

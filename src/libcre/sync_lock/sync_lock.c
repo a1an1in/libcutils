@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  test_cds_alloc.c
+ *       Filename:  sync_lock.c
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  06/15/2015 11:18:21 AM
+ *        Created:  08/24/2015 02:08:23 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,7 +16,7 @@
  * =====================================================================================
  */
 /*  
- * Copyright (c) 2015-2010 alan lin <a1an1in@sina.com>
+ * Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
  *  
  *  
  * Redistribution and use in source and binary forms, with or without
@@ -44,53 +44,30 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "libcontainer/inc_files.h"
+#include "libcre/sync_lock/sync_lock.h"
 
-void test_ctr_alloc()
+sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];
+
+inline int sync_lock_init(struct sync_lock_s *slock,uint32_t sync_lock_type)
 {
-	allocator_t *allocator;
-	void *p ,*p2,*p3;
-	uint32_t size = 8;
+	slock->lock_ops = &sync_lock_modules[sync_lock_type].sl_ops;
 
-	/*
-	 *alloc_p->slab_max_num = SLAB_ARRAY_MAX_NUM;
-	 *alloc_p->data_min_size = 8;
-	 *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
-	 */
-	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
-	allocator_ctr_init(allocator, 0, 0, 1024);
-	/*
-	 *allocator_cds_init(allocator,0,0,0);
-	 */
-
-	p = allocator_mem_alloc(allocator,7);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p);
-
-	allocator_mem_free(allocator,p);
-
-	p2 = allocator_mem_alloc(allocator,8);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p2);
-
-	/*
-	 *p3 = allocator_mem_alloc(allocator,200);
-	 *dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p3);
-	 */
-
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
-	allocator_mem_info(allocator);
-
-	allocator_mem_free(allocator,p);
-	allocator_mem_free(allocator,p2);
-	allocator_mem_free(allocator,p3);
-
-	dbg_str(DBG_CONTAINER_DETAIL,"batch alloc");
-	int i;
-	for(size = 8,i = 0; i< 20; i++,size += 8){
-		p = allocator_mem_alloc(allocator,size);
-	}
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
-	allocator_mem_info(allocator);
-
-	allocator_destroy(allocator);
-	dbg_str(DBG_CONTAINER_DETAIL,"test cds alloc end");
+	return slock->lock_ops->sync_lock_init(slock);
 }
+inline int sync_lock(struct sync_lock_s *slock,uint32_t flag)
+{
+	return slock->lock_ops->sync_lock(slock,flag);
+}
+inline int sync_trylock(struct sync_lock_s *slock,uint32_t flag)
+{
+	return slock->lock_ops->sync_trylock(slock,flag);
+}
+inline int sync_unlock(struct sync_lock_s *slock)
+{
+	return slock->lock_ops->sync_unlock(slock);
+}
+inline int sync_lock_destroy(struct sync_lock_s *slock)
+{
+	return slock->lock_ops->sync_lock_destroy(slock);
+}
+

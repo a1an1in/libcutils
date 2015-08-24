@@ -5,6 +5,7 @@
 #include "libcontainer/container_list.h"
 #include "libcontainer/container_rbtree_map.h"
 #include "libcontainer/container_vector.h"
+#include "libcre/sync_lock/sync_lock.h"
 
 #define container_for_each_safe(it, next, ct) \
 	for (it = container_begin(ct), next = iterator_next(it);\
@@ -70,7 +71,7 @@ typedef struct container{
 	struct container_operations *c_ops_p;
 	struct iterator_operations *it_ops_p;
 	struct iterator begin,end,cur;
-	pthread_rwlock_t head_lock;    
+	sync_lock_t head_lock;    
 	union{
 		list_priv_t list_priv;
 		rbtree_map_priv_t rbtree_map_priv;

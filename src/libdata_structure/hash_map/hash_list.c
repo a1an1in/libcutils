@@ -56,8 +56,9 @@ hash_map_t * hash_map_create(allocator_t *allocator)
 		dbg_str(DBG_ERROR,"allocator_mem_alloc(map->allocator err");
 	}
 	map->allocator = allocator;
+	dbg_str(DBG_DETAIL,"hash_map_create");
 	
-	return 0;
+	return map;
 }
 int hash_map_init(hash_map_t *hmap,
 		uint32_t key_size,
@@ -66,12 +67,14 @@ int hash_map_init(hash_map_t *hmap,
 		hash_func_fpt hash_func,
 		key_cmp_fpt key_cmp_func)
 {
-	hash_map_t *map = hmap;
-	map->data_size = data_size;
-	map->key_size = key_size;
-	map->bucket_size = bucket_size;
-	map->hash_func = hash_func;
+	dbg_str(DBG_DETAIL,"hash_map_init");
+	hash_map_t *map   = hmap;
+	map->data_size    = data_size;
+	map->key_size     = key_size;
+	map->bucket_size  = bucket_size;
+	map->hash_func    = hash_func;
 	map->key_cmp_func = key_cmp_func;
+	dbg_str(DBG_DETAIL,"hash_map_init");
 
 	map->hlist = allocator_mem_alloc(map->allocator,
 			sizeof(struct hlist_head)*bucket_size);
@@ -80,7 +83,10 @@ int hash_map_init(hash_map_t *hmap,
 	hash_map_pos_init(&map->begin,NULL,0,map->hlist,map);
 	hash_map_pos_init(&map->end,NULL,bucket_size - 1,map->hlist,map);
 
-	pthread_rwlock_init(&map->map_lock,NULL);
+	/*
+	 *pthread_rwlock_init(&map->map_lock,NULL);
+	 */
+	sync_lock_init(&map->map_lock,PTHREAD_RWLOCK);
 	
 	return 0;
 }
@@ -134,7 +140,10 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 	bucket_pos = hash_func(mnode->key,key_size,bucket_size); 
 	assert(bucket_pos <= bucket_size);
 
-	pthread_rwlock_wrlock(&hmap->map_lock);
+	/*
+	 *pthread_rwlock_wrlock(&hmap->map_lock);
+	 */
+	sync_lock(&hmap->map_lock,0);
 
 	hlist_add_head(&mnode->hlist_node, &hlist[bucket_pos]);
 	if(begin_pos->hlist_node_p == NULL || bucket_pos <= begin_pos->bucket_pos){
@@ -146,7 +155,10 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 			hlist[bucket_pos].first,
 			hlist[bucket_pos].first->next,
 			hmap->begin.hlist_node_p);
-	pthread_rwlock_unlock(&hmap->map_lock);
+	/*
+	 *pthread_rwlock_unlock(&hmap->map_lock);
+	 */
+	sync_unlock(&hmap->map_lock);
 
 	return 0;
 }
@@ -169,16 +181,25 @@ hash_map_pos_t hash_map_search(hash_map_t *hmap, void *key)
 	assert(bucket_pos <= bucket_size);
 
 	dbg_str(DBG_DETAIL,"hash_map_search,bucket_pos=%d",bucket_pos);
-	pthread_rwlock_rdlock(&hmap->map_lock);
+	sync_lock(&hmap->map_lock,0);
+	/*
+	 *pthread_rwlock_rdlock(&hmap->map_lock);
+	 */
 	hlist_for_each_safe(pos, next, &hlist[bucket_pos]){
 		mnode = container_of(pos,struct hash_map_node,hlist_node);
 		if(!key_cmp_func(mnode->key,key,key_size)){
 			dbg_str(DBG_IMPORTANT,"found key");
-			pthread_rwlock_unlock(&hmap->map_lock);
+			/*
+			 *pthread_rwlock_unlock(&hmap->map_lock);
+			 */
+			sync_unlock(&hmap->map_lock);
 			return hash_map_pos_init(&ret, pos, bucket_pos, hlist,hmap);
 		}
 	}
-	pthread_rwlock_unlock(&hmap->map_lock);
+	/*
+	 *pthread_rwlock_unlock(&hmap->map_lock);
+	 */
+	sync_unlock(&hmap->map_lock);
 	return hash_map_pos_init(&ret, NULL, bucket_pos, hlist,hmap);
 }
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)
@@ -190,7 +211,10 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)
 	dbg_str(DBG_IMPORTANT,"del hash_map ,bucket_pos:%d,cur node:%p,begin node:%p",
 			pos.bucket_pos, pos.hlist_node_p, hmap->begin.hlist_node_p);
 
-	pthread_rwlock_wrlock(&hmap->map_lock);
+	/*
+	 *pthread_rwlock_wrlock(&hmap->map_lock);
+	 */
+	sync_lock(&hmap->map_lock,0);
 	if(hash_map_pos_equal(pos,hmap->begin)){
 		dbg_str(DBG_WARNNING,"del iter equal begain");
 		next = hash_map_pos_next(pos);
@@ -199,7 +223,10 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)
 				next.bucket_pos, hlist, hmap);
 	}
 	hlist_del(pos.hlist_node_p);
-	pthread_rwlock_unlock(&hmap->map_lock);
+	/*
+	 *pthread_rwlock_unlock(&hmap->map_lock);
+	 */
+	sync_unlock(&hmap->map_lock);
 
 	mnode = container_of(pos.hlist_node_p,struct hash_map_node,hlist_node);
 	if (mnode != NULL) {
@@ -221,6 +248,7 @@ int hash_map_destroy(hash_map_t *hmap)
 	 }
 	 if(hash_map_pos_equal(hmap->end,it)){
 		 dbg_str(DBG_WARNNING,"hash_map_destroy,hash_map is NULL");
+		 sync_lock_destroy(&hmap->map_lock);
 		 allocator_mem_free(hmap->allocator,hmap->hlist);
 	 }
 }

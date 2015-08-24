@@ -43,10 +43,13 @@
  * 
  */
 #include <stdio.h>
+
 #include "libdbg/debug.h"
 #include "libdbg/libdbg_register_modules.h"
 #include "liballoc/liballoc_register_modules.h"
 #include "libcontainer/libcontainer_register_modules.h"
+#include "libcre/libcre_register_modules.h"
+
 #include "libcontainer/test_container.h"
 #include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_proto_analyzer.h"
@@ -60,6 +63,7 @@ void register_all_lib_modules()
 	libdbg_register_modules();
 	liballoc_register_modules();
 	libcontainer_register_modules();
+	libcre_register_modules();
 }
 void test_container()
 {
@@ -78,10 +82,8 @@ void test_container()
 	 *dbg_str(DBG_DETAIL,"test_vector");
 	 *test_vector();
 	 */
-	/*
-	 *dbg_str(DBG_DETAIL,"test_cds_alloc");
-	 *test_ctr_alloc();
-	 */
+	dbg_str(DBG_DETAIL,"test_cds_alloc");
+	test_ctr_alloc();
 }
 void test_datastructure()
 {
@@ -94,7 +96,9 @@ void test_datastructure()
 }
 void test_analyzer()
 {
-	test_pdt_proto_analyzer();
+	/*
+	 *test_pdt_proto_analyzer();
+	 */
 	/*
 	 *test_pdu_proto_analyzer();
 	 */

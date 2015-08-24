@@ -64,7 +64,10 @@ container_t *container_creator(uint32_t container_type,allocator_t *allocator)
 	p->allocator = allocator;
 	p->c_ops_p = &container_modules[container_type].c_ops;
 	p->it_ops_p = &container_modules[container_type].it_ops;
-	pthread_rwlock_init(&p->head_lock,NULL);   
+	/*
+	 *pthread_rwlock_init(&p->head_lock,NULL);   
+	 */
+	sync_lock_init(&p->head_lock,PTHREAD_RWLOCK);
 
 	if(p->c_ops_p == NULL || p->it_ops_p == NULL){
 		allocator_mem_free(p->allocator,p);
@@ -164,6 +167,7 @@ iterator_t container_map_search(container_t *ct, void *key)
 }
 int container_destroy(container_t **ct)
 {
+	sync_lock_destroy(&(*ct)->head_lock);
 	(*ct)->c_ops_p->destroy(*ct);
 	allocator_mem_free((*ct)->allocator,*ct);
 	*ct = NULL;

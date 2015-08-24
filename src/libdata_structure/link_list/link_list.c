@@ -44,7 +44,6 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 #include "libdbg/debug.h"
 #include "libdata_structure/link_list.h"
 
@@ -113,7 +112,13 @@ int llist_init(llist_t *llist,uint32_t data_size)
 	llist_pos_init(&llist->end,p,llist);
 	llist_pos_init(&llist->head,p,llist);
 
-	pthread_rwlock_init(&llist->list_lock,NULL);
+	/*
+	 *sync_lock_init(&llist->list_lock,0);
+	 */
+	sync_lock_init(&llist->list_lock,PTHREAD_RWLOCK);
+	/*
+	 *pthread_rwlock_init(&llist->list_lock,NULL);
+	 */
 
 	return 0;
 }
@@ -125,7 +130,10 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	p = (list_t *)allocator_mem_alloc(llist->allocator,sizeof(list_t) + data_size);
 	memcpy(p->data,data,data_size);
 
-	pthread_rwlock_wrlock(&llist->list_lock);
+	sync_lock(&llist->list_lock,0);
+	/*
+	 *pthread_rwlock_wrlock(&llist->list_lock);
+	 */
 	list_add(&p->list_head, pos.list_head_p);
 	if(llist_pos_equal(pos,llist->head)){
 		llist_pos_init(&llist->begin,&p->list_head,llist);
@@ -135,7 +143,12 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	}
 	llist->list_count++;
 	dbg_str(DBG_IMPORTANT,"insert llist,listcount=%d",llist->list_count);
-	pthread_rwlock_unlock(&llist->list_lock);
+	/*
+	 *sync_unlock(&llist->list_lock);
+	 */
+	/*
+	 *pthread_rwlock_unlock(&llist->list_lock);
+	 */
 
 	return 0;
 }
@@ -145,7 +158,10 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 
 	p = container_of(pos.list_head_p,list_t,list_head);
 
-	pthread_rwlock_wrlock(&llist->list_lock);
+	sync_lock(&llist->list_lock,0);
+	/*
+	 *pthread_rwlock_wrlock(&llist->list_lock);
+	 */
 	if(llist_pos_equal(pos,llist->begin)){
 		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
 	}else if(llist_pos_equal(pos,llist->end)){
@@ -154,7 +170,10 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	list_del(pos.list_head_p);
 	llist->list_count--;
 	dbg_str(DBG_IMPORTANT,"delete llist,listcount=%d",llist->list_count);
-	pthread_rwlock_unlock(&llist->list_lock);
+	sync_unlock(&llist->list_lock);
+	/*
+	 *pthread_rwlock_unlock(&llist->list_lock);
+	 */
 
 	allocator_mem_free(llist->allocator,p);
 	return 0;
@@ -165,7 +184,10 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 
 	p = container_of(pos.list_head_p,list_t,list_head);
 
-	pthread_rwlock_wrlock(&llist->list_lock);
+	sync_lock(&llist->list_lock,0);
+	/*
+	 *pthread_rwlock_wrlock(&llist->list_lock);
+	 */
 	if(llist_pos_equal(pos,llist->begin)){
 		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
 	}else if(llist_pos_equal(pos,llist->end)){
@@ -174,7 +196,10 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 	list_del(pos.list_head_p);
 	llist->list_count--;
 	dbg_str(DBG_IMPORTANT,"detach llist,listcount=%d",llist->list_count);
-	pthread_rwlock_unlock(&llist->list_lock);
+	/*
+	 *pthread_rwlock_unlock(&llist->list_lock);
+	 */
+	sync_unlock(&llist->list_lock);
 
 	return p;
 }
@@ -219,7 +244,10 @@ int llist_destroy(llist_t *llist)
 	if(llist_pos_equal(llist->head,llist->begin)){
 		dbg_str(DBG_WARNNING,"llist_destroy,llist is NULL,free llist head");
 		allocator_mem_free(llist->allocator,llist->head.list_head_p);
-		pthread_rwlock_destroy(&llist->list_lock);
+		/*
+		 *pthread_rwlock_destroy(&llist->list_lock);
+		 */
+		sync_lock_destroy(&llist->list_lock);
 	}
 
 	return 0;

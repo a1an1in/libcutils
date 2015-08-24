@@ -46,7 +46,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <pthread.h>
 #include <assert.h>
 #include "libcontainer/container_hash_map.h"
 #include "libcontainer/inc_files.h"
@@ -141,7 +140,10 @@ int __hash_map_insert(container_t *ct, void *data)
 	bucket_pos = hash_func(mnode->key,key_size,bucket_size); 
 	assert(bucket_pos <= bucket_size);
 
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 
 	hlist_add_head(&mnode->hlist_node, &hlist[bucket_pos]);
 	if(__hash_map_begin_pos->hlist_node_p == NULL || bucket_pos <= __hash_map_begin_pos->bucket_pos){
@@ -153,7 +155,10 @@ int __hash_map_insert(container_t *ct, void *data)
 			hlist[bucket_pos].first,
 			hlist[bucket_pos].first->next,
 			ct->begin.pos.hash_map_pos.hlist_node_p);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	return 0;
 }
@@ -176,16 +181,25 @@ iterator_t __hash_map_search(container_t *ct, void *key)
 	assert(bucket_pos <= bucket_size);
 
 	dbg_str(DBG_CONTAINER_DETAIL,"__hash_map_search,bucket_pos=%d",bucket_pos);
-	pthread_rwlock_rdlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_rdlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	hlist_for_each_safe(pos, next, &hlist[bucket_pos]){
 		mnode = container_of(pos,struct hash_map_node,hlist_node);
 		if(!key_cmp_func(mnode->key,key,key_size)){
 			dbg_str(DBG_CONTAINER_IMPORTANT,"found key");
-			pthread_rwlock_unlock(&ct->head_lock);
+			sync_unlock(&ct->head_lock);
+			/*
+			 *pthread_rwlock_unlock(&ct->head_lock);
+			 */
 			return __hash_map_iterator_init(&ret, pos, bucket_pos, hlist, ct);
 		}
 	}
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 	if(mnode == NULL){
 		return __hash_map_iterator_init(&ret, NULL, bucket_pos, hlist, ct);
 	}
@@ -204,7 +218,10 @@ int __hash_map_delete(container_t *ct, iterator_t it)
 			it_hm_pos->bucket_pos,
 			it_hm_pos->hlist_node_p,
 			ct->begin.pos.hash_map_pos.hlist_node_p);
-	pthread_rwlock_wrlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_wrlock(&ct->head_lock);
+	 */
+	sync_lock(&ct->head_lock,0);
 	if(__hash_map_iterator_equal(it,ct->begin)){
 		dbg_str(DBG_CONTAINER_WARNNING,"del iter equal begain");
 		next = __hash_map_iterator_next(it);
@@ -215,7 +232,10 @@ int __hash_map_delete(container_t *ct, iterator_t it)
 				next_hm_pos->bucket_pos, hlist, ct);
 	}
 	hlist_del(it_hm_pos->hlist_node_p);
-	pthread_rwlock_unlock(&ct->head_lock);
+	/*
+	 *pthread_rwlock_unlock(&ct->head_lock);
+	 */
+	sync_unlock(&ct->head_lock);
 
 	mnode = container_of(it.pos.hash_map_pos.hlist_node_p,struct hash_map_node,hlist_node);
 	if (mnode != NULL) {

@@ -19,13 +19,19 @@
 #ifndef __DEBUG_LOG_H__
 #define __DEBUG_LOG_H__
 #include <stdio.h>
-#include <pthread.h>
+#include "libcre/sync_lock/sync_lock.h"
+/*
+ *#include <pthread.h>
+ */
 
 typedef struct debug_log_prive{
 #define MAX_DEBUG_LOG_FILE_NAME_LEN 50
 	FILE *fp;
 	char log_file_name[MAX_DEBUG_LOG_FILE_NAME_LEN];
-	pthread_mutex_t log_file_lock;
+	/*
+	 *pthread_mutex_t log_file_lock;
+	 */
+	sync_lock_t log_file_lock;
 #undef MAX_DEBUG_LOG_FILE_NAME_LEN 
 }debug_log_prive_t;
 void log_print_regester();

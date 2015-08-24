@@ -18,9 +18,9 @@
 #ifndef __LINK_LIST_STRUCT_H__
 #define __LINK_LIST_STRUCT_H__
 
-#include "pthread.h"
 #include "list.h"
 #include "liballoc/allocator.h"
+#include "libcre/sync_lock/sync_lock.h"
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -35,7 +35,7 @@ typedef struct llist_pos_s{
 	struct llist_s *llist;
 }list_pos_t;
 typedef struct llist_s{
-	pthread_rwlock_t list_lock;
+	sync_lock_t list_lock;
 	uint32_t list_count;
 	uint32_t data_size;
 	list_pos_t begin,end,head;
