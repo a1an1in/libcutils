@@ -65,6 +65,7 @@ typedef struct hash_map_s{
 	/*
 	 *pthread_rwlock_t map_lock;
 	 */
+	uint8_t lock_type;
 	sync_lock_t map_lock;
 	allocator_t *allocator;
 }hash_map_t;

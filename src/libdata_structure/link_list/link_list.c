@@ -85,7 +85,7 @@ int llist_pos_equal(list_pos_t pos1,list_pos_t pos2)
 {
 	return pos1.list_head_p == pos2.list_head_p;
 }
-llist_t *llist_create(allocator_t *allocator)
+llist_t *llist_create(allocator_t *allocator,uint8_t lock_type)
 {
 	llist_t *ret = NULL;
 	ret = (llist_t *)allocator_mem_alloc(allocator,sizeof(llist_t));
@@ -93,6 +93,7 @@ llist_t *llist_create(allocator_t *allocator)
 		dbg_str(DBG_ERROR,"allock err");
 	}
 	ret->allocator = allocator;
+	ret->lock_type = lock_type;
 	return ret;
 }
 int llist_init(llist_t *llist,uint32_t data_size)
@@ -115,7 +116,7 @@ int llist_init(llist_t *llist,uint32_t data_size)
 	/*
 	 *sync_lock_init(&llist->list_lock,0);
 	 */
-	sync_lock_init(&llist->list_lock,PTHREAD_RWLOCK);
+	sync_lock_init(&llist->list_lock,llist->lock_type);
 	/*
 	 *pthread_rwlock_init(&llist->list_lock,NULL);
 	 */

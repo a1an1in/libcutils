@@ -50,7 +50,7 @@
 container_module_t container_modules[CONTAINER_TYPE_MAX_NUM];
 
 
-container_t *container_creator(uint32_t container_type,allocator_t *allocator)
+container_t *container_creator(uint32_t container_type,allocator_t *allocator,uint8_t lock_type)
 {
 	container_t *p;
 
@@ -67,7 +67,7 @@ container_t *container_creator(uint32_t container_type,allocator_t *allocator)
 	/*
 	 *pthread_rwlock_init(&p->head_lock,NULL);   
 	 */
-	sync_lock_init(&p->head_lock,PTHREAD_RWLOCK);
+	sync_lock_init(&p->head_lock,lock_type);
 
 	if(p->c_ops_p == NULL || p->it_ops_p == NULL){
 		allocator_mem_free(p->allocator,p);

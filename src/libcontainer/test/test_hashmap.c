@@ -14,9 +14,9 @@ int test_hash_map(void)
 	struct hash_map_node *mnode;
 	
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 	dbg_str(DBG_CONTAINER_DETAIL,"rbtree allocator addr:%p",allocator);
-	ct = container_creator(CONTAINER_TYPE_HASH_MAP,allocator);
+	ct = container_creator(CONTAINER_TYPE_HASH_MAP,allocator,0);
 
 	/*
 	 *int container_hash_map_init(container_t *ct,

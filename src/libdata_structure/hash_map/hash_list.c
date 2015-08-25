@@ -48,7 +48,7 @@
 #include "libdbg/debug.h"
 #include "libdata_structure/hash_list.h"
 
-hash_map_t * hash_map_create(allocator_t *allocator)
+hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 {
 	hash_map_t *map;
 	map = allocator_mem_alloc(allocator,sizeof(hash_map_t));
@@ -56,6 +56,7 @@ hash_map_t * hash_map_create(allocator_t *allocator)
 		dbg_str(DBG_ERROR,"allocator_mem_alloc(map->allocator err");
 	}
 	map->allocator = allocator;
+	map->lock_type = lock_type;
 	dbg_str(DBG_DETAIL,"hash_map_create");
 	
 	return map;
@@ -86,7 +87,7 @@ int hash_map_init(hash_map_t *hmap,
 	/*
 	 *pthread_rwlock_init(&map->map_lock,NULL);
 	 */
-	sync_lock_init(&map->map_lock,PTHREAD_RWLOCK);
+	sync_lock_init(&map->map_lock,map->lock_type);
 	
 	return 0;
 }

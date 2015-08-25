@@ -49,10 +49,10 @@ int test_datastructure_link_list()
 	 *dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
 	 */
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	//ct = container_creator(CONTAINER_TYPE_LIST,allocator);
-	llist = llist_create(allocator);
+	llist = llist_create(allocator,0);
 	llist_init(llist,sizeof(struct test));
 	llist_push_front(llist,&t1);
 	llist_push_front(llist,&t2);

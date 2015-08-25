@@ -11,6 +11,7 @@ typedef struct allocator{
 #	define COTAINOR_NAME_MAX_LEN 40
 	char name[COTAINOR_NAME_MAX_LEN];
 	uint8_t allocator_type;
+	uint8_t lock_type;
 	union{
 		cds_alloc_t cds_alloc;
 	}priv;
@@ -31,7 +32,7 @@ typedef struct allocator_module{
 }allocator_module_t;
 
 extern allocator_module_t allocator_modules[ALLOCATOR_TYPE_LAST];
-allocator_t *allocator_creator(uint8_t allocator_type);
+allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type);
 void *allocator_mem_alloc(allocator_t * alloc,uint32_t size);
 void allocator_mem_free(allocator_t * alloc,void *addr);
 void allocator_destroy(allocator_t * alloc);

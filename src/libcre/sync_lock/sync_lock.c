@@ -50,24 +50,41 @@ sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];
 
 inline int sync_lock_init(struct sync_lock_s *slock,uint32_t sync_lock_type)
 {
+	if(sync_lock_type == 0){
+		slock->lock_ops = NULL;
+		return 1;
+	}
 	slock->lock_ops = &sync_lock_modules[sync_lock_type].sl_ops;
+	slock->lock_ops->sync_lock_init(slock);
 
 	return slock->lock_ops->sync_lock_init(slock);
 }
 inline int sync_lock(struct sync_lock_s *slock,uint32_t flag)
 {
+	if(slock->lock_ops == NULL){
+		return 1;
+	}
 	return slock->lock_ops->sync_lock(slock,flag);
 }
 inline int sync_trylock(struct sync_lock_s *slock,uint32_t flag)
 {
+	if(slock->lock_ops == NULL){
+		return 1;
+	}
 	return slock->lock_ops->sync_trylock(slock,flag);
 }
 inline int sync_unlock(struct sync_lock_s *slock)
 {
+	if(slock->lock_ops == NULL){
+		return 1;
+	}
 	return slock->lock_ops->sync_unlock(slock);
 }
 inline int sync_lock_destroy(struct sync_lock_s *slock)
 {
+	if(slock->lock_ops == NULL){
+		return 1;
+	}
 	return slock->lock_ops->sync_lock_destroy(slock);
 }
 

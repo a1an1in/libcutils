@@ -26,7 +26,7 @@ list_pos_t llist_end(llist_t *llist);
 list_pos_t llist_pos_next(list_pos_t pos);
 list_pos_t llist_pos_prev(list_pos_t pos);
 int llist_pos_equal(list_pos_t pos1,list_pos_t pos2);
-llist_t *llist_create(allocator_t *allocator);
+llist_t *llist_create(allocator_t *allocator,uint8_t lock_type);
 int llist_init(llist_t *llist,uint32_t data_size);
 int llist_insert(llist_t *llist, list_pos_t pos, void *data);
 int llist_delete(llist_t *llist, list_pos_t pos);

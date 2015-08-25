@@ -142,7 +142,7 @@ void network_print_init(debugger_t *debugger)
 	/*
 	 *pthread_mutex_init(&debugger->priv.net.send_dgram_lock,NULL);
 	 */
-	sync_lock_init(&debugger->priv.net.send_dgram_lock,PTHREAD_RWLOCK);
+	sync_lock_init(&debugger->priv.net.send_dgram_lock,debugger->lock_type);
 	debugger->priv.net.sd = sd;
 
 	raddr = &debugger->priv.net.raddr;

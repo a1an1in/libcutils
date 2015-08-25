@@ -38,11 +38,11 @@ void test_datastructure_hashlist()
 	struct A t4 = {4,2};
 	struct A t5 = {5,2};
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	pair = create_pair(2,sizeof(struct A));
 
-	hmap = hash_map_create(allocator);
+	hmap = hash_map_create(allocator,0);
 	hash_map_init(hmap,
 			2,//uint32_t key_size,
 			sizeof(struct A)+ 2,

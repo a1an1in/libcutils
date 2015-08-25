@@ -35,7 +35,7 @@ int test_pdu_proto_analyzer()
 	struct proto_analyzer_admin_s *pa_admin = NULL;
 
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	pfs_p = pfs_create_proto_format_set(allocator);
 	init_proto_format_set(0x0,100,pfs_p);

@@ -20,7 +20,7 @@
 
 //#include "allocator_cds_alloc.h"
 
-void mempool_init_head_list(struct list_head **hl_head);
+void mempool_init_head_list(struct list_head **hl_head,uint8_t lock_type);
 void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head);
 void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head);
 void mempool_print_list(cds_mempool_t *mempool_list);

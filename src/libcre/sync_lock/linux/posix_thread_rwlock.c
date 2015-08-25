@@ -42,6 +42,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
+#include "libcre/libcre.h"
+#ifdef LINUX_USER_MODE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,6 +57,7 @@ int posix_thread_rwlock_init(struct sync_lock_s *slock)
 }
 int posix_thread_rwlock_lock(struct sync_lock_s *slock,uint32_t flag)
 {
+	printf("------------------------------------posix_thread_rwlock_lock\n");
 	return pthread_rwlock_wrlock(&slock->lock.rwlock);
 }
 int posix_thread_rwlock_trylock(struct sync_lock_s *slock,uint32_t flag)
@@ -63,6 +66,7 @@ int posix_thread_rwlock_trylock(struct sync_lock_s *slock,uint32_t flag)
 }
 int posix_thread_rwlock_unlock(struct sync_lock_s *slock)
 {
+	printf("------------------------------------posix_thread_rwlock_unlock\n");
 	return pthread_rwlock_unlock(&slock->lock.rwlock);
 }
 int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)
@@ -84,4 +88,5 @@ int  linux_user_mode_pthread_rwlock_register(){
 	memcpy(&sync_lock_modules[PTHREAD_RWLOCK],&slm,sizeof(sync_lock_module_t));
 	return 0;
 }
+#endif
 

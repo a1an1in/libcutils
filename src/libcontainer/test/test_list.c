@@ -12,12 +12,12 @@ int test_list(void)
 	/*
 	 *allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
 	 */
-	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC,0);
 	allocator_ctr_init(allocator, 0, 0, 1024);
 
 	dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
 
-	ct = container_creator(CONTAINER_TYPE_LIST,allocator);
+	ct = container_creator(CONTAINER_TYPE_LIST,allocator,0);
 
 	container_list_init(ct,sizeof(struct test));
 	/*

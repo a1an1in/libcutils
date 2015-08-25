@@ -82,7 +82,7 @@ void log_print_init(debugger_t *debugger)
 	 *pthread_mutex_init(&log_priv->log_file_lock,NULL);
 	 */
 	printf("run at here.\n");
-	sync_lock_init(&log_priv->log_file_lock,PTHREAD_RWLOCK);
+	sync_lock_init(&log_priv->log_file_lock,debugger->lock_type);
 	printf("debug log init end\n");
 }
 uint32_t log_print_write_log(FILE *fp,char *str)
@@ -119,7 +119,10 @@ int log_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_
 	memset(buffer_str,'\0',MAX_LOG_PRINT_BUFFER_LEN);
 	offset = vsnprintf(buffer_str,MAX_LOG_PRINT_BUFFER_LEN,fmt,vl);
 	ret = log_print_write_log(log_priv->fp,buffer_str);
-	pthread_mutex_unlock(&log_priv->log_file_lock);
+	sync_unlock(&log_priv->log_file_lock);
+	/*
+	 *pthread_mutex_unlock(&log_priv->log_file_lock);
+	 */
 
 	return ret;
 #undef MAX_LOG_PRINT_BUFFER_LEN 

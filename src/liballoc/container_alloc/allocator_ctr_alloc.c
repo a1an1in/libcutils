@@ -89,12 +89,13 @@ int cds_alloc_init(allocator_t *alloc)
 		alloc_p->free_slabs = used_slabs;
 	}
 
+	dbg_str(DBG_DETAIL,"lock_type=%d",alloc->lock_type);
 	for(i = 0; i < slab_array_max_num; i++){
-		slab_init_head_list(&used_slabs[i]);
-		slab_init_head_list(&free_slabs[i]);
+		slab_init_head_list(&used_slabs[i],alloc->lock_type);
+		slab_init_head_list(&free_slabs[i],alloc->lock_type);
 	}
 
-	mempool_init_head_list(&alloc_p->pool);
+	mempool_init_head_list(&alloc_p->pool,alloc->lock_type);
 	mempool = mempool_create_list(alloc);
 	if(mempool == NULL){
 		alloc_p->pool = NULL;
@@ -102,7 +103,7 @@ int cds_alloc_init(allocator_t *alloc)
 		mempool_attach_list(&mempool->list_head,alloc_p->pool);
 	}
 
-	mempool_init_head_list(&alloc_p->empty_pool);
+	mempool_init_head_list(&alloc_p->empty_pool,alloc->lock_type);
 
 	dbg_str(DBG_ALLOC_DETAIL,"out cds_alloc_init");
 

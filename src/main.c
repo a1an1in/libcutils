@@ -54,7 +54,7 @@
 #include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_proto_analyzer.h"
 
-#define LIBCDF_VERSION "1.1.4.1"
+#define LIBCDF_VERSION "1.1.5.1"
 
 debugger_t *debugger_gp;
 
@@ -82,8 +82,10 @@ void test_container()
 	 *dbg_str(DBG_DETAIL,"test_vector");
 	 *test_vector();
 	 */
-	dbg_str(DBG_DETAIL,"test_cds_alloc");
-	test_ctr_alloc();
+	/*
+	 *dbg_str(DBG_DETAIL,"test_cds_alloc");
+	 *test_ctr_alloc();
+	 */
 }
 void test_datastructure()
 {
@@ -96,9 +98,7 @@ void test_datastructure()
 }
 void test_analyzer()
 {
-	/*
-	 *test_pdt_proto_analyzer();
-	 */
+	test_pdt_proto_analyzer();
 	/*
 	 *test_pdu_proto_analyzer();
 	 */
@@ -110,7 +110,7 @@ int main()
 	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
 	register_all_lib_modules();
 
-	debugger_gp = debugger_creator("dbg.ini");
+	debugger_gp = debugger_creator("dbg.ini",0);
 	debugger_init(debugger_gp);
 
 	dbg_str(DBG_DETAIL,"debugger is start up");

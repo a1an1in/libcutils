@@ -231,7 +231,7 @@ int debugger_dbg_buf(debugger_t *debugger,
 #undef MAX_FMT_STR_LEN 
 }
 
-debugger_t *debugger_creator(char *ini_file_name)
+debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 {
 	debugger_t *debugger;
 	int8_t type;
@@ -258,6 +258,7 @@ debugger_t *debugger_creator(char *ini_file_name)
 	printf("debugger type =%d\n",type);
 	debugger->debugger_type = type;
 	debugger->dbg_ops = &debugger_modules[type].dbg_ops;
+	debugger->lock_type = lock_type;
 
 
 	debugger_set_level_infos(debugger);

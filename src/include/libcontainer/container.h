@@ -120,7 +120,7 @@ pair_t * create_pair(int key_len,int value_len);
 void make_pair(pair_t *p,void *key,void *value);
 int destroy_pair(pair_t *p);
 
-container_t *container_creator(uint32_t container_type,allocator_t *alloc);
+container_t *container_creator(uint32_t container_type,allocator_t *allocator,uint8_t lock_type);
 int container_vector_init(container_t *ct,uint32_t data_size,uint32_t capacity);
 int container_list_init(container_t *ct,uint32_t data_size);
 int container_tree_map_init(container_t *ct, uint32_t key_size, uint32_t value_size, key_cmp_fpt key_cmp_func);

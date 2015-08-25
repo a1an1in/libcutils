@@ -78,6 +78,7 @@ struct debugger{
 	dictionary *d;
 	struct debug_business debug_business[MAX_DEBUG_BUSINESS_NUM];
 	struct debugger_opperations *dbg_ops;
+	uint8_t lock_type;
 	union debugger_priv{
 		debug_network_prive_t net;
 		debug_log_prive_t log;
@@ -95,7 +96,7 @@ uint8_t debugger_get_level_color(debugger_t *debugger,uint32_t level);
 int debugger_get_business_level(debugger_t *debugger,uint32_t business_num);
 int debugger_dbg_str(debugger_t *debugger,uint32_t dbg_switch,const char *fmt,...);
 int debugger_dbg_buf(debugger_t *debugger, uint32_t dbg_switch,const char* const_str, uint8_t *buf,uint32_t buf_len, const char *fmt,...);
-debugger_t *debugger_creator(char *ini_file_name);
+debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type);
 void debugger_init(debugger_t *debugger);
 void debugger_network_init(debugger_t *debugger,char *ip_str,uint32_t port);
 void debugger_log_init(debugger_t *debugger,char *log_file);

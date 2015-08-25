@@ -17,7 +17,7 @@
  */
 #ifndef __ALLOCATOR_CDS_SLAB_LIST_H__
 #define __ALLOCATOR_CDS_SLAB_LIST_H__
-void slab_init_head_list(struct list_head **hl_head);
+void slab_init_head_list(struct list_head **hl_head,uint8_t lock_type);
 void slab_release_head_list(struct list_head *hl_head);
 void slab_attach_list(struct list_head *new_head,struct list_head *hl_head);
 void slab_detach_list(struct list_head *del_head,struct list_head *hl_head);

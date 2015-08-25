@@ -25,8 +25,9 @@
 #endif
 
 enum sync_lock_type{
-	PTHREAD_MUTEX_LOCK = 0,
+	PTHREAD_MUTEX_LOCK = 1,
 	PTHREAD_RWLOCK,
+	WINDOWS_MUTEX_LOCK,
 	SYNC_LOCK_TYPE_MAX_NUM,
 };
 typedef struct sync_lock_s{
@@ -38,7 +39,9 @@ typedef struct sync_lock_s{
 		pthread_rwlock_t rwlock;
 #endif
 #ifdef WINDOWS_USER_MODE
-		CRITIACAL_SECTION cs;
+		/*
+		 *CRITIACAL_SECTION cs;
+		 */
 #endif
 		int b;
 	}lock;

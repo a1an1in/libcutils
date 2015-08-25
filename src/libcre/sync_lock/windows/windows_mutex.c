@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  test_cds_alloc.c
+ *       Filename:  linux_user_mode_mutex.c
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  06/15/2015 11:18:21 AM
+ *        Created:  08/24/2015 03:32:06 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,7 +16,7 @@
  * =====================================================================================
  */
 /*  
- * Copyright (c) 2015-2010 alan lin <a1an1in@sina.com>
+ * Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
  *  
  *  
  * Redistribution and use in source and binary forms, with or without
@@ -42,55 +42,47 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
+#ifdef WINDOWS_USER_MODE
 #include <stdio.h>
 #include <stdlib.h>
-#include "libcontainer/inc_files.h"
+#include <string.h>
+#include "libcre/libcre.h"
+#include "libdbg/debug.h"
 
-void test_ctr_alloc()
+int windows_mutex_init(struct sync_lock_s *slock)
 {
-	allocator_t *allocator;
-	void *p ,*p2,*p3;
-	uint32_t size = 8;
-
-	/*
-	 *alloc_p->slab_max_num = SLAB_ARRAY_MAX_NUM;
-	 *alloc_p->data_min_size = 8;
-	 *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
-	 */
-	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC,1);
-	allocator_ctr_init(allocator, 0, 0, 1024);
-	/*
-	 *allocator_cds_init(allocator,0,0,0);
-	 */
-
-	p = allocator_mem_alloc(allocator,7);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p);
-
-	allocator_mem_free(allocator,p);
-
-	p2 = allocator_mem_alloc(allocator,8);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p2);
-
-	/*
-	 *p3 = allocator_mem_alloc(allocator,200);
-	 *dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p3);
-	 */
-
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
-	allocator_mem_info(allocator);
-
-	allocator_mem_free(allocator,p);
-	allocator_mem_free(allocator,p2);
-	allocator_mem_free(allocator,p3);
-
-	dbg_str(DBG_CONTAINER_DETAIL,"batch alloc");
-	int i;
-	for(size = 8,i = 0; i< 20; i++,size += 8){
-		p = allocator_mem_alloc(allocator,size);
-	}
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
-	allocator_mem_info(allocator);
-
-	allocator_destroy(allocator);
-	dbg_str(DBG_CONTAINER_DETAIL,"test cds alloc end");
+	printf("not support yet\n");
 }
+int windows_mutex_lock(struct sync_lock_s *slock,uint32_t flag)
+{
+	printf("not support yet\n");
+}
+int windows_mutex_trylock(struct sync_lock_s *slock,uint32_t flag)
+{
+	printf("not support yet\n");
+}
+int windows_mutex_unlock(struct sync_lock_s *slock)
+{
+	printf("not support yet\n");
+}
+int windows_mutex_lock_destroy(struct sync_lock_s *slock)
+{
+	printf("not support yet\n");
+}
+int  windows_user_mode_mutex_register(){
+	sync_lock_module_t slm = {
+		.name = "pthread_mutex",
+		.sync_lock_type = WINDOWS_MUTEX_LOCK,
+		.sl_ops = {
+			.sync_lock_init    = windows_mutex_init,
+			.sync_lock         = windows_mutex_lock,
+			.sync_trylock      = windows_mutex_trylock,
+			.sync_unlock       = windows_mutex_unlock,
+			.sync_lock_destroy = windows_mutex_lock_destroy,
+		},
+	};
+	memcpy(&sync_lock_modules[WINDOWS_MUTEX_LOCK],&slm,sizeof(sync_lock_module_t));
+	return 0;
+}
+
+#endif

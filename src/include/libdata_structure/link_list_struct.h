@@ -40,6 +40,7 @@ typedef struct llist_s{
 	uint32_t data_size;
 	list_pos_t begin,end,head;
 	list_t *list;
+	uint8_t lock_type;
 	allocator_t *allocator;
 }llist_t;
 #endif

@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  libcre.h
+ *       Filename:  windows_mutex.h
  *
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  08/24/2015 04:01:08 PM
+ *        Created:  08/25/2015 04:01:05 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,12 +15,5 @@
  *
  * =====================================================================================
  */
-#ifndef __LIBCRE_H__
-#define __LIBCRE_H__
 
-#define LINUX_USER_MODE
-/*
- *#define WINDOWS_USER_MODE
- */
-
-#endif
+int  windows_user_mode_mutex_register();

@@ -13,9 +13,9 @@ int test_rbtree_map(void)
 	struct rbtree_map_node *mnode;
 
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 	dbg_str(DBG_CONTAINER_DETAIL,"rbtree allocator addr:%p",allocator);
-	ct = container_creator(CONTAINER_TYPE_RBTREE_MAP,allocator);
+	ct = container_creator(CONTAINER_TYPE_RBTREE_MAP,allocator,0);
 
 	container_tree_map_init(ct,key_len,sizeof(struct test),NULL);
 

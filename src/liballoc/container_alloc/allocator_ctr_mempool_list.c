@@ -54,7 +54,7 @@ void *mempool_release_list(cds_mempool_t *mempool);
 /*-----------------------------------------------------------------------------
  *  mempool list operation
  *-----------------------------------------------------------------------------*/
-void mempool_init_head_list(struct list_head **hl_head)
+void mempool_init_head_list(struct list_head **hl_head,uint8_t lock_type)
 {
 	cds_mempool_head_list_t *head_list;
 
@@ -66,7 +66,7 @@ void mempool_init_head_list(struct list_head **hl_head)
 	/*
 	 *pthread_rwlock_init(&head_list->head_lock,NULL);
 	 */
-	sync_lock_init(&head_list->head_lock,PTHREAD_RWLOCK);
+	sync_lock_init(&head_list->head_lock,lock_type);
 	head_list->count = 0;
 	INIT_LIST_HEAD(&head_list->list_head);
 	*hl_head = &head_list->list_head;

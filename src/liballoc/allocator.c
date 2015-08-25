@@ -31,7 +31,7 @@
 
 allocator_module_t allocator_modules[ALLOCATOR_TYPE_LAST];
 
-allocator_t *allocator_creator(uint8_t allocator_type)
+allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)
 {
 	allocator_t *p;
 	p = (allocator_t *)malloc(sizeof(allocator_t));
@@ -40,6 +40,7 @@ allocator_t *allocator_creator(uint8_t allocator_type)
 		return p;
 	}
 	p->allocator_type = allocator_type;
+	p->lock_type = lock_type;
 
 	return p;
 }

@@ -9,9 +9,9 @@ int test_vector(void)
 	iterator_t it,next;
 	container_t *ct;
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC);
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 	dbg_str(DBG_CONTAINER_DETAIL,"vector allocator addr:%p",allocator);
-	ct = container_creator(CONTAINER_TYPE_VECTOR,allocator);
+	ct = container_creator(CONTAINER_TYPE_VECTOR,allocator,0);
 
 	container_vector_init(ct,sizeof(struct test),6);
 
