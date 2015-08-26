@@ -49,7 +49,7 @@
 #include "libcre/sync_lock/sync_lock.h"
 #include "libdbg/debug.h"
 
-#ifdef LINUX_USER_MODE
+#ifdef UNIX_LIKE_USER_MODE
 
 #include <pthread.h>
 

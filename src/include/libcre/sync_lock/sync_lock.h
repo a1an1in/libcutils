@@ -20,7 +20,7 @@
 
 #include "libcre/libcre.h"
 #include "libcre/basic_types.h"
-#ifdef LINUX_USER_MODE
+#ifdef UNIX_LIKE_USER_MODE
 #include <pthread.h>
 #endif
 
@@ -34,7 +34,7 @@ typedef struct sync_lock_s{
 	uint8_t lock_type;
 	struct sync_lock_operations *lock_ops;
 	union lock{
-#ifdef LINUX_USER_MODE
+#ifdef UNIX_LIKE_USER_MODE
 		pthread_mutex_t mutex;
 		pthread_rwlock_t rwlock;
 #endif

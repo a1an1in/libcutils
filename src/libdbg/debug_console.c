@@ -62,11 +62,12 @@ int console_print_print_str_vl(debugger_t *debugger,
 	char reverse_color_value[MAX_STR_LEN];
 	size_t color_value;
 
-	color_value = debugger_get_level_color(debugger,level);
 
 	memset(dest,'\0',MAX_STR_LEN);
 	offset = vsnprintf(dest,MAX_STR_LEN,fmt,vl);
 
+#ifdef UNIX_LIKE_USER_MODE
+	color_value = debugger_get_level_color(debugger,level);
 	reverse_color_flag = color_value&0x1;
 	background_color  = ((color_value&0x70)>>4);
 	front_color  = ((color_value&0xe)>>1);
@@ -93,8 +94,13 @@ int console_print_print_str_vl(debugger_t *debugger,
 	}
 	printf("\n");
 	return strlen(dest);
-#undef MAX_STR_LEN 
+#endif
 
+#ifdef WINDOWS_USER_MODE
+	printf("%s",dest);
+#endif
+
+#undef MAX_STR_LEN 
 	return ret;
 }
 int console_print_print(debugger_t *debugger,size_t level,const char *fmt,...)

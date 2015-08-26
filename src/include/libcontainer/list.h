@@ -122,7 +122,9 @@ static inline void __list_add_rcu(struct list_head * new,
 {
 	new->next = next;
 	new->prev = prev;
-	smp_wmb();
+	/*
+	 *smp_wmb();
+	 */
 	next->prev = new;
 	prev->next = new;
 }
@@ -265,7 +267,9 @@ static inline void list_replace_rcu(struct list_head *old,
 {
 	new->next = old->next;
 	new->prev = old->prev;
-	smp_wmb();
+	/*
+	 *smp_wmb();
+	 */
 	new->next->prev = new;
 	new->prev->next = new;
 	old->prev = LIST_POISON2;
@@ -719,7 +723,9 @@ static inline void hlist_replace_rcu(struct hlist_node *old,
 
 	new->next = next;
 	new->pprev = old->pprev;
-	smp_wmb();
+	/*
+	 *smp_wmb();
+	 */
 	if (next)
 		new->next->pprev = &new->next;
 	*new->pprev = new;
@@ -762,7 +768,9 @@ static inline void hlist_add_head_rcu(struct hlist_node *n,
 	struct hlist_node *first = h->first;
 	n->next = first;
 	n->pprev = &h->first;
-	smp_wmb();
+	/*
+	 *smp_wmb();
+	 */
 	if (first)
 		first->pprev = &n->next;
 	h->first = n;
@@ -812,7 +820,9 @@ static inline void hlist_add_before_rcu(struct hlist_node *n,
 {
 	n->pprev = next->pprev;
 	n->next = next;
-	smp_wmb();
+	/*
+	 *smp_wmb();
+	 */
 	next->pprev = &n->next;
 	*(n->pprev) = n;
 }
@@ -840,7 +850,9 @@ static inline void hlist_add_after_rcu(struct hlist_node *prev,
 {
 	n->next = prev->next;
 	n->pprev = &prev->next;
-	smp_wmb();
+	/*
+	 *smp_wmb();
+	 */
 	prev->next = n;
 	if (n->next)
 		n->next->pprev = &n->next;
