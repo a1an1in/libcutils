@@ -2,13 +2,14 @@
 #define __DEBUG_H__
 
 #include <stdio.h>
-#include <errno.h>
 #include <stdlib.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
 #include <stdarg.h>
 #include <string.h>
-#include <sys/time.h>
+/*
+ *#include <sys/time.h>
+ *#include <arpa/inet.h>
+ *#include <sys/socket.h>
+ */
 
 #include "basic_types.h"
 #include "debug_console.h"
@@ -80,7 +81,9 @@ struct debugger{
 	struct debugger_opperations *dbg_ops;
 	uint8_t lock_type;
 	union debugger_priv{
-		debug_network_prive_t net;
+		/*
+		 *debug_network_prive_t net;
+		 */
 		debug_log_prive_t log;
 	}priv;
 #undef MAX_INI_FILE_NAME_LEN

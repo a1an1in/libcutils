@@ -20,6 +20,6 @@
 void libdbg_register_modules()
 {
 	console_print_regester();
-	network_print_regester();
+	//network_print_regester();
 	log_print_regester();
 }
