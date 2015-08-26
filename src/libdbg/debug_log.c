@@ -87,7 +87,7 @@ void log_print_init(debugger_t *debugger)
 }
 uint32_t log_print_write_log(FILE *fp,char *str)
 {
-	int32_t ret;
+	uint32_t ret;
 
 	ret = fprintf(fp,"%s\n",str);
 	fflush(fp);

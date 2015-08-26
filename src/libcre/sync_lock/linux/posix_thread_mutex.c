@@ -42,14 +42,16 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-#include "libcre/libcre.h"
-#ifdef LINUX_USER_MODE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
+#include "libcre/libcre.h"
 #include "libcre/sync_lock/sync_lock.h"
 #include "libdbg/debug.h"
+
+#ifdef LINUX_USER_MODE
+
+#include <pthread.h>
 
 int posix_thread_mutex_init(struct sync_lock_s *slock)
 {

@@ -42,12 +42,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-#ifdef WINDOWS_USER_MODE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "libcre/libcre.h"
 #include "libdbg/debug.h"
+
+#ifdef WINDOWS_USER_MODE
 
 int windows_mutex_init(struct sync_lock_s *slock)
 {

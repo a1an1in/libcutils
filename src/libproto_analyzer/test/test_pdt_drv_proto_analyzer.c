@@ -1,5 +1,4 @@
 #include <ctype.h>
-#include <pthread.h>
 #include <math.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
@@ -108,7 +107,7 @@ int get_cont_pdu_num(buffer_t *buffer_p)
 	return buffer_p->data_p[4];
 }
 
-int get_cont_pdu_len(buffer_t *buffer_p,int16_t os) 
+int get_cont_pdu_len(buffer_t *buffer_p,uint16_t os) 
 {
 	return buffer_p->data_p[os];
 }
@@ -154,7 +153,7 @@ int test_pdt_proto_3019(protocol_format_set_t *pfs_p,
 	};
 	uint16_t len;
 	buffer_t buf[4];
-	int8_t i;
+	uint8_t i;
 	uint8_t size = 23;
 	buffer_t data;
 

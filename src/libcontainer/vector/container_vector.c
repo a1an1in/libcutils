@@ -143,7 +143,7 @@ int vector_pop_back(container_t *ct)
 
 	return 0;
 }
-int vector_copy_backward(container_t *ct,iterator_t to,iterator_t from,int32_t count)
+int vector_copy_backward(container_t *ct,iterator_t to,iterator_t from,uint32_t count)
 {
 	uint32_t from_pos, to_pos;
 	vector_priv_t *vp_p = &ct->priv.vector_priv;
@@ -164,7 +164,7 @@ int vector_copy_backward(container_t *ct,iterator_t to,iterator_t from,int32_t c
 		memcpy(vector_head + to_pos * step, vector_head + from_pos * step, num_per * step);
 	}
 }
-int vector_copy_forward(container_t *ct,iterator_t to,iterator_t from,int32_t count)
+int vector_copy_forward(container_t *ct,iterator_t to,iterator_t from,uint32_t count)
 {
 	uint32_t from_pos = from.pos.vector_pos;
 	uint32_t to_pos = to.pos.vector_pos;
@@ -183,7 +183,7 @@ int vector_copy_forward(container_t *ct,iterator_t to,iterator_t from,int32_t co
 		count -= num_per;
 	}
 }
-int vector_copy(container_t *ct,iterator_t to,iterator_t from,int32_t count)
+int vector_copy(container_t *ct,iterator_t to,iterator_t from,uint32_t count)
 {
 	uint32_t from_pos = from.pos.vector_pos;
 	uint32_t to_pos = to.pos.vector_pos;
