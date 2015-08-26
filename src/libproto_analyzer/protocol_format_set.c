@@ -43,7 +43,6 @@
  * 
  */
 #include <ctype.h>
-#include <pthread.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
 #include "libproto_analyzer/protocol_format_set.h"

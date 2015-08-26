@@ -44,7 +44,6 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 #include "libcontainer/inc_files.h"
 
 container_module_t container_modules[CONTAINER_TYPE_MAX_NUM];

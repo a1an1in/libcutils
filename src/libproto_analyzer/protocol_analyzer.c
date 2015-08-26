@@ -40,7 +40,6 @@
  * 
  */
 #include <ctype.h>
-#include <pthread.h>
 #include <math.h>
 #include "libdbg/debug.h"
 #include "libproto_analyzer/protocol_analyzer.h"
@@ -346,7 +345,6 @@ int pa_set_variable_length_flag(struct protocol_analyzer_s *pa)
 	 */
 	return ret;
 }
-//变长值忘设置很容易出错，且很难查找，所以提供个专用设置变长值的函数
 int pa_set_variable_length_value(char *key,uint32_t value,
 		struct protocol_analyzer_s *pa)
 {

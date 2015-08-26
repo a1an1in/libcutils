@@ -16,7 +16,6 @@
  * =====================================================================================
  */
 #include <ctype.h>
-#include <pthread.h>
 #include <math.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"

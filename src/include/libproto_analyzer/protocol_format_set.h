@@ -1,8 +1,6 @@
 #ifndef __PROTOCOL_FORMAT_SET__
 #define __PROTOCOL_FORMAT_SET__
 
-
-#include <pthread.h>
 #include "list.h"
 #include "my_types.h"
 #include "liballoc/allocator.h"
