@@ -59,19 +59,19 @@ inline int sync_lock_init(struct sync_lock_s *slock,uint32_t sync_lock_type)
 
 	return slock->lock_ops->sync_lock_init(slock);
 }
-inline int sync_lock(struct sync_lock_s *slock,uint32_t flag)
+inline int sync_lock(struct sync_lock_s *slock,void *arg)
 {
 	if(slock->lock_ops == NULL){
 		return 1;
 	}
-	return slock->lock_ops->sync_lock(slock,flag);
+	return slock->lock_ops->sync_lock(slock,arg);
 }
-inline int sync_trylock(struct sync_lock_s *slock,uint32_t flag)
+inline int sync_trylock(struct sync_lock_s *slock,void *arg)
 {
 	if(slock->lock_ops == NULL){
 		return 1;
 	}
-	return slock->lock_ops->sync_trylock(slock,flag);
+	return slock->lock_ops->sync_trylock(slock,arg);
 }
 inline int sync_unlock(struct sync_lock_s *slock)
 {

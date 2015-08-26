@@ -46,27 +46,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libdbg/debug.h"
+#include "libcre/libcre.h"
 
-
-/*-----------------------------------------------------------------------------
- *功能： 打印有颜色的字符
- *-----------------------------------------------------------------------------*/
 int console_print_print_str_vl(debugger_t *debugger,
 		size_t level,const char *fmt,va_list vl)
 {
 #define MAX_STR_LEN 1024
 	char dest[MAX_STR_LEN];
 	size_t offset=0 , ret = 0;
-	int reverse_color_flag,background_color,front_color,high_light_flag;
-	char high_light_value[MAX_STR_LEN];
-	char reverse_color_value[MAX_STR_LEN];
-	size_t color_value;
-
 
 	memset(dest,'\0',MAX_STR_LEN);
 	offset = vsnprintf(dest,MAX_STR_LEN,fmt,vl);
 
 #ifdef UNIX_LIKE_USER_MODE
+	int reverse_color_flag,background_color,front_color,high_light_flag;
+	char high_light_value[MAX_STR_LEN];
+	char reverse_color_value[MAX_STR_LEN];
+	size_t color_value;
+
 	color_value = debugger_get_level_color(debugger,level);
 	reverse_color_flag = color_value&0x1;
 	background_color  = ((color_value&0x70)>>4);
@@ -97,7 +94,7 @@ int console_print_print_str_vl(debugger_t *debugger,
 #endif
 
 #ifdef WINDOWS_USER_MODE
-	printf("%s",dest);
+	printf("%s\n",dest);
 #endif
 
 #undef MAX_STR_LEN 

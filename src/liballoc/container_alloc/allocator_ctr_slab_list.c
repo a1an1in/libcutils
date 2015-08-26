@@ -89,7 +89,7 @@ void slab_attach_list(struct list_head *new_head,struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_wrlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	list_add(new_head,hl_head);
 	head_list->count++;
 	sync_unlock(&head_list->head_lock);
@@ -120,7 +120,7 @@ void slab_detach_list(struct list_head *del_head,struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_wrlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 
 	dbg_str(DBG_ALLOC_DETAIL,"slab del head:%p, hl_head:%p",del_head,hl_head);
 	dbg_str(DBG_ALLOC_DETAIL,"slab del heads next:%p, prev:%p",del_head->next,del_head->prev);
@@ -151,7 +151,7 @@ cds_slab_t *slab_get_first_list(struct list_head *hl_head)
 	dbg_str(DBG_ALLOC_DETAIL,"slab_get_first_list");
 
 	head_list = container_of(hl_head,cds_slab_head_list_t,list_head);
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	/*
 	 *pthread_rwlock_wrlock(&head_list->head_lock);
 	 */
@@ -250,7 +250,7 @@ void slab_print_list_for_each(struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_rdlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	list_for_each_safe(pos, n, hl_head) {
 		slab_list = container_of(pos,cds_slab_t,list_head);
 		slab_print_list(slab_list);

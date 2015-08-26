@@ -46,43 +46,53 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libcre/libcre.h"
+#include "libcre/sync_lock/sync_lock.h"
 #include "libdbg/debug.h"
 
-#ifdef WINDOWS_USER_MODE
+#ifdef UNIX_LIKE_USER_MODE
 
-int windows_mutex_init(struct sync_lock_s *slock)
+#include <pthread.h>
+
+int posix_thread_mutex_init(struct sync_lock_s *slock)
 {
-	printf("not support yet\n");
+	return pthread_mutex_init(&slock->lock.mutex,NULL);
 }
-int windows_mutex_lock(struct sync_lock_s *slock,void *arg)
+int posix_thread_mutex_lock(struct sync_lock_s *slock,void *arg)
 {
-	printf("not support yet\n");
+	/*
+	 *dbg_str(DBG_DETAIL,"posix_thread_mutex_lock");
+	 */
+	return pthread_mutex_lock(&slock->lock.mutex);
 }
-int windows_mutex_trylock(struct sync_lock_s *slock,void *arg)
+int posix_thread_mutex_trylock(struct sync_lock_s *slock,void *arg)
 {
-	printf("not support yet\n");
+	return pthread_mutex_trylock(&slock->lock.mutex);
 }
-int windows_mutex_unlock(struct sync_lock_s *slock)
+int posix_thread_mutex_unlock(struct sync_lock_s *slock)
 {
-	printf("not support yet\n");
+	/*
+	 *dbg_str(DBG_DETAIL,"posix_thread_mutex_unlock");
+	 */
+	return pthread_mutex_unlock(&slock->lock.mutex);
 }
-int windows_mutex_lock_destroy(struct sync_lock_s *slock)
+int posix_thread_mutex_lock_destroy(struct sync_lock_s *slock)
 {
-	printf("not support yet\n");
+	return pthread_mutex_destroy(&slock->lock.mutex);
 }
-int  windows_user_mode_mutex_register(){
+int  linux_user_mode_pthread_mutex_register(){
 	sync_lock_module_t slm = {
 		.name = "pthread_mutex",
-		.sync_lock_type = WINDOWS_MUTEX_LOCK,
+		.sync_lock_type = PTHREAD_MUTEX_LOCK,
 		.sl_ops = {
-			.sync_lock_init    = windows_mutex_init,
-			.sync_lock         = windows_mutex_lock,
-			.sync_trylock      = windows_mutex_trylock,
-			.sync_unlock       = windows_mutex_unlock,
-			.sync_lock_destroy = windows_mutex_lock_destroy,
+			.sync_lock_init    = posix_thread_mutex_init,
+			.sync_lock         = posix_thread_mutex_lock,
+			.sync_trylock      = posix_thread_mutex_trylock,
+			.sync_unlock       = posix_thread_mutex_unlock,
+			.sync_lock_destroy = posix_thread_mutex_lock_destroy,
 		},
 	};
-	memcpy(&sync_lock_modules[WINDOWS_MUTEX_LOCK],&slm,sizeof(sync_lock_module_t));
+	printf("linux_user_mode_pthread_mutex_register\n");
+	memcpy(&sync_lock_modules[PTHREAD_MUTEX_LOCK],&slm,sizeof(sync_lock_module_t));
 	return 0;
 }
 

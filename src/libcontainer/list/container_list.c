@@ -77,7 +77,7 @@ int list_push_front(container_t *ct,void *data)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	list_add(&p->list_head, ct->end.pos.list_head_p);//end can be regrad as head list
 	list_iterator_init(&ct->begin,&p->list_head,ct);
 	sync_unlock(&ct->head_lock);
@@ -98,7 +98,7 @@ int list_push_back(container_t *ct,void *data)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	list_add_tail(&p->list_head, ct->end.pos.list_head_p);
 	list_iterator_init(&ct->begin,ct->end.pos.list_head_p->next,ct);
 	/*
@@ -120,7 +120,7 @@ int list_pop_back(container_t *ct)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	list_del(head->prev);
 	/*
 	 *pthread_rwlock_unlock(&ct->head_lock);
@@ -142,7 +142,7 @@ int list_pop_front(container_t *ct)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	list_del(head->next);
 	list_iterator_init(&ct->begin,head->next,ct);
 	/*
@@ -166,7 +166,7 @@ int list_insert(container_t *ct, iterator_t it, void *data)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	list_add(&p->list_head, it.pos.list_head_p);
 	list_iterator_init(&ct->begin,ct->end.pos.list_head_p->next,ct);
 	/*
@@ -186,7 +186,7 @@ int list_delete(container_t *ct, iterator_t it)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	if(list_iterator_equal(it,ct->begin)){
 		list_iterator_init(&ct->begin,it.pos.list_head_p->next,ct);
 	}

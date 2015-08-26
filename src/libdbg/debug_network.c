@@ -161,7 +161,7 @@
  *    uint16_t slen = 1024;
  *    //pthread_mutex_t *lock = &debugger->priv.net.send_dgram_lock;
  *    //pthread_mutex_lock(lock);
- *    sync_lock(&debugger->priv.net.send_dgram_lock,0);
+ *    sync_lock(&debugger->priv.net.send_dgram_lock,NULL);
  *    memset(dest,'\0',slen);
  *    offset = vsnprintf(dest,slen,fmt,vl);
  *    offset += snprintf(dest + offset,slen,"\n");

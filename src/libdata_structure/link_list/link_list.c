@@ -131,7 +131,7 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	p = (list_t *)allocator_mem_alloc(llist->allocator,sizeof(list_t) + data_size);
 	memcpy(p->data,data,data_size);
 
-	sync_lock(&llist->list_lock,0);
+	sync_lock(&llist->list_lock,NULL);
 	/*
 	 *pthread_rwlock_wrlock(&llist->list_lock);
 	 */
@@ -159,7 +159,7 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 
 	p = container_of(pos.list_head_p,list_t,list_head);
 
-	sync_lock(&llist->list_lock,0);
+	sync_lock(&llist->list_lock,NULL);
 	/*
 	 *pthread_rwlock_wrlock(&llist->list_lock);
 	 */
@@ -185,7 +185,7 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 
 	p = container_of(pos.list_head_p,list_t,list_head);
 
-	sync_lock(&llist->list_lock,0);
+	sync_lock(&llist->list_lock,NULL);
 	/*
 	 *pthread_rwlock_wrlock(&llist->list_lock);
 	 */

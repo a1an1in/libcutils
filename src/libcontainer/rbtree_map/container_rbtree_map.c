@@ -184,7 +184,7 @@ int rbtree_map_insert(container_t *ct, void *value)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	__rbtree_map_insert(ct,tree_root, mnode);
 
 	ct->begin.pos.rb_node_p = rb_first(tree_root);
@@ -208,7 +208,7 @@ int rbtree_map_delete(container_t *ct, iterator_t it)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	if(rbtree_map_iterator_equal(it,ct->begin)){
 		rbtree_map_iterator_init(&ct->begin,rb_next(rb_node_p),ct);
 	}
@@ -235,7 +235,7 @@ iterator_t rbtree_map_search(container_t *ct, void *key)
 	/*
 	 *pthread_rwlock_rdlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	mnode = __rbtree_map_search(ct,tree_root, key);
 	sync_unlock(&ct->head_lock);
 	/*

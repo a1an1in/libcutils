@@ -143,7 +143,7 @@ int __hash_map_insert(container_t *ct, void *data)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 
 	hlist_add_head(&mnode->hlist_node, &hlist[bucket_pos]);
 	if(__hash_map_begin_pos->hlist_node_p == NULL || bucket_pos <= __hash_map_begin_pos->bucket_pos){
@@ -184,7 +184,7 @@ iterator_t __hash_map_search(container_t *ct, void *key)
 	/*
 	 *pthread_rwlock_rdlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	hlist_for_each_safe(pos, next, &hlist[bucket_pos]){
 		mnode = container_of(pos,struct hash_map_node,hlist_node);
 		if(!key_cmp_func(mnode->key,key,key_size)){

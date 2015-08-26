@@ -144,7 +144,7 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 	/*
 	 *pthread_rwlock_wrlock(&hmap->map_lock);
 	 */
-	sync_lock(&hmap->map_lock,0);
+	sync_lock(&hmap->map_lock,NULL);
 
 	hlist_add_head(&mnode->hlist_node, &hlist[bucket_pos]);
 	if(begin_pos->hlist_node_p == NULL || bucket_pos <= begin_pos->bucket_pos){
@@ -182,7 +182,7 @@ hash_map_pos_t hash_map_search(hash_map_t *hmap, void *key)
 	assert(bucket_pos <= bucket_size);
 
 	dbg_str(DBG_DETAIL,"hash_map_search,bucket_pos=%d",bucket_pos);
-	sync_lock(&hmap->map_lock,0);
+	sync_lock(&hmap->map_lock,NULL);
 	/*
 	 *pthread_rwlock_rdlock(&hmap->map_lock);
 	 */
@@ -215,7 +215,7 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)
 	/*
 	 *pthread_rwlock_wrlock(&hmap->map_lock);
 	 */
-	sync_lock(&hmap->map_lock,0);
+	sync_lock(&hmap->map_lock,NULL);
 	if(hash_map_pos_equal(pos,hmap->begin)){
 		dbg_str(DBG_WARNNING,"del iter equal begain");
 		next = hash_map_pos_next(pos);

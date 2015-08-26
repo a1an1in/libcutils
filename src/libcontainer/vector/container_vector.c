@@ -90,7 +90,7 @@ int vector_push_back(container_t *ct,void *data)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	dbg_str(DBG_CONTAINER_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,capacity);
 	if(push_pos < capacity){
 		memcpy(vector_head + (push_pos++)*step,data,data_size);
@@ -127,7 +127,7 @@ int vector_pop_back(container_t *ct)
 	
 	dbg_str(DBG_CONTAINER_DETAIL,"pop back");
 
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
@@ -213,7 +213,7 @@ int vector_insert(container_t *ct, iterator_t it, void *data)
 	/*
 	 *pthread_rwlock_wrlock(&ct->head_lock);
 	 */
-	sync_lock(&ct->head_lock,0);
+	sync_lock(&ct->head_lock,NULL);
 	vector_copy(ct,to,it,count);
 	memcpy(vector_head + insert_pos * step,data,step);
 	vector_iterator_init(&ct->end,end_pos + 1,ct);

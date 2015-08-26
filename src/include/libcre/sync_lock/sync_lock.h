@@ -48,8 +48,8 @@ typedef struct sync_lock_s{
 }sync_lock_t;
 struct sync_lock_operations{
 	int (*sync_lock_init)(struct sync_lock_s *slock);
-	int (*sync_lock)(struct sync_lock_s *slock,uint32_t flag);
-	int (*sync_trylock)(struct sync_lock_s *slock,uint32_t flag);
+	int (*sync_lock)(struct sync_lock_s *slock,void *arg);
+	int (*sync_trylock)(struct sync_lock_s *slock,void *arg);
 	int (*sync_unlock)(struct sync_lock_s *slock);
 	int (*sync_lock_destroy)(struct sync_lock_s *slock);
 
@@ -65,8 +65,8 @@ typedef struct sync_lock_module{
 extern sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];
 
 inline int sync_lock_init(struct sync_lock_s *slock,uint32_t sync_lock_type);
-inline int sync_lock(struct sync_lock_s *slock,uint32_t flag);
-inline int sync_trylock(struct sync_lock_s *slock,uint32_t flag);
+inline int sync_lock(struct sync_lock_s *slock,void *arg);
+inline int sync_trylock(struct sync_lock_s *slock,void *arg);
 inline int sync_unlock(struct sync_lock_s *slock);
 inline int sync_lock_destroy(struct sync_lock_s *slock);
 

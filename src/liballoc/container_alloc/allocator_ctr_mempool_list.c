@@ -77,7 +77,7 @@ void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head)
 
 	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
 
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	/*
 	 *pthread_rwlock_wrlock(&head_list->head_lock);
 	 */
@@ -105,7 +105,7 @@ void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_wrlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del head:%p, hl_head:%p",del_head,hl_head);
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del heads next:%p, prev:%p",del_head->next,del_head->prev);
@@ -130,7 +130,7 @@ void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_wrlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del head:%p, hl_head:%p",del_head,hl_head);
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del heads next:%p, prev:%p",del_head->next,del_head->prev);
@@ -174,7 +174,7 @@ void mempool_print_list_for_each(struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_rdlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	list_for_each_safe(pos, n, hl_head) {
 		mempool_list = container_of(pos,cds_mempool_t,list_head);
 		mempool_print_list(mempool_list);
@@ -242,7 +242,7 @@ cds_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)
 	/*
 	 *pthread_rwlock_rdlock(&head_list->head_lock);
 	 */
-	sync_lock(&head_list->head_lock,0);
+	sync_lock(&head_list->head_lock,NULL);
 	list_for_each_safe(pos, n, hl_head) {
 		mempool_list = container_of(pos,cds_mempool_t,list_head);
 		if(mempool_list->depth >= size + sizeof(cds_slab_t)){
@@ -263,7 +263,7 @@ cds_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)
 			/*
 			 *pthread_rwlock_rdlock(&head_list->head_lock);
 			 */
-			sync_lock(&head_list->head_lock,0);
+			sync_lock(&head_list->head_lock,NULL);
 		}
 	}
 	/*

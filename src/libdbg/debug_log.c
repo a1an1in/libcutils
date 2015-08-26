@@ -115,7 +115,7 @@ int log_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_
 	 *pthread_mutex_t *lock = &log_priv->log_file_lock;
 	 *pthread_mutex_lock(lock);
 	 */
-	sync_lock(&log_priv->log_file_lock,0);
+	sync_lock(&log_priv->log_file_lock,NULL);
 	memset(buffer_str,'\0',MAX_LOG_PRINT_BUFFER_LEN);
 	offset = vsnprintf(buffer_str,MAX_LOG_PRINT_BUFFER_LEN,fmt,vl);
 	ret = log_print_write_log(log_priv->fp,buffer_str);
