@@ -247,6 +247,10 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 	if(access(debugger->ini_file_name,F_OK)){
 		printf("ini file not exsit\n");
 		f = fopen(debugger->ini_file_name, "w");
+		if(f == NULL){
+			console_str("open ini file failed");
+			exit(1);
+		}
 		iniparser_setstr(d, (char *)"debugger", NULL); 
 		/*
 		 *itoa(type,type_str,10);
