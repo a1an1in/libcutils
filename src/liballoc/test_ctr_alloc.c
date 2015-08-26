@@ -45,6 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libcontainer/inc_files.h"
+#include "libcre/libcre.h"
 
 void test_ctr_alloc()
 {
@@ -57,31 +58,40 @@ void test_ctr_alloc()
 	 *alloc_p->data_min_size = 8;
 	 *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
 	 */
-	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC,1);
+	uint8_t lock_type;
+#ifdef UNIX_LIKE_USER_MODE
+	lock_type = PTHREAD_MUTEX_LOCK;
+#endif
+#ifdef WINDOWS_USER_MODE
+	lock_type = WINDOWS_MUTEX_LOCK;
+#endif
+	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC,0);
 	allocator_ctr_init(allocator, 0, 0, 1024);
 	/*
 	 *allocator_cds_init(allocator,0,0,0);
 	 */
 
 	p = allocator_mem_alloc(allocator,7);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p);
+	dbg_str(DBG_CONTAINER_DETAIL,"_________alloc addr:%p",p);
 
 	allocator_mem_free(allocator,p);
 
 	p2 = allocator_mem_alloc(allocator,8);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p2);
+	dbg_str(DBG_CONTAINER_DETAIL,"************alloc addr:%p",p2);
 
-	/*
-	 *p3 = allocator_mem_alloc(allocator,200);
-	 *dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p3);
-	 */
+	p3 = allocator_mem_alloc(allocator,200);
+	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p3);
 
 	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
 	allocator_mem_info(allocator);
 
+	printf("\n");
 	allocator_mem_free(allocator,p);
+	printf("\n");
 	allocator_mem_free(allocator,p2);
+	printf("\n");
 	allocator_mem_free(allocator,p3);
+	printf("\n");
 
 	dbg_str(DBG_CONTAINER_DETAIL,"batch alloc");
 	int i;
