@@ -82,10 +82,8 @@ void test_container()
 	 *dbg_str(DBG_DETAIL,"test_vector");
 	 *test_vector();
 	 */
-	/*
-	 *dbg_str(DBG_DETAIL,"test_cds_alloc");
-	 *test_ctr_alloc();
-	 */
+	dbg_str(DBG_DETAIL,"test_cds_alloc");
+	test_ctr_alloc();
 }
 void test_datastructure()
 {
@@ -98,7 +96,9 @@ void test_datastructure()
 }
 void test_analyzer()
 {
-	test_pdt_proto_analyzer();
+	/*
+	 *test_pdt_proto_analyzer();
+	 */
 	/*
 	 *test_pdu_proto_analyzer();
 	 */

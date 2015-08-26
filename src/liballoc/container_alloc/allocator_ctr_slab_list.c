@@ -251,6 +251,7 @@ void slab_print_list_for_each(struct list_head *hl_head)
 	 *pthread_rwlock_rdlock(&head_list->head_lock);
 	 */
 	sync_lock(&head_list->head_lock,NULL);
+
 	list_for_each_safe(pos, n, hl_head) {
 		slab_list = container_of(pos,cds_slab_t,list_head);
 		slab_print_list(slab_list);

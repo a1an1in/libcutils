@@ -149,4 +149,11 @@ void debugger_destroy(debugger_t *debugger);
 	#define dbg_buf(debug_switch,const_str,buf,buf_len) do{}while(0)  
 #endif
 
+#define OPEN_CONSOLE_DEBUG
+#ifdef OPEN_CONSOLE_DEBUG
+	#define console_str(fmt,args...)\
+		printf("[" fmt "]--[%s:%d]\n",##args,__FILE__, __LINE__);
+#else
+#endif
+
 #endif

@@ -44,6 +44,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "libdbg/debug.h"
 #include "libcre/sync_lock/sync_lock.h"
 
 sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];
@@ -54,8 +55,10 @@ inline int sync_lock_init(struct sync_lock_s *slock,uint32_t sync_lock_type)
 		slock->lock_ops = NULL;
 		return 1;
 	}
+	/*
+	 *console_str("sync_lock_init");
+	 */
 	slock->lock_ops = &sync_lock_modules[sync_lock_type].sl_ops;
-	slock->lock_ops->sync_lock_init(slock);
 
 	return slock->lock_ops->sync_lock_init(slock);
 }
