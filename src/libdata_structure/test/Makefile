@@ -10,7 +10,7 @@ OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj
 $(TARGET) : $(OBJS) $(COMOBJS)
 	$(LD) -r $^ -o $@ $(LIBS) $(LDFLAGS) 
 %.o : %.c
-	$(CC) $< -o $@ $(CCFLAGS) $(INCLUDES)
+	$(CC) $< -fPIC -o  $@ $(CCFLAGS) $(INCLUDES)
 .PHONY:clean
 clean:
 	rm -rf *.o

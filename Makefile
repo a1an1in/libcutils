@@ -13,6 +13,7 @@
 #
 #TARGET file name
 TARGET = test
+SHARE_TARGET = libcdf.so
 #compile tools
 CC = gcc
 LD = ld
@@ -42,5 +43,20 @@ clean:
 cp:
 	make
 	cp -rf bin/$(TARGET) /var/ftp
-
+so:
+	@$(call build_obj);\
+	$(call check_output_dir);\
+	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread -lm;\
+	if [ $$? -ne 0 ]; then \
+		echo "Building $(SHARE_TARGET) is failed !"; \
+		exit 12; \
+	else\
+		echo $(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread -lm;\
+		echo ;\
+		echo $(TARGET) has been created!;\
+		echo ;\
+	fi;
+install:
+	cp -rf ./src/include/ /usr/local/include/libcdf
+	cp -rf $(PROJECT_PATH)/bin/$(SHARE_TARGET) /usr/local/lib
 
