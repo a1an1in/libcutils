@@ -54,7 +54,7 @@
 #include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_proto_analyzer.h"
 
-#define LIBCDF_VERSION "1.1.6.1"
+#define LIBCDF_VERSION "1.2.0.0"
 
 debugger_t *debugger_gp;
 
