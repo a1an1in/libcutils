@@ -191,10 +191,10 @@ void pfs_set_pdt_drv_proto_format(protocol_format_set_t *pfs_p)
 }
 int test_pdt_drv_proto(protocol_format_set_t *pfs_p, allocator_t *allocator)
 {
+	test_pdt_proto_3008(pfs_p,allocator);
 	/*
-	 *test_pdt_proto_3008(pfs_p,allocator);
+	 *test_pdt_proto_3019(pfs_p,allocator);
 	 */
-	test_pdt_proto_3019(pfs_p,allocator);
 }
 int test_pdt_proto_analyzer()
 {

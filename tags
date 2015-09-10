@@ -269,6 +269,7 @@ RB_RED	src/include/libcontainer/rbtree.h	143;"	d
 RB_ROOT	src/include/libcontainer/rbtree.h	172;"	d
 RED	src/include/libdbg/debug.h	108;"	d
 REVERSE_COLOR_FLAG	src/include/libdbg/debug.h	117;"	d
+SHARE_TARGET	Makefile	/^SHARE_TARGET = libcdf.so$/;"	m
 SLAB_ARRAY_MAX_NUM	src/include/liballoc/allocator_ctr_alloc.h	25;"	d
 SLC_DATA	src/libproto_analyzer/test/pdt_drv_proto_format.h	12;"	d
 SLC_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	11;"	d
@@ -1228,6 +1229,7 @@ posix_thread_rwlock_lock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int p
 posix_thread_rwlock_lock_destroy	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)$/;"	f
 posix_thread_rwlock_trylock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_trylock(struct sync_lock_s *slock,void *arg)$/;"	f
 posix_thread_rwlock_unlock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_unlock(struct sync_lock_s *slock)$/;"	f
+pow	src/libproto_analyzer/protocol_analyzer.c	/^static double pow(double x,double y)$/;"	f	file:
 pprev	src/include/liballoc/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libcontainer/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libdata_structure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::

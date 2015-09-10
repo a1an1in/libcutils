@@ -144,9 +144,8 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	}
 	llist->list_count++;
 	dbg_str(DBG_IMPORTANT,"insert llist,listcount=%d",llist->list_count);
-	/*
-	 *sync_unlock(&llist->list_lock);
-	 */
+
+	sync_unlock(&llist->list_lock);
 	/*
 	 *pthread_rwlock_unlock(&llist->list_lock);
 	 */
@@ -171,6 +170,7 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	list_del(pos.list_head_p);
 	llist->list_count--;
 	dbg_str(DBG_IMPORTANT,"delete llist,listcount=%d",llist->list_count);
+
 	sync_unlock(&llist->list_lock);
 	/*
 	 *pthread_rwlock_unlock(&llist->list_lock);

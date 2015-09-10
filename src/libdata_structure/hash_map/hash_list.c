@@ -175,7 +175,6 @@ hash_map_pos_t hash_map_search(hash_map_t *hmap, void *key)
 	hash_map_pos_t ret;
 	struct hlist_node *pos,*next;
 
-
 	dbg_str(DBG_DETAIL,"hash_map_search");
 
 	bucket_pos = hash_func(key,key_size,bucket_size); 
@@ -216,6 +215,7 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)
 	 *pthread_rwlock_wrlock(&hmap->map_lock);
 	 */
 	sync_lock(&hmap->map_lock,NULL);
+
 	if(hash_map_pos_equal(pos,hmap->begin)){
 		dbg_str(DBG_WARNNING,"del iter equal begain");
 		next = hash_map_pos_next(pos);
@@ -300,6 +300,7 @@ void *hash_map_pos_get_pointer(hash_map_pos_t pos)
 	mnode = container_of(pos.hlist_node_p,
 			struct hash_map_node,
 			hlist_node);
+	dbg_buf(DBG_DETAIL,"key:",mnode->key,mnode->data_size);
 
 	return &mnode->key[mnode->value_pos];
 }
