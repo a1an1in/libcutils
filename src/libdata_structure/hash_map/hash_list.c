@@ -91,27 +91,6 @@ int hash_map_init(hash_map_t *hmap,
 	
 	return 0;
 }
-hash_map_pos_t hash_map_pos_init(hash_map_pos_t *pos,
-		struct hlist_node *hlist_node_p,
-		uint32_t bucket_pos,
-		struct hlist_head *hlist_head_p,
-		struct hash_map_s *hmap)
-{
-	pos->hlist_node_p = hlist_node_p;
-	pos->bucket_pos   = bucket_pos;
-	pos->hlist        = hlist_head_p;
-	pos->hmap         = hmap;
-
-	return *pos;
-}
-hash_map_pos_t hash_map_begin(hash_map_t *hmap)
-{
-	return hmap->begin;
-}
-hash_map_pos_t hash_map_end(hash_map_t *hmap)
-{
-	return hmap->end;
-}
 int hash_map_insert(hash_map_t *hmap,void *data)
 {
 	struct hash_map_node *mnode;
@@ -289,37 +268,11 @@ hash_map_pos_t hash_map_pos_next(hash_map_pos_t pos)
 
 	return pos;
 }
-int hash_map_pos_equal(hash_map_pos_t pos1,hash_map_pos_t pos2)
-{
-	return (pos1.hlist_node_p == pos2.hlist_node_p);
-}
-void *hash_map_pos_get_pointer(hash_map_pos_t pos)
-{
-	struct hash_map_node *mnode;
-
-	mnode = container_of(pos.hlist_node_p,
-			struct hash_map_node,
-			hlist_node);
-	dbg_buf(DBG_DETAIL,"key:",mnode->key,mnode->data_size);
-
-	return &mnode->key[mnode->value_pos];
-}
-void hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))
-{
-	hash_map_pos_t pos;
-	struct hash_map_node *mnode;
-
-	for(pos = hash_map_begin(hmap); 
-			!hash_map_pos_equal(pos,hash_map_end(hmap));
-			pos = hash_map_pos_next(pos)){
-		mnode = container_of(pos.hlist_node_p,struct hash_map_node,hlist_node);
-		func(mnode);
-	}
-}
 void hash_map_print_mnode(struct hash_map_node *mnode)
 {
 	dbg_buf(DBG_DETAIL,"data:",mnode->key,mnode->data_size);
 }
+
 /*
  *int main()
  *{

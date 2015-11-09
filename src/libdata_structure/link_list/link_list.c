@@ -145,10 +145,6 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 
 	return p;
 }
-int llist_push_front(llist_t *llist,void *data)
-{
-	return llist_insert(llist,llist->head,data);
-}
 int llist_push_back(llist_t *llist,void *data)
 {
 	list_t *p = NULL;
@@ -189,10 +185,6 @@ int llist_pop_back(llist_t *llist)
 	allocator_mem_free(llist->allocator,p);
 	return 0;
 }
-int llist_pop_front(llist_t *llist)
-{
-	return llist_delete(llist, llist->begin);
-}
 
 list_t *llist_detach_back(llist_t *llist)
 {
@@ -214,10 +206,6 @@ list_t *llist_detach_back(llist_t *llist)
 	sync_unlock(&llist->list_lock);
 
 	return p;
-}
-list_t *llist_detach_front(llist_t *llist)
-{
-	return llist_detach(llist, llist->begin);
 }
 int llist_destroy(llist_t *llist)
 {
