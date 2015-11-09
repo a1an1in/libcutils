@@ -79,4 +79,8 @@ static inline list_t *llist_detach_front(llist_t *llist)
 {
 	return llist_detach(llist, llist->begin);
 }
+static inline int llist_get_count(llist_t *llist)
+{
+	return llist->list_count;
+}
 #endif

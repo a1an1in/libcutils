@@ -129,7 +129,7 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 
 	if(llist_pos_equal(llist->begin,llist->head)){
 		dbg_str(DBG_WARNNING,"llist is null,llist_detach");
-		return -1;
+		return NULL;
 	}
 
 	p = container_of(pos.list_head_p,list_t,list_head);
@@ -193,7 +193,7 @@ list_t *llist_detach_back(llist_t *llist)
 
 	if(llist_pos_equal(llist->begin,llist->head)){
 		dbg_str(DBG_WARNNING,"llist is null,llist_detach_back");
-		return -1;
+		return NULL;
 	}
 
 	p = container_of(head->prev,list_t,list_head);
