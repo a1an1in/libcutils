@@ -390,7 +390,8 @@ pfs_set_proto_info(
 }
 
 
-protocol_format_set_t *pfs_create_proto_format_set(allocator_t *allocator)
+protocol_format_set_t *
+pfs_create_proto_format_set(allocator_t *allocator)
 {
 	protocol_format_set_t *ret;
 

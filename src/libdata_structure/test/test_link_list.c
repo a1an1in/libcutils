@@ -59,6 +59,11 @@ int test_datastructure_link_list()
 	llist_push_front(llist,&t3);
 	llist_push_front(llist,&t4);
 
+	llist_push_back(llist,&t1);
+	llist_push_back(llist,&t2);
+	llist_push_back(llist,&t3);
+	llist_push_back(llist,&t4);
+
 	llist_for_each(llist,print_list_data);
 
 	llist_destroy(llist);

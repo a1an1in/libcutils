@@ -54,7 +54,7 @@
 #include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_proto_analyzer.h"
 
-#define LIBCDF_VERSION "1.2.0.0"
+#define LIBCDF_VERSION "1.2.1.0"
 
 debugger_t *debugger_gp;
 
@@ -92,13 +92,13 @@ void test_datastructure()
 	/*
 	 *test_datastructure_hashlist();
 	 */
-	/*
-	 *test_datastructure_link_list();
-	 */
+	test_datastructure_link_list();
 }
 void test_analyzer()
 {
-	test_pdt_proto_analyzer();
+	/*
+	 *test_pdt_proto_analyzer();
+	 */
 	/*
 	 *test_pdu_proto_analyzer();
 	 */

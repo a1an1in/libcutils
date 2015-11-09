@@ -63,7 +63,7 @@ list_pos_t llist_begin(llist_t *llist)
 
 list_pos_t llist_end(llist_t *llist)
 {
-	return llist->end;
+	return llist->head;
 }
 list_pos_t llist_pos_next(list_pos_t pos)
 {
@@ -110,7 +110,6 @@ int llist_init(llist_t *llist,uint32_t data_size)
 	}
 	INIT_LIST_HEAD(p);
 	llist_pos_init(&llist->begin,p,llist);
-	llist_pos_init(&llist->end,p,llist);
 	llist_pos_init(&llist->head,p,llist);
 
 	/*
@@ -139,9 +138,6 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	if(llist_pos_equal(pos,llist->head)){
 		llist_pos_init(&llist->begin,&p->list_head,llist);
 	}
-	if(llist_pos_equal(pos,llist->end)){
-		llist_pos_init(&llist->end,&p->list_head,llist);
-	}
 	llist->list_count++;
 	dbg_str(DBG_IMPORTANT,"insert llist,listcount=%d",llist->list_count);
 
@@ -164,8 +160,6 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	 */
 	if(llist_pos_equal(pos,llist->begin)){
 		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
-	}else if(llist_pos_equal(pos,llist->end)){
-		llist_pos_init(&llist->end,pos.list_head_p->prev,llist);
 	}
 	list_del(pos.list_head_p);
 	llist->list_count--;
@@ -191,8 +185,6 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 	 */
 	if(llist_pos_equal(pos,llist->begin)){
 		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
-	}else if(llist_pos_equal(pos,llist->end)){
-		llist_pos_init(&llist->end,pos.list_head_p->prev,llist);
 	}
 	list_del(pos.list_head_p);
 	llist->list_count--;
@@ -210,12 +202,50 @@ int llist_push_front(llist_t *llist,void *data)
 }
 int llist_push_back(llist_t *llist,void *data)
 {
-	return llist_insert(llist,llist->end,data);
+	list_t *p = NULL;
+	uint32_t data_size = llist->data_size; 
+
+	p = (list_t *)allocator_mem_alloc(llist->allocator,sizeof(list_t) + data_size);
+	memcpy(p->data,data,data_size);
+
+	sync_lock(&llist->list_lock,NULL);
+	/*
+	 *pthread_rwlock_wrlock(&llist->list_lock);
+	 */
+	list_add_tail(&p->list_head, llist->head.list_head_p);
+	llist->list_count++;
+	dbg_str(DBG_IMPORTANT,"llist_push_back,listcount=%d",llist->list_count);
+
+	sync_unlock(&llist->list_lock);
+	/*
+	 *pthread_rwlock_unlock(&llist->list_lock);
+	 */
+
+	return 0;
 }
 
 int llist_pop_back(llist_t *llist)
 {
-	return llist_delete(llist, llist->end);
+	list_t *p;
+	struct list_head *head = llist->head.list_head_p;
+
+	p = container_of(head->prev,list_t,list_head);
+
+	sync_lock(&llist->list_lock,NULL);
+	/*
+	 *pthread_rwlock_wrlock(&llist->list_lock);
+	 */
+	list_del(head->prev);
+	llist->list_count--;
+	dbg_str(DBG_IMPORTANT,"llist_pop_back,listcount=%d",llist->list_count);
+
+	sync_unlock(&llist->list_lock);
+	/*
+	 *pthread_rwlock_unlock(&llist->list_lock);
+	 */
+
+	allocator_mem_free(llist->allocator,p);
+	return 0;
 }
 int llist_pop_front(llist_t *llist)
 {
@@ -224,7 +254,25 @@ int llist_pop_front(llist_t *llist)
 
 list_t *llist_detach_back(llist_t *llist)
 {
-	return llist_detach(llist, llist->end);
+	list_t *p;
+	struct list_head *head = llist->head.list_head_p;
+
+	p = container_of(head->prev,list_t,list_head);
+
+	sync_lock(&llist->list_lock,NULL);
+	/*
+	 *pthread_rwlock_wrlock(&llist->list_lock);
+	 */
+	list_del(head->prev);
+	llist->list_count--;
+	dbg_str(DBG_IMPORTANT,"llist_detach_back,listcount=%d",llist->list_count);
+
+	sync_unlock(&llist->list_lock);
+	/*
+	 *pthread_rwlock_unlock(&llist->list_lock);
+	 */
+
+	return p;
 }
 list_t *llist_detach_front(llist_t *llist)
 {

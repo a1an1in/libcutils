@@ -163,7 +163,7 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 	uint32_t addr;
 	uint8_t *addr_p;
 
-	//change later
+	//change later,not relase it
 	pair = create_pair(key_size,data_size);
 
 	hmap = hash_map_create(pa->allocator,0);
