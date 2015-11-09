@@ -152,6 +152,10 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 {
 	list_t *p;
 
+	if(llist_pos_equal(llist->begin,llist->head)){
+		dbg_str(DBG_WARNNING,"llist is null,llist_delete");
+		return -1;
+	}
 	p = container_of(pos.list_head_p,list_t,list_head);
 
 	sync_lock(&llist->list_lock,NULL);
@@ -177,6 +181,10 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 {
 	list_t *p;
 
+	if(llist_pos_equal(llist->begin,llist->head)){
+		dbg_str(DBG_WARNNING,"llist is null,llist_detach");
+		return -1;
+	}
 	p = container_of(pos.list_head_p,list_t,list_head);
 
 	sync_lock(&llist->list_lock,NULL);
@@ -229,6 +237,10 @@ int llist_pop_back(llist_t *llist)
 	list_t *p;
 	struct list_head *head = llist->head.list_head_p;
 
+	if(llist_pos_equal(llist->begin,llist->head)){
+		dbg_str(DBG_WARNNING,"llist is null,llist_pop_back");
+		return -1;
+	}
 	p = container_of(head->prev,list_t,list_head);
 
 	sync_lock(&llist->list_lock,NULL);
@@ -257,6 +269,10 @@ list_t *llist_detach_back(llist_t *llist)
 	list_t *p;
 	struct list_head *head = llist->head.list_head_p;
 
+	if(llist_pos_equal(llist->begin,llist->head)){
+		dbg_str(DBG_WARNNING,"llist is null,llist_detach_back");
+		return -1;
+	}
 	p = container_of(head->prev,list_t,list_head);
 
 	sync_lock(&llist->list_lock,NULL);

@@ -114,6 +114,10 @@ int list_pop_back(container_t *ct)
 	struct container_list *p;
 	struct list_head *head = ct->end.pos.list_head_p;
 	
+	if(list_iterator_equal(ct->end,ct->begin)){
+		dbg_str(DBG_WARNNING,"list list null,pop back warnning");
+		return -1;
+	}
 	p = container_of(head->prev,struct container_list,list_head);
 	dbg_str(DBG_CONTAINER_DETAIL,"pop back");
 
@@ -136,6 +140,10 @@ int list_pop_front(container_t *ct)
 	struct container_list *p;
 	struct list_head *head = ct->end.pos.list_head_p;
 	
+	if(list_iterator_equal(ct->end,ct->begin)){
+		dbg_str(DBG_WARNNING,"list list null,pop front warnning");
+		return -1;
+	}
 	p = container_of(head->next,struct container_list,list_head);
 	dbg_str(DBG_CONTAINER_DETAIL,"pop front");
 
@@ -180,6 +188,10 @@ int list_delete(container_t *ct, iterator_t it)
 {
 	struct container_list *p;
 
+	if(list_iterator_equal(ct->end,ct->begin)){
+		dbg_str(DBG_WARNNING,"list list null,list delete warnning");
+		return -1;
+	}
 	p = container_of(it.pos.list_head_p,struct container_list,list_head);
 	dbg_str(DBG_CONTAINER_IMPORTANT,"delete list");
 
