@@ -47,13 +47,14 @@
 #include "libproto_analyzer/protocol_analyzer.h"
 #include "libdata_structure/hash_list.h"
 
-static double pow(double x,double y)
+static inline uint32_t 
+pow(uint32_t x,uint32_t y)
 {
 
-	double pow_value = 1;
-	int i;
+	uint32_t pow_value = 1;
+	uint32_t i;
 	
-	for(i = 0;i <= y; i++)
+	for(i = 0;i < y; i++)
 		pow_value *= x;
 
 	return pow_value;
@@ -603,26 +604,28 @@ void pa_get_protocol_bit_data(proto_info_list_t *info_list,
 		struct protocol_analyzer_s *pa)
 {
 	int i;
-	short t_len = info_list->len;
-	uint8_t t_pos_get = info_list->bit_pos;
+	short total_len = info_list->len;
+	uint8_t bit_pos_get = info_list->bit_pos;
 	char byte_pos = info_list->byte_pos;
-	uint8_t t_len_get;
+	uint8_t len_get;
 	uint8_t *dp = pa->protocol_data;
 	uint32_t data = 0,t_data_get;
 
-	for(i = 0; t_len > 0; i++){
+	for(i = 0; total_len > 0; i++){
 		/* get data len you want to get */
-		t_len_get = (t_len > t_pos_get % 8 + 1)?(t_pos_get % 8 + 1):t_len;
+		len_get = (total_len > bit_pos_get % 8 + 1)?(bit_pos_get % 8 + 1):total_len;
 		/* get data you want to get */
-		t_data_get = get_bit_data(dp[byte_pos + i], t_pos_get % 8 + 1 - t_len_get, t_len_get);
+		t_data_get = get_bit_data(dp[byte_pos + i], bit_pos_get % 8 + 1 - len_get, len_get);
 		/* restore data to data var*/
-		data |= (t_data_get << (t_len - t_len_get));
-		dbg_str(DBG_DETAIL,"get_data=%x,set_data=%x",t_data_get,data);
-		t_pos_get -= t_len_get;
-		if(t_pos_get < 0){
-			t_pos_get = 7;
+		data |= (t_data_get << (total_len - len_get));
+		/*
+		 *dbg_str(DBG_DETAIL,"get_data=%x,set_data=%x,len_get =%x,data=%x,bit_pos_get=%x",t_data_get,data,len_get,dp[byte_pos + i],bit_pos_get);
+		 */
+		bit_pos_get -= len_get;
+		if(bit_pos_get < 0){
+			bit_pos_get = 7;
 		}
-		t_len -= t_len_get;
+		total_len -= len_get;
 		
 	}
 	info_list->data = data;

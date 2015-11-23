@@ -30,7 +30,8 @@ typedef struct pair{
 	uint8_t data[1];
 }pair_t;
 
-static inline pair_t * create_pair(int key_len,int value_len)
+static inline pair_t * 
+create_pair(int key_len,int value_len)
 {
 	pair_t *p;
 	p = (pair_t *)malloc(sizeof(pair_t) + key_len + value_len);
@@ -39,7 +40,8 @@ static inline pair_t * create_pair(int key_len,int value_len)
 	p->data_len = key_len + value_len;
 	return p;
 }
-static inline void make_pair(pair_t *p,void *key,void *value)
+static inline void 
+make_pair(pair_t *p,void *key,void *value)
 {
 	memcpy(p->data,key,p->key_len);
 	memcpy(p->data + p->key_len,value,p->value_len);

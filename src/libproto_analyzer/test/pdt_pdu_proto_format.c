@@ -45,7 +45,7 @@ int pfs_set_pdu_format_ackd(protocol_format_set_t *pfs_p)
 	PFS_SET_PROTO_INFO( "FID",   "1",  "7", "8", "1",  NULL,     hl_head);
 	PFS_SET_PROTO_INFO( "RI",    "2",  "7", "7", "1",  NULL,     hl_head);
 	PFS_SET_PROTO_INFO( "ARC",   "2",  "0", "8", "1",  NULL,     hl_head);
-	PFS_SET_PROTO_INFO( "RSVD",  "3", "0", "1", "1",  NULL,     hl_head);
+	PFS_SET_PROTO_INFO( "RSVD",  "3", "0", "1",  "1",  NULL,     hl_head);
 	PFS_SET_PROTO_INFO( "TADDR", "4", "7", "24", "1",  NULL,     hl_head);
 	PFS_SET_PROTO_INFO( "SADDR", "7", "7", "24", "1",  NULL,     hl_head);
 

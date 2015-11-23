@@ -92,16 +92,16 @@ void test_datastructure()
 	/*
 	 *test_datastructure_hashlist();
 	 */
-	test_datastructure_link_list();
+	/*
+	 *test_datastructure_link_list();
+	 */
 }
 void test_analyzer()
 {
 	/*
 	 *test_pdt_proto_analyzer();
 	 */
-	/*
-	 *test_pdu_proto_analyzer();
-	 */
+	test_pdu_proto_analyzer();
 }
 int main()
 {

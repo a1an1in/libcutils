@@ -32,7 +32,7 @@ all :
 		echo "Building $(TARGET) is failed !"; \
 		exit 12; \
 	else\
-		echo $(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm;\
+		echo $(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread ;\
 		echo ;\
 		echo $(TARGET) has been created!;\
 		echo ;\
@@ -46,7 +46,7 @@ cp:
 so:
 	@$(call build_obj);\
 	$(call check_output_dir);\
-	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread -lm;\
+	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread;\
 	if [ $$? -ne 0 ]; then \
 		echo "Building $(SHARE_TARGET) is failed !"; \
 		exit 12; \
