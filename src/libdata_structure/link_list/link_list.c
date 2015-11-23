@@ -93,7 +93,7 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 		llist_pos_init(&llist->begin,&p->list_head,llist);
 	}
 	llist->list_count++;
-	dbg_str(DBG_IMPORTANT,"insert llist,listcount=%d",llist->list_count);
+	dbg_str(DBG_DETAIL,"insert llist,listcount=%d",llist->list_count);
 
 	sync_unlock(&llist->list_lock);
 
@@ -116,7 +116,7 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	}
 	list_del(pos.list_head_p);
 	llist->list_count--;
-	dbg_str(DBG_IMPORTANT,"delete llist,listcount=%d",llist->list_count);
+	dbg_str(DBG_DETAIL,"delete llist,listcount=%d",llist->list_count);
 
 	sync_unlock(&llist->list_lock);
 
@@ -128,7 +128,7 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 	list_t *p;
 
 	if(llist_pos_equal(llist->begin,llist->head)){
-		dbg_str(DBG_WARNNING,"llist is null,llist_detach");
+		dbg_str(DBG_DETAIL,"llist is null,llist_detach");
 		return NULL;
 	}
 
@@ -139,8 +139,9 @@ list_t *llist_detach(llist_t *llist, list_pos_t pos)
 		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
 	}
 	list_del(pos.list_head_p);
+	llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);
 	llist->list_count--;
-	dbg_str(DBG_IMPORTANT,"detach llist,listcount=%d",llist->list_count);
+	dbg_str(DBG_DETAIL,"detach llist,listcount=%d",llist->list_count);
 	sync_unlock(&llist->list_lock);
 
 	return p;
@@ -155,8 +156,11 @@ int llist_push_back(llist_t *llist,void *data)
 
 	sync_lock(&llist->list_lock,NULL);
 	list_add_tail(&p->list_head, llist->head.list_head_p);
+	if(llist_pos_equal(llist->head,llist->begin)){
+		llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);//if this list is first,updata begin
+	}
 	llist->list_count++;
-	dbg_str(DBG_IMPORTANT,"llist_push_back,listcount=%d",llist->list_count);
+	dbg_str(DBG_DETAIL,"llist_push_back,listcount=%d",llist->list_count);
 
 	sync_unlock(&llist->list_lock);
 
@@ -178,7 +182,10 @@ int llist_pop_back(llist_t *llist)
 	sync_lock(&llist->list_lock,NULL);
 	list_del(head->prev);
 	llist->list_count--;
-	dbg_str(DBG_IMPORTANT,"llist_pop_back,listcount=%d",llist->list_count);
+	if(llist->list_count == 0){
+		llist_pos_init(&llist->begin,llist->head.list_head_p,llist);
+	}
+	dbg_str(DBG_DETAIL,"llist_pop_back,listcount=%d",llist->list_count);
 
 	sync_unlock(&llist->list_lock);
 
@@ -201,7 +208,10 @@ list_t *llist_detach_back(llist_t *llist)
 	sync_lock(&llist->list_lock,NULL);
 	list_del(head->prev);
 	llist->list_count--;
-	dbg_str(DBG_IMPORTANT,"llist_detach_back,listcount=%d",llist->list_count);
+	if(llist->list_count == 0){
+		llist_pos_init(&llist->begin,llist->head.list_head_p,llist);
+	}
+	dbg_str(DBG_DETAIL,"llist_detach_back,listcount=%d",llist->list_count);
 
 	sync_unlock(&llist->list_lock);
 

@@ -300,12 +300,14 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 		 *dbg_buf(DBG_DETAIL,"name:",(char *)attr_value,sizeof(attr_value));
 		 */
 	}else if(!strcmp(name,"byte_pos")){
-		info_list->byte_pos = atoi((char *)(attr_value));
+		info_list->byte_pos     = atoi((char *)(attr_value));
+		info_list->byte_pos_bak = info_list->byte_pos;
 		/*
 		 *dbg_str(DBG_DETAIL,"byte_pos=%d",info_list->byte_pos);
 		 */
 	}else if(!strcmp(name,"bit_pos")){
-		info_list->bit_pos = atoi((char *)(attr_value));
+		info_list->bit_pos     = atoi((char *)(attr_value));
+		info_list->bit_pos_bak = info_list->bit_pos;
 	}else if(!strcmp(name,"len")){
 		info_list->len = atoi((char *)(attr_value));
 		/*
@@ -341,11 +343,11 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 	}else{
 	}
 }
-#define MAX_PROTOCOL_NUM 200
 int pfs_add_proto_link_list(uint32_t llist_num,
 		struct list_head *new_proto_llist,
 		protocol_format_set_t *pfs_ptr)
 {
+#define MAX_PROTOCOL_NUM 200
 	struct list_head **list_head = pfs_ptr->list_head_p2;
 	if(llist_num > MAX_PROTOCOL_NUM){
 		dbg_str(DBG_ERROR,"max_protocol_num greater than setting");
@@ -358,6 +360,7 @@ int pfs_add_proto_link_list(uint32_t llist_num,
 	list_head[llist_num] = new_proto_llist;
 	pfs_ptr->proto_total_num++;
 	return 0;
+#undef MAX_PROTOCOL_NUM 
 }
 
 proto_info_list_t * 
@@ -378,6 +381,7 @@ pfs_set_proto_info(
 	if(info_list == NULL){
 		return NULL;
 	}
+	memset(info_list,0,sizeof(proto_info_list_t));
 	set_proto_info_attribs(name, name_value,info_list);
 	set_proto_info_attribs(byte_pos, byte_pos_value,info_list);
 	set_proto_info_attribs(bit_pos, bit_pos_value,info_list);

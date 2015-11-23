@@ -32,7 +32,9 @@ typedef struct proto_info_list_s{
 	uint8_t vlenth_value_flag:1;
 	uint8_t vlenth_value_assigned_flag:1;
 	uint8_t byte_pos;
+	uint8_t byte_pos_bak;
 	uint8_t bit_pos;
+	uint8_t bit_pos_bak;
 	uint16_t len;//len value
 	uint8_t len_unit;//len unit
 	uint32_t bit_len;//len of bit

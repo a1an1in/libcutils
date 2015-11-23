@@ -33,6 +33,7 @@ static inline pair_t * create_pair(int key_len,int value_len)
 {
 	pair_t *p;
 	p = (pair_t *)malloc(sizeof(pair_t) + key_len + value_len);
+	memset(p,0,sizeof(pair_t) + key_len + value_len);
 	p->key_len = key_len;
 	p->value_len = value_len;
 	p->data_len = key_len + value_len;

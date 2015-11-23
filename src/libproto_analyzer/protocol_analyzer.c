@@ -546,7 +546,6 @@ void pa_get_protocol_buf(proto_info_list_t *info_list,
 	}else{
 		if(info_list->len <= info_list->buf.len){
 			memcpy(info_list->buf.data_p,pa->protocol_data + info_list->byte_pos,info_list->len);
-			info_list->buf.len = info_list->len;
 		}else{
 			dbg_str(DBG_WARNNING,"mem has malloc before,but too small,release and realloc");
 			allocator_mem_free(pa->allocator,info_list->buf.data_p);
@@ -812,6 +811,8 @@ int pa_reset_vlen_flag(struct protocol_analyzer_s *pa)
 		if(info_list->vlenth_flag_bak == 1){
 			info_list->vlenth_flag = 1;
 		}
+		info_list->byte_pos = info_list->byte_pos_bak;
+		info_list->bit_pos  = info_list->bit_pos_bak;
 	}
 	return ret;
 }
