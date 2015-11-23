@@ -25,6 +25,7 @@ CC	src/libcontainer/rbtree_map/Makefile	/^CC = gcc$/;"	m
 CC	src/libcontainer/test/Makefile	/^CC = gcc$/;"	m
 CC	src/libcontainer/vector/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/Makefile	/^CC = gcc$/;"	m
+CC	src/libcre/mem_alloc/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/sync_lock/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/sync_lock/unix/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/sync_lock/windows/Makefile	/^CC = gcc$/;"	m
@@ -42,10 +43,10 @@ CONTAINER_TYPE_RBTREE_MAP	src/include/libcontainer/container.h	/^	CONTAINER_TYPE
 CONTAINER_TYPE_VECTOR	src/include/libcontainer/container.h	/^	CONTAINER_TYPE_VECTOR = 0,$/;"	e	enum:container_type
 COTAINOR_NAME_MAX_LEN	src/include/liballoc/allocator.h	11;"	d
 COTAINOR_NAME_MAX_LEN	src/include/liballoc/allocator.h	19;"	d
-COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	108;"	d
-COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	114;"	d
-COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	67;"	d
-COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	81;"	d
+COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	110;"	d
+COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	116;"	d
+COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	69;"	d
+COTAINOR_NAME_MAX_LEN	src/include/libcontainer/container.h	83;"	d
 COUNT	src/libproto_analyzer/test/pdt_drv_proto_format.h	7;"	d
 DARK_GREEN	src/include/libdbg/debug.h	113;"	d
 DBG_ALLOC_CORRECT	src/include/libdbg/debug_businesses.h	47;"	d
@@ -146,6 +147,7 @@ LD	src/libcontainer/rbtree_map/Makefile	/^LD = ld$/;"	m
 LD	src/libcontainer/test/Makefile	/^LD = ld$/;"	m
 LD	src/libcontainer/vector/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/Makefile	/^LD = ld$/;"	m
+LD	src/libcre/mem_alloc/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/sync_lock/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/sync_lock/unix/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/sync_lock/windows/Makefile	/^LD = ld$/;"	m
@@ -183,7 +185,7 @@ MAX_BUFFER_STR_LEN	src/libdbg/debug.c	206;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	230;"	d	file:
 MAX_BUSINESSES_SETTING_LEN	src/libdbg/debug.c	135;"	d	file:
 MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	27;"	d
-MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	49;"	d
+MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	51;"	d
 MAX_DEBUGGER_MODULES_NUM	src/include/libdbg/debug.h	95;"	d
 MAX_DEBUG_BUSINESS_NUM	src/include/libdbg/debug.h	73;"	d
 MAX_DEBUG_BUSINESS_NUM	src/include/libdbg/debug.h	90;"	d
@@ -199,18 +201,19 @@ MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	89;"	d
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	108;"	d	file:
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	128;"	d	file:
 MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	26;"	d
-MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	48;"	d
-MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	53;"	d
-MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	60;"	d
+MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	50;"	d
+MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	55;"	d
+MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	62;"	d
 MAX_PRINT_LEVEL_NAME_LEN	src/include/libdbg/debug.h	61;"	d
 MAX_PRINT_LEVEL_NAME_LEN	src/include/libdbg/debug.h	64;"	d
-MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	344;"	d	file:
+MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	350;"	d	file:
+MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	363;"	d	file:
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	119;"	d	file:
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	122;"	d	file:
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	79;"	d	file:
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	81;"	d	file:
-MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	23;"	d
-MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	8;"	d
+MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
+MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	100;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	54;"	d	file:
@@ -231,6 +234,7 @@ OBJS	src/libcontainer/rbtree_map/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  
 OBJS	src/libcontainer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcontainer/vector/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libcre/mem_alloc/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/sync_lock/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/sync_lock/unix/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/sync_lock/windows/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -243,7 +247,7 @@ OBJS	src/libproto_analyzer/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子�
 OBJS	src/libproto_analyzer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	152;"	d
 OPEN_DEBUG	src/include/libdbg/debug.h	141;"	d
-PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	100;"	d
+PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	102;"	d
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
 PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon4
 PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon4
@@ -286,6 +290,7 @@ SRCS	src/libcontainer/rbtree_map/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcontainer/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcontainer/vector/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libcre/mem_alloc/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/sync_lock/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/sync_lock/unix/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/sync_lock/windows/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -315,6 +320,7 @@ TARGET	src/libcontainer/rbtree_map/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcontainer/test/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcontainer/vector/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libcre/mem_alloc/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/sync_lock/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/sync_lock/unix/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/sync_lock/windows/Makefile	/^TARGET = build_in.o$/;"	m
@@ -479,6 +485,7 @@ begin	src/include/libdata_structure/hash_list_struct.h	/^	hash_map_pos_t begin,e
 begin	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,head;$/;"	m	struct:llist_s
 bit_len	src/include/libproto_analyzer/protocol_format_set.h	/^	uint32_t bit_len;\/\/len of bit$/;"	m	struct:proto_info_list_s
 bit_pos	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t bit_pos;$/;"	m	struct:proto_info_list_s
+bit_pos_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t bit_pos_bak;$/;"	m	struct:proto_info_list_s
 bucket_pos	src/include/libcontainer/container_hash_map.h	/^	uint32_t bucket_pos;\/\/bucket pos$/;"	m	struct:hash_map_pos_info
 bucket_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_pos;\/\/bucket pos$/;"	m	struct:hash_map_pos_info
 bucket_size	src/include/libcontainer/container_hash_map.h	/^	uint32_t bucket_size;$/;"	m	struct:hash_map_priv_info
@@ -489,6 +496,7 @@ buffer_t	src/include/libproto_analyzer/protocol_format_set.h	/^}buffer_t;$/;"	t	
 business_debug_level	src/include/libdbg/debug.h	/^	uint8_t business_debug_level;$/;"	m	struct:debug_business
 business_switch	src/include/libdbg/debug.h	/^	uint8_t business_switch;$/;"	m	struct:debug_business
 byte_pos	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte_pos;$/;"	m	struct:proto_info_list_s
+byte_pos_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte_pos_bak;$/;"	m	struct:proto_info_list_s
 c_ops	src/include/libcontainer/container.h	/^	struct container_operations c_ops;$/;"	m	struct:container_module	typeref:struct:container_module::container_operations
 c_ops_p	src/include/libcontainer/container.h	/^	struct container_operations *c_ops_p;$/;"	m	struct:container	typeref:struct:container::container_operations
 capacity	src/include/libcontainer/container_vector.h	/^	uint32_t capacity;$/;"	m	struct:vector_priv_info
@@ -513,21 +521,21 @@ console_print_print_str_vl	src/libdbg/debug_console.c	/^int console_print_print_
 console_print_regester	src/libdbg/debug_console.c	/^void console_print_regester()$/;"	f
 console_str	src/include/libdbg/debug.h	154;"	d
 container	src/include/libcontainer/container.h	/^typedef struct container{$/;"	s
-container_begin	src/libcontainer/container.c	/^iterator_t container_begin(container_t *ct)$/;"	f
+container_begin	src/include/libcontainer/container.h	/^static inline iterator_t container_begin(container_t *ct)$/;"	f
 container_creator	src/libcontainer/container.c	/^container_t *container_creator(uint32_t container_type,allocator_t *allocator,uint8_t lock_type)$/;"	f
-container_delete	src/libcontainer/container.c	/^int container_delete(container_t *ct, iterator_t it)$/;"	f
-container_destroy	src/libcontainer/container.c	/^int container_destroy(container_t **ct)$/;"	f
-container_end	src/libcontainer/container.c	/^iterator_t container_end(container_t *ct)$/;"	f
+container_delete	src/include/libcontainer/container.h	/^static inline int container_delete(container_t *ct, iterator_t it)$/;"	f
+container_destroy	src/include/libcontainer/container.h	/^static inline int container_destroy(container_t **ct)$/;"	f
+container_end	src/include/libcontainer/container.h	/^static inline iterator_t container_end(container_t *ct)$/;"	f
 container_for_each	src/include/libcontainer/container.h	15;"	d
 container_for_each_safe	src/include/libcontainer/container.h	10;"	d
-container_hash_map_init	src/libcontainer/container.c	/^int container_hash_map_init(container_t *ct, uint32_t key_size,$/;"	f
+container_hash_map_init	src/include/libcontainer/container.h	/^static inline int container_hash_map_init(container_t *ct, uint32_t key_size,$/;"	f
 container_hash_map_register	src/libcontainer/hash_map/container_hash_map.c	/^int container_hash_map_register(){$/;"	f
-container_insert	src/libcontainer/container.c	/^int container_insert(container_t *ct,iterator_t it, void *data)$/;"	f
+container_insert	src/include/libcontainer/container.h	/^static inline int container_insert(container_t *ct,iterator_t it, void *data)$/;"	f
 container_list	src/include/libcontainer/container_list.h	/^struct container_list{$/;"	s
-container_list_init	src/libcontainer/container.c	/^int container_list_init(container_t *ct,uint32_t data_size)$/;"	f
+container_list_init	src/include/libcontainer/container.h	/^static inline int container_list_init(container_t *ct,uint32_t data_size)$/;"	f
 container_list_register	src/libcontainer/list/container_list.c	/^int  container_list_register(){$/;"	f
-container_map_insert	src/libcontainer/container.c	/^int container_map_insert(container_t *ct, pair_t *p)$/;"	f
-container_map_search	src/libcontainer/container.c	/^iterator_t container_map_search(container_t *ct, void *key)$/;"	f
+container_map_insert	src/include/libcontainer/container.h	/^static inline int container_map_insert(container_t *ct, pair_t *p)$/;"	f
+container_map_search	src/include/libcontainer/container.h	/^static inline iterator_t container_map_search(container_t *ct, void *key)$/;"	f
 container_module	src/include/libcontainer/container.h	/^typedef struct container_module{$/;"	s
 container_module_t	src/include/libcontainer/container.h	/^}container_module_t;$/;"	t	typeref:struct:container_module
 container_modules	src/libcontainer/container.c	/^container_module_t container_modules[CONTAINER_TYPE_MAX_NUM];$/;"	v
@@ -542,23 +550,23 @@ container_of	src/include/libdbg/list.h	23;"	d
 container_of	src/include/libproto_analyzer/list.h	22;"	d
 container_operations	src/include/libcontainer/container.h	/^struct container_operations{$/;"	s
 container_p	src/include/libcontainer/container.h	/^	 struct container *container_p;$/;"	m	struct:iterator	typeref:struct:iterator::container
-container_pop_back	src/libcontainer/container.c	/^int container_pop_back(container_t *ct)$/;"	f
-container_pop_front	src/libcontainer/container.c	/^int container_pop_front(container_t *ct)$/;"	f
-container_push_back	src/libcontainer/container.c	/^int container_push_back(container_t *ct,void *data)$/;"	f
-container_push_front	src/libcontainer/container.c	/^int container_push_front(container_t *ct,void *data)$/;"	f
+container_pop_back	src/include/libcontainer/container.h	/^static inline int container_pop_back(container_t *ct)$/;"	f
+container_pop_front	src/include/libcontainer/container.h	/^static inline int container_pop_front(container_t *ct)$/;"	f
+container_push_back	src/include/libcontainer/container.h	/^static inline int container_push_back(container_t *ct,void *data)$/;"	f
+container_push_front	src/include/libcontainer/container.h	/^static inline int container_push_front(container_t *ct,void *data)$/;"	f
 container_rbtree_map_register	src/libcontainer/rbtree_map/container_rbtree_map.c	/^int container_rbtree_map_register(){$/;"	f
 container_t	src/include/libcontainer/container.h	/^}container_t;$/;"	t	typeref:struct:container
-container_tree_map_init	src/libcontainer/container.c	/^int container_tree_map_init(container_t *ct,$/;"	f
+container_tree_map_init	src/include/libcontainer/container.h	/^static inline int container_tree_map_init(container_t *ct,$/;"	f
 container_type	src/include/libcontainer/container.h	/^	uint8_t container_type;$/;"	m	struct:container
 container_type	src/include/libcontainer/container.h	/^	uint8_t container_type;$/;"	m	struct:container_module
 container_type	src/include/libcontainer/container.h	/^enum container_type{$/;"	g
-container_vector_init	src/libcontainer/container.c	/^int container_vector_init(container_t *ct,uint32_t data_size,uint32_t capacity)$/;"	f
+container_vector_init	src/include/libcontainer/container.h	/^static inline int container_vector_init(container_t *ct,uint32_t data_size,uint32_t capacity)$/;"	f
 container_vector_register	src/libcontainer/vector/container_vector.c	/^int container_vector_register(){$/;"	f
 copy_protocol_format	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*copy_protocol_format)(struct protocol_analyzer_s *pa); $/;"	m	struct:protocol_analyzer_s
 count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct:cds_mem_pool_head_list
 count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct:slab_head_list
 count	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^	int count;$/;"	m	struct:pa_array_s	file:
-create_pair	src/include/libcontainer/container.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
+create_pair	src/include/libcontainer/container.h	/^create_pair(int key_len,int value_len)$/;"	f
 create_pair	src/include/libdata_structure/hash_list.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
 cur	src/include/libcontainer/container.h	/^	struct iterator begin,end,cur;$/;"	m	struct:container	typeref:struct:container::
 d	src/include/libdbg/debug.h	/^	dictionary *d;$/;"	m	struct:debugger
@@ -678,22 +686,22 @@ hash_func	src/include/libcontainer/container_hash_map.h	/^	hash_func_fpt hash_fu
 hash_func	src/include/libdata_structure/hash_list_struct.h	/^	hash_func_fpt hash_func;$/;"	m	struct:hash_map_s
 hash_func_fpt	src/include/libcontainer/container_hash_map.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
 hash_func_fpt	src/include/libdata_structure/hash_list_struct.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
-hash_map_begin	src/libdata_structure/hash_map/hash_list.c	/^hash_map_pos_t hash_map_begin(hash_map_t *hmap)$/;"	f
+hash_map_begin	src/include/libdata_structure/hash_list.h	/^static inline hash_map_pos_t hash_map_begin(hash_map_t *hmap)$/;"	f
 hash_map_create	src/libdata_structure/hash_map/hash_list.c	/^hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)$/;"	f
 hash_map_delete	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_delete(hash_map_t *hmap, hash_map_pos_t pos)$/;"	f
 hash_map_destroy	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_destroy(hash_map_t *hmap)$/;"	f
-hash_map_end	src/libdata_structure/hash_map/hash_list.c	/^hash_map_pos_t hash_map_end(hash_map_t *hmap)$/;"	f
-hash_map_for_each	src/libdata_structure/hash_map/hash_list.c	/^void hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))$/;"	f
+hash_map_end	src/include/libdata_structure/hash_list.h	/^static inline hash_map_pos_t hash_map_end(hash_map_t *hmap)$/;"	f
+hash_map_for_each	src/include/libdata_structure/hash_list.h	/^static inline void hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))$/;"	f
 hash_map_init	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_init(hash_map_t *hmap,$/;"	f
 hash_map_insert	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert(hash_map_t *hmap,void *data)$/;"	f
 hash_map_node	src/include/libcontainer/container_hash_map.h	/^struct hash_map_node {$/;"	s
 hash_map_node	src/include/libdata_structure/hash_list_struct.h	/^struct hash_map_node {$/;"	s
 hash_map_pos	src/include/libcontainer/container.h	/^		hash_map_pos_t hash_map_pos;$/;"	m	union:iterator::__anon2
-hash_map_pos_equal	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_pos_equal(hash_map_pos_t pos1,hash_map_pos_t pos2)$/;"	f
-hash_map_pos_get_pointer	src/libdata_structure/hash_map/hash_list.c	/^void *hash_map_pos_get_pointer(hash_map_pos_t pos)$/;"	f
+hash_map_pos_equal	src/include/libdata_structure/hash_list.h	/^static inline int hash_map_pos_equal(hash_map_pos_t pos1,hash_map_pos_t pos2)$/;"	f
+hash_map_pos_get_pointer	src/include/libdata_structure/hash_list.h	/^static inline void *hash_map_pos_get_pointer(hash_map_pos_t pos)$/;"	f
 hash_map_pos_info	src/include/libcontainer/container_hash_map.h	/^typedef struct hash_map_pos_info{$/;"	s
 hash_map_pos_info	src/include/libdata_structure/hash_list_struct.h	/^typedef struct hash_map_pos_info{$/;"	s
-hash_map_pos_init	src/libdata_structure/hash_map/hash_list.c	/^hash_map_pos_t hash_map_pos_init(hash_map_pos_t *pos,$/;"	f
+hash_map_pos_init	src/include/libdata_structure/hash_list.h	/^static inline hash_map_pos_t hash_map_pos_init(hash_map_pos_t *pos,$/;"	f
 hash_map_pos_next	src/libdata_structure/hash_map/hash_list.c	/^hash_map_pos_t hash_map_pos_next(hash_map_pos_t pos)$/;"	f
 hash_map_pos_t	src/include/libcontainer/container_hash_map.h	/^}hash_map_pos_t;$/;"	t	typeref:struct:hash_map_pos_info
 hash_map_pos_t	src/include/libdata_structure/hash_list_struct.h	/^}hash_map_pos_t;$/;"	t	typeref:struct:hash_map_pos_info
@@ -805,6 +813,7 @@ hlist_unhashed	src/include/libcontainer/list.h	/^static inline int hlist_unhashe
 hlist_unhashed	src/include/libdata_structure/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
 hlist_unhashed	src/include/libdbg/list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f
 hmap	src/include/libdata_structure/hash_list_struct.h	/^	struct hash_map_s *hmap;$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hash_map_s
+hmap	src/include/libproto_analyzer/protocol_analyzer.h	/^	hash_map_t *hmap;$/;"	m	struct:protocol_analyzer_s
 info	src/include/liballoc/allocator.h	/^	void (*info)(allocator_t * alloc);$/;"	m	struct:allocator_operations
 ini_file_name	src/include/libdbg/debug.h	/^	char ini_file_name[MAX_INI_FILE_NAME_LEN];$/;"	m	struct:debugger
 iniparser_add_entry	src/libini/iniparser.c	/^static void iniparser_add_entry($/;"	f	file:
@@ -831,12 +840,12 @@ insert	src/include/libcontainer/container.h	/^	int (*insert)(container_t *ct, it
 it_ops	src/include/libcontainer/container.h	/^	struct iterator_operations it_ops;$/;"	m	struct:container_module	typeref:struct:container_module::iterator_operations
 it_ops_p	src/include/libcontainer/container.h	/^	struct iterator_operations *it_ops_p;$/;"	m	struct:container	typeref:struct:container::iterator_operations
 iterator	src/include/libcontainer/container.h	/^typedef struct iterator{$/;"	s
-iterator_equal	src/libcontainer/container.c	/^int iterator_equal(iterator_t it1,iterator_t it2)$/;"	f
+iterator_equal	src/include/libcontainer/container.h	/^static inline int iterator_equal(iterator_t it1,iterator_t it2)$/;"	f
 iterator_get_pointer	src/include/libcontainer/container.h	/^	void *(*iterator_get_pointer)(iterator_t it);$/;"	m	struct:iterator_operations
-iterator_get_pointer	src/libcontainer/container.c	/^void* iterator_get_pointer(iterator_t it)$/;"	f
-iterator_next	src/libcontainer/container.c	/^iterator_t iterator_next(iterator_t it)$/;"	f
+iterator_get_pointer	src/include/libcontainer/container.h	/^static inline void* iterator_get_pointer(iterator_t it)$/;"	f
+iterator_next	src/include/libcontainer/container.h	/^static inline iterator_t iterator_next(iterator_t it)$/;"	f
 iterator_operations	src/include/libcontainer/container.h	/^struct iterator_operations{$/;"	s
-iterator_prev	src/libcontainer/container.c	/^iterator_t iterator_prev(iterator_t it)$/;"	f
+iterator_prev	src/include/libcontainer/container.h	/^static inline iterator_t iterator_prev(iterator_t it)$/;"	f
 iterator_t	src/include/libcontainer/container.h	/^}iterator_t;$/;"	t	typeref:struct:iterator
 key	src/include/libcontainer/container_hash_map.h	/^  	char key[1];$/;"	m	struct:hash_map_node
 key	src/include/libcontainer/container_rbtree_map.h	/^  	char key[1];$/;"	m	struct:rbtree_map_node
@@ -1073,28 +1082,29 @@ list_splice_init	src/include/libdbg/list.h	/^static inline void list_splice_init
 list_splice_init	src/include/libproto_analyzer/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_t	src/include/libdata_structure/link_list_struct.h	/^}list_t;$/;"	t	typeref:struct:llist_list_s
 llist	src/include/libdata_structure/link_list_struct.h	/^	struct llist_s *llist;$/;"	m	struct:llist_pos_s	typeref:struct:llist_pos_s::llist_s
-llist_begin	src/libdata_structure/link_list/link_list.c	/^list_pos_t llist_begin(llist_t *llist)$/;"	f
+llist_begin	src/include/libdata_structure/link_list.h	/^static inline list_pos_t llist_begin(llist_t *llist)$/;"	f
 llist_create	src/libdata_structure/link_list/link_list.c	/^llist_t *llist_create(allocator_t *allocator,uint8_t lock_type)$/;"	f
 llist_delete	src/libdata_structure/link_list/link_list.c	/^int llist_delete(llist_t *llist, list_pos_t pos)$/;"	f
 llist_destroy	src/libdata_structure/link_list/link_list.c	/^int llist_destroy(llist_t *llist)$/;"	f
 llist_detach	src/libdata_structure/link_list/link_list.c	/^list_t *llist_detach(llist_t *llist, list_pos_t pos)$/;"	f
 llist_detach_back	src/libdata_structure/link_list/link_list.c	/^list_t *llist_detach_back(llist_t *llist)$/;"	f
-llist_detach_front	src/libdata_structure/link_list/link_list.c	/^list_t *llist_detach_front(llist_t *llist)$/;"	f
-llist_end	src/libdata_structure/link_list/link_list.c	/^list_pos_t llist_end(llist_t *llist)$/;"	f
+llist_detach_front	src/include/libdata_structure/link_list.h	/^static inline list_t *llist_detach_front(llist_t *llist)$/;"	f
+llist_end	src/include/libdata_structure/link_list.h	/^static inline list_pos_t llist_end(llist_t *llist)$/;"	f
 llist_for_each	src/libdata_structure/link_list/link_list.c	/^void llist_for_each(llist_t *llist,void (*func)(list_t *list))$/;"	f
+llist_get_count	src/include/libdata_structure/link_list.h	/^static inline int llist_get_count(llist_t *llist)$/;"	f
 llist_init	src/libdata_structure/link_list/link_list.c	/^int llist_init(llist_t *llist,uint32_t data_size)$/;"	f
 llist_insert	src/libdata_structure/link_list/link_list.c	/^int llist_insert(llist_t *llist, list_pos_t pos, void *data)$/;"	f
 llist_list_s	src/include/libdata_structure/link_list_struct.h	/^typedef struct llist_list_s{$/;"	s
 llist_pop_back	src/libdata_structure/link_list/link_list.c	/^int llist_pop_back(llist_t *llist)$/;"	f
-llist_pop_front	src/libdata_structure/link_list/link_list.c	/^int llist_pop_front(llist_t *llist)$/;"	f
-llist_pos_equal	src/libdata_structure/link_list/link_list.c	/^int llist_pos_equal(list_pos_t pos1,list_pos_t pos2)$/;"	f
+llist_pop_front	src/include/libdata_structure/link_list.h	/^static inline int llist_pop_front(llist_t *llist)$/;"	f
+llist_pos_equal	src/include/libdata_structure/link_list.h	/^static inline int llist_pos_equal(list_pos_t pos1,list_pos_t pos2)$/;"	f
 llist_pos_get_pointer	src/libdata_structure/link_list/link_list.c	/^void *llist_pos_get_pointer(list_pos_t pos)$/;"	f
-llist_pos_init	src/libdata_structure/link_list/link_list.c	/^int llist_pos_init(list_pos_t *pos,struct list_head *lh,llist_t *llist)$/;"	f
-llist_pos_next	src/libdata_structure/link_list/link_list.c	/^list_pos_t llist_pos_next(list_pos_t pos)$/;"	f
-llist_pos_prev	src/libdata_structure/link_list/link_list.c	/^list_pos_t llist_pos_prev(list_pos_t pos)$/;"	f
+llist_pos_init	src/include/libdata_structure/link_list.h	/^static inline int llist_pos_init(list_pos_t *pos,struct list_head *lh,llist_t *llist)$/;"	f
+llist_pos_next	src/include/libdata_structure/link_list.h	/^static inline list_pos_t llist_pos_next(list_pos_t pos)$/;"	f
+llist_pos_prev	src/include/libdata_structure/link_list.h	/^static inline list_pos_t llist_pos_prev(list_pos_t pos)$/;"	f
 llist_pos_s	src/include/libdata_structure/link_list_struct.h	/^typedef struct llist_pos_s{$/;"	s
 llist_push_back	src/libdata_structure/link_list/link_list.c	/^int llist_push_back(llist_t *llist,void *data)$/;"	f
-llist_push_front	src/libdata_structure/link_list/link_list.c	/^int llist_push_front(llist_t *llist,void *data)$/;"	f
+llist_push_front	src/include/libdata_structure/link_list.h	/^static inline int llist_push_front(llist_t *llist,void *data)$/;"	f
 llist_s	src/include/libdata_structure/link_list_struct.h	/^typedef struct llist_s{$/;"	s
 llist_t	src/include/libdata_structure/link_list_struct.h	/^}llist_t;$/;"	t	typeref:struct:llist_s
 lock	src/include/libcre/sync_lock/sync_lock.h	/^	union lock{$/;"	u	struct:sync_lock_s
@@ -1116,7 +1126,7 @@ log_print_regester	src/libdbg/debug_log.c	/^void log_print_regester()$/;"	f
 log_print_write_log	src/libdbg/debug_log.c	/^uint32_t log_print_write_log(FILE *fp,char *str)$/;"	f
 main	src/main.c	/^int main()$/;"	f
 main_switch	src/include/libdbg/debug.h	/^	uint8_t main_switch;$/;"	m	struct:debugger
-make_pair	src/include/libcontainer/container.h	/^static inline void make_pair(pair_t *p,void *key,void *value)$/;"	f
+make_pair	src/include/libcontainer/container.h	/^make_pair(pair_t *p,void *key,void *value)$/;"	f
 make_pair	src/include/libdata_structure/hash_list.h	/^static inline void make_pair(pair_t *p,void *key,void *value)$/;"	f
 map_init	src/include/libcontainer/container.h	/^	int (*map_init)(container_t *ct, uint32_t key_size, uint32_t value_size, key_cmp_fpt key_cmp_func);$/;"	m	struct:container_operations
 map_insert	src/include/libcontainer/container.h	/^	int (*map_insert)(container_t *ct,void *value);$/;"	m	struct:container_operations
@@ -1167,6 +1177,7 @@ pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef st
 pa_array_t	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^}pa_array_t;$/;"	t	typeref:struct:pa_array_s	file:
 pa_check_protocol_num	src/libproto_analyzer/protocol_analyzer.c	/^int pa_check_protocol_num(struct protocol_analyzer_s *pa)$/;"	f
 pa_copy_protocol_format	src/libproto_analyzer/protocol_analyzer.c	/^int pa_copy_protocol_format(struct protocol_analyzer_s *pa)$/;"	f
+pa_create_hash_table	src/libproto_analyzer/protocol_analyzer.c	/^int pa_create_hash_table(struct protocol_analyzer_s *pa)$/;"	f
 pa_create_protocol_analyzer	src/libproto_analyzer/protocol_analyzer.c	/^struct protocol_analyzer_s *pa_create_protocol_analyzer(allocator_t *allocator)$/;"	f
 pa_destroy_protocol_analyzer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_destroy_protocol_analyzer(struct protocol_analyzer_s *pa)$/;"	f
 pa_find_key	src/libproto_analyzer/protocol_analyzer.c	/^proto_info_list_t * pa_find_key(const char *key,struct protocol_analyzer_s *pa)$/;"	f
@@ -1199,7 +1210,7 @@ pf_list_head_p	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_
 pfs_add_list	src/libproto_analyzer/protocol_format_set.c	/^void pfs_add_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
 pfs_add_proto_link_list	src/libproto_analyzer/protocol_format_set.c	/^int pfs_add_proto_link_list(uint32_t llist_num,$/;"	f
 pfs_create_head_list	src/libproto_analyzer/protocol_format_set.c	/^struct list_head *pfs_create_head_list(allocator_t *allocator)$/;"	f
-pfs_create_proto_format_set	src/libproto_analyzer/protocol_format_set.c	/^protocol_format_set_t *pfs_create_proto_format_set(allocator_t *allocator)$/;"	f
+pfs_create_proto_format_set	src/libproto_analyzer/protocol_format_set.c	/^pfs_create_proto_format_set(allocator_t *allocator)$/;"	f
 pfs_del_list	src/libproto_analyzer/protocol_format_set.c	/^void pfs_del_list(struct list_head *del_head,struct list_head *hl_head)$/;"	f
 pfs_del_list_for_each	src/libproto_analyzer/protocol_format_set.c	/^void pfs_del_list_for_each(struct list_head *hl_head)$/;"	f
 pfs_del_proto_link_list	src/libproto_analyzer/protocol_format_set.c	/^void pfs_del_proto_link_list(protocol_format_set_t *pfp,uint32_t llist_num)$/;"	f
@@ -1229,7 +1240,7 @@ posix_thread_rwlock_lock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int p
 posix_thread_rwlock_lock_destroy	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)$/;"	f
 posix_thread_rwlock_trylock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_trylock(struct sync_lock_s *slock,void *arg)$/;"	f
 posix_thread_rwlock_unlock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_unlock(struct sync_lock_s *slock)$/;"	f
-pow	src/libproto_analyzer/protocol_analyzer.c	/^static double pow(double x,double y)$/;"	f	file:
+pow	src/libproto_analyzer/protocol_analyzer.c	/^pow(uint32_t x,uint32_t y)$/;"	f	file:
 pprev	src/include/liballoc/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libcontainer/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libdata_structure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::

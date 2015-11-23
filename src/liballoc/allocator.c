@@ -58,21 +58,6 @@ void allocator_ctr_init(allocator_t * alloc,
 	return allocator_modules[alloc->allocator_type].alloc_ops.init(alloc);
 
 }
-void *allocator_mem_alloc(allocator_t * alloc,uint32_t size)
-{
-	return allocator_modules[alloc->allocator_type].alloc_ops.alloc(alloc,size);
-}
-
-void allocator_mem_free(allocator_t * alloc,void *addr)
-{
-	allocator_modules[alloc->allocator_type].alloc_ops.free(alloc,addr);
-
-}
-void allocator_mem_info(allocator_t * alloc)
-{
-	if(allocator_modules[alloc->allocator_type].alloc_ops.info)
-		allocator_modules[alloc->allocator_type].alloc_ops.info(alloc);
-}
 void allocator_destroy(allocator_t * alloc)
 {
 	uint8_t allocator_type = alloc->allocator_type;
