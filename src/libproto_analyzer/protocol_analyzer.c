@@ -172,8 +172,8 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 			key_size,//uint32_t key_size,
 			data_size + key_size,
 			bucket_size,//uint32_t bucket_size,
-			default_hash_func,
-			default_key_cmp_func);
+			NULL,
+			NULL);
 
 	if(hl_head == NULL){
 		dbg_str(DBG_ERROR,"a_copy_protocol_format err,hl_head is NULL");

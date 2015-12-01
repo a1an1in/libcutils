@@ -47,8 +47,8 @@ void test_datastructure_hashlist()
 			2,//uint32_t key_size,
 			sizeof(struct A)+ 2,
 			10,
-			default_hash_func,
-			default_key_cmp_func);
+			NULL,
+			NULL);
 
 	make_pair(pair,"11",&t1);
 	hash_map_insert(hmap,pair->data);

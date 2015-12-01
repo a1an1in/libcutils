@@ -19,8 +19,10 @@
 #define __HASH_LIST_ST_H__
 
 #include "libdata_structure/list.h"
+#include "libdata_structure/map_pair.h"
 #include "liballoc/allocator.h"
 #include "libcre/sync_lock/sync_lock.h"
+#include "libdata_structure/map_pair.h"
 
 /*
  *typedef unsigned int uint32_t;
@@ -28,17 +30,6 @@
  *typedef unsigned char uint8_t;
  */
 
-typedef struct pair{
-	uint16_t data_len;
-	uint32_t key_len;
-	uint32_t value_len;
-	uint8_t data[1];
-}pair_t;
-
-#ifndef __KEY_CMP_FPT__
-#define __KEY_CMP_FPT__
-typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);
-#endif
 typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);
 
 struct hash_map_node {

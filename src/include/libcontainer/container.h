@@ -4,6 +4,7 @@
 #include "libcre/sync_lock/sync_lock.h"
 #include "libdata_structure/link_list.h"
 #include "libdata_structure/hash_list.h"
+#include "libdata_structure/rbtree_map.h"
 
 #define container_for_each_safe(it,next,ct) \
 	iterator_t iterateor_end_;\
@@ -23,6 +24,7 @@ typedef struct iterator{
 	union{
 		list_pos_t list_pos;
 		hash_map_pos_t hash_pos;
+		rbtree_map_pos_t rbtree_pos;
 	}pos;
 	 struct container *container_p;
 }iterator_t;
@@ -38,6 +40,7 @@ typedef struct container{
 	union{
 		llist_t *llist;
 		hash_map_t *hmap;
+		rbtree_map_t *tmap;
 	}priv;
 #	undef COTAINOR_NAME_MAX_LEN
 }container_t;
@@ -115,7 +118,8 @@ static inline int container_init(container_t *ct,uint32_t data_size)
 	return ct->c_ops_p->init(ct,data_size);
 }
 
-static inline int container_hash_map_init(container_t *ct, uint32_t key_size,
+static inline int 
+container_hash_map_init(container_t *ct, uint32_t key_size,
 		uint32_t value_size, uint32_t bucket_size,
 		hash_func_fpt hash_func, key_cmp_fpt key_cmp_func)
 {
@@ -127,14 +131,21 @@ static inline int container_hash_map_init(container_t *ct, uint32_t key_size,
 	hmap->hash_func    = hash_func;
 	hmap->key_cmp_func = key_cmp_func;
 	hmap->bucket_size  = bucket_size;
-	if(key_cmp_func == NULL){
-		hmap->key_cmp_func = default_key_cmp_func;
-	}
-	if(hash_func == NULL){
-		hmap->hash_func = default_hash_func;
-	}
 
 	return ct->c_ops_p->init(ct,hmap->data_size);
+}
+static inline int 
+container_rbtree_map_init(container_t *ct, uint32_t key_size,
+		uint32_t value_size, key_cmp_fpt key_cmp_func)
+{
+	rbtree_map_t *tmap = ct->priv.tmap;
+
+	dbg_str(DBG_CONTAINER_DETAIL,"container_tree_map_init");
+	tmap->key_size     = key_size;
+	tmap->data_size    = key_size + value_size;
+	tmap->key_cmp_func = key_cmp_func;
+
+	return ct->c_ops_p->init(ct,tmap->data_size);
 }
 static inline int container_push_front(container_t *ct,void *data)
 {

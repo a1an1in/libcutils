@@ -2,7 +2,7 @@
 #include "libcontainer/inc_files.h"
 #include "libcontainer/test_container.h"
 
-int test_list(void)
+int test_container_list(void)
 {
 	int ret = 0;
 	allocator_t *allocator;

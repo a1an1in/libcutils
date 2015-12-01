@@ -24,7 +24,7 @@ struct test{
 extern struct test test,test2,test3,test4;
 int test_hash_map(void);
 int test_list(void);
-int test_rbtree_map(void);
+int test_container_rbtree_map(void);
 int test_vector(void);
 void print_test(struct test *t);
 void test_cds_alloc();

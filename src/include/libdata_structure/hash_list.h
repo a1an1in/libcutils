@@ -29,41 +29,7 @@ int hash_map_destroy(hash_map_t *hmap);
 int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next);
 void hash_map_print_mnode(struct hash_map_node *mnode);
 
-static inline pair_t * create_pair(int key_len,int value_len)
-{
-	pair_t *p;
-	p = (pair_t *)malloc(sizeof(pair_t) + key_len + value_len);
-	memset(p,0,sizeof(pair_t) + key_len + value_len);
-	p->key_len = key_len;
-	p->value_len = value_len;
-	p->data_len = key_len + value_len;
-	return p;
-}
-static inline void make_pair(pair_t *p,void *key,void *value)
-{
-	memcpy(p->data,key,p->key_len);
-	memcpy(p->data + p->key_len,value,p->value_len);
-}
-static inline int destroy_pair(pair_t *p)
-{
-	free(p);
-	p = NULL;
-	return 0;
-}
 
-static inline int default_key_cmp_func(void *key1,void *key2,uint32_t size)
-{
-	return memcmp(key1,key2,size);
-}
-static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)
-{
-	uint32_t sum = 0;
-	uint32_t i = 0;
-	for(i = 0; i < key_size; i++){
-		sum += *(uint8_t *)(key + i);
-	}
-	return sum % bucket_size;
-}
 
 static inline int
 hash_map_pos_init(hash_map_pos_t *pos,

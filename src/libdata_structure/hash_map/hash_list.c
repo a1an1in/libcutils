@@ -48,6 +48,19 @@
 #include "libdbg/debug.h"
 #include "libdata_structure/hash_list.h"
 
+static inline int default_key_cmp_func(void *key1,void *key2,uint32_t size)
+{
+	return memcmp(key1,key2,size);
+}
+static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)
+{
+	uint32_t sum = 0;
+	uint32_t i = 0;
+	for(i = 0; i < key_size; i++){
+		sum += *(uint8_t *)(key + i);
+	}
+	return sum % bucket_size;
+}
 hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 {
 	hash_map_t *map;
@@ -70,12 +83,22 @@ int hash_map_init(hash_map_t *hmap,
 		key_cmp_fpt key_cmp_func)
 {
 	dbg_str(DBG_DETAIL,"hash_map_init");
+
 	hash_map_t *map   = hmap;
 	map->data_size    = data_size;
 	map->key_size     = key_size;
 	map->bucket_size  = bucket_size;
-	map->hash_func    = hash_func;
-	map->key_cmp_func = key_cmp_func;
+
+	if(key_cmp_func == NULL){
+		hmap->key_cmp_func = default_key_cmp_func;
+	}else{
+		map->key_cmp_func = key_cmp_func;
+	}
+	if(hash_func == NULL){
+		hmap->hash_func = default_hash_func;
+	}else{
+		map->hash_func    = hash_func;
+	}
 
 	map->hlist = allocator_mem_alloc(map->allocator,
 			sizeof(struct hlist_head)*bucket_size);

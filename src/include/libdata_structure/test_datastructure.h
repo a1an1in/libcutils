@@ -18,3 +18,4 @@
 
 void test_datastructure_hashlist();
 void test_datastructure_hashlist();
+int test_rbtree_map(void);

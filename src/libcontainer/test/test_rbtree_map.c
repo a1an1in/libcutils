@@ -2,7 +2,7 @@
 #include "libcontainer/inc_files.h"
 #include "libcontainer/test_container.h"
 
-int test_container_hash_map(void)
+int test_container_rbtree_map(void)
 {
 	int ret = 0;
 	iterator_t it,next,end;
@@ -11,23 +11,22 @@ int test_container_hash_map(void)
 	pair_t *pair;
 	int key_len = 2;
 	int bucket_size = 10;
-	struct hash_map_node *mnode;
+	struct rbtree_map_node *mnode;
 	
 
 	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
-	dbg_str(DBG_CONTAINER_DETAIL,"hash_map allocator addr:%p",allocator);
-	ct = container_creator(CONTAINER_TYPE_HASH_MAP,allocator,0);
+	dbg_str(DBG_CONTAINER_DETAIL,"rbtree_map allocator addr:%p",allocator);
+	ct = container_creator(CONTAINER_TYPE_RBTREE_MAP,allocator,0);
 
 	dbg_str(DBG_CONTAINER_DETAIL,"run at here");
 	/*
-	 *int container_hash_map_init(container_t *ct,
+	 *int container_rbtree_map_init(container_t *ct,
 	 *        uint32_t key_size,
 	 *        uint32_t value_size,
 	 *        uint32_t bucket_size,
-	 *        hash_func_ft hash_func)
+	 *        rbtree_func_ft rbtree_func)
 	 */
-	container_hash_map_init(ct, key_len, sizeof(struct test),
-			bucket_size, NULL,NULL);
+	container_rbtree_map_init(ct, key_len, sizeof(struct test),NULL);
 
 	dbg_str(DBG_CONTAINER_DETAIL,"create_pair");
 	pair = create_pair(key_len,sizeof(struct test));
@@ -73,17 +72,15 @@ int test_container_hash_map(void)
 			!iterator_equal(&it,container_end(ct,&end));
 			it = next,iterator_next(&it,&next))
 	{
-		dbg_str(DBG_CONTAINER_DETAIL,"cur=%p next=%p",it.pos.hash_pos.hlist_node_p,it.pos.hash_pos.hlist_node_p->next);
-		mnode = container_of(it.pos.hash_pos.hlist_node_p,struct hash_map_node,hlist_node);
+		mnode = container_of(it.pos.rbtree_pos.rb_node_p,struct rbtree_map_node,node);
 		dbg_buf(DBG_CONTAINER_DETAIL,"key:",mnode->key,mnode->value_pos);
 		print_test((struct test *)iterator_get_pointer(&it));
 	}
 
 	dbg_str(DBG_CONTAINER_DETAIL,"search node key = 22");
 	container_map_search(ct, (void *)"22",&it);
-	if(it.pos.hash_pos.hlist_node_p){
-		dbg_str(DBG_CONTAINER_DETAIL,"bocket pos:%d",it.pos.hash_pos.bucket_pos);
-		mnode = container_of(it.pos.hash_pos.hlist_node_p,struct hash_map_node,hlist_node);
+	if(it.pos.rbtree_pos.rb_node_p){
+		mnode = container_of(it.pos.rbtree_pos.rb_node_p,struct rbtree_map_node,node);
 		dbg_buf(DBG_CONTAINER_DETAIL,"key:",mnode->key,mnode->value_pos);
 		print_test((struct test *)iterator_get_pointer(&it));
 	}

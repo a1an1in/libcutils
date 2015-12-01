@@ -68,15 +68,13 @@ void register_all_lib_modules()
 void test_container()
 {
 	/*
-	 *test_list();
+	 *test_container_list();
 	 */
+	dbg_str(DBG_DETAIL,"test_hash_map");
+	test_container_hash_map();
 	/*
 	 *dbg_str(DBG_DETAIL,"test_rbtree_map");
-	 *test_rbtree_map();
-	 */
-	/*
-	 *dbg_str(DBG_DETAIL,"test_hash_map");
-	 *test_hash_map();
+	 *test_container_rbtree_map();
 	 */
 	/*
 	 *dbg_str(DBG_DETAIL,"test_vector");
@@ -95,10 +93,16 @@ void test_datastructure()
 	/*
 	 *test_datastructure_link_list();
 	 */
+	 /*
+	  *test_datastructure_rbtree_map();
+	  */
+	 
 }
 void test_analyzer()
 {
-	test_pdt_proto_analyzer();
+	/*
+	 *test_pdt_proto_analyzer();
+	 */
 	/*
 	 *test_pdu_proto_analyzer();
 	 */
