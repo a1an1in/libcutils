@@ -45,198 +45,97 @@
 #include <stdio.h>
 #include <string.h>
 #include "libcontainer/container_list.h"
+#include <libdata_structure/link_list.h>
 #include "libcontainer/inc_files.h"
 
-int list_iterator_init(iterator_t *it,struct list_head *lh,container_t *ct);
-int list_iterator_equal(iterator_t it1,iterator_t it2);
 // free list not considered
-int list_init(container_t *ct)
+static inline int __container_list_create(container_t *ct,uint8_t lock_type)
 {
-	struct container_list *p = NULL;
-	uint32_t data_size = ct->priv.list_priv.data_size; 
-
-	dbg_str(DBG_CONTAINER_DETAIL,"list init");
-
-	ct->container_type = CONTAINER_TYPE_LIST;
-	strcpy(ct->name,"list container");
-	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
-	INIT_LIST_HEAD(&p->list_head);
-	list_iterator_init(&ct->begin,&p->list_head,ct);
-	list_iterator_init(&ct->end,&p->list_head,ct);
-	list_iterator_init(&ct->cur,&p->list_head,ct);
-	return 0;
-}
-int list_push_front(container_t *ct,void *data)
-{
-	struct container_list *p = NULL;
-	uint32_t data_size = ct->priv.list_priv.data_size; 
-
-	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
-	memcpy(p->data,data,data_size);
-
-	sync_lock(&ct->head_lock,NULL);
-	list_add(&p->list_head, ct->end.pos.list_head_p);//end can be regrad as head list
-	list_iterator_init(&ct->begin,&p->list_head,ct);
-	sync_unlock(&ct->head_lock);
-
-	return 0;
-}
-int list_push_back(container_t *ct,void *data)
-{
-	struct container_list *p = NULL;
-	uint32_t data_size = ct->priv.list_priv.data_size; 
-
-	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
-	memcpy(p->data,data,data_size);
-
-	sync_lock(&ct->head_lock,NULL);
-	list_add_tail(&p->list_head, ct->end.pos.list_head_p);
-	list_iterator_init(&ct->begin,ct->end.pos.list_head_p->next,ct);
-	sync_unlock(&ct->head_lock);
-
-	return 0;
-}
-
-int list_pop_back(container_t *ct)
-{
-	struct container_list *p;
-	struct list_head *head = ct->end.pos.list_head_p;
-	
-	if(list_iterator_equal(ct->end,ct->begin)){
-		dbg_str(DBG_WARNNING,"list list null,pop back warnning");
-		return -1;
-	}
-
-	p = container_of(head->prev,struct container_list,list_head);
-	dbg_str(DBG_CONTAINER_DETAIL,"pop back");
-
-	sync_lock(&ct->head_lock,NULL);
-	list_del(head->prev);
-	sync_unlock(&ct->head_lock);
-
-	allocator_mem_free(ct->allocator,p);
-
-	return 0;
-}
-int list_pop_front(container_t *ct)
-{
-	struct container_list *p;
-	struct list_head *head = ct->end.pos.list_head_p;
-	
-	if(list_iterator_equal(ct->end,ct->begin)){
-		dbg_str(DBG_WARNNING,"list list null,pop front warnning");
-		return -1;
-	}
-
-	p = container_of(head->next,struct container_list,list_head);
-	dbg_str(DBG_CONTAINER_DETAIL,"pop front");
-
-	sync_lock(&ct->head_lock,NULL);
-	list_del(head->next);
-	list_iterator_init(&ct->begin,head->next,ct);
-	sync_unlock(&ct->head_lock);
-
-	allocator_mem_free(ct->allocator,p);
-
-	return 0;
-}
-int list_insert(container_t *ct, iterator_t it, void *data)
-{
-	struct container_list *p = NULL;
-	uint32_t data_size = ct->priv.list_priv.data_size; 
-
-	dbg_str(DBG_CONTAINER_IMPORTANT,"insert list");
-	p = (struct container_list *)allocator_mem_alloc(ct->allocator,sizeof(struct container_list) + data_size);
-	memcpy(p->data,data,data_size);
-
-	sync_lock(&ct->head_lock,NULL);
-	list_add(&p->list_head, it.pos.list_head_p);
-	list_iterator_init(&ct->begin,ct->end.pos.list_head_p->next,ct);
-	sync_unlock(&ct->head_lock);
-
-	return 0;
-}
-int list_delete(container_t *ct, iterator_t it)
-{
-	struct container_list *p;
-
-	if(list_iterator_equal(ct->end,ct->begin)){
-		dbg_str(DBG_WARNNING,"list list null,list delete warnning");
-		return -1;
-	}
-
-	p = container_of(it.pos.list_head_p,struct container_list,list_head);
-	dbg_str(DBG_CONTAINER_IMPORTANT,"delete list");
-
-	sync_lock(&ct->head_lock,NULL);
-	if(list_iterator_equal(it,ct->begin)){
-		list_iterator_init(&ct->begin,it.pos.list_head_p->next,ct);
-	}
-	list_del(it.pos.list_head_p);
-	sync_unlock(&ct->head_lock);
-
-	allocator_mem_free(ct->allocator,p);
-	return 0;
-}
-int list_destroy(container_t *ct)
-{
-	iterator_t it,next;
-
-	dbg_str(DBG_CONTAINER_IMPORTANT,"list_destroy");
-	for(	it = container_begin(ct), next = iterator_next(it);
-			!iterator_equal(it,container_end(ct));
-			it = next, next = iterator_next(it))
-	{
-		list_delete(ct,it);
-	}
-	if(list_iterator_equal(ct->end,ct->begin)){
-		dbg_str(DBG_CONTAINER_WARNNING,"list_destroy,list is NULL,free list head");
-		allocator_mem_free(ct->allocator,ct->end.pos.list_head_p);
+	ct->priv.llist = llist_create(ct->allocator,lock_type);
+	if(ct->priv.llist != NULL){
+		return 1;
+	} else{
+		dbg_str(DBG_ERROR,"container_list create err");
+		return 0;
 	}
 }
-
-iterator_t list_begin(container_t *ct)
+static inline int __container_list_init(container_t *ct,uint32_t data_size)
 {
-	return ct->begin;
+	return llist_init(ct->priv.llist,data_size);
+}
+static inline int __container_list_push_front(container_t *ct,void *data)
+{
+	return llist_push_front(ct->priv.llist,data);
+}
+static inline int __container_list_push_back(container_t *ct,void *data)
+{
+	return llist_push_back(ct->priv.llist,data);
+}
+static inline int __container_list_pop_back(container_t *ct)
+{
+	return llist_pop_back(ct->priv.llist);
+}
+static inline int __container_list_pop_front(container_t *ct)
+{
+	return llist_pop_front(ct->priv.llist);
+}
+static inline int __container_list_insert(container_t *ct, iterator_t *it, void *data)
+{
+	return llist_insert(ct->priv.llist,&it->pos.list_pos,data);
+}
+static inline int __container_list_delete(container_t *ct, iterator_t *it)
+{
+	return llist_delete(ct->priv.llist,&it->pos.list_pos);
+}
+static inline int __container_list_destroy(container_t *ct)
+{
+	return llist_destroy(ct->priv.llist);
 }
 
-iterator_t list_end(container_t *ct)
+static inline iterator_t *
+__container_list_begin(container_t *ct,iterator_t  *begin)
 {
-	return ct->end;
+	begin->container_p = ct;
+	llist_begin(ct->priv.llist,&begin->pos.list_pos);
+	return begin;
 }
 
-
-int list_iterator_init(iterator_t *it,struct list_head *lh,container_t *ct)
+static inline iterator_t *
+__container_list_end(container_t *ct,iterator_t *end)
 {
+	end->container_p = ct;
+	llist_end(ct->priv.llist,&end->pos.list_pos);
+	return end;
+}
 
+static inline iterator_t *
+__container_list_iterator_init(iterator_t *it,struct list_head *lh,container_t *ct)
+{
 	it->container_p = ct;
-	it->pos.list_head_p = lh;
-
-	return 0;
+	llist_pos_init(&it->pos.list_pos,lh,ct->priv.llist);
+	return it;
 }
-iterator_t list_iterator_next(iterator_t it)
+static inline iterator_t *
+__container_list_iterator_next(iterator_t *it,iterator_t *next)
 {
-	iterator_t ret;
-
-	list_iterator_init(&ret,it.pos.list_head_p->next,it.container_p);
-
-	return ret;
+	next->container_p = it->container_p;
+	llist_pos_next(&it->pos.list_pos,&next->pos.list_pos);
+	return next;
 }
-iterator_t list_iterator_prev(iterator_t it)
+static inline iterator_t *
+__container_list_iterator_prev(iterator_t *it,iterator_t *prev)
 {
-	iterator_t ret;
-
-	list_iterator_init(&ret,it.pos.list_head_p->prev,it.container_p);
-
-	return ret;
+	prev->container_p = it->container_p;
+	llist_pos_prev(&it->pos.list_pos,&prev->pos.list_pos);
+	return prev;
 }
-int list_iterator_equal(iterator_t it1,iterator_t it2)
+static inline int __container_list_iterator_equal(iterator_t *it1,iterator_t *it2)
 {
-	return it1.pos.list_head_p == it2.pos.list_head_p;
+	return llist_pos_equal(&it1->pos.list_pos,&it2->pos.list_pos);
 }
-void *list_iterator_get_pointer(iterator_t it)
+static inline void *__container_list_iterator_get_pointer(iterator_t *it)
 {
-	return (struct container_list *)(container_of(it.pos.list_head_p,struct container_list,list_head))->data;
+	return llist_pos_get_pointer(&it->pos.list_pos);
 }
 
 int  container_list_register(){
@@ -244,22 +143,23 @@ int  container_list_register(){
 		.name = "container_list",
 		.container_type = CONTAINER_TYPE_LIST,
 		.c_ops = {
-			.init       = list_init,
-			.push_front = list_push_front,
-			.push_back  = list_push_back,
-			.pop_front  = list_pop_front,
-			.pop_back   = list_pop_back,
-			.begin      = list_begin,
-			.end        = list_end,
-			.del        = list_delete,
-			.insert     = list_insert,
-			.destroy 	= list_destroy,
+			.create     = __container_list_create,
+			.init       = __container_list_init,
+			.push_front = __container_list_push_front,
+			.push_back  = __container_list_push_back,
+			.pop_front  = __container_list_pop_front,
+			.pop_back   = __container_list_pop_back,
+			.begin      = __container_list_begin,
+			.end        = __container_list_end,
+			.del        = __container_list_delete,
+			.insert     = __container_list_insert,
+			.destroy    = __container_list_destroy,
 		},
 		.it_ops = {
-			list_iterator_next,
-			list_iterator_prev,
-			list_iterator_equal,
-			list_iterator_get_pointer
+			__container_list_iterator_next,
+			__container_list_iterator_prev,
+			__container_list_iterator_equal,
+			__container_list_iterator_get_pointer
 		}
 	};
 	memcpy(&container_modules[CONTAINER_TYPE_LIST],&cm,sizeof(container_module_t));

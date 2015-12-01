@@ -40,11 +40,11 @@ void test_datastructure_hashlist()
 
 	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
-	pair = create_pair(4,sizeof(struct A));
+	pair = create_pair(2,sizeof(struct A));
 
 	hmap = hash_map_create(allocator,0);
 	hash_map_init(hmap,
-			4,//uint32_t key_size,
+			2,//uint32_t key_size,
 			sizeof(struct A)+ 2,
 			10,
 			default_hash_func,
@@ -56,9 +56,16 @@ void test_datastructure_hashlist()
 	hash_map_insert(hmap,pair->data);
 	make_pair(pair,"33",&t3);
 	hash_map_insert(hmap,pair->data);
-	make_pair(pair,"44",&t4);
+	make_pair(pair,"55",&t4);
 	hash_map_insert(hmap,pair->data);
 
+	dbg_str(DBG_DETAIL,"hash map search");
+	struct A *p;
+	hash_map_search(hmap,"33",&pos);
+	p = hash_map_pos_get_pointer(&pos);
+	dbg_str(DBG_DETAIL,"a =%d, b=%d",p->a,p->b);
+
+	dbg_str(DBG_DETAIL,"for each");
 	hash_map_for_each(hmap,hash_map_print_mnode);
 
 	hash_map_destroy(hmap);

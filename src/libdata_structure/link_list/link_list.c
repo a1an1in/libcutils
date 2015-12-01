@@ -79,7 +79,7 @@ int llist_init(llist_t *llist,uint32_t data_size)
 
 	return 0;
 }
-int llist_insert(llist_t *llist, list_pos_t pos, void *data)
+int llist_insert(llist_t *llist, list_pos_t *pos, void *data)
 {
 	list_t *p = NULL;
 	uint32_t data_size = llist->data_size; 
@@ -88,33 +88,33 @@ int llist_insert(llist_t *llist, list_pos_t pos, void *data)
 	memcpy(p->data,data,data_size);
 
 	sync_lock(&llist->list_lock,NULL);
-	list_add(&p->list_head, pos.list_head_p);
-	if(llist_pos_equal(pos,llist->head)){
+	list_add(&p->list_head, pos->list_head_p);
+	if(llist_pos_equal(pos,&llist->head)){
 		llist_pos_init(&llist->begin,&p->list_head,llist);
 	}
 	llist->list_count++;
-	dbg_str(DBG_DETAIL,"insert llist,listcount=%d",llist->list_count);
+	dbg_str(DBG_DETAIL,"insert llist,listcount=%d,addr=%p",llist->list_count,&p->list_head);
 
 	sync_unlock(&llist->list_lock);
 
 	return 0;
 }
-int llist_delete(llist_t *llist, list_pos_t pos)
+int llist_delete(llist_t *llist, list_pos_t *pos)
 {
 	list_t *p;
 
-	if(llist_pos_equal(llist->begin,llist->head)){
+	if(llist_pos_equal(&llist->begin,&llist->head)){
 		dbg_str(DBG_WARNNING,"llist is null,llist_delete");
 		return -1;
 	}
 
-	p = container_of(pos.list_head_p,list_t,list_head);
+	p = container_of(pos->list_head_p,list_t,list_head);
 
 	sync_lock(&llist->list_lock,NULL);
-	if(llist_pos_equal(pos,llist->begin)){
-		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
+	if(llist_pos_equal(pos,&llist->begin)){
+		llist_pos_init(&llist->begin,pos->list_head_p->next,llist);
 	}
-	list_del(pos.list_head_p);
+	list_del(pos->list_head_p);
 	llist->list_count--;
 	dbg_str(DBG_DETAIL,"delete llist,listcount=%d",llist->list_count);
 
@@ -123,22 +123,22 @@ int llist_delete(llist_t *llist, list_pos_t pos)
 	allocator_mem_free(llist->allocator,p);
 	return 0;
 }
-list_t *llist_detach(llist_t *llist, list_pos_t pos)
+list_t *llist_detach(llist_t *llist, list_pos_t *pos)
 {
 	list_t *p;
 
-	if(llist_pos_equal(llist->begin,llist->head)){
+	if(llist_pos_equal(&llist->begin,&llist->head)){
 		dbg_str(DBG_DETAIL,"llist is null,llist_detach");
 		return NULL;
 	}
 
-	p = container_of(pos.list_head_p,list_t,list_head);
+	p = container_of(pos->list_head_p,list_t,list_head);
 
 	sync_lock(&llist->list_lock,NULL);
-	if(llist_pos_equal(pos,llist->begin)){
-		llist_pos_init(&llist->begin,pos.list_head_p->next,llist);
+	if(llist_pos_equal(pos,&llist->begin)){
+		llist_pos_init(&llist->begin,pos->list_head_p->next,llist);
 	}
-	list_del(pos.list_head_p);
+	list_del(pos->list_head_p);
 	llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);
 	llist->list_count--;
 	dbg_str(DBG_DETAIL,"detach llist,listcount=%d",llist->list_count);
@@ -156,11 +156,11 @@ int llist_push_back(llist_t *llist,void *data)
 
 	sync_lock(&llist->list_lock,NULL);
 	list_add_tail(&p->list_head, llist->head.list_head_p);
-	if(llist_pos_equal(llist->head,llist->begin)){
+	if(llist_pos_equal(&llist->head,&llist->begin)){
 		llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);//if this list is first,updata begin
 	}
 	llist->list_count++;
-	dbg_str(DBG_DETAIL,"llist_push_back,listcount=%d",llist->list_count);
+	dbg_str(DBG_DETAIL,"llist_push_back,listcount=%d,addr=%p",llist->list_count,&p->list_head);
 
 	sync_unlock(&llist->list_lock);
 
@@ -172,7 +172,7 @@ int llist_pop_back(llist_t *llist)
 	list_t *p;
 	struct list_head *head = llist->head.list_head_p;
 
-	if(llist_pos_equal(llist->begin,llist->head)){
+	if(llist_pos_equal(&llist->begin,&llist->head)){
 		dbg_str(DBG_WARNNING,"llist is null,llist_pop_back");
 		return -1;
 	}
@@ -198,7 +198,7 @@ list_t *llist_detach_back(llist_t *llist)
 	list_t *p;
 	struct list_head *head = llist->head.list_head_p;
 
-	if(llist_pos_equal(llist->begin,llist->head)){
+	if(llist_pos_equal(&llist->begin,&llist->head)){
 		dbg_str(DBG_WARNNING,"llist is null,llist_detach_back");
 		return NULL;
 	}
@@ -223,38 +223,19 @@ int llist_destroy(llist_t *llist)
 
 	dbg_str(DBG_IMPORTANT,"llist_destroy");
 
-	for(	pos = llist_begin(llist), next = llist_pos_next(pos);
-			!llist_pos_equal(pos,llist->head);
-			pos = next, next = llist_pos_next(pos))
+	for(	llist_begin(llist, &pos), llist_pos_next(&pos,&next);
+			!llist_pos_equal(&pos,&llist->head);
+			pos = next, llist_pos_next(&pos,&next))
 	{
-		llist_delete(llist,pos);
+		llist_delete(llist,&pos);
 	}
-	if(llist_pos_equal(llist->head,llist->begin)){
+	if(llist_pos_equal(&llist->head,&llist->begin)){
 		dbg_str(DBG_WARNNING,"llist_destroy,llist is NULL,free llist head");
 		allocator_mem_free(llist->allocator,llist->head.list_head_p);
 		sync_lock_destroy(&llist->list_lock);
 	}
 
 	return 0;
-}
-
-void *llist_pos_get_pointer(list_pos_t pos)
-{
-	return (list_t *)(container_of(pos.list_head_p,list_t,list_head))->data;
-}
-void llist_for_each(llist_t *llist,void (*func)(list_t *list))
-{
-	list_t *ls;
-	list_pos_t pos,next;
-
-
-	for(	pos = llist_begin(llist), next = llist_pos_next(pos);
-			!llist_pos_equal(pos,llist->head);
-			pos = next, next = llist_pos_next(pos))
-	{
-		ls = container_of(pos.list_head_p,list_t,list_head);
-		func(ls);
-	}
 }
 
 

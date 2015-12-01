@@ -248,12 +248,12 @@ proto_info_list_t * pa_find_key(const char *key,struct protocol_analyzer_s *pa)
 		memcpy(key_str,key,strlen(key));
 	}
 
-	map_pos = hash_map_search(hmap,(void *)key_str);
+	hash_map_search(hmap,(void *)key_str,&map_pos);
 	if(map_pos.hlist_node_p == NULL){
 		dbg_str(DBG_WARNNING,"not found key:%s",key_str);
 		return NULL;	
 	}
-	addr_p = hash_map_pos_get_pointer(map_pos);
+	addr_p = hash_map_pos_get_pointer(&map_pos);
 	info_list = (proto_info_list_t *)(addr_p[0] << 24 | addr_p[1] << 16 | addr_p[2] <<8 | addr_p[3]);
 	/*
 	 *dbg_str(DBG_IMPORTANT,"info list addr:%p",info_list);

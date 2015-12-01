@@ -47,7 +47,7 @@
 #include "libdbg/debug.h"
 #include "libdbg/libdbg_register_modules.h"
 #include "liballoc/liballoc_register_modules.h"
-#include "libcontainer/libcontainer_register_modules.h"
+#include "libcontainer/container.h"
 #include "libcre/libcre_register_modules.h"
 
 #include "libcontainer/test_container.h"
@@ -98,10 +98,10 @@ void test_datastructure()
 }
 void test_analyzer()
 {
+	test_pdt_proto_analyzer();
 	/*
-	 *test_pdt_proto_analyzer();
+	 *test_pdu_proto_analyzer();
 	 */
-	test_pdu_proto_analyzer();
 }
 int main()
 {

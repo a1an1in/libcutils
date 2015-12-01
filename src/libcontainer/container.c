@@ -48,30 +48,14 @@
 
 container_module_t container_modules[CONTAINER_TYPE_MAX_NUM];
 
-
-container_t *container_creator(uint32_t container_type,allocator_t *allocator,uint8_t lock_type)
+void libcontainer_register_modules()
 {
-	container_t *p;
-
-	p = (container_t *)allocator_mem_alloc(allocator,sizeof(container_t));
-	if(p == NULL){
-		goto err;
-	}
-
-	dbg_str(DBG_CONTAINER_DETAIL,"container_t addr:%p,sizeof_container_struct:%d",p,sizeof(container_t));
-	p->container_type = container_type;
-	p->allocator = allocator;
-	p->c_ops_p = &container_modules[container_type].c_ops;
-	p->it_ops_p = &container_modules[container_type].it_ops;
+	container_list_register();
+	container_hash_map_register();
 	/*
-	 *pthread_rwlock_init(&p->head_lock,NULL);   
+	 *container_rbtree_map_register();
+	 *container_vector_register();
 	 */
-	sync_lock_init(&p->head_lock,lock_type);
-
-	if(p->c_ops_p == NULL || p->it_ops_p == NULL){
-		allocator_mem_free(p->allocator,p);
-		p = NULL;
-	}
-err:
-	return p;
 }
+
+
