@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include "libdbg/debug_string.h"
 
-size_t debug_string_buf_to_str(uint8_t *buf_addr,size_t buf_len,char *str,size_t str_len)
+uint32_t debug_string_buf_to_str(uint8_t *buf_addr,size_t buf_len,char *str,size_t str_len)
 {
 	size_t i;
 	size_t offset=0;

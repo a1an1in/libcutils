@@ -199,7 +199,7 @@ static inline iterator_t * iterator_next(iterator_t *it,iterator_t *next)
 {
 	return it->container_p->it_ops_p->next(it,next);
 }
-static inline int iterator_prev(iterator_t *it,iterator_t *prev)
+static inline iterator_t * iterator_prev(iterator_t *it,iterator_t *prev)
 {
 	return it->container_p->it_ops_p->prev(it,prev);
 }
