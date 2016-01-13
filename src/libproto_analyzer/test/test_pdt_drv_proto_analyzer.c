@@ -6,6 +6,8 @@
 #include "libproto_analyzer/protocol_analyzer.h"
 #include "pdt_drv_proto_format.h"
 
+extern int pfs_set_proto_format_3008(protocol_format_set_t *pfp_p);
+extern int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p);
 debugger_t *debugger_gp;
 allocator_t *allocator;
 
@@ -147,7 +149,7 @@ int test_pdt_proto_3019(protocol_format_set_t *pfs_p,
 {
 	int ret = 0;
 	struct protocol_analyzer_s *pa;
-	uint8_t proto_data2[23] ={
+	uint8_t proto_data2[50] ={
 		0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xa,
 		0xb,0xc,0xd,0xe,0xf,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18
 	};

@@ -32,6 +32,7 @@ int pa_copy_protocol_format(struct protocol_analyzer_s *pa);
 proto_info_list_t * pa_find_key(const char *key,struct protocol_analyzer_s *pa);
 int pa_set_value(const char *key,uint32_t value,struct protocol_analyzer_s *pa);
 int pa_get_value(const char *key,struct protocol_analyzer_s *pa);
+int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyzer_s *pa);
 uint8_t get_bit_data(uint32_t data,uint8_t bit_pos,uint8_t len);
 uint8_t set_bit_data(uint8_t *buf,uint8_t data,uint8_t bit_pos,uint8_t len);
 int pa_set_variable_length_flag(struct protocol_analyzer_s *pa);

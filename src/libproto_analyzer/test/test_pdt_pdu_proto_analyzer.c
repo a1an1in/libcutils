@@ -23,6 +23,7 @@
 #include "libproto_analyzer/protocol_analyzer.h"
 
 allocator_t *allocator;
+extern int pfs_set_pdu_format_ackd(protocol_format_set_t *pfs_p);
 
 int test_pdu_proto_analyzer()
 {
