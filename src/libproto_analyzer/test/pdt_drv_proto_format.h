@@ -16,5 +16,5 @@
 #define DC_DATA    "dc_data"
 
 int pfp_set_proto_format_3008(protocol_format_set_t *pfp_p);
-
+int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p);
 #endif

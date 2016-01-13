@@ -126,6 +126,9 @@ int vector_init(vector_t *vector,uint32_t data_size,uint32_t capacity)
 			capacity * (vector->step));
 	vector_pos_init(&vector->begin,0,vector);
 	vector_pos_init(&vector->end,0,vector);
+
+	sync_lock_init(&vector->vector_lock,vector->lock_type);
+
 	return 0;
 }
 int vector_push_front(vector_t *vector,void *data)
@@ -142,7 +145,6 @@ int vector_push_back(vector_t *vector,void *data)
 	uint32_t push_pos     = vector->end.vector_pos;
 
 	sync_lock(&vector->vector_lock,NULL);
-	dbg_str(DBG_CONTAINER_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,capacity);
 	if(push_pos < capacity){
 		memcpy(vector_head + (push_pos++)*step,data,data_size);
 		vector_pos_init(&vector->end,push_pos,vector);
@@ -160,6 +162,7 @@ int vector_push_back(vector_t *vector,void *data)
 		allocator_mem_free(vector->allocator,vector_head);
 	}
 	sync_unlock(&vector->vector_lock);
+	dbg_str(DBG_CONTAINER_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,vector->capacity);
 
 	return 0;
 }
@@ -234,16 +237,17 @@ int vector_set(vector_t *vector,int index,void *data)
 	uint32_t end_pos  = vector->end.vector_pos;
 	void *vector_head = vector->vector_head;
 	uint32_t step     = vector->step;
-	int ret  = -1;
+	int ret  = 0;
 	
 	dbg_str(DBG_CONTAINER_DETAIL,"set_pos=%d",set_pos);
 
 	sync_lock(&vector->vector_lock,NULL);
-	ret = memcpy(vector_head + set_pos * step,data,step);
-	sync_unlock(&vector->vector_lock);
+	memcpy(vector_head + set_pos * step,data,step);
 	if(set_pos > end_pos){
 		vector_pos_init(&vector->end,set_pos,vector);
 	}
+	sync_unlock(&vector->vector_lock);
+
 	return ret;
 }
 void * vector_get(vector_t *vector,int index)
@@ -264,6 +268,9 @@ void * vector_get(vector_t *vector,int index)
 int vector_destroy(vector_t *vt)
 {
 	dbg_str(DBG_CONTAINER_DETAIL,"vector_destroy");
+
+	sync_lock_destroy(&vt->vector_lock);
+
 	allocator_mem_free(vt->allocator,vt->vector_head);
 	allocator_mem_free(vt->allocator,vt);
 }

@@ -56,7 +56,7 @@ int test_datastructure_vector()
 	vector_push_back(vector,&t3);
 	vector_push_back(vector,&t4);
 
-	vector_for_each(vector,print_vector_data);
+	vector_for_each(vector,(void (*)(void *))(print_vector_data));
 
 	dbg_str(DBG_DETAIL,"test get");
 	dbg_buf(DBG_DETAIL,"get data:",vector_get(vector,2),vector->data_size);
@@ -64,7 +64,7 @@ int test_datastructure_vector()
 	dbg_str(DBG_DETAIL,"test set");
 	vector_set(vector,1,&t4);
 
-	vector_for_each(vector,print_vector_data);
+	vector_for_each(vector,(void (*)(void *))(print_vector_data));
 
 	vector_destroy(vector);
 	return ret;

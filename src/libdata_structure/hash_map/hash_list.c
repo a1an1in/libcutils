@@ -104,7 +104,7 @@ int hash_map_init(hash_map_t *hmap,
 			sizeof(struct hlist_head)*bucket_size);
 	if(map->hlist == NULL){
 		dbg_str(DBG_ERROR,"hash map init");
-		return NULL;
+		return -1;
 	}
 	memset(map->hlist,0,sizeof(struct hlist_head)*bucket_size);
 

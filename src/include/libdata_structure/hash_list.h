@@ -26,6 +26,7 @@ int hash_map_insert(hash_map_t *hmap,void *data);
 int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret);
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos);
 int hash_map_destroy(hash_map_t *hmap);
+int hash_map_init(hash_map_t *hmap, uint32_t key_size, uint32_t data_size, uint32_t bucket_size, hash_func_fpt hash_func, key_cmp_fpt key_cmp_func);
 int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next);
 void hash_map_print_mnode(struct hash_map_node *mnode);
 

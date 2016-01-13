@@ -17,6 +17,9 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+extern void console_print_regester();
+extern void log_print_regester();
+
 void libdbg_register_modules()
 {
 	console_print_regester();

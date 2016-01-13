@@ -46,6 +46,10 @@
 #include <string.h>
 #include "libcontainer/inc_files.h"
 
+extern int  container_list_register();
+extern int container_hash_map_register();
+extern int container_rbtree_map_register();
+
 container_module_t container_modules[CONTAINER_TYPE_MAX_NUM];
 
 void libcontainer_register_modules()

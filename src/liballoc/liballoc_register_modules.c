@@ -27,6 +27,9 @@
  */
 #include <stdio.h>
 
+extern int allocator_sys_alloc_register();
+extern int allocator_cds_alloc_register();
+
 void liballoc_register_modules()
 {
 	allocator_sys_alloc_register();

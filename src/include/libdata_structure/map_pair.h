@@ -15,6 +15,9 @@
  *
  * =====================================================================================
  */
+#include <string.h>
+#include <stdlib.h>
+
 #ifndef __MAP_PAIR_H__
 #define __MAP_PAIR_H__
 typedef struct pair{

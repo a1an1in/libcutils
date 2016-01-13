@@ -26,6 +26,8 @@
  * 
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "liballoc/inc_files.h"
 
 void *sys_alloc_alloc(allocator_t *alloc,uint32_t size)

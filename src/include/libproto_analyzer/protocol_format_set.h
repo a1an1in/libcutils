@@ -98,6 +98,7 @@ int pfs_create_protocol_format_database(char *filename,protocol_format_set_t *pf
 void init_proto_format_set(int proto_base_addr, int max_proto_num, protocol_format_set_t *pfs_p);
 protocol_format_set_t *pfs_create_proto_format_set(allocator_t *allocator);
 void pfs_destroy_protocol_format_set(protocol_format_set_t *pfp);
+proto_info_list_t * pfs_set_proto_info( char *name,char *name_value, char *byte_pos,char *byte_pos_value, char *bit_pos,char *bit_pos_value, char *len,char *len_value, char *len_unit,char *len_unit_value, char *vlenth_index,char *vlenth_index_value, struct list_head *hl_head);
 
 #define PFS_SET_PROTO_INFO(name,byte_pos,bit_pos,len,len_unit,vlenth_index,hl_head) \
 	pfs_set_proto_info("name",name,\

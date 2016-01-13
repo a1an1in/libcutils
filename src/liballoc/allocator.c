@@ -54,8 +54,7 @@ void allocator_ctr_init(allocator_t * alloc,
 	alloc_p->slab_array_max_num = slab_array_max_num;
 	alloc_p->data_min_size = data_min_size;
 	alloc_p->mempool_capacity = mempool_capacity;
-
-	return allocator_modules[alloc->allocator_type].alloc_ops.init(alloc);
+	allocator_modules[alloc->allocator_type].alloc_ops.init(alloc);
 
 }
 void allocator_destroy(allocator_t * alloc)
