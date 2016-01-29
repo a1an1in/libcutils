@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  test_cds_alloc.c
+ *       Filename:  test_ctr_alloc.c
  *
  *    Description:  
  *
@@ -68,40 +68,38 @@ void test_ctr_alloc()
 #endif
 	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC,0);
 	allocator_ctr_init(allocator, 0, 0, 1024);
+
+	printf("\n");
+	dbg_str(DBG_ALLOC_IMPORTANT,"ctr alloc test begin");
 	/*
-	 *allocator_cds_init(allocator,0,0,0);
+	 *allocator_ctr_init(allocator,0,0,0);
 	 */
 
 	p = allocator_mem_alloc(allocator,7);
-	dbg_str(DBG_ALLOC_DETAIL,"_________alloc addr:%p",p);
-
-	allocator_mem_free(allocator,p);
-
+	/*
+	 *allocator_mem_free(allocator,p);
+	 */
 	p2 = allocator_mem_alloc(allocator,8);
-	dbg_str(DBG_ALLOC_DETAIL,"************alloc addr:%p",p2);
-
 	p3 = allocator_mem_alloc(allocator,200);
 	dbg_str(DBG_ALLOC_DETAIL,"alloc addr:%p",p3);
 
-	dbg_str(DBG_ALLOC_DETAIL,"inquire alloc info");
+	dbg_str(DBG_ALLOC_IMPORTANT,"inquire alloc info");
 	allocator_mem_info(allocator);
 
-	printf("\n");
 	allocator_mem_free(allocator,p);
-	printf("\n");
 	allocator_mem_free(allocator,p2);
-	printf("\n");
 	allocator_mem_free(allocator,p3);
-	printf("\n");
 
-	dbg_str(DBG_ALLOC_DETAIL,"batch alloc");
-	int i;
-	for(size = 8,i = 0; i< 20; i++,size += 8){
-		p = allocator_mem_alloc(allocator,size);
-	}
-	dbg_str(DBG_ALLOC_DETAIL,"inquire alloc info");
+	/*
+	 *dbg_str(DBG_ALLOC_DETAIL,"batch alloc");
+	 *int i;
+	 *for(size = 8,i = 0; i< 20; i++,size += 8){
+	 *    p = allocator_mem_alloc(allocator,size);
+	 *}
+	 */
+	dbg_str(DBG_ALLOC_IMPORTANT,"inquire alloc info");
 	allocator_mem_info(allocator);
 
 	allocator_destroy(allocator);
-	dbg_str(DBG_ALLOC_DETAIL,"test cds alloc end");
+	dbg_str(DBG_ALLOC_DETAIL,"test ctr alloc end");
 }

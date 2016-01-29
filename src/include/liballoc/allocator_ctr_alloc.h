@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  allocator_cds_alloc.h
+ *       Filename:  allocator_ctr_alloc.h
  *
  *    Description:  
  *
@@ -26,7 +26,7 @@
 #define MEM_POOL_MAX_SIZE 1024*4
 #define MEM_POOL_MIN_DEPTH 8
 
-typedef struct cds_mem_pool_head_list{
+typedef struct ctr_mem_pool_head_list{
 	uint32_t size;
 	uint32_t count;
 	/*
@@ -34,15 +34,15 @@ typedef struct cds_mem_pool_head_list{
 	 */
 	sync_lock_t head_lock;    
 	struct list_head list_head;
-}cds_mempool_head_list_t;
-typedef struct cds_mem_pool{
+}ctr_mempool_head_list_t;
+typedef struct ctr_mem_pool{
 	void *start;
 	uint32_t depth;
 	uint32_t min_depth;
 	uint32_t size;
 	//pthread_rwlock_t head_lock;
 	struct list_head list_head;
-}cds_mempool_t;
+}ctr_mempool_t;
 
 typedef struct slab_head_list{
 	uint16_t size;
@@ -52,7 +52,7 @@ typedef struct slab_head_list{
 	 */
 	sync_lock_t head_lock;    
 	struct list_head list_head;
-}cds_slab_head_list_t;
+}ctr_slab_head_list_t;
 typedef struct slab{
 	uint16_t size;
 	uint16_t data_size;
@@ -61,9 +61,9 @@ typedef struct slab{
 	uint8_t *mem_addr;
 	struct list_head list_head;
 	uint8_t data[0];
-}cds_slab_t;
+}ctr_slab_t;
 
-typedef struct cds_alloc_s{
+typedef struct ctr_alloc_s{
 	uint32_t slab_array_max_num;
 	uint32_t mempool_capacity;
 	uint32_t data_min_size;
@@ -71,6 +71,6 @@ typedef struct cds_alloc_s{
 	struct list_head *pool;
 	struct list_head **free_slabs;
 	struct list_head **used_slabs;
-}cds_alloc_t;
-int allocator_cds_alloc_register();
+}ctr_alloc_t;
+int allocator_ctr_alloc_register();
 #endif

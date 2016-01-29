@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  allocator_cds_mempool_list.c 
+ *       Filename:  allocator_ctr_mempool_list.c 
  *
  *    Description:  
  *
@@ -50,22 +50,19 @@
 #include "libdbg/debug.h"
 #include "liballoc/inc_files.h"
 
-void *mempool_release_list(cds_mempool_t *mempool);
+void *mempool_release_list(ctr_mempool_t *mempool);
 /*-----------------------------------------------------------------------------
  *  mempool list operation
  *-----------------------------------------------------------------------------*/
 void mempool_init_head_list(struct list_head **hl_head,uint8_t lock_type)
 {
-	cds_mempool_head_list_t *head_list;
+	ctr_mempool_head_list_t *head_list;
 
-	head_list = (cds_mempool_head_list_t *)malloc(sizeof(cds_mempool_head_list_t));
+	head_list = (ctr_mempool_head_list_t *)malloc(sizeof(ctr_mempool_head_list_t));
 	if(head_list == NULL){
 		dbg_str(DBG_ALLOC_ERROR,"malloc mempool list_head_list");
 		return;
 	}
-	/*
-	 *pthread_rwlock_init(&head_list->head_lock,NULL);
-	 */
 	sync_lock_init(&head_list->head_lock,lock_type);
 	head_list->count = 0;
 	INIT_LIST_HEAD(&head_list->list_head);
@@ -73,20 +70,14 @@ void mempool_init_head_list(struct list_head **hl_head,uint8_t lock_type)
 }
 void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head)
 {
-	cds_mempool_head_list_t *head_list;
+	ctr_mempool_head_list_t *head_list;
 
-	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
+	head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
 
 	sync_lock(&head_list->head_lock,NULL);
-	/*
-	 *pthread_rwlock_wrlock(&head_list->head_lock);
-	 */
 	list_add(new_head,hl_head);
 	head_list->count++;
 	sync_unlock(&head_list->head_lock);
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"add head:%p hl_head:%p",new_head,hl_head);
@@ -97,14 +88,11 @@ void mempool_attach_list(struct list_head *new_head,struct list_head *hl_head)
 /* not del list,just detach it from one link list */
 void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)
 {
-	cds_mempool_head_list_t *head_list;
-	cds_mempool_t *mempool_list;
+	ctr_mempool_head_list_t *head_list;
+	ctr_mempool_t *mempool_list;
 
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_detach_list");
-	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
-	/*
-	 *pthread_rwlock_wrlock(&head_list->head_lock);
-	 */
+	head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
 	sync_lock(&head_list->head_lock,NULL);
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del head:%p, hl_head:%p",del_head,hl_head);
@@ -112,24 +100,18 @@ void mempool_detach_list(struct list_head *del_head,struct list_head *hl_head)
 	 */
 	list_del(del_head);
 	head_list->count--;
-	mempool_list = container_of(del_head,cds_mempool_t,list_head);
+	mempool_list = container_of(del_head,ctr_mempool_t,list_head);
 	sync_unlock(&head_list->head_lock);
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 
 	dbg_str(DBG_ALLOC_DETAIL,"del_mempool list,list count =%d",head_list->count);
 }
 void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)
 {
-	cds_mempool_head_list_t *head_list;
-	cds_mempool_t *mempool_list;
+	ctr_mempool_head_list_t *head_list;
+	ctr_mempool_t *mempool_list;
 
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_detach_list");
-	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
-	/*
-	 *pthread_rwlock_wrlock(&head_list->head_lock);
-	 */
+	head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
 	sync_lock(&head_list->head_lock,NULL);
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"mempool del head:%p, hl_head:%p",del_head,hl_head);
@@ -137,24 +119,21 @@ void mempool_destroy_list(struct list_head *del_head,struct list_head *hl_head)
 	 */
 	list_del(del_head);
 	head_list->count--;
-	mempool_list = container_of(del_head,cds_mempool_t,list_head);
+	mempool_list = container_of(del_head,ctr_mempool_t,list_head);
 	mempool_release_list(mempool_list); 
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 	sync_unlock(&head_list->head_lock);
 
 	dbg_str(DBG_ALLOC_DETAIL,"del_mempool list,list count =%d",head_list->count);
 }
 void mempool_print_head_list(struct list_head *hl_head)
 {
-	cds_mempool_head_list_t *head_list;
-	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
+	ctr_mempool_head_list_t *head_list;
+	head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_print_head_list:mempool count:%d",head_list->count);
 }
-void mempool_print_list(cds_mempool_t *mempool_list)
+void mempool_print_list(ctr_mempool_t *mempool_list)
 {
-	dbg_str(DBG_ALLOC_DETAIL,"mempool info,start addr:%p,depth:%d,min_depth:%d,size=%d,list_head_addr:%p",
+	dbg_str(DBG_ALLOC_DETAIL,"mempool info,start addr:%p,depth:%d,min_depth:%d,mempool_capacity=%d,list_head_addr:%p",
 			mempool_list->start,
 			mempool_list->depth,
 			mempool_list->min_depth,
@@ -163,40 +142,35 @@ void mempool_print_list(cds_mempool_t *mempool_list)
 }
 void mempool_print_list_for_each(struct list_head *hl_head)
 {
-	cds_mempool_head_list_t *head_list;
-	cds_mempool_t *mempool_list;
+	ctr_mempool_head_list_t *head_list;
+	ctr_mempool_t *mempool_list;
 	struct list_head *pos,*n;
 
 	mempool_print_head_list(hl_head);
 
-	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
+	head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
 
-	/*
-	 *pthread_rwlock_rdlock(&head_list->head_lock);
-	 */
 	sync_lock(&head_list->head_lock,NULL);
 	list_for_each_safe(pos, n, hl_head) {
-		mempool_list = container_of(pos,cds_mempool_t,list_head);
+		mempool_list = container_of(pos,ctr_mempool_t,list_head);
 		mempool_print_list(mempool_list);
 	}
 	sync_unlock(&head_list->head_lock);
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 }
 
-cds_mempool_t *mempool_create_list(allocator_t *alloc)
+ctr_mempool_t *mempool_create_list(allocator_t *alloc)
 {
-	cds_alloc_t *alloc_p = &alloc->priv.cds_alloc; 
-	cds_mempool_t *mempool;
+	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc; 
+	ctr_mempool_t *mempool;
 	void *p;
 
-	p = malloc(sizeof(cds_mempool_t));
+	p = malloc(sizeof(ctr_mempool_t));
 	if(p == NULL){
-		dbg_str(DBG_ALLOC_ERROR,"malloc cds_mempool_t");
+		dbg_str(DBG_ALLOC_ERROR,"malloc ctr_mempool_t");
 		return p;
 	}else{
-		mempool = (cds_mempool_t *)p;
+		mempool = (ctr_mempool_t *)p;
+		dbg_str(DBG_ALLOC_DETAIL,"mempool addr:%p,sizeof(p)=%d",mempool,sizeof(mempool));
 	}
 	p = malloc(alloc_p->mempool_capacity);
 	if(p == NULL){
@@ -207,11 +181,11 @@ cds_mempool_t *mempool_create_list(allocator_t *alloc)
 	mempool->size = alloc_p->mempool_capacity;
 	mempool->start = p;
 	mempool->depth = alloc_p->mempool_capacity;
-	mempool->min_depth = alloc_p->data_min_size + sizeof(cds_slab_t);
+	mempool->min_depth = alloc_p->data_min_size + sizeof(ctr_slab_t);
 
 	return mempool;
 }
-void *mempool_release_list(cds_mempool_t *mempool)
+void *mempool_release_list(ctr_mempool_t *mempool)
 {
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_release_list");
 	free(mempool->start);
@@ -228,61 +202,46 @@ void mempool_destroy_lists(struct list_head *hl_head)
 		mempool_destroy_list(pos,hl_head);
 	}
 }
-cds_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)
+ctr_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)
 {
-	cds_alloc_t *alloc_p = &alloc->priv.cds_alloc; 
+	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc; 
 	struct list_head *hl_head = alloc_p->pool;
 	struct list_head *empty_pool_hl_head = alloc_p->empty_pool;
-	cds_mempool_head_list_t *head_list;
-	cds_mempool_t *mempool_list;
+	ctr_mempool_head_list_t *head_list;
+	ctr_mempool_t *mempool_list;
 	struct list_head *pos,*n;
 
-	head_list = container_of(hl_head,cds_mempool_head_list_t,list_head);
+	head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
 
-	/*
-	 *pthread_rwlock_rdlock(&head_list->head_lock);
-	 */
 	sync_lock(&head_list->head_lock,NULL);
 	list_for_each_safe(pos, n, hl_head) {
-		mempool_list = container_of(pos,cds_mempool_t,list_head);
-		if(mempool_list->depth >= size + sizeof(cds_slab_t)){
+		mempool_list = container_of(pos,ctr_mempool_t,list_head);
+		if(mempool_list->depth >= size + sizeof(ctr_slab_t)){
 			dbg_str(DBG_ALLOC_DETAIL,"find an appropriate_pool");
-			/*
-			 *pthread_rwlock_unlock(&head_list->head_lock);
-			 */
 			sync_unlock(&head_list->head_lock);
 			return mempool_list;
 		}else if(mempool_list->depth < mempool_list->min_depth){
 			dbg_str(DBG_ALLOC_WARNNING,"this mempool is empty");
-			/*
-			 *pthread_rwlock_unlock(&head_list->head_lock);
-			 */
 			sync_unlock(&head_list->head_lock);
 			mempool_detach_list(pos,hl_head);
 			mempool_attach_list(pos,empty_pool_hl_head);
-			/*
-			 *pthread_rwlock_rdlock(&head_list->head_lock);
-			 */
 			sync_lock(&head_list->head_lock,NULL);
 		}
 	}
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 	sync_unlock(&head_list->head_lock);
 	return NULL;
 }
 uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)
 {
-	int data_min_size = alloc->priv.cds_alloc.data_min_size;
+	int data_min_size = alloc->priv.ctr_alloc.data_min_size;
 	return (slab_get_slab_index(alloc,size) + 1 ) * data_min_size;
 }
-cds_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)
+ctr_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)
 {
 
-	cds_mempool_t *mempool_list;
-	cds_alloc_t *alloc_p = &alloc->priv.cds_alloc;
-	cds_slab_t *slab_list;
+	ctr_mempool_t *mempool_list;
+	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
+	ctr_slab_t *slab_list;
 
 	dbg_str(DBG_ALLOC_DETAIL,"mempool_alloc_slab_list");
 
@@ -296,7 +255,7 @@ cds_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)
 		}
 	}
 
-	dbg_str(DBG_ALLOC_DETAIL,"dmempool_alloc_slab_list  next:%p, prev:%p",
+	dbg_str(DBG_ALLOC_DETAIL,"mempool_alloc_slab_list  next:%p, prev:%p",
 			mempool_list->list_head.next,mempool_list->list_head.prev);
 
 	slab_list = mempool_list->start + mempool_list->size - mempool_list->depth;
@@ -304,13 +263,13 @@ cds_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)
 	slab_list->data_size = size;
 	slab_list->mem_addr  = &slab_list->data[0];
 	slab_list->stat_flag = 1;
-	slab_list->slab_size = slab_list->size + sizeof(cds_slab_t);
+	slab_list->slab_size = slab_list->size + sizeof(ctr_slab_t);
 
 	assert(slab_list->size >= slab_list->data_size);
 
 	/*
 	 *dbg_str(DBG_ALLOC_DETAIL,"slab_list=%p,slab_list->mem_addr=%p", slab_list ,slab_list->mem_addr);
-	 *dbg_str(DBG_ALLOC_DETAIL,"sizeof(cds_slab_t)=%d,size=%d",sizeof(cds_slab_t),size);
+	 *dbg_str(DBG_ALLOC_DETAIL,"sizeof(ctr_slab_t)=%d,size=%d",sizeof(ctr_slab_t),size);
 	 *dbg_str(DBG_ALLOC_DETAIL,"dmempool_alloc_mem:%p,slab list_head:%p",slab_list->mem_addr,&slab_list->list_head);
 	 *dbg_str(DBG_ALLOC_DETAIL,"dmempool_alloc_slab_list  next:%p, prev:%p",
 	 *        mempool_list->list_head.next,mempool_list->list_head.prev);

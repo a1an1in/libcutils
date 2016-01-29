@@ -64,7 +64,9 @@ void register_all_lib_modules()
 }
 void test_datastructure()
 {
-	test_datastructure_hashlist();
+	/*
+	 *test_datastructure_hashlist();
+	 */
 	/*
 	 *test_datastructure_link_list();
 	 */
@@ -87,9 +89,7 @@ void test_analyzer()
 }
 void test_allocator()
 {
-	/*
-	 *test_ctr_alloc();
-	 */
+	test_ctr_alloc();
 }
 int main()
 {

@@ -13,9 +13,10 @@ typedef struct allocator{
 	uint8_t allocator_type;
 	uint8_t lock_type;
 	union{
-		cds_alloc_t cds_alloc;
+		ctr_alloc_t ctr_alloc;
 	}priv;
 	struct allocator_operations *alloc_ops;
+	uint32_t alloc_count;
 #	undef COTAINOR_NAME_MAX_LEN
 }allocator_t;
 

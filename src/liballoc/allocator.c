@@ -49,7 +49,7 @@ void allocator_ctr_init(allocator_t * alloc,
 		uint32_t slab_array_max_num, uint32_t data_min_size,
 		uint32_t mempool_capacity)
 {
-	cds_alloc_t *alloc_p = &alloc->priv.cds_alloc;
+	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
 
 	alloc_p->slab_array_max_num = slab_array_max_num;
 	alloc_p->data_min_size = data_min_size;
@@ -64,5 +64,6 @@ void allocator_destroy(allocator_t * alloc)
 	if(allocator_modules[allocator_type].alloc_ops.destroy){
 		allocator_modules[allocator_type].alloc_ops.destroy(alloc);
 	}
+	dbg_str(DBG_DETAIL,"run at here");
 	free(alloc);
 }
