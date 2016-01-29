@@ -125,17 +125,20 @@ void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)
 		dbg_str(DBG_ERROR,"apply size:%d too large,max size:%d,excess slab num,"
 				"please assignd by sys malloc,or reconfig ctr_alloc",size,20*8);
 		return NULL;
-	}else{
-		slab_list = slab_detach_front_list_from_free_slabs(alloc,size);
-		if(slab_list == NULL){
-			slab_list = mempool_alloc_slab_list(alloc,size);
-		}
-		slab_attach_list_to_used_slabs(alloc,&slab_list->list_head,size);
-		alloc->alloc_count++;
-		dbg_str(DBG_ALLOC_IMPORTANT,"ctr_alloc alloc mem,request size=%d,mem addr=%p,"
-				"alloc using count=%d",size,slab_list->mem_addr,alloc->alloc_count);
-		return slab_list->mem_addr;
 	}
+
+	if(!(slab_list = slab_detach_front_list_from_free_slabs(alloc,size))){
+		if(!(slab_list = mempool_alloc_slab_list(alloc,size))){  
+			dbg_str(DBG_ERROR,"alloc slab list err");
+			return NULL;
+		}
+	}
+	slab_attach_list_to_used_slabs(alloc,&slab_list->list_head,size);
+	alloc->alloc_count++;
+	dbg_str(DBG_ALLOC_IMPORTANT,"ctr_alloc alloc mem,request size=%d,mem addr=%p,"
+			"alloc using count=%d",size,slab_list->mem_addr,alloc->alloc_count);
+
+	return slab_list->mem_addr;
 }
 void ctr_alloc_free(allocator_t *alloc,void *addr)
 {
@@ -179,8 +182,8 @@ void ctr_alloc_info(allocator_t *alloc)
 	int i;
 	int slab_array_max_num = alloc->priv.ctr_alloc.slab_array_max_num;
 
+	printf("##########################-printf allocator mem info##########################");
 	dbg_str(DBG_ALLOC_DETAIL,"the mem using, count=%d",alloc->alloc_count);
-
 	dbg_str(DBG_ALLOC_DETAIL,"query pool:");
 	mempool_print_list_for_each(alloc->priv.ctr_alloc.pool);
 
@@ -189,13 +192,14 @@ void ctr_alloc_info(allocator_t *alloc)
 
 	dbg_str(DBG_ALLOC_DETAIL,"query free_slabs:");
 	for(i = 0; i < slab_array_max_num; i++){
-		slab_print_list_for_each(alloc->priv.ctr_alloc.free_slabs[i]);
+		slab_print_list_for_each(alloc->priv.ctr_alloc.free_slabs[i],i);
 	}
 
 	dbg_str(DBG_ALLOC_DETAIL,"query used_slabs:");
 	for(i = 0; i < slab_array_max_num; i++){
-		slab_print_list_for_each(alloc->priv.ctr_alloc.used_slabs[i]);
+		slab_print_list_for_each(alloc->priv.ctr_alloc.used_slabs[i],i);
 	}
+	printf("##############################################################################\n");
 }
 void ctr_alloc_destroy(allocator_t *alloc)
 {

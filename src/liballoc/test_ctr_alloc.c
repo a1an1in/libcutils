@@ -90,13 +90,11 @@ void test_ctr_alloc()
 	allocator_mem_free(allocator,p2);
 	allocator_mem_free(allocator,p3);
 
-	/*
-	 *dbg_str(DBG_ALLOC_DETAIL,"batch alloc");
-	 *int i;
-	 *for(size = 8,i = 0; i< 20; i++,size += 8){
-	 *    p = allocator_mem_alloc(allocator,size);
-	 *}
-	 */
+	dbg_str(DBG_ALLOC_DETAIL,"batch alloc");
+	int i;
+	for(size = 8,i = 0; i< 20; i++,size += 8){
+		p = allocator_mem_alloc(allocator,size);
+	}
 	dbg_str(DBG_ALLOC_IMPORTANT,"inquire alloc info");
 	allocator_mem_info(allocator);
 

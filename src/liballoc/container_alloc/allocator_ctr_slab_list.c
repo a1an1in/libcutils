@@ -161,36 +161,29 @@ void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_hea
 
 	return slab_attach_list(new_head,free_slabs[index]);
 }
-void slab_print_head_list(struct list_head *hl_head)
+
+
+void slab_print_list(ctr_slab_t *slab_list,uint16_t slab_index)
 {
-	ctr_slab_head_list_t *head_list;
-	head_list = container_of(hl_head,ctr_slab_head_list_t,list_head);
-	
-	if(head_list->count)
-		dbg_str(DBG_ALLOC_DETAIL,"slab head_list,count =%d",head_list->count);
-}
-void slab_print_list(ctr_slab_t *slab_list)
-{
-	dbg_str(DBG_ALLOC_DETAIL,"slab info,alloc size=%d,request_size =%d,slab_size=%d,slab_start:%p,slab_end:%p",
+	dbg_str(DBG_ALLOC_DETAIL,"slab info,slab index =%d\t,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,slab_start:%p\t,slab_end:%p",
+			slab_index,
 			slab_list->size,slab_list->data_size,
 			slab_list->slab_size,
 			slab_list,
 			(uint8_t*)slab_list +  slab_list->size + sizeof(ctr_slab_t));
 }
-void slab_print_list_for_each(struct list_head *hl_head)
+void slab_print_list_for_each(struct list_head *hl_head, uint16_t slab_index)
 {
 	ctr_slab_head_list_t *head_list;
 	ctr_slab_t *slab_list;
 	struct list_head *pos,*n;
-
-	slab_print_head_list(hl_head);
 
 	head_list = container_of(hl_head,ctr_slab_head_list_t,list_head);
 
 	sync_lock(&head_list->head_lock,NULL);
 	list_for_each_safe(pos, n, hl_head) {
 		slab_list = container_of(pos,ctr_slab_t,list_head);
-		slab_print_list(slab_list);
+		slab_print_list(slab_list,slab_index);
 	}
 	sync_unlock(&head_list->head_lock);
 }
