@@ -212,40 +212,6 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 }
 proto_info_list_t * pa_find_key(const char *key,struct protocol_analyzer_s *pa)
 {
-#if 0
-	proto_info_list_t *ret = NULL;
-	proto_head_list_t *head_list;
-	proto_info_list_t *info_list;
-	struct list_head *pos,*n;
-	head_list = container_of(pa->pa_list_head_p,proto_head_list_t,list_head);
-
-	/*
-	 *pthread_rwlock_rdlock(&head_list->head_lock);
-	 */
-	list_for_each_safe(pos, n,pa->pa_list_head_p) {
-		info_list = container_of(pos,proto_info_list_t,list_head);
-		/*
-		 *printf("find name:%s,key:%s\n",info_list->name,key);
-		 */
-		if(!strcmp(info_list->name,key)){
-			/*
-			 *pthread_rwlock_unlock(&head_list->head_lock);
-			 */
-			/*
-			 *dbg_str(DBG_DETAIL,"find key hehe");
-			 */
-			//print_info_list(info_list);
-			return info_list;
-		}
-	}
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
-
-	dbg_str(DBG_WARNNING,"not found key:%s",key);
-	return ret;
-#endif
-#if 1
 	hash_map_t *hmap = pa->hmap;
 	hash_map_pos_t map_pos;
 	proto_info_list_t *info_list; 
@@ -264,14 +230,8 @@ proto_info_list_t * pa_find_key(const char *key,struct protocol_analyzer_s *pa)
 	}
 	addr_p = hash_map_pos_get_pointer(&map_pos);
 	info_list = pa_buffer_to_addr(addr_p);
-	/*
-	 *dbg_str(DBG_IMPORTANT,"info list addr:%p",info_list);
-	 *print_info_list(info_list);
-	 *dbg_str(DBG_DETAIL,"found key:%s",key);
-	 */
 
 	return info_list;
-#endif
 }
 struct protocol_analyzer_s *pa_create_protocol_analyzer(allocator_t *allocator)
 {
@@ -311,9 +271,6 @@ int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyz
 
 	head_list = container_of(hl_head,proto_head_list_t,list_head);
 
-	/*
-	 *pthread_rwlock_wrlock(&head_list->head_lock);
-	 */
 	info_list = pa_find_key(key,pa);
 	if(info_list != NULL){
 		if(info_list->buf.data_p == NULL){
@@ -336,29 +293,15 @@ int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyz
 		dbg_str(DBG_ERROR,"not find info list");
 	}
 
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 	return 0;
 
 }
 int pa_set_value(const char *key,uint32_t value,struct protocol_analyzer_s *pa)
 {
 	proto_info_list_t *info_list = NULL; 
-	/*
-	 *proto_head_list_t *head_list;
-	 *struct list_head *hl_head = pa->pa_list_head_p;
-	 *head_list = container_of(hl_head,proto_head_list_t,list_head);
-	 */
 
-	/*
-	 *pthread_rwlock_wrlock(&head_list->head_lock);
-	 */
 	info_list = pa_find_key(key,pa);
 	info_list->data = value;
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 	return 0;
 
 }
@@ -399,16 +342,10 @@ int pa_recompute_byte_pos(struct list_head *cur,struct protocol_analyzer_s *pa)
 
 	//recompute byte pos of the info list after vlenth_flag
 	head_list = container_of(list_head_p,proto_head_list_t,list_head);
-	/*
-	 *pthread_rwlock_wrlock(&head_list->head_lock);
-	 */
 	for(pos = cur->next; pos != list_head_p; pos = pos->next){
 		info_list = container_of(pos,proto_info_list_t,list_head);
 		info_list ->byte_pos += bit_len / 8;
 	}
-	/*
-	 *pthread_rwlock_unlock(&head_list->head_lock);
-	 */
 
 	return ret;
 }
@@ -477,31 +414,6 @@ void pa_set_protocol_byte_data(uint32_t data,
 		dp[byte_pos + i] = (data >> 8 *(len - i - 1)) & 0xff;
 	}
 }
-/*
- *void pa_set_protocol_bit_data(uint32_t data,
- *        uint8_t byte_pos, uint8_t bit_pos,
- *        uint16_t len,uint8_t *dp)
- *{
- *    int i;
- *    short t_len = len;
- *    uint8_t t_pos_set = bit_pos;
- *    uint8_t t_data_get;
- *    uint8_t t_len_get,t_len_get_total = 0;
- *
- *    dbg_str(DBG_DETAIL,"byte_pos=%d,bit_pos=%d,t_len=%d",byte_pos,bit_pos,t_len);
- *
- *    for(i = 0; t_len > 0; i++){
- *        t_len_get = (t_len > 8 - t_pos_set % 8)?(8 - t_pos_set % 8):t_len;
- *        t_data_get = get_bit_data(data, t_len_get_total, t_len_get);
- *        set_bit_data(&dp[byte_pos - t_pos_set / 8],t_data_get,t_pos_set %8,t_len_get);
- *        dbg_str(DBG_DETAIL,"t_data_get=%x,t_data_set=%x",t_data_get,dp[byte_pos - t_pos_set / 8]);
- *        t_len_get_total += t_len_get;
- *        t_len -= t_len_get;
- *        t_pos_set += t_len_get;
- *
- *    }
- *}
- */
 void pa_set_protocol_bit_data(uint32_t data,
 		uint8_t byte_pos, uint8_t bit_pos,
 		uint16_t len,uint8_t *dp)
@@ -572,31 +484,6 @@ void pa_get_protocol_byte_data(proto_info_list_t *info_list,
 	 *dbg_str(DBG_DETAIL,"name %s set data=%x",info_list->name,data);
 	 */
 }
-/*
- *void pa_get_protocol_bit_data(proto_info_list_t *info_list,
- *        struct protocol_analyzer_s *pa)
- *{
- *    int i;
- *    short t_len = info_list->len;
- *    uint8_t t_pos_get = info_list->bit_pos;
- *    uint8_t byte_pos = info_list->byte_pos;
- *    uint8_t t_len_get;
- *    uint8_t *dp = pa->protocol_data;
- *    uint32_t data = 0,t_data_get;
- *    uint8_t t_len_get_total = 0;
- *
- *    for(i = 0; t_len > 0; i++){
- *        t_len_get = (t_len > 8 - t_pos_get % 8)?(8 - t_pos_get % 8):t_len;
- *        t_data_get = get_bit_data(dp[byte_pos - i], t_pos_get % 8, t_len_get);
- *        data |= (t_data_get << t_len_get_total);
- *        t_len_get_total += t_len_get;
- *        t_pos_get += t_len_get;
- *        t_len -= t_len_get;
- *    }
- *    info_list->data = data;
- *    dbg_str(DBG_DETAIL,"name %s set data=%x",info_list->name,data);
- *}
- */
 void pa_get_protocol_bit_data(proto_info_list_t *info_list,
 		struct protocol_analyzer_s *pa)
 {
