@@ -44,7 +44,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "libcontainer/inc_files.h"
+#include <liballoc/inc_files.h>
+#include <libdbg/debug.h>
 #include "libcre/libcre.h"
 
 void test_ctr_alloc()
@@ -72,17 +73,17 @@ void test_ctr_alloc()
 	 */
 
 	p = allocator_mem_alloc(allocator,7);
-	dbg_str(DBG_CONTAINER_DETAIL,"_________alloc addr:%p",p);
+	dbg_str(DBG_ALLOC_DETAIL,"_________alloc addr:%p",p);
 
 	allocator_mem_free(allocator,p);
 
 	p2 = allocator_mem_alloc(allocator,8);
-	dbg_str(DBG_CONTAINER_DETAIL,"************alloc addr:%p",p2);
+	dbg_str(DBG_ALLOC_DETAIL,"************alloc addr:%p",p2);
 
 	p3 = allocator_mem_alloc(allocator,200);
-	dbg_str(DBG_CONTAINER_DETAIL,"alloc addr:%p",p3);
+	dbg_str(DBG_ALLOC_DETAIL,"alloc addr:%p",p3);
 
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
+	dbg_str(DBG_ALLOC_DETAIL,"inquire alloc info");
 	allocator_mem_info(allocator);
 
 	printf("\n");
@@ -93,14 +94,14 @@ void test_ctr_alloc()
 	allocator_mem_free(allocator,p3);
 	printf("\n");
 
-	dbg_str(DBG_CONTAINER_DETAIL,"batch alloc");
+	dbg_str(DBG_ALLOC_DETAIL,"batch alloc");
 	int i;
 	for(size = 8,i = 0; i< 20; i++,size += 8){
 		p = allocator_mem_alloc(allocator,size);
 	}
-	dbg_str(DBG_CONTAINER_DETAIL,"inquire alloc info");
+	dbg_str(DBG_ALLOC_DETAIL,"inquire alloc info");
 	allocator_mem_info(allocator);
 
 	allocator_destroy(allocator);
-	dbg_str(DBG_CONTAINER_DETAIL,"test cds alloc end");
+	dbg_str(DBG_ALLOC_DETAIL,"test cds alloc end");
 }

@@ -176,7 +176,7 @@ int rbtree_map_init(rbtree_map_t *map,
 {
 	struct rb_root *tree_root;
 
-	dbg_str(DBG_CONTAINER_DETAIL,"rbtree_map init");
+	dbg_str(DBG_DETAIL,"rbtree_map init");
 
 	/*
 	 *strcpy(ct->name,"rbtree_map container");
@@ -221,12 +221,12 @@ int rbtree_map_insert(rbtree_map_t *map, void *value)
 	uint32_t data_size = map->data_size;
 	uint32_t key_size = map->key_size;
 
-	dbg_str(DBG_CONTAINER_DETAIL,"rbtree_map_insert");
+	dbg_str(DBG_DETAIL,"rbtree_map_insert");
 
 	mnode = (struct rbtree_map_node *)allocator_mem_alloc(map->allocator,
 			sizeof(struct rbtree_map_node) + data_size);
 	if(mnode == NULL){
-		dbg_str(DBG_CONTAINER_ERROR,"rbtree_map_insert,malloc err");
+		dbg_str(DBG_ERROR,"rbtree_map_insert,malloc err");
 		return -1;
 	}
 
@@ -249,7 +249,7 @@ int rbtree_map_delete(rbtree_map_t *map, rbtree_map_pos_t *it)
 
 	mnode = rb_entry(rb_node_p,struct rbtree_map_node,node);
 
-	dbg_str(DBG_CONTAINER_DETAIL,"delete node");
+	dbg_str(DBG_DETAIL,"delete node");
 
 	sync_lock(&map->map_lock,NULL);
 	if(rbtree_map_pos_equal(it,&map->begin)){
@@ -270,7 +270,7 @@ rbtree_map_search(rbtree_map_t *map, void *key, rbtree_map_pos_t *it)
 	struct rbtree_map_node *mnode;
 	struct rb_root *tree_root = map->tree_root;
 
-	dbg_str(DBG_CONTAINER_DETAIL,"rbtree_map_search");
+	dbg_str(DBG_DETAIL,"rbtree_map_search");
 
 	sync_lock(&map->map_lock,NULL);
 	mnode = __rbtree_map_search(map,tree_root, key);
@@ -290,7 +290,7 @@ int rbtree_map_destroy(rbtree_map_t *map)
 	rbtree_map_pos_t it,end;
 	struct rb_root *tree_root = map->tree_root;
 
-	dbg_str(DBG_CONTAINER_DETAIL,"rbtree_map_destroy");
+	dbg_str(DBG_DETAIL,"rbtree_map_destroy");
 	for(	rbtree_map_begin(map,&it); 
 			!rbtree_map_pos_equal(&it,rbtree_map_end(map,&end));
 			rbtree_map_begin(map,&it)) 
@@ -298,7 +298,7 @@ int rbtree_map_destroy(rbtree_map_t *map)
 		rbtree_map_delete(map,&it);
 	}
 	if(rbtree_map_pos_equal(&map->end,&map->begin)){
-		dbg_str(DBG_CONTAINER_WARNNING,"rbtree_map_destroy,rbtree_map is NULL");
+		dbg_str(DBG_WARNNING,"rbtree_map_destroy,rbtree_map is NULL");
 		allocator_mem_free(map->allocator,tree_root);
 	}
 }
