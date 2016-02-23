@@ -80,7 +80,9 @@ void test_datastructure()
 }
 void test_analyzer()
 {
-	test_pdt_proto_analyzer();
+	/*
+	 *test_pdt_proto_analyzer();
+	 */
 	/*
 	 *test_pdu_proto_analyzer();
 	 */
@@ -90,6 +92,13 @@ void test_allocator()
 	/*
 	 *test_ctr_alloc();
 	 */
+}
+void test_libthread_pool()
+{
+	/*
+	 *test_shutdown();
+	 */
+	test_thrdtest();
 }
 int main()
 {
@@ -106,6 +115,7 @@ int main()
 	test_allocator();
 	test_datastructure();
 	test_analyzer();
+	test_libthread_pool();
 
 	dbg_str(DBG_DETAIL,"test end");
 

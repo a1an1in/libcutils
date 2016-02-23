@@ -932,9 +932,11 @@ offsetof	src/include/libdata_structure/rbtree.h	127;"	d
 offsetof	src/include/libdata_structure/rbtree.h	128;"	d
 offsetof	src/include/libdata_structure/rbtree.h	130;"	d
 os	.ycm_extra_conf.py	/^import os$/;"	i
+pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
 pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef struct pa_array_s{$/;"	s	file:
 pa_array_t	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^}pa_array_t;$/;"	t	typeref:struct:pa_array_s	file:
+pa_buffer_to_addr	src/libproto_analyzer/protocol_analyzer.c	/^void *pa_buffer_to_addr(uint8_t *buffer)$/;"	f
 pa_check_protocol_num	src/libproto_analyzer/protocol_analyzer.c	/^int pa_check_protocol_num(struct protocol_analyzer_s *pa)$/;"	f
 pa_copy_protocol_format	src/libproto_analyzer/protocol_analyzer.c	/^int pa_copy_protocol_format(struct protocol_analyzer_s *pa)$/;"	f
 pa_create_hash_table	src/libproto_analyzer/protocol_analyzer.c	/^int pa_create_hash_table(struct protocol_analyzer_s *pa)$/;"	f
@@ -951,6 +953,7 @@ pa_init_protocol_analyzer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_in
 pa_list_head_p	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_head *pa_list_head_p;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::list_head
 pa_p2	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^	struct protocol_analyzer_s **pa_p2;$/;"	m	struct:pa_array_s	typeref:struct:pa_array_s::protocol_analyzer_s	file:
 pa_parse_protocol_data	src/libproto_analyzer/protocol_analyzer.c	/^int pa_parse_protocol_data(struct protocol_analyzer_s *pa)$/;"	f
+pa_pow	src/libproto_analyzer/protocol_analyzer.c	/^pa_pow(uint32_t x,uint32_t y)$/;"	f	file:
 pa_recompute_byte_pos	src/libproto_analyzer/protocol_analyzer.c	/^int pa_recompute_byte_pos(struct list_head *cur,struct protocol_analyzer_s *pa)$/;"	f
 pa_reset_vlen_flag	src/libproto_analyzer/protocol_analyzer.c	/^int pa_reset_vlen_flag(struct protocol_analyzer_s *pa)$/;"	f
 pa_set_buf	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyzer_s *pa)$/;"	f
@@ -995,7 +998,6 @@ posix_thread_rwlock_lock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int p
 posix_thread_rwlock_lock_destroy	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)$/;"	f
 posix_thread_rwlock_trylock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_trylock(struct sync_lock_s *slock,void *arg)$/;"	f
 posix_thread_rwlock_unlock	src/libcre/sync_lock/unix/posix_thread_rwlock.c	/^int posix_thread_rwlock_unlock(struct sync_lock_s *slock)$/;"	f
-pow	src/libproto_analyzer/protocol_analyzer.c	/^pow(uint32_t x,uint32_t y)$/;"	f	file:
 pprev	src/include/liballoc/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libdata_structure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
 pprev	src/include/libdbg/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::
