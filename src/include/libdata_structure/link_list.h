@@ -18,17 +18,17 @@
 #ifndef __LINK_LIST_H__
 #define __LINK_LIST_H__
 
-#include "link_list_struct.h"
+#include "libdata_structure/link_list_struct.h"
 #include <libdbg/debug.h>
 
 llist_t *llist_create(allocator_t *allocator,uint8_t lock_type);
 int llist_init(llist_t *llist,uint32_t data_size);
 int llist_insert(llist_t *llist, list_pos_t *pos, void *data);
 int llist_delete(llist_t *llist, list_pos_t *pos);
-list_t *llist_detach(llist_t *llist, list_pos_t *pos);
 int llist_push_back(llist_t *llist,void *data);
 int llist_pop_back(llist_t *llist);
 int llist_destroy(llist_t *llist);
+list_t *__llist_detach(llist_t *llist, list_pos_t *pos);
 
 
 static inline int 
@@ -76,7 +76,23 @@ static inline int llist_pop_front(llist_t *llist)
 }
 static inline list_t *llist_detach_front(llist_t *llist)
 {
-	return llist_detach(llist, &llist->begin);
+	list_t *l = NULL;
+
+	sync_lock(&llist->list_lock,NULL);
+	l = __llist_detach(llist, &llist->begin);
+	sync_unlock(&llist->list_lock);
+
+	return l;
+}
+static inline list_t *llist_detach(llist_t *llist, list_pos_t *pos)
+{
+	list_t *l = NULL;
+
+	sync_lock(&llist->list_lock,NULL);
+	l = __llist_detach(llist, pos);
+	sync_unlock(&llist->list_lock);
+
+	return l;
 }
 static inline int llist_get_count(llist_t *llist)
 {

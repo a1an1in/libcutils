@@ -47,7 +47,6 @@ static inline void
 allocator_mem_free(allocator_t * alloc,void *addr)
 {
 	allocator_modules[alloc->allocator_type].alloc_ops.free(alloc,addr);
-
 }
 static inline void 
 allocator_mem_info(allocator_t * alloc)

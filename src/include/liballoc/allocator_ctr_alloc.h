@@ -19,8 +19,8 @@
 #define __ALLOCATOR_SGI_ALLOC_H__
 
 #include "libcre/sync_lock/sync_lock.h"
-#include "basic_types.h"
-#include "liballoc/list.h"
+#include "libcre/basic_types.h"
+#include "libdata_structure/list.h"
 
 #define SLAB_ARRAY_MAX_NUM 24
 #define MEM_POOL_MAX_SIZE 1024*4

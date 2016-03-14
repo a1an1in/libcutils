@@ -51,6 +51,8 @@
 
 #include "libdata_structure/test_datastructure.h"
 #include "libproto_analyzer/test_proto_analyzer.h"
+#include "libconcurrent/test_concurrent.h"
+#include "libnet/server.h"
 
 #define LIBCDF_VERSION "1.2.1.0"
 
@@ -98,7 +100,19 @@ void test_libthread_pool()
 	/*
 	 *test_shutdown();
 	 */
-	test_thrdtest();
+	/*
+	 *test_thrdtest();
+	 */
+}
+void test_libconcurrent()
+{
+	/*
+	 *test_concurrent3();
+	 */
+}
+void test_libnet()
+{
+	test_server();
 }
 int main()
 {
@@ -116,6 +130,8 @@ int main()
 	test_datastructure();
 	test_analyzer();
 	test_libthread_pool();
+	test_libconcurrent();
+	test_libnet();
 
 	dbg_str(DBG_DETAIL,"test end");
 

@@ -18,7 +18,7 @@
 #ifndef __LINK_LIST_STRUCT_H__
 #define __LINK_LIST_STRUCT_H__
 
-#include "list.h"
+#include "libdata_structure/list.h"
 #include "liballoc/allocator.h"
 #include "libcre/sync_lock/sync_lock.h"
 

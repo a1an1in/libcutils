@@ -123,7 +123,7 @@ int llist_delete(llist_t *llist, list_pos_t *pos)
 	allocator_mem_free(llist->allocator,p);
 	return 0;
 }
-list_t *llist_detach(llist_t *llist, list_pos_t *pos)
+list_t *__llist_detach(llist_t *llist, list_pos_t *pos)
 {
 	list_t *p;
 
@@ -134,15 +134,12 @@ list_t *llist_detach(llist_t *llist, list_pos_t *pos)
 
 	p = container_of(pos->list_head_p,list_t,list_head);
 
-	sync_lock(&llist->list_lock,NULL);
-	if(llist_pos_equal(pos,&llist->begin)){
-		llist_pos_init(&llist->begin,pos->list_head_p->next,llist);
-	}
 	list_del(pos->list_head_p);
-	llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);
+	if(llist_pos_equal(pos,&llist->begin)){
+		llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);//if this list is first,updata begin
+	}
 	llist->list_count--;
 	dbg_str(DBG_DETAIL,"detach llist,listcount=%d",llist->list_count);
-	sync_unlock(&llist->list_lock);
 
 	return p;
 }
@@ -160,7 +157,9 @@ int llist_push_back(llist_t *llist,void *data)
 		llist_pos_init(&llist->begin,llist->head.list_head_p->next,llist);//if this list is first,updata begin
 	}
 	llist->list_count++;
-	dbg_str(DBG_DETAIL,"llist_push_back,listcount=%d,addr=%p",llist->list_count,&p->list_head);
+	/*
+	 *dbg_str(DBG_DETAIL,"llist_push_back,listcount=%d,addr=%p",llist->list_count,&p->list_head);
+	 */
 
 	sync_unlock(&llist->list_lock);
 

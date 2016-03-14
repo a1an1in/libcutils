@@ -44,7 +44,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <liballoc/inc_files.h>
+#include <liballoc/allocator.h>
 #include <libdbg/debug.h>
 #include "libcre/libcre.h"
 
