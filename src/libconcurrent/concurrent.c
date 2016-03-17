@@ -86,6 +86,7 @@ int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void
 	pair = create_pair(task_admin->key_size,task_admin->data_size);
 	make_pair(pair,key,data);
 	hash_map_insert(task_admin->hmap,pair->data);
+	destroy_pair(pair);
 
 	return 0;
 }
@@ -99,6 +100,14 @@ int concurrent_task_admin_del(concurrent_task_admin_t *task_admin,
 {
 	return hash_map_delete(task_admin->hmap,pos);
 }
+int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
+		void *key)
+{
+	hash_map_pos_t pos;
+
+	hash_map_search(task_admin->hmap, key,&pos);
+	return hash_map_delete(task_admin->hmap, &pos);
+}
 int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
 {
 	hash_map_destroy(task_admin->hmap);
@@ -108,6 +117,14 @@ int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
 	return 0;
 }
 
+/**
+ * @synopsis slave_event_handler_process_message 
+ *				tell slave do something,if listen fd,it may not need use this func,
+ *				main thread can set slave event directly.
+ * @param fd
+ * @param event
+ * @param arg
+ */
 static void slave_event_handler_process_message(int fd, short event, void *arg)
 {
 	concurrent_slave_t *slave = (concurrent_slave_t *)arg;
@@ -154,14 +171,16 @@ void *concurrent_slave_thread(void *arg)
 }
 int concurrent_slave_add_new_event(concurrent_slave_t *slave,
 		int fd,int event_flag,
+		struct event *event,
 		void (*event_handler)(int fd, short event, void *arg),
-		struct event *event)
+		void *task)
 {
-	event_set(event,fd, event_flag, event_handler, slave);
+	event_set(event,fd, event_flag, event_handler, task);
 	event_base_set(slave->event_base, event);
 	if (event_add(event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
+
 	return 0;
 }
 int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)
@@ -240,12 +259,13 @@ concurrent_master_t *concurrent_master_create(allocator_t *allocator)
 	master->allocator = allocator;
 	master->event_base = event_init();
 	master->concurrent_master_inited_flag = 0;
+	master->assignment_count = 0;
 
 	return master;
 }
 /**
  * @synopsis master_event_handler_add_new_event 
- * 			to add new event,which master thread is listening 
+ * 			just let main thread listen a fd, may be useful future 
  *
  * @param fd 
  * @param event
@@ -336,7 +356,7 @@ int concurrent_master_init(concurrent_master_t *master,
 	concurrent_master_create_slaves(master);
 	return ret;
 }
-int concurrent_master_add_task(concurrent_master_t *master,
+int concurrent_master_add_task_and_message(concurrent_master_t *master,
 		void *task,void *key,
 		void (*work_func)(concurrent_slave_t *slave,void *arg))
 {
@@ -344,7 +364,10 @@ int concurrent_master_add_task(concurrent_master_t *master,
 	hash_map_pos_t pos;
 	void *t;
 
-	concurrent_task_admin_add(master->task_admin,key,task);
+	/*
+	 *concurrent_task_admin_add(master->task_admin,key,task);
+	 */
+	concurrent_master_add_task(master,task,key);
 	concurrent_task_admin_search(master->task_admin,key,&pos);
 
 	t = hash_map_pos_get_pointer(&pos);
@@ -353,11 +376,23 @@ int concurrent_master_add_task(concurrent_master_t *master,
 
 	return 0;
 }
+int concurrent_master_add_task(concurrent_master_t *master,
+		void *task,void *key)
+{
+	concurrent_task_admin_add(master->task_admin,key,task);
+	master->assignment_count++;
+
+	return 0;
+}
+int concurrent_master_choose_slave(concurrent_master_t *master)
+{
+	return master->assignment_count % master->slave_amount;
+}
 static void concurrent_master_notify_slave(concurrent_master_t *master,char command)
 {
 	int i = 0;
 
-	i = master->message_count % master->slave_amount;
+	i = concurrent_master_choose_slave(master);
 	dbg_str(DBG_DETAIL,"concurrent_master_notify_slave,slave i=%d is assigned,notify fd=%d",i,master->snd_notify_fd[i]);
 
 	if (write(master->snd_notify_fd[i], &command, 1) != 1) {
@@ -400,8 +435,9 @@ int concurrent_master_init_message(struct concurrent_message_s *message,
  */
 int concurrent_master_add_new_event(concurrent_master_t *master,
 		int fd,int event_flag,
+		struct event *event,
 		void (*event_handler)(int fd, short event, void *arg),
-		struct event *event)
+		void *arg)
 {
 	while(master->concurrent_master_inited_flag == 0);	
 
@@ -420,12 +456,13 @@ int concurrent_master_add_new_event(concurrent_master_t *master,
 	 */
 	return 0;
 }
+//there may be some omited,must check carefully later
 int concurrent_master_destroy(concurrent_master_t *master)
 {
 	concurrent_task_admin_destroy(master->task_admin);
 	concurrent_master_destroy_slaves(master);
 	llist_destroy(master->message_que);
-	//... release event base??
+	//... release event base,master base and slave base??
 	allocator_mem_free(master->allocator,master);
 	return 0;
 }

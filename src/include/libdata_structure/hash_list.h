@@ -69,7 +69,9 @@ static inline void *hash_map_pos_get_pointer(hash_map_pos_t *pos)
 	mnode = container_of(pos->hlist_node_p,
 			struct hash_map_node,
 			hlist_node);
-	dbg_buf(DBG_DETAIL,"key:",mnode->key,mnode->data_size);
+	/*
+	 *dbg_buf(DBG_DETAIL,"key:",mnode->key,mnode->data_size);
+	 */
 
 	return &mnode->key[mnode->value_pos];
 }
