@@ -104,9 +104,11 @@ int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
 		void *key)
 {
 	hash_map_pos_t pos;
+	int ret = 0;
 
 	hash_map_search(task_admin->hmap, key,&pos);
-	return hash_map_delete(task_admin->hmap, &pos);
+	ret = hash_map_delete(task_admin->hmap, &pos);
+	return ret;
 }
 int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
 {
@@ -132,7 +134,7 @@ static void slave_event_handler_process_message(int fd, short event, void *arg)
 	list_t *l;
 	struct concurrent_message_s *message;
 
-	dbg_str(DBG_VIP,"slave_event_handler_process_message,fd=%d",fd);
+	dbg_str(DBG_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
 	if (read(fd, buf, 1) != 1){
 		dbg_str(DBG_WARNNING,"cannot read form pipe");
 		return;
@@ -275,6 +277,8 @@ static void master_event_handler_add_new_event(
 		int fd, short event, void *arg)
 {
 	concurrent_master_t *master  = (concurrent_master_t *)arg;
+	list_t *l;
+	struct concurrent_message_s *message;
 	char buf[1];          
 
 	if (read(fd, buf, 1) != 1){
@@ -283,9 +287,12 @@ static void master_event_handler_add_new_event(
 	}
 	switch (buf[0]) {
 		case 'c': 
-			if (event_add(&master->event, 0) == -1) {
+			l = llist_detach_front(master->new_ev_que);
+			message = (struct concurrent_message_s *)l->data;
+			if (event_add(message->event, 0) == -1) {
 				dbg_str(DBG_WARNNING,"event_add err");
 			}
+			allocator_mem_free(master->allocator,l);
 			break;
 		case 'p':
 			break;            
@@ -325,6 +332,7 @@ int concurrent_master_init(concurrent_master_t *master,
 	int ret = 0;
 	int fds[2];
 
+	dbg_str(DBG_DETAIL,"concurrent_master_init");
 	master->concurrent_work_type = concurrent_work_type;
 	master->slave_amount = slave_amount;
 	master->message_que = llist_create(master->allocator,1);
@@ -337,8 +345,8 @@ int concurrent_master_init(concurrent_master_t *master,
 				4,
 				task_size,
 				10,//uint32_t bucket_size,
-				0,//uint8_t admin_lock_type,
-				1);//uint8_t hmap_lock_type)
+				1,//uint8_t admin_lock_type,
+				0);//uint8_t hmap_lock_type)
 
 	if(pipe(fds)) {
 		dbg_str(DBG_ERROR,"cannot create pipe");
@@ -364,25 +372,32 @@ int concurrent_master_add_task_and_message(concurrent_master_t *master,
 	hash_map_pos_t pos;
 	void *t;
 
-	/*
-	 *concurrent_task_admin_add(master->task_admin,key,task);
-	 */
-	concurrent_master_add_task(master,task,key);
-	concurrent_task_admin_search(master->task_admin,key,&pos);
-
-	t = hash_map_pos_get_pointer(&pos);
+	t = concurrent_master_add_task(master,task,key);
 	concurrent_master_init_message(&message, work_func,t,0);
 	concurrent_master_add_message(master,&message);
 
 	return 0;
 }
-int concurrent_master_add_task(concurrent_master_t *master,
+void *concurrent_master_add_task(concurrent_master_t *master,
 		void *task,void *key)
 {
+	hash_map_pos_t pos;
+	void *t = NULL;
+
+	sync_lock(&master->task_admin->admin_lock,NULL);
 	concurrent_task_admin_add(master->task_admin,key,task);
 	master->assignment_count++;
 
-	return 0;
+	concurrent_task_admin_search(master->task_admin,key,&pos);
+	if(pos.hlist_node_p == NULL){
+		dbg_str(DBG_ERROR,"not found key,key=%s",key);
+		return NULL;
+	}
+
+	t = hash_map_pos_get_pointer(&pos);
+	sync_unlock(&master->task_admin->admin_lock);
+
+	return t;
 }
 int concurrent_master_choose_slave(concurrent_master_t *master)
 {
@@ -449,11 +464,6 @@ int concurrent_master_add_new_event(concurrent_master_t *master,
 	if (event_add(event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
-	/*
-	 *if (write(master->snd_add_new_event_fd, "c", 1) != 1) {
-	 *    dbg_str(DBG_ERROR,"cannot write pipe");
-	 *}
-	 */
 	return 0;
 }
 //there may be some omited,must check carefully later
@@ -465,4 +475,70 @@ int concurrent_master_destroy(concurrent_master_t *master)
 	//... release event base,master base and slave base??
 	allocator_mem_free(master->allocator,master);
 	return 0;
+}
+
+
+
+
+concurrent_t *concurrent_create(allocator_t *allocator)
+{
+	concurrent_t *c;
+
+	if ((c = (concurrent_t *)allocator_mem_alloc(allocator,
+			sizeof(concurrent_t))) == NULL){
+		dbg_str(DBG_ERROR,"concurrent_create err");
+		return NULL;
+	}
+	c->allocator= allocator;
+
+	return c;
+}
+int concurrent_init(concurrent_t *c,
+		uint8_t concurrent_work_type,
+		uint32_t task_size,
+		uint8_t slave_amount,
+		uint8_t concurrent_lock_type)
+{
+	int ret = 0;
+
+	dbg_str(DBG_DETAIL,"concurrent_init");
+	c->master = concurrent_master_create(c->allocator);
+	concurrent_master_init(c->master, concurrent_work_type, task_size, slave_amount);
+
+	c->snd_add_new_event_fd  = c->master->snd_add_new_event_fd;
+
+	c->new_ev_que = llist_create(c->allocator,1);
+	c->master->new_ev_que = c->new_ev_que;
+	llist_init(c->new_ev_que,sizeof(struct concurrent_message_s));
+
+	sync_lock_init(&c->concurrent_lock,concurrent_lock_type);
+	return ret;
+}
+int concurrent_add_event_to_master(concurrent_t *c,
+		int fd,int event_flag,
+		struct event *event,
+		void (*event_handler)(int fd, short event, void *arg),
+		void *arg)
+{
+	struct concurrent_message_s message;
+
+	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
+	event_set(event,fd, event_flag, event_handler, c->master);
+	event_base_set(c->master->event_base, event);
+
+	message.event = event;
+	llist_push_back(c->new_ev_que,&message);
+
+	if (write(c->snd_add_new_event_fd, "c", 1) != 1) {
+		dbg_str(DBG_ERROR,"cannot write pipe");
+	}
+
+	return 0;
+}
+void concurrent_destroy(concurrent_t *c)
+{
+	concurrent_master_destroy(c->master);
+	//del list
+	//...
+	allocator_mem_free(c->allocator,c);
 }

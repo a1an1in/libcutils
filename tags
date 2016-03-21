@@ -154,9 +154,7 @@ LIST_POISON2	src/include/libdata_structure/list.h	25;"	d
 LIST_POISON2	src/include/libdbg/list.h	34;"	d
 LIST_POISON2	src/include/libproto_analyzer/list.h	30;"	d
 MAXEPOLLSIZE	src/libnet/server/server.c	50;"	d	file:
-MAXEPOLLSIZE	src/libnet/server/ss.cc	17;"	d	file:
 MAXLINE	src/libnet/server/server.c	51;"	d	file:
-MAXLINE	src/libnet/server/ss.cc	18;"	d	file:
 MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	206;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	230;"	d	file:
@@ -196,7 +194,7 @@ MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	100;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	54;"	d	file:
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	43;"	d
-MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	47;"	d
+MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	48;"	d
 MAX_THREADS	src/include/libthread_pool/threadpool.h	45;"	d
 MEM_POOL_MAX_SIZE	src/include/liballoc/allocator_ctr_alloc.h	26;"	d
 MEM_POOL_MIN_DEPTH	src/include/liballoc/allocator_ctr_alloc.h	27;"	d
@@ -427,6 +425,7 @@ alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations *alloc
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations alloc_ops;$/;"	m	struct:allocator_module	typeref:struct:allocator_module::allocator_operations
 allocator	src/include/liballoc/allocator.h	/^typedef struct allocator{$/;"	s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_master_s
+allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_slave_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_task_admin_s
 allocator	src/include/libdata_structure/hash_list_struct.h	/^	allocator_t *allocator;$/;"	m	struct:hash_map_s
@@ -482,9 +481,14 @@ byte_pos_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte
 capacity	src/include/libdata_structure/vector_struct.h	/^	uint32_t capacity;$/;"	m	struct:vector_s
 color	src/include/libdbg/debug.h	/^	uint8_t color;$/;"	m	struct:debug_level_info
 compilation_database_folder	.ycm_extra_conf.py	/^compilation_database_folder = ''$/;"	v
+concurrent_add_event_to_master	src/libconcurrent/concurrent.c	/^int concurrent_add_event_to_master(concurrent_t *c,$/;"	f
+concurrent_create	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_create(allocator_t *allocator)$/;"	f
+concurrent_destroy	src/libconcurrent/concurrent.c	/^void concurrent_destroy(concurrent_t *c)$/;"	f
+concurrent_init	src/libconcurrent/concurrent.c	/^int concurrent_init(concurrent_t *c,$/;"	f
+concurrent_lock	src/include/libconcurrent/concurrent.h	/^	sync_lock_t concurrent_lock;$/;"	m	struct:concurrent_s
 concurrent_master_add_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_message(concurrent_master_t *master,$/;"	f
 concurrent_master_add_new_event	src/libconcurrent/concurrent.c	/^int concurrent_master_add_new_event(concurrent_master_t *master,$/;"	f
-concurrent_master_add_task	src/libconcurrent/concurrent.c	/^int concurrent_master_add_task(concurrent_master_t *master,$/;"	f
+concurrent_master_add_task	src/libconcurrent/concurrent.c	/^void *concurrent_master_add_task(concurrent_master_t *master,$/;"	f
 concurrent_master_add_task_and_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_task_and_message(concurrent_master_t *master,$/;"	f
 concurrent_master_choose_slave	src/libconcurrent/concurrent.c	/^int concurrent_master_choose_slave(concurrent_master_t *master)$/;"	f
 concurrent_master_create	src/libconcurrent/concurrent.c	/^concurrent_master_t *concurrent_master_create(allocator_t *allocator)$/;"	f
@@ -500,10 +504,12 @@ concurrent_master_s	src/include/libconcurrent/concurrent.h	/^typedef struct conc
 concurrent_master_t	src/include/libconcurrent/concurrent.h	/^}concurrent_master_t;$/;"	t	typeref:struct:concurrent_master_s
 concurrent_master_thread	src/libconcurrent/concurrent.c	/^void *concurrent_master_thread(void *arg)$/;"	f
 concurrent_message_s	src/include/libconcurrent/concurrent.h	/^struct concurrent_message_s{$/;"	s
+concurrent_s	src/include/libconcurrent/concurrent.h	/^typedef struct concurrent_s{$/;"	s
 concurrent_slave_add_new_event	src/libconcurrent/concurrent.c	/^int concurrent_slave_add_new_event(concurrent_slave_t *slave,$/;"	f
 concurrent_slave_s	src/include/libconcurrent/concurrent.h	/^typedef struct concurrent_slave_s{$/;"	s
 concurrent_slave_t	src/include/libconcurrent/concurrent.h	/^}concurrent_slave_t;$/;"	t	typeref:struct:concurrent_slave_s
 concurrent_slave_thread	src/libconcurrent/concurrent.c	/^void *concurrent_slave_thread(void *arg)$/;"	f
+concurrent_t	src/include/libconcurrent/concurrent.h	/^}concurrent_t;$/;"	t	typeref:struct:concurrent_s
 concurrent_task_admin_add	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void *data)$/;"	f
 concurrent_task_admin_create	src/libconcurrent/concurrent.c	/^concurrent_task_admin_create(allocator_t *allocator)$/;"	f
 concurrent_task_admin_del	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_del(concurrent_task_admin_t *task_admin,$/;"	f
@@ -516,10 +522,8 @@ concurrent_task_admin_t	src/include/libconcurrent/concurrent.h	/^}concurrent_tas
 concurrent_task_s	src/libconcurrent/test_concurrent.c	/^typedef struct concurrent_task_s{$/;"	s	file:
 concurrent_task_t	src/libconcurrent/test_concurrent.c	/^}concurrent_task_t;$/;"	t	typeref:struct:concurrent_task_s	file:
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_master_s
-concurrent_work_type	src/libnet/server/ss.cc	/^	uint8_t concurrent_work_type;$/;"	m	struct:master_s	file:
+concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_s
 conn	src/libconcurrent/test_concurrent.c	/^	uint32_t conn;$/;"	m	struct:concurrent_task_s	file:
-conn_event	src/libnet/server/ss.cc	/^struct event conn_event;$/;"	v	typeref:struct:event
-conn_handler	src/libnet/server/ss.cc	/^conn_handler(int fd,short event,void *arg)$/;"	f	file:
 console_print_print	src/libdbg/debug_console.c	/^int console_print_print(debugger_t *debugger,size_t level,const char *fmt,...)$/;"	f
 console_print_print_str_vl	src/libdbg/debug_console.c	/^int console_print_print_str_vl(debugger_t *debugger,$/;"	f
 console_print_regester	src/libdbg/debug_console.c	/^void console_print_regester()$/;"	f
@@ -640,12 +644,10 @@ end	src/include/libdata_structure/vector_struct.h	/^	vector_pos_t begin,end;$/;"
 error	src/libthread_pool/tests/heavy.c	/^static int error;$/;"	v	file:
 error	src/libthread_pool/tests/shutdown.c	/^static int error;$/;"	v	file:
 event	src/include/libconcurrent/concurrent.h	/^	struct event event;$/;"	m	struct:concurrent_master_s	typeref:struct:concurrent_master_s::event
+event	src/include/libconcurrent/concurrent.h	/^	void *event;$/;"	m	struct:concurrent_message_s
 event	src/libnet/server/server.c	/^	struct event *event;$/;"	m	struct:server_task_s	typeref:struct:server_task_s::event	file:
-event	src/libnet/server/ss.cc	/^struct event event;$/;"	v	typeref:struct:event
 event_base	src/include/libconcurrent/concurrent.h	/^	struct event_base *event_base;$/;"	m	struct:concurrent_master_s	typeref:struct:concurrent_master_s::event_base
 event_base	src/include/libconcurrent/concurrent.h	/^	struct event_base *event_base;$/;"	m	struct:concurrent_slave_s	typeref:struct:concurrent_slave_s::event_base
-event_base	src/libnet/server/ss.cc	/^	struct event_base *event_base;$/;"	m	struct:master_s	typeref:struct:master_s::event_base	file:
-event_base	src/libnet/server/ss.cc	/^struct event_base *event_base;$/;"	v	typeref:struct:event_base
 fd	src/libnet/server/server.c	/^	uint32_t fd;$/;"	m	struct:server_task_s	file:
 find_key	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_head * (*find_key)(char *key); $/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::find_key
 find_protocol_format	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*find_protocol_format)(struct protocol_analyzer_s *pa);$/;"	m	struct:protocol_analyzer_s
@@ -768,6 +770,7 @@ hmap	src/include/libdata_structure/hash_list_struct.h	/^	struct hash_map_s *hmap
 hmap	src/include/libproto_analyzer/protocol_analyzer.h	/^	hash_map_t *hmap;$/;"	m	struct:protocol_analyzer_s
 hmap_lock_type	src/include/libconcurrent/concurrent.h	/^	uint8_t hmap_lock_type;$/;"	m	struct:concurrent_task_admin_s
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon8
+id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_s	typeref:union:concurrent_s::__anon9
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon7
 immediate_shutdown	src/libthread_pool/threadpool.c	/^    immediate_shutdown = 1,$/;"	e	enum:__anon1	file:
 info	src/include/liballoc/allocator.h	/^	void (*info)(allocator_t * alloc);$/;"	m	struct:allocator_operations
@@ -968,8 +971,6 @@ list_splice_init	src/include/libdata_structure/list.h	/^static inline void list_
 list_splice_init	src/include/libdbg/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_splice_init	src/include/libproto_analyzer/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_t	src/include/libdata_structure/link_list_struct.h	/^}list_t;$/;"	t	typeref:struct:llist_list_s
-listen_fd	src/libnet/server/ss.cc	/^	uint32_t listen_fd;$/;"	m	struct:task_s	file:
-listen_handler	src/libnet/server/ss.cc	/^listen_handler(int fd,short event,void *arg)$/;"	f	file:
 llist	src/include/libdata_structure/link_list_struct.h	/^	struct llist_s *llist;$/;"	m	struct:llist_pos_s	typeref:struct:llist_pos_s::llist_s
 llist_begin	src/include/libdata_structure/link_list.h	/^llist_begin(llist_t *llist,list_pos_t *begin)$/;"	f
 llist_create	src/libdata_structure/link_list/link_list.c	/^llist_t *llist_create(allocator_t *allocator,uint8_t lock_type)$/;"	f
@@ -1019,17 +1020,15 @@ log_print_print_str	src/libdbg/debug_log.c	/^int log_print_print_str(debugger_t 
 log_print_print_str_vl	src/libdbg/debug_log.c	/^int log_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_list vl)$/;"	f
 log_print_regester	src/libdbg/debug_log.c	/^void log_print_regester()$/;"	f
 log_print_write_log	src/libdbg/debug_log.c	/^uint32_t log_print_write_log(FILE *fp,char *str)$/;"	f
-main	src/libnet/server/ss.cc	/^int main(int argc, char **argv)$/;"	f
 main	src/main.c	/^int main()$/;"	f
 main_switch	src/include/libdbg/debug.h	/^	uint8_t main_switch;$/;"	m	struct:debugger
 make_pair	src/include/libdata_structure/map_pair.h	/^static inline void make_pair(pair_t *p,void *key,void *value)$/;"	f
 map	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rbtree_map_s *map;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rbtree_map_s
 map_lock	src/include/libdata_structure/hash_list_struct.h	/^	sync_lock_t map_lock;$/;"	m	struct:hash_map_s
 map_lock	src/include/libdata_structure/rbtree_map_struct.h	/^	sync_lock_t map_lock;$/;"	m	struct:rbtree_map_s
+master	src/include/libconcurrent/concurrent.h	/^	concurrent_master_t *master;$/;"	m	struct:concurrent_s
 master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^static void master_event_handler_add_new_event($/;"	f	file:
 master_event_handler_server_listen	src/libnet/server/server.c	/^void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f
-master_event_handler_server_listen2	src/libnet/server/server.c	/^void master_event_handler_server_listen2(int fd, short event, void *arg)$/;"	f
-master_s	src/libnet/server/ss.cc	/^struct master_s{$/;"	s	file:
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
 mem_double	src/libini/iniparser.c	/^static void * mem_double(void * ptr, int size)$/;"	f	file:
 mem_used	src/include/libproto_analyzer/protocol_format_set.h	/^	void *mem_used;$/;"	m	struct:proto_info_list_s
@@ -1057,6 +1056,9 @@ n	src/include/libini/iniparser.h	/^	int n;$/;"	m	struct:_dictionary_
 name	src/include/liballoc/allocator.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:allocator
 name	src/include/libcre/sync_lock/sync_lock.h	/^	char name[SYNC_LOCK_NAME_MAX_LEN];$/;"	m	struct:sync_lock_module
 name	src/include/libproto_analyzer/protocol_format_set.h	/^	char name[MAX_NAME_LEN];$/;"	m	struct:proto_info_list_s
+new_ev_que	src/include/libconcurrent/concurrent.h	/^	llist_t *new_ev_que;$/;"	m	struct:concurrent_master_s
+new_ev_que	src/include/libconcurrent/concurrent.h	/^	llist_t *new_ev_que;$/;"	m	struct:concurrent_s
+new_event	src/include/libconcurrent/concurrent.h	/^	struct event new_event;$/;"	m	struct:concurrent_s	typeref:struct:concurrent_s::event
 next	src/include/liballoc/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
 next	src/include/liballoc/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::list_head
 next	src/include/libdata_structure/list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node::hlist_node
@@ -1127,6 +1129,7 @@ pfs_set_proto_format_3008	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^in
 pfs_set_proto_format_3019	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p)$/;"	f
 pfs_set_proto_info	src/libproto_analyzer/protocol_format_set.c	/^pfs_set_proto_info($/;"	f
 pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon8
+pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_s::__anon9
 pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon7
 pool	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head *pool;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
 pool	src/libthread_pool/tests/heavy.c	/^static threadpool_t *pool[QUEUES];$/;"	v	file:
@@ -1227,6 +1230,7 @@ rcv_notify_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_notify_fd;$/;"	m
 register_all_lib_modules	src/main.c	/^void register_all_lib_modules()$/;"	f
 rwlock	src/include/libcre/sync_lock/sync_lock.h	/^		pthread_rwlock_t rwlock;$/;"	m	union:sync_lock_s::lock
 server	src/libnet/server/server.c	/^int server(char *host,char *server)$/;"	f
+server2	src/libnet/server/server.c	/^int server2(char *host,char *server)$/;"	f
 server_create_socket	src/libnet/server/server.c	/^int server_create_socket(struct addrinfo *addr)$/;"	f
 server_init_task	src/libnet/server/server.c	/^int server_init_task(server_task_t *task,$/;"	f
 server_release_task	src/libnet/server/server.c	/^int server_release_task(server_task_t *task,concurrent_task_admin_t *admin)$/;"	f
@@ -1236,7 +1240,6 @@ set_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t set_bit_data(ui
 set_proto_info_attribs	src/libproto_analyzer/protocol_format_set.c	/^void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_list)$/;"	f
 set_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*set_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
 setnonblocking	src/libnet/server/server.c	/^int setnonblocking(int sockfd)$/;"	f
-setnonblocking	src/libnet/server/ss.cc	/^int setnonblocking(int sockfd)$/;"	f
 shutdown	src/libthread_pool/threadpool.c	/^  int shutdown;$/;"	m	struct:threadpool_t	file:
 size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t size;$/;"	m	struct:slab
 size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t size;$/;"	m	struct:slab_head_list
@@ -1267,6 +1270,7 @@ slave_event_handler_process_conn_bussiness	src/libnet/server/server.c	/^static v
 slave_event_handler_process_message	src/libconcurrent/concurrent.c	/^static void slave_event_handler_process_message(int fd, short event, void *arg)$/;"	f	file:
 slave_work_function	src/libnet/server/server.c	/^void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f
 snd_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int snd_add_new_event_fd;$/;"	m	struct:concurrent_master_s
+snd_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int snd_add_new_event_fd;$/;"	m	struct:concurrent_s
 snd_notify_fd	src/include/libconcurrent/concurrent.h	/^	int *snd_notify_fd;$/;"	m	struct:concurrent_master_s
 start	src/include/liballoc/allocator_ctr_alloc.h	/^	void *start;$/;"	m	struct:ctr_mem_pool
 started	src/libthread_pool/threadpool.c	/^  int started;$/;"	m	struct:threadpool_t	file:
@@ -1301,13 +1305,10 @@ sys_alloc_alloc	src/liballoc/sys_alloc/allocator_sys_alloc.c	/^void *sys_alloc_a
 sys_alloc_free	src/liballoc/sys_alloc/allocator_sys_alloc.c	/^void sys_alloc_free(allocator_t *alloc,void *addr)$/;"	f
 tail	src/libthread_pool/threadpool.c	/^  int tail;$/;"	m	struct:threadpool_t	file:
 task	src/include/libconcurrent/concurrent.h	/^	void *task;$/;"	m	struct:concurrent_message_s
-task	src/libnet/server/ss.cc	/^	struct task_s *task;$/;"	m	struct:master_s	typeref:struct:master_s::task_s	file:
 task_admin	src/include/libconcurrent/concurrent.h	/^	concurrent_task_admin_t *task_admin;$/;"	m	struct:concurrent_master_s
 task_admin	src/include/libconcurrent/concurrent.h	/^	concurrent_task_admin_t *task_admin;$/;"	m	struct:concurrent_slave_s
 task_admin	src/libconcurrent/test_concurrent.c	/^	concurrent_task_admin_t *task_admin;$/;"	m	struct:concurrent_task_s	file:
 task_count	src/include/libconcurrent/concurrent.h	/^	uint32_t task_count;$/;"	m	struct:concurrent_task_admin_s
-task_event	src/libnet/server/ss.cc	/^	struct event task_event;$/;"	m	struct:master_s	typeref:struct:master_s::event	file:
-task_s	src/libnet/server/ss.cc	/^struct task_s{$/;"	s	file:
 tasks	src/libthread_pool/tests/heavy.c	/^static int tasks[SIZE], left;$/;"	v	file:
 tasks	src/libthread_pool/tests/thrdtest.c	/^static int tasks = 0, done = 0;$/;"	v	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
@@ -1356,6 +1357,7 @@ threadpool_thread	src/libthread_pool/threadpool.c	/^static void *threadpool_thre
 threadpool_thread_failure	src/include/libthread_pool/threadpool.h	/^    threadpool_thread_failure = -5$/;"	e	enum:__anon3
 threads	src/libthread_pool/threadpool.c	/^  pthread_t *threads;$/;"	m	struct:threadpool_t	file:
 tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon8
+tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_s::__anon9
 tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon7
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rb_root
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
@@ -1433,6 +1435,5 @@ windows_mutex_unlock	src/libcre/sync_lock/windows/windows_mutex.c	/^int windows_
 windows_user_mode_mutex_register	src/libcre/sync_lock/windows/windows_mutex.c	/^int  windows_user_mode_mutex_register(){$/;"	f
 work	src/libconcurrent/test_concurrent.c	/^void work(concurrent_slave_t *slave,void *arg)$/;"	f
 work_func	src/include/libconcurrent/concurrent.h	/^	void (*work_func)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:concurrent_message_s
-work_func	src/libnet/server/ss.cc	/^	void (*work_func)(int fd,short event,void *arg);$/;"	m	struct:task_s	file:
 work_id	src/include/libconcurrent/concurrent.h	/^	uint8_t work_id;$/;"	m	struct:concurrent_slave_s
 ycm_core	.ycm_extra_conf.py	/^import ycm_core$/;"	i

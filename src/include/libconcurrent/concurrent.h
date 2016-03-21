@@ -42,6 +42,7 @@ typedef struct concurrent_slave_s{
 struct concurrent_message_s{
 #define MAX_TASK_KEY_LEN 10
 	void *task;
+	void *event;
 	void (*work_func)(concurrent_slave_t *slave,void *arg);
 	uint32_t message_id;
 #undef MAX_TASK_KEY_LEN
@@ -53,6 +54,7 @@ typedef struct concurrent_master_s{
 	uint8_t concurrent_work_type;
 	allocator_t *allocator;
 	llist_t *message_que;
+	llist_t *new_ev_que;
 	int *snd_notify_fd;
 	concurrent_slave_t *slave;
 	uint8_t assignment_count;
@@ -68,6 +70,19 @@ typedef struct concurrent_master_s{
 	uint8_t concurrent_master_inited_flag;
 }concurrent_master_t;
 
+typedef struct concurrent_s{
+	struct event new_event;
+	uint8_t concurrent_work_type;
+	allocator_t *allocator;
+	llist_t *new_ev_que;
+	union{
+		pthread_t tid;
+		pid_t pid;
+	}id;
+	int snd_add_new_event_fd;
+	concurrent_master_t *master;
+	sync_lock_t concurrent_lock;
+}concurrent_t;
 
 concurrent_task_admin_t *concurrent_task_admin_create(allocator_t *allocator);
 int concurrent_task_admin_init(concurrent_task_admin_t *task_admin, uint8_t key_size,uint32_t data_size,uint32_t bucket_size, uint8_t admin_lock_type,uint8_t hmap_lock_type);
@@ -92,8 +107,12 @@ int concurrent_slave_add_new_event(concurrent_slave_t *slave, int fd,int event_f
 int concurrent_master_add_new_event(concurrent_master_t *master, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *arg);
 int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin, void *key);
 int concurrent_master_choose_slave(concurrent_master_t *master);
-int concurrent_master_add_task(concurrent_master_t *master, void *task,void *key);
 int concurrent_master_add_task_and_message(concurrent_master_t *master, void *task,void *key, void (*work_func)(concurrent_slave_t *slave,void *arg));
+void *concurrent_master_add_task(concurrent_master_t *master, void *task,void *key);
 
+concurrent_t *concurrent_create(allocator_t *allocator);
+int concurrent_init(concurrent_t *c, uint8_t concurrent_work_type, uint32_t task_size, uint8_t slave_amount, uint8_t concurrent_lock_type);
+int concurrent_add_event_to_master(concurrent_t *c, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *arg);
+void concurrent_destroy(concurrent_t *c);
 
 #endif

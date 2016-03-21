@@ -154,12 +154,18 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 		 */
 	}
 	hmap->node_count++;
-	dbg_str(DBG_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,first =%p,next=%p,begin.hash_map_pos=%p",
+	dbg_str(DBG_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,insert_hash_node_pos=%p",
 			hmap->node_count,
 			bucket_pos,
-			hlist[bucket_pos].first,
-			hlist[bucket_pos].first->next,
-			hmap->begin.hlist_node_p);
+			&mnode->hlist_node);
+	/*
+	 *dbg_str(DBG_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,first =%p,next=%p,begin.hash_map_pos=%p",
+	 *        hmap->node_count,
+	 *        bucket_pos,
+	 *        hlist[bucket_pos].first,
+	 *        hlist[bucket_pos].first->next,
+	 *        hmap->begin.hlist_node_p);
+	 */
 
 	sync_unlock(&hmap->map_lock);
 
@@ -217,7 +223,7 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 	}
 	hlist_del(pos->hlist_node_p);
 	hmap->node_count--;
-	dbg_str(DBG_IMPORTANT,"del hash_map ,hash map count=%d",hmap->node_count);
+	dbg_str(DBG_IMPORTANT,"del hash_map ,hash map count=%d,del node pos=%p",hmap->node_count,pos->hlist_node_p);
 
 	sync_unlock(&hmap->map_lock);
 
