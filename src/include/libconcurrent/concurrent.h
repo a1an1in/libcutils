@@ -75,10 +75,6 @@ typedef struct concurrent_s{
 	uint8_t concurrent_work_type;
 	allocator_t *allocator;
 	llist_t *new_ev_que;
-	union{
-		pthread_t tid;
-		pid_t pid;
-	}id;
 	int snd_add_new_event_fd;
 	concurrent_master_t *master;
 	sync_lock_t concurrent_lock;
@@ -100,9 +96,6 @@ int concurrent_master_init_message(struct concurrent_message_s *message, void (*
 int concurrent_master_destroy(concurrent_master_t *master);
 int concurrent_master_init(concurrent_master_t *master, uint8_t concurrent_work_type, uint32_t task_size, uint8_t slave_amount);
 void concurrent_master_process_event(int fd, short event, void *arg);
-/*
- *int concurrent_master_add_task(concurrent_master_t *master, void *task,void *key, void (*work_func)(concurrent_slave_t *slave,void *arg));
- */
 int concurrent_slave_add_new_event(concurrent_slave_t *slave, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *task);
 int concurrent_master_add_new_event(concurrent_master_t *master, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *arg);
 int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin, void *key);

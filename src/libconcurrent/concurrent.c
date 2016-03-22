@@ -134,7 +134,9 @@ static void slave_event_handler_process_message(int fd, short event, void *arg)
 	list_t *l;
 	struct concurrent_message_s *message;
 
-	dbg_str(DBG_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
+	/*
+	 *dbg_str(DBG_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
+	 */
 	if (read(fd, buf, 1) != 1){
 		dbg_str(DBG_WARNNING,"cannot read form pipe");
 		return;
@@ -420,7 +422,6 @@ int concurrent_master_add_message(concurrent_master_t *master,
 	char command = 'c';
 
 	llist_push_back(master->message_que,message);
-	master->message_count++;
 	concurrent_master_notify_slave(master,command);
 
 	return 0;
@@ -438,7 +439,8 @@ int concurrent_master_init_message(struct concurrent_message_s *message,
 }
 /**
  * @synopsis concurrent_master_add_new_event 
- * 			 we can assign task or listenning fd to slave thread through this func
+ * 			 this func is obsolete, for we can't add event to master thread derectly,the libevent may not support,
+ * 			 so we should use "concurrent_add_event_to_master" instead 
  *
  * @param master
  * @param fd
@@ -476,8 +478,6 @@ int concurrent_master_destroy(concurrent_master_t *master)
 	allocator_mem_free(master->allocator,master);
 	return 0;
 }
-
-
 
 
 concurrent_t *concurrent_create(allocator_t *allocator)
@@ -521,6 +521,8 @@ int concurrent_add_event_to_master(concurrent_t *c,
 		void *arg)
 {
 	struct concurrent_message_s message;
+
+	while(c->master->concurrent_master_inited_flag != 1);
 
 	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
 	event_set(event,fd, event_flag, event_handler, c->master);

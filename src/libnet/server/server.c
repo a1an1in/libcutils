@@ -63,12 +63,14 @@ int server_release_task(server_task_t *task,concurrent_task_admin_t *admin);
 int setnonblocking(int sockfd)
 {
 	if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
-			return -1;
-		}
+		return -1;
+	}
 	return 0;
+
 }
 #if 1
-//version 5, using pipe mode,without task
+//version 4, using pipe mode,without task admin
+int server_release_task_without_task_admin(server_task_t *task);
 static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)
 {
     int nread;
@@ -79,12 +81,12 @@ static void slave_event_handler_process_conn_bussiness(int fd, short event, void
 	dbg_str(DBG_VIP,"slave_work start,conn_fd=%d",fd);
     if (nread < 0) {
         dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		server_release_task(task,task->slave->task_admin);
+		server_release_task_without_task_admin(task);
 		close(fd);//modify for test
         return;
     } 
     write(fd, buf, nread);//响应客户端  
-	server_release_task(task,task->slave->task_admin);
+	server_release_task_without_task_admin(task);
 	close(fd);
 	dbg_str(DBG_DETAIL,"slave_work done");
 }
@@ -100,17 +102,11 @@ int server_init_task(server_task_t *task,
 	task->slave = slave;
 	return 0;
 }
-int server_release_task(server_task_t *task,concurrent_task_admin_t *admin)
+int server_release_task_without_task_admin(server_task_t *task)
 {
-	dbg_str(DBG_DETAIL,"lock at release_task");
-	sync_lock(&admin->admin_lock,NULL);
-	dbg_str(DBG_DETAIL,"server_release_task");
 	event_del(task->event);
 	allocator_mem_free(task->allocator,task->event);
-	concurrent_task_admin_del_by_key(admin, task->key);
-	sync_unlock(&admin->admin_lock);
-	dbg_str(DBG_DETAIL,"unlock at release_task");
-
+	allocator_mem_free(task->allocator,task);
 
 	return 0;
 }
@@ -136,10 +132,9 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 	int connfd;
 	struct sockaddr_in cliaddr;
 	socklen_t socklen;
-	server_task_t task;
+	server_task_t *task;
 	char key[10];
-	struct event *ev;
-	int num = 0;
+	struct concurrent_message_s message;
 
 	connfd = accept(fd, (struct sockaddr *)&cliaddr,&socklen);
 	if (connfd < 0) {
@@ -152,81 +147,20 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 
 	sprintf(key,"%d",connfd);
 
-	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,"
-			"slave %d is choosed,listen_fd=%d,connfd=%d",num,fd,connfd);
-	server_init_task(&task,
+	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
+
+	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
+	server_init_task(task,
 			connfd,//int fd, 
 			key,//void *key, 
-			ev,//struct event *ev,
+			NULL,//struct event *ev,
 			master->allocator,
 			NULL);
 
-	concurrent_master_add_task_and_message(master,&task,(void *)task.key,slave_work_function);
-	dbg_str(DBG_DETAIL,"listen end");
-
-    return ;
-}
-#endif
-#if 0
-//version 4,without task mode
-static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)
-{
-    int nread;
-    char buf[MAXLINE];
-    nread = read(fd, buf, MAXLINE);//读取客户端socket流
-
-	dbg_str(DBG_DETAIL,"slave_work start,conn_fd=%d",fd);
-    if (nread < 0) {
-        dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		close(fd);//modify for test
-        return;
-    } 
-    write(fd, buf, nread);//响应客户端  
-	event_del(arg);
-	close(fd);
-	dbg_str(DBG_DETAIL,"slave_work done");
-}
-
-void master_event_handler_server_listen(int fd, short event, void *arg)
-{
-	concurrent_master_t *master = (concurrent_master_t *)arg;
-	int connfd;
-	struct sockaddr_in cliaddr;
-	socklen_t socklen;
-	server_task_t task,*t;
-	hash_map_pos_t pos;
-	char key[10];
-	concurrent_slave_t *slave;
-	struct event *ev;
-	int num = 0;
-
-	connfd = accept(fd, (struct sockaddr *)&cliaddr,&socklen);
-	if (connfd < 0) {
-		perror("accept error");
-		return;
-	}
-	if (setnonblocking(connfd) < 0) {
-		perror("setnonblocking error");
-	}
-
-	sprintf(key,"%d",connfd);
-	num = concurrent_master_choose_slave(master);
-	slave = master->slave + num;
 	master->assignment_count++;
-	ev = (struct event *)allocator_mem_alloc(master->allocator,sizeof(struct event));
-	if(ev == NULL){
-		dbg_str(DBG_ERROR,"alloc event err");
-		return;
-	}
-
-	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,"
-			"slave %d is choosed,listen_fd=%d,connfd=%d",num,fd,connfd);
-	concurrent_slave_add_new_event(slave,
-			connfd,
-			EV_READ | EV_PERSIST,//int event_flag,
-			ev,
-			slave_event_handler_process_conn_bussiness,//void (*event_handler)(int fd, short event, void *arg))
-			ev);
+	concurrent_master_init_message(&message, slave_work_function,task,0);
+	concurrent_master_add_message(master,&message);
+	dbg_str(DBG_DETAIL,"listen end");
 
     return ;
 }
@@ -469,67 +403,20 @@ int server_create_socket(struct addrinfo *addr)
 
     return listen_fd;
 }
-int server2(char *host,char *server)
-{
-	struct addrinfo  *addr, hint;
-	int err;
-	allocator_t *allocator;
-	concurrent_master_t *master;
-	int ret = 0;
-	int server_fd;
-	struct event listen_event;
-
-	bzero(&hint, sizeof(hint));
-	hint.ai_family = AF_INET;
-	hint.ai_socktype = SOCK_STREAM;
-
-	dbg_str(DBG_DETAIL,"run at here");
-	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
-		printf("getaddrinfo error: %s", gai_strerror(err));
-	if(addr != NULL){
-		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
-	}else{
-		dbg_str(DBG_ERROR,"getaddrinfo err");
-		exit(1);
-	}
-	server_fd = server_create_socket(addr);
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
-
-	master = concurrent_master_create(allocator);
-	concurrent_master_init(master,
-			SERVER_WORK_TYPE_THREAD,//uint8_t concurrent_slave_work_function_type,
-			sizeof(server_task_t),
-			2);
-
-	concurrent_master_add_new_event(master,
-			server_fd,
-			EV_READ | EV_PERSIST,
-			&listen_event,
-			master_event_handler_server_listen,
-			NULL);
-
-	freeaddrinfo(addr);
-
-	pause();
-
-	return ret;
-}
 int server(char *host,char *server)
 {
 	struct addrinfo  *addr, hint;
 	int err;
 	allocator_t *allocator;
-	concurrent_master_t *master;
 	int ret = 0;
 	int server_fd;
 	struct event listen_event;
+	concurrent_t *c ;
 
 	bzero(&hint, sizeof(hint));
 	hint.ai_family = AF_INET;
 	hint.ai_socktype = SOCK_STREAM;
 
-	dbg_str(DBG_DETAIL,"run at here");
 	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
 		printf("getaddrinfo error: %s", gai_strerror(err));
 	if(addr != NULL){
@@ -542,21 +429,7 @@ int server(char *host,char *server)
 
 	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
-	/*
-	 *master = concurrent_master_create(allocator);
-	 *concurrent_master_init(master,
-	 *        SERVER_WORK_TYPE_THREAD,//uint8_t concurrent_slave_work_function_type,
-	 *        sizeof(server_task_t),
-	 *        2);
-	 *concurrent_master_add_new_event(master,
-	 *        server_fd,
-	 *        EV_READ | EV_PERSIST,
-	 *        &listen_event,
-	 *        master_event_handler_server_listen,
-	 *        NULL);
-	 */
-
-	concurrent_t *c = concurrent_create(allocator);
+	c = concurrent_create(allocator);
 	concurrent_init(c,
 			SERVER_WORK_TYPE_THREAD,
 			sizeof(server_task_t),//uint32_t task_size, 
