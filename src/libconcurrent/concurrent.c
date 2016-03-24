@@ -269,7 +269,6 @@ concurrent_master_t *concurrent_master_create(allocator_t *allocator)
 }
 /**
  * @synopsis master_event_handler_add_new_event 
- * 			just let main thread listen a fd, may be useful future 
  *
  * @param fd 
  * @param event
@@ -540,7 +539,7 @@ int concurrent_add_event_to_master(concurrent_t *c,
 void concurrent_destroy(concurrent_t *c)
 {
 	concurrent_master_destroy(c->master);
-	//del list
-	//...
+	//del list...
+	//del event of master...
 	allocator_mem_free(c->allocator,c);
 }

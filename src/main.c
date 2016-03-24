@@ -114,17 +114,23 @@ void test_libnet()
 {
 	test_server();
 }
-int main()
+int init_libcdf()
 {
-	int ret = 0;
-
-	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
 	register_all_lib_modules();
 
 	debugger_gp = debugger_creator("dbg.ini",0);
 	debugger_init(debugger_gp);
 
 	dbg_str(DBG_DETAIL,"debugger is start up");
+
+	return 0;
+}
+int main()
+{
+	int ret = 0;
+
+	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
+	init_libcdf();
 
 	test_allocator();
 	test_datastructure();

@@ -114,7 +114,7 @@ void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 
-	dbg_str(DBG_DETAIL,"slave_work_function done,rev conn =%d,task key %s",task->fd,task->key);
+	dbg_str(DBG_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
 	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
 	task->slave = slave;
 	concurrent_slave_add_new_event(
@@ -157,7 +157,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 			master->allocator,
 			NULL);
 
-	master->assignment_count++;
+	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, slave_work_function,task,0);
 	concurrent_master_add_message(master,&message);
 	dbg_str(DBG_DETAIL,"listen end");
@@ -165,6 +165,94 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
     return ;
 }
 #endif
+int server_create_socket(struct addrinfo *addr)
+{
+    int listenq = 1024;
+    struct rlimit rt;
+	int listen_fd;
+    int opt = 1;
+
+    /* 设置每个进程允许打开的最大文件数 */
+    rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
+    if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
+        perror("setrlimit error");
+        return -1;
+    }
+
+    if ((listen_fd = socket(addr->ai_family, addr->ai_socktype, 0)) == -1) {
+        perror("can't create socket file");
+        return -1;
+    }
+
+    setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+    if (setnonblocking(listen_fd) < 0) {
+        perror("setnonblock error");
+    }
+
+    if (bind(listen_fd, (struct sockaddr *)addr->ai_addr, sizeof(struct sockaddr)) == -1) {
+        perror("bind error");
+        return -1;
+    } 
+    if (listen(listen_fd, listenq) == -1) {
+        perror("listen error");
+        return -1;
+    }
+
+    return listen_fd;
+}
+int server(char *host,char *server)
+{
+	struct addrinfo  *addr, hint;
+	int err;
+	allocator_t *allocator;
+	int ret = 0;
+	int server_fd;
+	struct event listen_event;
+	concurrent_t *c ;
+
+	bzero(&hint, sizeof(hint));
+	hint.ai_family = AF_INET;
+	hint.ai_socktype = SOCK_STREAM;
+
+	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
+		printf("getaddrinfo error: %s", gai_strerror(err));
+	if(addr != NULL){
+		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
+	}else{
+		dbg_str(DBG_ERROR,"getaddrinfo err");
+		exit(1);
+	}
+	server_fd = server_create_socket(addr);
+
+	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
+
+	c = concurrent_create(allocator);
+	concurrent_init(c,
+			SERVER_WORK_TYPE_THREAD,
+			sizeof(server_task_t),//uint32_t task_size, 
+			2,//uint8_t slave_amount, 
+			1);//uint8_t concurrent_lock_type);
+	concurrent_add_event_to_master(c,
+			server_fd,//int fd,
+			EV_READ | EV_PERSIST,//int event_flag,
+			&listen_event,//struct event *event, 
+			master_event_handler_server_listen,//void (*event_handler)(int fd, short event, void *arg),
+			NULL);//void *arg);
+
+	freeaddrinfo(addr);
+
+	pause();
+	/*
+	 *void concurrent_destroy(concurrent_t *c);
+	 */
+
+	return ret;
+}
+int test_server()
+{
+	return server("127.0.0.1","6888");
+}
 #if 0
 /*
  *version 3,master assign task derectly mode,this may have problem,for libevent may not support
@@ -367,91 +455,3 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
     return ;
 }
 #endif
-int server_create_socket(struct addrinfo *addr)
-{
-    int listenq = 1024;
-    struct rlimit rt;
-	int listen_fd;
-    int opt = 1;
-
-    /* 设置每个进程允许打开的最大文件数 */
-    rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
-    if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
-        perror("setrlimit error");
-        return -1;
-    }
-
-    if ((listen_fd = socket(addr->ai_family, addr->ai_socktype, 0)) == -1) {
-        perror("can't create socket file");
-        return -1;
-    }
-
-    setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-
-    if (setnonblocking(listen_fd) < 0) {
-        perror("setnonblock error");
-    }
-
-    if (bind(listen_fd, (struct sockaddr *)addr->ai_addr, sizeof(struct sockaddr)) == -1) {
-        perror("bind error");
-        return -1;
-    } 
-    if (listen(listen_fd, listenq) == -1) {
-        perror("listen error");
-        return -1;
-    }
-
-    return listen_fd;
-}
-int server(char *host,char *server)
-{
-	struct addrinfo  *addr, hint;
-	int err;
-	allocator_t *allocator;
-	int ret = 0;
-	int server_fd;
-	struct event listen_event;
-	concurrent_t *c ;
-
-	bzero(&hint, sizeof(hint));
-	hint.ai_family = AF_INET;
-	hint.ai_socktype = SOCK_STREAM;
-
-	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
-		printf("getaddrinfo error: %s", gai_strerror(err));
-	if(addr != NULL){
-		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
-	}else{
-		dbg_str(DBG_ERROR,"getaddrinfo err");
-		exit(1);
-	}
-	server_fd = server_create_socket(addr);
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
-
-	c = concurrent_create(allocator);
-	concurrent_init(c,
-			SERVER_WORK_TYPE_THREAD,
-			sizeof(server_task_t),//uint32_t task_size, 
-			2,//uint8_t slave_amount, 
-			1);//uint8_t concurrent_lock_type);
-	concurrent_add_event_to_master(c,
-			server_fd,//int fd,
-			EV_READ | EV_PERSIST,//int event_flag,
-			&listen_event,//struct event *event, 
-			master_event_handler_server_listen,//void (*event_handler)(int fd, short event, void *arg),
-			NULL);//void *arg);
-
-	freeaddrinfo(addr);
-
-	pause();
-	/*
-	 *void concurrent_destroy(concurrent_t *c);
-	 */
-
-	return ret;
-}
-int test_server()
-{
-	return server("127.0.0.1","6888");
-}

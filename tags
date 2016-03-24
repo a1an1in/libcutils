@@ -770,7 +770,6 @@ hmap	src/include/libdata_structure/hash_list_struct.h	/^	struct hash_map_s *hmap
 hmap	src/include/libproto_analyzer/protocol_analyzer.h	/^	hash_map_t *hmap;$/;"	m	struct:protocol_analyzer_s
 hmap_lock_type	src/include/libconcurrent/concurrent.h	/^	uint8_t hmap_lock_type;$/;"	m	struct:concurrent_task_admin_s
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon8
-id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_s	typeref:union:concurrent_s::__anon9
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon7
 immediate_shutdown	src/libthread_pool/threadpool.c	/^    immediate_shutdown = 1,$/;"	e	enum:__anon1	file:
 info	src/include/liballoc/allocator.h	/^	void (*info)(allocator_t * alloc);$/;"	m	struct:allocator_operations
@@ -1129,7 +1128,6 @@ pfs_set_proto_format_3008	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^in
 pfs_set_proto_format_3019	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p)$/;"	f
 pfs_set_proto_info	src/libproto_analyzer/protocol_format_set.c	/^pfs_set_proto_info($/;"	f
 pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon8
-pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_s::__anon9
 pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon7
 pool	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head *pool;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
 pool	src/libthread_pool/tests/heavy.c	/^static threadpool_t *pool[QUEUES];$/;"	v	file:
@@ -1230,10 +1228,9 @@ rcv_notify_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_notify_fd;$/;"	m
 register_all_lib_modules	src/main.c	/^void register_all_lib_modules()$/;"	f
 rwlock	src/include/libcre/sync_lock/sync_lock.h	/^		pthread_rwlock_t rwlock;$/;"	m	union:sync_lock_s::lock
 server	src/libnet/server/server.c	/^int server(char *host,char *server)$/;"	f
-server2	src/libnet/server/server.c	/^int server2(char *host,char *server)$/;"	f
 server_create_socket	src/libnet/server/server.c	/^int server_create_socket(struct addrinfo *addr)$/;"	f
 server_init_task	src/libnet/server/server.c	/^int server_init_task(server_task_t *task,$/;"	f
-server_release_task	src/libnet/server/server.c	/^int server_release_task(server_task_t *task,concurrent_task_admin_t *admin)$/;"	f
+server_release_task_without_task_admin	src/libnet/server/server.c	/^int server_release_task_without_task_admin(server_task_t *task)$/;"	f
 server_task_s	src/libnet/server/server.c	/^typedef struct server_task_s{$/;"	s	file:
 server_task_t	src/libnet/server/server.c	/^}server_task_t;$/;"	t	typeref:struct:server_task_s	file:
 set_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t set_bit_data(uint8_t *buf,uint8_t data,uint8_t bit_pos,uint8_t len)$/;"	f
@@ -1357,7 +1354,6 @@ threadpool_thread	src/libthread_pool/threadpool.c	/^static void *threadpool_thre
 threadpool_thread_failure	src/include/libthread_pool/threadpool.h	/^    threadpool_thread_failure = -5$/;"	e	enum:__anon3
 threads	src/libthread_pool/threadpool.c	/^  pthread_t *threads;$/;"	m	struct:threadpool_t	file:
 tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon8
-tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_s::__anon9
 tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon7
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rb_root
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
