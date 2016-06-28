@@ -114,7 +114,7 @@ void test_libnet()
 {
 	test_server();
 }
-int init_libcdf()
+int init_libcuitls()
 {
 	register_all_lib_modules();
 
@@ -130,7 +130,7 @@ int main()
 	int ret = 0;
 
 	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
-	init_libcdf();
+	init_libcuitls();
 
 	test_allocator();
 	test_datastructure();
