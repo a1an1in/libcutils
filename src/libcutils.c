@@ -58,27 +58,25 @@
 
 debugger_t *debugger_gp;
 
-void register_all_lib_modules()
-{
-	libdbg_register_modules();
-	liballoc_register_modules();
-	libcre_register_modules();
-}
 int __attribute__((constructor)) init_libcuitls()
 {
 	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
 	printf("init libcuitls\n");
-	register_all_lib_modules();
+
+	libdbg_register_modules();
+	liballoc_register_modules();
+	libcre_register_modules();
 
 	debugger_gp = debugger_creator("dbg.ini",0);
 	debugger_init(debugger_gp);
 
-	dbg_str(DBG_DETAIL,"debugger is start up");
+	dbg_str(DBG_DETAIL,"libcutils has inited, you can use it now.");
 
 	return 0;
 }
 int  __attribute__((destructor)) destroy_libcuitls()
 {
 	printf("destroy libcuitls\n");
-	//....
+	debugger_destroy(debugger_gp);
+	//...,there may be some lib not been destroyed.
 }
