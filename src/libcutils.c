@@ -43,74 +43,42 @@
  * 
  */
 #include <stdio.h>
+
 #include "libdbg/debug.h"
+#include "libdbg/libdbg_register_modules.h"
+#include "liballoc/liballoc_register_modules.h"
+#include "libcre/libcre_register_modules.h"
 
-void test_datastructure()
-{
-	/*
-	 *test_datastructure_hashlist();
-	 */
-	/*
-	 *test_datastructure_link_list();
-	 */
-	/*
-	 *test_datastructure_rbtree_map();
-	 */
-	test_datastructure_vector();
-	 
-}
-void test_analyzer()
-{
-	/*
-	 *test_pdt_proto_analyzer();
-	 */
-	/*
-	 *test_pdu_proto_analyzer();
-	 */
-}
-void test_allocator()
-{
-	/*
-	 *test_ctr_alloc();
-	 */
-}
-void test_libthread_pool()
-{
-	/*
-	 *test_shutdown();
-	 */
-	/*
-	 *test_thrdtest();
-	 */
-}
-void test_libconcurrent()
-{
-	/*
-	 *test_concurrent3();
-	 */
-}
-void test_libnet()
-{
-	/*
-	 *test_server();
-	 */
-}
+#include "libdata_structure/test_datastructure.h"
+#include "libproto_analyzer/test_proto_analyzer.h"
+#include "libconcurrent/test_concurrent.h"
+#include "libnet/server.h"
 
-int main()
+#define LIBCDF_VERSION "1.2.1.0"
+
+debugger_t *debugger_gp;
+
+void register_all_lib_modules()
 {
-	int ret = 0;
-
-	dbg_str(DBG_DETAIL,"test begin");
-
-	test_allocator();
-	test_datastructure();
-	test_analyzer();
-	test_libthread_pool();
-	test_libconcurrent();
-	test_libnet();
-
-	dbg_str(DBG_DETAIL,"test end");
-
-	return ret;
+	libdbg_register_modules();
+	liballoc_register_modules();
+	libcre_register_modules();
 }
+int __attribute__((constructor)) init_libcuitls()
+{
+	printf("LIBCDF_VERSION:%s\n",LIBCDF_VERSION);
+	printf("init libcuitls\n");
+	register_all_lib_modules();
 
+	debugger_gp = debugger_creator("dbg.ini",0);
+	debugger_init(debugger_gp);
+
+	dbg_str(DBG_DETAIL,"debugger is start up");
+
+	return 0;
+}
+int  __attribute__((destructor)) destroy_libcuitls()
+{
+	printf("destroy libcuitls\n");
+	//....
+}

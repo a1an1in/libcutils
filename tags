@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 A	src/libdata_structure/test/test_hashmap.c	/^struct A{$/;"	s	file:
 A	src/libdata_structure/test/test_rbtree_map.c	/^struct A{$/;"	s	file:
 ALLOCATOR_TYPE_CTR_MALLOC	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_CTR_MALLOC,$/;"	e	enum:allocator_type
@@ -231,18 +231,18 @@ OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	152;"	d
 OPEN_DEBUG	src/include/libdbg/debug.h	141;"	d
 PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	103;"	d
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
-PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon6
-PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon6
-PROTO_0x3002	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3002,	$/;"	e	enum:__anon6
-PROTO_0x3003	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3003,	$/;"	e	enum:__anon6
-PROTO_0x3004	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3004,	$/;"	e	enum:__anon6
-PROTO_0x3005	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3005,	$/;"	e	enum:__anon6
-PROTO_0x3006	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3006,	$/;"	e	enum:__anon6
-PROTO_0x3007	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3007,	$/;"	e	enum:__anon6
-PROTO_0x3008	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3008 ,	$/;"	e	enum:__anon6
-PROTO_0x3009	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3009 ,	$/;"	e	enum:__anon6
-PROTO_0x300A	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300A,	$/;"	e	enum:__anon6
-PROTO_0x300B	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300B,	$/;"	e	enum:__anon6
+PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon3
+PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon3
+PROTO_0x3002	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3002,	$/;"	e	enum:__anon3
+PROTO_0x3003	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3003,	$/;"	e	enum:__anon3
+PROTO_0x3004	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3004,	$/;"	e	enum:__anon3
+PROTO_0x3005	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3005,	$/;"	e	enum:__anon3
+PROTO_0x3006	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3006,	$/;"	e	enum:__anon3
+PROTO_0x3007	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3007,	$/;"	e	enum:__anon3
+PROTO_0x3008	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3008 ,	$/;"	e	enum:__anon3
+PROTO_0x3009	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3009 ,	$/;"	e	enum:__anon3
+PROTO_0x300A	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300A,	$/;"	e	enum:__anon3
+PROTO_0x300B	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300B,	$/;"	e	enum:__anon3
 PROTO_NUM	src/libproto_analyzer/test/pdt_drv_proto_format.h	4;"	d
 PTHREAD_MUTEX_LOCK	src/include/libcre/sync_lock/sync_lock.h	/^	PTHREAD_MUTEX_LOCK = 1,$/;"	e	enum:sync_lock_type
 PTHREAD_RWLOCK	src/include/libcre/sync_lock/sync_lock.h	/^	PTHREAD_RWLOCK,$/;"	e	enum:sync_lock_type
@@ -355,6 +355,7 @@ __HASH_LIST_ST_H__	src/include/libdata_structure/hash_list_struct.h	19;"	d
 __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
 __KEY_CMP_FPT__	src/include/libdata_structure/map_pair.h	31;"	d
 __KEY_CMP_FPT__	src/include/libdata_structure/rbtree_map_struct.h	33;"	d
+__LIBCDF_H__	src/include/libcdf.h	2;"	d
 __LIBCRE_H__	src/include/libcre/libcre.h	19;"	d
 __LINK_LIST_H__	src/include/libdata_structure/link_list.h	19;"	d
 __LINK_LIST_STRUCT_H__	src/include/libdata_structure/link_list_struct.h	19;"	d
@@ -454,7 +455,7 @@ allocator_t	src/include/liballoc/allocator.h	/^}allocator_t;$/;"	t	typeref:struc
 allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m	struct:allocator
 allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m	struct:allocator_module
 allocator_type	src/include/liballoc/allocator.h	/^enum allocator_type{$/;"	g
-argument	src/libthread_pool/threadpool.c	/^    void *argument;$/;"	m	struct:__anon2	file:
+argument	src/libthread_pool/threadpool.c	/^    void *argument;$/;"	m	struct:__anon8	file:
 assignment_count	src/include/libconcurrent/concurrent.h	/^	uint8_t assignment_count;$/;"	m	struct:concurrent_master_s
 b	src/include/libcre/sync_lock/sync_lock.h	/^		int b;$/;"	m	union:sync_lock_s::lock
 b	src/libdata_structure/test/test_hashmap.c	/^	int b;$/;"	m	struct:A	file:
@@ -540,7 +541,7 @@ count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct
 count	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^	int count;$/;"	m	struct:pa_array_s	file:
 count	src/libthread_pool/threadpool.c	/^  int count;$/;"	m	struct:threadpool_t	file:
 create_pair	src/include/libdata_structure/map_pair.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
-ctr_alloc	src/include/liballoc/allocator.h	/^		ctr_alloc_t ctr_alloc;$/;"	m	union:allocator::__anon5
+ctr_alloc	src/include/liballoc/allocator.h	/^		ctr_alloc_t ctr_alloc;$/;"	m	union:allocator::__anon4
 ctr_alloc_alloc	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)$/;"	f
 ctr_alloc_destroy	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^void ctr_alloc_destroy(allocator_t *alloc)$/;"	f
 ctr_alloc_free	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^void ctr_alloc_free(allocator_t *alloc,void *addr)$/;"	f
@@ -661,13 +662,13 @@ free_mem	src/include/libproto_analyzer/protocol_format_set.h	/^	free_mem_fptr fr
 free_mem_fptr	src/include/libproto_analyzer/protocol_format_set.h	/^typedef void (*free_mem_fptr)(void *mem_used);$/;"	t
 free_proto_info_list_mem	src/libproto_analyzer/protocol_format_set.c	/^void free_proto_info_list_mem(void *mem_used)$/;"	f
 free_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **free_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
-function	src/libthread_pool/threadpool.c	/^    void (*function)(void *);$/;"	m	struct:__anon2	file:
+function	src/libthread_pool/threadpool.c	/^    void (*function)(void *);$/;"	m	struct:__anon8	file:
 get_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t get_bit_data(uint32_t data,uint8_t bit_pos,uint8_t len)$/;"	f
 get_cont_pdu_len	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_len(buffer_t *buffer_p,uint16_t os) $/;"	f
 get_cont_pdu_num	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_num(buffer_t *buffer_p) $/;"	f
 get_real_alloc_mem_size	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)$/;"	f
 get_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*get_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
-graceful_shutdown	src/libthread_pool/threadpool.c	/^    graceful_shutdown  = 2$/;"	e	enum:__anon1	file:
+graceful_shutdown	src/libthread_pool/threadpool.c	/^    graceful_shutdown  = 2$/;"	e	enum:__anon7	file:
 hash	src/include/libini/iniparser.h	/^	unsigned *hash;$/;"	m	struct:_dictionary_
 hash_func	src/include/libdata_structure/hash_list_struct.h	/^	hash_func_fpt hash_func;$/;"	m	struct:hash_map_s
 hash_func_fpt	src/include/libdata_structure/hash_list_struct.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
@@ -769,9 +770,9 @@ hmap	src/include/libconcurrent/concurrent.h	/^	hash_map_t *hmap;$/;"	m	struct:co
 hmap	src/include/libdata_structure/hash_list_struct.h	/^	struct hash_map_s *hmap;$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hash_map_s
 hmap	src/include/libproto_analyzer/protocol_analyzer.h	/^	hash_map_t *hmap;$/;"	m	struct:protocol_analyzer_s
 hmap_lock_type	src/include/libconcurrent/concurrent.h	/^	uint8_t hmap_lock_type;$/;"	m	struct:concurrent_task_admin_s
-id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon8
-id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon7
-immediate_shutdown	src/libthread_pool/threadpool.c	/^    immediate_shutdown = 1,$/;"	e	enum:__anon1	file:
+id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon2
+id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon1
+immediate_shutdown	src/libthread_pool/threadpool.c	/^    immediate_shutdown = 1,$/;"	e	enum:__anon7	file:
 info	src/include/liballoc/allocator.h	/^	void (*info)(allocator_t * alloc);$/;"	m	struct:allocator_operations
 ini_file_name	src/include/libdbg/debug.h	/^	char ini_file_name[MAX_INI_FILE_NAME_LEN];$/;"	m	struct:debugger
 iniparser_add_entry	src/libini/iniparser.c	/^static void iniparser_add_entry($/;"	f	file:
@@ -791,6 +792,7 @@ iniparser_setstr	src/libini/iniparser.c	/^int iniparser_setstr(dictionary * ini,
 iniparser_unset	src/libini/iniparser.c	/^void iniparser_unset(dictionary * ini, char * entry)$/;"	f
 init	src/include/liballoc/allocator.h	/^	int (*init)(allocator_t *alloc);$/;"	m	struct:allocator_operations
 init	src/include/libdbg/debug.h	/^	void (*init)(debugger_t *debugger);$/;"	m	struct:debugger_opperations
+init_libcuitls	src/main.c	/^int init_libcuitls()$/;"	f
 init_proto_format_set	src/libproto_analyzer/protocol_format_set.c	/^void init_proto_format_set(int proto_base_addr,$/;"	f
 init_proto_info_list	src/libproto_analyzer/protocol_format_set.c	/^void init_proto_info_list(proto_info_list_t *info_list)$/;"	f
 key	src/include/libdata_structure/hash_list_struct.h	/^	char key[1];$/;"	m	struct:hash_map_node
@@ -1071,7 +1073,6 @@ notify	src/libthread_pool/threadpool.c	/^  pthread_cond_t notify;$/;"	m	struct:t
 offsetof	src/include/libdata_structure/rbtree.h	127;"	d
 offsetof	src/include/libdata_structure/rbtree.h	128;"	d
 offsetof	src/include/libdata_structure/rbtree.h	130;"	d
-os	.ycm_extra_conf.py	/^import os$/;"	i
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
 pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef struct pa_array_s{$/;"	s	file:
@@ -1127,8 +1128,8 @@ pfs_set_pdu_format_ackd	src/libproto_analyzer/test/pdt_pdu_proto_format.c	/^int 
 pfs_set_proto_format_3008	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^int pfs_set_proto_format_3008(protocol_format_set_t *pfs_p)$/;"	f
 pfs_set_proto_format_3019	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p)$/;"	f
 pfs_set_proto_info	src/libproto_analyzer/protocol_format_set.c	/^pfs_set_proto_info($/;"	f
-pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon8
-pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon7
+pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon2
+pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon1
 pool	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head *pool;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
 pool	src/libthread_pool/tests/heavy.c	/^static threadpool_t *pool[QUEUES];$/;"	v	file:
 pool	src/libthread_pool/tests/shutdown.c	/^static threadpool_t *pool;$/;"	v	file:
@@ -1157,7 +1158,7 @@ print_A	src/libdata_structure/test/test_rbtree_map.c	/^void print_A(struct A *t)
 print_info_list	src/libproto_analyzer/protocol_format_set.c	/^void print_info_list(proto_info_list_t *info_list)$/;"	f
 print_list_data	src/libdata_structure/test/test_link_list.c	/^void print_list_data(list_t *list)$/;"	f
 print_vector_data	src/libdata_structure/test/test_vector.c	/^void print_vector_data(vector_pos_t *pos)$/;"	f
-priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon5
+priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon4
 priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:debugger::debugger_priv
 proto_base_addr	src/include/libproto_analyzer/protocol_format_set.h	/^	uint32_t proto_base_addr;$/;"	m	struct:protocol_format_set_s
 proto_head_list_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct proto_head_list_s{$/;"	s
@@ -1338,23 +1339,23 @@ thread_count	src/libthread_pool/threadpool.c	/^  int thread_count;$/;"	m	struct:
 threadpool_add	src/libthread_pool/threadpool.c	/^int threadpool_add(threadpool_t *pool, void (*function)(void *),$/;"	f
 threadpool_create	src/libthread_pool/threadpool.c	/^threadpool_t *threadpool_create(int thread_count, int queue_size, int flags)$/;"	f
 threadpool_destroy	src/libthread_pool/threadpool.c	/^int threadpool_destroy(threadpool_t *pool, int flags)$/;"	f
-threadpool_destroy_flags_t	src/include/libthread_pool/threadpool.h	/^} threadpool_destroy_flags_t;$/;"	t	typeref:enum:__anon4
-threadpool_error_t	src/include/libthread_pool/threadpool.h	/^} threadpool_error_t;$/;"	t	typeref:enum:__anon3
+threadpool_destroy_flags_t	src/include/libthread_pool/threadpool.h	/^} threadpool_destroy_flags_t;$/;"	t	typeref:enum:__anon6
+threadpool_error_t	src/include/libthread_pool/threadpool.h	/^} threadpool_error_t;$/;"	t	typeref:enum:__anon5
 threadpool_free	src/libthread_pool/threadpool.c	/^int threadpool_free(threadpool_t *pool)$/;"	f
-threadpool_graceful	src/include/libthread_pool/threadpool.h	/^    threadpool_graceful       = 1$/;"	e	enum:__anon4
-threadpool_invalid	src/include/libthread_pool/threadpool.h	/^    threadpool_invalid        = -1,$/;"	e	enum:__anon3
-threadpool_lock_failure	src/include/libthread_pool/threadpool.h	/^    threadpool_lock_failure   = -2,$/;"	e	enum:__anon3
-threadpool_queue_full	src/include/libthread_pool/threadpool.h	/^    threadpool_queue_full     = -3,$/;"	e	enum:__anon3
-threadpool_shutdown	src/include/libthread_pool/threadpool.h	/^    threadpool_shutdown       = -4,$/;"	e	enum:__anon3
-threadpool_shutdown_t	src/libthread_pool/threadpool.c	/^} threadpool_shutdown_t;$/;"	t	typeref:enum:__anon1	file:
+threadpool_graceful	src/include/libthread_pool/threadpool.h	/^    threadpool_graceful       = 1$/;"	e	enum:__anon6
+threadpool_invalid	src/include/libthread_pool/threadpool.h	/^    threadpool_invalid        = -1,$/;"	e	enum:__anon5
+threadpool_lock_failure	src/include/libthread_pool/threadpool.h	/^    threadpool_lock_failure   = -2,$/;"	e	enum:__anon5
+threadpool_queue_full	src/include/libthread_pool/threadpool.h	/^    threadpool_queue_full     = -3,$/;"	e	enum:__anon5
+threadpool_shutdown	src/include/libthread_pool/threadpool.h	/^    threadpool_shutdown       = -4,$/;"	e	enum:__anon5
+threadpool_shutdown_t	src/libthread_pool/threadpool.c	/^} threadpool_shutdown_t;$/;"	t	typeref:enum:__anon7	file:
 threadpool_t	src/include/libthread_pool/threadpool.h	/^typedef struct threadpool_t threadpool_t;$/;"	t	typeref:struct:threadpool_t
 threadpool_t	src/libthread_pool/threadpool.c	/^struct threadpool_t {$/;"	s	file:
-threadpool_task_t	src/libthread_pool/threadpool.c	/^} threadpool_task_t;$/;"	t	typeref:struct:__anon2	file:
+threadpool_task_t	src/libthread_pool/threadpool.c	/^} threadpool_task_t;$/;"	t	typeref:struct:__anon8	file:
 threadpool_thread	src/libthread_pool/threadpool.c	/^static void *threadpool_thread(void *threadpool)$/;"	f	file:
-threadpool_thread_failure	src/include/libthread_pool/threadpool.h	/^    threadpool_thread_failure = -5$/;"	e	enum:__anon3
+threadpool_thread_failure	src/include/libthread_pool/threadpool.h	/^    threadpool_thread_failure = -5$/;"	e	enum:__anon5
 threads	src/libthread_pool/threadpool.c	/^  pthread_t *threads;$/;"	m	struct:threadpool_t	file:
-tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon8
-tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon7
+tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon2
+tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon1
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rb_root
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
@@ -1432,4 +1433,3 @@ windows_user_mode_mutex_register	src/libcre/sync_lock/windows/windows_mutex.c	/^
 work	src/libconcurrent/test_concurrent.c	/^void work(concurrent_slave_t *slave,void *arg)$/;"	f
 work_func	src/include/libconcurrent/concurrent.h	/^	void (*work_func)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:concurrent_message_s
 work_id	src/include/libconcurrent/concurrent.h	/^	uint8_t work_id;$/;"	m	struct:concurrent_slave_s
-ycm_core	.ycm_extra_conf.py	/^import ycm_core$/;"	i
