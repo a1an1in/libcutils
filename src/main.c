@@ -96,6 +96,11 @@ void test_libnet()
 	 */
 }
 
+/*
+ * The libs used modules has been registered before main func,
+ * and debugger has been construct before main too. so can use
+ * it derectly.
+ */
 int main()
 {
 	int ret = 0;
