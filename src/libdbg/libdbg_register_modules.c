@@ -20,7 +20,7 @@
 extern void console_print_regester();
 extern void log_print_regester();
 
-void libdbg_register_modules()
+__attribute__((constructor(101))) void libdbg_register_modules()
 {
 	console_print_regester();
 	//network_print_regester();
