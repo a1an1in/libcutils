@@ -60,7 +60,7 @@ typedef struct server_task_s{
 
 int server_release_task(server_task_t *task,concurrent_task_admin_t *admin);
 
-int setnonblocking(int sockfd)
+static int setnonblocking(int sockfd)
 {
 	if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
 		return -1;
@@ -110,7 +110,7 @@ int server_release_task_without_task_admin(server_task_t *task)
 
 	return 0;
 }
-void slave_work_function(concurrent_slave_t *slave,void *arg)
+static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 

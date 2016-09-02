@@ -56,7 +56,9 @@ void test_datastructure()
 	/*
 	 *test_datastructure_rbtree_map();
 	 */
-	test_datastructure_vector();
+	/*
+	 *test_datastructure_vector();
+	 */
 	 
 }
 void test_analyzer()
@@ -94,6 +96,7 @@ void test_libnet()
 	/*
 	 *test_server();
 	 */
+	test_client();
 }
 
 /*
@@ -115,6 +118,8 @@ int main()
 	test_libnet();
 
 	dbg_str(DBG_DETAIL,"test end");
+	
+	pause();
 
 	return ret;
 }

@@ -3,7 +3,6 @@
 
 #include <event.h>
 #include <libdbg/debug.h>
-#include "libconcurrent/concurrent.h"
 #include "libdata_structure/link_list.h"
 #include "libdata_structure/hash_list.h"
 
