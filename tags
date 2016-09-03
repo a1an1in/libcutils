@@ -196,6 +196,8 @@ MAX_QUEUE	src/include/libthread_pool/threadpool.h	46;"	d
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	100;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	54;"	d	file:
+MAX_TASK_BUFFER_LEN	src/include/libnet/client/client.h	15;"	d
+MAX_TASK_BUFFER_LEN	src/include/libnet/client/client.h	24;"	d
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	42;"	d
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	47;"	d
 MAX_THREADS	src/include/libthread_pool/threadpool.h	45;"	d
@@ -483,6 +485,8 @@ bucket_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_p
 bucket_size	src/include/libconcurrent/concurrent.h	/^	uint32_t bucket_size;$/;"	m	struct:concurrent_task_admin_s
 bucket_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_size;$/;"	m	struct:hash_map_s
 buf	src/include/libproto_analyzer/protocol_format_set.h	/^	buffer_t buf;$/;"	m	struct:proto_info_list_s
+buffer	src/include/libnet/client/client.h	/^	uint8_t buffer[MAX_TASK_BUFFER_LEN];$/;"	m	struct:client_task_s
+buffer_len	src/include/libnet/client/client.h	/^	uint32_t buffer_len;$/;"	m	struct:client_task_s
 buffer_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct buffer_s{$/;"	s
 buffer_t	src/include/libproto_analyzer/protocol_format_set.h	/^}buffer_t;$/;"	t	typeref:struct:buffer_s
 business_debug_level	src/include/libdbg/debug.h	/^	uint8_t business_debug_level;$/;"	m	struct:debug_business
@@ -491,14 +495,16 @@ byte_pos	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte_pos
 byte_pos_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte_pos_bak;$/;"	m	struct:proto_info_list_s
 c	src/include/libnet/client/proxy.h	/^	concurrent_t *c ;$/;"	m	struct:client_proxy_s
 capacity	src/include/libdata_structure/vector_struct.h	/^	uint32_t capacity;$/;"	m	struct:vector_s
+client	src/include/libnet/client/client.h	/^	client_t *client;$/;"	m	struct:client_task_s
 client	src/libnet/client/client.c	/^client_t *client(char *host,$/;"	f
 client_create_socket	src/libnet/client/client.c	/^int client_create_socket(struct addrinfo *addr)$/;"	f
+client_event_handler	src/include/libnet/client/client.h	/^	void (*client_event_handler)(int fd, short event, void *arg);$/;"	m	struct:client_s
 client_event_handler	src/libnet/client/client.c	/^void client_event_handler(int fd, short event, void *arg)$/;"	f
 client_fd	src/include/libnet/client/client.h	/^	int client_fd;$/;"	m	struct:client_s
-client_init_task	src/libnet/client/client.c	/^int client_init_task(client_task_t *task,$/;"	f
+client_init_task	src/libnet/client/client.c	/^int client_init_task($/;"	f
 client_proxy_s	src/include/libnet/client/proxy.h	/^typedef struct client_proxy_s{$/;"	s
 client_proxy_t	src/include/libnet/client/proxy.h	/^}client_proxy_t;$/;"	t	typeref:struct:client_proxy_s
-client_release_task_without_task_admin	src/libnet/client/client.c	/^int client_release_task_without_task_admin(client_task_t *task)$/;"	f
+client_release_task	src/libnet/client/client.c	/^int client_release_task(client_task_t *task)$/;"	f
 client_s	src/include/libnet/client/client.h	/^typedef struct client_s{$/;"	s
 client_t	src/include/libnet/client/client.h	/^}client_t;$/;"	t	typeref:struct:client_s
 client_task_s	src/include/libnet/client/client.h	/^typedef struct client_task_s{$/;"	s
@@ -506,6 +512,7 @@ client_task_t	src/include/libnet/client/client.h	/^}client_task_t;$/;"	t	typeref
 color	src/include/libdbg/debug.h	/^	uint8_t color;$/;"	m	struct:debug_level_info
 compilation_database_folder	.ycm_extra_conf.py	/^compilation_database_folder = ''$/;"	v
 concurrent_add_event_to_master	src/libconcurrent/concurrent.c	/^int concurrent_add_event_to_master(concurrent_t *c,$/;"	f
+concurrent_add_event_to_master2	src/libconcurrent/concurrent.c	/^int concurrent_add_event_to_master2(concurrent_t *c,$/;"	f
 concurrent_create	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_create(allocator_t *allocator)$/;"	f
 concurrent_destroy	src/libconcurrent/concurrent.c	/^void concurrent_destroy(concurrent_t *c)$/;"	f
 concurrent_init	src/libconcurrent/concurrent.c	/^int concurrent_init(concurrent_t *c,$/;"	f
@@ -670,8 +677,8 @@ error	src/libthread_pool/tests/heavy.c	/^static int error;$/;"	v	file:
 error	src/libthread_pool/tests/shutdown.c	/^static int error;$/;"	v	file:
 event	src/include/libconcurrent/concurrent.h	/^	struct event event;$/;"	m	struct:concurrent_master_s	typeref:struct:concurrent_master_s::event
 event	src/include/libconcurrent/concurrent.h	/^	void *event;$/;"	m	struct:concurrent_message_s
-event	src/include/libnet/client/client.h	/^	struct event *event;$/;"	m	struct:client_s	typeref:struct:client_s::event
 event	src/include/libnet/client/client.h	/^	struct event *event;$/;"	m	struct:client_task_s	typeref:struct:client_task_s::event
+event	src/include/libnet/client/client.h	/^	struct event event;$/;"	m	struct:client_s	typeref:struct:client_s::event
 event	src/libnet/server/server.c	/^	struct event *event;$/;"	m	struct:server_task_s	typeref:struct:server_task_s::event	file:
 event_base	src/include/libconcurrent/concurrent.h	/^	struct event_base *event_base;$/;"	m	struct:concurrent_master_s	typeref:struct:concurrent_master_s::event_base
 event_base	src/include/libconcurrent/concurrent.h	/^	struct event_base *event_base;$/;"	m	struct:concurrent_slave_s	typeref:struct:concurrent_slave_s::event_base
@@ -691,8 +698,8 @@ free_proto_info_list_mem	src/libproto_analyzer/protocol_format_set.c	/^void free
 free_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **free_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
 function	src/libthread_pool/threadpool.c	/^    void (*function)(void *);$/;"	m	struct:__anon2	file:
 g_client_proxy	src/libnet/client/proxy.c	/^client_proxy_t *g_client_proxy;$/;"	v
-g_proxy_concurrent_lock_type	src/libnet/client/proxy.c	/^uint8_t g_proxy_concurrent_lock_type;$/;"	v
-g_proxy_slave_amount	src/libnet/client/proxy.c	/^uint8_t g_proxy_slave_amount;$/;"	v
+g_proxy_concurrent_lock_type	src/libnet/client/proxy.c	/^uint8_t g_proxy_concurrent_lock_type = 0;$/;"	v
+g_proxy_slave_amount	src/libnet/client/proxy.c	/^uint8_t g_proxy_slave_amount = 2;$/;"	v
 get_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t get_bit_data(uint32_t data,uint8_t bit_pos,uint8_t len)$/;"	f
 get_cont_pdu_len	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_len(buffer_t *buffer_p,uint16_t os) $/;"	f
 get_cont_pdu_num	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_num(buffer_t *buffer_p) $/;"	f
@@ -1103,6 +1110,7 @@ notify	src/libthread_pool/threadpool.c	/^  pthread_cond_t notify;$/;"	m	struct:t
 offsetof	src/include/libdata_structure/rbtree.h	127;"	d
 offsetof	src/include/libdata_structure/rbtree.h	128;"	d
 offsetof	src/include/libdata_structure/rbtree.h	130;"	d
+opaque	src/include/libnet/client/client.h	/^	void *opaque;$/;"	m	struct:client_s
 os	.ycm_extra_conf.py	/^import os$/;"	i
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
@@ -1212,6 +1220,7 @@ proxy_destructor	src/libnet/client/proxy.c	/^void proxy_destructor()$/;"	f
 proxy_get_proxy_addr	src/libnet/client/proxy.c	/^client_proxy_t *proxy_get_proxy_addr()$/;"	f
 proxy_init	src/libnet/client/proxy.c	/^int proxy_init(client_proxy_t *proxy, uint32_t task_size, uint8_t slave_amount, uint8_t concurrent_lock_type)$/;"	f
 proxy_register_client	src/libnet/client/proxy.c	/^int proxy_register_client(client_proxy_t *proxy,$/;"	f
+proxy_register_client2	src/libnet/client/proxy.c	/^int proxy_register_client2(client_proxy_t *proxy,client_t *client)$/;"	f
 queue	src/libthread_pool/threadpool.c	/^  threadpool_task_t *queue;$/;"	m	struct:threadpool_t	file:
 queue_size	src/libthread_pool/threadpool.c	/^  int queue_size;$/;"	m	struct:threadpool_t	file:
 rb_augment_erase_begin	src/libdata_structure/rbtree_map/rbtree.c	/^struct rb_node *rb_augment_erase_begin(struct rb_node *node)$/;"	f
@@ -1303,9 +1312,9 @@ slave	src/include/libconcurrent/concurrent.h	/^	concurrent_slave_t *slave;$/;"	m
 slave	src/include/libnet/client/client.h	/^	concurrent_slave_t *slave;$/;"	m	struct:client_task_s
 slave	src/libnet/server/server.c	/^	concurrent_slave_t *slave;$/;"	m	struct:server_task_s	file:
 slave_amount	src/include/libconcurrent/concurrent.h	/^	uint8_t slave_amount;$/;"	m	struct:concurrent_master_s
-slave_event_handler_process_conn_bussiness	src/libnet/client/client.c	/^static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)$/;"	f	file:
 slave_event_handler_process_conn_bussiness	src/libnet/server/server.c	/^static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)$/;"	f	file:
 slave_event_handler_process_message	src/libconcurrent/concurrent.c	/^static void slave_event_handler_process_message(int fd, short event, void *arg)$/;"	f	file:
+slave_work_function	src/include/libnet/client/client.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:client_s
 slave_work_function	src/libnet/client/client.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libnet/server/server.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 snd_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int snd_add_new_event_fd;$/;"	m	struct:concurrent_master_s

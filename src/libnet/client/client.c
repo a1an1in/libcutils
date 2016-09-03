@@ -52,9 +52,6 @@
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
 
-
-int client_release_task(client_task_t *task,concurrent_task_admin_t *admin);
-
 static int setnonblocking(int sockfd)
 {
 	if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
@@ -65,65 +62,47 @@ static int setnonblocking(int sockfd)
 }
 #if 1
 //version 4, using pipe mode,without task admin
-int client_release_task_without_task_admin(client_task_t *task);
-static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)
-{
-    int nread;
-    char buf[MAXLINE];
-	client_task_t *task = (client_task_t *)arg;
-    nread = read(fd, buf, MAXLINE);//读取客户端socket流
-
-	dbg_str(DBG_VIP,"slave_work start,conn_fd=%d",fd);
-    if (nread < 0) {
-        dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		client_release_task_without_task_admin(task);
-		close(fd);//modify for test
-        return;
-    } 
-    write(fd, buf, nread);//响应客户端  
-	client_release_task_without_task_admin(task);
-	close(fd);
-	dbg_str(DBG_DETAIL,"slave_work done");
-}
-int client_init_task(client_task_t *task,
-		int fd, void *key, struct event *ev,
+int client_init_task(
+		client_task_t *task,
 		allocator_t *allocator,
-		concurrent_slave_t *slave)
+		int fd, struct event *ev,
+		void *key, uint8_t key_len,
+		uint8_t *buf,int buf_len,
+		concurrent_slave_t *slave,
+		client_t *client)
 {
 	task->fd = fd;
-	memcpy(task->key,key,10);
-	task->event = ev;
-	task->allocator = allocator;
-	task->slave = slave;
+	if(key_len)
+		memcpy(task->key,key,key_len);
+	if(buf_len)
+		memcpy(task->buffer,buf,buf_len);
+	task->buffer_len = buf_len;
+	task->event      = ev;
+	task->allocator  = allocator;
+	task->slave      = slave;
+	task->client     = client;
 	return 0;
 }
-int client_release_task_without_task_admin(client_task_t *task)
+int client_release_task(client_task_t *task)
 {
-	event_del(task->event);
-	allocator_mem_free(task->allocator,task->event);
 	allocator_mem_free(task->allocator,task);
-
 	return 0;
 }
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	client_task_t *task = (client_task_t *)arg;
 
-	dbg_str(DBG_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
-	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
-	task->slave = slave;
-	concurrent_slave_add_new_event(
-			slave,
-			task->fd,//int fd,
-			EV_READ | EV_PERSIST,//int event_flag,
-			task->event,//	struct event *event,
-			slave_event_handler_process_conn_bussiness,//void (*event_handler)(int fd, short event, void *arg),
-			task);//void *task);
+	dbg_str(DBG_DETAIL,"slave_work_function begin");
+	dbg_buf(DBG_DETAIL,"task buffer:",task->buffer,task->buffer_len);
+	client_release_task(task);
+	dbg_str(DBG_DETAIL,"slave_work_function end");
 	return ;
 }
 void client_event_handler(int fd, short event, void *arg)
 {
-	concurrent_master_t *master = (concurrent_master_t *)arg;
+
+	client_t *client = (client_t *)arg;
+	concurrent_master_t *master = client->master;
 	int connfd;
 	struct sockaddr_in cliaddr;
 	socklen_t socklen;
@@ -152,20 +131,25 @@ void client_event_handler(int fd, short event, void *arg)
 	 */
 	dbg_buf(DBG_DETAIL,"rcv buf:",buf,nread);
 
-#if 0
+	dbg_str(DBG_DETAIL,"client handler allocator=%p",master->allocator);
+
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
-	client_init_task(task,
-			connfd,//int fd, 
-			key,//void *key, 
+	client_init_task(
+			task,//client_task_t *task,
+			master->allocator,//allocator_t *allocator,
+			0,//int fd,
 			NULL,//struct event *ev,
-			master->allocator,
-			NULL);
+			NULL,//void *key,
+			0,//uint8_t key_len,
+			buf,//uint8_t *buf,
+			nread,//int buf_len,
+			NULL,
+			client);
 
 	master->assignment_count++;//do for assigning slave
-	concurrent_master_init_message(&message, slave_work_function,task,0);
+	concurrent_master_init_message(&message, client->slave_work_function,task,0);
 	concurrent_master_add_message(master,&message);
-	dbg_str(DBG_DETAIL,"listen end");
-#endif
+	dbg_str(DBG_DETAIL,"client event handler end");
 
     return ;
 }
@@ -207,7 +191,8 @@ client_t *client(char *host,
 				 int family,
 				 int socktype,
 				 int protocol,
-				 void (*event_handler)(int fd, short event, void *arg))
+				 void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+				 void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -237,12 +222,14 @@ client_t *client(char *host,
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
 	}
-	client->client_fd = client_create_socket(addr);
+	client->client_fd            = client_create_socket(addr);
+	client->opaque               = opaque;
+	client->slave_work_function  = slave_work_function;
+	client->client_event_handler = client_event_handler;
+	client->master               = proxy->c->master;
+	dbg_str(DBG_DETAIL,"client->master=%p,allocator=%p",client->master,allocator);
 
-	if(proxy_register_client(proxy, /*client_proxy_t *proxy*/
-				client->client_fd,  /*int fd*/
-				event_handler,      /*void (*event_handler)(int fd, short event, void *arg)*/
-				&client->event) < 0)/*struct event *event)*/
+	if(proxy_register_client2(proxy, client) < 0)/*struct event *event)*/
 	{
 		goto err_register_client;
 	}
@@ -263,5 +250,6 @@ int test_client()
 			AF_INET,//int family,
 			SOCK_DGRAM,//int socktype,
 			0,//int protocol,
-			client_event_handler);//void (*event_handler)(int fd, short event, void *arg));
+			slave_work_function,
+			NULL);
 }

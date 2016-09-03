@@ -489,6 +489,7 @@ concurrent_t *concurrent_create(allocator_t *allocator)
 		return NULL;
 	}
 	c->allocator= allocator;
+	dbg_str(DBG_DETAIL,"concurrent allocator=%p",allocator);
 
 	return c;
 }
@@ -502,6 +503,7 @@ int concurrent_init(concurrent_t *c,
 
 	dbg_str(DBG_DETAIL,"concurrent_init");
 	c->master = concurrent_master_create(c->allocator);
+	dbg_str(DBG_DETAIL,"concurrent master=%p",c->master);
 	concurrent_master_init(c->master, concurrent_work_type, task_size, slave_amount);
 
 	c->snd_add_new_event_fd  = c->master->snd_add_new_event_fd;
@@ -525,6 +527,29 @@ int concurrent_add_event_to_master(concurrent_t *c,
 
 	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
 	event_set(event,fd, event_flag, event_handler, c->master);
+	event_base_set(c->master->event_base, event);
+
+	message.event = event;
+	llist_push_back(c->new_ev_que,&message);
+
+	if (write(c->snd_add_new_event_fd, "c", 1) != 1) {
+		dbg_str(DBG_ERROR,"cannot write pipe");
+	}
+
+	return 0;
+}
+int concurrent_add_event_to_master2(concurrent_t *c,
+		int fd,int event_flag,
+		struct event *event,
+		void (*event_handler)(int fd, short event, void *arg),
+		void *arg)
+{
+	struct concurrent_message_s message;
+
+	while(c->master->concurrent_master_inited_flag != 1);
+
+	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
+	event_set(event,fd, event_flag, event_handler, arg);
 	event_base_set(c->master->event_base, event);
 
 	message.event = event;

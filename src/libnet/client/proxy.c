@@ -16,8 +16,8 @@
 #include <libnet/client/proxy.h>
 
 client_proxy_t *g_client_proxy;
-uint8_t g_proxy_slave_amount;
-uint8_t g_proxy_concurrent_lock_type;
+uint8_t g_proxy_slave_amount = 2;
+uint8_t g_proxy_concurrent_lock_type = 0;
 
 client_proxy_t *proxy_get_proxy_addr()
 {
@@ -69,6 +69,16 @@ int proxy_register_client(client_proxy_t *proxy,
 			event,//struct event *event, 
 			event_handler,//void (*event_handler)(int fd, short event, void *arg),
 			NULL);//void *arg);
+}
+int proxy_register_client2(client_proxy_t *proxy,client_t *client)
+{
+	return concurrent_add_event_to_master2(proxy->c,
+			client->client_fd,//int fd,
+			EV_READ | EV_PERSIST,//int event_flag,
+			&client->event,//struct event *event, 
+			client->client_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+			client);//void *arg);
+
 }
 __attribute__((constructor(111)))
 void proxy_constructor()
