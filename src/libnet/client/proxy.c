@@ -70,6 +70,7 @@ int proxy_register_client(client_proxy_t *proxy,
 			event_handler,//void (*event_handler)(int fd, short event, void *arg),
 			NULL);//void *arg);
 }
+__attribute__((constructor(111)))
 void proxy_constructor()
 {
 	uint8_t proxy_slave_amount = g_proxy_slave_amount;
@@ -78,6 +79,7 @@ void proxy_constructor()
 	g_client_proxy = proxy_create();
 	proxy_init(g_client_proxy, sizeof(client_task_t), proxy_slave_amount, proxy_lock_type);
 }
+__attribute__((destructor(111)))
 void proxy_destructor()
 {
 	proxy_destroy(g_client_proxy);

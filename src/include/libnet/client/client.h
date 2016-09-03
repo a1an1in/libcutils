@@ -12,7 +12,7 @@ typedef struct client_task_s{
 }client_task_t;
 typedef struct client_s{
 	client_task_t *task;
-	struct event *event;
+	struct event event;
 	int client_fd;
 }client_t;
 #endif

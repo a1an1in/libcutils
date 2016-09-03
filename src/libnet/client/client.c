@@ -132,12 +132,25 @@ void client_event_handler(int fd, short event, void *arg)
 	struct concurrent_message_s message;
     int nread;
     char buf[MAXLINE];
+	struct sockaddr_in raddr;
+	socklen_t raddr_len;
 
-    nread = read(fd, buf, MAXLINE);//读取客户端socket流
-    if (nread < 0) {
-        dbg_str(DBG_ERROR,"client_event_handler,read fd error");
-        return;
-    } 
+	/*
+	 *dbg_str(DBG_DETAIL,"sockfd =%d",fd);
+	 */
+	nread = read(fd, buf, MAXLINE);//读取客户端socket流
+	if (nread < 0) {
+		dbg_str(DBG_ERROR,"client_event_handler,read fd error");
+		return;
+	} 
+	/*
+	 *if((nread = recvfrom(fd,buf,MAXLINE,0,(void *)&raddr,&raddr_len)) < 0)
+	 *{
+	 *    perror("recvfrom()");
+	 *    exit(1);
+	 *}
+	 */
+	dbg_buf(DBG_DETAIL,"rcv buf:",buf,nread);
 
 #if 0
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
@@ -203,7 +216,9 @@ client_t *client(char *host,
 	allocator_t *allocator = proxy->allocator;;
 	client_t *client, *ret = NULL;
 
-	if ((client = (client_t *)allocator_mem_alloc(allocator, sizeof(client_t))) == NULL){
+	if ((client = (client_t *)allocator_mem_alloc(
+					allocator, sizeof(client_t))) == NULL)
+	{
 		dbg_str(DBG_ERROR,"client_create err");
 		return NULL;
 	}
@@ -224,11 +239,11 @@ client_t *client(char *host,
 	}
 	client->client_fd = client_create_socket(addr);
 
-	ret = proxy_register_client(proxy,//client_proxy_t *proxy,
-			client_fd,//int fd,
-			event_handler,//void (*event_handler)(int fd, short event, void *arg),
-			&client->event);//struct event *event)
-	if(ret < 0){
+	if(proxy_register_client(proxy, /*client_proxy_t *proxy*/
+				client->client_fd,  /*int fd*/
+				event_handler,      /*void (*event_handler)(int fd, short event, void *arg)*/
+				&client->event) < 0)/*struct event *event)*/
+	{
 		goto err_register_client;
 	}
 
@@ -236,18 +251,15 @@ client_t *client(char *host,
 	goto end;
 
 err_register_client:
-	close(client_fd);
+	close(client->client_fd);
 end:
 	freeaddrinfo(addr);
 	return ret;
 }
 int test_client()
 {
-	client_t * cli ;
-
-	cli = client(
-			"127.0.0.1",//char *host,
-			"6888",//char *client_port,
+	client( "127.0.0.1",//char *host,
+			"1989",//char *client_port,
 			AF_INET,//int family,
 			SOCK_DGRAM,//int socktype,
 			0,//int protocol,
