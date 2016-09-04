@@ -3,7 +3,7 @@
  * @synopsis 
  * @author a1an1in@sina.com
  * @version 1.0
- * @date 2016-03-14
+ * @date 2016-09-03
  */
 
 /* Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
@@ -52,6 +52,10 @@
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
 
+/*
+ *extern int process_task_callback(client_task_t *task);
+ */
+
 static int setnonblocking(int sockfd)
 {
 	if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
@@ -60,16 +64,29 @@ static int setnonblocking(int sockfd)
 	return 0;
 
 }
+static void slave_work_function(concurrent_slave_t *slave,void *arg)
+{
+	client_task_t *task = (client_task_t *)arg;
+	client_t *client = task->client;
+
+	dbg_str(DBG_DETAIL,"slave_work_function begin");
+	client->process_task_cb(task);
+	client_release_task(task);
+	dbg_str(DBG_DETAIL,"slave_work_function end");
+	return ;
+}
 #if 1
 //version 4, using pipe mode,without task admin
-int client_init_task(
-		client_task_t *task,
-		allocator_t *allocator,
-		int fd, struct event *ev,
-		void *key, uint8_t key_len,
-		uint8_t *buf,int buf_len,
-		concurrent_slave_t *slave,
-		client_t *client)
+int client_init_task(client_task_t *task,
+					 allocator_t *allocator,
+					 int fd,
+					 struct event *ev,
+					 void *key,
+					 uint8_t key_len,
+					 uint8_t *buf,
+					 int buf_len,
+					 concurrent_slave_t *slave,
+					 client_t *client)
 {
 	task->fd = fd;
 	if(key_len)
@@ -87,16 +104,6 @@ int client_release_task(client_task_t *task)
 {
 	allocator_mem_free(task->allocator,task);
 	return 0;
-}
-static void slave_work_function(concurrent_slave_t *slave,void *arg)
-{
-	client_task_t *task = (client_task_t *)arg;
-
-	dbg_str(DBG_DETAIL,"slave_work_function begin");
-	dbg_buf(DBG_DETAIL,"task buffer:",task->buffer,task->buffer_len);
-	client_release_task(task);
-	dbg_str(DBG_DETAIL,"slave_work_function end");
-	return ;
 }
 void client_event_handler(int fd, short event, void *arg)
 {
@@ -134,8 +141,7 @@ void client_event_handler(int fd, short event, void *arg)
 	dbg_str(DBG_DETAIL,"client handler allocator=%p",master->allocator);
 
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
-	client_init_task(
-			task,//client_task_t *task,
+	client_init_task(task,//client_task_t *task,
 			master->allocator,//allocator_t *allocator,
 			0,//int fd,
 			NULL,//struct event *ev,
@@ -191,7 +197,7 @@ client_t *client(char *host,
 				 int family,
 				 int socktype,
 				 int protocol,
-				 void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+				 int (*process_task_cb)(client_task_t *task),
 				 void *opaque)
 {
 	struct addrinfo  *addr, hint;
@@ -222,11 +228,14 @@ client_t *client(char *host,
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
 	}
+	client->socktype             = socktype;
+	client->allocator            = allocator;
 	client->client_fd            = client_create_socket(addr);
 	client->opaque               = opaque;
 	client->slave_work_function  = slave_work_function;
 	client->client_event_handler = client_event_handler;
 	client->master               = proxy->c->master;
+	client->process_task_cb      = process_task_cb;
 	dbg_str(DBG_DETAIL,"client->master=%p,allocator=%p",client->master,allocator);
 
 	if(proxy_register_client2(proxy, client) < 0)/*struct event *event)*/
@@ -243,13 +252,26 @@ end:
 	freeaddrinfo(addr);
 	return ret;
 }
-int test_client()
+int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
+		const struct sockaddr *destaddr,socklen_t destlen)
 {
-	client( "127.0.0.1",//char *host,
-			"1989",//char *client_port,
-			AF_INET,//int family,
-			SOCK_DGRAM,//int socktype,
-			0,//int protocol,
-			slave_work_function,
-			NULL);
+	if(client->socktype == SOCK_DGRAM){
+		if(sendto(client->client_fd,&buf,nbytes,flags,
+					(struct sockaddr *)destaddr,
+					(socklen_t)destlen) < 0)
+		{
+			perror("sendto()");  
+		}  
+	}else if(client->socktype == SOCK_STREAM){
+		if(send(client->client_fd,&buf,nbytes,flags) < 0) {
+			perror("send()");  
+		}  
+	}
+
+}
+int client_destroy(client_t *client)
+{
+	allocator_mem_free(client->allocator,client);
+
+	return 0;
 }

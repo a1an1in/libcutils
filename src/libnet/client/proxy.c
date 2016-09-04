@@ -1,3 +1,10 @@
+/**
+ * @file proxy.c
+ * @synopsis 
+ * @author a1an1in@sina.com
+ * @version 1.0
+ * @date 2016-09-02
+ */
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>

@@ -105,6 +105,7 @@ void *concurrent_master_add_task(concurrent_master_t *master, void *task,void *k
 concurrent_t *concurrent_create(allocator_t *allocator);
 int concurrent_init(concurrent_t *c, uint8_t concurrent_work_type, uint32_t task_size, uint8_t slave_amount, uint8_t concurrent_lock_type);
 int concurrent_add_event_to_master(concurrent_t *c, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *arg);
+int concurrent_add_event_to_master2(concurrent_t *c, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *arg);
 void concurrent_destroy(concurrent_t *c);
 
 #endif
