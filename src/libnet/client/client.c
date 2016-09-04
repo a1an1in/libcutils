@@ -256,14 +256,14 @@ int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 		const struct sockaddr *destaddr,socklen_t destlen)
 {
 	if(client->socktype == SOCK_DGRAM){
-		if(sendto(client->client_fd,&buf,nbytes,flags,
+		if(sendto(client->client_fd,buf,nbytes,flags,
 					(struct sockaddr *)destaddr,
 					(socklen_t)destlen) < 0)
 		{
 			perror("sendto()");  
 		}  
 	}else if(client->socktype == SOCK_STREAM){
-		if(send(client->client_fd,&buf,nbytes,flags) < 0) {
+		if(send(client->client_fd,buf,nbytes,flags) < 0) {
 			perror("send()");  
 		}  
 	}

@@ -164,9 +164,11 @@ void *concurrent_slave_thread(void *arg)
 		dbg_str(DBG_ERROR,"cannot create slave event_base");
 		exit(1);
 	}
-	event_set(&slave->message_event,slave->rcv_notify_fd,
+	event_assign(&slave->message_event,slave->event_base,slave->rcv_notify_fd,
 	              EV_READ | EV_PERSIST, slave_event_handler_process_message, arg);
-	event_base_set(slave->event_base, &slave->message_event);
+	/*
+	 *event_base_set(slave->event_base, &slave->message_event);
+	 */
 	if (event_add(&slave->message_event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
@@ -179,8 +181,10 @@ int concurrent_slave_add_new_event(concurrent_slave_t *slave,
 		void (*event_handler)(int fd, short event, void *arg),
 		void *task)
 {
-	event_set(event,fd, event_flag, event_handler, task);
-	event_base_set(slave->event_base, event);
+	event_assign(event,slave->event_base,fd, event_flag, event_handler, task);
+	/*
+	 *event_base_set(slave->event_base, event);
+	 */
 	if (event_add(event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
@@ -312,9 +316,11 @@ void *concurrent_master_thread(void *arg)
 	 *listenning rcv_add_new_event_fd, we can designe any right fd here,
 	 *we just need event base become loop state.
 	 */
-	event_set(&event,master->rcv_add_new_event_fd, EV_READ | EV_PERSIST,
+	event_assign(&event,master->event_base,master->rcv_add_new_event_fd, EV_READ | EV_PERSIST,
 			master_event_handler_add_new_event, master);
-	event_base_set(master->event_base, &event);
+	/*
+	 *event_base_set(master->event_base, &event);
+	 */
 	if (event_add(&event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
@@ -458,8 +464,10 @@ int concurrent_master_add_new_event(concurrent_master_t *master,
 	while(master->concurrent_master_inited_flag == 0);	
 
 	dbg_str(DBG_DETAIL,"init new event");
-	event_set(event,fd, event_flag, event_handler, master);
-	event_base_set(master->event_base, event);
+	event_assign(event,master->event_base,fd, event_flag, event_handler, master);
+	/*
+	 *event_base_set(master->event_base, event);
+	 */
 
 	dbg_str(DBG_DETAIL,"add new event");
 	if (event_add(event, 0) == -1) {
@@ -526,8 +534,10 @@ int concurrent_add_event_to_master(concurrent_t *c,
 	while(c->master->concurrent_master_inited_flag != 1);
 
 	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
-	event_set(event,fd, event_flag, event_handler, c->master);
-	event_base_set(c->master->event_base, event);
+	event_assign(event,c->master->event_base,fd, event_flag, event_handler, c->master);
+	/*
+	 *event_base_set(c->master->event_base, event);
+	 */
 
 	message.event = event;
 	llist_push_back(c->new_ev_que,&message);
@@ -549,8 +559,10 @@ int concurrent_add_event_to_master2(concurrent_t *c,
 	while(c->master->concurrent_master_inited_flag != 1);
 
 	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
-	event_set(event,fd, event_flag, event_handler, arg);
-	event_base_set(c->master->event_base, event);
+	event_assign(event,c->master->event_base,fd, event_flag, event_handler, arg);
+	/*
+	 *event_base_set(c->master->event_base, event);
+	 */
 
 	message.event = event;
 	llist_push_back(c->new_ev_que,&message);

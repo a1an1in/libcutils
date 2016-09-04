@@ -27,7 +27,7 @@ include ./mk/Makefile.funcs
 all :
 	@$(call build_obj);\
 	$(call check_output_dir);\
-	$(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm -levent;\
+	$(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm -Llibs -levent_tiny;\
 	if [ $$? -ne 0 ]; then \
 		echo "Building $(TARGET) is failed !"; \
 		exit 12; \
