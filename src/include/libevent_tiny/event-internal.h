@@ -101,14 +101,6 @@ struct eventop {
 	size_t fdinfo_len;
 };
 
-#ifdef WIN32
-/* If we're on win32, then file descriptors are not nice low densely packed
-   integers.  Instead, they are pointer-like windows handles, and we want to
-   use a hashtable instead of an array to map fds to events.
-*/
-#define EVMAP_USE_HT
-#endif
-
 /* #define HT_CACHE_HASH_VALS */
 
 #ifdef EVMAP_USE_HT
@@ -342,6 +334,18 @@ void event_active_nolock(struct event *ev, int res, short count);
 /* FIXME document. */
 void event_base_add_virtual(struct event_base *base);
 void event_base_del_virtual(struct event_base *base);
+static inline int event_add_internal(struct event *ev, const struct timeval *tv, int tv_is_absolute);
+static inline int event_del_internal(struct event *ev);
+static void	event_queue_insert(struct event_base *, struct event *, int);
+static void	event_queue_remove(struct event_base *, struct event *, int);
+static int	event_haveevents(struct event_base *);
+static int	event_process_active(struct event_base *);
+static int	timeout_next(struct event_base *, struct timeval **);
+static void	timeout_process(struct event_base *);
+static void	timeout_correct(struct event_base *, struct timeval *);
+static inline void	event_signal_closure(struct event_base *, struct event *ev);
+static inline void	event_persist_closure(struct event_base *, struct event *ev);
+static int	evthread_notify_base(struct event_base *base);
 
 /** For debugging: unless assertions are disabled, verify the referential
     integrity of the internal data structures of 'base'.  This operation can

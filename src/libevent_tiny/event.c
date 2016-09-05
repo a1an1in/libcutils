@@ -84,22 +84,7 @@ static const struct eventop *eventops[] = {
 };
 
 /* Global state */
-
 static int use_monotonic;
-
-/* Prototypes */
-static inline int event_add_internal(struct event *ev, const struct timeval *tv, int tv_is_absolute);
-static inline int event_del_internal(struct event *ev);
-static void	event_queue_insert(struct event_base *, struct event *, int);
-static void	event_queue_remove(struct event_base *, struct event *, int);
-static int	event_haveevents(struct event_base *);
-static int	event_process_active(struct event_base *);
-static int	timeout_next(struct event_base *, struct timeval **);
-static void	timeout_process(struct event_base *);
-static void	timeout_correct(struct event_base *, struct timeval *);
-static inline void	event_signal_closure(struct event_base *, struct event *ev);
-static inline void	event_persist_closure(struct event_base *, struct event *ev);
-static int	evthread_notify_base(struct event_base *base);
 
 /* The first time this function is called, it sets use_monotonic to 1
  * if we have a clock function that supports monotonic time */
@@ -310,7 +295,6 @@ void event_base_free(struct event_base *base)
 			ev = next;
 		}
 	}
-
 	if (n_deleted)
 		event_debug(("%s: %d events were still set in base", __func__, n_deleted));
 
@@ -336,7 +320,6 @@ void event_base_free(struct event_base *base)
 
 	mm_free(base);
 }
-
 	int
 event_base_priority_init(struct event_base *base, int npriorities)
 {
@@ -407,7 +390,6 @@ event_signal_closure(struct event_base *base, struct event *ev)
 		}
 	}
 }
-
 /* Common timeouts are special timeouts that are handled as queues rather than
  * in the minheap.  This is more efficient than the minheap if we happen to
  * know that we're going to get several thousands of timeout events all with
@@ -427,7 +409,6 @@ event_signal_closure(struct event_base *base, struct event *ev)
 #define COMMON_TIMEOUT_IDX_SHIFT 20
 #define COMMON_TIMEOUT_MASK     0xf0000000
 #define COMMON_TIMEOUT_MAGIC    0x50000000
-
 #define COMMON_TIMEOUT_IDX(tv) \
 	(((tv)->tv_usec & COMMON_TIMEOUT_IDX_MASK)>>COMMON_TIMEOUT_IDX_SHIFT)
 
@@ -459,7 +440,6 @@ get_common_timeout_list(struct event_base *base, const struct timeval *tv)
 {
 	return base->common_timeout_queues[COMMON_TIMEOUT_IDX(tv)];
 }
-
 /* Add the timeout for the first event in given common timeout list to the
  * event_base's minheap. */
 	static void
@@ -470,7 +450,6 @@ common_timeout_schedule(struct common_timeout_list *ctl,
 	timeout.tv_usec &= MICROSECONDS_MASK;
 	event_add_internal(&ctl->timeout_event, &timeout, 1);
 }
-
 /* Callback: invoked when the timeout for a common timeout queue triggers.
  * This means that (at least) the first event in that queue should be run,
  * and the timeout should be rescheduled if there are more events. */
@@ -572,7 +551,6 @@ done:
 	EVBASE_RELEASE_LOCK(base, th_base_lock);
 	return result;
 }
-
 /* Closure function invoked when we're activating a persistent event. */
 	static inline void
 event_persist_closure(struct event_base *base, struct event *ev)
@@ -639,7 +617,6 @@ event_persist_closure(struct event_base *base, struct event *ev)
 	// Execute the callback
 	(evcb_callback)(evcb_fd, evcb_res, evcb_arg);
 }
-
 /*
    Helper for event_process_active to process all the events in a single queue,
    releasing the lock as we go.  This function requires that the lock be held
@@ -694,13 +671,11 @@ event_process_active_single_queue(struct event_base *base,
 	}
 	return count;
 }
-
 /*
  * Active events are stored in priority queues.  Lower priorities are always
  * process before higher priorities.  Low priority events can starve high
  * priority ones.
  */
-
 	static int
 event_process_active(struct event_base *base)
 {
@@ -808,9 +783,7 @@ event_base_loop(struct event_base *base, int flags)
 
 		/* update last old time */
 		gettime(base, &base->event_tv);
-
 		clear_time_cache(base);
-
 		res = evsel->dispatch(base, tv_p);
 
 		if (res == -1) {
@@ -821,7 +794,6 @@ event_base_loop(struct event_base *base, int flags)
 		}
 
 		update_time_cache(base);
-
 		timeout_process(base);
 
 		if (N_ACTIVE_CALLBACKS(base)) {
@@ -843,7 +815,6 @@ done:
 
 	return (retval);
 }
-
 	int 
 event_assign(struct event *ev,
 		struct event_base *base,
@@ -852,7 +823,6 @@ event_assign(struct event *ev,
 		void (*callback)(evutil_socket_t, short, void *), void *arg)
 {
 	ev->ev_base = base;
-
 	ev->ev_callback = callback;
 	ev->ev_arg = arg;
 	ev->ev_fd = fd;
@@ -886,7 +856,6 @@ event_assign(struct event *ev,
 
 	return 0;
 }
-
 	struct event *
 event_new(struct event_base *base, evutil_socket_t fd, short events, 
 		void (*cb)(evutil_socket_t, short, void *), void *arg)
@@ -902,7 +871,6 @@ event_new(struct event_base *base, evutil_socket_t fd, short events,
 
 	return (ev);
 }
-
 	void
 event_free(struct event *ev)
 {
@@ -911,7 +879,6 @@ event_free(struct event *ev)
 	mm_free(ev);
 
 }
-
 	void
 event_debug_unassign(struct event *ev)
 {
@@ -922,7 +889,6 @@ event_debug_unassign(struct event *ev)
  * Set's the priority of an event - if an event is already scheduled
  * changing the priority is going to fail.
  */
-
 	int
 event_priority_set(struct event *ev, int pri)
 {
@@ -935,11 +901,9 @@ event_priority_set(struct event *ev, int pri)
 
 	return (0);
 }
-
 /*
  * Checks if a specific event is pending or scheduled.
  */
-
 	int
 event_pending(const struct event *ev, short event, struct timeval *tv)
 {
@@ -1140,7 +1104,6 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 
 	return (res);
 }
-
 	int
 event_del(struct event *ev)
 {
@@ -1157,7 +1120,6 @@ event_del(struct event *ev)
 
 	return (res);
 }
-
 /* Helper for event_del: always called with th_base_lock held. */
 	static inline int
 event_del_internal(struct event *ev)
@@ -1264,8 +1226,6 @@ event_active_nolock(struct event *ev, int res, short ncalls)
 	if (EVBASE_NEED_NOTIFY(base))
 		evthread_notify_base(base);
 }
-
-
 	static int
 timeout_next(struct event_base *base, struct timeval **tv_p)
 {
@@ -1357,7 +1317,6 @@ timeout_correct(struct event_base *base, struct timeval *tv)
 	/* Now remember what the new time turned out to be. */
 	base->event_tv = *tv;
 }
-
 /* Activate every event whose timeout has elapsed. */
 	static void
 timeout_process(struct event_base *base)
@@ -1382,7 +1341,6 @@ timeout_process(struct event_base *base)
 		event_active_nolock(ev, EV_TIMEOUT, 1);
 	}
 }
-
 /* Remove 'ev' from 'queue' (EVLIST_...) in base. */
 	static void
 event_queue_remove(struct event_base *base, struct event *ev, int queue)
@@ -1418,7 +1376,6 @@ event_queue_remove(struct event_base *base, struct event *ev, int queue)
 			event_errx(1, "%s: unknown queue %x", __func__, queue);
 	}
 }
-
 /* Add 'ev' to the common timeout list in 'ev'. */
 	static void 
 insert_common_timeout_inorder(struct common_timeout_list *ctl,
@@ -1447,7 +1404,6 @@ insert_common_timeout_inorder(struct common_timeout_list *ctl,
 	}
 	TAILQ_INSERT_HEAD(&ctl->events, ev, ev_timeout_pos.ev_next_with_common_timeout);
 }
-
 	static void
 event_queue_insert(struct event_base *base, struct event *ev, int queue)
 {
@@ -1493,7 +1449,6 @@ event_mm_malloc_(size_t sz)
 {
 	return malloc(sz);
 }
-
 	void *
 event_mm_calloc_(size_t count, size_t size)
 {
