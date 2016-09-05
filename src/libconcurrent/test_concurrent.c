@@ -104,7 +104,7 @@ void concurrent_master_process_listen_event(int fd, short event, void *arg)
 		return;
 	}
 	concurrent_task_t task;
-	test_concurrent_init_task(&task,fd,"1111",sizeof(concurrent_task_t));
+	test_concurrent_init_task(&task,fd,"1111",strlen("1111"));
 	test_concurrent_add_task(master,&task);
 }
 int test_concurrent3()

@@ -23,7 +23,7 @@
 #include <libnet/client/proxy.h>
 
 client_proxy_t *g_client_proxy;
-uint8_t g_proxy_slave_amount = 2;
+uint8_t g_proxy_slave_amount = 1;
 uint8_t g_proxy_concurrent_lock_type = 0;
 
 client_proxy_t *proxy_get_proxy_addr()
@@ -87,8 +87,8 @@ int proxy_register_client2(client_proxy_t *proxy,client_t *client)
 			client);//void *arg);
 
 }
-__attribute__((constructor(111)))
-void proxy_constructor()
+__attribute__((constructor(111))) void
+proxy_constructor()
 {
 	uint8_t proxy_slave_amount = g_proxy_slave_amount;
 	uint8_t proxy_lock_type    = g_proxy_concurrent_lock_type;
@@ -96,8 +96,8 @@ void proxy_constructor()
 	g_client_proxy = proxy_create();
 	proxy_init(g_client_proxy, sizeof(client_task_t), proxy_slave_amount, proxy_lock_type);
 }
-__attribute__((destructor(111)))
-void proxy_destructor()
+__attribute__((destructor(111))) void 
+proxy_destructor()
 {
 	proxy_destroy(g_client_proxy);
 }

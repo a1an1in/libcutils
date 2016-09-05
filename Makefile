@@ -18,7 +18,7 @@ SHARE_TARGET = libcdf.so
 CC = gcc
 LD = ld
 export PROJECT_PATH = $(shell pwd)
-export INCLUDES = -I $(PROJECT_PATH)/src/include
+export INCLUDES = -I $(PROJECT_PATH)/src/include -I $(PROJECT_PATH)/src/include/libevent_tiny
 
 #include makefile funtions
 include ./mk/Makefile.funcs
@@ -27,7 +27,7 @@ include ./mk/Makefile.funcs
 all :
 	@$(call build_obj);\
 	$(call check_output_dir);\
-	$(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm -Llibs -levent_tiny;\
+	$(CC) -o $(PROJECT_PATH)/bin/$(TARGET) $$BUILD_IN_FILES -lpthread -lm;\
 	if [ $$? -ne 0 ]; then \
 		echo "Building $(TARGET) is failed !"; \
 		exit 12; \

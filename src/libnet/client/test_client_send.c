@@ -69,6 +69,11 @@ int test_client_send()
 	struct sockaddr_in raddr;
 	socklen_t destlen;
 
+	/*
+	 *proxy_constructor();
+	 *sleep(2);
+	 */
+
 	cli = client( "127.0.0.1",//char *host,
 			"2016",//char *client_port,
 			AF_INET,//int family,

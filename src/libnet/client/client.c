@@ -136,7 +136,9 @@ void client_event_handler(int fd, short event, void *arg)
 	 *    exit(1);
 	 *}
 	 */
-	dbg_buf(DBG_DETAIL,"rcv buf:",buf,nread);
+	/*
+	 *dbg_buf(DBG_DETAIL,"rcv buf:",buf,nread);
+	 */
 
 	dbg_str(DBG_DETAIL,"client handler allocator=%p",master->allocator);
 

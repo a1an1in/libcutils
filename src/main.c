@@ -103,6 +103,24 @@ void test_libnet()
 	 */
 	test_client_send();
 }
+int test_libevent_tiny()
+{
+	/*
+	 *test_io();
+	 */
+	/*
+	 *test_signal();
+	 */
+	/*
+	 *test_signal2();
+	 */
+	/*
+	 *test_time();
+	 */
+	/*
+	 *test_time2();
+	 */
+}
 
 /*
  * The libs used modules has been registered before main func,
@@ -121,10 +139,11 @@ int main()
 	test_libthread_pool();
 	test_libconcurrent();
 	test_libnet();
+	test_libevent_tiny();
 
 	dbg_str(DBG_DETAIL,"test end");
-	
 	pause();
+	dbg_str(DBG_DETAIL,"test end,but pause breaked");
 
 	return ret;
 }
