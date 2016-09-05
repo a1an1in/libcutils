@@ -40,6 +40,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <sys/param.h>
+#include <sys/syscall.h>
 
 #include "event-internal.h"
 #include "evsignal-internal.h"
@@ -71,7 +73,6 @@ static const struct eventop epollops_changelist = {
 	EVENT_CHANGELIST_FDINFO_SIZE
 };
 
-
 static int epoll_nochangelist_add(struct event_base *base, evutil_socket_t fd,
     short old, short events, void *p);
 static int epoll_nochangelist_del(struct event_base *base, evutil_socket_t fd,
@@ -100,6 +101,36 @@ const struct eventop epollops = {
  */
 #define MAX_EPOLL_TIMEOUT_MSEC (35*60*1000)
 
+int
+epoll_create(int size)
+{
+#if !defined(__NR_epoll_create) && defined(__NR_epoll_create1)
+	if (size <= 0) {
+		errno = EINVAL;
+		return -1;
+	}
+	return (syscall(__NR_epoll_create1, 0));
+#else
+	return (syscall(__NR_epoll_create, size));
+#endif
+}
+
+int
+epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)
+{
+
+	return (syscall(__NR_epoll_ctl, epfd, op, fd, event));
+}
+
+int
+epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout)
+{
+#if !defined(__NR_epoll_wait) && defined(__NR_epoll_pwait)
+	return (syscall(__NR_epoll_pwait, epfd, events, maxevents, timeout, NULL, 0));
+#else
+	return (syscall(__NR_epoll_wait, epfd, events, maxevents, timeout));
+#endif
+}
 static void *
 epoll_init(struct event_base *base)
 {
