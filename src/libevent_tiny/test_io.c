@@ -47,12 +47,6 @@ fifo_read(evutil_socket_t fd, short event, void *arg)
 	buf[len] = '\0';
 	fprintf(stdout, "Read: %s\n", buf);
 }
-void *thread_func_callback(void *arg)
-{
-	printf("thread_func_callback\n");
-	pause();
-}
-
 int test_io()
 {
 	struct event evfifo;
@@ -60,10 +54,6 @@ int test_io()
 	const char *fifo = "event.fifo";
 	int socket;
 	struct event_base *event_base;
-
-	pthread_t tid;
-
-	pthread_create(&tid,NULL,thread_func_callback,NULL);
 
 	if (lstat(fifo, &st) == 0) {
 		if ((st.st_mode & S_IFMT) == S_IFREG) {

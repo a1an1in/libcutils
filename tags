@@ -42,12 +42,12 @@ CC	src/libproto_analyzer/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/test/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread_pool/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread_pool/tests/Makefile	/^CC = gcc$/;"	m
-CLOCK_SYNC_INTERVAL	src/libevent_tiny/event.c	126;"	d	file:
-COMMON_TIMEOUT_IDX	src/libevent_tiny/event.c	477;"	d	file:
-COMMON_TIMEOUT_IDX_MASK	src/libevent_tiny/event.c	472;"	d	file:
-COMMON_TIMEOUT_IDX_SHIFT	src/libevent_tiny/event.c	473;"	d	file:
-COMMON_TIMEOUT_MAGIC	src/libevent_tiny/event.c	475;"	d	file:
-COMMON_TIMEOUT_MASK	src/libevent_tiny/event.c	474;"	d	file:
+CLOCK_SYNC_INTERVAL	src/libevent_tiny/event.c	125;"	d	file:
+COMMON_TIMEOUT_IDX	src/libevent_tiny/event.c	435;"	d	file:
+COMMON_TIMEOUT_IDX_MASK	src/libevent_tiny/event.c	430;"	d	file:
+COMMON_TIMEOUT_IDX_SHIFT	src/libevent_tiny/event.c	431;"	d	file:
+COMMON_TIMEOUT_MAGIC	src/libevent_tiny/event.c	433;"	d	file:
+COMMON_TIMEOUT_MASK	src/libevent_tiny/event.c	432;"	d	file:
 COMMON_TIMEOUT_MICROSECONDS_MASK	src/include/libevent_tiny/event-internal.h	152;"	d
 COTAINOR_NAME_MAX_LEN	src/include/liballoc/allocator.h	11;"	d
 COTAINOR_NAME_MAX_LEN	src/include/liballoc/allocator.h	20;"	d
@@ -104,19 +104,11 @@ E	src/libevent_tiny/evutil.c	1533;"	d	file:
 ERR	src/libevent_tiny/evutil.c	204;"	d	file:
 ERR	src/libevent_tiny/evutil.c	291;"	d	file:
 ERRORIP	src/include/libdbg/debug.h	139;"	d
-EVBASE_ACQUIRE_LOCK	src/include/libevent_tiny/evthread-internal.h	113;"	d
-EVBASE_ACQUIRE_LOCK	src/include/libevent_tiny/evthread-internal.h	227;"	d
-EVBASE_ACQUIRE_LOCK	src/include/libevent_tiny/evthread-internal.h	305;"	d
-EVBASE_IN_THREAD	src/include/libevent_tiny/evthread-internal.h	195;"	d
-EVBASE_IN_THREAD	src/include/libevent_tiny/evthread-internal.h	303;"	d
-EVBASE_IN_THREAD	src/include/libevent_tiny/evthread-internal.h	61;"	d
-EVBASE_NEED_NOTIFY	src/include/libevent_tiny/evthread-internal.h	197;"	d
-EVBASE_NEED_NOTIFY	src/include/libevent_tiny/evthread-internal.h	304;"	d
-EVBASE_NEED_NOTIFY	src/include/libevent_tiny/evthread-internal.h	68;"	d
-EVBASE_RELEASE_LOCK	src/include/libevent_tiny/evthread-internal.h	118;"	d
-EVBASE_RELEASE_LOCK	src/include/libevent_tiny/evthread-internal.h	232;"	d
-EVBASE_RELEASE_LOCK	src/include/libevent_tiny/evthread-internal.h	306;"	d
-EVENT_BASE_ASSERT_LOCKED	src/libevent_tiny/event.c	103;"	d	file:
+EVBASE_ACQUIRE_LOCK	src/include/libevent_tiny/evthread-internal.h	42;"	d
+EVBASE_IN_THREAD	src/include/libevent_tiny/evthread-internal.h	40;"	d
+EVBASE_NEED_NOTIFY	src/include/libevent_tiny/evthread-internal.h	41;"	d
+EVBASE_RELEASE_LOCK	src/include/libevent_tiny/evthread-internal.h	43;"	d
+EVENT_BASE_ASSERT_LOCKED	src/libevent_tiny/event.c	104;"	d	file:
 EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST	src/include/libevent_tiny/event2/event.h	/^	EVENT_BASE_FLAG_EPOLL_USE_CHANGELIST = 0x10$/;"	e	enum:event_base_config_flag
 EVENT_BASE_FLAG_IGNORE_ENV	src/include/libevent_tiny/event2/event.h	/^	EVENT_BASE_FLAG_IGNORE_ENV = 0x02,$/;"	e	enum:event_base_config_flag
 EVENT_BASE_FLAG_NOLOCK	src/include/libevent_tiny/event2/event.h	/^	EVENT_BASE_FLAG_NOLOCK = 0x01,$/;"	e	enum:event_base_config_flag
@@ -140,67 +132,27 @@ EVLIST_SIGNAL	src/include/libevent_tiny/event2/event_struct.h	59;"	d
 EVLIST_TIMEOUT	src/include/libevent_tiny/event2/event_struct.h	57;"	d
 EVLIST_X_IOFOUND	src/libevent_tiny/evmap.c	721;"	d	file:
 EVLIST_X_SIGFOUND	src/libevent_tiny/evmap.c	720;"	d	file:
-EVLOCK_ASSERT_LOCKED	src/include/libevent_tiny/evthread-internal.h	124;"	d
-EVLOCK_ASSERT_LOCKED	src/include/libevent_tiny/evthread-internal.h	238;"	d
-EVLOCK_ASSERT_LOCKED	src/include/libevent_tiny/evthread-internal.h	307;"	d
-EVLOCK_LOCK	src/include/libevent_tiny/evthread-internal.h	212;"	d
-EVLOCK_LOCK	src/include/libevent_tiny/evthread-internal.h	298;"	d
-EVLOCK_LOCK	src/include/libevent_tiny/evthread-internal.h	88;"	d
-EVLOCK_LOCK2	src/include/libevent_tiny/evthread-internal.h	300;"	d
-EVLOCK_LOCK2	src/include/libevent_tiny/evthread-internal.h	336;"	d
-EVLOCK_TRY_LOCK	src/include/libevent_tiny/evthread-internal.h	/^EVLOCK_TRY_LOCK(void *lock)$/;"	f
-EVLOCK_TRY_LOCK	src/include/libevent_tiny/evthread-internal.h	309;"	d
-EVLOCK_UNLOCK	src/include/libevent_tiny/evthread-internal.h	219;"	d
-EVLOCK_UNLOCK	src/include/libevent_tiny/evthread-internal.h	299;"	d
-EVLOCK_UNLOCK	src/include/libevent_tiny/evthread-internal.h	95;"	d
-EVLOCK_UNLOCK2	src/include/libevent_tiny/evthread-internal.h	301;"	d
-EVLOCK_UNLOCK2	src/include/libevent_tiny/evthread-internal.h	346;"	d
+EVLOCK_ASSERT_LOCKED	src/include/libevent_tiny/evthread-internal.h	44;"	d
+EVLOCK_LOCK	src/include/libevent_tiny/evthread-internal.h	36;"	d
+EVLOCK_LOCK2	src/include/libevent_tiny/evthread-internal.h	38;"	d
+EVLOCK_TRY_LOCK	src/include/libevent_tiny/evthread-internal.h	45;"	d
+EVLOCK_UNLOCK	src/include/libevent_tiny/evthread-internal.h	37;"	d
+EVLOCK_UNLOCK2	src/include/libevent_tiny/evthread-internal.h	39;"	d
 EVLOOP_NONBLOCK	src/include/libevent_tiny/event2/event.h	639;"	d
 EVLOOP_ONCE	src/include/libevent_tiny/event2/event.h	636;"	d
 EVMAP_USE_HT	src/include/libevent_tiny/event-internal.h	109;"	d
 EVSIGBASE_LOCK	src/libevent_tiny/signal.c	101;"	d	file:
 EVSIGBASE_UNLOCK	src/libevent_tiny/signal.c	102;"	d	file:
-EVTHREAD_ALLOC_COND	src/include/libevent_tiny/evthread-internal.h	148;"	d
-EVTHREAD_ALLOC_COND	src/include/libevent_tiny/evthread-internal.h	262;"	d
-EVTHREAD_ALLOC_COND	src/include/libevent_tiny/evthread-internal.h	311;"	d
-EVTHREAD_ALLOC_LOCK	src/include/libevent_tiny/evthread-internal.h	201;"	d
-EVTHREAD_ALLOC_LOCK	src/include/libevent_tiny/evthread-internal.h	295;"	d
-EVTHREAD_ALLOC_LOCK	src/include/libevent_tiny/evthread-internal.h	75;"	d
-EVTHREAD_CONDITION_API_VERSION	src/include/libevent_tiny/event2/thread.h	129;"	d
-EVTHREAD_COND_BROADCAST	src/include/libevent_tiny/evthread-internal.h	163;"	d
-EVTHREAD_COND_BROADCAST	src/include/libevent_tiny/evthread-internal.h	276;"	d
-EVTHREAD_COND_BROADCAST	src/include/libevent_tiny/evthread-internal.h	314;"	d
-EVTHREAD_COND_SIGNAL	src/include/libevent_tiny/evthread-internal.h	160;"	d
-EVTHREAD_COND_SIGNAL	src/include/libevent_tiny/evthread-internal.h	273;"	d
-EVTHREAD_COND_SIGNAL	src/include/libevent_tiny/evthread-internal.h	313;"	d
-EVTHREAD_COND_WAIT	src/include/libevent_tiny/evthread-internal.h	169;"	d
-EVTHREAD_COND_WAIT	src/include/libevent_tiny/evthread-internal.h	282;"	d
-EVTHREAD_COND_WAIT	src/include/libevent_tiny/evthread-internal.h	315;"	d
-EVTHREAD_COND_WAIT_TIMED	src/include/libevent_tiny/evthread-internal.h	173;"	d
-EVTHREAD_COND_WAIT_TIMED	src/include/libevent_tiny/evthread-internal.h	286;"	d
-EVTHREAD_COND_WAIT_TIMED	src/include/libevent_tiny/evthread-internal.h	316;"	d
-EVTHREAD_EXPOSE_STRUCTS	src/include/libevent_tiny/evthread-internal.h	44;"	d
-EVTHREAD_FREE_COND	src/include/libevent_tiny/evthread-internal.h	154;"	d
-EVTHREAD_FREE_COND	src/include/libevent_tiny/evthread-internal.h	267;"	d
-EVTHREAD_FREE_COND	src/include/libevent_tiny/evthread-internal.h	312;"	d
-EVTHREAD_FREE_LOCK	src/include/libevent_tiny/evthread-internal.h	204;"	d
-EVTHREAD_FREE_LOCK	src/include/libevent_tiny/evthread-internal.h	296;"	d
-EVTHREAD_FREE_LOCK	src/include/libevent_tiny/evthread-internal.h	80;"	d
-EVTHREAD_GET_ID	src/include/libevent_tiny/evthread-internal.h	194;"	d
-EVTHREAD_GET_ID	src/include/libevent_tiny/evthread-internal.h	294;"	d
-EVTHREAD_GET_ID	src/include/libevent_tiny/evthread-internal.h	56;"	d
-EVTHREAD_LOCKING_ENABLED	src/include/libevent_tiny/evthread-internal.h	177;"	d
-EVTHREAD_LOCKING_ENABLED	src/include/libevent_tiny/evthread-internal.h	289;"	d
-EVTHREAD_LOCKING_ENABLED	src/include/libevent_tiny/evthread-internal.h	318;"	d
-EVTHREAD_LOCKTYPE_READWRITE	src/include/libevent_tiny/event2/thread.h	86;"	d
-EVTHREAD_LOCKTYPE_RECURSIVE	src/include/libevent_tiny/event2/thread.h	83;"	d
-EVTHREAD_LOCK_API_VERSION	src/include/libevent_tiny/event2/thread.h	74;"	d
-EVTHREAD_READ	src/include/libevent_tiny/event2/thread.h	65;"	d
-EVTHREAD_SETUP_GLOBAL_LOCK	src/include/libevent_tiny/evthread-internal.h	362;"	d
-EVTHREAD_TRY	src/include/libevent_tiny/event2/thread.h	69;"	d
-EVTHREAD_USE_PTHREADS_IMPLEMENTED	src/include/libevent_tiny/event2/thread.h	210;"	d
-EVTHREAD_USE_WINDOWS_THREADS_IMPLEMENTED	src/include/libevent_tiny/event2/thread.h	199;"	d
-EVTHREAD_WRITE	src/include/libevent_tiny/event2/thread.h	62;"	d
+EVTHREAD_ALLOC_COND	src/include/libevent_tiny/evthread-internal.h	46;"	d
+EVTHREAD_ALLOC_LOCK	src/include/libevent_tiny/evthread-internal.h	34;"	d
+EVTHREAD_COND_BROADCAST	src/include/libevent_tiny/evthread-internal.h	49;"	d
+EVTHREAD_COND_SIGNAL	src/include/libevent_tiny/evthread-internal.h	48;"	d
+EVTHREAD_COND_WAIT	src/include/libevent_tiny/evthread-internal.h	50;"	d
+EVTHREAD_COND_WAIT_TIMED	src/include/libevent_tiny/evthread-internal.h	51;"	d
+EVTHREAD_FREE_COND	src/include/libevent_tiny/evthread-internal.h	47;"	d
+EVTHREAD_FREE_LOCK	src/include/libevent_tiny/evthread-internal.h	35;"	d
+EVTHREAD_GET_ID	src/include/libevent_tiny/evthread-internal.h	33;"	d
+EVTHREAD_LOCKING_ENABLED	src/include/libevent_tiny/evthread-internal.h	52;"	d
 EVUTIL_AI_ADDRCONFIG	src/include/libevent_tiny/event2/util.h	623;"	d
 EVUTIL_AI_ADDRCONFIG	src/include/libevent_tiny/event2/util.h	625;"	d
 EVUTIL_AI_ALL	src/include/libevent_tiny/event2/util.h	618;"	d
@@ -355,8 +307,6 @@ GET_IO_SLOT_AND_CTOR	src/libevent_tiny/evmap.c	109;"	d	file:
 GET_IO_SLOT_AND_CTOR	src/libevent_tiny/evmap.c	172;"	d	file:
 GET_SIGNAL_SLOT	src/libevent_tiny/evmap.c	149;"	d	file:
 GET_SIGNAL_SLOT_AND_CTOR	src/libevent_tiny/evmap.c	156;"	d	file:
-GLOBAL	src/libevent_tiny/evthread.c	42;"	d	file:
-GLOBAL	src/libevent_tiny/evthread.c	44;"	d	file:
 GREEN	src/include/libdbg/debug.h	109;"	d
 GetCompilationInfoForFile	.ycm_extra_conf.py	/^def GetCompilationInfoForFile( filename ):$/;"	f
 HIGHLIGHT_FLAG	src/include/libdbg/debug.h	118;"	d
@@ -446,7 +396,6 @@ LIST_POISON2	src/include/liballoc/list.h	25;"	d
 LIST_POISON2	src/include/libdata_structure/list.h	25;"	d
 LIST_POISON2	src/include/libdbg/list.h	34;"	d
 LIST_POISON2	src/include/libproto_analyzer/list.h	30;"	d
-LOCAL_SOCKETPAIR_AF	src/libevent_tiny/event.c	1713;"	d	file:
 MAXEPOLLSIZE	src/libnet/client/client.c	52;"	d	file:
 MAXEPOLLSIZE	src/libnet/server/server.c	50;"	d	file:
 MAXLINE	src/libnet/client/client.c	53;"	d	file:
@@ -455,7 +404,7 @@ MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	206;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	230;"	d	file:
 MAX_BUSINESSES_SETTING_LEN	src/libdbg/debug.c	135;"	d	file:
-MAX_COMMON_TIMEOUTS	src/libevent_tiny/event.c	546;"	d	file:
+MAX_COMMON_TIMEOUTS	src/libevent_tiny/event.c	504;"	d	file:
 MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	27;"	d
 MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	51;"	d
 MAX_DEBUGGER_MODULES_NUM	src/include/libdbg/debug.h	95;"	d
@@ -500,7 +449,7 @@ MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	47;"	d
 MAX_THREADS	src/include/libthread_pool/threadpool.h	45;"	d
 MEM_POOL_MAX_SIZE	src/include/liballoc/allocator_ctr_alloc.h	26;"	d
 MEM_POOL_MIN_DEPTH	src/include/liballoc/allocator_ctr_alloc.h	27;"	d
-MICROSECONDS_MASK	src/libevent_tiny/event.c	471;"	d	file:
+MICROSECONDS_MASK	src/libevent_tiny/event.c	429;"	d	file:
 MakeRelativePathsInFlagsAbsolute	.ycm_extra_conf.py	/^def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):$/;"	f
 NFDBITS	src/libevent_tiny/select.c	55;"	d	file:
 NULL	src/include/libdata_structure/list.h	635;"	d
@@ -662,7 +611,6 @@ _EVENT2_EVENT_COMPAT_H_	src/include/libevent_tiny/event2/event_compat.h	28;"	d
 _EVENT2_EVENT_CONFIG_H_	src/include/libevent_tiny/event2/event-config.h	12;"	d
 _EVENT2_EVENT_H_	src/include/libevent_tiny/event2/event.h	28;"	d
 _EVENT2_EVENT_STRUCT_H_	src/include/libevent_tiny/event2/event_struct.h	28;"	d
-_EVENT2_THREAD_H_	src/include/libevent_tiny/event2/thread.h	27;"	d
 _EVENT2_UTIL_H_	src/include/libevent_tiny/event2/util.h	27;"	d
 _EVENT_DEFINED_TQENTRY	src/include/libevent_tiny/event2/event_struct.h	69;"	d
 _EVENT_DEFINED_TQHEAD	src/include/libevent_tiny/event2/event_struct.h	78;"	d
@@ -785,15 +733,12 @@ _EVENT_STDC_HEADERS	src/include/libevent_tiny/event2/event-config.h	426;"	d
 _EVENT_TIME_WITH_SYS_TIME	src/include/libevent_tiny/event2/event-config.h	429;"	d
 _EVENT_UTIL_INTERNAL_H	src/include/libevent_tiny/util-internal.h	27;"	d
 _EVENT_VERSION	src/include/libevent_tiny/event2/event-config.h	432;"	d
-_EVLOCK_SORTLOCKS	src/include/libevent_tiny/evthread-internal.h	102;"	d
-_EVLOCK_SORTLOCKS	src/include/libevent_tiny/evthread-internal.h	325;"	d
 _EVMAP_H_	src/include/libevent_tiny/evmap-internal.h	27;"	d
 _EVSIGNAL_H_	src/include/libevent_tiny/evsignal-internal.h	28;"	d
 _EVTHREAD_INTERNAL_H_	src/include/libevent_tiny/evthread-internal.h	27;"	d
 _EVUTIL_NIL_CONDITION	src/include/libevent_tiny/util-internal.h	62;"	d
 _EVUTIL_NIL_STMT	src/include/libevent_tiny/util-internal.h	56;"	d
 _GNU_SOURCE	src/include/libevent_tiny/event2/util.h	61;"	d
-_GNU_SOURCE	src/libevent_tiny/evthread_pthread.c	29;"	d	file:
 _GNU_SOURCE	src/libevent_tiny/evutil.c	29;"	d	file:
 _HT_BUCKET	src/include/libevent_tiny/ht-internal.h	117;"	d
 _HT_ELT_HASH	src/include/libevent_tiny/ht-internal.h	105;"	d
@@ -895,23 +840,6 @@ _event_debugx	src/libevent_tiny/log.c	/^_event_debugx(const char *fmt, ...)$/;"	
 _event_strlcpy	src/libevent_tiny/strlcpy.c	/^_event_strlcpy(dst, src, siz)$/;"	f
 _evsig_restore_handler	src/libevent_tiny/signal.c	/^_evsig_restore_handler(struct event_base *base, int evsignal)$/;"	f
 _evsig_set_handler	src/libevent_tiny/signal.c	/^_evsig_set_handler(struct event_base *base,$/;"	f
-_evthread_cond_fns	src/libevent_tiny/evthread.c	/^GLOBAL struct evthread_condition_callbacks _evthread_cond_fns = {$/;"	v	typeref:struct:evthread_condition_callbacks
-_evthread_debug_get_real_lock	src/libevent_tiny/evthread.c	/^_evthread_debug_get_real_lock(void *lock_)$/;"	f
-_evthread_id_fn	src/libevent_tiny/evthread.c	/^GLOBAL unsigned long (*_evthread_id_fn)(void) = NULL;$/;"	v
-_evthread_is_debug_lock_held	src/libevent_tiny/evthread.c	/^_evthread_is_debug_lock_held(void *lock_)$/;"	f
-_evthread_lock_debugging_enabled	src/libevent_tiny/evthread.c	/^GLOBAL int _evthread_lock_debugging_enabled = 0;$/;"	v
-_evthread_lock_fns	src/libevent_tiny/evthread.c	/^GLOBAL struct evthread_lock_callbacks _evthread_lock_fns = {$/;"	v	typeref:struct:evthread_lock_callbacks
-_evthreadimpl_cond_alloc	src/libevent_tiny/evthread.c	/^_evthreadimpl_cond_alloc(unsigned condtype)$/;"	f
-_evthreadimpl_cond_free	src/libevent_tiny/evthread.c	/^_evthreadimpl_cond_free(void *cond)$/;"	f
-_evthreadimpl_cond_signal	src/libevent_tiny/evthread.c	/^_evthreadimpl_cond_signal(void *cond, int broadcast)$/;"	f
-_evthreadimpl_cond_wait	src/libevent_tiny/evthread.c	/^_evthreadimpl_cond_wait(void *cond, void *lock, const struct timeval *tv)$/;"	f
-_evthreadimpl_get_id	src/libevent_tiny/evthread.c	/^_evthreadimpl_get_id()$/;"	f
-_evthreadimpl_is_lock_debugging_enabled	src/libevent_tiny/evthread.c	/^_evthreadimpl_is_lock_debugging_enabled(void)$/;"	f
-_evthreadimpl_lock_alloc	src/libevent_tiny/evthread.c	/^_evthreadimpl_lock_alloc(unsigned locktype)$/;"	f
-_evthreadimpl_lock_free	src/libevent_tiny/evthread.c	/^_evthreadimpl_lock_free(void *lock, unsigned locktype)$/;"	f
-_evthreadimpl_lock_lock	src/libevent_tiny/evthread.c	/^_evthreadimpl_lock_lock(unsigned mode, void *lock)$/;"	f
-_evthreadimpl_lock_unlock	src/libevent_tiny/evthread.c	/^_evthreadimpl_lock_unlock(unsigned mode, void *lock)$/;"	f
-_evthreadimpl_locking_enabled	src/libevent_tiny/evthread.c	/^_evthreadimpl_locking_enabled(void)$/;"	f
 _evutil_weakrand	src/libevent_tiny/evutil.c	/^_evutil_weakrand(void)$/;"	f
 _offsetof	src/include/liballoc/list.h	11;"	d
 _offsetof	src/include/liballoc/list.h	12;"	d
@@ -923,8 +851,6 @@ _offsetof	src/include/libdbg/list.h	11;"	d
 _offsetof	src/include/libdbg/list.h	12;"	d
 _offsetof	src/include/libdbg/list.h	14;"	d
 _offsetof	src/include/libproto_analyzer/list.h	13;"	d
-_original_cond_fns	src/libevent_tiny/evthread.c	/^static struct evthread_condition_callbacks _original_cond_fns = {$/;"	v	typeref:struct:evthread_condition_callbacks	file:
-_original_lock_fns	src/libevent_tiny/evthread.c	/^static struct evthread_lock_callbacks _original_lock_fns = {$/;"	v	typeref:struct:evthread_lock_callbacks	file:
 _warn_helper	src/libevent_tiny/log.c	/^_warn_helper(int severity, const char *errstr, const char *fmt, va_list ap)$/;"	f	file:
 a	src/include/libevent_tiny/minheap-internal.h	/^	unsigned n, a;$/;"	m	struct:min_heap
 a	src/libdata_structure/test/test_hashmap.c	/^	int a;$/;"	m	struct:A	file:
@@ -945,8 +871,6 @@ ai_next	src/include/libevent_tiny/event2/util.h	/^	struct evutil_addrinfo  *ai_n
 ai_protocol	src/include/libevent_tiny/event2/util.h	/^	int     ai_protocol;  \/* 0 or IPPROTO_xxx for IPv4 and IPv6 *\/$/;"	m	struct:evutil_addrinfo
 ai_socktype	src/include/libevent_tiny/event2/util.h	/^	int     ai_socktype;  \/* SOCK_xxx *\/$/;"	m	struct:evutil_addrinfo
 alloc	src/include/liballoc/allocator.h	/^	void *(*alloc)(allocator_t *alloc,uint32_t size);$/;"	m	struct:allocator_operations
-alloc	src/include/libevent_tiny/event2/thread.h	/^	void *(*alloc)(unsigned locktype);$/;"	m	struct:evthread_lock_callbacks
-alloc_condition	src/include/libevent_tiny/event2/thread.h	/^	void *(*alloc_condition)(unsigned condtype);$/;"	m	struct:evthread_condition_callbacks
 alloc_count	src/include/liballoc/allocator.h	/^	uint32_t alloc_count;$/;"	m	struct:allocator
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations *alloc_ops;$/;"	m	struct:allocator	typeref:struct:allocator::allocator_operations
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations alloc_ops;$/;"	m	struct:allocator_module	typeref:struct:allocator_module::allocator_operations
@@ -988,7 +912,6 @@ apply_numeric_port_hack	src/libevent_tiny/evutil.c	/^apply_numeric_port_hack(int
 apply_socktype_protocol_hack	src/libevent_tiny/evutil.c	/^apply_socktype_protocol_hack(struct evutil_addrinfo *ai)$/;"	f	file:
 argument	src/libthread_pool/threadpool.c	/^    void *argument;$/;"	m	struct:__anon15	file:
 assignment_count	src/include/libconcurrent/concurrent.h	/^	uint8_t assignment_count;$/;"	m	struct:concurrent_master_s
-attr_recursive	src/libevent_tiny/evthread_pthread.c	/^static pthread_mutexattr_t attr_recursive;$/;"	v	file:
 avoid_method	src/include/libevent_tiny/event-internal.h	/^	const char *avoid_method;$/;"	m	struct:event_config_entry
 b	src/include/libcre/sync_lock/sync_lock.h	/^		int b;$/;"	m	union:sync_lock_s::lock
 b	src/libdata_structure/test/test_hashmap.c	/^	int b;$/;"	m	struct:A	file:
@@ -1092,7 +1015,6 @@ concurrent_task_s	src/libconcurrent/test_concurrent.c	/^typedef struct concurren
 concurrent_task_t	src/libconcurrent/test_concurrent.c	/^}concurrent_task_t;$/;"	t	typeref:struct:concurrent_task_s	file:
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_master_s
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_s
-condition_api_version	src/include/libevent_tiny/event2/thread.h	/^	int condition_api_version;$/;"	m	struct:evthread_condition_callbacks
 conn	src/libconcurrent/test_concurrent.c	/^	uint32_t conn;$/;"	m	struct:concurrent_task_s	file:
 console_print_print	src/libdbg/debug_console.c	/^int console_print_print(debugger_t *debugger,size_t level,const char *fmt,...)$/;"	f
 console_print_print_str_vl	src/libdbg/debug_console.c	/^int console_print_print_str_vl(debugger_t *debugger,$/;"	f
@@ -1107,7 +1029,6 @@ container_of	src/include/libproto_analyzer/list.h	22;"	d
 copy_protocol_format	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*copy_protocol_format)(struct protocol_analyzer_s *pa); $/;"	m	struct:protocol_analyzer_s
 count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct:ctr_mem_pool_head_list
 count	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t count;$/;"	m	struct:slab_head_list
-count	src/libevent_tiny/evthread.c	/^	int count;$/;"	m	struct:debug_lock	file:
 count	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^	int count;$/;"	m	struct:pa_array_s	file:
 count	src/libthread_pool/threadpool.c	/^  int count;$/;"	m	struct:threadpool_t	file:
 create_pair	src/include/libdata_structure/map_pair.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
@@ -1157,18 +1078,12 @@ dealloc	src/include/libevent_tiny/event-internal.h	/^	void (*dealloc)(struct eve
 debug_business	src/include/libdbg/debug.h	/^	struct debug_business debug_business[MAX_DEBUG_BUSINESS_NUM];$/;"	m	struct:debugger	typeref:struct:debugger::debug_business
 debug_business	src/include/libdbg/debug.h	/^struct debug_business{$/;"	s
 debug_business_enum	src/include/libdbg/debug_businesses.h	/^enum debug_business_enum{$/;"	g
-debug_cond_wait	src/libevent_tiny/evthread.c	/^debug_cond_wait(void *_cond, void *_lock, const struct timeval *tv)$/;"	f	file:
 debug_cosole_prive	src/include/libdbg/debug_console.h	/^typedef struct debug_cosole_prive{$/;"	s
 debug_cosole_prive_t	src/include/libdbg/debug_console.h	/^}debug_cosole_prive_t;$/;"	t	typeref:struct:debug_cosole_prive
 debug_level_enum	src/include/libdbg/debug.h	/^enum debug_level_enum{$/;"	g
 debug_level_info	src/include/libdbg/debug.h	/^	debug_level_info_t debug_level_info[DBG_MAX_LEVEL];$/;"	m	struct:debugger
 debug_level_info	src/include/libdbg/debug.h	/^struct debug_level_info{$/;"	s
 debug_level_info_t	src/include/libdbg/debug.h	/^typedef struct debug_level_info debug_level_info_t;$/;"	t	typeref:struct:debug_level_info
-debug_lock	src/libevent_tiny/evthread.c	/^struct debug_lock {$/;"	s	file:
-debug_lock_alloc	src/libevent_tiny/evthread.c	/^debug_lock_alloc(unsigned locktype)$/;"	f	file:
-debug_lock_free	src/libevent_tiny/evthread.c	/^debug_lock_free(void *lock_, unsigned locktype)$/;"	f	file:
-debug_lock_lock	src/libevent_tiny/evthread.c	/^debug_lock_lock(unsigned mode, void *lock_)$/;"	f	file:
-debug_lock_unlock	src/libevent_tiny/evthread.c	/^debug_lock_unlock(unsigned mode, void *lock_)$/;"	f	file:
 debug_log_prive	src/include/libdbg/debug_log.h	/^typedef struct debug_log_prive{$/;"	s
 debug_log_prive_t	src/include/libdbg/debug_log.h	/^}debug_log_prive_t;$/;"	t	typeref:struct:debug_log_prive
 debug_string_buf_to_str	src/libdbg/debug_string.c	/^uint32_t debug_string_buf_to_str(uint8_t *buf_addr,size_t buf_len,char *str,size_t str_len)$/;"	f
@@ -1207,7 +1122,7 @@ depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t depth;$/;"	m	struct
 destroy	src/include/liballoc/allocator.h	/^	void (*destroy)(allocator_t * alloc);$/;"	m	struct:allocator_operations
 destroy	src/include/libdbg/debug.h	/^	void (*destroy)(debugger_t *debugger);$/;"	m	struct:debugger_opperations
 destroy_pair	src/include/libdata_structure/map_pair.h	/^static inline int destroy_pair(pair_t *p)$/;"	f
-detect_monotonic	src/libevent_tiny/event.c	/^detect_monotonic(void)$/;"	f	file:
+detect_monotonic	src/libevent_tiny/event.c	/^static void detect_monotonic(void)$/;"	f	file:
 dictionary	src/include/libini/iniparser.h	/^} dictionary ;$/;"	t	typeref:struct:_dictionary_
 dictionary_del	src/libini/iniparser.c	/^static void dictionary_del(dictionary * d)$/;"	f	file:
 dictionary_dump	src/libini/iniparser.c	/^static void dictionary_dump(dictionary *d, FILE *f)$/;"	f	file:
@@ -1348,7 +1263,7 @@ event_active	src/libevent_tiny/event.c	/^event_active(struct event *ev, int res,
 event_active_nolock	src/libevent_tiny/event.c	/^event_active_nolock(struct event *ev, int res, short ncalls)$/;"	f
 event_add	src/libevent_tiny/event.c	/^event_add(struct event *ev, const struct timeval *tv)$/;"	f
 event_add_internal	src/libevent_tiny/event.c	/^event_add_internal(struct event *ev, const struct timeval *tv,$/;"	f	file:
-event_assign	src/libevent_tiny/event.c	/^event_assign(struct event *ev, struct event_base *base, evutil_socket_t fd, short events, void (*callback)(evutil_socket_t, short, void *), void *arg)$/;"	f
+event_assign	src/libevent_tiny/event.c	/^event_assign(struct event *ev,$/;"	f
 event_base	src/include/libconcurrent/concurrent.h	/^	struct event_base *event_base;$/;"	m	struct:concurrent_master_s	typeref:struct:concurrent_master_s::event_base
 event_base	src/include/libconcurrent/concurrent.h	/^	struct event_base *event_base;$/;"	m	struct:concurrent_slave_s	typeref:struct:concurrent_slave_s::event_base
 event_base	src/include/libevent_tiny/event-internal.h	/^struct event_base {$/;"	s
@@ -1356,12 +1271,11 @@ event_base	src/include/libevent_tiny/event2/event.h	/^struct event_base$/;"	s
 event_base_config_flag	src/include/libevent_tiny/event2/event.h	/^enum event_base_config_flag {$/;"	g
 event_base_dispatch	src/libevent_tiny/event.c	/^event_base_dispatch(struct event_base *event_base)$/;"	f
 event_base_dump_events	src/libevent_tiny/event.c	/^event_base_dump_events(struct event_base *base, FILE *output)$/;"	f
-event_base_free	src/libevent_tiny/event.c	/^event_base_free(struct event_base *base)$/;"	f
+event_base_free	src/libevent_tiny/event.c	/^void event_base_free(struct event_base *base)$/;"	f
 event_base_init_common_timeout	src/libevent_tiny/event.c	/^event_base_init_common_timeout(struct event_base *base,$/;"	f
 event_base_loop	src/libevent_tiny/event.c	/^event_base_loop(struct event_base *base, int flags)$/;"	f
 event_base_loopbreak	src/libevent_tiny/event.c	/^event_base_loopbreak(struct event_base *event_base)$/;"	f
-event_base_new	src/libevent_tiny/event.c	/^event_base_new(void)$/;"	f
-event_base_new_with_config	src/libevent_tiny/event.c	/^event_base_new_with_config(const struct event_config *cfg)$/;"	f
+event_base_new	src/libevent_tiny/event.c	/^struct event_base * event_base_new(void)$/;"	f
 event_base_priority_init	src/libevent_tiny/event.c	/^event_base_priority_init(struct event_base *base, int npriorities)$/;"	f
 event_break	src/include/libevent_tiny/event-internal.h	/^	int event_break;$/;"	m	struct:event_base
 event_callback_fn	src/include/libevent_tiny/event2/event.h	/^typedef void (*event_callback_fn)(evutil_socket_t, short, void *);$/;"	t
@@ -1399,7 +1313,6 @@ event_fdsz	src/libevent_tiny/select.c	/^	int event_fdsz;$/;"	m	struct:selectop	f
 event_free	src/libevent_tiny/event.c	/^event_free(struct event *ev)$/;"	f
 event_get_fd	src/libevent_tiny/event.c	/^event_get_fd(const struct event *ev)$/;"	f
 event_get_signal	src/include/libevent_tiny/event2/event.h	1005;"	d
-event_global_setup_locks_	src/libevent_tiny/event.c	/^event_global_setup_locks_(const int enable_locks)$/;"	f
 event_gotterm	src/include/libevent_tiny/event-internal.h	/^	int event_gotterm;$/;"	m	struct:event_base
 event_haveevents	src/libevent_tiny/event.c	/^event_haveevents(struct event_base *base)$/;"	f	file:
 event_initialized	src/libevent_tiny/event.c	/^event_initialized(const struct event *ev)$/;"	f
@@ -1475,7 +1388,6 @@ evsig_base_n_signals_added	src/libevent_tiny/signal.c	/^static int evsig_base_n_
 evsig_cb	src/libevent_tiny/signal.c	/^evsig_cb(evutil_socket_t fd, short what, void *arg)$/;"	f	file:
 evsig_dealloc	src/libevent_tiny/signal.c	/^evsig_dealloc(struct event_base *base)$/;"	f
 evsig_del	src/libevent_tiny/signal.c	/^evsig_del(struct event_base *base, evutil_socket_t evsignal, short old, short events, void *p)$/;"	f	file:
-evsig_global_setup_locks_	src/libevent_tiny/signal.c	/^evsig_global_setup_locks_(const int enable_locks)$/;"	f
 evsig_handler	src/libevent_tiny/signal.c	/^evsig_handler(int sig)$/;"	f	file:
 evsig_info	src/include/libevent_tiny/evsignal-internal.h	/^struct evsig_info {$/;"	s
 evsig_init	src/libevent_tiny/signal.c	/^evsig_init(struct event_base *base)$/;"	f
@@ -1489,29 +1401,6 @@ evsignal_pending	src/include/libevent_tiny/event2/event.h	775;"	d
 evsignal_set	src/include/libevent_tiny/event2/event_compat.h	177;"	d
 evsigops	src/libevent_tiny/signal.c	/^static const struct eventop evsigops = {$/;"	v	typeref:struct:eventop	file:
 evsigsel	src/include/libevent_tiny/event-internal.h	/^	const struct eventop *evsigsel;$/;"	m	struct:event_base	typeref:struct:event_base::eventop
-evthread_condition_callbacks	src/include/libevent_tiny/event2/thread.h	/^struct evthread_condition_callbacks {$/;"	s
-evthread_debug_lock_mark_locked	src/libevent_tiny/evthread.c	/^evthread_debug_lock_mark_locked(unsigned mode, struct debug_lock *lock)$/;"	f	file:
-evthread_debug_lock_mark_unlocked	src/libevent_tiny/evthread.c	/^evthread_debug_lock_mark_unlocked(unsigned mode, struct debug_lock *lock)$/;"	f	file:
-evthread_enable_lock_debuging	src/libevent_tiny/evthread.c	/^evthread_enable_lock_debuging(void)$/;"	f
-evthread_lock_callbacks	src/include/libevent_tiny/event2/thread.h	/^struct evthread_lock_callbacks {$/;"	s
-evthread_make_base_notifiable	src/libevent_tiny/event.c	/^evthread_make_base_notifiable(struct event_base *base)$/;"	f
-evthread_notify_base	src/libevent_tiny/event.c	/^evthread_notify_base(struct event_base *base)$/;"	f	file:
-evthread_notify_base_default	src/libevent_tiny/event.c	/^evthread_notify_base_default(struct event_base *base)$/;"	f	file:
-evthread_notify_drain_default	src/libevent_tiny/event.c	/^evthread_notify_drain_default(evutil_socket_t fd, short what, void *arg)$/;"	f	file:
-evthread_posix_cond_alloc	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_cond_alloc(unsigned condflags)$/;"	f	file:
-evthread_posix_cond_free	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_cond_free(void *_cond)$/;"	f	file:
-evthread_posix_cond_signal	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_cond_signal(void *_cond, int broadcast)$/;"	f	file:
-evthread_posix_cond_wait	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_cond_wait(void *_cond, void *_lock, const struct timeval *tv)$/;"	f	file:
-evthread_posix_get_id	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_get_id(void)$/;"	f	file:
-evthread_posix_lock	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_lock(unsigned mode, void *_lock)$/;"	f	file:
-evthread_posix_lock_alloc	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_lock_alloc(unsigned locktype)$/;"	f	file:
-evthread_posix_lock_free	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_lock_free(void *_lock, unsigned locktype)$/;"	f	file:
-evthread_posix_unlock	src/libevent_tiny/evthread_pthread.c	/^evthread_posix_unlock(unsigned mode, void *_lock)$/;"	f	file:
-evthread_set_condition_callbacks	src/libevent_tiny/evthread.c	/^evthread_set_condition_callbacks(const struct evthread_condition_callbacks *cbs)$/;"	f
-evthread_set_id_callback	src/libevent_tiny/evthread.c	/^evthread_set_id_callback(unsigned long (*id_fn)(void))$/;"	f
-evthread_set_lock_callbacks	src/libevent_tiny/evthread.c	/^evthread_set_lock_callbacks(const struct evthread_lock_callbacks *cbs)$/;"	f
-evthread_setup_global_lock_	src/libevent_tiny/evthread.c	/^evthread_setup_global_lock_(void *lock_, unsigned locktype, int enable_locks)$/;"	f
-evthread_use_pthreads	src/libevent_tiny/evthread_pthread.c	/^evthread_use_pthreads(void)$/;"	f
 evtimer_add	src/include/libevent_tiny/event2/event.h	757;"	d
 evtimer_assign	src/include/libevent_tiny/event2/event.h	754;"	d
 evtimer_del	src/include/libevent_tiny/event2/event.h	758;"	d
@@ -1602,8 +1491,6 @@ flags	src/include/libevent_tiny/event-internal.h	/^	enum event_base_config_flag 
 flags	src/include/libevent_tiny/event-internal.h	/^	enum event_base_config_flag flags;$/;"	m	struct:event_config	typeref:enum:event_config::event_base_config_flag
 fp	src/include/libdbg/debug_log.h	/^	FILE *fp;$/;"	m	struct:debug_log_prive
 free	src/include/liballoc/allocator.h	/^	void (*free)(allocator_t *alloc,void *addr);$/;"	m	struct:allocator_operations
-free	src/include/libevent_tiny/event2/thread.h	/^	void (*free)(void *lock, unsigned locktype);$/;"	m	struct:evthread_lock_callbacks
-free_condition	src/include/libevent_tiny/event2/thread.h	/^	void (*free_condition)(void *cond);$/;"	m	struct:evthread_condition_callbacks
 free_mem	src/include/libproto_analyzer/protocol_format_set.h	/^	free_mem_fptr free_mem;$/;"	m	struct:proto_info_list_s
 free_mem_fptr	src/include/libproto_analyzer/protocol_format_set.h	/^typedef void (*free_mem_fptr)(void *mem_used);$/;"	t
 free_proto_info_list_mem	src/libproto_analyzer/protocol_format_set.c	/^void free_proto_info_list_mem(void *mem_used)$/;"	f
@@ -1612,14 +1499,14 @@ fstat	src/libevent_tiny/evutil.c	86;"	d	file:
 function	src/libthread_pool/threadpool.c	/^    void (*function)(void *);$/;"	m	struct:__anon15	file:
 g_client_proxy	src/libnet/client/proxy.c	/^client_proxy_t *g_client_proxy;$/;"	v
 g_proxy_concurrent_lock_type	src/libnet/client/proxy.c	/^uint8_t g_proxy_concurrent_lock_type = 0;$/;"	v
-g_proxy_slave_amount	src/libnet/client/proxy.c	/^uint8_t g_proxy_slave_amount = 0;$/;"	v
+g_proxy_slave_amount	src/libnet/client/proxy.c	/^uint8_t g_proxy_slave_amount = 1;$/;"	v
 get_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t get_bit_data(uint32_t data,uint8_t bit_pos,uint8_t len)$/;"	f
 get_common_timeout_list	src/libevent_tiny/event.c	/^get_common_timeout_list(struct event_base *base, const struct timeval *tv)$/;"	f	file:
 get_cont_pdu_len	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_len(buffer_t *buffer_p,uint16_t os) $/;"	f
 get_cont_pdu_num	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_num(buffer_t *buffer_p) $/;"	f
 get_real_alloc_mem_size	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)$/;"	f
 get_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*get_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
-gettime	src/libevent_tiny/event.c	/^gettime(struct event_base *base, struct timeval *tp)$/;"	f	file:
+gettime	src/libevent_tiny/event.c	/^static int gettime(struct event_base *base, struct timeval *tp)$/;"	f	file:
 graceful_shutdown	src/libthread_pool/threadpool.c	/^    graceful_shutdown  = 2$/;"	e	enum:__anon14	file:
 had_ipv4_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
 had_ipv6_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
@@ -1651,7 +1538,6 @@ head	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,he
 head	src/libthread_pool/threadpool.c	/^  int head;$/;"	m	struct:threadpool_t	file:
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	sync_lock_t head_lock;    $/;"	m	struct:ctr_mem_pool_head_list
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	sync_lock_t head_lock;    $/;"	m	struct:slab_head_list
-held_by	src/libevent_tiny/evthread.c	/^	unsigned long held_by;$/;"	m	struct:debug_lock	file:
 hexstr2num	src/libproto_analyzer/protocol_format_set.c	/^int hexstr2num(const char* const_str)$/;"	f
 hlist	src/include/libdata_structure/hash_list_struct.h	/^	struct hlist_head *hlist;$/;"	m	struct:hash_map_s	typeref:struct:hash_map_s::hlist_head
 hlist	src/include/libdata_structure/hash_list_struct.h	/^	struct hlist_head *hlist;\/\/hash table head addr$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hlist_head
@@ -1973,13 +1859,10 @@ llist_t	src/include/libdata_structure/link_list_struct.h	/^}llist_t;$/;"	t	typer
 local_sockaddr	src/include/libnet/client/client.h	/^	void *local_sockaddr;$/;"	m	struct:client_s
 lock	src/include/libcre/sync_lock/sync_lock.h	/^	union lock{$/;"	u	struct:sync_lock_s
 lock	src/include/libcre/sync_lock/sync_lock.h	/^	}lock;$/;"	m	struct:sync_lock_s	typeref:union:sync_lock_s::lock
-lock	src/include/libevent_tiny/event2/thread.h	/^	int (*lock)(unsigned mode, void *lock);$/;"	m	struct:evthread_lock_callbacks
-lock	src/libevent_tiny/evthread.c	/^	void *lock;$/;"	m	struct:debug_lock	file:
 lock	src/libthread_pool/tests/heavy.c	/^static pthread_mutex_t lock;$/;"	v	file:
 lock	src/libthread_pool/tests/shutdown.c	/^static pthread_mutex_t lock;$/;"	v	file:
 lock	src/libthread_pool/tests/thrdtest.c	/^static pthread_mutex_t lock;$/;"	v	file:
 lock	src/libthread_pool/threadpool.c	/^  pthread_mutex_t lock;$/;"	m	struct:threadpool_t	file:
-lock_api_version	src/include/libevent_tiny/event2/thread.h	/^	int lock_api_version;$/;"	m	struct:evthread_lock_callbacks
 lock_ops	src/include/libcre/sync_lock/sync_lock.h	/^	struct sync_lock_operations *lock_ops;$/;"	m	struct:sync_lock_s	typeref:struct:sync_lock_s::sync_lock_operations
 lock_type	src/include/liballoc/allocator.h	/^	uint8_t lock_type;$/;"	m	struct:allocator
 lock_type	src/include/libcre/sync_lock/sync_lock.h	/^	uint8_t lock_type;$/;"	m	struct:sync_lock_s
@@ -1988,7 +1871,6 @@ lock_type	src/include/libdata_structure/link_list_struct.h	/^	uint8_t lock_type;
 lock_type	src/include/libdata_structure/rbtree_map_struct.h	/^	uint8_t lock_type;$/;"	m	struct:rbtree_map_s
 lock_type	src/include/libdata_structure/vector_struct.h	/^	uint8_t lock_type;$/;"	m	struct:vector_s
 lock_type	src/include/libdbg/debug.h	/^	uint8_t lock_type;$/;"	m	struct:debugger
-locktype	src/libevent_tiny/evthread.c	/^	unsigned locktype;$/;"	m	struct:debug_lock	file:
 log	src/include/libdbg/debug.h	/^		debug_log_prive_t log;$/;"	m	union:debugger::debugger_priv
 log_file_lock	src/include/libdbg/debug_log.h	/^	sync_lock_t log_file_lock;$/;"	m	struct:debug_log_prive
 log_file_name	src/include/libdbg/debug_log.h	/^	char log_file_name[MAX_DEBUG_LOG_FILE_NAME_LEN];$/;"	m	struct:debug_log_prive
@@ -2219,10 +2101,10 @@ protocol_data_len	src/include/libproto_analyzer/protocol_analyzer.h	/^	uint16_t 
 protocol_format_set_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct protocol_format_set_s{$/;"	s
 protocol_format_set_t	src/include/libproto_analyzer/protocol_format_set.h	/^}protocol_format_set_t;$/;"	t	typeref:struct:protocol_format_set_s
 protocol_num	src/include/libproto_analyzer/protocol_analyzer.h	/^	uint32_t protocol_num;$/;"	m	struct:protocol_analyzer_s
-proxy_constructor	src/libnet/client/proxy.c	/^void proxy_constructor()$/;"	f
+proxy_constructor	src/libnet/client/proxy.c	/^proxy_constructor()$/;"	f
 proxy_create	src/libnet/client/proxy.c	/^client_proxy_t *proxy_create()$/;"	f
 proxy_destroy	src/libnet/client/proxy.c	/^int proxy_destroy(client_proxy_t *proxy)$/;"	f
-proxy_destructor	src/libnet/client/proxy.c	/^void proxy_destructor()$/;"	f
+proxy_destructor	src/libnet/client/proxy.c	/^proxy_destructor()$/;"	f
 proxy_get_proxy_addr	src/libnet/client/proxy.c	/^client_proxy_t *proxy_get_proxy_addr()$/;"	f
 proxy_init	src/libnet/client/proxy.c	/^int proxy_init(client_proxy_t *proxy, uint32_t task_size, uint8_t slave_amount, uint8_t concurrent_lock_type)$/;"	f
 proxy_register_client	src/libnet/client/proxy.c	/^int proxy_register_client(client_proxy_t *proxy,$/;"	f
@@ -2321,11 +2203,11 @@ sig	src/include/libevent_tiny/event-internal.h	/^	struct evsig_info sig;$/;"	m	s
 sigmap	src/include/libevent_tiny/event-internal.h	/^	struct event_signal_map sigmap;$/;"	m	struct:event_base	typeref:struct:event_base::event_signal_map
 signal_add	src/include/libevent_tiny/event2/event_compat.h	202;"	d
 signal_cb	src/libevent_tiny/test_signal.c	/^signal_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
-signal_condition	src/include/libevent_tiny/event2/thread.h	/^	int (*signal_condition)(void *cond, int broadcast);$/;"	m	struct:evthread_condition_callbacks
 signal_del	src/include/libevent_tiny/event2/event_compat.h	205;"	d
 signal_initialized	src/include/libevent_tiny/event2/event_compat.h	207;"	d
 signal_pending	src/include/libevent_tiny/event2/event_compat.h	206;"	d
 signal_set	src/include/libevent_tiny/event2/event_compat.h	203;"	d
+signal_thread_callback_fn	src/libevent_tiny/test_signal.c	/^void * signal_thread_callback_fn(void *arg)$/;"	f
 sin6_addr	src/include/libevent_tiny/ipv6-internal.h	/^	struct in6_addr sin6_addr;$/;"	m	struct:sockaddr_in6	typeref:struct:sockaddr_in6::in6_addr
 sin6_family	src/include/libevent_tiny/ipv6-internal.h	/^	sa_family_t sin6_family;$/;"	m	struct:sockaddr_in6
 sin6_port	src/include/libevent_tiny/ipv6-internal.h	/^	ev_uint16_t sin6_port;$/;"	m	struct:sockaddr_in6
@@ -2386,7 +2268,6 @@ strlwc	src/libini/iniparser.c	/^static char * strlwc(char * s)$/;"	f	file:
 strskp	src/libini/iniparser.c	/^static char * strskp(char * s)$/;"	f	file:
 strstrip	src/libini/iniparser.c	/^static char * strstrip(char * s)$/;"	f	file:
 strupc	src/libini/iniparser.c	/^static char * strupc(char * s)$/;"	f	file:
-supported_locktypes	src/include/libevent_tiny/event2/thread.h	/^	unsigned supported_locktypes;$/;"	m	struct:evthread_lock_callbacks
 sync_lock	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_lock)(struct sync_lock_s *slock,void *arg);$/;"	m	struct:sync_lock_operations
 sync_lock	src/include/libcre/sync_lock/sync_lock.h	/^static inline int sync_lock(struct sync_lock_s *slock,void *arg)$/;"	f
 sync_lock_destroy	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_lock_destroy)(struct sync_lock_s *slock);$/;"	m	struct:sync_lock_operations
@@ -2447,8 +2328,10 @@ test_pdu_proto_analyzer	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c
 test_server	src/libnet/server/server.c	/^int test_server()$/;"	f
 test_shutdown	src/libthread_pool/tests/shutdown.c	/^int test_shutdown()$/;"	f
 test_signal	src/libevent_tiny/test_signal.c	/^int test_signal()$/;"	f
+test_signal2	src/libevent_tiny/test_signal.c	/^int test_signal2()$/;"	f
 test_thrdtest	src/libthread_pool/tests/thrdtest.c	/^int test_thrdtest()$/;"	f
 test_time	src/libevent_tiny/test_time.c	/^int test_time()$/;"	f
+test_time2	src/libevent_tiny/test_time.c	/^int test_time2()$/;"	f
 tested_for_getaddrinfo_hacks	src/libevent_tiny/evutil.c	/^static int tested_for_getaddrinfo_hacks=0;$/;"	v	file:
 th_base_lock	src/include/libevent_tiny/event-internal.h	/^	void *th_base_lock;$/;"	m	struct:event_base
 th_notify	src/include/libevent_tiny/event-internal.h	/^	struct event th_notify;$/;"	m	struct:event_base	typeref:struct:event_base::event
@@ -2456,7 +2339,6 @@ th_notify_fd	src/include/libevent_tiny/event-internal.h	/^	evutil_socket_t th_no
 th_notify_fn	src/include/libevent_tiny/event-internal.h	/^	int (*th_notify_fn)(struct event_base *base);$/;"	m	struct:event_base
 th_owner_id	src/include/libevent_tiny/event-internal.h	/^	unsigned long th_owner_id;$/;"	m	struct:event_base
 thread_count	src/libthread_pool/threadpool.c	/^  int thread_count;$/;"	m	struct:threadpool_t	file:
-thread_func_callback	src/libevent_tiny/test_io.c	/^void *thread_func_callback(void *arg)$/;"	f
 threadpool_add	src/libthread_pool/threadpool.c	/^int threadpool_add(threadpool_t *pool, void (*function)(void *),$/;"	f
 threadpool_create	src/libthread_pool/threadpool.c	/^threadpool_t *threadpool_create(int thread_count, int queue_size, int flags)$/;"	f
 threadpool_destroy	src/libthread_pool/threadpool.c	/^int threadpool_destroy(threadpool_t *pool, int flags)$/;"	f
@@ -2489,6 +2371,7 @@ timeout_next	src/libevent_tiny/event.c	/^timeout_next(struct event_base *base, s
 timeout_pending	src/include/libevent_tiny/event2/event_compat.h	191;"	d
 timeout_process	src/libevent_tiny/event.c	/^timeout_process(struct event_base *base)$/;"	f	file:
 timeout_set	src/include/libevent_tiny/event2/event_compat.h	189;"	d
+timer_thread_callback_fn	src/libevent_tiny/test_time.c	/^void * timer_thread_callback_fn(void *arg)$/;"	f
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rb_root
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
 tv_cache	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_cache;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
@@ -2517,7 +2400,6 @@ uint8_t	src/include/liballoc/basic_types.h	/^typedef unsigned char uint8_t;$/;"	
 uint8_t	src/include/libcre/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdbg/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned char uint8_t;$/;"	t
-unlock	src/include/libevent_tiny/event2/thread.h	/^	int (*unlock)(unsigned mode, void *lock);$/;"	m	struct:evthread_lock_callbacks
 update_time_cache	src/libevent_tiny/event.c	/^update_time_cache(struct event_base *base)$/;"	f	file:
 use_monotonic	src/libevent_tiny/event.c	/^static int use_monotonic;$/;"	v	file:
 used_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **used_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
@@ -2563,7 +2445,6 @@ vlenth_flag_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t v
 vlenth_index	src/include/libproto_analyzer/protocol_format_set.h	/^	char vlenth_index[MAX_NAME_LEN];$/;"	m	struct:proto_info_list_s
 vlenth_value_assigned_flag	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_value_assigned_flag:1;$/;"	m	struct:proto_info_list_s
 vlenth_value_flag	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_value_flag:1;$/;"	m	struct:proto_info_list_s
-wait_condition	src/include/libevent_tiny/event2/thread.h	/^	int (*wait_condition)(void *cond, void *lock,$/;"	m	struct:evthread_condition_callbacks
 windows_mutex_init	src/libcre/sync_lock/windows/windows_mutex.c	/^int windows_mutex_init(struct sync_lock_s *slock)$/;"	f
 windows_mutex_lock	src/libcre/sync_lock/windows/windows_mutex.c	/^int windows_mutex_lock(struct sync_lock_s *slock,void *arg)$/;"	f
 windows_mutex_lock_destroy	src/libcre/sync_lock/windows/windows_mutex.c	/^int windows_mutex_lock_destroy(struct sync_lock_s *slock)$/;"	f

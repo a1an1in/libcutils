@@ -420,12 +420,3 @@ evsig_dealloc(struct event_base *base)
 		base->sig.sh_old = NULL;
 	}
 }
-
-#ifndef _EVENT_DISABLE_THREAD_SUPPORT
-int
-evsig_global_setup_locks_(const int enable_locks)
-{
-	EVTHREAD_SETUP_GLOBAL_LOCK(evsig_base_lock, 0);
-	return 0;
-}
-#endif
