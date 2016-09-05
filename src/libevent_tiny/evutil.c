@@ -28,47 +28,19 @@
 
 #define _GNU_SOURCE
 
-#ifdef WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef WIN32_LEAN_AND_MEAN
-#include <io.h>
-#include <tchar.h>
-#endif
-
 #include <sys/types.h>
-#ifdef _EVENT_HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
-#endif
-#ifdef _EVENT_HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-#ifdef _EVENT_HAVE_FCNTL_H
 #include <fcntl.h>
-#endif
-#ifdef _EVENT_HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
-#ifdef _EVENT_HAVE_NETINET_IN_H
 #include <netinet/in.h>
-#endif
-#ifdef _EVENT_HAVE_NETINET_IN6_H
-#include <netinet/in6.h>
-#endif
-#ifdef _EVENT_HAVE_ARPA_INET_H
 #include <arpa/inet.h>
-#endif
-
-#ifndef _EVENT_HAVE_GETTIMEOFDAY
 #include <sys/timeb.h>
 #include <time.h>
-#endif
 #include <sys/stat.h>
 
 #include "event2/util.h"

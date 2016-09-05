@@ -101,8 +101,6 @@ static inline void	event_signal_closure(struct event_base *, struct event *ev);
 static inline void	event_persist_closure(struct event_base *, struct event *ev);
 static int	evthread_notify_base(struct event_base *base);
 
-#define EVENT_BASE_ASSERT_LOCKED(base)	EVLOCK_ASSERT_LOCKED((base)->th_base_lock)
-
 /* The first time this function is called, it sets use_monotonic to 1
  * if we have a clock function that supports monotonic time */
 static void detect_monotonic(void)
@@ -131,8 +129,6 @@ static void detect_monotonic(void)
  */
 static int gettime(struct event_base *base, struct timeval *tp)
 {
-	EVENT_BASE_ASSERT_LOCKED(base);
-
 	if (base->tv_cache.tv_sec) {
 		*tp = base->tv_cache;
 		return (0);
@@ -1022,8 +1018,6 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 	int res = 0;
 	int notify = 0;
 
-	EVENT_BASE_ASSERT_LOCKED(base);
-
 	event_debug((
 				"event_add: event: %p (fd "EV_SOCK_FMT"), %s%s%scall %p",
 				ev,
@@ -1178,8 +1172,6 @@ event_del_internal(struct event *ev)
 	if (ev->ev_base == NULL)
 		return (-1);
 
-	EVENT_BASE_ASSERT_LOCKED(ev->ev_base);
-
 	/* If the main thread is currently executing this event's callback,
 	 * and we are not the main thread, then we want to wait until the
 	 * callback is done before we start removing the event.  That way,
@@ -1257,9 +1249,6 @@ event_active_nolock(struct event *ev, int res, short ncalls)
 	}
 
 	base = ev->ev_base;
-
-	EVENT_BASE_ASSERT_LOCKED(base);
-
 	ev->ev_res = res;
 
 	if (ev->ev_pri < base->event_running_priority)
@@ -1398,8 +1387,6 @@ timeout_process(struct event_base *base)
 	static void
 event_queue_remove(struct event_base *base, struct event *ev, int queue)
 {
-	EVENT_BASE_ASSERT_LOCKED(base);
-
 	if (!(ev->ev_flags & queue)) {
 		event_errx(1, "%s: %p(fd "EV_SOCK_FMT") not on queue %x", __func__,
 				ev, EV_SOCK_ARG(ev->ev_fd), queue);
@@ -1464,8 +1451,6 @@ insert_common_timeout_inorder(struct common_timeout_list *ctl,
 	static void
 event_queue_insert(struct event_base *base, struct event *ev, int queue)
 {
-	EVENT_BASE_ASSERT_LOCKED(base);
-
 	if (ev->ev_flags & queue) {
 		/* Double insertion is possible for active events */
 		if (queue & EVLIST_ACTIVE)
