@@ -132,8 +132,7 @@ int test_concurrent3()
 
 
 	sleep(1);
-	event_set(&master->event,fds[0], EV_READ | EV_PERSIST, concurrent_master_process_listen_event, master);
-	event_base_set(master->event_base, &master->event);
+	event_assign(&master->event,master->event_base,fds[0], EV_READ | EV_PERSIST, concurrent_master_process_listen_event, master);
 	if (event_add(&master->event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}

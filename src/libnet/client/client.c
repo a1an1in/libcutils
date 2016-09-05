@@ -168,11 +168,13 @@ int client_create_socket(struct addrinfo *addr)
     int opt = 1;
 
     /* 设置每个进程允许打开的最大文件数 */
-    rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
-    if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
-        perror("setrlimit error");
-        return -1;
-    }
+	/*
+     *rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
+     *if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
+     *    perror("setrlimit error");
+     *    return -1;
+     *}
+	 */
 
     if ((sockfd = socket(addr->ai_family, addr->ai_socktype, 0)) == -1) {
         perror("can't create socket file");

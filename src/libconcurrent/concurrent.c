@@ -159,7 +159,7 @@ void *concurrent_slave_thread(void *arg)
 
 	dbg_str(DBG_DETAIL,"concurrent_slave_thread start,concurrent_slave_thread id=%d",slave->work_id);
 
-	slave->event_base = event_init();
+	slave->event_base = event_base_new();
 	if(slave->event_base == NULL){
 		dbg_str(DBG_ERROR,"cannot create slave event_base");
 		exit(1);
@@ -265,7 +265,9 @@ concurrent_master_t *concurrent_master_create(allocator_t *allocator)
 	master = (struct concurrent_master_s *)allocator_mem_alloc(allocator,
 			sizeof(struct concurrent_master_s));
 	master->allocator = allocator;
-	master->event_base = event_init();
+	/*
+	 *master->event_base = event_base_new();
+	 */
 	master->concurrent_master_inited_flag = 0;
 	master->assignment_count = 0;
 
@@ -311,7 +313,7 @@ void *concurrent_master_thread(void *arg)
 
 	dbg_str(DBG_DETAIL,"concurrent_master_thread start");
 
-	master->event_base = event_init();
+	master->event_base = event_base_new();
 	/*
 	 *listenning rcv_add_new_event_fd, we can designe any right fd here,
 	 *we just need event base become loop state.
