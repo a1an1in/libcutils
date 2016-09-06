@@ -1,9 +1,9 @@
 /**
- * @file test_client_send.c
+ * @file user.c
  * @synopsis 
  * @author a1an1in@sina.com
  * @version 1.0
- * @date 2016-09-04
+ * @date 2016-09-03
  */
 
 /* Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
@@ -45,50 +45,46 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libnet/client.h>
+#include <libproxy/user.h>
+#include <libproxy/proxy.h>
 
 
-static int process_task_callback(client_task_t *task)
+user_t *user(
+		allocator_t *allocator,
+		int user_fd,
+		uint8_t user_type,
+		void (*user_event_handler)(int fd, short event, void *arg),
+		void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+		int (*process_task_cb)(void *task),
+		void *opaque)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,client send");
-	dbg_buf(DBG_DETAIL,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"process_task end");
+	struct addrinfo  *addr, hint;
+	int err;
+	proxy_t *proxy = proxy_get_proxy_addr();
+	user_t *user = NULL;
+
+	if ((user = (user_t *)allocator_mem_alloc(
+					allocator, sizeof(user_t))) == NULL)
+	{
+		dbg_str(DBG_ERROR,"user_create err");
+		return NULL;
+	}
+
+	user->allocator           = allocator;
+	user->user_fd             = user_fd;
+	user->user_type           = user_type;
+	user->opaque              = opaque;
+	user->slave_work_function = slave_work_function;
+	user->user_event_handler  = user_event_handler;
+	user->master              = proxy->c->master;
+	user->process_task_cb     = process_task_cb;
+	dbg_str(DBG_DETAIL,"user->master=%p,allocator=%p",user->master,allocator);
+
+	return user;
 }
-/*
- *enum socktype_e{
- *    SOCKTYPE_UDP = 0,
- *    SOCKTYPE_TCP,
- *    SOCKTYPE_UNIX
- *};
- */
-int test_client_send()
+int user_destroy(user_t *user)
 {
-	client_t *cli;
-	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
-	struct sockaddr_in raddr;
-	socklen_t destlen;
+	allocator_mem_free(user->allocator,user);
 
-	/*
-	 *proxy_constructor();
-	 *sleep(2);
-	 */
-
-	cli = client( "127.0.0.1",//char *host,
-			"2016",//char *client_port,
-			AF_INET,//int family,
-			SOCK_DGRAM,//int socktype,
-			0,//int protocol,
-			process_task_callback,
-			NULL);
-	raddr.sin_family = AF_INET; 
-	raddr.sin_port = htons(atoi("1989"));  
-	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
-
-	client_send(
-			cli,//client_t *client,
-			buf,//const void *buf,
-			sizeof(buf),
-			0,//int flags,
-			(void *)&raddr,//const struct sockaddr *destaddr,
-			sizeof(raddr));//socklen_t destlen);
+	return 0;
 }

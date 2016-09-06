@@ -45,8 +45,9 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libnet/client/client.h>
-#include <libnet/client/proxy.h>
+#include <libproxy/user.h>
+#include <libproxy/proxy.h>
+#include <libnet/client.h>
 
 
 #define MAXEPOLLSIZE 10000
@@ -206,8 +207,8 @@ client_t *client(char *host,
 {
 	struct addrinfo  *addr, hint;
 	int err;
-	int client_fd;
-	client_proxy_t *proxy = proxy_get_proxy_addr();
+	int user_id;
+	proxy_t *proxy = proxy_get_proxy_addr();
 	allocator_t *allocator = proxy->allocator;;
 	client_t *client, *ret = NULL;
 
@@ -232,18 +233,24 @@ client_t *client(char *host,
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
 	}
-	client->socktype             = socktype;
-	client->allocator            = allocator;
-	client->client_fd            = client_create_socket(addr);
-	client->opaque               = opaque;
-	client->slave_work_function  = slave_work_function;
-	client->client_event_handler = client_event_handler;
-	client->master               = proxy->c->master;
-	client->process_task_cb      = process_task_cb;
-	dbg_str(DBG_DETAIL,"client->master=%p,allocator=%p",client->master,allocator);
+	client = user(
+			allocator,//allocator_t *allocator,
+			client_create_socket(addr),//int user_fd,
+			socktype,//user_type
+			client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+			slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+			(int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
+			opaque);//void *opaque)
+	if(client == NULL){
+	
+		dbg_str(DBG_ERROR,"create client error");
+		return NULL;
+	}
 
-	if(proxy_register_client2(proxy, client) < 0)/*struct event *event)*/
+	if(proxy_register_user2(proxy, client) < 0)/*struct event *event)*/
 	{
+		dbg_str(DBG_ERROR,"proxy_register_user error");
+		allocator_mem_free(client->allocator,client);
 		goto err_register_client;
 	}
 
@@ -251,7 +258,7 @@ client_t *client(char *host,
 	goto end;
 
 err_register_client:
-	close(client->client_fd);
+	close(client->user_fd);
 end:
 	freeaddrinfo(addr);
 	return ret;
@@ -259,15 +266,15 @@ end:
 int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 		const struct sockaddr *destaddr,socklen_t destlen)
 {
-	if(client->socktype == SOCK_DGRAM){
-		if(sendto(client->client_fd,buf,nbytes,flags,
+	if(client->user_type == SOCK_DGRAM){
+		if(sendto(client->user_fd,buf,nbytes,flags,
 					(struct sockaddr *)destaddr,
 					(socklen_t)destlen) < 0)
 		{
 			perror("sendto()");  
 		}  
-	}else if(client->socktype == SOCK_STREAM){
-		if(send(client->client_fd,buf,nbytes,flags) < 0) {
+	}else if(client->user_type == SOCK_STREAM){
+		if(send(client->user_fd,buf,nbytes,flags) < 0) {
 			perror("send()");  
 		}  
 	}

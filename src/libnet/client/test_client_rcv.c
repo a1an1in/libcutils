@@ -45,8 +45,7 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libnet/client/client.h>
-#include <libnet/client/proxy.h>
+#include <libnet/client.h>
 
 
 static int process_task_callback(client_task_t *task)

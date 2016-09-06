@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "libdbg/debug.h"
-#include <libnet/client/client.h>
+#include <libnet/client.h>
 
 void test_datastructure()
 {

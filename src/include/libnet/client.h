@@ -10,6 +10,10 @@
  *    SOCKTYPE_UNIX
  *};
  */
+
+struct user_s;
+typedef struct user_s client_t;
+
 typedef struct client_task_s{
 #define MAX_TASK_BUFFER_LEN 1024
 	uint32_t fd;
@@ -19,25 +23,10 @@ typedef struct client_task_s{
 	concurrent_slave_t *slave;
 	uint8_t buffer[MAX_TASK_BUFFER_LEN];
 	uint32_t buffer_len;
-	struct client_s *client;
+	client_t *client;
 #undef MAX_TASK_BUFFER_LEN
 }client_task_t;
-typedef struct client_s{
-	/*
-	 *client_task_t *task;
-	 */
-	struct event event;
-	int client_fd;
-	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);
-	void (*client_event_handler)(int fd, short event, void *arg);
-	int (*process_task_cb)(client_task_t *task);
-	void *opaque;
-	concurrent_master_t *master;
-	allocator_t *allocator;
-	void *local_sockaddr;
-	void *remote_sockaddr;
-	uint8_t socktype;
-}client_t;
+
 
 client_t *client(char *host,
 				 char *client_port,
