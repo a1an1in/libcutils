@@ -127,9 +127,15 @@ void client_event_handler(int fd, short event, void *arg)
 	 */
 	nread = read(fd, buf, MAXLINE);//读取客户端socket流
 	if (nread < 0) {
-		dbg_str(DBG_ERROR,"client_event_handler,read fd error");
+		dbg_str(DBG_ERROR,"client_event_handler,read fd error2");
 		return;
-	} 
+	} else if(nread == 0){
+		dbg_str(DBG_ERROR,"client_event_handler,socket has broken,del client event");
+		event_del(&client->event);
+		return;
+	} else {
+		dbg_str(DBG_DETAIL,"*************read buf len=%d",nread);
+	}
 	/*
 	 *if((nread = recvfrom(fd,buf,MAXLINE,0,(void *)&raddr,&raddr_len)) < 0)
 	 *{
@@ -142,18 +148,18 @@ void client_event_handler(int fd, short event, void *arg)
 	 */
 
 	dbg_str(DBG_DETAIL,"client handler allocator=%p",master->allocator);
-
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
+
 	client_init_task(task,//client_task_t *task,
-			master->allocator,//allocator_t *allocator,
-			0,//int fd,
-			NULL,//struct event *ev,
-			NULL,//void *key,
-			0,//uint8_t key_len,
-			buf,//uint8_t *buf,
-			nread,//int buf_len,
-			NULL,
-			client);
+			    	 master->allocator,//allocator_t *allocator,
+			    	 0,//int fd,
+			    	 NULL,//struct event *ev,
+			    	 NULL,//void *key,
+			    	 0,//uint8_t key_len,
+			    	 buf,//uint8_t *buf,
+			    	 nread,//int buf_len,
+			    	 NULL,
+			    	 client);
 
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, client->slave_work_function,task,0);
@@ -163,7 +169,7 @@ void client_event_handler(int fd, short event, void *arg)
     return ;
 }
 #endif
-int client_create_socket(struct addrinfo *addr)
+int udp_client_create_socket(struct addrinfo *addr)
 {
     int listenq = 1024;
     struct rlimit rt;
@@ -186,9 +192,9 @@ int client_create_socket(struct addrinfo *addr)
 
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    if (setnonblocking(sockfd) < 0) {
-        perror("setnonblock error");
-    }
+	if (setnonblocking(sockfd) < 0) {
+		perror("setnonblock error");
+	}
 
     if (bind(sockfd, (struct sockaddr *)addr->ai_addr, sizeof(struct sockaddr)) == -1) {
         perror("bind error");
@@ -197,11 +203,38 @@ int client_create_socket(struct addrinfo *addr)
 
     return sockfd;
 }
-client_t *client(char *host,
+client_t *__client(allocator_t *allocator,
+				   int user_id,
+				   uint8_t socktype,
+				   int (*process_task_cb)(client_task_t *task),
+				   void *opaque)
+{
+	proxy_t *proxy = proxy_get_proxy_addr();
+	client_t *client = NULL;
+
+	client = user(allocator,//allocator_t *allocator,
+				  user_id,//int user_fd,
+				  socktype,//user_type
+				  client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+				  slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+				  (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
+				  opaque);//void *opaque)
+	if(client == NULL){
+		dbg_str(DBG_ERROR,"create client error");
+		return NULL;
+	}
+
+	if(proxy_register_user2(proxy, client) < 0)/*struct event *event)*/
+	{
+		dbg_str(DBG_ERROR,"proxy_register_user error");
+		user_destroy(client);
+		return NULL;
+	}
+
+	return client;
+}
+client_t *udp_client(char *host,
 				 char *client_port,
-				 int family,
-				 int socktype,
-				 int protocol,
 				 int (*process_task_cb)(client_task_t *task),
 				 void *opaque)
 {
@@ -209,19 +242,12 @@ client_t *client(char *host,
 	int err;
 	int user_id;
 	proxy_t *proxy = proxy_get_proxy_addr();
-	allocator_t *allocator = proxy->allocator;;
-	client_t *client, *ret = NULL;
-
-	if ((client = (client_t *)allocator_mem_alloc(
-					allocator, sizeof(client_t))) == NULL)
-	{
-		dbg_str(DBG_ERROR,"client_create err");
-		return NULL;
-	}
+	allocator_t *allocator = proxy->allocator;
+	client_t *client = NULL;
 
 	bzero(&hint, sizeof(hint));
-	hint.ai_family   = family;
-	hint.ai_socktype = socktype;
+	hint.ai_family   = AF_INET;
+	hint.ai_socktype = SOCK_DGRAM;
 
 	if ((err = getaddrinfo(host, client_port, &hint, &addr)) != 0){
 		printf("getaddrinfo error: %s", gai_strerror(err));
@@ -233,52 +259,90 @@ client_t *client(char *host,
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
 	}
-	client = user(
-			allocator,//allocator_t *allocator,
-			client_create_socket(addr),//int user_fd,
-			socktype,//user_type
-			client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
-			slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-			(int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
+	user_id = udp_client_create_socket(addr);
+
+	client = __client(allocator,//allocator_t *allocator,
+			user_id,//int user_id,
+			SOCK_DGRAM,//uint8_t socktype,
+			process_task_cb,//int (*process_task_cb)(client_task_t *task),
 			opaque);//void *opaque)
+
 	if(client == NULL){
-	
-		dbg_str(DBG_ERROR,"create client error");
+		close(user_id);
 		return NULL;
 	}
 
-	if(proxy_register_user2(proxy, client) < 0)/*struct event *event)*/
-	{
-		dbg_str(DBG_ERROR,"proxy_register_user error");
-		allocator_mem_free(client->allocator,client);
-		goto err_register_client;
-	}
-
-	ret = client;
-	goto end;
-
-err_register_client:
-	close(client->user_fd);
-end:
-	freeaddrinfo(addr);
-	return ret;
+	return client;
 }
-int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
+int udp_client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 		const struct sockaddr *destaddr,socklen_t destlen)
 {
-	if(client->user_type == SOCK_DGRAM){
-		if(sendto(client->user_fd,buf,nbytes,flags,
-					(struct sockaddr *)destaddr,
-					(socklen_t)destlen) < 0)
-		{
-			perror("sendto()");  
-		}  
-	}else if(client->user_type == SOCK_STREAM){
-		if(send(client->user_fd,buf,nbytes,flags) < 0) {
-			perror("send()");  
-		}  
+	int ret = 0;
+
+	if( ret = sendto(client->user_fd,buf,nbytes,flags,
+				(struct sockaddr *)destaddr,
+				(socklen_t)destlen) < 0)
+	{
+		perror("sendto()");  
+	}  
+
+	return ret;
+}
+
+client_t *tcp_client(char *server_ip,
+				 char *server_port,
+				 int (*process_task_cb)(client_task_t *task),
+				 void *opaque)
+{
+	int err;
+	int sockfd;
+	struct sockaddr_in sa_addr;
+	proxy_t *proxy = proxy_get_proxy_addr();
+	allocator_t *allocator = proxy->allocator;
+	client_t *client = NULL;
+	int ret;
+
+	bzero(&sa_addr, sizeof(sa_addr));
+	sa_addr.sin_family = AF_INET; 
+	sa_addr.sin_port = htons(atoi(server_port));  
+	inet_pton(AF_INET,server_ip,&sa_addr.sin_addr);
+
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("can't create socket file");
+        return NULL;
+    }
+	ret = connect(sockfd,(struct sockaddr *)&sa_addr,
+			                   sizeof(sa_addr));
+	if(ret < 0){
+		dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
+		close(sockfd);
+		return NULL;
+	}else{
+		dbg_str(DBG_DETAIL,"conect suc");
 	}
 
+	client = __client(allocator,//allocator_t *allocator,
+			sockfd,//int user_id,
+			SOCK_DGRAM,//uint8_t socktype,
+			process_task_cb,//int (*process_task_cb)(client_task_t *task),
+			opaque);//void *opaque)
+
+	if(client == NULL){
+		close(sockfd);
+		return NULL;
+	}
+
+	return client;
+}
+int tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
+{
+	int ret = 0;
+
+	if(ret = send(client->user_fd,buf,nbytes,flags) < 0) {
+		perror("send()");  
+	}  
+
+	return ret;
 }
 int client_destroy(client_t *client)
 {

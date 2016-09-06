@@ -99,15 +99,18 @@ void test_libnet()
 	 *test_server();
 	 */
 	/*
-	 *test_client_recieve();
+	 *test_udp_client_recieve();
 	 */
 	/*
-	 *test_client_send();
+	 *test_udp_client_send();
 	 */
+	test_tcp_client_send();
 }
 int test_libevent_tiny()
 {
-	test_io();
+	/*
+	 *test_io();
+	 */
 	/*
 	 *test_signal();
 	 */

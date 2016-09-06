@@ -1,5 +1,8 @@
 #ifndef __CLIENT_PROXY_H__
 #define __CLIENT_PROXY_H__
+
+#include <libproxy/user.h>
+
 typedef struct user_proxy_s{
 	concurrent_t *c ;
 	allocator_t *allocator;

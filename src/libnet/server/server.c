@@ -44,6 +44,8 @@
 #include <fcntl.h>         /* nonblocking */
 #include <sys/resource.h>  /*setrlimit */
 #include <libconcurrent/concurrent.h>
+#include <libproxy/proxy.h>
+#include <libnet/server.h>
 #include <signal.h>
 
 
@@ -87,7 +89,9 @@ static void slave_event_handler_process_conn_bussiness(int fd, short event, void
     } 
     write(fd, buf, nread);//响应客户端  
 	server_release_task_without_task_admin(task);
-	close(fd);
+	/*
+	 *close(fd);
+	 */
 	dbg_str(DBG_DETAIL,"slave_work done");
 }
 int server_init_task(server_task_t *task,
@@ -128,7 +132,11 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 }
 void master_event_handler_server_listen(int fd, short event, void *arg)
 {
-	concurrent_master_t *master = (concurrent_master_t *)arg;
+	server_t *server = (server_t *)arg;
+	concurrent_master_t *master = server->master;
+	/*
+	 *concurrent_master_t *master = (concurrent_master_t *)arg;
+	 */
 	int connfd;
 	struct sockaddr_in cliaddr;
 	socklen_t socklen;
@@ -173,11 +181,13 @@ int server_create_socket(struct addrinfo *addr)
     int opt = 1;
 
     /* 设置每个进程允许打开的最大文件数 */
-    rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
-    if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
-        perror("setrlimit error");
-        return -1;
-    }
+	/*
+     *rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
+     *if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
+     *    perror("setrlimit error");
+     *    return -1;
+     *}
+	 */
 
     if ((listen_fd = socket(addr->ai_family, addr->ai_socktype, 0)) == -1) {
         perror("can't create socket file");
@@ -200,6 +210,100 @@ int server_create_socket(struct addrinfo *addr)
     }
 
     return listen_fd;
+}
+void * server(char *host,char *server)
+{
+	struct addrinfo  *addr, hint;
+	int err;
+	int user_id;
+	proxy_t *proxy = proxy_get_proxy_addr();
+	allocator_t *allocator = proxy->allocator;
+	server_t *srv, *ret = NULL;
+
+	bzero(&hint, sizeof(hint));
+	hint.ai_family = AF_INET;
+	hint.ai_socktype = SOCK_STREAM;
+
+	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
+		printf("getaddrinfo error: %s", gai_strerror(err));
+	if(addr != NULL){
+		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
+	}else{
+		dbg_str(DBG_ERROR,"getaddrinfo err");
+		exit(1);
+	}
+
+	srv = user(allocator,//allocator_t *allocator,
+			   server_create_socket(addr),//int user_fd,
+			   SOCK_STREAM,//user_type
+			   master_event_handler_server_listen,//void (*user_event_handler)(int fd, short event, void *arg),
+			   slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+			   NULL,//int (*process_task_cb)(user_task_t *task),
+			   NULL);//void *opaque)
+	if(srv == NULL){
+		dbg_str(DBG_ERROR,"create srv error");
+		return NULL;
+	}
+
+	if(proxy_register_user2(proxy, srv) < 0)/*struct event *event)*/
+	{
+		dbg_str(DBG_ERROR,"proxy_register_user error");
+		allocator_mem_free(srv->allocator,srv);
+		goto err_register_srv;
+	}
+
+	ret = srv;
+	goto end;
+
+err_register_srv:
+	close(srv->user_fd);
+end:
+	freeaddrinfo(addr);
+	return ret;
+}
+int test_server()
+{
+	server("127.0.0.1","6888");
+	return;
+}
+#if 0
+void master_event_handler_server_listen(int fd, short event, void *arg)
+{
+	concurrent_master_t *master = (concurrent_master_t *)arg;
+	int connfd;
+	struct sockaddr_in cliaddr;
+	socklen_t socklen;
+	server_task_t *task;
+	char key[10];
+	struct concurrent_message_s message;
+
+	connfd = accept(fd, (struct sockaddr *)&cliaddr,&socklen);
+	if (connfd < 0) {
+		perror("accept error");
+		return;
+	}
+	if (setnonblocking(connfd) < 0) {
+		perror("setnonblocking error");
+	}
+
+	sprintf(key,"%d",connfd);
+
+	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
+
+	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
+	server_init_task(task,
+			connfd,//int fd, 
+			key,//void *key, 
+			NULL,//struct event *ev,
+			master->allocator,
+			NULL);
+
+	master->assignment_count++;//do for assigning slave
+	concurrent_master_init_message(&message, slave_work_function,task,0);
+	concurrent_master_add_message(master,&message);
+	dbg_str(DBG_DETAIL,"listen end");
+
+    return ;
 }
 int server(char *host,char *server)
 {
@@ -249,10 +353,7 @@ int server(char *host,char *server)
 
 	return ret;
 }
-int test_server()
-{
-	return server("127.0.0.1","6888");
-}
+#endif
 #if 0
 /*
  *version 3,master assign task derectly mode,this may have problem,for libevent may not support

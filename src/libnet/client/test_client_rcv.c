@@ -61,13 +61,10 @@ static int process_task_callback(client_task_t *task)
  *    SOCKTYPE_UNIX
  *};
  */
-int test_client_recieve()
+int test_udp_client_recieve()
 {
-	client( "127.0.0.1",//char *host,
+	udp_client("127.0.0.1",//char *host,
 			"1989",//char *client_port,
-			AF_INET,//int family,
-			SOCK_DGRAM,//int socktype,
-			0,//int protocol,
 			process_task_callback,
 			NULL);
 }
