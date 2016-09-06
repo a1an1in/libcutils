@@ -524,28 +524,6 @@ int concurrent_add_event_to_master(concurrent_t *c,
 	while(c->master->concurrent_master_inited_flag != 1);
 
 	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
-	event_assign(event,c->master->event_base,fd, event_flag, event_handler, c->master);
-
-	message.event = event;
-	llist_push_back(c->new_ev_que,&message);
-
-	if (write(c->snd_add_new_event_fd, "r", 1) != 1) {
-		dbg_str(DBG_ERROR,"cannot write pipe");
-	}
-
-	return 0;
-}
-int concurrent_add_event_to_master2(concurrent_t *c,
-		int fd,int event_flag,
-		struct event *event,
-		void (*event_handler)(int fd, short event, void *arg),
-		void *arg)
-{
-	struct concurrent_message_s message;
-
-	while(c->master->concurrent_master_inited_flag != 1);
-
-	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
 	event_assign(event,c->master->event_base,fd, event_flag, event_handler, arg);
 
 	message.event = event;

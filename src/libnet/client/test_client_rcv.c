@@ -54,13 +54,7 @@ static int process_task_callback(client_task_t *task)
 	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
 	dbg_str(DBG_DETAIL,"process_task end");
 }
-/*
- *enum socktype_e{
- *    SOCKTYPE_UDP = 0,
- *    SOCKTYPE_TCP,
- *    SOCKTYPE_UNIX
- *};
- */
+
 int test_udp_client_recieve()
 {
 	udp_client("127.0.0.1",//char *host,

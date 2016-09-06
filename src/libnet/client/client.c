@@ -224,7 +224,7 @@ client_t *__client(allocator_t *allocator,
 		return NULL;
 	}
 
-	if(proxy_register_user2(proxy, client) < 0)/*struct event *event)*/
+	if(proxy_register_user(proxy, client) < 0)/*struct event *event)*/
 	{
 		dbg_str(DBG_ERROR,"proxy_register_user error");
 		user_destroy(client);

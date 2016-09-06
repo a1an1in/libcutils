@@ -65,21 +65,9 @@ int proxy_init(proxy_t *proxy, uint32_t task_size, uint8_t slave_amount, uint8_t
 			slave_amount, 
 			concurrent_lock_type);//uint8_t concurrent_lock_type);
 }
-int proxy_register_user(proxy_t *proxy,
-		int fd,
-		void (*event_handler)(int fd, short event, void *arg),
-		struct event *event)
+int proxy_register_user(proxy_t *proxy,user_t *user)
 {
 	return concurrent_add_event_to_master(proxy->c,
-			fd,//int fd,
-			EV_READ | EV_PERSIST,//int event_flag,
-			event,//struct event *event, 
-			event_handler,//void (*event_handler)(int fd, short event, void *arg),
-			NULL);//void *arg);
-}
-int proxy_register_user2(proxy_t *proxy,user_t *user)
-{
-	return concurrent_add_event_to_master2(proxy->c,
 			user->user_fd,//int fd,
 			EV_READ | EV_PERSIST,//int event_flag,
 			&user->event,//struct event *event, 

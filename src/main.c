@@ -101,10 +101,10 @@ void test_libnet()
 	/*
 	 *test_udp_client_recieve();
 	 */
+	test_udp_client_send();
 	/*
-	 *test_udp_client_send();
+	 *test_tcp_client_send();
 	 */
-	test_tcp_client_send();
 }
 int test_libevent_tiny()
 {

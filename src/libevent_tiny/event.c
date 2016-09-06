@@ -90,7 +90,6 @@ static int use_monotonic;
  * if we have a clock function that supports monotonic time */
 static void detect_monotonic(void)
 {
-	dbg_str(DBG_DETAIL,"detect_monotonic");
 	struct timespec	ts;
 	static int use_monotonic_initialized = 0;
 

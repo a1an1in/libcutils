@@ -245,7 +245,7 @@ void * server(char *host,char *server)
 		return NULL;
 	}
 
-	if(proxy_register_user2(proxy, srv) < 0)/*struct event *event)*/
+	if(proxy_register_user(proxy, srv) < 0)/*struct event *event)*/
 	{
 		dbg_str(DBG_ERROR,"proxy_register_user error");
 		allocator_mem_free(srv->allocator,srv);
