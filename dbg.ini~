@@ -9,13 +9,13 @@ normal_level                   = 9
 alloc_switch                   = 1
 alloc_level                    = 8
 container_switch               = 1
-container_level                = 8
+container_level                = 9
 linklist_switch                = 1
 linklist_level                 = 8
 hashmap_switch                 = 1
 hashmap_level                  = 8
 concurrent_switch              = 1
-concurrent_level               = 8
+concurrent_level               = 9
 net_switch                     = 1
 net_level                      = 8
 
