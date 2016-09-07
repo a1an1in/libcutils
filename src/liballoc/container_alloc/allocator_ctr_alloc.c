@@ -55,7 +55,7 @@ int ctr_alloc_init(allocator_t *alloc)
 	int slab_array_max_num;
 	int i;
 
-	dbg_str(DBG_ALLOC_DETAIL,"in ctr_alloc_init");
+	dbg_str(ALLOC_DETAIL,"in ctr_alloc_init");
 
 	if(!alloc_p->slab_array_max_num) {
 		alloc_p->slab_array_max_num = SLAB_ARRAY_MAX_NUM;
@@ -68,7 +68,7 @@ int ctr_alloc_init(allocator_t *alloc)
 	}
 	alloc->alloc_count = 0;
 
-	dbg_str(DBG_ALLOC_DETAIL,"slab_num=%d,data_size=%d,cap=%d",alloc_p->slab_array_max_num,alloc_p->data_min_size,alloc_p->mempool_capacity);
+	dbg_str(ALLOC_DETAIL,"slab_num=%d,data_size=%d,cap=%d",alloc_p->slab_array_max_num,alloc_p->data_min_size,alloc_p->mempool_capacity);
 
 	slab_array_max_num = alloc_p->slab_array_max_num;
 
@@ -103,7 +103,7 @@ int ctr_alloc_init(allocator_t *alloc)
 
 	mempool_init_head_list(&alloc_p->empty_pool,alloc->lock_type);
 
-	dbg_str(DBG_ALLOC_DETAIL,"out ctr_alloc_init");
+	dbg_str(ALLOC_DETAIL,"out ctr_alloc_init");
 
 	return 0;
 }
@@ -114,7 +114,7 @@ void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)
 
 	index = slab_get_slab_index(alloc,size);
 	/*
-	 *dbg_str(DBG_ALLOC_DETAIL,"alloc mem,size=%d,index=%d,slab_array_max_num=%d",
+	 *dbg_str(ALLOC_DETAIL,"alloc mem,size=%d,index=%d,slab_array_max_num=%d",
 	 *        size,index,alloc->priv.ctr_alloc.slab_array_max_num);
 	 */
 	if(size > alloc->priv.ctr_alloc.mempool_capacity){
@@ -135,7 +135,7 @@ void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)
 	}
 	slab_attach_list_to_used_slabs(alloc,&slab_list->list_head,size);
 	alloc->alloc_count++;
-	dbg_str(DBG_ALLOC_IMPORTANT,"ctr_alloc alloc mem,request size=%d,mem addr=%p,"
+	dbg_str(ALLOC_IMPORTANT,"ctr_alloc alloc mem,request size=%d,mem addr=%p,"
 			"alloc using count=%d",size,slab_list->mem_addr,alloc->alloc_count);
 
 	return slab_list->mem_addr;
@@ -149,7 +149,7 @@ void ctr_alloc_free(allocator_t *alloc,void *addr)
 	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
 
 	if(addr == NULL){
-		dbg_str(DBG_ALLOC_DETAIL,"release addr is NULL");
+		dbg_str(ALLOC_DETAIL,"release addr is NULL");
 		return;
 	}
 	slab_list = container_of(addr,ctr_slab_t,data);
@@ -159,8 +159,8 @@ void ctr_alloc_free(allocator_t *alloc,void *addr)
 	}
 
 	/*
-	 *dbg_str(DBG_ALLOC_DETAIL,"release slab_list:%p",slab_list);
-	 *dbg_str(DBG_ALLOC_DETAIL,"release mem_addr:%p,addr:%p",slab_list->mem_addr,addr);
+	 *dbg_str(ALLOC_DETAIL,"release slab_list:%p",slab_list);
+	 *dbg_str(ALLOC_DETAIL,"release mem_addr:%p,addr:%p",slab_list->mem_addr,addr);
 	 */
 	alloc->alloc_count--;
 
@@ -175,7 +175,7 @@ void ctr_alloc_free(allocator_t *alloc,void *addr)
 	slab_attach_list_to_free_slabs(alloc,
 			new_head,//struct list_head *new_head,
 			size);//uint32_t size);
-	dbg_str(DBG_ALLOC_IMPORTANT,"free ctr mem,free add=%p,alloc using count=%d",addr,alloc->alloc_count);
+	dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p,alloc using count=%d",addr,alloc->alloc_count);
 }
 void ctr_alloc_info(allocator_t *alloc)
 {
@@ -183,19 +183,19 @@ void ctr_alloc_info(allocator_t *alloc)
 	int slab_array_max_num = alloc->priv.ctr_alloc.slab_array_max_num;
 
 	printf("##########################-printf allocator mem info##########################");
-	dbg_str(DBG_ALLOC_DETAIL,"the mem using, count=%d",alloc->alloc_count);
-	dbg_str(DBG_ALLOC_DETAIL,"query pool:");
+	dbg_str(ALLOC_DETAIL,"the mem using, count=%d",alloc->alloc_count);
+	dbg_str(ALLOC_DETAIL,"query pool:");
 	mempool_print_list_for_each(alloc->priv.ctr_alloc.pool);
 
-	dbg_str(DBG_ALLOC_DETAIL,"query empty_pool:");
+	dbg_str(ALLOC_DETAIL,"query empty_pool:");
 	mempool_print_list_for_each(alloc->priv.ctr_alloc.empty_pool);
 
-	dbg_str(DBG_ALLOC_DETAIL,"query free_slabs:");
+	dbg_str(ALLOC_DETAIL,"query free_slabs:");
 	for(i = 0; i < slab_array_max_num; i++){
 		slab_print_list_for_each(alloc->priv.ctr_alloc.free_slabs[i],i);
 	}
 
-	dbg_str(DBG_ALLOC_DETAIL,"query used_slabs:");
+	dbg_str(ALLOC_DETAIL,"query used_slabs:");
 	for(i = 0; i < slab_array_max_num; i++){
 		slab_print_list_for_each(alloc->priv.ctr_alloc.used_slabs[i],i);
 	}
@@ -208,12 +208,12 @@ void ctr_alloc_destroy(allocator_t *alloc)
 	struct list_head **free_slabs = alloc->priv.ctr_alloc.free_slabs;
 	struct list_head **used_slabs = alloc->priv.ctr_alloc.used_slabs;
 
-	dbg_str(DBG_ALLOC_DETAIL,"destroy pool");
+	dbg_str(ALLOC_DETAIL,"destroy pool");
 	mempool_destroy_lists(alloc->priv.ctr_alloc.pool);
-	dbg_str(DBG_ALLOC_DETAIL,"destroy empty_pool");
+	dbg_str(ALLOC_DETAIL,"destroy empty_pool");
 	mempool_destroy_lists(alloc->priv.ctr_alloc.empty_pool);
 
-	dbg_str(DBG_ALLOC_DETAIL,"destroy free_slabs");
+	dbg_str(ALLOC_DETAIL,"destroy free_slabs");
 	for(i = 0; i < slab_array_max_num; i++){
 		slab_release_head_list(free_slabs[i]);
 		slab_release_head_list(used_slabs[i]);

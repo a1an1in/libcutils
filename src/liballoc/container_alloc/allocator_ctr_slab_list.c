@@ -59,7 +59,7 @@ void slab_init_head_list(struct list_head **hl_head,uint8_t lock_type)
 
 	head_list = (ctr_slab_head_list_t *)malloc(sizeof(ctr_slab_head_list_t));
 	if(head_list == NULL){
-		dbg_str(DBG_ALLOC_ERROR,"malloc slab list_head_list");
+		dbg_str(ALLOC_ERROR,"malloc slab list_head_list");
 		return;
 	}
 	sync_lock_init(&head_list->head_lock,lock_type);
@@ -165,7 +165,7 @@ void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_hea
 
 void slab_print_list(ctr_slab_t *slab_list,uint16_t slab_index)
 {
-	dbg_str(DBG_ALLOC_DETAIL,"slab info,slab index =%d\t,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,slab_start:%p\t,slab_end:%p",
+	dbg_str(ALLOC_DETAIL,"slab info,slab index =%d\t,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,slab_start:%p\t,slab_end:%p",
 			slab_index,
 			slab_list->size,slab_list->data_size,
 			slab_list->slab_size,
