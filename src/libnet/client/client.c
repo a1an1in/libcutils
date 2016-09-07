@@ -70,10 +70,10 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	client_task_t *task = (client_task_t *)arg;
 	client_t *client = task->client;
 
-	dbg_str(DBG_DETAIL,"slave_work_function begin");
+	dbg_str(NET_DETAIL,"slave_work_function begin");
 	client->process_task_cb(task);
 	client_release_task(task);
-	dbg_str(DBG_DETAIL,"slave_work_function end");
+	dbg_str(NET_DETAIL,"slave_work_function end");
 	return ;
 }
 #if 1
@@ -123,7 +123,7 @@ void client_event_handler(int fd, short event, void *arg)
 	socklen_t raddr_len;
 
 	/*
-	 *dbg_str(DBG_DETAIL,"sockfd =%d",fd);
+	 *dbg_str(NET_DETAIL,"sockfd =%d",fd);
 	 */
 	nread = read(fd, buf, MAXLINE);//读取客户端socket流
 	if (nread < 0) {
@@ -134,7 +134,7 @@ void client_event_handler(int fd, short event, void *arg)
 		event_del(&client->event);
 		return;
 	} else {
-		dbg_str(DBG_DETAIL,"*************read buf len=%d",nread);
+		dbg_str(NET_DETAIL,"*************read buf len=%d",nread);
 	}
 	/*
 	 *if((nread = recvfrom(fd,buf,MAXLINE,0,(void *)&raddr,&raddr_len)) < 0)
@@ -144,10 +144,10 @@ void client_event_handler(int fd, short event, void *arg)
 	 *}
 	 */
 	/*
-	 *dbg_buf(DBG_DETAIL,"rcv buf:",buf,nread);
+	 *dbg_buf(NET_DETAIL,"rcv buf:",buf,nread);
 	 */
 
-	dbg_str(DBG_DETAIL,"client handler allocator=%p",master->allocator);
+	dbg_str(NET_DETAIL,"client handler allocator=%p",master->allocator);
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
 
 	client_init_task(task,//client_task_t *task,
@@ -164,7 +164,7 @@ void client_event_handler(int fd, short event, void *arg)
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, client->slave_work_function,task,0);
 	concurrent_master_add_message(master,&message);
-	dbg_str(DBG_DETAIL,"client event handler end");
+	dbg_str(NET_DETAIL,"client event handler end");
 
     return ;
 }
@@ -254,7 +254,7 @@ client_t *udp_client(char *host,
 		return NULL;
 	}
 	if(addr != NULL){
-		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
+		dbg_str(NET_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
 	}else{
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
@@ -318,7 +318,7 @@ client_t *tcp_client(char *server_ip,
 		close(sockfd);
 		return NULL;
 	}else{
-		dbg_str(DBG_DETAIL,"conect suc");
+		dbg_str(NET_DETAIL,"conect suc");
 	}
 
 	client = __client(allocator,//allocator_t *allocator,

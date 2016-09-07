@@ -92,7 +92,7 @@ static void slave_event_handler_process_conn_bussiness(int fd, short event, void
 	/*
 	 *close(fd);
 	 */
-	dbg_str(DBG_DETAIL,"slave_work done");
+	dbg_str(NET_DETAIL,"slave_work done");
 }
 int server_init_task(server_task_t *task,
 		int fd, void *key, struct event *ev,
@@ -118,7 +118,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 
-	dbg_str(DBG_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
+	dbg_str(NET_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
 	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
 	task->slave = slave;
 	concurrent_slave_add_new_event(
@@ -155,7 +155,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 
 	sprintf(key,"%d",connfd);
 
-	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
+	dbg_str(NET_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
 
 	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
 	server_init_task(task,
@@ -168,7 +168,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, slave_work_function,task,0);
 	concurrent_master_add_message(master,&message);
-	dbg_str(DBG_DETAIL,"listen end");
+	dbg_str(NET_DETAIL,"listen end");
 
     return ;
 }
@@ -227,7 +227,7 @@ void * server(char *host,char *server)
 	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
 		printf("getaddrinfo error: %s", gai_strerror(err));
 	if(addr != NULL){
-		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
+		dbg_str(NET_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
 	}else{
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		exit(1);
@@ -288,7 +288,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 
 	sprintf(key,"%d",connfd);
 
-	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
+	dbg_str(NET_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
 
 	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
 	server_init_task(task,
@@ -301,7 +301,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, slave_work_function,task,0);
 	concurrent_master_add_message(master,&message);
-	dbg_str(DBG_DETAIL,"listen end");
+	dbg_str(NET_DETAIL,"listen end");
 
     return ;
 }
@@ -322,7 +322,7 @@ int server(char *host,char *server)
 	if ((err = getaddrinfo(host, server, &hint, &addr)) != 0)
 		printf("getaddrinfo error: %s", gai_strerror(err));
 	if(addr != NULL){
-		dbg_str(DBG_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
+		dbg_str(NET_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
 	}else{
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		exit(1);
@@ -366,7 +366,7 @@ static void slave_event_handler_process_conn_bussiness(int fd, short event, void
 	server_task_t *task = (server_task_t *)arg;
     nread = read(fd, buf, MAXLINE);//读取客户端socket流
 
-	dbg_str(DBG_DETAIL,"slave_work start,conn_fd=%d",fd);
+	dbg_str(NET_DETAIL,"slave_work start,conn_fd=%d",fd);
     if (nread < 0) {
         dbg_str(DBG_ERROR,"fd read err,client close the connection");
 		server_release_task(task,task->slave->task_admin);
@@ -376,7 +376,7 @@ static void slave_event_handler_process_conn_bussiness(int fd, short event, void
     write(fd, buf, nread);//响应客户端  
 	server_release_task(task,task->slave->task_admin);
 	close(fd);
-	dbg_str(DBG_DETAIL,"slave_work done");
+	dbg_str(NET_DETAIL,"slave_work done");
 }
 
 int server_init_task(server_task_t *task,
@@ -393,14 +393,14 @@ int server_init_task(server_task_t *task,
 }
 int server_release_task(server_task_t *task,concurrent_task_admin_t *admin)
 {
-	dbg_str(DBG_DETAIL,"lock at release_task");
+	dbg_str(NET_DETAIL,"lock at release_task");
 	sync_lock(&admin->admin_lock,NULL);
-	dbg_str(DBG_DETAIL,"server_release_task");
+	dbg_str(NET_DETAIL,"server_release_task");
 	event_del(task->event);
 	allocator_mem_free(task->allocator,task->event);
 	concurrent_task_admin_del_by_key(admin, task->key);
 	sync_unlock(&admin->admin_lock);
-	dbg_str(DBG_DETAIL,"unlock at release_task");
+	dbg_str(NET_DETAIL,"unlock at release_task");
 
 
 	return 0;
@@ -436,7 +436,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 		return;
 	}
 
-	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,"
+	dbg_str(NET_DETAIL,"master_event_handler_server_listen,"
 			"slave %d is choosed,listen_fd=%d,connfd=%d",num,fd,connfd);
 	server_init_task(&task,
 			connfd,//int fd, 
@@ -475,7 +475,7 @@ static void slave_event_handler_process_conn_bussiness(int fd, short event, void
     write(fd, buf, nread);//响应客户端  
 	server_release_task(task,task->slave->task_admin);
 	close(fd);
-	dbg_str(DBG_DETAIL,"slave_work done");
+	dbg_str(NET_DETAIL,"slave_work done");
 }
 int server_init_task(server_task_t *task,
 		int fd, void *key, struct event *ev,
@@ -491,14 +491,14 @@ int server_init_task(server_task_t *task,
 }
 int server_release_task(server_task_t *task,concurrent_task_admin_t *admin)
 {
-	dbg_str(DBG_DETAIL,"lock at release_task");
+	dbg_str(NET_DETAIL,"lock at release_task");
 	sync_lock(&admin->admin_lock,NULL);
-	dbg_str(DBG_DETAIL,"server_release_task");
+	dbg_str(NET_DETAIL,"server_release_task");
 	event_del(task->event);
 	allocator_mem_free(task->allocator,task->event);
 	concurrent_task_admin_del_by_key(admin, task->key);
 	sync_unlock(&admin->admin_lock);
-	dbg_str(DBG_DETAIL,"unlock at release_task");
+	dbg_str(NET_DETAIL,"unlock at release_task");
 
 
 	return 0;
@@ -507,7 +507,7 @@ void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 
-	dbg_str(DBG_DETAIL,"slave_work_function done,rev conn =%d,task key %s",task->fd,task->key);
+	dbg_str(NET_DETAIL,"slave_work_function done,rev conn =%d,task key %s",task->fd,task->key);
 	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
 	task->slave = slave;
 	concurrent_slave_add_new_event(
@@ -541,7 +541,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 
 	sprintf(key,"%d",connfd);
 
-	dbg_str(DBG_DETAIL,"master_event_handler_server_listen,"
+	dbg_str(NET_DETAIL,"master_event_handler_server_listen,"
 			"slave %d is choosed,listen_fd=%d,connfd=%d",num,fd,connfd);
 	server_init_task(&task,
 			connfd,//int fd, 
@@ -551,7 +551,7 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 			NULL);
 
 	concurrent_master_add_task_and_message(master,&task,(void *)task.key,slave_work_function);
-	dbg_str(DBG_DETAIL,"listen end");
+	dbg_str(NET_DETAIL,"listen end");
 
     return ;
 }
