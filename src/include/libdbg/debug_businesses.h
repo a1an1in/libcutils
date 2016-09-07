@@ -28,6 +28,15 @@ enum debug_business_enum{
 	DBG_BUSINESS_NET,
 	MAX_DEBUG_BUSINESS_NUM
 };
+char *debug_business_names[] = {
+	"normal",
+	"alloc",
+	"container",
+	"linklist",
+	"hashmap",
+	"concurrent",
+	"net"
+};
 
 #define ALLOC_DBG_PANIC			 DBG_BUSINESS_ALLOC << 8 | DBG_DBG_PANIC 
 #define ALLOC_FATAL				 DBG_BUSINESS_ALLOC << 8 | DBG_FATAL 

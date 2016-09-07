@@ -117,8 +117,12 @@ void debugger_set_businesses(debugger_t *debugger)
 		iniparser_setstr(d, (char *)"businesses", NULL); 
 		iniparser_setstr(d, (char *)"businesses:business_num", buf); 
 		for(i = 0; i < MAX_DEBUG_BUSINESS_NUM; i++){
-			snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
-			snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
+			snprintf(switch_str,MAX_STRING_LEN,"businesses:%s_switch",debug_business_names[i]);
+			snprintf(level_str,MAX_STRING_LEN,"businesses:%s_level",debug_business_names[i]);
+			/*
+			 *snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
+			 *snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
+			 */
 			iniparser_setstr(d, switch_str,"1");
 			if(i == 0){
 				iniparser_setstr(d, level_str,"9");
@@ -133,8 +137,12 @@ void debugger_set_businesses(debugger_t *debugger)
 		fclose(f);
 	}else{
 		for(i = 0; i < bussiness_num; i++){
-			snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
-			snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
+			/*
+			 *snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
+			 *snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
+			 */
+			snprintf(switch_str,MAX_STRING_LEN,"businesses:%s_switch",debug_business_names[i]);
+			snprintf(level_str,MAX_STRING_LEN,"businesses:%s_level",debug_business_names[i]);
 			/*
 			 *printf("debugger_set_businesses,bussiness_num=%d\n",bussiness_num);
 			 */

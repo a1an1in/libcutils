@@ -3,17 +3,19 @@
 type                           = 0
 
 [businesses]
-business_num                   = 6
-business0_switch               = 1
-business0_level                = 8
-business1_switch               = 1
-business1_level                = 8
-business2_switch               = 1
-business2_level                = 8
-business3_switch               = 1
-business3_level                = 8
-business4_switch               = 1
-business4_level                = 8
-business5_switch               = 1
-business5_level                = 8
+business_num                   = 7
+normal_switch                  = 1
+normal_level                   = 9
+alloc_switch                   = 1
+alloc_level                    = 8
+container_switch               = 1
+container_level                = 8
+linklist_switch                = 1
+linklist_level                 = 8
+hashmap_switch                 = 1
+hashmap_level                  = 8
+concurrent_switch              = 1
+concurrent_level               = 8
+net_switch                     = 1
+net_level                      = 8
 
