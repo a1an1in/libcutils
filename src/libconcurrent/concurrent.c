@@ -135,7 +135,7 @@ static void slave_event_handler_process_message(int fd, short event, void *arg)
 	struct concurrent_message_s *message;
 
 	/*
-	 *dbg_str(DBG_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
+	 *dbg_str(CONCURRENT_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
 	 */
 	if (read(fd, buf, 1) != 1){
 		dbg_str(DBG_WARNNING,"cannot read form pipe");
@@ -157,7 +157,7 @@ void *concurrent_slave_thread(void *arg)
 {
 	concurrent_slave_t *slave = (concurrent_slave_t *)arg;
 
-	dbg_str(DBG_DETAIL,"concurrent_slave_thread start,concurrent_slave_thread id=%d",slave->work_id);
+	dbg_str(CONCURRENT_DETAIL,"concurrent_slave_thread start,concurrent_slave_thread id=%d",slave->work_id);
 
 	slave->event_base = event_base_new();
 	if(slave->event_base == NULL){
@@ -302,7 +302,7 @@ void *concurrent_master_thread(void *arg)
 	concurrent_master_t *master  = (concurrent_master_t *)arg;
 	struct event event;
 
-	dbg_str(DBG_DETAIL,"concurrent_master_thread start");
+	dbg_str(CONCURRENT_DETAIL,"concurrent_master_thread start");
 
 	master->event_base = event_base_new();
 	/*
@@ -315,7 +315,7 @@ void *concurrent_master_thread(void *arg)
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
 
-	dbg_str(DBG_DETAIL,"concurrent_master_thread end");
+	dbg_str(CONCURRENT_DETAIL,"concurrent_master_thread end");
 	master->concurrent_master_inited_flag = 1;
 	event_base_loop(master->event_base, 0);
 
@@ -329,7 +329,7 @@ int concurrent_master_init(concurrent_master_t *master,
 	int ret = 0;
 	int fds[2];
 
-	dbg_str(DBG_DETAIL,"concurrent_master_init");
+	dbg_str(CONCURRENT_DETAIL,"concurrent_master_init");
 	master->concurrent_work_type = concurrent_work_type;
 	master->slave_amount = slave_amount;
 	master->message_que = llist_create(master->allocator,1);
@@ -405,7 +405,7 @@ static void concurrent_master_notify_slave(concurrent_master_t *master,char comm
 	int i = 0;
 
 	i = concurrent_master_choose_slave(master);
-	dbg_str(DBG_DETAIL,"concurrent_master_notify_slave,slave i=%d is assigned,notify fd=%d",i,master->snd_notify_fd[i]);
+	dbg_str(CONCURRENT_DETAIL,"concurrent_master_notify_slave,slave i=%d is assigned,notify fd=%d",i,master->snd_notify_fd[i]);
 
 	if (write(master->snd_notify_fd[i], &command, 1) != 1) {
 		dbg_str(DBG_WARNNING,"concurrent_master_notify_slave,write pipe err");
@@ -453,13 +453,13 @@ int concurrent_master_add_new_event(concurrent_master_t *master,
 {
 	while(master->concurrent_master_inited_flag == 0);	
 
-	dbg_str(DBG_DETAIL,"init new event");
+	dbg_str(CONCURRENT_DETAIL,"init new event");
 	event_assign(event,master->event_base,fd, event_flag, event_handler, master);
 	/*
 	 *event_base_set(master->event_base, event);
 	 */
 
-	dbg_str(DBG_DETAIL,"add new event");
+	dbg_str(CONCURRENT_DETAIL,"add new event");
 	if (event_add(event, 0) == -1) {
 		dbg_str(DBG_WARNNING,"event_add err");
 	}
@@ -487,7 +487,7 @@ concurrent_t *concurrent_create(allocator_t *allocator)
 		return NULL;
 	}
 	c->allocator= allocator;
-	dbg_str(DBG_DETAIL,"concurrent allocator=%p",allocator);
+	dbg_str(CONCURRENT_DETAIL,"concurrent allocator=%p",allocator);
 
 	return c;
 }
@@ -499,9 +499,9 @@ int concurrent_init(concurrent_t *c,
 {
 	int ret = 0;
 
-	dbg_str(DBG_DETAIL,"concurrent_init");
+	dbg_str(CONCURRENT_DETAIL,"concurrent_init");
 	c->master = concurrent_master_create(c->allocator);
-	dbg_str(DBG_DETAIL,"concurrent master=%p",c->master);
+	dbg_str(CONCURRENT_DETAIL,"concurrent master=%p",c->master);
 	concurrent_master_init(c->master, concurrent_work_type, task_size, slave_amount);
 
 	c->snd_add_new_event_fd  = c->master->snd_add_new_event_fd;
@@ -523,7 +523,7 @@ int concurrent_add_event_to_master(concurrent_t *c,
 
 	while(c->master->concurrent_master_inited_flag != 1);
 
-	dbg_str(DBG_DETAIL,"concurrent_add_new_event");
+	dbg_str(CONCURRENT_DETAIL,"concurrent_add_new_event");
 	event_assign(event,c->master->event_base,fd, event_flag, event_handler, arg);
 
 	message.event = event;

@@ -13,10 +13,11 @@
 #
 #TARGET file name
 TARGET = test
-SHARE_TARGET = libcdf.so
+SHARE_TARGET = libcutils.so
 #compile tools
 CC = gcc
 LD = ld
+export MACROS+=$(MACRO)
 export PROJECT_PATH = $(shell pwd)
 export INCLUDES = -I $(PROJECT_PATH)/src/include -I $(PROJECT_PATH)/src/include/libevent_tiny
 
@@ -46,7 +47,7 @@ cp:
 so:
 	@$(call build_obj);\
 	$(call check_output_dir);\
-	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread;\
+	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread ;\
 	if [ $$? -ne 0 ]; then \
 		echo "Building $(SHARE_TARGET) is failed !"; \
 		exit 12; \
@@ -57,6 +58,6 @@ so:
 		echo ;\
 	fi;
 install:
-	cp -rf ./src/include/ /usr/local/include/libcdf
+	cp -rf ./src/include/ /usr/local/include/libcutils
 	cp -rf $(PROJECT_PATH)/bin/$(SHARE_TARGET) /usr/local/lib
 

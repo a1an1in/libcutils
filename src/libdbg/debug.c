@@ -106,17 +106,21 @@ void debugger_set_businesses(debugger_t *debugger)
 	char switch_str[MAX_STRING_LEN];
 	char level_str[MAX_STRING_LEN];
 	int sw,lv;
+	char buf[MAX_STRING_LEN];
 
-	printf("debugger_set_businesses\n");
+	/*
+	 *printf("debugger_set_businesses\n");
+	 */
 	bussiness_num = iniparser_getint(d, (char *)"businesses:business_num",0);
+	sprintf(buf,"%d",MAX_DEBUG_BUSINESS_NUM);
 	if(bussiness_num == 0){
 		iniparser_setstr(d, (char *)"businesses", NULL); 
-		iniparser_setstr(d, (char *)"businesses:business_num", "3"); 
+		iniparser_setstr(d, (char *)"businesses:business_num", buf); 
 		for(i = 0; i < MAX_DEBUG_BUSINESS_NUM; i++){
 			snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
 			snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
 			iniparser_setstr(d, switch_str,"1");
-			iniparser_setstr(d, level_str,"9");
+			iniparser_setstr(d, level_str,"8");
 			debugger_set_business(debugger,i,1,9);
 		}
 		FILE *f = fopen(debugger->ini_file_name, "w");
@@ -126,9 +130,11 @@ void debugger_set_businesses(debugger_t *debugger)
 		for(i = 0; i < bussiness_num; i++){
 			snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
 			snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
-			printf("debugger_set_businesses,bussiness_num=%d\n",bussiness_num);
+			/*
+			 *printf("debugger_set_businesses,bussiness_num=%d\n",bussiness_num);
+			 */
 			sw = iniparser_getint(d, switch_str,1);
-			lv = iniparser_getint(d, level_str,9);
+			lv = iniparser_getint(d, level_str,8);
 			debugger_set_business(debugger,i,sw,lv);
 		}
 	}
@@ -259,7 +265,9 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 		iniparser_dump_ini(d, f);
 		fclose(f);
 	}
-	printf("debugger type =%d\n",type);
+	/*
+	 *printf("debugger type =%d\n",type);
+	 */
 	debugger->debugger_type = type;
 	debugger->dbg_ops = &debugger_modules[type].dbg_ops;
 	debugger->lock_type = lock_type;

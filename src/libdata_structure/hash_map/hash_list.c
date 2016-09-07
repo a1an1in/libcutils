@@ -72,7 +72,7 @@ hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 	}
 	map->allocator = allocator;
 	map->lock_type = lock_type;
-	dbg_str(DBG_DETAIL,"hash_map_create");
+	dbg_str(HMAP_DETAIL,"hash_map_create");
 	
 	return map;
 }
@@ -83,7 +83,7 @@ int hash_map_init(hash_map_t *hmap,
 		hash_func_fpt hash_func,
 		key_cmp_fpt key_cmp_func)
 {
-	dbg_str(DBG_DETAIL,"hash_map_init");
+	dbg_str(HMAP_DETAIL,"hash_map_init");
 
 	hash_map_t *map   = hmap;
 	map->data_size    = data_size;
@@ -185,7 +185,7 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 	bucket_pos = hash_func(key,key_size,bucket_size); 
 	assert(bucket_pos <= bucket_size);
 
-	dbg_str(DBG_DETAIL,"hash_map_search,bucket_pos=%d",bucket_pos);
+	dbg_str(HMAP_DETAIL,"hash_map_search,bucket_pos=%d",bucket_pos);
 
 	sync_lock(&hmap->map_lock,NULL);
 	hlist_for_each_safe(pos, next, &hlist[bucket_pos]){
@@ -236,13 +236,13 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 }
 int hash_map_destroy(hash_map_t *hmap)
 {
-	 dbg_str(DBG_DETAIL,"hash_map_destroy");
+	 dbg_str(HMAP_DETAIL,"hash_map_destroy");
 	 hash_map_pos_t it;
 	 for(	 hash_map_begin(hmap,&it);
 			 !hash_map_pos_equal(&it,&hmap->end);
 			 hash_map_begin(hmap,&it))
 	 {
-		 dbg_str(DBG_DETAIL,"destroy node:%p",it.hlist_node_p);
+		 dbg_str(HMAP_DETAIL,"destroy node:%p",it.hlist_node_p);
 		 hash_map_delete(hmap,&it);
 	 }
 	 if(hash_map_pos_equal(&hmap->end,&it)){
@@ -267,7 +267,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 	if(pos->hlist_node_p->next){
 		hlist_node_p = pos->hlist_node_p->next;
 		ret = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);
-		dbg_str(DBG_DETAIL,"find next iter ,list next is not null,bucket_pos=%d,node:%p,next:%p",
+		dbg_str(HMAP_DETAIL,"find next iter ,list next is not null,bucket_pos=%d,node:%p,next:%p",
 				bucket_pos,hlist_node_p,hlist_node_p->next);
 		return ret;
 	} else if(bucket_pos < bucket_size - 1 ){
@@ -275,7 +275,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 			if(hlist[bucket_pos].first){
 				hlist_node_p = hlist[bucket_pos].first;
 				ret = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);
-				dbg_str(DBG_DETAIL,"find new head,bucket_pos=%d,node:%p,next:%p",
+				dbg_str(HMAP_DETAIL,"find new head,bucket_pos=%d,node:%p,next:%p",
 						bucket_pos,hlist_node_p,hlist_node_p->next);
 				return ret;
 			}
@@ -292,7 +292,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 }
 void hash_map_print_mnode(struct hash_map_node *mnode)
 {
-	dbg_buf(DBG_DETAIL,"data:",mnode->key,mnode->data_size);
+	dbg_buf(HMAP_DETAIL,"data:",mnode->key,mnode->data_size);
 }
 
 /*

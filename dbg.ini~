@@ -5,7 +5,7 @@ type                           = 0
 [businesses]
 business_num                   = 6
 business0_switch               = 1
-business0_level                = 9
+business0_level                = 8
 business1_switch               = 1
 business1_level                = 8
 business2_switch               = 1

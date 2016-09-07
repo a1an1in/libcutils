@@ -91,7 +91,9 @@ int  linux_user_mode_pthread_mutex_register(){
 			.sync_lock_destroy = posix_thread_mutex_lock_destroy,
 		},
 	};
-	printf("linux_user_mode_pthread_mutex_register\n");
+	/*
+	 *printf("linux_user_mode_pthread_mutex_register\n");
+	 */
 	memcpy(&sync_lock_modules[PTHREAD_MUTEX_LOCK],&slm,sizeof(sync_lock_module_t));
 	return 0;
 }
