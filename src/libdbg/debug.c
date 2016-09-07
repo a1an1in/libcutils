@@ -120,8 +120,13 @@ void debugger_set_businesses(debugger_t *debugger)
 			snprintf(switch_str,MAX_STRING_LEN,"businesses:business%d_switch",i);
 			snprintf(level_str,MAX_STRING_LEN,"businesses:business%d_level",i);
 			iniparser_setstr(d, switch_str,"1");
-			iniparser_setstr(d, level_str,"8");
-			debugger_set_business(debugger,i,1,9);
+			if(i == 0){
+				iniparser_setstr(d, level_str,"9");
+				debugger_set_business(debugger,i,1,9);
+			}else{
+				iniparser_setstr(d, level_str,"8");
+				debugger_set_business(debugger,i,1,8);
+			}
 		}
 		FILE *f = fopen(debugger->ini_file_name, "w");
 		iniparser_dump_ini(d, f);
