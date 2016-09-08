@@ -57,8 +57,15 @@ static int process_task_callback(client_task_t *task)
 
 int test_udp_client_recieve()
 {
-	udp_client("127.0.0.1",//char *host,
-			"1989",//char *client_port,
-			process_task_callback,
-			NULL);
+	allocator_t *allocator;
+
+	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
+		return -1;
+	}
+	udp_client(allocator,
+			   "127.0.0.1",//char *host,
+			   "1989",//char *client_port,
+			   process_task_callback,
+			   NULL);
 }

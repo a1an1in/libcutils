@@ -115,5 +115,18 @@ static inline void llist_for_each(llist_t *llist,void (*func)(list_t *list))
 		func(ls);
 	}
 }
+static inline void llist_for_each_with_arg(llist_t *llist,void (*func)(list_t *list,void *arg),void *arg)
+{
+	list_t *ls;
+	list_pos_t pos,next;
+
+	for(	llist_begin(llist, &pos), llist_pos_next(&pos,&next);
+			!llist_pos_equal(&pos,&llist->head);
+			pos = next, llist_pos_next(&pos,&next))
+	{
+		ls = container_of(pos.list_head_p,list_t,list_head);
+		func(ls,arg);
+	}
+}
 
 #endif

@@ -51,6 +51,7 @@
 llist_t *llist_create(allocator_t *allocator,uint8_t lock_type)
 {
 	llist_t *ret = NULL;
+	dbg_str(LINKLIST_IMPORTANT,"llist_create");
 	ret = (llist_t *)allocator_mem_alloc(allocator,sizeof(llist_t));
 	if(ret == NULL){
 		dbg_str(DBG_ERROR,"allock err");
@@ -220,7 +221,7 @@ int llist_destroy(llist_t *llist)
 {
 	list_pos_t pos,next;
 
-	dbg_str(DBG_IMPORTANT,"llist_destroy");
+	dbg_str(LINKLIST_IMPORTANT,"llist_destroy");
 
 	for(	llist_begin(llist, &pos), llist_pos_next(&pos,&next);
 			!llist_pos_equal(&pos,&llist->head);

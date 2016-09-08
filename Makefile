@@ -58,6 +58,7 @@ so:
 		echo ;\
 	fi;
 install:
-	cp -rf ./src/include/ /usr/local/include/libcutils
+	mkdir -p /usr/local/include/libcutils
+	cp -rf ./src/include/* /usr/local/include/libcutils/
 	cp -rf $(PROJECT_PATH)/bin/$(SHARE_TARGET) /usr/local/lib
 

@@ -49,14 +49,13 @@
 #include <libproxy/proxy.h>
 
 
-user_t *user(
-		allocator_t *allocator,
-		int user_fd,
-		uint8_t user_type,
-		void (*user_event_handler)(int fd, short event, void *arg),
-		void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-		int (*process_task_cb)(void *task),
-		void *opaque)
+user_t *user(allocator_t *allocator,
+			 int user_fd,
+			 uint8_t user_type,
+			 void (*user_event_handler)(int fd, short event, void *arg),
+			 void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+			 int (*process_task_cb)(void *task),
+			 void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;

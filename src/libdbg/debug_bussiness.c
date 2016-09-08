@@ -10,6 +10,5 @@ debug_business_names[MAX_DEBUG_BUSINESS_NUM] = {
 	"hashmap",
 	"concurrent",
 	"net",
-	NULL
 };
 

@@ -125,7 +125,7 @@ int test_libevent_tiny()
 	 */
 }
 
-#ifndef MAKESO
+#ifndef MAKELIB
 /*
  * The libs used modules has been registered before main func,
  * and debugger has been construct before main too. so can use

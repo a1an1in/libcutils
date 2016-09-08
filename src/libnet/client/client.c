@@ -233,16 +233,15 @@ client_t *__client(allocator_t *allocator,
 
 	return client;
 }
-client_t *udp_client(char *host,
-				 char *client_port,
-				 int (*process_task_cb)(client_task_t *task),
-				 void *opaque)
+client_t *udp_client(allocator_t *allocator,
+					 char *host,
+					 char *client_port,
+					 int (*process_task_cb)(client_task_t *task),
+					 void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;
 	int user_id;
-	proxy_t *proxy = proxy_get_proxy_addr();
-	allocator_t *allocator = proxy->allocator;
 	client_t *client = NULL;
 
 	bzero(&hint, sizeof(hint));
@@ -262,10 +261,10 @@ client_t *udp_client(char *host,
 	user_id = udp_client_create_socket(addr);
 
 	client = __client(allocator,//allocator_t *allocator,
-			user_id,//int user_id,
-			SOCK_DGRAM,//uint8_t socktype,
-			process_task_cb,//int (*process_task_cb)(client_task_t *task),
-			opaque);//void *opaque)
+					  user_id,//int user_id,
+					  SOCK_DGRAM,//uint8_t socktype,
+					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
+					  opaque);//void *opaque)
 
 	if(client == NULL){
 		close(user_id);
@@ -280,8 +279,8 @@ int udp_client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 	int ret = 0;
 
 	if( ret = sendto(client->user_fd,buf,nbytes,flags,
-				(struct sockaddr *)destaddr,
-				(socklen_t)destlen) < 0)
+					 (struct sockaddr *)destaddr,
+					 (socklen_t)destlen) < 0)
 	{
 		perror("sendto()");  
 	}  
@@ -289,16 +288,14 @@ int udp_client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 	return ret;
 }
 
-client_t *tcp_client(char *server_ip,
-				 char *server_port,
-				 int (*process_task_cb)(client_task_t *task),
-				 void *opaque)
+client_t *tcp_client(allocator_t *allocator,
+				 	 char *server_ip,
+				 	 char *server_port,
+				 	 int (*process_task_cb)(client_task_t *task),
+				 	 void *opaque)
 {
-	int err;
 	int sockfd;
 	struct sockaddr_in sa_addr;
-	proxy_t *proxy = proxy_get_proxy_addr();
-	allocator_t *allocator = proxy->allocator;
 	client_t *client = NULL;
 	int ret;
 
@@ -322,10 +319,10 @@ client_t *tcp_client(char *server_ip,
 	}
 
 	client = __client(allocator,//allocator_t *allocator,
-			sockfd,//int user_id,
-			SOCK_DGRAM,//uint8_t socktype,
-			process_task_cb,//int (*process_task_cb)(client_task_t *task),
-			opaque);//void *opaque)
+					  sockfd,//int user_id,
+					  SOCK_DGRAM,//uint8_t socktype,
+					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
+					  opaque);//void *opaque)
 
 	if(client == NULL){
 		close(sockfd);

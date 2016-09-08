@@ -345,7 +345,6 @@ static void	timeout_process(struct event_base *);
 static void	timeout_correct(struct event_base *, struct timeval *);
 static inline void	event_signal_closure(struct event_base *, struct event *ev);
 static inline void	event_persist_closure(struct event_base *, struct event *ev);
-static int	evthread_notify_base(struct event_base *base);
 
 /** For debugging: unless assertions are disabled, verify the referential
     integrity of the internal data structures of 'base'.  This operation can
