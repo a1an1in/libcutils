@@ -108,7 +108,7 @@ void print_info_list(proto_info_list_t *info_list)
 	if(info_list == NULL)
 		return;
 	if(info_list->len <= 4)
-		printf("|%15s|%10d|%10d|%10d|%10d|%10d|%10d|%10d|%10x|%15s|\n",
+		printf("|%15s|%10d|%10d|%10d|%10d|%10d|%10d|%10d|%10x|%10s|\n",
 				info_list->name,
 				info_list->byte_pos,
 				info_list->bit_pos,
@@ -120,7 +120,7 @@ void print_info_list(proto_info_list_t *info_list)
 				info_list->data,
 				info_list->vlenth_index);
 	else{
-		printf("|%15s|%10d|%10d|%10d|%10d|%10d|%10d|%10d|%10s|%15s|\n",
+		printf("|%15s|%10d|%10d|%10d|%10d|%10d|%10d|%10d|%10s|%10s|\n",
 				info_list->name,
 				info_list->byte_pos,
 				info_list->bit_pos,
@@ -137,17 +137,6 @@ void print_info_list(proto_info_list_t *info_list)
 		 */
 	}
 }
-/*
- *void print_info_list_buffer(proto_info_list_t *info_list)
- *{
- *    if(info_list == NULL)
- *        return;
- *    if(info_list->buf.data_p != NULL){
- *        printf("|%15s|", info_list->name);
- *        dbg_buf(PA_DETAIL,"buf:",info_list->buf.data_p,info_list->len);
- *    }
- *}
- */
 struct list_head *pfs_create_head_list(allocator_t *allocator)
 {
 	proto_head_list_t *head_list;
@@ -251,7 +240,7 @@ void pfs_print_list_for_each(struct list_head *hl_head)
 	char c9  [] = "value";
 	char c10 [] = "vl_index";
 
-	printf("|%15s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|%15s|\n",
+	printf("|%15s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|\n",
 			c1 , c2 , c3 , c4 , c5 , c6 , c7 , c8 , c9, c10);
 	list_for_each_safe(pos, n, hl_head) {
 		info_list = container_of(pos,proto_info_list_t,list_head);

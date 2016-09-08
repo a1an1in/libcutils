@@ -124,6 +124,10 @@ int test_libevent_tiny()
 	 *test_time2();
 	 */
 }
+int test_libargs()
+{
+	test_args();
+}
 
 #ifndef MAKELIB
 /*
@@ -144,6 +148,7 @@ int main()
 	test_libconcurrent();
 	test_libnet();
 	test_libevent_tiny();
+	test_libargs();
 
 	dbg_str(DBG_DETAIL,"test end");
 	pause();
