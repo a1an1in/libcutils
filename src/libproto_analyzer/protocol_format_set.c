@@ -83,10 +83,10 @@ int str2num(const char *const_str)
 	int ret;
 
 	if(strncmp(str,"0x",2) && strncmp(str,"0X",2)){
-		dbg_str(DBG_DETAIL,"str is dex data,convert func is atoi");
+		dbg_str(PA_DETAIL,"str is dex data,convert func is atoi");
 		ret = atoi(const_str);
 	}else{
-		dbg_str(DBG_DETAIL,"str is hex data,convert func is hexstr2num");
+		dbg_str(PA_DETAIL,"str is hex data,convert func is hexstr2num");
 		ret = hexstr2num(const_str);
 	}
 	return ret;
@@ -107,66 +107,61 @@ void print_info_list(proto_info_list_t *info_list)
 {
 	if(info_list == NULL)
 		return;
-	if(info_list->len_unit == 8){
-		if(info_list->len <= 4)
-			printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
-					"vlenth_flag=%d,vlenth_value_flag=%d,"
-					"vlenth_value_assigned_flag=%d,value=0x%x,vl_index=%s\n",
-					info_list->name,
-					info_list->byte_pos,
-					info_list->bit_pos,
-					info_list->len,
-					info_list->vlenth_flag,
-					info_list->vlenth_value_flag,
-					info_list->vlenth_value_assigned_flag,
-					info_list->data,
-					info_list->vlenth_index);
-		else{
-			printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
-					"vlenth_flag=%d,vlenth_value_flag=%d,"
-					"vlenth_value_assigned_flag=%d,vl_index=%s\n",
-					info_list->name,
-					info_list->byte_pos,
-					info_list->bit_pos,
-					info_list->len,
-					info_list->vlenth_flag,
-					info_list->vlenth_value_flag,
-					info_list->vlenth_value_assigned_flag,
-					info_list->vlenth_index);
-			if(info_list->buf.data_p != NULL)
-				dbg_buf(DBG_DETAIL,"buf:",info_list->buf.data_p,info_list->len);
-		}
-
-	}else{
-		printf("name=%10s,byte_pos=%2d,bit_pos=%d,len=%2d,"
-				"vlenth_flag=%d,vlenth_value_flag=%d,"
-				"vlenth_value_assigned_flag=%d,value=0x%x,vl_index=%s\n",
+	if(info_list->len <= 4)
+		printf("|%15s|%10d|%10d|%10d|%10d|%10d|%10d|%10d|%10x|%15s|\n",
 				info_list->name,
 				info_list->byte_pos,
 				info_list->bit_pos,
 				info_list->len,
+				info_list->len_unit,
 				info_list->vlenth_flag,
 				info_list->vlenth_value_flag,
 				info_list->vlenth_value_assigned_flag,
 				info_list->data,
 				info_list->vlenth_index);
+	else{
+		printf("|%15s|%10d|%10d|%10d|%10d|%10d|%10d|%10d|%10s|%15s|\n",
+				info_list->name,
+				info_list->byte_pos,
+				info_list->bit_pos,
+				info_list->len,
+				info_list->len_unit,
+				info_list->vlenth_flag,
+				info_list->vlenth_value_flag,
+				info_list->vlenth_value_assigned_flag,
+				"N/A",
+				info_list->vlenth_index);
+		/*
+		 *if(info_list->buf.data_p != NULL)
+		 *    dbg_buf(PA_DETAIL,"buf:",info_list->buf.data_p,info_list->len);
+		 */
 	}
-
 }
+/*
+ *void print_info_list_buffer(proto_info_list_t *info_list)
+ *{
+ *    if(info_list == NULL)
+ *        return;
+ *    if(info_list->buf.data_p != NULL){
+ *        printf("|%15s|", info_list->name);
+ *        dbg_buf(PA_DETAIL,"buf:",info_list->buf.data_p,info_list->len);
+ *    }
+ *}
+ */
 struct list_head *pfs_create_head_list(allocator_t *allocator)
 {
 	proto_head_list_t *head_list;
 
 	head_list = (proto_head_list_t *)allocator_mem_alloc(allocator,sizeof(proto_head_list_t));
 	if(head_list == NULL){
-		dbg_str(DBG_ERROR,"create head_list err");
+		dbg_str(PA_ERROR,"create head_list err");
 		return NULL;
 	}
 	/*
 	 *pthread_rwlock_init(&head_list->head_lock,NULL);
 	 */
 	head_list->allocator = allocator;
-	dbg_str(DBG_DETAIL,"allocator=%p",allocator);
+	dbg_str(PA_DETAIL,"allocator=%p",allocator);
 
 	return &head_list->list_head;
 }
@@ -187,7 +182,7 @@ void pfs_release_head_list(struct list_head *hl_head)
 	proto_head_list_t *head_list;
 
 	head_list = container_of(hl_head,proto_head_list_t,list_head);
-	dbg_str(DBG_DETAIL,"release_head_list");
+	dbg_str(PA_DETAIL,"release_head_list");
 	/*
 	 *pthread_rwlock_destroy(&head_list->head_lock);
 	 */
@@ -245,10 +240,29 @@ void pfs_print_list_for_each(struct list_head *hl_head)
 	/*
 	 *pthread_rwlock_rdlock(&head_list->head_lock);
 	 */
+	char c1  [] = "name";
+	char c2  [] = "byte_pos";
+	char c3  [] = "bit_pos";
+	char c4  [] = "len";
+	char c5  [] = "len_unit";
+	char c6  [] = "vl_flag";
+	char c7  [] = "vl_vflag";
+	char c8  [] = "vl_vaflag";
+	char c9  [] = "value";
+	char c10 [] = "vl_index";
+
+	printf("|%15s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|%10s|%15s|\n",
+			c1 , c2 , c3 , c4 , c5 , c6 , c7 , c8 , c9, c10);
 	list_for_each_safe(pos, n, hl_head) {
 		info_list = container_of(pos,proto_info_list_t,list_head);
 		print_info_list(info_list);
 	}
+	/*
+	 *list_for_each_safe(pos, n, hl_head) {
+	 *    info_list = container_of(pos,proto_info_list_t,list_head);
+	 *    print_info_list_buffer(info_list);
+	 *}
+	 */
 	/*
 	 *pthread_rwlock_unlock(&head_list->head_lock);
 	 */
@@ -260,7 +274,7 @@ void pfs_del_list_for_each(struct list_head *hl_head)
 
 	list_for_each_safe(pos, n, hl_head) {
 		i++;
-		dbg_str(DBG_DETAIL,"del %d list",i);
+		dbg_str(PA_DETAIL,"del %d list",i);
 		pfs_del_list(pos,hl_head);
 	}
 	pfs_release_head_list(hl_head);
@@ -271,7 +285,7 @@ void pfs_print_proto_link_lists(protocol_format_set_t *pfp)
 	int i = 0;
 	struct list_head **hl_head = pfp->list_head_p2;
 	if(!hl_head){
-		dbg_str(DBG_ERROR,"hl_head is NULL");
+		dbg_str(PA_ERROR,"hl_head is NULL");
 		return;
 	}
 	for(i = 0; i < 100; i++){
@@ -285,10 +299,10 @@ void pfs_del_proto_link_list(protocol_format_set_t *pfp,uint32_t llist_num)
 	struct list_head **hl_head = pfp->list_head_p2;
 
 	if(!hl_head){
-		dbg_str(DBG_ERROR,"hl_head is NULL");
+		dbg_str(PA_ERROR,"hl_head is NULL");
 		return;
 	}
-	dbg_str(DBG_IMPORTANT,"delete link list %d",llist_num);
+	dbg_str(PA_IMPORTANT,"delete link list %d",llist_num);
 	pfs_del_list_for_each(hl_head[llist_num]);
 }
 void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_list)
@@ -297,13 +311,13 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 	if(!strcmp(name,"name")){
 		strcpy(info_list->name,(char *)attr_value);
 		/*
-		 *dbg_buf(DBG_DETAIL,"name:",(char *)attr_value,sizeof(attr_value));
+		 *dbg_buf(PA_DETAIL,"name:",(char *)attr_value,sizeof(attr_value));
 		 */
 	}else if(!strcmp(name,"byte_pos")){
 		info_list->byte_pos     = atoi((char *)(attr_value));
 		info_list->byte_pos_bak = info_list->byte_pos;
 		/*
-		 *dbg_str(DBG_DETAIL,"byte_pos=%d",info_list->byte_pos);
+		 *dbg_str(PA_DETAIL,"byte_pos=%d",info_list->byte_pos);
 		 */
 	}else if(!strcmp(name,"bit_pos")){
 		info_list->bit_pos     = atoi((char *)(attr_value));
@@ -311,9 +325,9 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 	}else if(!strcmp(name,"len")){
 		info_list->len = atoi((char *)(attr_value));
 		/*
-		 *dbg_str(DBG_DETAIL,"len=%d",info_list->len);
+		 *dbg_str(PA_DETAIL,"len=%d",info_list->len);
 		 */
-		//dbg_str(DBG_DETAIL,"len =%d",info_list->len);
+		//dbg_str(PA_DETAIL,"len =%d",info_list->len);
 		
 	}else if(!strcmp(name,"len_unit")){
 		info_list->len_unit = atoi((char *)(attr_value));
@@ -323,7 +337,7 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 		}
 		strcpy(info_list->vlenth_index,(char *)attr_value);
 		/*
-		 *dbg_buf(DBG_DETAIL,"vlenth_index:",(char *)attr_value,sizeof(attr_value));
+		 *dbg_buf(PA_DETAIL,"vlenth_index:",(char *)attr_value,sizeof(attr_value));
 		 */
 		if(strlen(info_list->vlenth_index) > 0){
 			info_list->vlenth_flag = 1;
@@ -335,10 +349,10 @@ void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_
 		info_list->bit_len = info_list->len * info_list->len_unit;
 		if(info_list->bit_len / 8 <= 4){
 			info_list->data = atoi((char *)(attr_value));
-			//dbg_str(DBG_DETAIL,"data =%x",info_list->data);
+			//dbg_str(PA_DETAIL,"data =%x",info_list->data);
 		}else {
 			info_list->buf.data_p = NULL;
-			dbg_str(DBG_DETAIL,"value is buf,need malloc mem,this data hasnot stored");
+			dbg_str(PA_DETAIL,"value is buf,need malloc mem,this data hasnot stored");
 		}
 	}else{
 	}
@@ -350,11 +364,11 @@ int pfs_add_proto_link_list(uint32_t llist_num,
 #define MAX_PROTOCOL_NUM 200
 	struct list_head **list_head = pfs_ptr->list_head_p2;
 	if(llist_num > MAX_PROTOCOL_NUM){
-		dbg_str(DBG_ERROR,"max_protocol_num greater than setting");
+		dbg_str(PA_ERROR,"max_protocol_num greater than setting");
 		return -1;
 	}
 	if(new_proto_llist == NULL){
-		dbg_str(DBG_ERROR,"new_proto_llist is NULL");
+		dbg_str(PA_ERROR,"new_proto_llist is NULL");
 		return -1;
 	}
 	list_head[llist_num] = new_proto_llist;
@@ -401,7 +415,7 @@ pfs_create_proto_format_set(allocator_t *allocator)
 
 	ret = (protocol_format_set_t *)allocator_mem_alloc(allocator,sizeof(protocol_format_set_t));
 	if(ret <= 0){
-		dbg_str(DBG_ERROR,"allocator_mem_alloc err");
+		dbg_str(PA_ERROR,"allocator_mem_alloc err");
 	}
 	memset(ret,0,sizeof(protocol_format_set_t));
 	ret->allocator = allocator;
@@ -414,13 +428,13 @@ void pfs_destroy_protocol_format_set(protocol_format_set_t *pfp)
 	struct list_head **hl_head_p2 = pfp->list_head_p2;
 	uint32_t protocol_num = pfp->proto_max_num;
 
-	dbg_str(DBG_DETAIL,"protocol num=%d",protocol_num);
+	dbg_str(PA_DETAIL,"protocol num=%d",protocol_num);
 	if(!hl_head_p2){
-		dbg_str(DBG_ERROR,"hl_head is NULL");
+		dbg_str(PA_ERROR,"hl_head is NULL");
 		return;
 	}
 	if(protocol_num > 100){
-		dbg_str(DBG_ERROR,"proto num err");
+		dbg_str(PA_ERROR,"proto num err");
 	}
 	for(i = 0; i < protocol_num; i++){
 		if(hl_head_p2[i] != NULL){
@@ -428,7 +442,7 @@ void pfs_destroy_protocol_format_set(protocol_format_set_t *pfp)
 			hl_head_p2[i] = NULL;
 		}
 	}
-	dbg_str(DBG_DETAIL,"allocator=%p free addr=%p",pfp->allocator,hl_head_p2);
+	dbg_str(PA_DETAIL,"allocator=%p free addr=%p",pfp->allocator,hl_head_p2);
 	allocator_mem_free(pfp->allocator,hl_head_p2);
 	allocator_mem_free(pfp->allocator,pfp);
 
@@ -441,8 +455,8 @@ void init_proto_format_set(int proto_base_addr,
 	pfs_p->list_head_p2 = (struct list_head **)allocator_mem_alloc(pfs_p->allocator,
 			sizeof(struct list_head *)*max_proto_num);
 	memset(pfs_p->list_head_p2,0,sizeof(struct list_head *)*max_proto_num);
-	dbg_str(DBG_DETAIL,"protocol num=%d",max_proto_num);
-	dbg_str(DBG_DETAIL,"allocator=%p free addr=%p",pfs_p->allocator,pfs_p->list_head_p2);
+	dbg_str(PA_DETAIL,"protocol num=%d",max_proto_num);
+	dbg_str(PA_DETAIL,"allocator=%p free addr=%p",pfs_p->allocator,pfs_p->list_head_p2);
 	//not realse
 	pfs_p->proto_total_num = 0;
 	pfs_p->proto_max_num = max_proto_num;
@@ -455,7 +469,7 @@ void init_proto_format_set(int proto_base_addr,
  *    pfs_set_proto_format_3008(&pfp);
  *    pfs_print_proto_link_lists(&pfp);
  *    pfs_del_proto_link_lists(&pfp);
- *    dbg_str(DBG_DETAIL,"run at here");
+ *    dbg_str(PA_DETAIL,"run at here");
  *}
  *
  */

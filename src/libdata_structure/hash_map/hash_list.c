@@ -154,12 +154,12 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 		 */
 	}
 	hmap->node_count++;
-	dbg_str(DBG_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,insert_hash_node_pos=%p",
+	dbg_str(HMAP_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,insert_hash_node_pos=%p",
 			hmap->node_count,
 			bucket_pos,
 			&mnode->hlist_node);
 	/*
-	 *dbg_str(DBG_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,first =%p,next=%p,begin.hash_map_pos=%p",
+	 *dbg_str(HMAP_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,first =%p,next=%p,begin.hash_map_pos=%p",
 	 *        hmap->node_count,
 	 *        bucket_pos,
 	 *        hlist[bucket_pos].first,
@@ -196,7 +196,7 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 		}
 	}
 	sync_unlock(&hmap->map_lock);
-	dbg_str(DBG_IMPORTANT,"not found key");
+	dbg_str(HMAP_IMPORTANT,"not found key");
 	return -1;
 }
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
@@ -206,7 +206,7 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 	hash_map_pos_t next;
 
 	/*
-	 *dbg_str(DBG_IMPORTANT,"del hash_map ,bucket_pos:%d,cur node:%p,begin node:%p",
+	 *dbg_str(HMAP_IMPORTANT,"del hash_map ,bucket_pos:%d,cur node:%p,begin node:%p",
 	 *        pos->bucket_pos, pos->hlist_node_p, hmap->begin.hlist_node_p);
 	 */
 
@@ -223,7 +223,7 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 	}
 	hlist_del(pos->hlist_node_p);
 	hmap->node_count--;
-	dbg_str(DBG_IMPORTANT,"del hash_map ,hash map count=%d,del node pos=%p",hmap->node_count,pos->hlist_node_p);
+	dbg_str(HMAP_IMPORTANT,"del hash_map ,hash map count=%d,del node pos=%p",hmap->node_count,pos->hlist_node_p);
 
 	sync_unlock(&hmap->map_lock);
 
@@ -282,7 +282,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 		}
 		hash_map_pos_init(next, NULL, bucket_size -1, hlist, hmap);
 	} else if(bucket_pos == bucket_size -1 ){
-		dbg_str(DBG_IMPORTANT,"container is null");
+		dbg_str(HMAP_IMPORTANT,"container is null");
 		hash_map_pos_init(next, NULL, bucket_pos, hlist, hmap);
 	}else{
 		dbg_str(DBG_ERROR,"hash_map_iterator_next err");

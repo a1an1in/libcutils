@@ -70,7 +70,6 @@ struct debug_business{
 
 struct debugger{
 #define MAX_INI_FILE_NAME_LEN 50
-#define MAX_DEBUG_BUSINESS_NUM 20
 	debug_level_info_t debug_level_info[DBG_MAX_LEVEL];
 	uint8_t main_switch;
 	uint8_t level;
@@ -87,7 +86,6 @@ struct debugger{
 		debug_log_prive_t log;
 	}priv;
 #undef MAX_INI_FILE_NAME_LEN
-#undef MAX_DEBUG_BUSINESS_NUM 
 };
 
 

@@ -73,12 +73,12 @@ int pa_check_protocol_num(struct protocol_analyzer_s *pa)
 	uint32_t protocol_num = pa->protocol_num;
 	uint32_t proto_base_addr = pa->pfs_p->proto_base_addr;
 	uint32_t proto_max_num = pa->pfs_p->proto_max_num;
-	dbg_str(DBG_DETAIL,"proto_base_addr =%x,proto_max_num=%d",proto_base_addr,proto_max_num);
+	dbg_str(PA_DETAIL,"proto_base_addr =%x,proto_max_num=%d",proto_base_addr,proto_max_num);
 	if(	
 		(uint32_t)protocol_num > proto_base_addr + proto_max_num ||
 		(uint32_t)protocol_num < proto_base_addr)
 	{
-		dbg_str(DBG_ERROR,"protocol num is err,please check");
+		dbg_str(PA_ERROR,"protocol num is err,please check");
 		return -1;
 	}
 	return 0;
@@ -91,10 +91,10 @@ int pa_find_protocol_format(struct protocol_analyzer_s *pa)
 
 		return ret;
 	};
-	//dbg_str(DBG_DETAIL,"proto_num=%x,proto_base_addr=%x",pa->protocol_num,pa->pfs_p->proto_base_addr);
+	//dbg_str(PA_DETAIL,"proto_num=%x,proto_base_addr=%x",pa->protocol_num,pa->pfs_p->proto_base_addr);
 	pa->pf_list_head_p = pa->pfs_p->list_head_p2[pa->protocol_num - pa->pfs_p->proto_base_addr];
 	if(pa->pf_list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa not find_protocol_format");
+		dbg_str(PA_ERROR,"pa not find_protocol_format");
 		ret = -1;
 	}
 	return ret;
@@ -103,7 +103,7 @@ int pa_copy_protocol_format(struct protocol_analyzer_s *pa)
 {
 	int ret = 0;
 	if(pa->pf_list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa_copy_protocol_format,pf_list_head_p == NULL");
+		dbg_str(PA_ERROR,"pa_copy_protocol_format,pf_list_head_p == NULL");
 		return -1;
 	}
 
@@ -113,7 +113,7 @@ int pa_copy_protocol_format(struct protocol_analyzer_s *pa)
 	struct list_head *pos,*n;
 
 	if(hl_head == NULL){
-		dbg_str(DBG_ERROR,"a_copy_protocol_format err,hl_head is NULL");
+		dbg_str(PA_ERROR,"a_copy_protocol_format err,hl_head is NULL");
 		return -1;
 	}
 	head_list = container_of(hl_head,proto_head_list_t,list_head);
@@ -129,9 +129,9 @@ int pa_copy_protocol_format(struct protocol_analyzer_s *pa)
 		pfs_add_list(&info_list_copy->list_head,&head_list_copy->list_head);
 
 	}
-	//dbg_str(DBG_DETAIL,"copy_protocol_format original");
+	//dbg_str(PA_DETAIL,"copy_protocol_format original");
 	//pfs_print_list_for_each(hl_head);
-	dbg_str(DBG_DETAIL,"copy_protocol_format copy");
+	dbg_str(PA_DETAIL,"copy_protocol_format copy");
 	/*
 	 *pfs_print_list_for_each(&head_list_copy->list_head);
 	 */
@@ -166,7 +166,7 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 	hash_map_t *hmap;
 	pair_t *pair;
 	struct hash_map_node *mnode;
-	uint8_t key_size = 10;
+	uint8_t key_size = 15;
 	uint8_t data_size = sizeof(proto_info_list_t *);
 	uint8_t bucket_size = 10;
 	int ret = 0;
@@ -189,7 +189,7 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 			NULL);
 
 	if(hl_head == NULL){
-		dbg_str(DBG_ERROR,"a_copy_protocol_format err,hl_head is NULL");
+		dbg_str(PA_ERROR,"a_copy_protocol_format err,hl_head is NULL");
 		return -1;
 	}
 	head_list = container_of(hl_head,proto_head_list_t,list_head);
@@ -225,7 +225,7 @@ proto_info_list_t * pa_find_key(const char *key,struct protocol_analyzer_s *pa)
 
 	hash_map_search(hmap,(void *)key_str,&map_pos);
 	if(map_pos.hlist_node_p == NULL){
-		dbg_str(DBG_WARNNING,"not found key:%s",key_str);
+		dbg_str(PA_WARNNING,"not found key:%s",key_str);
 		return NULL;	
 	}
 	addr_p = hash_map_pos_get_pointer(&map_pos);
@@ -280,17 +280,17 @@ int pa_set_buf(const char *key,uint8_t *data,uint32_t len,struct protocol_analyz
 		}else if(len <= info_list->buf.len){
 			memcpy(info_list->buf.data_p,data,len);
 		}else{
-			dbg_str(DBG_WARNNING,"prev buffer len is small,release it and new a buffer");
+			dbg_str(PA_WARNNING,"prev buffer len is small,release it and new a buffer");
 			allocator_mem_free(pa->allocator,info_list->buf.data_p);
 			info_list->buf.data_p =(uint8_t *)allocator_mem_alloc(pa->allocator,len);
 			info_list->buf.len = len;
 			memcpy(info_list->buf.data_p,data,len);
 		}
 		if(info_list->len != len){
-			dbg_str(DBG_WARNNING,"proto format len not equal copy data len,name=%s",info_list->name);
+			dbg_str(PA_WARNNING,"proto format len not equal copy data len,name=%s",info_list->name);
 		}
 	}else{
-		dbg_str(DBG_ERROR,"not find info list");
+		dbg_str(PA_ERROR,"not find info list");
 	}
 
 	return 0;
@@ -312,7 +312,7 @@ int pa_get_value(const char *key,struct protocol_analyzer_s *pa)
 	if(info_list != NULL)
 		return info_list->data;
 	else{
-		dbg_str(DBG_ERROR,"info_list is NULL");
+		dbg_str(PA_ERROR,"info_list is NULL");
 		return -1;
 	}
 }
@@ -324,16 +324,16 @@ int pa_recompute_byte_pos(struct list_head *cur,struct protocol_analyzer_s *pa)
 	uint32_t bit_len = 0;
 	int ret = 0;
 	if(list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa_list_head_p is NULL");
+		dbg_str(PA_ERROR,"pa_list_head_p is NULL");
 		return -1;
 	}
 
 	info_list = container_of(cur,proto_info_list_t,list_head);
 
-	dbg_str(DBG_DETAIL,"vlenth_index=%s",info_list->vlenth_index);
+	dbg_str(PA_DETAIL,"vlenth_index=%s",info_list->vlenth_index);
 	info_list_find = pa_find_key(info_list->vlenth_index,pa);
 	if(info_list_find == NULL){
-		dbg_str(DBG_ERROR,"vlenth_flag,but not find related info list,"
+		dbg_str(PA_ERROR,"vlenth_flag,but not find related info list,"
 				"please check if configure file is right");
 		return -1;
 	}
@@ -359,7 +359,7 @@ int pa_set_variable_length_flag(struct protocol_analyzer_s *pa)
 	int ret = 0;
 
 	if(list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa_list_head_p is NULL");
+		dbg_str(PA_ERROR,"pa_list_head_p is NULL");
 		return -1;
 	}
 
@@ -397,7 +397,7 @@ void pa_set_protocol_buf(uint8_t *data,uint32_t len,
 		uint8_t byte_pos, uint8_t bit_pos,uint8_t *dp)
 {
 	if(bit_pos != 0){
-		dbg_str(DBG_ERROR,"not support this set buf while it bit pos is not zero");
+		dbg_str(PA_ERROR,"not support this set buf while it bit pos is not zero");
 		return;
 	}
 	memcpy(dp + byte_pos,data,len);
@@ -408,7 +408,7 @@ void pa_set_protocol_byte_data(uint32_t data,
 {
 	int i;
 
-	//dbg_str(DBG_DETAIL,"byte_pos=%d,bit_pos=%d,t_len=%d",byte_pos,bit_pos,t_len);
+	//dbg_str(PA_DETAIL,"byte_pos=%d,bit_pos=%d,t_len=%d",byte_pos,bit_pos,t_len);
 
 	for(i = 0; i < len; i++){
 		dp[byte_pos + i] = (data >> 8 *(len - i - 1)) & 0xff;
@@ -424,7 +424,7 @@ void pa_set_protocol_bit_data(uint32_t data,
 	uint8_t t_data_get;
 	uint8_t t_len_get;
 
-	dbg_str(DBG_DETAIL,"byte_pos=%d,bit_pos=%d,t_len=%d,data=%x",byte_pos,bit_pos,t_len,data);
+	dbg_str(PA_DETAIL,"byte_pos=%d,bit_pos=%d,t_len=%d,data=%x",byte_pos,bit_pos,t_len,data);
 
 	for(i = 0; t_len > 0; i++){
 		/* get data len you wana set */
@@ -433,7 +433,7 @@ void pa_set_protocol_bit_data(uint32_t data,
 		t_data_get = get_bit_data(data, t_len - t_len_get, t_len_get);
 		/* set data */
 		set_bit_data(&dp[byte_pos + i],t_data_get,t_pos_set % 8 + 1 - t_len_get,t_len_get);
-		dbg_str(DBG_DETAIL,"-------t_data_get=%x,t_data_set=%x,t_len_get=%d,t_pos_set=%d",
+		dbg_str(PA_DETAIL,"-------t_data_get=%x,t_data_set=%x,t_len_get=%d,t_pos_set=%d",
 				t_data_get,dp[byte_pos + i],t_len_get,t_pos_set);
 		t_len -= t_len_get;
 		t_pos_set -= t_len_get;
@@ -447,7 +447,7 @@ void pa_get_protocol_buf(proto_info_list_t *info_list,
 		struct protocol_analyzer_s *pa)
 {
 	if(info_list->bit_pos != 0){
-		dbg_str(DBG_ERROR,"bit_pos != 0,not support this mod");
+		dbg_str(PA_ERROR,"bit_pos != 0,not support this mod");
 	}
 	if(info_list->buf.data_p == NULL){
 		info_list->buf.data_p = (uint8_t *)allocator_mem_alloc(pa->allocator,info_list->len);
@@ -457,7 +457,7 @@ void pa_get_protocol_buf(proto_info_list_t *info_list,
 		if(info_list->len <= info_list->buf.len){
 			memcpy(info_list->buf.data_p,pa->protocol_data + info_list->byte_pos,info_list->len);
 		}else{
-			dbg_str(DBG_WARNNING,"mem has malloc before,but too small,release and realloc");
+			dbg_str(PA_WARNNING,"mem has malloc before,but too small,release and realloc");
 			allocator_mem_free(pa->allocator,info_list->buf.data_p);
 			info_list->buf.data_p = (uint8_t *)allocator_mem_alloc(pa->allocator,info_list->len);
 			memcpy(info_list->buf.data_p,pa->protocol_data + info_list->byte_pos,info_list->len);
@@ -474,14 +474,14 @@ void pa_get_protocol_byte_data(proto_info_list_t *info_list,
 	uint8_t byte_pos = info_list->byte_pos;
 	uint8_t *dp = pa->protocol_data;
 	uint32_t data = 0;
-	//dbg_buf(DBG_DETAIL,"data:",dp,pa->protocol_data_len);
+	//dbg_buf(PA_DETAIL,"data:",dp,pa->protocol_data_len);
 
 	for(i = 0; i < t_len; i++){
 		data |= dp[byte_pos + i] << (t_len - i - 1)*8;
 	}
 	info_list->data = data;
 	/*
-	 *dbg_str(DBG_DETAIL,"name %s set data=%x",info_list->name,data);
+	 *dbg_str(PA_DETAIL,"name %s set data=%x",info_list->name,data);
 	 */
 }
 void pa_get_protocol_bit_data(proto_info_list_t *info_list,
@@ -503,7 +503,7 @@ void pa_get_protocol_bit_data(proto_info_list_t *info_list,
 		/* restore data to data var*/
 		data |= (t_data_get << (total_len - len_get));
 		/*
-		 *dbg_str(DBG_DETAIL,"get_data=%x,set_data=%x,len_get =%x,data=%x,bit_pos_get=%x",t_data_get,data,len_get,dp[byte_pos + i],bit_pos_get);
+		 *dbg_str(PA_DETAIL,"get_data=%x,set_data=%x,len_get =%x,data=%x,bit_pos_get=%x",t_data_get,data,len_get,dp[byte_pos + i],bit_pos_get);
 		 */
 		bit_pos_get -= len_get;
 		if(bit_pos_get < 0){
@@ -513,7 +513,7 @@ void pa_get_protocol_bit_data(proto_info_list_t *info_list,
 		
 	}
 	info_list->data = data;
-	dbg_str(DBG_DETAIL,"name %s set data=%x",info_list->name,data);
+	dbg_str(PA_DETAIL,"name %s set data=%x",info_list->name,data);
 }
 int pa_generate_protocol_data(struct protocol_analyzer_s *pa)
 {
@@ -526,14 +526,14 @@ int pa_generate_protocol_data(struct protocol_analyzer_s *pa)
 	uint8_t vlenth_flag;
 	int ret = 0;
 	if(list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa_list_head_p is NULL");
+		dbg_str(PA_ERROR,"pa_list_head_p is NULL");
 		return -1;
 	}
 	proto_head_list_t *head_list;
 	proto_info_list_t *info_list;
 	struct list_head *pos,*n;
 
-	dbg_str(DBG_DETAIL,"pa_generate_protocol_data");
+	dbg_str(PA_DETAIL,"pa_generate_protocol_data");
 
 	pa_set_variable_length_flag(pa);
 
@@ -555,20 +555,20 @@ int pa_generate_protocol_data(struct protocol_analyzer_s *pa)
 		if(		info_list->vlenth_value_flag &&
 				!info_list->vlenth_value_assigned_flag)
 		{
-			dbg_str(DBG_WARNNING,"this protocol has variable length,"
+			dbg_str(PA_WARNNING,"this protocol has variable length,"
 					"please call exclusive func assign value fist");
 		}
 
-		//dbg_str(DBG_DETAIL,"vlenth_flag =%x",vlenth_flag);
+		//dbg_str(PA_DETAIL,"vlenth_flag =%x",vlenth_flag);
 		if(vlenth_flag == 1){
-			 dbg_str(DBG_IMPORTANT,"pa_recompute_byte_pos");
+			 dbg_str(PA_IMPORTANT,"pa_recompute_byte_pos");
 			/*
-			 *dbg_str(DBG_DETAIL,"*************pa_recompute_byte_pos");
+			 *dbg_str(PA_DETAIL,"*************pa_recompute_byte_pos");
 			 *pfs_print_list_for_each(list_head_p);
 			 */
 			 pa_recompute_byte_pos(pos,pa);
 			/*
-			 *dbg_str(DBG_DETAIL,"*************pa_recompute_byte_pos");
+			 *dbg_str(PA_DETAIL,"*************pa_recompute_byte_pos");
 			 *pfs_print_list_for_each(list_head_p);
 			 */
 			len      = info_list->len;
@@ -594,7 +594,7 @@ int pa_generate_protocol_data(struct protocol_analyzer_s *pa)
 	}
 
 	pa->protocol_data_len = byte_pos + len;
-	dbg_buf(DBG_DETAIL,"buffer:",dp,pa->protocol_data_len);
+	dbg_buf(PA_DETAIL,"buffer:",dp,pa->protocol_data_len);
 	return ret;
 }
 int pa_parse_protocol_data(struct protocol_analyzer_s *pa)
@@ -603,16 +603,16 @@ int pa_parse_protocol_data(struct protocol_analyzer_s *pa)
 	int ret = 0;
 
 	if(pa == NULL){
-		dbg_str(DBG_ERROR,"pa is NULL");
+		dbg_str(PA_ERROR,"pa is NULL");
 		return -1;
 	}
 	list_head_p = pa->pa_list_head_p;
 	if(list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa_list_head_p is NULL");
+		dbg_str(PA_ERROR,"pa_list_head_p is NULL");
 		return -1;
 	}
 	if(pa->protocol_data_len == 0){
-		dbg_str(DBG_ERROR,"protocol_data_len err");
+		dbg_str(PA_ERROR,"protocol_data_len err");
 		return -1;
 	}
 
@@ -620,7 +620,7 @@ int pa_parse_protocol_data(struct protocol_analyzer_s *pa)
 	proto_info_list_t *info_list;
 	struct list_head *pos,*n;
 
-	dbg_str(DBG_DETAIL,"pa_parse_protocol_data");
+	dbg_str(PA_DETAIL,"pa_parse_protocol_data");
 	head_list = container_of(list_head_p,proto_head_list_t,list_head);
 
 	list_for_each_safe(pos, n,list_head_p) {
@@ -651,12 +651,12 @@ int pa_reset_vlen_flag(struct protocol_analyzer_s *pa)
 	struct list_head *pos,*n;
 
 	if(pa == NULL){
-		dbg_str(DBG_ERROR,"pa is NULL");
+		dbg_str(PA_ERROR,"pa is NULL");
 		return -1;
 	}
 	list_head_p = pa->pa_list_head_p;
 	if(list_head_p == NULL){
-		dbg_str(DBG_ERROR,"pa_list_head_p is NULL");
+		dbg_str(PA_ERROR,"pa_list_head_p is NULL");
 		return -1;
 	}
 

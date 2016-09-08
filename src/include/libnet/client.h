@@ -2,6 +2,7 @@
 #define __CLIENT_H__
 
 #include <libconcurrent/concurrent.h>
+#include <libproxy/user.h>
 
 /*
  *enum socktype_e{
@@ -11,7 +12,9 @@
  *};
  */
 
-struct user_s;
+/*
+ *struct user_s;
+ */
 typedef struct user_s client_t;
 
 typedef struct client_task_s{
