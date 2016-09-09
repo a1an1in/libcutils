@@ -127,45 +127,12 @@ int test_libevent_tiny()
 	 *test_time2();
 	 */
 }
-
-#ifndef MAKELIB
-typedef struct config_list_s{
-}config_list_t;
-
-typedef struct base_s{
-	config_list_t config;
-}base_t;
-
-int args_process_port(void *base,int argc,char **argv)
-{
-	dbg_str(DBG_DETAIL,"args_process_port:%s",argv[0]);
-	return 1;
-}
-int args_process_ipaddr(void *base,int argc,char **argv)
-{
-	dbg_str(DBG_DETAIL,"args_process_ipaddr:%s",argv[0]);
-	return 1;
-}
 void test_libargs(int argc, char *argv[])
 {
-	allocator_t *allocator;
-	args_processor_t *processor;
-	base_t *base;
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
-	if((base = (base_t *)allocator_mem_alloc(allocator,sizeof(base_t))) == NULL){
-		dbg_str(DBG_ERROR,"allocator_mem_allo");
-		return;
-	}
-	
-	processor = args_create(allocator);
-	args_init(processor,base);
-	args_add_entry(processor, "port", args_process_port, "port", "NN(number)",1,"udp port,using to send/rcv msg with neighbor");
-	args_add_entry(processor, "ip", args_process_ipaddr, "ip addr", "xx.xx.xx.xx",1,"ip addr,using to send/rcv msg with neighbor");
-	args_print_help_info(processor);
-	args_parse_args(processor,argc - 1, argv + 1);
-	args_destroy(processor);
+	test_args(argc,argv);
 }
+
+#ifndef MAKELIB
 
 /*
  * The libs used modules has been registered before main func,

@@ -71,7 +71,7 @@ int test_udp_client_send()
 
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return NULL;
+		return -1;
 	}
 
 	/*
