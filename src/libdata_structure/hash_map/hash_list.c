@@ -246,7 +246,7 @@ int hash_map_destroy(hash_map_t *hmap)
 		 hash_map_delete(hmap,&it);
 	 }
 	 if(hash_map_pos_equal(&hmap->end,&it)){
-		 dbg_str(DBG_WARNNING,"hash_map_destroy,hash_map is NULL");
+		 dbg_str(HMAP_IMPORTANT,"hash_map_destroy,hash_map is NULL");
 		 sync_lock_destroy(&hmap->map_lock);
 		 allocator_mem_free(hmap->allocator,hmap->hlist);
 	 }

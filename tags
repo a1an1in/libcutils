@@ -449,8 +449,6 @@ MAXEPOLLSIZE	src/libnet/server/server.c	52;"	d	file:
 MAXLINE	src/libnet/client/client.c	54;"	d	file:
 MAXLINE	src/libnet/server/server.c	53;"	d	file:
 MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
-MAX_ARG_NAME_LEN	src/include/libargs/cmd_args.h	16;"	d
-MAX_ARG_NAME_LEN	src/include/libargs/cmd_args.h	7;"	d
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	225;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	249;"	d	file:
 MAX_BUSINESSES_SETTING_LEN	src/libdbg/debug.c	154;"	d	file:
@@ -466,8 +464,6 @@ MAX_FMT_STR_LEN	src/libdbg/debug.c	197;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	219;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	226;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	250;"	d	file:
-MAX_HELP_INFO_LEN	src/include/libargs/cmd_args.h	15;"	d
-MAX_HELP_INFO_LEN	src/include/libargs/cmd_args.h	8;"	d
 MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	72;"	d
 MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	88;"	d
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	108;"	d	file:
@@ -872,7 +868,6 @@ __SYNC_LOCK_H__	src/include/libcre/sync_lock/sync_lock.h	19;"	d
 __USER_H__	src/include/libproxy/user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
 __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
-__args_add_entry	src/libargs/cmd_args.c	/^__args_add_entry(args_processor_t *p,arg_entry_t *e)$/;"	f	file:
 __cdecl	src/libevent_tiny/signal.c	73;"	d	file:
 __client	src/libnet/client/client.c	/^client_t *__client(allocator_t *allocator,$/;"	f
 __concurrent_master_create_slave	src/libconcurrent/concurrent.c	/^int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)$/;"	f
@@ -951,7 +946,6 @@ alloc_count	src/include/liballoc/allocator.h	/^	uint32_t alloc_count;$/;"	m	stru
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations *alloc_ops;$/;"	m	struct:allocator	typeref:struct:allocator::allocator_operations
 alloc_ops	src/include/liballoc/allocator.h	/^	struct allocator_operations alloc_ops;$/;"	m	struct:allocator_module	typeref:struct:allocator_module::allocator_operations
 allocator	src/include/liballoc/allocator.h	/^typedef struct allocator{$/;"	s
-allocator	src/include/libargs/cmd_args.h	/^	allocator_t *allocator;$/;"	m	struct:args_processor_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_master_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_slave_s
@@ -987,21 +981,19 @@ allocator_type	src/include/liballoc/allocator.h	/^	uint8_t allocator_type;$/;"	m
 allocator_type	src/include/liballoc/allocator.h	/^enum allocator_type{$/;"	g
 apply_numeric_port_hack	src/libevent_tiny/evutil.c	/^apply_numeric_port_hack(int port, struct evutil_addrinfo **ai)$/;"	f	file:
 apply_socktype_protocol_hack	src/libevent_tiny/evutil.c	/^apply_socktype_protocol_hack(struct evutil_addrinfo *ai)$/;"	f	file:
-arg_entry_s	src/include/libargs/cmd_args.h	/^typedef struct arg_entry_s{$/;"	s
-arg_entry_t	src/include/libargs/cmd_args.h	/^}arg_entry_t;$/;"	t	typeref:struct:arg_entry_s
-args_add_entry	src/libargs/cmd_args.c	/^int args_add_entry(args_processor_t *p,$/;"	f
-args_count	src/include/libargs/cmd_args.h	/^	uint8_t args_count;$/;"	m	struct:arg_entry_s
-args_create	src/libargs/cmd_args.c	/^args_create(allocator_t *allocator)$/;"	f
-args_destroy	src/libargs/cmd_args.c	/^int args_destroy(args_processor_t *processor)$/;"	f
+args_count	src/include/libargs/cmd_args.h	/^	uint8_t args_count;$/;"	m	struct:cmd_config_s
 args_find_entry	src/libargs/cmd_args.c	/^args_find_entry(args_processor_t *p,char *cmd)$/;"	f
-args_init	src/libargs/cmd_args.c	/^args_init(args_processor_t *p,void *base)$/;"	f
+args_get_processor_globle_addr	src/libargs/cmd_args.c	/^args_processor_t *args_get_processor_globle_addr()$/;"	f
+args_init	src/libargs/cmd_args.c	/^args_init(args_processor_t *p,void *base,cmd_config_t *c)$/;"	f
 args_parse_args	src/libargs/cmd_args.c	/^args_parse_args(args_processor_t *p,int argc, char *argv[])$/;"	f
 args_print_help_info	src/libargs/cmd_args.c	/^void args_print_help_info(args_processor_t *p)$/;"	f
-args_process_ipaddr	src/main.c	/^int args_process_ipaddr(void *base,int argc,char **argv)$/;"	f
-args_process_port	src/main.c	/^int args_process_port(void *base,int argc,char **argv)$/;"	f
+args_process	src/libargs/cmd_args.c	/^void args_process(void *base,cmd_config_t *cmd_configs,int argc, char *argv[])$/;"	f
+args_process_help	src/libargs/test_cmd_args.c	/^int args_process_help(void *base,int argc,char **argv)$/;"	f
+args_process_ipaddr	src/libargs/test_cmd_args.c	/^int args_process_ipaddr(void *base,int argc,char **argv)$/;"	f
+args_process_port	src/libargs/test_cmd_args.c	/^int args_process_port(void *base,int argc,char **argv)$/;"	f
 args_processor_s	src/include/libargs/cmd_args.h	/^typedef struct args_processor_s{$/;"	s
 args_processor_t	src/include/libargs/cmd_args.h	/^}args_processor_t;$/;"	t	typeref:struct:args_processor_s
-args_readable_names	src/include/libargs/cmd_args.h	/^	char args_readable_names[MAX_ARG_NAME_LEN];$/;"	m	struct:arg_entry_s
+args_readable_names	src/include/libargs/cmd_args.h	/^	char *args_readable_names;$/;"	m	struct:cmd_config_s
 argument	src/libthread_pool/threadpool.c	/^    void *argument;$/;"	m	struct:__anon15	file:
 assignment_count	src/include/libconcurrent/concurrent.h	/^	uint8_t assignment_count;$/;"	m	struct:concurrent_master_s
 avoid_method	src/include/libevent_tiny/event-internal.h	/^	const char *avoid_method;$/;"	m	struct:event_config_entry
@@ -1012,8 +1004,8 @@ b	src/libdata_structure/test/test_rbtree_map.c	/^	int b;$/;"	m	struct:A	file:
 b	src/libdata_structure/test/test_vector.c	/^	int b;$/;"	m	struct:test	file:
 base	src/include/libargs/cmd_args.h	/^	void *base;$/;"	m	struct:args_processor_s
 base	src/include/libevent_tiny/event-internal.h	/^	struct event_base *base;$/;"	m	struct:common_timeout_list	typeref:struct:common_timeout_list::event_base
-base_s	src/main.c	/^typedef struct base_s{$/;"	s	file:
-base_t	src/main.c	/^}base_t;$/;"	t	typeref:struct:base_s	file:
+base_s	src/libargs/test_cmd_args.c	/^typedef struct base_s{$/;"	s	file:
+base_t	src/libargs/test_cmd_args.c	/^}base_t;$/;"	t	typeref:struct:base_s	file:
 begin	src/include/libdata_structure/hash_list_struct.h	/^	hash_map_pos_t begin,end;$/;"	m	struct:hash_map_s
 begin	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,head;$/;"	m	struct:llist_s
 begin	src/include/libdata_structure/rbtree_map_struct.h	/^	rbtree_map_pos_t begin ,end;$/;"	m	struct:rbtree_map_s
@@ -1052,8 +1044,12 @@ client_t	src/include/libnet/client.h	/^typedef struct user_s client_t;$/;"	t	typ
 client_task_s	src/include/libnet/client.h	/^typedef struct client_task_s{$/;"	s
 client_task_t	src/include/libnet/client.h	/^}client_task_t;$/;"	t	typeref:struct:client_task_s
 close	src/libevent_tiny/evutil.c	56;"	d	file:
-cmd	src/include/libargs/cmd_args.h	/^	char cmd[MAX_ARG_NAME_LEN];$/;"	m	struct:arg_entry_s
-cmd_readable_name	src/include/libargs/cmd_args.h	/^	char cmd_readable_name[MAX_ARG_NAME_LEN];$/;"	m	struct:arg_entry_s
+cmd	src/include/libargs/cmd_args.h	/^	char *cmd;$/;"	m	struct:cmd_config_s
+cmd_config	src/include/libargs/cmd_args.h	/^	cmd_config_t *cmd_config;$/;"	m	struct:args_processor_s
+cmd_config_s	src/include/libargs/cmd_args.h	/^typedef struct cmd_config_s{$/;"	s
+cmd_config_t	src/include/libargs/cmd_args.h	/^}cmd_config_t;$/;"	t	typeref:struct:cmd_config_s
+cmd_readable_name	src/include/libargs/cmd_args.h	/^	char *cmd_readable_name;$/;"	m	struct:cmd_config_s
+cmds	src/libargs/test_cmd_args.c	/^cmd_config_t cmds[]={$/;"	v
 code	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon12	file:
 color	src/include/libdbg/debug.h	/^	uint8_t color;$/;"	m	struct:debug_level_info
 common_timeout_callback	src/libevent_tiny/event.c	/^common_timeout_callback(evutil_socket_t fd, short what, void *arg)$/;"	f	file:
@@ -1103,9 +1099,9 @@ concurrent_task_s	src/libconcurrent/test_concurrent.c	/^typedef struct concurren
 concurrent_task_t	src/libconcurrent/test_concurrent.c	/^}concurrent_task_t;$/;"	t	typeref:struct:concurrent_task_s	file:
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_master_s
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_s
-config	src/main.c	/^	config_list_t config;$/;"	m	struct:base_s	file:
-config_list_s	src/main.c	/^typedef struct config_list_s{$/;"	s	file:
-config_list_t	src/main.c	/^}config_list_t;$/;"	t	typeref:struct:config_list_s	file:
+config	src/libargs/test_cmd_args.c	/^	config_list_t config;$/;"	m	struct:base_s	file:
+config_list_s	src/libargs/test_cmd_args.c	/^typedef struct config_list_s{$/;"	s	file:
+config_list_t	src/libargs/test_cmd_args.c	/^}config_list_t;$/;"	t	typeref:struct:config_list_s	file:
 conn	src/libconcurrent/test_concurrent.c	/^	uint32_t conn;$/;"	m	struct:concurrent_task_s	file:
 console_print_print	src/libdbg/debug_console.c	/^int console_print_print(debugger_t *debugger,size_t level,const char *fmt,...)$/;"	f
 console_print_print_str_vl	src/libdbg/debug_console.c	/^int console_print_print_str_vl(debugger_t *debugger,$/;"	f
@@ -1578,7 +1574,7 @@ first	src/include/libdbg/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_
 flags	.ycm_extra_conf.py	/^flags = [$/;"	v
 flags	src/include/libevent_tiny/event-internal.h	/^	enum event_base_config_flag flags;$/;"	m	struct:event_base	typeref:enum:event_base::event_base_config_flag
 flags	src/include/libevent_tiny/event-internal.h	/^	enum event_base_config_flag flags;$/;"	m	struct:event_config	typeref:enum:event_config::event_base_config_flag
-fn	src/include/libargs/cmd_args.h	/^	int (*fn)(void *base, int argc, char **argv);$/;"	m	struct:arg_entry_s
+fn	src/include/libargs/cmd_args.h	/^	int (*fn)(void *base, int argc, char **argv);$/;"	m	struct:cmd_config_s
 fp	src/include/libdbg/debug_log.h	/^	FILE *fp;$/;"	m	struct:debug_log_prive
 free	src/include/liballoc/allocator.h	/^	void (*free)(allocator_t *alloc,void *addr);$/;"	m	struct:allocator_operations
 free_mem	src/include/libproto_analyzer/protocol_format_set.h	/^	free_mem_fptr free_mem;$/;"	m	struct:proto_info_list_s
@@ -1628,7 +1624,7 @@ head	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,he
 head	src/libthread_pool/threadpool.c	/^  int head;$/;"	m	struct:threadpool_t	file:
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	sync_lock_t head_lock;    $/;"	m	struct:ctr_mem_pool_head_list
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	sync_lock_t head_lock;    $/;"	m	struct:slab_head_list
-help_info	src/include/libargs/cmd_args.h	/^	char help_info[MAX_HELP_INFO_LEN];$/;"	m	struct:arg_entry_s
+help_info	src/include/libargs/cmd_args.h	/^	char *help_info;$/;"	m	struct:cmd_config_s
 hexstr2num	src/libproto_analyzer/protocol_format_set.c	/^int hexstr2num(const char* const_str)$/;"	f
 hlist	src/include/libdata_structure/hash_list_struct.h	/^	struct hlist_head *hlist;$/;"	m	struct:hash_map_s	typeref:struct:hash_map_s::hlist_head
 hlist	src/include/libdata_structure/hash_list_struct.h	/^	struct hlist_head *hlist;\/\/hash table head addr$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hlist_head
@@ -1920,7 +1916,6 @@ list_splice_init	src/include/libdata_structure/list.h	/^static inline void list_
 list_splice_init	src/include/libdbg/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_splice_init	src/include/libproto_analyzer/list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f
 list_t	src/include/libdata_structure/link_list_struct.h	/^}list_t;$/;"	t	typeref:struct:llist_list_s
-llist	src/include/libargs/cmd_args.h	/^	llist_t *llist;$/;"	m	struct:args_processor_s
 llist	src/include/libdata_structure/link_list_struct.h	/^	struct llist_s *llist;$/;"	m	struct:llist_pos_s	typeref:struct:llist_pos_s::llist_s
 llist_begin	src/include/libdata_structure/link_list.h	/^llist_begin(llist_t *llist,list_pos_t *begin)$/;"	f
 llist_create	src/libdata_structure/link_list/link_list.c	/^llist_t *llist_create(allocator_t *allocator,uint8_t lock_type)$/;"	f
@@ -2077,6 +2072,7 @@ old_events	src/include/libevent_tiny/changelist-internal.h	/^	short old_events;$
 opaque	src/include/libproxy/user.h	/^	void *opaque;$/;"	m	struct:user_s
 open	src/libevent_tiny/evutil.c	54;"	d	file:
 p	src/include/libevent_tiny/minheap-internal.h	/^	struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
+p	src/libargs/test_cmd_args.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
 pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef struct pa_array_s{$/;"	s	file:
@@ -2178,6 +2174,7 @@ priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:de
 process_task_callback	src/libnet/client/test_client_rcv.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libnet/client/test_client_send.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_cb	src/include/libproxy/user.h	/^	int (*process_task_cb)(void *task);$/;"	m	struct:user_s
+processor_globle	src/libargs/cmd_args.c	/^args_processor_t processor_globle;$/;"	v
 proto_base_addr	src/include/libproto_analyzer/protocol_format_set.h	/^	uint32_t proto_base_addr;$/;"	m	struct:protocol_format_set_s
 proto_head_list_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct proto_head_list_s{$/;"	s
 proto_head_list_t	src/include/libproto_analyzer/protocol_format_set.h	/^}proto_head_list_t;$/;"	t	typeref:struct:proto_head_list_s
@@ -2389,6 +2386,7 @@ test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_allocator	src/main.c	/^void test_allocator()$/;"	f
 test_analyzer	src/main.c	/^void test_analyzer()$/;"	f
+test_args	src/libargs/test_cmd_args.c	/^void test_args(int argc, char *argv[])$/;"	f
 test_concurrent1	src/libconcurrent/test_concurrent.c	/^int test_concurrent1()$/;"	f
 test_concurrent3	src/libconcurrent/test_concurrent.c	/^int test_concurrent3()$/;"	f
 test_concurrent_add_task	src/libconcurrent/test_concurrent.c	/^int test_concurrent_add_task(concurrent_master_t *master,void *task)$/;"	f

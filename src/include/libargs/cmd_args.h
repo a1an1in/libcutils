@@ -15,7 +15,6 @@ typedef struct cmd_config_s{
 typedef struct args_processor_s{
 	cmd_config_t *cmd_config;
 	void *base;
-	allocator_t *allocator;
 }args_processor_t;
 
 args_processor_t * args_init(args_processor_t *p,void *base,cmd_config_t *c);

@@ -127,6 +127,10 @@ int test_libevent_tiny()
 	 *test_time2();
 	 */
 }
+int test_libproxy()
+{
+    test_ev_timer();
+}
 void test_libargs(int argc, char *argv[])
 {
 	test_args(argc,argv);
@@ -152,6 +156,7 @@ int main(int argc, char *agrv[])
 	test_libthread_pool();
 	test_libconcurrent();
 	test_libnet();
+    test_libproxy();
 	test_libevent_tiny();
 
 	dbg_str(DBG_DETAIL,"test end");

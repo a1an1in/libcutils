@@ -287,7 +287,7 @@ static void master_event_handler_add_new_event(
 		case 'r': 
 			l = llist_detach_front(master->new_ev_que);
 			message = (struct concurrent_message_s *)l->data;
-			if (event_add(message->event, 0) == -1) {
+			if (event_add(message->event, message->tv) == -1) {
 				dbg_str(DBG_WARNNING,"event_add err");
 			}
 			allocator_mem_free(master->allocator,l);
@@ -516,6 +516,7 @@ int concurrent_init(concurrent_t *c,
 int concurrent_add_event_to_master(concurrent_t *c,
 		int fd,int event_flag,
 		struct event *event,
+        struct timeval *tv,
 		void (*event_handler)(int fd, short event, void *arg),
 		void *arg)
 {
@@ -527,6 +528,7 @@ int concurrent_add_event_to_master(concurrent_t *c,
 	event_assign(event,c->master->event_base,fd, event_flag, event_handler, arg);
 
 	message.event = event;
+    message.tv = tv;
 	llist_push_back(c->new_ev_que,&message);
 
 	if (write(c->snd_add_new_event_fd, "r", 1) != 1) {

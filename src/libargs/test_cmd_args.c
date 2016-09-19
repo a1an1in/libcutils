@@ -9,17 +9,17 @@ typedef struct base_s{
 	args_processor_t *p;
 }base_t;
 
-int args_process_port(void *base,int argc,char **argv)
+static int args_process_port(void *base,int argc,char **argv)
 {
 	dbg_str(DBG_DETAIL,"args_process_port:%s",argv[0]);
 	return 1;
 }
-int args_process_ipaddr(void *base,int argc,char **argv)
+static int args_process_ipaddr(void *base,int argc,char **argv)
 {
 	dbg_str(DBG_DETAIL,"args_process_ipaddr:%s",argv[0]);
 	return 1;
 }
-int args_process_help(void *base,int argc,char **argv)
+static int args_process_help(void *base,int argc,char **argv)
 {
 	args_print_help_info(args_get_processor_globle_addr());
 	return 0;
