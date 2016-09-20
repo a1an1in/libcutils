@@ -44,7 +44,6 @@
 #include <fcntl.h>         /* nonblocking */
 #include <sys/resource.h>  /*setrlimit */
 #include <libconcurrent/concurrent.h>
-#include <libproxy/proxy.h>
 #include <libnet/server.h>
 #include <signal.h>
 
@@ -216,8 +215,8 @@ void * server(char *host,char *server)
 	struct addrinfo  *addr, hint;
 	int err;
 	int user_id;
-	proxy_t *proxy = proxy_get_proxy_addr();
-	allocator_t *allocator = proxy->allocator;
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+	allocator_t *allocator = c->allocator;
 	server_t *srv = NULL;
 
 	bzero(&hint, sizeof(hint));

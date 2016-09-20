@@ -50,9 +50,8 @@
 
 #include <libdbg/debug.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/io_user.h>
-#include <libproxy/proxy.h>
-#include <libproxy/tmr_user.h>
+#include <libconcurrent/io_user.h>
+#include <libconcurrent/tmr_user.h>
 
 tmr_user_t *tmr_user(allocator_t *allocator,
         struct timeval *tv,
@@ -60,7 +59,7 @@ tmr_user_t *tmr_user(allocator_t *allocator,
         void (*tmr_event_handler)(int fd, short event, void *arg),
         void *opaque)
 {
-	proxy_t *proxy = proxy_get_proxy_addr();
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
 	tmr_user_t *tmr_user = NULL;
 
 	if ((tmr_user = (tmr_user_t *)allocator_mem_alloc(
@@ -74,12 +73,19 @@ tmr_user_t *tmr_user(allocator_t *allocator,
 	tmr_user->tmr_user_fd       = -1;
 	tmr_user->opaque            = opaque;
 	tmr_user->tmr_event_handler = tmr_event_handler;
-	tmr_user->master            = proxy->c->master;
+	tmr_user->master            = c->master;
     tmr_user->flags             = timer_flags;
     tmr_user->tv                = *tv;
+
 	dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
 
-    proxy_register_tmr_user(proxy,tmr_user);
+    concurrent_add_event_to_master(c,
+                                   -1,//int fd,
+                                   tmr_user->flags,//int event_flag,
+                                   &tmr_user->event,//struct event *event, 
+                                   &tmr_user->tv,
+                                   tmr_user->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   tmr_user);//void *arg);
 
 	return tmr_user;
 }
@@ -135,6 +141,7 @@ int test_tmr_user()
             timeout_cb,
             NULL);
 
+#if 0
 	evutil_timerclear(&tv);
 	tv.tv_sec = 10;
     timer = tmr_user(allocator,
@@ -145,5 +152,6 @@ int test_tmr_user()
             EV_PERSIST,
             timeout_10s_cb,
             NULL);
+#endif
     return 0;
 }

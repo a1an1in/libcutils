@@ -45,7 +45,6 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/proxy.h>
 #include <libnet/client.h>
 
 
@@ -208,7 +207,6 @@ client_t *__client(allocator_t *allocator,
 				   int (*process_task_cb)(client_task_t *task),
 				   void *opaque)
 {
-	proxy_t *proxy = proxy_get_proxy_addr();
 	client_t *client = NULL;
 
 	client = io_user(allocator,//allocator_t *allocator,

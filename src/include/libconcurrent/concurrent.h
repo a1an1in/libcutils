@@ -114,4 +114,6 @@ int concurrent_add_event_to_master(concurrent_t *c,
                                    void *arg);
 void concurrent_destroy(concurrent_t *c);
 
+concurrent_t *concurrent_get_global_concurrent_addr();
+
 #endif

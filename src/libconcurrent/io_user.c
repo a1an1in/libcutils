@@ -45,8 +45,7 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/io_user.h>
-#include <libproxy/proxy.h>
+#include <libconcurrent/io_user.h>
 
 
 io_user_t *io_user(allocator_t *allocator,
@@ -59,7 +58,7 @@ io_user_t *io_user(allocator_t *allocator,
 {
 	struct addrinfo  *addr, hint;
 	int err;
-	proxy_t *proxy = proxy_get_proxy_addr();
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
 	io_user_t *io_user = NULL;
 
 	if ((io_user = (io_user_t *)allocator_mem_alloc(
@@ -75,16 +74,17 @@ io_user_t *io_user(allocator_t *allocator,
 	io_user->opaque              = opaque;
 	io_user->slave_work_function = slave_work_function;
 	io_user->io_event_handler    = io_event_handler;
-	io_user->master              = proxy->c->master;
+	io_user->master              = c->master;
 	io_user->process_task_cb     = process_task_cb;
 	dbg_str(DBG_DETAIL,"io_user->master=%p,allocator=%p",io_user->master,allocator);
 
-	if(proxy_register_io_user(proxy, io_user) < 0)/*struct event *event)*/
-	{
-		dbg_str(DBG_ERROR,"proxy_register_user error");
-		io_user_destroy(io_user);
-		return NULL;
-	}
+	concurrent_add_event_to_master(c,
+	                               io_user->user_fd,//int fd,
+	                               EV_READ | EV_PERSIST,//int event_flag,
+	                               &io_user->event,//struct event *event, 
+                                   NULL,
+	                               io_user->io_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+	                               io_user);//void *arg);
 
 	return io_user;
 }

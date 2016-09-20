@@ -544,3 +544,43 @@ void concurrent_destroy(concurrent_t *c)
 	//del event of master...
 	allocator_mem_free(c->allocator,c);
 }
+
+concurrent_t *global_concurrent;
+uint8_t g_slave_amount = 1;
+uint8_t g_concurrent_lock_type = 0;
+
+concurrent_t *concurrent_get_global_concurrent_addr()
+{
+	return global_concurrent;
+}
+
+#define MAX_PROXY_TASK_SIZE 128
+__attribute__((constructor(111))) void
+concurrent_constructor()
+{
+	allocator_t *allocator;
+	uint8_t slave_amount = g_slave_amount;
+	uint8_t lock_type    = g_concurrent_lock_type;
+    concurrent_t *c;
+
+	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
+		return NULL;
+	}
+	c = concurrent_create(allocator);
+
+	concurrent_init(c,
+		            SERVER_WORK_TYPE_THREAD,
+		            MAX_PROXY_TASK_SIZE, 
+		            slave_amount, 
+		            lock_type);//uint8_t concurrent_lock_type);
+
+    global_concurrent = c;
+}
+__attribute__((destructor(111))) void 
+concurrent_destructor()
+{
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+
+    concurrent_destroy(c);
+}

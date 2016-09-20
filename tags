@@ -61,7 +61,6 @@ CC	src/libnet/client/Makefile	/^CC = gcc$/;"	m
 CC	src/libnet/server/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/test/Makefile	/^CC = gcc$/;"	m
-CC	src/libproxy/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread_pool/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread_pool/tests/Makefile	/^CC = gcc$/;"	m
 CLOCK_SYNC_INTERVAL	src/libevent_tiny/event.c	107;"	d	file:
@@ -412,7 +411,6 @@ LD	src/libnet/client/Makefile	/^LD = ld$/;"	m
 LD	src/libnet/server/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/test/Makefile	/^LD = ld$/;"	m
-LD	src/libproxy/Makefile	/^LD = ld$/;"	m
 LD	src/libthread_pool/Makefile	/^LD = ld$/;"	m
 LD	src/libthread_pool/tests/Makefile	/^LD = ld$/;"	m
 LEN	src/libproto_analyzer/test/pdt_drv_proto_format.h	6;"	d
@@ -444,10 +442,10 @@ LIST_POISON2	src/include/liballoc/list.h	25;"	d
 LIST_POISON2	src/include/libdata_structure/list.h	25;"	d
 LIST_POISON2	src/include/libdbg/list.h	34;"	d
 LIST_POISON2	src/include/libproto_analyzer/list.h	30;"	d
-MAXEPOLLSIZE	src/libnet/client/client.c	52;"	d	file:
-MAXEPOLLSIZE	src/libnet/server/server.c	52;"	d	file:
-MAXLINE	src/libnet/client/client.c	53;"	d	file:
-MAXLINE	src/libnet/server/server.c	53;"	d	file:
+MAXEPOLLSIZE	src/libnet/client/client.c	51;"	d	file:
+MAXEPOLLSIZE	src/libnet/server/server.c	51;"	d	file:
+MAXLINE	src/libnet/client/client.c	52;"	d	file:
+MAXLINE	src/libnet/server/server.c	52;"	d	file:
 MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	225;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	249;"	d	file:
@@ -483,7 +481,7 @@ MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	81
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	83;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
-MAX_PROXY_TASK_SIZE	src/libproxy/proxy.c	100;"	d	file:
+MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	557;"	d	file:
 MAX_QUEUE	src/include/libthread_pool/threadpool.h	46;"	d
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
@@ -540,7 +538,6 @@ OBJS	src/libnet/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录
 OBJS	src/libnet/server/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
-OBJS	src/libproxy/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libthread_pool/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libthread_pool/tests/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	150;"	d
@@ -619,7 +616,6 @@ SRCS	src/libnet/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libnet/server/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
-SRCS	src/libproxy/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libthread_pool/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libthread_pool/tests/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 ST_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	14;"	d
@@ -662,7 +658,6 @@ TARGET	src/libnet/client/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libnet/server/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/test/Makefile	/^TARGET = build_in.o$/;"	m
-TARGET	src/libproxy/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread_pool/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread_pool/tests/Makefile	/^TARGET = build_in.o$/;"	m
 THREAD	src/libthread_pool/tests/heavy.c	8;"	d	file:
@@ -839,7 +834,6 @@ __BASIC_TYPES_H__	src/include/libcre/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libdbg/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libproto_analyzer/my_types.h	2;"	d
 __CLIENT_H__	src/include/libnet/client.h	2;"	d
-__CLIENT_PROXY_H__	src/include/libproxy/proxy.h	2;"	d
 __CMD_ARGS_H__	src/include/libargs/cmd_args.h	2;"	d
 __CONCURRENT_H__	src/include/libconcurrent/concurrent.h	2;"	d
 __DEBUG_BUSINESSES_H__	src/include/libdbg/debug_businesses.h	20;"	d
@@ -848,7 +842,7 @@ __DEBUG_H__	src/include/libdbg/debug.h	2;"	d
 __DEBUG_LOG_H__	src/include/libdbg/debug_log.h	20;"	d
 __DEBUG_NETWORK_H__	src/include/libdbg/debug_network.h	19;"	d
 __DEBUG_STRING_H__	src/include/libdbg/debug_string.h	20;"	d
-__EV_TIMER_H__	src/include/libproxy/tmr_user.h	2;"	d
+__EV_TIMER_H__	src/include/libconcurrent/tmr_user.h	2;"	d
 __HASH_LIST_H__	src/include/libdata_structure/hash_list.h	19;"	d
 __HASH_LIST_ST_H__	src/include/libdata_structure/hash_list_struct.h	19;"	d
 __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
@@ -866,7 +860,7 @@ __RBTREE_MAP_H__	src/include/libdata_structure/rbtree_map.h	20;"	d
 __RBTREE_MAP_STRUCP_H__	src/include/libdata_structure/rbtree_map_struct.h	20;"	d
 __SERVER_H__	src/include/libnet/server.h	2;"	d
 __SYNC_LOCK_H__	src/include/libcre/sync_lock/sync_lock.h	19;"	d
-__USER_H__	src/include/libproxy/io_user.h	2;"	d
+__USER_H__	src/include/libconcurrent/io_user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
 __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
 __cdecl	src/libevent_tiny/signal.c	73;"	d	file:
@@ -951,6 +945,8 @@ allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_slave_s
 allocator	src/include/libconcurrent/concurrent.h	/^	allocator_t *allocator;$/;"	m	struct:concurrent_task_admin_s
+allocator	src/include/libconcurrent/io_user.h	/^	allocator_t *allocator;$/;"	m	struct:io_user_s
+allocator	src/include/libconcurrent/tmr_user.h	/^    allocator_t *allocator;$/;"	m	struct:tmr_user_s
 allocator	src/include/libdata_structure/hash_list_struct.h	/^	allocator_t *allocator;$/;"	m	struct:hash_map_s
 allocator	src/include/libdata_structure/link_list_struct.h	/^	allocator_t *allocator;$/;"	m	struct:llist_s
 allocator	src/include/libdata_structure/rbtree_map_struct.h	/^	allocator_t *allocator;$/;"	m	struct:rbtree_map_s
@@ -959,9 +955,6 @@ allocator	src/include/libnet/client.h	/^	allocator_t *allocator;$/;"	m	struct:cl
 allocator	src/include/libproto_analyzer/protocol_analyzer.h	/^	allocator_t *allocator;$/;"	m	struct:protocol_analyzer_s
 allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *allocator;$/;"	m	struct:proto_head_list_s
 allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *allocator;$/;"	m	struct:protocol_format_set_s
-allocator	src/include/libproxy/io_user.h	/^	allocator_t *allocator;$/;"	m	struct:io_user_s
-allocator	src/include/libproxy/proxy.h	/^	allocator_t *allocator;$/;"	m	struct:user_proxy_s
-allocator	src/include/libproxy/tmr_user.h	/^    allocator_t *allocator;$/;"	m	struct:tmr_user_s
 allocator	src/libnet/server/server.c	/^	allocator_t *allocator;$/;"	m	struct:server_task_s	file:
 allocator	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
 allocator	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
@@ -1027,7 +1020,6 @@ business_debug_level	src/include/libdbg/debug.h	/^	uint8_t business_debug_level;
 business_switch	src/include/libdbg/debug.h	/^	uint8_t business_switch;$/;"	m	struct:debug_business
 byte_pos	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte_pos;$/;"	m	struct:proto_info_list_s
 byte_pos_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t byte_pos_bak;$/;"	m	struct:proto_info_list_s
-c	src/include/libproxy/proxy.h	/^	concurrent_t *c ;$/;"	m	struct:user_proxy_s
 called	src/libevent_tiny/test_signal.c	/^int called = 0;$/;"	v
 capacity	src/include/libdata_structure/vector_struct.h	/^	uint32_t capacity;$/;"	m	struct:vector_s
 change_to_string	src/libevent_tiny/epoll.c	/^change_to_string(int change)$/;"	f	file:
@@ -1060,8 +1052,11 @@ common_timeout_queues	src/include/libevent_tiny/event-internal.h	/^	struct commo
 common_timeout_schedule	src/libevent_tiny/event.c	/^common_timeout_schedule(struct common_timeout_list *ctl,$/;"	f	file:
 compilation_database_folder	.ycm_extra_conf.py	/^compilation_database_folder = ''$/;"	v
 concurrent_add_event_to_master	src/libconcurrent/concurrent.c	/^int concurrent_add_event_to_master(concurrent_t *c,$/;"	f
+concurrent_constructor	src/libconcurrent/concurrent.c	/^concurrent_constructor()$/;"	f
 concurrent_create	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_create(allocator_t *allocator)$/;"	f
 concurrent_destroy	src/libconcurrent/concurrent.c	/^void concurrent_destroy(concurrent_t *c)$/;"	f
+concurrent_destructor	src/libconcurrent/concurrent.c	/^concurrent_destructor()$/;"	f
+concurrent_get_global_concurrent_addr	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_get_global_concurrent_addr()$/;"	f
 concurrent_init	src/libconcurrent/concurrent.c	/^int concurrent_init(concurrent_t *c,$/;"	f
 concurrent_lock	src/include/libconcurrent/concurrent.h	/^	sync_lock_t concurrent_lock;$/;"	m	struct:concurrent_s
 concurrent_master_add_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_message(concurrent_master_t *master,$/;"	f
@@ -1341,11 +1336,11 @@ evdns_getaddrinfo_fn	src/include/libevent_tiny/util-internal.h	/^typedef struct 
 evdns_getaddrinfo_impl	src/libevent_tiny/evutil.c	/^static evdns_getaddrinfo_fn evdns_getaddrinfo_impl = NULL;$/;"	v	file:
 event	src/include/libconcurrent/concurrent.h	/^	struct event event;$/;"	m	struct:concurrent_master_s	typeref:struct:concurrent_master_s::event
 event	src/include/libconcurrent/concurrent.h	/^	void *event;$/;"	m	struct:concurrent_message_s
+event	src/include/libconcurrent/io_user.h	/^	struct event event;$/;"	m	struct:io_user_s	typeref:struct:io_user_s::event
+event	src/include/libconcurrent/tmr_user.h	/^	struct event event;$/;"	m	struct:tmr_user_s	typeref:struct:tmr_user_s::event
 event	src/include/libevent_tiny/event2/event.h	/^struct event$/;"	s
 event	src/include/libevent_tiny/event2/event_struct.h	/^struct event {$/;"	s
 event	src/include/libnet/client.h	/^	struct event *event;$/;"	m	struct:client_task_s	typeref:struct:client_task_s::event
-event	src/include/libproxy/io_user.h	/^	struct event event;$/;"	m	struct:io_user_s	typeref:struct:io_user_s::event
-event	src/include/libproxy/tmr_user.h	/^	struct event event;$/;"	m	struct:tmr_user_s	typeref:struct:tmr_user_s::event
 event	src/libnet/server/server.c	/^	struct event *event;$/;"	m	struct:server_task_s	typeref:struct:server_task_s::event	file:
 event_active	src/libevent_tiny/event.c	/^event_active(struct event *ev, int res, short ncalls)$/;"	f
 event_active_nolock	src/libevent_tiny/event.c	/^event_active_nolock(struct event *ev, int res, short ncalls)$/;"	f
@@ -1406,8 +1401,8 @@ event_haveevents	src/libevent_tiny/event.c	/^event_haveevents(struct event_base 
 event_initialized	src/libevent_tiny/event.c	/^event_initialized(const struct event *ev)$/;"	f
 event_io_map	src/include/libevent_tiny/event-internal.h	111;"	d
 event_is_method_disabled	src/libevent_tiny/event.c	/^event_is_method_disabled(const char *name)$/;"	f	file:
+event_is_persistent	src/libconcurrent/tmr_user.c	/^int event_is_persistent;$/;"	v
 event_is_persistent	src/libevent_tiny/test_time.c	/^int event_is_persistent;$/;"	v
-event_is_persistent	src/libproxy/tmr_user.c	/^int event_is_persistent;$/;"	v
 event_log	src/libevent_tiny/log.c	/^event_log(int severity, const char *msg)$/;"	f	file:
 event_log_cb	src/include/libevent_tiny/event2/event.h	/^typedef void (*event_log_cb)(int severity, const char *msg);$/;"	t
 event_map_entry	src/libevent_tiny/evmap.c	/^struct event_map_entry {$/;"	s	file:
@@ -1576,9 +1571,9 @@ first	src/include/liballoc/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlis
 first	src/include/libdata_structure/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
 first	src/include/libdbg/list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_head::hlist_node
 flags	.ycm_extra_conf.py	/^flags = [$/;"	v
+flags	src/include/libconcurrent/tmr_user.h	/^    uint32_t flags;$/;"	m	struct:tmr_user_s
 flags	src/include/libevent_tiny/event-internal.h	/^	enum event_base_config_flag flags;$/;"	m	struct:event_base	typeref:enum:event_base::event_base_config_flag
 flags	src/include/libevent_tiny/event-internal.h	/^	enum event_base_config_flag flags;$/;"	m	struct:event_config	typeref:enum:event_config::event_base_config_flag
-flags	src/include/libproxy/tmr_user.h	/^    uint32_t flags;$/;"	m	struct:tmr_user_s
 fn	src/include/libargs/cmd_args.h	/^	int (*fn)(void *base, int argc, char **argv);$/;"	m	struct:cmd_config_s
 fp	src/include/libdbg/debug_log.h	/^	FILE *fp;$/;"	m	struct:debug_log_prive
 free	src/include/liballoc/allocator.h	/^	void (*free)(allocator_t *alloc,void *addr);$/;"	m	struct:allocator_operations
@@ -1588,9 +1583,8 @@ free_proto_info_list_mem	src/libproto_analyzer/protocol_format_set.c	/^void free
 free_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **free_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
 fstat	src/libevent_tiny/evutil.c	57;"	d	file:
 function	src/libthread_pool/threadpool.c	/^    void (*function)(void *);$/;"	m	struct:__anon15	file:
-g_proxy_concurrent_lock_type	src/libproxy/proxy.c	/^uint8_t g_proxy_concurrent_lock_type = 0;$/;"	v
-g_proxy_slave_amount	src/libproxy/proxy.c	/^uint8_t g_proxy_slave_amount = 1;$/;"	v
-g_user_proxy	src/libproxy/proxy.c	/^proxy_t *g_user_proxy;$/;"	v
+g_concurrent_lock_type	src/libconcurrent/concurrent.c	/^uint8_t g_concurrent_lock_type = 0;$/;"	v
+g_slave_amount	src/libconcurrent/concurrent.c	/^uint8_t g_slave_amount = 1;$/;"	v
 get_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t get_bit_data(uint32_t data,uint8_t bit_pos,uint8_t len)$/;"	f
 get_common_timeout_list	src/libevent_tiny/event.c	/^get_common_timeout_list(struct event_base *base, const struct timeval *tv)$/;"	f	file:
 get_cont_pdu_len	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int get_cont_pdu_len(buffer_t *buffer_p,uint16_t os) $/;"	f
@@ -1598,6 +1592,7 @@ get_cont_pdu_num	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int 
 get_real_alloc_mem_size	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)$/;"	f
 get_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*get_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
 gettime	src/libevent_tiny/event.c	/^static int gettime(struct event_base *base, struct timeval *tp)$/;"	f	file:
+global_concurrent	src/libconcurrent/concurrent.c	/^concurrent_t *global_concurrent;$/;"	v
 graceful_shutdown	src/libthread_pool/threadpool.c	/^    graceful_shutdown  = 2$/;"	e	enum:__anon14	file:
 had_ipv4_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
 had_ipv6_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
@@ -1738,11 +1733,11 @@ init_proto_info_list	src/libproto_analyzer/protocol_format_set.c	/^void init_pro
 inline	src/include/libevent_tiny/util-internal.h	49;"	d
 insert_common_timeout_inorder	src/libevent_tiny/event.c	/^insert_common_timeout_inorder(struct common_timeout_list *ctl,$/;"	f	file:
 io	src/include/libevent_tiny/event-internal.h	/^	struct event_io_map io;$/;"	m	struct:event_base	typeref:struct:event_base::event_io_map
-io_event_handler	src/include/libproxy/io_user.h	/^	void (*io_event_handler)(int fd, short event, void *arg);$/;"	m	struct:io_user_s
-io_user	src/libproxy/io_user.c	/^io_user_t *io_user(allocator_t *allocator,$/;"	f
-io_user_destroy	src/libproxy/io_user.c	/^int io_user_destroy(io_user_t *io_user)$/;"	f
-io_user_s	src/include/libproxy/io_user.h	/^typedef struct io_user_s{$/;"	s
-io_user_t	src/include/libproxy/io_user.h	/^}io_user_t;$/;"	t	typeref:struct:io_user_s
+io_event_handler	src/include/libconcurrent/io_user.h	/^	void (*io_event_handler)(int fd, short event, void *arg);$/;"	m	struct:io_user_s
+io_user	src/libconcurrent/io_user.c	/^io_user_t *io_user(allocator_t *allocator,$/;"	f
+io_user_destroy	src/libconcurrent/io_user.c	/^int io_user_destroy(io_user_t *io_user)$/;"	f
+io_user_s	src/include/libconcurrent/io_user.h	/^typedef struct io_user_s{$/;"	s
+io_user_t	src/include/libconcurrent/io_user.h	/^}io_user_t;$/;"	t	typeref:struct:io_user_s
 is_common_timeout	src/libevent_tiny/event.c	/^is_common_timeout(const struct timeval *tv,$/;"	f	file:
 is_notify_pending	src/include/libevent_tiny/event-internal.h	/^	int is_notify_pending;$/;"	m	struct:event_base
 is_same_common_timeout	src/libevent_tiny/event.c	/^is_same_common_timeout(const struct timeval *tv1, const struct timeval *tv2)$/;"	f	file:
@@ -1761,8 +1756,8 @@ key_size	src/include/libconcurrent/concurrent.h	/^	uint8_t key_size;$/;"	m	struc
 key_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t key_size;$/;"	m	struct:hash_map_s
 key_size	src/include/libdata_structure/rbtree_map_struct.h	/^	uint32_t key_size;$/;"	m	struct:rbtree_map_s
 last_updated_clock_diff	src/include/libevent_tiny/event-internal.h	/^	time_t last_updated_clock_diff;$/;"	m	struct:event_base
+lasttime	src/libconcurrent/tmr_user.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
 lasttime	src/libevent_tiny/test_time.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
-lasttime	src/libproxy/tmr_user.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
 left	src/libthread_pool/tests/heavy.c	/^static int tasks[SIZE], left;$/;"	v	file:
 left	src/libthread_pool/tests/shutdown.c	/^static int left;$/;"	v	file:
 len	src/include/libproto_analyzer/protocol_format_set.h	/^	uint16_t len;$/;"	m	struct:buffer_s
@@ -1954,7 +1949,7 @@ llist_push_back	src/libdata_structure/link_list/link_list.c	/^int llist_push_bac
 llist_push_front	src/include/libdata_structure/link_list.h	/^static inline int llist_push_front(llist_t *llist,void *data)$/;"	f
 llist_s	src/include/libdata_structure/link_list_struct.h	/^typedef struct llist_s{$/;"	s
 llist_t	src/include/libdata_structure/link_list_struct.h	/^}llist_t;$/;"	t	typeref:struct:llist_s
-local_sockaddr	src/include/libproxy/io_user.h	/^	void *local_sockaddr;$/;"	m	struct:io_user_s
+local_sockaddr	src/include/libconcurrent/io_user.h	/^	void *local_sockaddr;$/;"	m	struct:io_user_s
 lock	src/include/libcre/sync_lock/sync_lock.h	/^	union lock{$/;"	u	struct:sync_lock_s
 lock	src/include/libcre/sync_lock/sync_lock.h	/^	}lock;$/;"	m	struct:sync_lock_s	typeref:union:sync_lock_s::lock
 lock	src/libthread_pool/tests/heavy.c	/^static pthread_mutex_t lock;$/;"	v	file:
@@ -1986,8 +1981,8 @@ map	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rbtree_map_s *ma
 map_lock	src/include/libdata_structure/hash_list_struct.h	/^	sync_lock_t map_lock;$/;"	m	struct:hash_map_s
 map_lock	src/include/libdata_structure/rbtree_map_struct.h	/^	sync_lock_t map_lock;$/;"	m	struct:rbtree_map_s
 master	src/include/libconcurrent/concurrent.h	/^	concurrent_master_t *master;$/;"	m	struct:concurrent_s
-master	src/include/libproxy/io_user.h	/^	concurrent_master_t *master;$/;"	m	struct:io_user_s
-master	src/include/libproxy/tmr_user.h	/^	concurrent_master_t *master;$/;"	m	struct:tmr_user_s
+master	src/include/libconcurrent/io_user.h	/^	concurrent_master_t *master;$/;"	m	struct:io_user_s
+master	src/include/libconcurrent/tmr_user.h	/^	concurrent_master_t *master;$/;"	m	struct:tmr_user_s
 master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^static void master_event_handler_add_new_event($/;"	f	file:
 master_event_handler_server_listen	src/libnet/server/server.c	/^void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
@@ -2081,8 +2076,8 @@ offsetof	src/include/libdata_structure/rbtree.h	127;"	d
 offsetof	src/include/libdata_structure/rbtree.h	128;"	d
 offsetof	src/include/libdata_structure/rbtree.h	130;"	d
 old_events	src/include/libevent_tiny/changelist-internal.h	/^	short old_events;$/;"	m	struct:event_change
-opaque	src/include/libproxy/io_user.h	/^	void *opaque;$/;"	m	struct:io_user_s
-opaque	src/include/libproxy/tmr_user.h	/^    void *opaque;$/;"	m	struct:tmr_user_s
+opaque	src/include/libconcurrent/io_user.h	/^	void *opaque;$/;"	m	struct:io_user_s
+opaque	src/include/libconcurrent/tmr_user.h	/^    void *opaque;$/;"	m	struct:tmr_user_s
 open	src/libevent_tiny/evutil.c	54;"	d	file:
 p	src/include/libevent_tiny/minheap-internal.h	/^	struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
 p	src/libargs/test_cmd_args.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
@@ -2186,7 +2181,7 @@ priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:u
 priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:debugger::debugger_priv
 process_task_callback	src/libnet/client/test_client_rcv.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libnet/client/test_client_send.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
-process_task_cb	src/include/libproxy/io_user.h	/^	int (*process_task_cb)(void *task);$/;"	m	struct:io_user_s
+process_task_cb	src/include/libconcurrent/io_user.h	/^	int (*process_task_cb)(void *task);$/;"	m	struct:io_user_s
 processor_globle	src/libargs/cmd_args.c	/^args_processor_t processor_globle;$/;"	v
 proto_base_addr	src/include/libproto_analyzer/protocol_format_set.h	/^	uint32_t proto_base_addr;$/;"	m	struct:protocol_format_set_s
 proto_head_list_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct proto_head_list_s{$/;"	s
@@ -2202,15 +2197,6 @@ protocol_data_len	src/include/libproto_analyzer/protocol_analyzer.h	/^	uint16_t 
 protocol_format_set_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct protocol_format_set_s{$/;"	s
 protocol_format_set_t	src/include/libproto_analyzer/protocol_format_set.h	/^}protocol_format_set_t;$/;"	t	typeref:struct:protocol_format_set_s
 protocol_num	src/include/libproto_analyzer/protocol_analyzer.h	/^	uint32_t protocol_num;$/;"	m	struct:protocol_analyzer_s
-proxy_constructor	src/libproxy/proxy.c	/^proxy_constructor()$/;"	f
-proxy_create	src/libproxy/proxy.c	/^proxy_t *proxy_create()$/;"	f
-proxy_destroy	src/libproxy/proxy.c	/^int proxy_destroy(proxy_t *proxy)$/;"	f
-proxy_destructor	src/libproxy/proxy.c	/^proxy_destructor()$/;"	f
-proxy_get_proxy_addr	src/libproxy/proxy.c	/^proxy_t *proxy_get_proxy_addr()$/;"	f
-proxy_init	src/libproxy/proxy.c	/^int proxy_init(proxy_t *proxy, uint32_t task_size, uint8_t slave_amount, uint8_t concurrent_lock_type)$/;"	f
-proxy_register_io_user	src/libproxy/proxy.c	/^int proxy_register_io_user(proxy_t *proxy,io_user_t *user)$/;"	f
-proxy_register_tmr_user	src/libproxy/proxy.c	/^int proxy_register_tmr_user(proxy_t *proxy,tmr_user_t *ev_timer)$/;"	f
-proxy_t	src/include/libproxy/proxy.h	/^}proxy_t;$/;"	t	typeref:struct:user_proxy_s
 queue	src/libthread_pool/threadpool.c	/^  threadpool_task_t *queue;$/;"	m	struct:threadpool_t	file:
 queue_size	src/libthread_pool/threadpool.c	/^  int queue_size;$/;"	m	struct:threadpool_t	file:
 rb_augment_erase_begin	src/libdata_structure/rbtree_map/rbtree.c	/^struct rb_node *rb_augment_erase_begin(struct rb_node *node)$/;"	f
@@ -2266,7 +2252,7 @@ rcv_notify_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_notify_fd;$/;"	m
 read	src/libevent_tiny/evutil.c	55;"	d	file:
 read_change	src/include/libevent_tiny/changelist-internal.h	/^	ev_uint8_t read_change;$/;"	m	struct:event_change
 realloc_copy	src/libevent_tiny/poll.c	/^	int realloc_copy;		\/* True iff we must realloc$/;"	m	struct:pollop	file:
-remote_sockaddr	src/include/libproxy/io_user.h	/^	void *remote_sockaddr;$/;"	m	struct:io_user_s
+remote_sockaddr	src/include/libconcurrent/io_user.h	/^	void *remote_sockaddr;$/;"	m	struct:io_user_s
 require_features	src/include/libevent_tiny/event-internal.h	/^	enum event_method_feature require_features;$/;"	m	struct:event_config	typeref:enum:event_config::event_method_feature
 resize_out_sets	src/libevent_tiny/select.c	/^	int resize_out_sets;$/;"	m	struct:selectop	file:
 running_loop	src/include/libevent_tiny/event-internal.h	/^	int running_loop;$/;"	m	struct:event_base
@@ -2338,7 +2324,7 @@ slave	src/libnet/server/server.c	/^	concurrent_slave_t *slave;$/;"	m	struct:serv
 slave_amount	src/include/libconcurrent/concurrent.h	/^	uint8_t slave_amount;$/;"	m	struct:concurrent_master_s
 slave_event_handler_process_conn_bussiness	src/libnet/server/server.c	/^static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)$/;"	f	file:
 slave_event_handler_process_message	src/libconcurrent/concurrent.c	/^static void slave_event_handler_process_message(int fd, short event, void *arg)$/;"	f	file:
-slave_work_function	src/include/libproxy/io_user.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:io_user_s
+slave_work_function	src/include/libconcurrent/io_user.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:io_user_s
 slave_work_function	src/libnet/client/client.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libnet/server/server.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 snd_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int snd_add_new_event_fd;$/;"	m	struct:concurrent_master_s
@@ -2433,7 +2419,7 @@ test_tcp_client_send	src/libnet/client/test_client_send.c	/^int test_tcp_client_
 test_thrdtest	src/libthread_pool/tests/thrdtest.c	/^int test_thrdtest()$/;"	f
 test_time	src/libevent_tiny/test_time.c	/^int test_time()$/;"	f
 test_time2	src/libevent_tiny/test_time.c	/^int test_time2()$/;"	f
-test_tmr_user	src/libproxy/tmr_user.c	/^int test_tmr_user()$/;"	f
+test_tmr_user	src/libconcurrent/tmr_user.c	/^int test_tmr_user()$/;"	f
 test_udp_client_recieve	src/libnet/client/test_client_rcv.c	/^int test_udp_client_recieve()$/;"	f
 test_udp_client_send	src/libnet/client/test_client_send.c	/^int test_udp_client_send()$/;"	f
 tested_for_getaddrinfo_hacks	src/libevent_tiny/evutil.c	/^static int tested_for_getaddrinfo_hacks=0;$/;"	v	file:
@@ -2464,10 +2450,10 @@ threads	src/libthread_pool/threadpool.c	/^  pthread_t *threads;$/;"	m	struct:thr
 tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon2
 tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon1
 timeheap	src/include/libevent_tiny/event-internal.h	/^	struct min_heap timeheap;$/;"	m	struct:event_base	typeref:struct:event_base::min_heap
-timeout_10s_cb	src/libproxy/tmr_user.c	/^timeout_10s_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
+timeout_10s_cb	src/libconcurrent/tmr_user.c	/^timeout_10s_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
 timeout_add	src/include/libevent_tiny/event2/event_compat.h	188;"	d
+timeout_cb	src/libconcurrent/tmr_user.c	/^timeout_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
 timeout_cb	src/libevent_tiny/test_time.c	/^timeout_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
-timeout_cb	src/libproxy/tmr_user.c	/^timeout_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
 timeout_correct	src/libevent_tiny/event.c	/^timeout_correct(struct event_base *base, struct timeval *tv)$/;"	f	file:
 timeout_del	src/include/libevent_tiny/event2/event_compat.h	190;"	d
 timeout_event	src/include/libevent_tiny/event-internal.h	/^	struct event timeout_event;$/;"	m	struct:common_timeout_list	typeref:struct:common_timeout_list::event
@@ -2477,16 +2463,16 @@ timeout_pending	src/include/libevent_tiny/event2/event_compat.h	191;"	d
 timeout_process	src/libevent_tiny/event.c	/^timeout_process(struct event_base *base)$/;"	f	file:
 timeout_set	src/include/libevent_tiny/event2/event_compat.h	189;"	d
 timer_thread_callback_fn	src/libevent_tiny/test_time.c	/^void * timer_thread_callback_fn(void *arg)$/;"	f
-tmr_event_handler	src/include/libproxy/tmr_user.h	/^    void (*tmr_event_handler)(int fd, short event, void *arg);$/;"	m	struct:tmr_user_s
-tmr_user	src/libproxy/tmr_user.c	/^tmr_user_t *tmr_user(allocator_t *allocator,$/;"	f
-tmr_user_destroy	src/libproxy/tmr_user.c	/^int tmr_user_destroy(tmr_user_t *tmr_user)$/;"	f
-tmr_user_fd	src/include/libproxy/tmr_user.h	/^    int32_t tmr_user_fd;$/;"	m	struct:tmr_user_s
-tmr_user_s	src/include/libproxy/tmr_user.h	/^typedef struct tmr_user_s{$/;"	s
-tmr_user_t	src/include/libproxy/tmr_user.h	/^}tmr_user_t;$/;"	t	typeref:struct:tmr_user_s
+tmr_event_handler	src/include/libconcurrent/tmr_user.h	/^    void (*tmr_event_handler)(int fd, short event, void *arg);$/;"	m	struct:tmr_user_s
+tmr_user	src/libconcurrent/tmr_user.c	/^tmr_user_t *tmr_user(allocator_t *allocator,$/;"	f
+tmr_user_destroy	src/libconcurrent/tmr_user.c	/^int tmr_user_destroy(tmr_user_t *tmr_user)$/;"	f
+tmr_user_fd	src/include/libconcurrent/tmr_user.h	/^    int32_t tmr_user_fd;$/;"	m	struct:tmr_user_s
+tmr_user_s	src/include/libconcurrent/tmr_user.h	/^typedef struct tmr_user_s{$/;"	s
+tmr_user_t	src/include/libconcurrent/tmr_user.h	/^}tmr_user_t;$/;"	t	typeref:struct:tmr_user_s
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rb_root
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
 tv	src/include/libconcurrent/concurrent.h	/^    struct timeval *tv;$/;"	m	struct:concurrent_message_s	typeref:struct:concurrent_message_s::timeval
-tv	src/include/libproxy/tmr_user.h	/^	struct timeval tv;$/;"	m	struct:tmr_user_s	typeref:struct:tmr_user_s::timeval
+tv	src/include/libconcurrent/tmr_user.h	/^	struct timeval tv;$/;"	m	struct:tmr_user_s	typeref:struct:tmr_user_s::timeval
 tv_cache	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_cache;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
 tv_clock_diff	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_clock_diff;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
@@ -2519,9 +2505,8 @@ uint8_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned char uint8_t
 update_time_cache	src/libevent_tiny/event.c	/^update_time_cache(struct event_base *base)$/;"	f	file:
 use_monotonic	src/libevent_tiny/event.c	/^static int use_monotonic;$/;"	v	file:
 used_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **used_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
-user_fd	src/include/libproxy/io_user.h	/^	int user_fd;$/;"	m	struct:io_user_s
-user_proxy_s	src/include/libproxy/proxy.h	/^typedef struct user_proxy_s{$/;"	s
-user_type	src/include/libproxy/io_user.h	/^	uint8_t user_type;$/;"	m	struct:io_user_s
+user_fd	src/include/libconcurrent/io_user.h	/^	int user_fd;$/;"	m	struct:io_user_s
+user_type	src/include/libconcurrent/io_user.h	/^	uint8_t user_type;$/;"	m	struct:io_user_s
 val	src/include/libini/iniparser.h	/^	char **val;$/;"	m	struct:_dictionary_
 value_len	src/include/libdata_structure/map_pair.h	/^	uint32_t value_len;$/;"	m	struct:pair
 value_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint8_t value_pos;\/\/value's pos at key array$/;"	m	struct:hash_map_node
