@@ -8,9 +8,11 @@ debug_business_names[MAX_DEBUG_BUSINESS_NUM] = {
 	"container",
 	"linklist",
 	"hashmap",
+    "vector",
 	"concurrent",
 	"net",
 	"protocol_analyzer",
 	"args_processor",
+    "state_machine"
 };
 

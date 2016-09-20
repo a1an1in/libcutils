@@ -64,7 +64,7 @@ int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,ui
 		from_pos -= num_per;
 		count    -= num_per;
 		num_per   = count - num_per > 0 ? num_per :count;
-		dbg_str(DBG_DETAIL,"to_pos=%d,from_pos=%d",to_pos,from_pos);
+		dbg_str(VECTOR_DETAIL,"to_pos=%d,from_pos=%d",to_pos,from_pos);
 		memcpy(vector_head + to_pos * step, vector_head + from_pos * step, num_per * step);
 	}
 }
@@ -79,7 +79,7 @@ int vector_copy_forward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uin
 	num_per = from_pos - to_pos;
 	for(;count > 0;){
 		num_per = count - num_per > 0 ? num_per :count;
-		dbg_str(DBG_DETAIL,"to_pos=%d,from_pos=%d,num_per=%d",to_pos,from_pos,num_per);
+		dbg_str(VECTOR_DETAIL,"to_pos=%d,from_pos=%d,num_per=%d",to_pos,from_pos,num_per);
 		memcpy(vector_head + to_pos * step,vector_head + from_pos * step,num_per * step);
 		to_pos += num_per;
 		from_pos += num_per;
@@ -91,7 +91,7 @@ int vector_copy(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t co
 	uint32_t from_pos = from->vector_pos;
 	uint32_t to_pos   = to->vector_pos;
 	
-	dbg_str(DBG_WARNNING,"count=%d",count);
+	dbg_str(VECTOR_WARNNING,"count=%d",count);
 	if(from_pos > to_pos){//forward
 		vector_copy_forward(vector,to,from,count);
 	}else{//backward
@@ -103,7 +103,7 @@ vector_t *vector_create(allocator_t *allocator,uint8_t lock_type)
 	vector_t *ret = NULL;
 	ret = (vector_t *)allocator_mem_alloc(allocator,sizeof(vector_t));
 	if(ret == NULL){
-		dbg_str(DBG_ERROR,"allock err");
+		dbg_str(VECTOR_ERROR,"allock err");
 	}
 	ret->allocator = allocator;
 	ret->lock_type = lock_type;
@@ -112,16 +112,16 @@ vector_t *vector_create(allocator_t *allocator,uint8_t lock_type)
 int vector_init(vector_t *vector,uint32_t data_size,uint32_t capacity)
 {
 
-	dbg_str(DBG_DETAIL,"vector init");
+	dbg_str(VECTOR_DETAIL,"vector init");
 	vector->step = data_size;
 	vector->data_size = data_size;
 	vector->capacity = capacity;
 	vector->vector_head = allocator_mem_alloc(
 			vector->allocator, capacity * (vector->step));
 	if(vector->vector_head == NULL){
-		dbg_str(DBG_ERROR,"vector_init");
+		dbg_str(VECTOR_ERROR,"vector_init");
 	}
-	dbg_str(DBG_DETAIL,"vector_head:%p,size=%d",
+	dbg_str(VECTOR_DETAIL,"vector_head:%p,size=%d",
 			vector->vector_head,
 			capacity * (vector->step));
 	vector_pos_init(&vector->begin,0,vector);
@@ -133,7 +133,7 @@ int vector_init(vector_t *vector,uint32_t data_size,uint32_t capacity)
 }
 int vector_push_front(vector_t *vector,void *data)
 {
-	dbg_str(DBG_WARNNING,"not support vector_push_front");
+	dbg_str(VECTOR_WARNNING,"not support vector_push_front");
 	return 0;
 }
 int vector_push_back(vector_t *vector,void *data)
@@ -149,11 +149,11 @@ int vector_push_back(vector_t *vector,void *data)
 		memcpy(vector_head + (push_pos++)*step,data,data_size);
 		vector_pos_init(&vector->end,push_pos,vector);
 	}else{
-		dbg_str(DBG_WARNNING,"realloc mem");
+		dbg_str(VECTOR_WARNNING,"realloc mem");
 		vector->vector_head = allocator_mem_alloc(
 				vector->allocator, 2*capacity * (vector->step));
 		if(vector->vector_head == NULL){
-			dbg_str(DBG_ERROR,"vector_push_back,realloc mem");
+			dbg_str(VECTOR_ERROR,"vector_push_back,realloc mem");
 		}
 		vector->capacity = 2*capacity;
 		memcpy(vector->vector_head,vector_head,capacity*step);
@@ -162,27 +162,27 @@ int vector_push_back(vector_t *vector,void *data)
 		allocator_mem_free(vector->allocator,vector_head);
 	}
 	sync_unlock(&vector->vector_lock);
-	dbg_str(DBG_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,vector->capacity);
+	dbg_str(VECTOR_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,vector->capacity);
 
 	return 0;
 }
 
 int vector_pop_front(vector_t *vector)
 {
-	dbg_str(DBG_WARNNING,"not support vector_pop_front");
+	dbg_str(VECTOR_WARNNING,"not support vector_pop_front");
 	return 0;
 }
 int vector_pop_back(vector_t *vector)
 {
 	uint32_t pop_pos  = vector->end.vector_pos;
 	
-	dbg_str(DBG_DETAIL,"pop back");
+	dbg_str(VECTOR_DETAIL,"pop back");
 
 	sync_lock(&vector->vector_lock,NULL);
 	if(!vector_pos_equal(&vector->begin,&vector->end)){
 		vector_pos_init(&vector->end,--pop_pos,vector);
 	} else{
-		dbg_str(DBG_WARNNING,"vector is NULL");
+		dbg_str(VECTOR_WARNNING,"vector is NULL");
 	}
 	sync_unlock(&vector->vector_lock);
 
@@ -199,7 +199,7 @@ int vector_insert(vector_t *vector, vector_pos_t *it, void *data)
 	vector_pos_t to;
 	
 	vector_pos_init(&to,insert_pos + 1,vector);
-	dbg_str(DBG_DETAIL,"insert_pos=%d,to_pos=%d",insert_pos,to.vector_pos);
+	dbg_str(VECTOR_DETAIL,"insert_pos=%d,to_pos=%d",insert_pos,to.vector_pos);
 
 	sync_lock(&vector->vector_lock,NULL);
 	vector_copy(vector,&to,it,count);
@@ -220,9 +220,9 @@ int vector_delete(vector_t *vector, vector_pos_t *it)
 
 	sync_lock(&vector->vector_lock,0);
 	if(vector_pos_equal(it,&vector->end)){
-		dbg_str(DBG_WARNNING,"can't del end pos");
+		dbg_str(VECTOR_WARNNING,"can't del end pos");
 	}else if(vector_pos_equal(it,&vector->begin)&&vector_pos_equal(&from,&vector->end)){
-		dbg_str(DBG_WARNNING,"vector is NULL");
+		dbg_str(VECTOR_WARNNING,"vector is NULL");
 	}else{
 		vector_copy(vector,it,&from,count);
 		vector_pos_init(&vector->end,end_pos - 1,vector);
@@ -239,7 +239,7 @@ int vector_set(vector_t *vector,int index,void *data)
 	uint32_t step     = vector->step;
 	int ret  = 0;
 	
-	dbg_str(DBG_DETAIL,"set_pos=%d",set_pos);
+	dbg_str(VECTOR_DETAIL,"set_pos=%d",set_pos);
 
 	sync_lock(&vector->vector_lock,NULL);
 	memcpy(vector_head + set_pos * step,data,step);
@@ -257,9 +257,7 @@ void * vector_get(vector_t *vector,int index)
 	uint32_t step        = vector->step;
 	void * ret           = NULL;
 	
-    /*
-	 *dbg_str(DBG_DETAIL,"get_pos=%d",get_pos);
-     */
+    dbg_str(VECTOR_DETAIL,"get_pos=%d",get_pos);
 
 	sync_lock(&vector->vector_lock,NULL);
 	ret = (vector_head + get_pos * step);
@@ -269,7 +267,7 @@ void * vector_get(vector_t *vector,int index)
 }
 int vector_destroy(vector_t *vt)
 {
-	dbg_str(DBG_DETAIL,"vector_destroy");
+	dbg_str(VECTOR_DETAIL,"vector_destroy");
 
 	sync_lock_destroy(&vt->vector_lock);
 
