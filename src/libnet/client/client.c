@@ -210,12 +210,12 @@ client_t *__client(allocator_t *allocator,
 	client_t *client = NULL;
 
 	client = io_user(allocator,//allocator_t *allocator,
-				  user_id,//int user_fd,
-				  socktype,//user_type
-				  client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
-				  slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-				  (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
-				  opaque);//void *opaque)
+			         user_id,//int user_fd,
+			         socktype,//user_type
+			         client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+			         slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+			         (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
+			         opaque);//void *opaque)
 
 	return client;
 }

@@ -36,6 +36,15 @@
 #include <libdbg/debug.h>
 #include <libconcurrent/concurrent.h>
 
+concurrent_t *global_concurrent;
+uint8_t g_slave_amount = 1;
+uint8_t g_concurrent_lock_type = 0;
+
+concurrent_t *concurrent_get_global_concurrent_addr()
+{
+	return global_concurrent;
+}
+
 concurrent_task_admin_t *
 concurrent_task_admin_create(allocator_t *allocator)
 {
@@ -432,39 +441,6 @@ int concurrent_master_init_message(struct concurrent_message_s *message,
 
 	return 0;
 }
-/**
- * @synopsis concurrent_master_add_new_event 
- * 			 this func is obsolete, for we can't add event to master thread derectly,the libevent may not support,
- * 			 so we should use "concurrent_add_event_to_master" instead 
- *
- * @param master
- * @param fd
- * @param event_flag
- * @param event_handler
- * @param event
- *
- * @returns   
- */
-int concurrent_master_add_new_event(concurrent_master_t *master,
-		int fd,int event_flag,
-		struct event *event,
-		void (*event_handler)(int fd, short event, void *arg),
-		void *arg)
-{
-	while(master->concurrent_master_inited_flag == 0);	
-
-	dbg_str(CONCURRENT_DETAIL,"init new event");
-	event_assign(event,master->event_base,fd, event_flag, event_handler, master);
-	/*
-	 *event_base_set(master->event_base, event);
-	 */
-
-	dbg_str(CONCURRENT_DETAIL,"add new event");
-	if (event_add(event, 0) == -1) {
-		dbg_str(DBG_WARNNING,"event_add err");
-	}
-	return 0;
-}
 //there may be some omited,must check carefully later
 int concurrent_master_destroy(concurrent_master_t *master)
 {
@@ -545,15 +521,6 @@ void concurrent_destroy(concurrent_t *c)
 	allocator_mem_free(c->allocator,c);
 }
 
-concurrent_t *global_concurrent;
-uint8_t g_slave_amount = 1;
-uint8_t g_concurrent_lock_type = 0;
-
-concurrent_t *concurrent_get_global_concurrent_addr()
-{
-	return global_concurrent;
-}
-
 #define MAX_PROXY_TASK_SIZE 128
 __attribute__((constructor(111))) void
 concurrent_constructor()
@@ -565,7 +532,7 @@ concurrent_constructor()
 
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return NULL;
+		return;
 	}
 	c = concurrent_create(allocator);
 
