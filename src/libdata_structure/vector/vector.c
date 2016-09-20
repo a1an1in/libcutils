@@ -257,7 +257,9 @@ void * vector_get(vector_t *vector,int index)
 	uint32_t step        = vector->step;
 	void * ret           = NULL;
 	
-	dbg_str(DBG_DETAIL,"get_pos=%d",get_pos);
+    /*
+	 *dbg_str(DBG_DETAIL,"get_pos=%d",get_pos);
+     */
 
 	sync_lock(&vector->vector_lock,NULL);
 	ret = (vector_head + get_pos * step);

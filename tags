@@ -61,6 +61,7 @@ CC	src/libnet/client/Makefile	/^CC = gcc$/;"	m
 CC	src/libnet/server/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/test/Makefile	/^CC = gcc$/;"	m
+CC	src/libstate_machine/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread_pool/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread_pool/tests/Makefile	/^CC = gcc$/;"	m
 CLOCK_SYNC_INTERVAL	src/libevent_tiny/event.c	107;"	d	file:
@@ -411,11 +412,13 @@ LD	src/libnet/client/Makefile	/^LD = ld$/;"	m
 LD	src/libnet/server/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/test/Makefile	/^LD = ld$/;"	m
+LD	src/libstate_machine/Makefile	/^LD = ld$/;"	m
 LD	src/libthread_pool/Makefile	/^LD = ld$/;"	m
 LD	src/libthread_pool/tests/Makefile	/^LD = ld$/;"	m
 LEN	src/libproto_analyzer/test/pdt_drv_proto_format.h	6;"	d
 LIBEVENT_VERSION	src/include/libevent_tiny/event2/event.h	1084;"	d
 LIBEVENT_VERSION_NUMBER	src/include/libevent_tiny/event2/event.h	1087;"	d
+LIBRARY_VERSION	src/main.c	51;"	d	file:
 LINKLIST_CORRECT	src/include/libdbg/debug_businesses.h	51;"	d
 LINKLIST_DETAIL	src/include/libdbg/debug_businesses.h	55;"	d
 LINKLIST_ERROR	src/include/libdbg/debug_businesses.h	48;"	d
@@ -457,6 +460,10 @@ MAX_DEBUGGER_MODULES_NUM	src/include/libdbg/debug.h	93;"	d
 MAX_DEBUG_BUSINESS_NUM	src/include/libdbg/debug_businesses.h	/^	MAX_DEBUG_BUSINESS_NUM$/;"	e	enum:debug_business_enum
 MAX_DEBUG_LOG_FILE_NAME_LEN	src/include/libdbg/debug_log.h	28;"	d
 MAX_DEBUG_LOG_FILE_NAME_LEN	src/include/libdbg/debug_log.h	35;"	d
+MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	57;"	d	file:
+MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	59;"	d	file:
+MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	63;"	d	file:
+MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	65;"	d	file:
 MAX_EPOLL_TIMEOUT_MSEC	src/libevent_tiny/epoll.c	102;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	197;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	219;"	d	file:
@@ -481,7 +488,7 @@ MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	81
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	83;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
-MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	557;"	d	file:
+MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	551;"	d	file:
 MAX_QUEUE	src/include/libthread_pool/threadpool.h	46;"	d
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
@@ -538,6 +545,7 @@ OBJS	src/libnet/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录
 OBJS	src/libnet/server/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libstate_machine/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libthread_pool/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libthread_pool/tests/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	150;"	d
@@ -616,6 +624,7 @@ SRCS	src/libnet/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libnet/server/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libstate_machine/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libthread_pool/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libthread_pool/tests/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 ST_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	14;"	d
@@ -658,6 +667,7 @@ TARGET	src/libnet/client/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libnet/server/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/test/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libstate_machine/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread_pool/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread_pool/tests/Makefile	/^TARGET = build_in.o$/;"	m
 THREAD	src/libthread_pool/tests/heavy.c	8;"	d	file:
@@ -864,7 +874,7 @@ __USER_H__	src/include/libconcurrent/io_user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
 __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
 __cdecl	src/libevent_tiny/signal.c	73;"	d	file:
-__client	src/libnet/client/client.c	/^client_t *__client(allocator_t *allocator,$/;"	f
+__client	src/libnet/client/client.c	/^client_t *__client(allocator_t *allocator,$/;"	f	file:
 __concurrent_master_create_slave	src/libconcurrent/concurrent.c	/^int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)$/;"	f
 __func__	src/include/libevent_tiny/util-internal.h	52;"	d
 __func__	src/libevent_tiny/test_signal.c	27;"	d	file:
@@ -923,6 +933,8 @@ a	src/libdata_structure/test/test_hashmap.c	/^	int a;$/;"	m	struct:A	file:
 a	src/libdata_structure/test/test_link_list.c	/^	int a;$/;"	m	struct:test	file:
 a	src/libdata_structure/test/test_rbtree_map.c	/^	int a;$/;"	m	struct:A	file:
 a	src/libdata_structure/test/test_vector.c	/^	int a;$/;"	m	struct:test	file:
+action_callback	src/libstate_machine/state_machine.c	/^     void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_config_s	file:
+action_callback	src/libstate_machine/state_machine.c	/^    void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_s	file:
 activequeues	src/include/libevent_tiny/event-internal.h	/^	struct event_list *activequeues;$/;"	m	struct:event_base	typeref:struct:event_base::event_list
 add	src/include/libevent_tiny/event-internal.h	/^	int (*add)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);$/;"	m	struct:eventop
 addrinfo_from_hostent	src/libevent_tiny/evutil.c	/^addrinfo_from_hostent(const struct hostent *ent,$/;"	f	file:
@@ -958,6 +970,7 @@ allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *al
 allocator	src/libnet/server/server.c	/^	allocator_t *allocator;$/;"	m	struct:server_task_s	file:
 allocator	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
 allocator	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
+allocator	src/libstate_machine/state_machine.c	/^    allocator_t *allocator;$/;"	m	struct:state_machine_s	file:
 allocator_creator	src/liballoc/allocator.c	/^allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)$/;"	f
 allocator_ctr_alloc_register	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_ctr_alloc_register(){$/;"	f
 allocator_ctr_init	src/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f
@@ -999,6 +1012,7 @@ b	src/libdata_structure/test/test_rbtree_map.c	/^	int b;$/;"	m	struct:A	file:
 b	src/libdata_structure/test/test_vector.c	/^	int b;$/;"	m	struct:test	file:
 base	src/include/libargs/cmd_args.h	/^	void *base;$/;"	m	struct:args_processor_s
 base	src/include/libevent_tiny/event-internal.h	/^	struct event_base *base;$/;"	m	struct:common_timeout_list	typeref:struct:common_timeout_list::event_base
+base	src/libstate_machine/state_machine.c	/^    void *base;$/;"	m	struct:state_machine_s	file:
 base_s	src/libargs/test_cmd_args.c	/^typedef struct base_s{$/;"	s	file:
 base_t	src/libargs/test_cmd_args.c	/^}base_t;$/;"	t	typeref:struct:base_s	file:
 begin	src/include/libdata_structure/hash_list_struct.h	/^	hash_map_pos_t begin,end;$/;"	m	struct:hash_map_s
@@ -1054,13 +1068,13 @@ compilation_database_folder	.ycm_extra_conf.py	/^compilation_database_folder = '
 concurrent_add_event_to_master	src/libconcurrent/concurrent.c	/^int concurrent_add_event_to_master(concurrent_t *c,$/;"	f
 concurrent_constructor	src/libconcurrent/concurrent.c	/^concurrent_constructor()$/;"	f
 concurrent_create	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_create(allocator_t *allocator)$/;"	f
+concurrent_del_event_of_master	src/libconcurrent/concurrent.c	/^int concurrent_del_event_of_master(concurrent_t *c,$/;"	f
 concurrent_destroy	src/libconcurrent/concurrent.c	/^void concurrent_destroy(concurrent_t *c)$/;"	f
 concurrent_destructor	src/libconcurrent/concurrent.c	/^concurrent_destructor()$/;"	f
 concurrent_get_global_concurrent_addr	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_get_global_concurrent_addr()$/;"	f
 concurrent_init	src/libconcurrent/concurrent.c	/^int concurrent_init(concurrent_t *c,$/;"	f
 concurrent_lock	src/include/libconcurrent/concurrent.h	/^	sync_lock_t concurrent_lock;$/;"	m	struct:concurrent_s
 concurrent_master_add_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_message(concurrent_master_t *master,$/;"	f
-concurrent_master_add_new_event	src/libconcurrent/concurrent.c	/^int concurrent_master_add_new_event(concurrent_master_t *master,$/;"	f
 concurrent_master_add_task	src/libconcurrent/concurrent.c	/^void *concurrent_master_add_task(concurrent_master_t *master,$/;"	f
 concurrent_master_add_task_and_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_task_and_message(concurrent_master_t *master,$/;"	f
 concurrent_master_choose_slave	src/libconcurrent/concurrent.c	/^int concurrent_master_choose_slave(concurrent_master_t *master)$/;"	f
@@ -1133,6 +1147,7 @@ ctr_slab_t	src/include/liballoc/allocator_ctr_alloc.h	/^}ctr_slab_t;$/;"	t	typer
 current_event	src/include/libevent_tiny/event-internal.h	/^	struct event *current_event;$/;"	m	struct:event_base	typeref:struct:event_base::event
 current_event_cond	src/include/libevent_tiny/event-internal.h	/^	void *current_event_cond;$/;"	m	struct:event_base
 current_event_waiters	src/include/libevent_tiny/event-internal.h	/^	int current_event_waiters;$/;"	m	struct:event_base
+current_state	src/libstate_machine/state_machine.c	/^    int current_state;$/;"	m	struct:state_machine_s	file:
 d	src/include/libdbg/debug.h	/^	dictionary *d;$/;"	m	struct:debugger
 data	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t data[0];$/;"	m	struct:slab
 data	src/include/libdata_structure/link_list_struct.h	/^	uint8_t data[1];$/;"	m	struct:llist_list_s
@@ -1231,6 +1246,10 @@ end	src/include/libdata_structure/vector_struct.h	/^	vector_pos_t begin,end;$/;"
 ent	src/libevent_tiny/evmap.c	/^	} ent;$/;"	m	struct:event_map_entry	typeref:union:event_map_entry::__anon13	file:
 entries	src/include/libevent_tiny/event-internal.h	/^	TAILQ_HEAD(event_configq, event_config_entry) entries;$/;"	m	struct:event_config
 entries	src/include/libevent_tiny/event-internal.h	/^	void **entries;$/;"	m	struct:event_signal_map
+entry_config	src/libstate_machine/state_machine.c	/^state_entry_config_t entry_config[]={$/;"	v
+entry_name	src/libstate_machine/state_machine.c	/^     char entry_name[MAX_ENTRY_NAME_LEN];$/;"	m	struct:state_entry_config_s	file:
+entry_name	src/libstate_machine/state_machine.c	/^    char entry_name[MAX_ENTRY_NAME_LEN];$/;"	m	struct:state_entry_s	file:
+entry_num	src/libstate_machine/state_machine.c	/^    int entry_num;$/;"	m	struct:state_machine_s	file:
 epfd	src/libevent_tiny/epoll.c	/^	int epfd;$/;"	m	struct:epollop	file:
 epoll_apply_changes	src/libevent_tiny/epoll.c	/^epoll_apply_changes(struct event_base *base)$/;"	f	file:
 epoll_apply_one_change	src/libevent_tiny/epoll.c	/^epoll_apply_one_change(struct event_base *base,$/;"	f	file:
@@ -1730,6 +1749,7 @@ init	src/include/libdbg/debug.h	/^	void (*init)(debugger_t *debugger);$/;"	m	str
 init	src/include/libevent_tiny/event-internal.h	/^	void *(*init)(struct event_base *);$/;"	m	struct:eventop
 init_proto_format_set	src/libproto_analyzer/protocol_format_set.c	/^void init_proto_format_set(int proto_base_addr,$/;"	f
 init_proto_info_list	src/libproto_analyzer/protocol_format_set.c	/^void init_proto_info_list(proto_info_list_t *info_list)$/;"	f
+init_state_entry	src/libstate_machine/state_machine.c	/^state_entry_t *init_state_entry(state_entry_t *e,$/;"	f
 inline	src/include/libevent_tiny/util-internal.h	49;"	d
 insert_common_timeout_inorder	src/libevent_tiny/event.c	/^insert_common_timeout_inorder(struct common_timeout_list *ctl,$/;"	f	file:
 io	src/include/libevent_tiny/event-internal.h	/^	struct event_io_map io;$/;"	m	struct:event_base	typeref:struct:event_base::event_io_map
@@ -1755,6 +1775,7 @@ key_len	src/include/libdata_structure/map_pair.h	/^	uint32_t key_len;$/;"	m	stru
 key_size	src/include/libconcurrent/concurrent.h	/^	uint8_t key_size;$/;"	m	struct:concurrent_task_admin_s
 key_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t key_size;$/;"	m	struct:hash_map_s
 key_size	src/include/libdata_structure/rbtree_map_struct.h	/^	uint32_t key_size;$/;"	m	struct:rbtree_map_s
+last_state	src/libstate_machine/state_machine.c	/^    int last_state;$/;"	m	struct:state_machine_s	file:
 last_updated_clock_diff	src/include/libevent_tiny/event-internal.h	/^	time_t last_updated_clock_diff;$/;"	m	struct:event_base
 lasttime	src/libconcurrent/tmr_user.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
 lasttime	src/libevent_tiny/test_time.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
@@ -2069,6 +2090,8 @@ next	src/include/libproto_analyzer/list.h	/^	struct list_head *next, *prev;$/;"	
 nfds	src/libevent_tiny/poll.c	/^	int nfds;			\/* Highest number used *\/$/;"	m	struct:pollop	file:
 node	src/include/libdata_structure/rbtree_map_struct.h	/^  	struct rb_node node;$/;"	m	struct:rbtree_map_node	typeref:struct:rbtree_map_node::rb_node
 node_count	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t node_count;$/;"	m	struct:hash_map_s
+notification_event_handler	src/libstate_machine/state_machine.c	/^static void notification_event_handler(int fd, short event, void *arg)$/;"	f	file:
+notifier	src/libstate_machine/state_machine.c	/^    io_user_t *notifier;$/;"	m	struct:state_machine_s	file:
 notify	src/libthread_pool/threadpool.c	/^  pthread_cond_t notify;$/;"	m	struct:threadpool_t	file:
 nread	src/libevent_tiny/evmap.c	/^	ev_uint16_t nread;$/;"	m	struct:evmap_io	file:
 nwrite	src/libevent_tiny/evmap.c	/^	ev_uint16_t nwrite;$/;"	m	struct:evmap_io	file:
@@ -2175,6 +2198,7 @@ prev	src/include/libdbg/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:li
 prev	src/include/libproto_analyzer/list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head::
 print_A	src/libdata_structure/test/test_rbtree_map.c	/^void print_A(struct A *t)$/;"	f
 print_info_list	src/libproto_analyzer/protocol_format_set.c	/^void print_info_list(proto_info_list_t *info_list)$/;"	f
+print_library_version	src/main.c	/^print_library_version()$/;"	f
 print_list_data	src/libdata_structure/test/test_link_list.c	/^void print_list_data(list_t *list)$/;"	f
 print_vector_data	src/libdata_structure/test/test_vector.c	/^void print_vector_data(vector_pos_t *pos)$/;"	f
 priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon4
@@ -2251,6 +2275,7 @@ rcv_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_add_new_e
 rcv_notify_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_notify_fd;$/;"	m	struct:concurrent_slave_s
 read	src/libevent_tiny/evutil.c	55;"	d	file:
 read_change	src/include/libevent_tiny/changelist-internal.h	/^	ev_uint8_t read_change;$/;"	m	struct:event_change
+read_notify_fd	src/libstate_machine/state_machine.c	/^    int read_notify_fd;$/;"	m	struct:state_machine_s	file:
 realloc_copy	src/libevent_tiny/poll.c	/^	int realloc_copy;		\/* True iff we must realloc$/;"	m	struct:pollop	file:
 remote_sockaddr	src/include/libconcurrent/io_user.h	/^	void *remote_sockaddr;$/;"	m	struct:io_user_s
 require_features	src/include/libevent_tiny/event-internal.h	/^	enum event_method_feature require_features;$/;"	m	struct:event_config	typeref:enum:event_config::event_method_feature
@@ -2344,6 +2369,31 @@ start	src/include/liballoc/allocator_ctr_alloc.h	/^	void *start;$/;"	m	struct:ct
 started	src/libthread_pool/threadpool.c	/^  int started;$/;"	m	struct:threadpool_t	file:
 stat	src/libevent_tiny/evutil.c	58;"	d	file:
 stat_flag	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t stat_flag;$/;"	m	struct:slab
+state0_action_callback	src/libstate_machine/state_machine.c	/^static void state0_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
+state0_timeout_callback	src/libstate_machine/state_machine.c	/^static void state0_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
+state1_action_callback	src/libstate_machine/state_machine.c	/^static void state1_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
+state1_timeout_callback	src/libstate_machine/state_machine.c	/^static void state1_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
+state2_action_callback	src/libstate_machine/state_machine.c	/^static void state2_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
+state2_timeout_callback	src/libstate_machine/state_machine.c	/^static void state2_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
+state3_action_callback	src/libstate_machine/state_machine.c	/^static void state3_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
+state3_timeout_callback	src/libstate_machine/state_machine.c	/^static void state3_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
+state4_action_callback	src/libstate_machine/state_machine.c	/^static void state4_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
+state4_timeout_callback	src/libstate_machine/state_machine.c	/^static void state4_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
+state_entry_config_s	src/libstate_machine/state_machine.c	/^typedef struct state_entry_config_s{$/;"	s	file:
+state_entry_config_t	src/libstate_machine/state_machine.c	/^}state_entry_config_t;$/;"	t	typeref:struct:state_entry_config_s	file:
+state_entry_s	src/libstate_machine/state_machine.c	/^typedef struct state_entry_s{$/;"	s	file:
+state_entry_t	src/libstate_machine/state_machine.c	/^}state_entry_t;$/;"	t	typeref:struct:state_entry_s	file:
+state_machine	src/libstate_machine/state_machine.c	/^    state_machine_t *state_machine;$/;"	m	struct:state_entry_s	file:
+state_machine	src/libstate_machine/state_machine.c	/^state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config)$/;"	f
+state_machine_change_state	src/libstate_machine/state_machine.c	/^state_machine_change_state(state_machine_t *s, int state)$/;"	f
+state_machine_construct_state_entry	src/libstate_machine/state_machine.c	/^state_entry_t *state_machine_construct_state_entry(state_machine_t *s,$/;"	f
+state_machine_create	src/libstate_machine/state_machine.c	/^state_machine_t *state_machine_create(allocator_t *allocator)$/;"	f
+state_machine_init	src/libstate_machine/state_machine.c	/^int state_machine_init(state_machine_t *s,$/;"	f
+state_machine_register_state_entry	src/libstate_machine/state_machine.c	/^state_machine_register_state_entry(state_machine_t *s, state_entry_t *e)$/;"	f
+state_machine_s	src/libstate_machine/state_machine.c	/^typedef struct state_machine_s{$/;"	s	file:
+state_machine_setup_entry_timer	src/libstate_machine/state_machine.c	/^int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)$/;"	f
+state_machine_stop_entry_timer	src/libstate_machine/state_machine.c	/^int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)$/;"	f
+state_machine_t	src/libstate_machine/state_machine.c	/^}state_machine_t;$/;"	t	typeref:struct:state_machine_s	file:
 step	src/include/libdata_structure/vector_struct.h	/^	uint32_t step;$/;"	m	struct:vector_s
 str2num	src/libproto_analyzer/protocol_format_set.c	/^int str2num(const char *const_str)$/;"	f
 strcrop	src/libini/iniparser.c	/^static char * strcrop(char * s)$/;"	f	file:
@@ -2404,7 +2454,7 @@ test_libargs	src/main.c	/^void test_libargs(int argc, char *argv[])$/;"	f
 test_libconcurrent	src/main.c	/^void test_libconcurrent()$/;"	f
 test_libevent_tiny	src/main.c	/^int test_libevent_tiny()$/;"	f
 test_libnet	src/main.c	/^void test_libnet()$/;"	f
-test_libproxy	src/main.c	/^int test_libproxy()$/;"	f
+test_libstate_machine	src/main.c	/^void test_libstate_machine()$/;"	f
 test_libthread_pool	src/main.c	/^void test_libthread_pool()$/;"	f
 test_pdt_drv_proto	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_drv_proto(protocol_format_set_t *pfs_p, allocator_t *allocator)$/;"	f
 test_pdt_proto_3008	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_proto_3008(protocol_format_set_t *pfs_p,$/;"	f
@@ -2415,6 +2465,7 @@ test_server	src/libnet/server/server.c	/^int test_server()$/;"	f
 test_shutdown	src/libthread_pool/tests/shutdown.c	/^int test_shutdown()$/;"	f
 test_signal	src/libevent_tiny/test_signal.c	/^int test_signal()$/;"	f
 test_signal2	src/libevent_tiny/test_signal.c	/^int test_signal2()$/;"	f
+test_state_machine	src/libstate_machine/state_machine.c	/^void test_state_machine()$/;"	f
 test_tcp_client_send	src/libnet/client/test_client_send.c	/^int test_tcp_client_send()$/;"	f
 test_thrdtest	src/libthread_pool/tests/thrdtest.c	/^int test_thrdtest()$/;"	f
 test_time	src/libevent_tiny/test_time.c	/^int test_time()$/;"	f
@@ -2462,6 +2513,9 @@ timeout_next	src/libevent_tiny/event.c	/^timeout_next(struct event_base *base, s
 timeout_pending	src/include/libevent_tiny/event2/event_compat.h	191;"	d
 timeout_process	src/libevent_tiny/event.c	/^timeout_process(struct event_base *base)$/;"	f	file:
 timeout_set	src/include/libevent_tiny/event2/event_compat.h	189;"	d
+timer	src/libstate_machine/state_machine.c	/^    tmr_user_t *timer;$/;"	m	struct:state_entry_s	file:
+timer_event_callback	src/libstate_machine/state_machine.c	/^     void (*timer_event_callback)(int fd, short event, void *arg);$/;"	m	struct:state_entry_config_s	file:
+timer_event_callback	src/libstate_machine/state_machine.c	/^    void (*timer_event_callback)(int fd, short event, void *arg);$/;"	m	struct:state_entry_s	file:
 timer_thread_callback_fn	src/libevent_tiny/test_time.c	/^void * timer_thread_callback_fn(void *arg)$/;"	f
 tmr_event_handler	src/include/libconcurrent/tmr_user.h	/^    void (*tmr_event_handler)(int fd, short event, void *arg);$/;"	m	struct:tmr_user_s
 tmr_user	src/libconcurrent/tmr_user.c	/^tmr_user_t *tmr_user(allocator_t *allocator,$/;"	f
@@ -2473,8 +2527,11 @@ tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *t
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
 tv	src/include/libconcurrent/concurrent.h	/^    struct timeval *tv;$/;"	m	struct:concurrent_message_s	typeref:struct:concurrent_message_s::timeval
 tv	src/include/libconcurrent/tmr_user.h	/^	struct timeval tv;$/;"	m	struct:tmr_user_s	typeref:struct:tmr_user_s::timeval
+tv	src/libstate_machine/state_machine.c	/^    struct timeval tv;$/;"	m	struct:state_entry_s	typeref:struct:state_entry_s::timeval	file:
 tv_cache	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_cache;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
 tv_clock_diff	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_clock_diff;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
+tv_sec	src/libstate_machine/state_machine.c	/^     time_t tv_sec;$/;"	m	struct:state_entry_config_s	file:
+tv_usec	src/libstate_machine/state_machine.c	/^     suseconds_t tv_usec;$/;"	m	struct:state_entry_config_s	file:
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdata_structure/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdbg/list.h	/^typedef unsigned short    u16;$/;"	t
@@ -2513,6 +2570,7 @@ value_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint8_t value_pos;
 value_pos	src/include/libdata_structure/rbtree_map_struct.h	/^	uint8_t value_pos;$/;"	m	struct:rbtree_map_node
 value_size	src/include/libdata_structure/rbtree_map_struct.h	/^	uint32_t value_size;$/;"	m	struct:rbtree_map_s
 vector	src/include/libdata_structure/vector_struct.h	/^	struct vector_s *vector;$/;"	m	struct:vector_pos_s	typeref:struct:vector_pos_s::vector_s
+vector	src/libstate_machine/state_machine.c	/^	vector_t *vector;$/;"	m	struct:state_machine_s	file:
 vector_begin	src/include/libdata_structure/vector.h	/^static inline vector_pos_t * vector_begin(vector_t *vt,vector_pos_t *it)$/;"	f
 vector_copy	src/libdata_structure/vector/vector.c	/^int vector_copy(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
 vector_copy_backward	src/libdata_structure/vector/vector.c	/^int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
@@ -2560,3 +2618,4 @@ work	src/libconcurrent/test_concurrent.c	/^void work(concurrent_slave_t *slave,v
 work_func	src/include/libconcurrent/concurrent.h	/^	void (*work_func)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:concurrent_message_s
 work_id	src/include/libconcurrent/concurrent.h	/^	uint8_t work_id;$/;"	m	struct:concurrent_slave_s
 write_change	src/include/libevent_tiny/changelist-internal.h	/^	ev_uint8_t write_change;$/;"	m	struct:event_change
+write_notify_fd	src/libstate_machine/state_machine.c	/^    int write_notify_fd;$/;"	m	struct:state_machine_s	file:

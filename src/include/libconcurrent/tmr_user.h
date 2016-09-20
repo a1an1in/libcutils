@@ -10,4 +10,11 @@ typedef struct tmr_user_s{
 	struct timeval tv;
     uint32_t flags;
 }tmr_user_t;
+
+tmr_user_t *tmr_user(allocator_t *allocator,
+        struct timeval *tv,
+        uint16_t timer_flags,
+        void (*tmr_event_handler)(int fd, short event, void *arg),
+        void *opaque);
+int tmr_user_destroy(tmr_user_t *tmr_user);
 #endif

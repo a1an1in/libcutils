@@ -201,23 +201,21 @@ int udp_client_create_socket(struct addrinfo *addr)
 
     return sockfd;
 }
+static inline 
 client_t *__client(allocator_t *allocator,
 				   int user_id,
 				   uint8_t socktype,
 				   int (*process_task_cb)(client_task_t *task),
 				   void *opaque)
 {
-	client_t *client = NULL;
+	return io_user(allocator,//allocator_t *allocator,
+			       user_id,//int user_fd,
+			       socktype,//user_type
+			       client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+			       slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+			       (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
+			       opaque);//void *opaque)
 
-	client = io_user(allocator,//allocator_t *allocator,
-			         user_id,//int user_fd,
-			         socktype,//user_type
-			         client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
-			         slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-			         (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
-			         opaque);//void *opaque)
-
-	return client;
 }
 client_t *udp_client(allocator_t *allocator,
 					 char *host,

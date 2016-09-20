@@ -77,7 +77,9 @@ tmr_user_t *tmr_user(allocator_t *allocator,
     tmr_user->flags             = timer_flags;
     tmr_user->tv                = *tv;
 
-	dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
+    /*
+	 *dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
+     */
 
     concurrent_add_event_to_master(c,
                                    -1,//int fd,
@@ -91,6 +93,9 @@ tmr_user_t *tmr_user(allocator_t *allocator,
 }
 int tmr_user_destroy(tmr_user_t *tmr_user)
 {
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+    concurrent_del_event_of_master(c,
+            &tmr_user->event);
 	allocator_mem_free(tmr_user->allocator,tmr_user);
 
 	return 0;
@@ -134,13 +139,17 @@ int test_tmr_user()
 	tv.tv_sec = 1;
     timer = tmr_user(allocator,
             &tv,
+            0,
             /*
-             *0,
+             *EV_PERSIST,
              */
-            EV_PERSIST,
             timeout_cb,
             NULL);
 
+    /*
+     *sleep(3);
+     */
+    tmr_user_destroy(timer);
 #if 0
 	evutil_timerclear(&tv);
 	tv.tv_sec = 10;

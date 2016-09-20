@@ -301,6 +301,14 @@ static void master_event_handler_add_new_event(
 			}
 			allocator_mem_free(master->allocator,l);
 			break;
+		case 'd': 
+			l = llist_detach_front(master->new_ev_que);
+			message = (struct concurrent_message_s *)l->data;
+			if (event_del(message->event) < 0) {
+				dbg_str(DBG_WARNNING,"event_del err");
+			}
+			allocator_mem_free(master->allocator,l);
+			break;
 		case 'p':
 			break;            
 	}
@@ -508,6 +516,25 @@ int concurrent_add_event_to_master(concurrent_t *c,
 	llist_push_back(c->new_ev_que,&message);
 
 	if (write(c->snd_add_new_event_fd, "r", 1) != 1) {
+		dbg_str(DBG_ERROR,"cannot write pipe");
+	}
+
+	return 0;
+}
+int concurrent_del_event_of_master(concurrent_t *c,
+		struct event *event)
+{
+	struct concurrent_message_s message;
+
+	while(c->master->concurrent_master_inited_flag != 1);
+
+	dbg_str(CONCURRENT_DETAIL,"concurrent_del_event");
+
+	message.event = event;
+
+	llist_push_back(c->new_ev_que,&message);
+
+	if (write(c->snd_add_new_event_fd, "d", 1) != 1) {
 		dbg_str(DBG_ERROR,"cannot write pipe");
 	}
 

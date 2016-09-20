@@ -44,9 +44,10 @@
  */
 #include <stdio.h>
 #include <unistd.h>
-#include "libdbg/debug.h"
+#include <libdbg/debug.h>
 #include <libnet/client.h>
 #include <libargs/cmd_args.h>
+#include <libstate_machine/state_machine.h>
 
 #define LIBRARY_VERSION "libcutils version 2.0.0.1"
 void test_datastructure()
@@ -136,6 +137,10 @@ void test_libargs(int argc, char *argv[])
 	test_args(argc,argv);
 }
 
+void test_libstate_machine()
+{
+    test_state_machine();
+}
 #ifndef MAKELIB
 
 /*
@@ -147,6 +152,7 @@ int main(int argc, char *agrv[])
 {
 	int ret = 0;
 
+    printf("\n\n");
 	dbg_str(DBG_DETAIL,"test begin");
 
 	test_libargs(argc, agrv);
@@ -157,6 +163,7 @@ int main(int argc, char *agrv[])
 	test_libconcurrent();
 	test_libnet();
 	test_libevent_tiny();
+    test_libstate_machine();
 
 	dbg_str(DBG_DETAIL,"test end");
 	pause();
