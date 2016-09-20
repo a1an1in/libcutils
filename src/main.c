@@ -48,6 +48,7 @@
 #include <libnet/client.h>
 #include <libargs/cmd_args.h>
 
+#define LIBRARY_VERSION "libcutils version 2.0.0.1"
 void test_datastructure()
 {
 	/*
@@ -93,22 +94,24 @@ void test_libconcurrent()
 	/*
 	 *test_concurrent3();
 	 */
-    test_tmr_user();
+    /*
+     *test_tmr_user();
+     */
 }
 void test_libnet()
 {
-	/*
-	 *test_server();
-	 */
+    /*
+     *test_server();
+     */
 	/*
 	 *test_udp_client_recieve();
 	 */
 	/*
 	 *test_udp_client_send();
 	 */
-	/*
-	 *test_tcp_client_send();
-	 */
+    /*
+     *test_tcp_client_send();
+     */
 }
 int test_libevent_tiny()
 {
@@ -163,3 +166,8 @@ int main(int argc, char *agrv[])
 }
 #endif
 
+__attribute__((constructor(111))) void
+print_library_version()
+{
+    dbg_str(DBG_DETAIL,"%s",LIBRARY_VERSION);
+}
