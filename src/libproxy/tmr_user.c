@@ -36,7 +36,6 @@
 #include <event2/event-config.h>
 
 #include <sys/stat.h>
-#include <sys/queue.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <fcntl.h>
@@ -51,51 +50,49 @@
 
 #include <libdbg/debug.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/user.h>
+#include <libproxy/io_user.h>
 #include <libproxy/proxy.h>
-#include <libproxy/timer.h>
+#include <libproxy/tmr_user.h>
 
-struct timeval lasttime;
-int event_is_persistent;
-
-ev_timer_t *ev_timer(allocator_t *allocator,
+tmr_user_t *tmr_user(allocator_t *allocator,
         struct timeval *tv,
         uint16_t timer_flags,
-        void (*ev_timer_event_handler)(int fd, short event, void *arg),
+        void (*tmr_event_handler)(int fd, short event, void *arg),
         void *opaque)
 {
 	proxy_t *proxy = proxy_get_proxy_addr();
-	ev_timer_t *ev_timer = NULL;
+	tmr_user_t *tmr_user = NULL;
 
-	if ((ev_timer = (ev_timer_t *)allocator_mem_alloc(
-					allocator, sizeof(ev_timer_t))) == NULL)
+	if ((tmr_user = (tmr_user_t *)allocator_mem_alloc(
+					allocator, sizeof(tmr_user_t))) == NULL)
 	{
-		dbg_str(DBG_ERROR,"ev_timer_create err");
+		dbg_str(DBG_ERROR,"tmr_user_create err");
 		return NULL;
 	}
 
-	ev_timer->allocator              = allocator;
-	ev_timer->ev_timer_fd            = -1;
-	ev_timer->opaque                 = opaque;
-	ev_timer->ev_timer_event_handler = ev_timer_event_handler;
-	ev_timer->master                 = proxy->c->master;
-    ev_timer->flags                  = timer_flags;
-    ev_timer->tv                     = tv;
-	dbg_str(DBG_DETAIL,"ev_timer->master=%p,allocator=%p",ev_timer->master,allocator);
+	tmr_user->allocator         = allocator;
+	tmr_user->tmr_user_fd       = -1;
+	tmr_user->opaque            = opaque;
+	tmr_user->tmr_event_handler = tmr_event_handler;
+	tmr_user->master            = proxy->c->master;
+    tmr_user->flags             = timer_flags;
+    tmr_user->tv                = *tv;
+	dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
 
-	evutil_gettimeofday(&lasttime, NULL);
+    proxy_register_tmr_user(proxy,tmr_user);
 
-    proxy_register_timer(proxy,ev_timer);
-
-	return ev_timer;
+	return tmr_user;
 }
-int ev_timer_destroy(ev_timer_t *ev_timer)
+int tmr_user_destroy(tmr_user_t *tmr_user)
 {
-	allocator_mem_free(ev_timer->allocator,ev_timer);
+	allocator_mem_free(tmr_user->allocator,tmr_user);
 
 	return 0;
 }
 
+
+struct timeval lasttime;
+int event_is_persistent;
 static void
 timeout_cb(evutil_socket_t fd, short event, void *arg)
 {
@@ -116,10 +113,10 @@ timeout_10s_cb(evutil_socket_t fd, short event, void *arg)
 {
 	printf("timeout_10s_cb\n");
 }
-int test_ev_timer()
+int test_tmr_user()
 {
 	allocator_t *allocator;
-    ev_timer_t *timer;
+    tmr_user_t *timer;
     struct timeval tv;
 
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
@@ -127,8 +124,9 @@ int test_ev_timer()
 		return -1;
 	}
 	evutil_timerclear(&tv);
+	evutil_gettimeofday(&lasttime, NULL);
 	tv.tv_sec = 1;
-    timer = ev_timer(allocator,
+    timer = tmr_user(allocator,
             &tv,
             /*
              *0,
@@ -139,7 +137,7 @@ int test_ev_timer()
 
 	evutil_timerclear(&tv);
 	tv.tv_sec = 10;
-    timer = ev_timer(allocator,
+    timer = tmr_user(allocator,
             &tv,
             /*
              *0,

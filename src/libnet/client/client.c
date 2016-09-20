@@ -45,7 +45,6 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/user.h>
 #include <libproxy/proxy.h>
 #include <libnet/client.h>
 
@@ -212,24 +211,13 @@ client_t *__client(allocator_t *allocator,
 	proxy_t *proxy = proxy_get_proxy_addr();
 	client_t *client = NULL;
 
-	client = user(allocator,//allocator_t *allocator,
+	client = io_user(allocator,//allocator_t *allocator,
 				  user_id,//int user_fd,
 				  socktype,//user_type
 				  client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
 				  slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
 				  (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
 				  opaque);//void *opaque)
-	if(client == NULL){
-		dbg_str(DBG_ERROR,"create client error");
-		return NULL;
-	}
-
-	if(proxy_register_user(proxy, client) < 0)/*struct event *event)*/
-	{
-		dbg_str(DBG_ERROR,"proxy_register_user error");
-		user_destroy(client);
-		return NULL;
-	}
 
 	return client;
 }

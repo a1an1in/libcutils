@@ -4,11 +4,11 @@
 #include <libconcurrent/concurrent.h>
 
 
-typedef struct user_s{
+typedef struct io_user_s{
 	struct event event;
 	int user_fd;
 	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);
-	void (*user_event_handler)(int fd, short event, void *arg);
+	void (*io_event_handler)(int fd, short event, void *arg);
 	int (*process_task_cb)(void *task);
 	void *opaque;
 	concurrent_master_t *master;
@@ -16,14 +16,14 @@ typedef struct user_s{
 	void *local_sockaddr;
 	void *remote_sockaddr;
 	uint8_t user_type;
-}user_t;
+}io_user_t;
 
 
-user_t *user(
+io_user_t *io_user(
 		allocator_t *allocator,
 		int user_fd,
 		uint8_t user_type,
-		void (*user_event_handler)(int fd, short event, void *arg),
+		void (*io_event_handler)(int fd, short event, void *arg),
 		void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
 		int (*process_task_cb)(void *task),
 		void *opaque);

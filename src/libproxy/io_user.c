@@ -1,5 +1,5 @@
 /**
- * @file user.c
+ * @file io_user.c
  * @synopsis 
  * @author a1an1in@sina.com
  * @version 1.0
@@ -45,14 +45,14 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/user.h>
+#include <libproxy/io_user.h>
 #include <libproxy/proxy.h>
 
 
-user_t *user(allocator_t *allocator,
+io_user_t *io_user(allocator_t *allocator,
 			 int user_fd,
 			 uint8_t user_type,
-			 void (*user_event_handler)(int fd, short event, void *arg),
+			 void (*io_event_handler)(int fd, short event, void *arg),
 			 void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
 			 int (*process_task_cb)(void *task),
 			 void *opaque)
@@ -60,30 +60,37 @@ user_t *user(allocator_t *allocator,
 	struct addrinfo  *addr, hint;
 	int err;
 	proxy_t *proxy = proxy_get_proxy_addr();
-	user_t *user = NULL;
+	io_user_t *io_user = NULL;
 
-	if ((user = (user_t *)allocator_mem_alloc(
-					allocator, sizeof(user_t))) == NULL)
+	if ((io_user = (io_user_t *)allocator_mem_alloc(
+					allocator, sizeof(io_user_t))) == NULL)
 	{
-		dbg_str(DBG_ERROR,"user_create err");
+		dbg_str(DBG_ERROR,"io_user_create err");
 		return NULL;
 	}
 
-	user->allocator           = allocator;
-	user->user_fd             = user_fd;
-	user->user_type           = user_type;
-	user->opaque              = opaque;
-	user->slave_work_function = slave_work_function;
-	user->user_event_handler  = user_event_handler;
-	user->master              = proxy->c->master;
-	user->process_task_cb     = process_task_cb;
-	dbg_str(DBG_DETAIL,"user->master=%p,allocator=%p",user->master,allocator);
+	io_user->allocator           = allocator;
+	io_user->user_fd             = user_fd;
+	io_user->user_type           = user_type;
+	io_user->opaque              = opaque;
+	io_user->slave_work_function = slave_work_function;
+	io_user->io_event_handler    = io_event_handler;
+	io_user->master              = proxy->c->master;
+	io_user->process_task_cb     = process_task_cb;
+	dbg_str(DBG_DETAIL,"io_user->master=%p,allocator=%p",io_user->master,allocator);
 
-	return user;
+	if(proxy_register_io_user(proxy, io_user) < 0)/*struct event *event)*/
+	{
+		dbg_str(DBG_ERROR,"proxy_register_user error");
+		io_user_destroy(io_user);
+		return NULL;
+	}
+
+	return io_user;
 }
-int user_destroy(user_t *user)
+int io_user_destroy(io_user_t *io_user)
 {
-	allocator_mem_free(user->allocator,user);
+	allocator_mem_free(io_user->allocator,io_user);
 
 	return 0;
 }

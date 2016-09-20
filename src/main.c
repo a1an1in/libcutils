@@ -129,7 +129,7 @@ int test_libevent_tiny()
 }
 int test_libproxy()
 {
-    test_ev_timer();
+    test_tmr_user();
 }
 void test_libargs(int argc, char *argv[])
 {

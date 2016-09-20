@@ -1,13 +1,13 @@
 #ifndef __EV_TIMER_H__
 #define __EV_TIMER_H__
-typedef struct ev_timer_s{
+typedef struct tmr_user_s{
 	struct event event;
     allocator_t *allocator;
-    void (*ev_timer_event_handler)(int fd, short event, void *arg);
+    void (*tmr_event_handler)(int fd, short event, void *arg);
     void *opaque;
-    int32_t ev_timer_fd;
+    int32_t tmr_user_fd;
 	concurrent_master_t *master;
-	struct timeval *tv;
+	struct timeval tv;
     uint32_t flags;
-}ev_timer_t;
+}tmr_user_t;
 #endif

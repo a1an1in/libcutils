@@ -218,7 +218,7 @@ void * server(char *host,char *server)
 	int user_id;
 	proxy_t *proxy = proxy_get_proxy_addr();
 	allocator_t *allocator = proxy->allocator;
-	server_t *srv, *ret = NULL;
+	server_t *srv = NULL;
 
 	bzero(&hint, sizeof(hint));
 	hint.ai_family = AF_INET;
@@ -233,7 +233,7 @@ void * server(char *host,char *server)
 		exit(1);
 	}
 
-	srv = user(allocator,//allocator_t *allocator,
+	srv = io_user(allocator,//allocator_t *allocator,
 			   server_create_socket(addr),//int user_fd,
 			   SOCK_STREAM,//user_type
 			   master_event_handler_server_listen,//void (*user_event_handler)(int fd, short event, void *arg),
@@ -245,21 +245,8 @@ void * server(char *host,char *server)
 		return NULL;
 	}
 
-	if(proxy_register_user(proxy, srv) < 0)/*struct event *event)*/
-	{
-		dbg_str(DBG_ERROR,"proxy_register_user error");
-		allocator_mem_free(srv->allocator,srv);
-		goto err_register_srv;
-	}
-
-	ret = srv;
-	goto end;
-
-err_register_srv:
-	close(srv->user_fd);
-end:
 	freeaddrinfo(addr);
-	return ret;
+	return srv;
 }
 int test_server()
 {

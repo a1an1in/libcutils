@@ -2,7 +2,7 @@
 #define __CLIENT_H__
 
 #include <libconcurrent/concurrent.h>
-#include <libproxy/user.h>
+#include <libproxy/io_user.h>
 
 /*
  *enum socktype_e{
@@ -15,7 +15,7 @@
 /*
  *struct user_s;
  */
-typedef struct user_s client_t;
+typedef struct io_user_s client_t;
 
 typedef struct client_task_s{
 #define MAX_TASK_BUFFER_LEN 1024

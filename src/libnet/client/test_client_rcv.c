@@ -46,7 +46,6 @@
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
 #include <libnet/client.h>
-#include <libproxy/user.h>
 
 
 static int process_task_callback(client_task_t *task)

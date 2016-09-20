@@ -19,9 +19,7 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libproxy/user.h>
 #include <libproxy/proxy.h>
-#include <libproxy/timer.h>
 
 proxy_t *g_user_proxy;
 uint8_t g_proxy_slave_amount = 1;
@@ -66,25 +64,25 @@ int proxy_init(proxy_t *proxy, uint32_t task_size, uint8_t slave_amount, uint8_t
 			slave_amount, 
 			concurrent_lock_type);//uint8_t concurrent_lock_type);
 }
-int proxy_register_user(proxy_t *proxy,user_t *user)
+int proxy_register_io_user(proxy_t *proxy,io_user_t *user)
 {
 	return concurrent_add_event_to_master(proxy->c,
 			user->user_fd,//int fd,
 			EV_READ | EV_PERSIST,//int event_flag,
 			&user->event,//struct event *event, 
             NULL,
-			user->user_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+			user->io_event_handler,//void (*event_handler)(int fd, short event, void *arg),
 			user);//void *arg);
 
 }
-int proxy_register_timer(proxy_t *proxy,ev_timer_t *ev_timer)
+int proxy_register_tmr_user(proxy_t *proxy,tmr_user_t *ev_timer)
 {
 	return concurrent_add_event_to_master(proxy->c,
 			-1,//int fd,
 			ev_timer->flags,//int event_flag,
 			&ev_timer->event,//struct event *event, 
-            ev_timer->tv,
-			ev_timer->ev_timer_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+            &ev_timer->tv,
+			ev_timer->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
 			ev_timer);//void *arg);
 }
 /*
