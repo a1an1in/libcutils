@@ -3,7 +3,7 @@
 type                           = 0
 
 [businesses]
-business_num                   = 11
+business_num                   = 12
 normal_switch                  = 1
 normal_level                   = 9
 alloc_switch                   = 1
@@ -26,4 +26,6 @@ args_processor_switch          = 1
 args_processor_level           = 8
 state_machine_switch           = 1
 state_machine_level            = 8
+libevent_switch                = 1
+libevent_level                 = 8
 

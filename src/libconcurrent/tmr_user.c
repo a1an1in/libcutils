@@ -94,9 +94,22 @@ tmr_user_t *tmr_user(allocator_t *allocator,
 int tmr_user_destroy(tmr_user_t *tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
+    dbg_str(DBG_DETAIL,"state_machine_destroy_timer");
     concurrent_del_event_of_master(c,
             &tmr_user->event);
-	allocator_mem_free(tmr_user->allocator,tmr_user);
+    allocator_mem_free(tmr_user->allocator,tmr_user);
+
+	return 0;
+}
+int tmr_user_stop(tmr_user_t *tmr_user)
+{
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+    dbg_str(DBG_DETAIL,"state_machine_stop_timer");
+    concurrent_del_event_of_master(c,
+            &tmr_user->event);
+    /*
+	 *allocator_mem_free(tmr_user->allocator,tmr_user);
+     */
 
 	return 0;
 }

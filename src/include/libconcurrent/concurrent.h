@@ -75,6 +75,9 @@ typedef struct concurrent_s{
 	uint8_t concurrent_work_type;
 	allocator_t *allocator;
 	llist_t *new_ev_que;
+    /*
+	 *llist_t *del_ev_que;
+     */
 	int snd_add_new_event_fd;
 	concurrent_master_t *master;
 	sync_lock_t concurrent_lock;

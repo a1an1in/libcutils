@@ -295,7 +295,7 @@ void event_base_free(struct event_base *base)
 		}
 	}
 	if (n_deleted)
-		event_debug(("%s: %d events were still set in base", __func__, n_deleted));
+		dbg_str(EV_DETAIL,"%s: %d events were still set in base", __func__, n_deleted);
 
 	if (base->evsel != NULL && base->evsel->dealloc != NULL)
 		base->evsel->dealloc(base);
@@ -640,11 +640,15 @@ event_process_active_single_queue(struct event_base *base,
 		if (!(ev->ev_flags & EVLIST_INTERNAL))
 			++count;
 
-		event_debug(( "event_process_active: event: %p, %s%scall %p",
+		dbg_str(EV_DETAIL,"process_active_event: event: %p, %s%scall %p,ev_closure=%d,fd=%d,event_active_count=%d,ev_flags=%x",
 					ev,
 					ev->ev_res & EV_READ ? "EV_READ " : " ",
 					ev->ev_res & EV_WRITE ? "EV_WRITE " : " ",
-					ev->ev_callback));
+					ev->ev_callback,
+                    ev->ev_closure,
+                    ev->ev_fd,
+                    base->event_count_active,
+                    ev->ev_flags);
 
 		switch (ev->ev_closure) {
 			case EV_CLOSURE_SIGNAL:
@@ -658,6 +662,9 @@ event_process_active_single_queue(struct event_base *base,
 				EVBASE_RELEASE_LOCK(base, th_base_lock);
 				(*ev->ev_callback)(
 						ev->ev_fd, ev->ev_res, ev->ev_arg);
+                //alan add>>
+                ev->ev_flags = 0;
+                //alan<<
 				break;
 		}
 
@@ -775,7 +782,7 @@ event_base_loop(struct event_base *base, int flags)
 
 		/* If we have no events, we just exit */
 		if (!event_haveevents(base) && !N_ACTIVE_CALLBACKS(base)) {
-			event_debug(("%s: no events registered.", __func__));
+			dbg_str(EV_DETAIL,"%s: no events registered.", __func__);
 			retval = 1;
 			goto done;
 		}
@@ -786,8 +793,7 @@ event_base_loop(struct event_base *base, int flags)
 		res = evsel->dispatch(base, tv_p);
 
 		if (res == -1) {
-			event_debug(("%s: dispatch returned unsuccessfully.",
-						__func__));
+			dbg_str(EV_DETAIL,"%s: dispatch returned unsuccessfully.", __func__);
 			retval = -1;
 			goto done;
 		}
@@ -796,6 +802,9 @@ event_base_loop(struct event_base *base, int flags)
 		timeout_process(base);
 
 		if (N_ACTIVE_CALLBACKS(base)) {
+            /*
+             *dbg_str(EV_DETAIL,"active events num=%d", N_ACTIVE_CALLBACKS(base));
+             */
 			int n = event_process_active(base);
 			if ((flags & EVLOOP_ONCE)
 					&& N_ACTIVE_CALLBACKS(base) == 0
@@ -804,7 +813,7 @@ event_base_loop(struct event_base *base, int flags)
 		} else if (flags & EVLOOP_NONBLOCK)
 			done = 1;
 	}
-	event_debug(("%s: asked to terminate loop.", __func__));
+	dbg_str(EV_DETAIL,"%s: asked to terminate loop.", __func__);
 
 done:
 	clear_time_cache(base);
@@ -981,14 +990,15 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 	int res = 0;
 	int notify = 0;
 
-	event_debug((
-				"event_add: event: %p (fd "EV_SOCK_FMT"), %s%s%scall %p",
+	dbg_str(EV_DETAIL, "add event: event: %p (fd "EV_SOCK_FMT"), %s%s%scall %p,event_flag=%x,tv_set=%d",
 				ev,
 				EV_SOCK_ARG(ev->ev_fd),
 				ev->ev_events & EV_READ ? "EV_READ " : " ",
 				ev->ev_events & EV_WRITE ? "EV_WRITE " : " ",
 				tv ? "EV_TIMEOUT " : " ",
-				ev->ev_callback));
+				ev->ev_callback,
+                ev->ev_flags,
+                ev->ev_timeout.tv_sec);
 
 	EVUTIL_ASSERT(!(ev->ev_flags & ~EVLIST_ALL));
 
@@ -1048,8 +1058,7 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 		/* Check if it is active due to a timeout.  Rescheduling
 		 * this timeout before the callback can be executed
 		 * removes it from the active list. */
-		if ((ev->ev_flags & EVLIST_ACTIVE) &&
-				(ev->ev_res & EV_TIMEOUT)) {
+		if ((ev->ev_flags & EVLIST_ACTIVE) && (ev->ev_res & EV_TIMEOUT)) {
 			if (ev->ev_events & EV_SIGNAL) {
 				/* See if we are just active executing
 				 * this event in a loop
@@ -1078,7 +1087,7 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 			evutil_timeradd(&now, tv, &ev->ev_timeout);
 		}
 
-		event_debug(("event_add: timeout in %d seconds, call %p", (int)tv->tv_sec, ev->ev_callback));
+		dbg_str(EV_DETAIL,"add event: timeout in %d seconds, call %p", (int)tv->tv_sec, ev->ev_callback);
 
 		event_queue_insert(base, ev, EVLIST_TIMEOUT);
 		if (common_timeout) {
@@ -1126,8 +1135,9 @@ event_del_internal(struct event *ev)
 	struct event_base *base;
 	int res = 0, notify = 0;
 
-	event_debug(("event_del: %p (fd "EV_SOCK_FMT"), callback %p",
-				ev, EV_SOCK_ARG(ev->ev_fd), ev->ev_callback));
+    dbg_str(EV_DETAIL,"event_del: %p (fd "EV_SOCK_FMT"), callback %p,event_flags=%x",
+                ev, EV_SOCK_ARG(ev->ev_fd), ev->ev_callback,
+                ev->ev_flags);
 
 	/* An event without a base has not been added */
 	if (ev->ev_base == NULL)
@@ -1199,8 +1209,10 @@ event_active_nolock(struct event *ev, int res, short ncalls)
 {
 	struct event_base *base;
 
-	event_debug(("event_active: %p (fd "EV_SOCK_FMT"), res %d, callback %p",
-				ev, EV_SOCK_ARG(ev->ev_fd), (int)res, ev->ev_callback));
+    /*
+	 *dbg_str(EV_DETAIL,"activate event: %p (fd "EV_SOCK_FMT"), res %d, callback %p",
+	 *            ev, EV_SOCK_ARG(ev->ev_fd), (int)res, ev->ev_callback);
+     */
 
 
 	/* We get different kinds of events, add them together */
@@ -1256,7 +1268,7 @@ timeout_next(struct event_base *base, struct timeval **tv_p)
 
 	EVUTIL_ASSERT(tv->tv_sec >= 0);
 	EVUTIL_ASSERT(tv->tv_usec >= 0);
-	event_debug(("timeout_next: in %d seconds", (int)tv->tv_sec));
+	dbg_str(EV_DETAIL,"timeout_next: in %d seconds", (int)tv->tv_sec);
 
 out:
 	return (res);
@@ -1288,8 +1300,7 @@ timeout_correct(struct event_base *base, struct timeval *tv)
 		return;
 	}
 
-	event_debug(("%s: time is running backwards, corrected",
-				__func__));
+	dbg_str(EV_DETAIL,"%s: time is running backwards, corrected", __func__);
 	evutil_timersub(&base->event_tv, tv, &off);
 
 	/*
@@ -1335,8 +1346,11 @@ timeout_process(struct event_base *base)
 			break;
 
 		/* delete this event from the I/O queues */
+        /*
+		 *dbg_str(EV_DETAIL,"timeout_process: call %p,ev_flags=%x", ev->ev_callback,ev->ev_flags);
+         */
+
 		event_del_internal(ev);
-		event_debug(("timeout_process: call %p", ev->ev_callback));
 		event_active_nolock(ev, EV_TIMEOUT, 1);
 	}
 }
@@ -1365,14 +1379,17 @@ event_queue_remove(struct event_base *base, struct event *ev, int queue)
 			break;
 		case EVLIST_TIMEOUT:
 			if (is_common_timeout(&ev->ev_timeout, base)) {
+                dbg_str(EV_DETAIL,"del tv event from min heap,is_common_timeout");
 				struct common_timeout_list *ctl = get_common_timeout_list(base, &ev->ev_timeout);
 				TAILQ_REMOVE(&ctl->events, ev, ev_timeout_pos.ev_next_with_common_timeout);
 			} else {
+                dbg_str(EV_DETAIL,"del tv event from min heap");
 				min_heap_erase(&base->timeheap, ev);
+             
 			}
 			break;
 		default:
-			event_errx(1, "%s: unknown queue %x", __func__, queue);
+			dbg_str(EV_ERROR, "%s: unknown queue %x", __func__, queue);
 	}
 }
 /* Add 'ev' to the common timeout list in 'ev'. */
@@ -1426,6 +1443,9 @@ event_queue_insert(struct event_base *base, struct event *ev, int queue)
 			break;
 		case EVLIST_ACTIVE:
 			base->event_count_active++;
+            /*
+             *dbg_str(EV_DETAIL,"event_queue_insert,add pri=%d,active event count=%d",ev->ev_pri,base->event_count_active);
+             */
 			TAILQ_INSERT_TAIL(&base->activequeues[ev->ev_pri],
 					ev,ev_active_next);
 			break;

@@ -41,7 +41,8 @@ typedef struct state_entry_config_s{
 state_machine_t *state_machine_create(allocator_t *allocator);
 int state_machine_init(state_machine_t *s,
         void (*notification_event_handler)(int fd, short event, void *arg),
-        int entry_num);
+        int entry_num,
+        void *base);
 state_entry_t *init_state_entry(state_entry_t *e,
         state_machine_t *s,
         void (*action_callback)(state_machine_t *s,void *opaque),
@@ -61,7 +62,8 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state);
 int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state);
 void
 state_machine_change_state(state_machine_t *s, int state);
-state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config);
+state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base);
+int state_machine_get_cur_state(state_machine_t *s);
 void test_state_machine();
 
 #endif

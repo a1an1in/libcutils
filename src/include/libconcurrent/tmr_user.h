@@ -1,5 +1,8 @@
 #ifndef __EV_TIMER_H__
 #define __EV_TIMER_H__
+#include <libconcurrent/concurrent.h>
+#include <libevent_tiny/event2/event_struct.h>
+
 typedef struct tmr_user_s{
 	struct event event;
     allocator_t *allocator;
@@ -17,4 +20,5 @@ tmr_user_t *tmr_user(allocator_t *allocator,
         void (*tmr_event_handler)(int fd, short event, void *arg),
         void *opaque);
 int tmr_user_destroy(tmr_user_t *tmr_user);
+int tmr_user_stop(tmr_user_t *tmr_user);
 #endif

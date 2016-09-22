@@ -10,28 +10,28 @@ AF_INET6	src/include/libevent_tiny/ipv6-internal.h	71;"	d
 ALLOCATOR_TYPE_CTR_MALLOC	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_CTR_MALLOC,$/;"	e	enum:allocator_type
 ALLOCATOR_TYPE_LAST	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_LAST$/;"	e	enum:allocator_type
 ALLOCATOR_TYPE_SYS_MALLOC	src/include/liballoc/allocator.h	/^	ALLOCATOR_TYPE_SYS_MALLOC = 0,$/;"	e	enum:allocator_type
-ALLOC_CORRECT	src/include/libdbg/debug_businesses.h	40;"	d
-ALLOC_DBG_PANIC	src/include/libdbg/debug_businesses.h	35;"	d
-ALLOC_DETAIL	src/include/libdbg/debug_businesses.h	44;"	d
-ALLOC_ERROR	src/include/libdbg/debug_businesses.h	37;"	d
-ALLOC_FATAL	src/include/libdbg/debug_businesses.h	36;"	d
-ALLOC_FLOW	src/include/libdbg/debug_businesses.h	42;"	d
-ALLOC_IMPORTANT	src/include/libdbg/debug_businesses.h	43;"	d
-ALLOC_SUC	src/include/libdbg/debug_businesses.h	39;"	d
-ALLOC_VIP	src/include/libdbg/debug_businesses.h	41;"	d
-ALLOC_WARNNING	src/include/libdbg/debug_businesses.h	38;"	d
+ALLOC_CORRECT	src/include/libdbg/debug_businesses.h	43;"	d
+ALLOC_DBG_PANIC	src/include/libdbg/debug_businesses.h	38;"	d
+ALLOC_DETAIL	src/include/libdbg/debug_businesses.h	47;"	d
+ALLOC_ERROR	src/include/libdbg/debug_businesses.h	40;"	d
+ALLOC_FATAL	src/include/libdbg/debug_businesses.h	39;"	d
+ALLOC_FLOW	src/include/libdbg/debug_businesses.h	45;"	d
+ALLOC_IMPORTANT	src/include/libdbg/debug_businesses.h	46;"	d
+ALLOC_SUC	src/include/libdbg/debug_businesses.h	42;"	d
+ALLOC_VIP	src/include/libdbg/debug_businesses.h	44;"	d
+ALLOC_WARNNING	src/include/libdbg/debug_businesses.h	41;"	d
 ALL_NATIVE_AI_FLAGS	src/libevent_tiny/evutil.c	/^static const unsigned int ALL_NATIVE_AI_FLAGS =$/;"	v	file:
 ALL_NONNATIVE_AI_FLAGS	src/libevent_tiny/evutil.c	/^static const unsigned int ALL_NONNATIVE_AI_FLAGS =$/;"	v	file:
-ARGS_ARGSNIC	src/include/libdbg/debug_businesses.h	101;"	d
-ARGS_CORRECT	src/include/libdbg/debug_businesses.h	106;"	d
-ARGS_DETAIL	src/include/libdbg/debug_businesses.h	110;"	d
-ARGS_ERROR	src/include/libdbg/debug_businesses.h	103;"	d
-ARGS_FATAL	src/include/libdbg/debug_businesses.h	102;"	d
-ARGS_FLOW	src/include/libdbg/debug_businesses.h	108;"	d
-ARGS_IMPORTANT	src/include/libdbg/debug_businesses.h	109;"	d
-ARGS_SUC	src/include/libdbg/debug_businesses.h	105;"	d
-ARGS_VIP	src/include/libdbg/debug_businesses.h	107;"	d
-ARGS_WARNNING	src/include/libdbg/debug_businesses.h	104;"	d
+ARGS_ARGSNIC	src/include/libdbg/debug_businesses.h	115;"	d
+ARGS_CORRECT	src/include/libdbg/debug_businesses.h	120;"	d
+ARGS_DETAIL	src/include/libdbg/debug_businesses.h	124;"	d
+ARGS_ERROR	src/include/libdbg/debug_businesses.h	117;"	d
+ARGS_FATAL	src/include/libdbg/debug_businesses.h	116;"	d
+ARGS_FLOW	src/include/libdbg/debug_businesses.h	122;"	d
+ARGS_IMPORTANT	src/include/libdbg/debug_businesses.h	123;"	d
+ARGS_SUC	src/include/libdbg/debug_businesses.h	119;"	d
+ARGS_VIP	src/include/libdbg/debug_businesses.h	121;"	d
+ARGS_WARNNING	src/include/libdbg/debug_businesses.h	118;"	d
 ASCIILINESZ	src/libini/iniparser.c	29;"	d	file:
 ASCIILINESZ	src/libini/iniparser.c	417;"	d	file:
 BGC	src/include/libdbg/debug.h	119;"	d
@@ -71,16 +71,16 @@ COMMON_TIMEOUT_IDX_SHIFT	src/libevent_tiny/event.c	408;"	d	file:
 COMMON_TIMEOUT_MAGIC	src/libevent_tiny/event.c	410;"	d	file:
 COMMON_TIMEOUT_MASK	src/libevent_tiny/event.c	409;"	d	file:
 COMMON_TIMEOUT_MICROSECONDS_MASK	src/include/libevent_tiny/event-internal.h	144;"	d
-CONCURRENT_CORRECT	src/include/libdbg/debug_businesses.h	73;"	d
-CONCURRENT_DETAIL	src/include/libdbg/debug_businesses.h	77;"	d
-CONCURRENT_ERROR	src/include/libdbg/debug_businesses.h	70;"	d
-CONCURRENT_FATAL	src/include/libdbg/debug_businesses.h	69;"	d
-CONCURRENT_FLOW	src/include/libdbg/debug_businesses.h	75;"	d
-CONCURRENT_IMPORTANT	src/include/libdbg/debug_businesses.h	76;"	d
-CONCURRENT_PANIC	src/include/libdbg/debug_businesses.h	68;"	d
-CONCURRENT_SUC	src/include/libdbg/debug_businesses.h	72;"	d
-CONCURRENT_VIP	src/include/libdbg/debug_businesses.h	74;"	d
-CONCURRENT_WARNNING	src/include/libdbg/debug_businesses.h	71;"	d
+CONCURRENT_CORRECT	src/include/libdbg/debug_businesses.h	87;"	d
+CONCURRENT_DETAIL	src/include/libdbg/debug_businesses.h	91;"	d
+CONCURRENT_ERROR	src/include/libdbg/debug_businesses.h	84;"	d
+CONCURRENT_FATAL	src/include/libdbg/debug_businesses.h	83;"	d
+CONCURRENT_FLOW	src/include/libdbg/debug_businesses.h	89;"	d
+CONCURRENT_IMPORTANT	src/include/libdbg/debug_businesses.h	90;"	d
+CONCURRENT_PANIC	src/include/libdbg/debug_businesses.h	82;"	d
+CONCURRENT_SUC	src/include/libdbg/debug_businesses.h	86;"	d
+CONCURRENT_VIP	src/include/libdbg/debug_businesses.h	88;"	d
+CONCURRENT_WARNNING	src/include/libdbg/debug_businesses.h	85;"	d
 COTAINOR_NAME_MAX_LEN	src/include/liballoc/allocator.h	11;"	d
 COTAINOR_NAME_MAX_LEN	src/include/liballoc/allocator.h	20;"	d
 COUNT	src/libproto_analyzer/test/pdt_drv_proto_format.h	7;"	d
@@ -89,11 +89,14 @@ DBG_BUSINESS_ALLOC	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_ALLOC,$
 DBG_BUSINESS_ARGS	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_ARGS,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_CONCURRENT	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_CONCURRENT,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_CONTAINER	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_CONTAINER,$/;"	e	enum:debug_business_enum
+DBG_BUSINESS_EV	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_EV,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_HASHMAP	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_HASHMAP,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_LINKLIST	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_LINKLIST,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_NET	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_NET,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_NORMAL	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_NORMAL = 0,$/;"	e	enum:debug_business_enum
 DBG_BUSINESS_PA	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_PA,$/;"	e	enum:debug_business_enum
+DBG_BUSINESS_SM	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_SM,$/;"	e	enum:debug_business_enum
+DBG_BUSINESS_VECTOR	src/include/libdbg/debug_businesses.h	/^	DBG_BUSINESS_VECTOR,$/;"	e	enum:debug_business_enum
 DBG_CORRECT	src/include/libdbg/debug.h	/^	DBG_CORRECT,$/;"	e	enum:debug_level_enum
 DBG_CORRECT_COLOR	src/include/libdbg/debug.h	128;"	d
 DBG_DETAIL	src/include/libdbg/debug.h	/^	DBG_DETAIL,$/;"	e	enum:debug_level_enum
@@ -259,6 +262,7 @@ EVUTIL_UNLIKELY	src/include/libevent_tiny/util-internal.h	190;"	d
 EVUTIL_UPCAST	src/include/libevent_tiny/util-internal.h	161;"	d
 EVUTIL_V4ADDR_IS_CLASSD	src/libevent_tiny/evutil.c	517;"	d	file:
 EVUTIL_V4ADDR_IS_LOCALHOST	src/libevent_tiny/evutil.c	512;"	d	file:
+EV_ARGSNIC	src/include/libdbg/debug_businesses.h	137;"	d
 EV_CHANGE_ADD	src/include/libevent_tiny/changelist-internal.h	70;"	d
 EV_CHANGE_DEL	src/include/libevent_tiny/changelist-internal.h	72;"	d
 EV_CHANGE_ET	src/include/libevent_tiny/changelist-internal.h	78;"	d
@@ -270,14 +274,20 @@ EV_CHECK_FMT	src/include/libevent_tiny/log-internal.h	57;"	d
 EV_CLOSURE_NONE	src/include/libevent_tiny/event-internal.h	57;"	d
 EV_CLOSURE_PERSIST	src/include/libevent_tiny/event-internal.h	59;"	d
 EV_CLOSURE_SIGNAL	src/include/libevent_tiny/event-internal.h	58;"	d
+EV_CORRECT	src/include/libdbg/debug_businesses.h	142;"	d
+EV_DETAIL	src/include/libdbg/debug_businesses.h	146;"	d
+EV_ERROR	src/include/libdbg/debug_businesses.h	139;"	d
 EV_ET	src/include/libevent_tiny/event2/event.h	746;"	d
+EV_FATAL	src/include/libdbg/debug_businesses.h	138;"	d
 EV_FEATURE_ET	src/include/libevent_tiny/event2/event.h	/^    EV_FEATURE_ET = 0x01,$/;"	e	enum:event_method_feature
 EV_FEATURE_FDS	src/include/libevent_tiny/event2/event.h	/^    EV_FEATURE_FDS = 0x04$/;"	e	enum:event_method_feature
 EV_FEATURE_O1	src/include/libevent_tiny/event2/event.h	/^    EV_FEATURE_O1 = 0x02,$/;"	e	enum:event_method_feature
+EV_FLOW	src/include/libdbg/debug_businesses.h	144;"	d
 EV_I64_ARG	src/include/libevent_tiny/util-internal.h	282;"	d
 EV_I64_ARG	src/include/libevent_tiny/util-internal.h	287;"	d
 EV_I64_FMT	src/include/libevent_tiny/util-internal.h	281;"	d
 EV_I64_FMT	src/include/libevent_tiny/util-internal.h	286;"	d
+EV_IMPORTANT	src/include/libdbg/debug_businesses.h	145;"	d
 EV_INT16_MAX	src/include/libevent_tiny/event2/util.h	225;"	d
 EV_INT16_MIN	src/include/libevent_tiny/event2/util.h	226;"	d
 EV_INT32_MAX	src/include/libevent_tiny/event2/util.h	222;"	d
@@ -314,6 +324,7 @@ EV_SSIZE_MAX	src/include/libevent_tiny/event2/util.h	239;"	d
 EV_SSIZE_MAX	src/include/libevent_tiny/event2/util.h	242;"	d
 EV_SSIZE_MAX	src/include/libevent_tiny/event2/util.h	245;"	d
 EV_SSIZE_MIN	src/include/libevent_tiny/event2/util.h	250;"	d
+EV_SUC	src/include/libdbg/debug_businesses.h	141;"	d
 EV_TIMEOUT	src/include/libevent_tiny/event2/event.h	731;"	d
 EV_U64_ARG	src/include/libevent_tiny/util-internal.h	283;"	d
 EV_U64_ARG	src/include/libevent_tiny/util-internal.h	288;"	d
@@ -323,6 +334,8 @@ EV_UINT16_MAX	src/include/libevent_tiny/event2/util.h	224;"	d
 EV_UINT32_MAX	src/include/libevent_tiny/event2/util.h	221;"	d
 EV_UINT64_MAX	src/include/libevent_tiny/event2/util.h	218;"	d
 EV_UINT8_MAX	src/include/libevent_tiny/event2/util.h	227;"	d
+EV_VIP	src/include/libdbg/debug_businesses.h	143;"	d
+EV_WARNNING	src/include/libdbg/debug_businesses.h	140;"	d
 EV_WRITE	src/include/libevent_tiny/event2/event.h	735;"	d
 FDINFO_OFFSET	src/libevent_tiny/evmap.c	174;"	d	file:
 FTC	src/include/libdbg/debug.h	120;"	d
@@ -342,16 +355,16 @@ HLIST_HEAD	src/include/libdbg/list.h	641;"	d
 HLIST_HEAD_INIT	src/include/liballoc/list.h	635;"	d
 HLIST_HEAD_INIT	src/include/libdata_structure/list.h	641;"	d
 HLIST_HEAD_INIT	src/include/libdbg/list.h	640;"	d
-HMAP_CORRECT	src/include/libdbg/debug_businesses.h	62;"	d
-HMAP_DETAIL	src/include/libdbg/debug_businesses.h	66;"	d
-HMAP_ERROR	src/include/libdbg/debug_businesses.h	59;"	d
-HMAP_FATAL	src/include/libdbg/debug_businesses.h	58;"	d
-HMAP_FLOW	src/include/libdbg/debug_businesses.h	64;"	d
-HMAP_IMPORTANT	src/include/libdbg/debug_businesses.h	65;"	d
-HMAP_PANIC	src/include/libdbg/debug_businesses.h	57;"	d
-HMAP_SUC	src/include/libdbg/debug_businesses.h	61;"	d
-HMAP_VIP	src/include/libdbg/debug_businesses.h	63;"	d
-HMAP_WARNNING	src/include/libdbg/debug_businesses.h	60;"	d
+HMAP_CORRECT	src/include/libdbg/debug_businesses.h	65;"	d
+HMAP_DETAIL	src/include/libdbg/debug_businesses.h	69;"	d
+HMAP_ERROR	src/include/libdbg/debug_businesses.h	62;"	d
+HMAP_FATAL	src/include/libdbg/debug_businesses.h	61;"	d
+HMAP_FLOW	src/include/libdbg/debug_businesses.h	67;"	d
+HMAP_IMPORTANT	src/include/libdbg/debug_businesses.h	68;"	d
+HMAP_PANIC	src/include/libdbg/debug_businesses.h	60;"	d
+HMAP_SUC	src/include/libdbg/debug_businesses.h	64;"	d
+HMAP_VIP	src/include/libdbg/debug_businesses.h	66;"	d
+HMAP_WARNNING	src/include/libdbg/debug_businesses.h	63;"	d
 HT_CLEAR	src/include/libevent_tiny/ht-internal.h	55;"	d
 HT_EMPTY	src/include/libevent_tiny/ht-internal.h	41;"	d
 HT_ENTRY	src/include/libevent_tiny/ht-internal.h	29;"	d
@@ -418,17 +431,17 @@ LD	src/libthread_pool/tests/Makefile	/^LD = ld$/;"	m
 LEN	src/libproto_analyzer/test/pdt_drv_proto_format.h	6;"	d
 LIBEVENT_VERSION	src/include/libevent_tiny/event2/event.h	1084;"	d
 LIBEVENT_VERSION_NUMBER	src/include/libevent_tiny/event2/event.h	1087;"	d
-LIBRARY_VERSION	src/main.c	51;"	d	file:
-LINKLIST_CORRECT	src/include/libdbg/debug_businesses.h	51;"	d
-LINKLIST_DETAIL	src/include/libdbg/debug_businesses.h	55;"	d
-LINKLIST_ERROR	src/include/libdbg/debug_businesses.h	48;"	d
-LINKLIST_FATAL	src/include/libdbg/debug_businesses.h	47;"	d
-LINKLIST_FLOW	src/include/libdbg/debug_businesses.h	53;"	d
-LINKLIST_IMPORTANT	src/include/libdbg/debug_businesses.h	54;"	d
-LINKLIST_PANIC	src/include/libdbg/debug_businesses.h	46;"	d
-LINKLIST_SUC	src/include/libdbg/debug_businesses.h	50;"	d
-LINKLIST_VIP	src/include/libdbg/debug_businesses.h	52;"	d
-LINKLIST_WARNNING	src/include/libdbg/debug_businesses.h	49;"	d
+LIBRARY_VERSION	src/main.c	52;"	d	file:
+LINKLIST_CORRECT	src/include/libdbg/debug_businesses.h	54;"	d
+LINKLIST_DETAIL	src/include/libdbg/debug_businesses.h	58;"	d
+LINKLIST_ERROR	src/include/libdbg/debug_businesses.h	51;"	d
+LINKLIST_FATAL	src/include/libdbg/debug_businesses.h	50;"	d
+LINKLIST_FLOW	src/include/libdbg/debug_businesses.h	56;"	d
+LINKLIST_IMPORTANT	src/include/libdbg/debug_businesses.h	57;"	d
+LINKLIST_PANIC	src/include/libdbg/debug_businesses.h	49;"	d
+LINKLIST_SUC	src/include/libdbg/debug_businesses.h	53;"	d
+LINKLIST_VIP	src/include/libdbg/debug_businesses.h	55;"	d
+LINKLIST_WARNNING	src/include/libdbg/debug_businesses.h	52;"	d
 LIST_HEAD	src/include/liballoc/list.h	43;"	d
 LIST_HEAD	src/include/libdata_structure/list.h	43;"	d
 LIST_HEAD	src/include/libdbg/list.h	52;"	d
@@ -460,10 +473,10 @@ MAX_DEBUGGER_MODULES_NUM	src/include/libdbg/debug.h	93;"	d
 MAX_DEBUG_BUSINESS_NUM	src/include/libdbg/debug_businesses.h	/^	MAX_DEBUG_BUSINESS_NUM$/;"	e	enum:debug_business_enum
 MAX_DEBUG_LOG_FILE_NAME_LEN	src/include/libdbg/debug_log.h	28;"	d
 MAX_DEBUG_LOG_FILE_NAME_LEN	src/include/libdbg/debug_log.h	35;"	d
-MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	57;"	d	file:
-MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	59;"	d	file:
-MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	63;"	d	file:
-MAX_ENTRY_NAME_LEN	src/libstate_machine/state_machine.c	65;"	d	file:
+MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	25;"	d
+MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	27;"	d
+MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	31;"	d
+MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	33;"	d
 MAX_EPOLL_TIMEOUT_MSEC	src/libevent_tiny/epoll.c	102;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	197;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	219;"	d	file:
@@ -488,7 +501,7 @@ MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	81
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	83;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
-MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	551;"	d	file:
+MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	563;"	d	file:
 MAX_QUEUE	src/include/libthread_pool/threadpool.h	46;"	d
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
@@ -503,16 +516,16 @@ MEM_POOL_MAX_SIZE	src/include/liballoc/allocator_ctr_alloc.h	26;"	d
 MEM_POOL_MIN_DEPTH	src/include/liballoc/allocator_ctr_alloc.h	27;"	d
 MICROSECONDS_MASK	src/libevent_tiny/event.c	406;"	d	file:
 MakeRelativePathsInFlagsAbsolute	.ycm_extra_conf.py	/^def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):$/;"	f
-NET_CORRECT	src/include/libdbg/debug_businesses.h	84;"	d
-NET_DETAIL	src/include/libdbg/debug_businesses.h	88;"	d
-NET_ERROR	src/include/libdbg/debug_businesses.h	81;"	d
-NET_FATAL	src/include/libdbg/debug_businesses.h	80;"	d
-NET_FLOW	src/include/libdbg/debug_businesses.h	86;"	d
-NET_IMPORTANT	src/include/libdbg/debug_businesses.h	87;"	d
-NET_PANIC	src/include/libdbg/debug_businesses.h	79;"	d
-NET_SUC	src/include/libdbg/debug_businesses.h	83;"	d
-NET_VIP	src/include/libdbg/debug_businesses.h	85;"	d
-NET_WARNNING	src/include/libdbg/debug_businesses.h	82;"	d
+NET_CORRECT	src/include/libdbg/debug_businesses.h	98;"	d
+NET_DETAIL	src/include/libdbg/debug_businesses.h	102;"	d
+NET_ERROR	src/include/libdbg/debug_businesses.h	95;"	d
+NET_FATAL	src/include/libdbg/debug_businesses.h	94;"	d
+NET_FLOW	src/include/libdbg/debug_businesses.h	100;"	d
+NET_IMPORTANT	src/include/libdbg/debug_businesses.h	101;"	d
+NET_PANIC	src/include/libdbg/debug_businesses.h	93;"	d
+NET_SUC	src/include/libdbg/debug_businesses.h	97;"	d
+NET_VIP	src/include/libdbg/debug_businesses.h	99;"	d
+NET_WARNNING	src/include/libdbg/debug_businesses.h	96;"	d
 NFDBITS	src/libevent_tiny/select.c	55;"	d	file:
 NULL	src/include/libdata_structure/list.h	635;"	d
 NULL	src/include/libdata_structure/list.h	637;"	d
@@ -550,16 +563,16 @@ OBJS	src/libthread_pool/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目�
 OBJS	src/libthread_pool/tests/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	150;"	d
 OPEN_DEBUG	src/include/libdbg/debug.h	139;"	d
-PA_CORRECT	src/include/libdbg/debug_businesses.h	95;"	d
-PA_DETAIL	src/include/libdbg/debug_businesses.h	99;"	d
-PA_ERROR	src/include/libdbg/debug_businesses.h	92;"	d
-PA_FATAL	src/include/libdbg/debug_businesses.h	91;"	d
-PA_FLOW	src/include/libdbg/debug_businesses.h	97;"	d
-PA_IMPORTANT	src/include/libdbg/debug_businesses.h	98;"	d
-PA_PANIC	src/include/libdbg/debug_businesses.h	90;"	d
-PA_SUC	src/include/libdbg/debug_businesses.h	94;"	d
-PA_VIP	src/include/libdbg/debug_businesses.h	96;"	d
-PA_WARNNING	src/include/libdbg/debug_businesses.h	93;"	d
+PA_CORRECT	src/include/libdbg/debug_businesses.h	109;"	d
+PA_DETAIL	src/include/libdbg/debug_businesses.h	113;"	d
+PA_ERROR	src/include/libdbg/debug_businesses.h	106;"	d
+PA_FATAL	src/include/libdbg/debug_businesses.h	105;"	d
+PA_FLOW	src/include/libdbg/debug_businesses.h	111;"	d
+PA_IMPORTANT	src/include/libdbg/debug_businesses.h	112;"	d
+PA_PANIC	src/include/libdbg/debug_businesses.h	104;"	d
+PA_SUC	src/include/libdbg/debug_businesses.h	108;"	d
+PA_VIP	src/include/libdbg/debug_businesses.h	110;"	d
+PA_WARNNING	src/include/libdbg/debug_businesses.h	107;"	d
 PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	103;"	d
 PF_INET6	src/include/libevent_tiny/ipv6-internal.h	74;"	d
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
@@ -600,6 +613,16 @@ SLAB_ARRAY_MAX_NUM	src/include/liballoc/allocator_ctr_alloc.h	25;"	d
 SLC_DATA	src/libproto_analyzer/test/pdt_drv_proto_format.h	12;"	d
 SLC_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	11;"	d
 SLOT_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	8;"	d
+SM_ARGSNIC	src/include/libdbg/debug_businesses.h	126;"	d
+SM_CORRECT	src/include/libdbg/debug_businesses.h	131;"	d
+SM_DETAIL	src/include/libdbg/debug_businesses.h	135;"	d
+SM_ERROR	src/include/libdbg/debug_businesses.h	128;"	d
+SM_FATAL	src/include/libdbg/debug_businesses.h	127;"	d
+SM_FLOW	src/include/libdbg/debug_businesses.h	133;"	d
+SM_IMPORTANT	src/include/libdbg/debug_businesses.h	134;"	d
+SM_SUC	src/include/libdbg/debug_businesses.h	130;"	d
+SM_VIP	src/include/libdbg/debug_businesses.h	132;"	d
+SM_WARNNING	src/include/libdbg/debug_businesses.h	129;"	d
 SOURCE_EXTENSIONS	.ycm_extra_conf.py	/^SOURCE_EXTENSIONS = [ '.cpp', '.cxx', '.cc', '.c', '.m', '.mm' ]$/;"	v
 SRCS	src/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/liballoc/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -677,6 +700,16 @@ UNIX_LIKE_USER_MODE	src/include/libcre/libcre.h	21;"	d
 USE_INTERNAL_NTOP	src/libevent_tiny/evutil.c	1554;"	d	file:
 USE_INTERNAL_PTON	src/libevent_tiny/evutil.c	1555;"	d	file:
 USE_NATIVE_GETADDRINFO	src/libevent_tiny/evutil.c	897;"	d	file:
+VECTOR_CORRECT	src/include/libdbg/debug_businesses.h	76;"	d
+VECTOR_DETAIL	src/include/libdbg/debug_businesses.h	80;"	d
+VECTOR_ERROR	src/include/libdbg/debug_businesses.h	73;"	d
+VECTOR_FATAL	src/include/libdbg/debug_businesses.h	72;"	d
+VECTOR_FLOW	src/include/libdbg/debug_businesses.h	78;"	d
+VECTOR_IMPORTANT	src/include/libdbg/debug_businesses.h	79;"	d
+VECTOR_PANIC	src/include/libdbg/debug_businesses.h	71;"	d
+VECTOR_SUC	src/include/libdbg/debug_businesses.h	75;"	d
+VECTOR_VIP	src/include/libdbg/debug_businesses.h	77;"	d
+VECTOR_WARNNING	src/include/libdbg/debug_businesses.h	74;"	d
 WHITE	src/include/libdbg/debug.h	112;"	d
 WIN32_LEAN_AND_MEAN	src/libevent_tiny/log.c	44;"	d	file:
 WIN32_LEAN_AND_MEAN	src/libevent_tiny/log.c	46;"	d	file:
@@ -869,6 +902,7 @@ __PROTOCOL_FORMAT_SET__	src/include/libproto_analyzer/protocol_format_set.h	2;"	
 __RBTREE_MAP_H__	src/include/libdata_structure/rbtree_map.h	20;"	d
 __RBTREE_MAP_STRUCP_H__	src/include/libdata_structure/rbtree_map_struct.h	20;"	d
 __SERVER_H__	src/include/libnet/server.h	2;"	d
+__STATE_MACHINE_H__	src/include/libstate_machine/state_machine.h	2;"	d
 __SYNC_LOCK_H__	src/include/libcre/sync_lock/sync_lock.h	19;"	d
 __USER_H__	src/include/libconcurrent/io_user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
@@ -928,13 +962,13 @@ _offsetof	src/include/libdbg/list.h	12;"	d
 _offsetof	src/include/libdbg/list.h	14;"	d
 _offsetof	src/include/libproto_analyzer/list.h	13;"	d
 _warn_helper	src/libevent_tiny/log.c	/^_warn_helper(int severity, const char *errstr, const char *fmt, va_list ap)$/;"	f	file:
-a	src/include/libevent_tiny/minheap-internal.h	/^	unsigned n, a;$/;"	m	struct:min_heap
+a	src/include/libevent_tiny/minheap-internal.h	/^    unsigned n, a;$/;"	m	struct:min_heap
 a	src/libdata_structure/test/test_hashmap.c	/^	int a;$/;"	m	struct:A	file:
 a	src/libdata_structure/test/test_link_list.c	/^	int a;$/;"	m	struct:test	file:
 a	src/libdata_structure/test/test_rbtree_map.c	/^	int a;$/;"	m	struct:A	file:
 a	src/libdata_structure/test/test_vector.c	/^	int a;$/;"	m	struct:test	file:
-action_callback	src/libstate_machine/state_machine.c	/^     void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_config_s	file:
-action_callback	src/libstate_machine/state_machine.c	/^    void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_s	file:
+action_callback	src/include/libstate_machine/state_machine.h	/^     void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_config_s
+action_callback	src/include/libstate_machine/state_machine.h	/^    void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_s
 activequeues	src/include/libevent_tiny/event-internal.h	/^	struct event_list *activequeues;$/;"	m	struct:event_base	typeref:struct:event_base::event_list
 add	src/include/libevent_tiny/event-internal.h	/^	int (*add)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);$/;"	m	struct:eventop
 addrinfo_from_hostent	src/libevent_tiny/evutil.c	/^addrinfo_from_hostent(const struct hostent *ent,$/;"	f	file:
@@ -967,10 +1001,10 @@ allocator	src/include/libnet/client.h	/^	allocator_t *allocator;$/;"	m	struct:cl
 allocator	src/include/libproto_analyzer/protocol_analyzer.h	/^	allocator_t *allocator;$/;"	m	struct:protocol_analyzer_s
 allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *allocator;$/;"	m	struct:proto_head_list_s
 allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *allocator;$/;"	m	struct:protocol_format_set_s
+allocator	src/include/libstate_machine/state_machine.h	/^    allocator_t *allocator;$/;"	m	struct:state_machine_s
 allocator	src/libnet/server/server.c	/^	allocator_t *allocator;$/;"	m	struct:server_task_s	file:
 allocator	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
 allocator	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
-allocator	src/libstate_machine/state_machine.c	/^    allocator_t *allocator;$/;"	m	struct:state_machine_s	file:
 allocator_creator	src/liballoc/allocator.c	/^allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)$/;"	f
 allocator_ctr_alloc_register	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_ctr_alloc_register(){$/;"	f
 allocator_ctr_init	src/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f
@@ -1012,7 +1046,7 @@ b	src/libdata_structure/test/test_rbtree_map.c	/^	int b;$/;"	m	struct:A	file:
 b	src/libdata_structure/test/test_vector.c	/^	int b;$/;"	m	struct:test	file:
 base	src/include/libargs/cmd_args.h	/^	void *base;$/;"	m	struct:args_processor_s
 base	src/include/libevent_tiny/event-internal.h	/^	struct event_base *base;$/;"	m	struct:common_timeout_list	typeref:struct:common_timeout_list::event_base
-base	src/libstate_machine/state_machine.c	/^    void *base;$/;"	m	struct:state_machine_s	file:
+base	src/include/libstate_machine/state_machine.h	/^    void *base;$/;"	m	struct:state_machine_s
 base_s	src/libargs/test_cmd_args.c	/^typedef struct base_s{$/;"	s	file:
 base_t	src/libargs/test_cmd_args.c	/^}base_t;$/;"	t	typeref:struct:base_s	file:
 begin	src/include/libdata_structure/hash_list_struct.h	/^	hash_map_pos_t begin,end;$/;"	m	struct:hash_map_s
@@ -1147,7 +1181,7 @@ ctr_slab_t	src/include/liballoc/allocator_ctr_alloc.h	/^}ctr_slab_t;$/;"	t	typer
 current_event	src/include/libevent_tiny/event-internal.h	/^	struct event *current_event;$/;"	m	struct:event_base	typeref:struct:event_base::event
 current_event_cond	src/include/libevent_tiny/event-internal.h	/^	void *current_event_cond;$/;"	m	struct:event_base
 current_event_waiters	src/include/libevent_tiny/event-internal.h	/^	int current_event_waiters;$/;"	m	struct:event_base
-current_state	src/libstate_machine/state_machine.c	/^    int current_state;$/;"	m	struct:state_machine_s	file:
+current_state	src/include/libstate_machine/state_machine.h	/^    int current_state;$/;"	m	struct:state_machine_s
 d	src/include/libdbg/debug.h	/^	dictionary *d;$/;"	m	struct:debugger
 data	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t data[0];$/;"	m	struct:slab
 data	src/include/libdata_structure/link_list_struct.h	/^	uint8_t data[1];$/;"	m	struct:llist_list_s
@@ -1177,7 +1211,6 @@ dealloc	src/include/libevent_tiny/event-internal.h	/^	void (*dealloc)(struct eve
 debug_business	src/include/libdbg/debug.h	/^	struct debug_business debug_business[MAX_DEBUG_BUSINESS_NUM];$/;"	m	struct:debugger	typeref:struct:debugger::debug_business
 debug_business	src/include/libdbg/debug.h	/^struct debug_business{$/;"	s
 debug_business_enum	src/include/libdbg/debug_businesses.h	/^enum debug_business_enum{$/;"	g
-debug_business_names	src/include/libdbg/debug_businesses.h	/^char *debug_business_names[MAX_DEBUG_BUSINESS_NUM];$/;"	v
 debug_business_names	src/libdbg/debug_bussiness.c	/^debug_business_names[MAX_DEBUG_BUSINESS_NUM] = {$/;"	v
 debug_cosole_prive	src/include/libdbg/debug_console.h	/^typedef struct debug_cosole_prive{$/;"	s
 debug_cosole_prive_t	src/include/libdbg/debug_console.h	/^}debug_cosole_prive_t;$/;"	t	typeref:struct:debug_cosole_prive
@@ -1246,10 +1279,10 @@ end	src/include/libdata_structure/vector_struct.h	/^	vector_pos_t begin,end;$/;"
 ent	src/libevent_tiny/evmap.c	/^	} ent;$/;"	m	struct:event_map_entry	typeref:union:event_map_entry::__anon13	file:
 entries	src/include/libevent_tiny/event-internal.h	/^	TAILQ_HEAD(event_configq, event_config_entry) entries;$/;"	m	struct:event_config
 entries	src/include/libevent_tiny/event-internal.h	/^	void **entries;$/;"	m	struct:event_signal_map
-entry_config	src/libstate_machine/state_machine.c	/^state_entry_config_t entry_config[]={$/;"	v
-entry_name	src/libstate_machine/state_machine.c	/^     char entry_name[MAX_ENTRY_NAME_LEN];$/;"	m	struct:state_entry_config_s	file:
-entry_name	src/libstate_machine/state_machine.c	/^    char entry_name[MAX_ENTRY_NAME_LEN];$/;"	m	struct:state_entry_s	file:
-entry_num	src/libstate_machine/state_machine.c	/^    int entry_num;$/;"	m	struct:state_machine_s	file:
+entry_config	src/libstate_machine/state_machine.c	/^static state_entry_config_t entry_config[]={$/;"	v	file:
+entry_name	src/include/libstate_machine/state_machine.h	/^     char entry_name[MAX_ENTRY_NAME_LEN];$/;"	m	struct:state_entry_config_s
+entry_name	src/include/libstate_machine/state_machine.h	/^    char entry_name[MAX_ENTRY_NAME_LEN];$/;"	m	struct:state_entry_s
+entry_num	src/include/libstate_machine/state_machine.h	/^    int entry_num;$/;"	m	struct:state_machine_s
 epfd	src/libevent_tiny/epoll.c	/^	int epfd;$/;"	m	struct:epollop	file:
 epoll_apply_changes	src/libevent_tiny/epoll.c	/^epoll_apply_changes(struct event_base *base)$/;"	f	file:
 epoll_apply_one_change	src/libevent_tiny/epoll.c	/^epoll_apply_one_change(struct event_base *base,$/;"	f	file:
@@ -1775,7 +1808,7 @@ key_len	src/include/libdata_structure/map_pair.h	/^	uint32_t key_len;$/;"	m	stru
 key_size	src/include/libconcurrent/concurrent.h	/^	uint8_t key_size;$/;"	m	struct:concurrent_task_admin_s
 key_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t key_size;$/;"	m	struct:hash_map_s
 key_size	src/include/libdata_structure/rbtree_map_struct.h	/^	uint32_t key_size;$/;"	m	struct:rbtree_map_s
-last_state	src/libstate_machine/state_machine.c	/^    int last_state;$/;"	m	struct:state_machine_s	file:
+last_state	src/include/libstate_machine/state_machine.h	/^    int last_state;$/;"	m	struct:state_machine_s
 last_updated_clock_diff	src/include/libevent_tiny/event-internal.h	/^	time_t last_updated_clock_diff;$/;"	m	struct:event_base
 lasttime	src/libconcurrent/tmr_user.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
 lasttime	src/libevent_tiny/test_time.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
@@ -2058,7 +2091,7 @@ mm_strdup	src/include/libevent_tiny/mm-internal.h	52;"	d
 mode_t	src/libevent_tiny/evutil.c	59;"	d	file:
 msg	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon12	file:
 mutex	src/include/libcre/sync_lock/sync_lock.h	/^		pthread_mutex_t mutex;$/;"	m	union:sync_lock_s::lock
-n	src/include/libevent_tiny/minheap-internal.h	/^	unsigned n, a;$/;"	m	struct:min_heap
+n	src/include/libevent_tiny/minheap-internal.h	/^    unsigned n, a;$/;"	m	struct:min_heap
 n	src/include/libini/iniparser.h	/^	int n;$/;"	m	struct:_dictionary_
 n_changes	src/include/libevent_tiny/event-internal.h	/^	int n_changes;$/;"	m	struct:event_changelist
 n_common_timeouts	src/include/libevent_tiny/event-internal.h	/^	int n_common_timeouts;$/;"	m	struct:event_base
@@ -2091,7 +2124,7 @@ nfds	src/libevent_tiny/poll.c	/^	int nfds;			\/* Highest number used *\/$/;"	m	s
 node	src/include/libdata_structure/rbtree_map_struct.h	/^  	struct rb_node node;$/;"	m	struct:rbtree_map_node	typeref:struct:rbtree_map_node::rb_node
 node_count	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t node_count;$/;"	m	struct:hash_map_s
 notification_event_handler	src/libstate_machine/state_machine.c	/^static void notification_event_handler(int fd, short event, void *arg)$/;"	f	file:
-notifier	src/libstate_machine/state_machine.c	/^    io_user_t *notifier;$/;"	m	struct:state_machine_s	file:
+notifier	src/include/libstate_machine/state_machine.h	/^    io_user_t *notifier;$/;"	m	struct:state_machine_s
 notify	src/libthread_pool/threadpool.c	/^  pthread_cond_t notify;$/;"	m	struct:threadpool_t	file:
 nread	src/libevent_tiny/evmap.c	/^	ev_uint16_t nread;$/;"	m	struct:evmap_io	file:
 nwrite	src/libevent_tiny/evmap.c	/^	ev_uint16_t nwrite;$/;"	m	struct:evmap_io	file:
@@ -2102,7 +2135,7 @@ old_events	src/include/libevent_tiny/changelist-internal.h	/^	short old_events;$
 opaque	src/include/libconcurrent/io_user.h	/^	void *opaque;$/;"	m	struct:io_user_s
 opaque	src/include/libconcurrent/tmr_user.h	/^    void *opaque;$/;"	m	struct:tmr_user_s
 open	src/libevent_tiny/evutil.c	54;"	d	file:
-p	src/include/libevent_tiny/minheap-internal.h	/^	struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
+p	src/include/libevent_tiny/minheap-internal.h	/^    struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
 p	src/libargs/test_cmd_args.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
@@ -2275,7 +2308,7 @@ rcv_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_add_new_e
 rcv_notify_fd	src/include/libconcurrent/concurrent.h	/^	int rcv_notify_fd;$/;"	m	struct:concurrent_slave_s
 read	src/libevent_tiny/evutil.c	55;"	d	file:
 read_change	src/include/libevent_tiny/changelist-internal.h	/^	ev_uint8_t read_change;$/;"	m	struct:event_change
-read_notify_fd	src/libstate_machine/state_machine.c	/^    int read_notify_fd;$/;"	m	struct:state_machine_s	file:
+read_notify_fd	src/include/libstate_machine/state_machine.h	/^    int read_notify_fd;$/;"	m	struct:state_machine_s
 realloc_copy	src/libevent_tiny/poll.c	/^	int realloc_copy;		\/* True iff we must realloc$/;"	m	struct:pollop	file:
 remote_sockaddr	src/include/libconcurrent/io_user.h	/^	void *remote_sockaddr;$/;"	m	struct:io_user_s
 require_features	src/include/libevent_tiny/event-internal.h	/^	enum event_method_feature require_features;$/;"	m	struct:event_config	typeref:enum:event_config::event_method_feature
@@ -2369,8 +2402,6 @@ start	src/include/liballoc/allocator_ctr_alloc.h	/^	void *start;$/;"	m	struct:ct
 started	src/libthread_pool/threadpool.c	/^  int started;$/;"	m	struct:threadpool_t	file:
 stat	src/libevent_tiny/evutil.c	58;"	d	file:
 stat_flag	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t stat_flag;$/;"	m	struct:slab
-state0_action_callback	src/libstate_machine/state_machine.c	/^static void state0_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
-state0_timeout_callback	src/libstate_machine/state_machine.c	/^static void state0_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
 state1_action_callback	src/libstate_machine/state_machine.c	/^static void state1_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
 state1_timeout_callback	src/libstate_machine/state_machine.c	/^static void state1_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
 state2_action_callback	src/libstate_machine/state_machine.c	/^static void state2_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
@@ -2379,21 +2410,24 @@ state3_action_callback	src/libstate_machine/state_machine.c	/^static void state3
 state3_timeout_callback	src/libstate_machine/state_machine.c	/^static void state3_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
 state4_action_callback	src/libstate_machine/state_machine.c	/^static void state4_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
 state4_timeout_callback	src/libstate_machine/state_machine.c	/^static void state4_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
-state_entry_config_s	src/libstate_machine/state_machine.c	/^typedef struct state_entry_config_s{$/;"	s	file:
-state_entry_config_t	src/libstate_machine/state_machine.c	/^}state_entry_config_t;$/;"	t	typeref:struct:state_entry_config_s	file:
-state_entry_s	src/libstate_machine/state_machine.c	/^typedef struct state_entry_s{$/;"	s	file:
-state_entry_t	src/libstate_machine/state_machine.c	/^}state_entry_t;$/;"	t	typeref:struct:state_entry_s	file:
-state_machine	src/libstate_machine/state_machine.c	/^    state_machine_t *state_machine;$/;"	m	struct:state_entry_s	file:
-state_machine	src/libstate_machine/state_machine.c	/^state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config)$/;"	f
+state5_action_callback	src/libstate_machine/state_machine.c	/^static void state5_action_callback(state_machine_t *s,void *opaque)$/;"	f	file:
+state5_timeout_callback	src/libstate_machine/state_machine.c	/^static void state5_timeout_callback(int fd, short event, void *arg)$/;"	f	file:
+state_entry_config_s	src/include/libstate_machine/state_machine.h	/^typedef struct state_entry_config_s{$/;"	s
+state_entry_config_t	src/include/libstate_machine/state_machine.h	/^}state_entry_config_t;$/;"	t	typeref:struct:state_entry_config_s
+state_entry_s	src/include/libstate_machine/state_machine.h	/^typedef struct state_entry_s{$/;"	s
+state_entry_t	src/include/libstate_machine/state_machine.h	/^}state_entry_t;$/;"	t	typeref:struct:state_entry_s
+state_machine	src/include/libstate_machine/state_machine.h	/^    state_machine_t *state_machine;$/;"	m	struct:state_entry_s
+state_machine	src/libstate_machine/state_machine.c	/^state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base)$/;"	f
 state_machine_change_state	src/libstate_machine/state_machine.c	/^state_machine_change_state(state_machine_t *s, int state)$/;"	f
 state_machine_construct_state_entry	src/libstate_machine/state_machine.c	/^state_entry_t *state_machine_construct_state_entry(state_machine_t *s,$/;"	f
 state_machine_create	src/libstate_machine/state_machine.c	/^state_machine_t *state_machine_create(allocator_t *allocator)$/;"	f
+state_machine_get_cur_state	src/libstate_machine/state_machine.c	/^int state_machine_get_cur_state(state_machine_t *s)$/;"	f
 state_machine_init	src/libstate_machine/state_machine.c	/^int state_machine_init(state_machine_t *s,$/;"	f
 state_machine_register_state_entry	src/libstate_machine/state_machine.c	/^state_machine_register_state_entry(state_machine_t *s, state_entry_t *e)$/;"	f
-state_machine_s	src/libstate_machine/state_machine.c	/^typedef struct state_machine_s{$/;"	s	file:
+state_machine_s	src/include/libstate_machine/state_machine.h	/^typedef struct state_machine_s{$/;"	s
 state_machine_setup_entry_timer	src/libstate_machine/state_machine.c	/^int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)$/;"	f
 state_machine_stop_entry_timer	src/libstate_machine/state_machine.c	/^int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)$/;"	f
-state_machine_t	src/libstate_machine/state_machine.c	/^}state_machine_t;$/;"	t	typeref:struct:state_machine_s	file:
+state_machine_t	src/include/libstate_machine/state_machine.h	/^}state_machine_t;$/;"	t	typeref:struct:state_machine_s
 step	src/include/libdata_structure/vector_struct.h	/^	uint32_t step;$/;"	m	struct:vector_s
 str2num	src/libproto_analyzer/protocol_format_set.c	/^int str2num(const char *const_str)$/;"	f
 strcrop	src/libini/iniparser.c	/^static char * strcrop(char * s)$/;"	f	file:
@@ -2513,9 +2547,9 @@ timeout_next	src/libevent_tiny/event.c	/^timeout_next(struct event_base *base, s
 timeout_pending	src/include/libevent_tiny/event2/event_compat.h	191;"	d
 timeout_process	src/libevent_tiny/event.c	/^timeout_process(struct event_base *base)$/;"	f	file:
 timeout_set	src/include/libevent_tiny/event2/event_compat.h	189;"	d
-timer	src/libstate_machine/state_machine.c	/^    tmr_user_t *timer;$/;"	m	struct:state_entry_s	file:
-timer_event_callback	src/libstate_machine/state_machine.c	/^     void (*timer_event_callback)(int fd, short event, void *arg);$/;"	m	struct:state_entry_config_s	file:
-timer_event_callback	src/libstate_machine/state_machine.c	/^    void (*timer_event_callback)(int fd, short event, void *arg);$/;"	m	struct:state_entry_s	file:
+timer	src/include/libstate_machine/state_machine.h	/^    tmr_user_t *timer;$/;"	m	struct:state_entry_s
+timer_event_callback	src/include/libstate_machine/state_machine.h	/^     void (*timer_event_callback)(int fd, short event, void *arg);$/;"	m	struct:state_entry_config_s
+timer_event_callback	src/include/libstate_machine/state_machine.h	/^    void (*timer_event_callback)(int fd, short event, void *arg);$/;"	m	struct:state_entry_s
 timer_thread_callback_fn	src/libevent_tiny/test_time.c	/^void * timer_thread_callback_fn(void *arg)$/;"	f
 tmr_event_handler	src/include/libconcurrent/tmr_user.h	/^    void (*tmr_event_handler)(int fd, short event, void *arg);$/;"	m	struct:tmr_user_s
 tmr_user	src/libconcurrent/tmr_user.c	/^tmr_user_t *tmr_user(allocator_t *allocator,$/;"	f
@@ -2527,11 +2561,11 @@ tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *t
 tree_root	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rb_root *tree_root;$/;"	m	struct:rbtree_map_s	typeref:struct:rbtree_map_s::rb_root
 tv	src/include/libconcurrent/concurrent.h	/^    struct timeval *tv;$/;"	m	struct:concurrent_message_s	typeref:struct:concurrent_message_s::timeval
 tv	src/include/libconcurrent/tmr_user.h	/^	struct timeval tv;$/;"	m	struct:tmr_user_s	typeref:struct:tmr_user_s::timeval
-tv	src/libstate_machine/state_machine.c	/^    struct timeval tv;$/;"	m	struct:state_entry_s	typeref:struct:state_entry_s::timeval	file:
+tv	src/include/libstate_machine/state_machine.h	/^    struct timeval tv;$/;"	m	struct:state_entry_s	typeref:struct:state_entry_s::timeval
 tv_cache	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_cache;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
 tv_clock_diff	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_clock_diff;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
-tv_sec	src/libstate_machine/state_machine.c	/^     time_t tv_sec;$/;"	m	struct:state_entry_config_s	file:
-tv_usec	src/libstate_machine/state_machine.c	/^     suseconds_t tv_usec;$/;"	m	struct:state_entry_config_s	file:
+tv_sec	src/include/libstate_machine/state_machine.h	/^     time_t tv_sec;$/;"	m	struct:state_entry_config_s
+tv_usec	src/include/libstate_machine/state_machine.h	/^     suseconds_t tv_usec;$/;"	m	struct:state_entry_config_s
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdata_structure/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdbg/list.h	/^typedef unsigned short    u16;$/;"	t
@@ -2570,7 +2604,7 @@ value_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint8_t value_pos;
 value_pos	src/include/libdata_structure/rbtree_map_struct.h	/^	uint8_t value_pos;$/;"	m	struct:rbtree_map_node
 value_size	src/include/libdata_structure/rbtree_map_struct.h	/^	uint32_t value_size;$/;"	m	struct:rbtree_map_s
 vector	src/include/libdata_structure/vector_struct.h	/^	struct vector_s *vector;$/;"	m	struct:vector_pos_s	typeref:struct:vector_pos_s::vector_s
-vector	src/libstate_machine/state_machine.c	/^	vector_t *vector;$/;"	m	struct:state_machine_s	file:
+vector	src/include/libstate_machine/state_machine.h	/^	vector_t *vector;$/;"	m	struct:state_machine_s
 vector_begin	src/include/libdata_structure/vector.h	/^static inline vector_pos_t * vector_begin(vector_t *vt,vector_pos_t *it)$/;"	f
 vector_copy	src/libdata_structure/vector/vector.c	/^int vector_copy(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
 vector_copy_backward	src/libdata_structure/vector/vector.c	/^int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
@@ -2618,4 +2652,4 @@ work	src/libconcurrent/test_concurrent.c	/^void work(concurrent_slave_t *slave,v
 work_func	src/include/libconcurrent/concurrent.h	/^	void (*work_func)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:concurrent_message_s
 work_id	src/include/libconcurrent/concurrent.h	/^	uint8_t work_id;$/;"	m	struct:concurrent_slave_s
 write_change	src/include/libevent_tiny/changelist-internal.h	/^	ev_uint8_t write_change;$/;"	m	struct:event_change
-write_notify_fd	src/libstate_machine/state_machine.c	/^    int write_notify_fd;$/;"	m	struct:state_machine_s	file:
+write_notify_fd	src/include/libstate_machine/state_machine.h	/^    int write_notify_fd;$/;"	m	struct:state_machine_s

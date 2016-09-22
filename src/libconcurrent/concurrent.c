@@ -52,7 +52,7 @@ concurrent_task_admin_create(allocator_t *allocator)
 
 	task_admin = (concurrent_task_admin_t *)allocator_mem_alloc(allocator,sizeof(concurrent_task_admin_t));
 	if(task_admin == NULL){
-		dbg_str(DBG_ERROR,"allocc concurrent task admin err");
+		dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
 		exit(1);
 	}
 	task_admin->allocator = allocator;
@@ -147,7 +147,7 @@ static void slave_event_handler_process_message(int fd, short event, void *arg)
 	 *dbg_str(CONCURRENT_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
 	 */
 	if (read(fd, buf, 1) != 1){
-		dbg_str(DBG_WARNNING,"cannot read form pipe");
+		dbg_str(CONCURRENT_WARNNING,"cannot read form pipe");
 		return;
 	}
 	switch (buf[0]) {
@@ -170,13 +170,13 @@ void *concurrent_slave_thread(void *arg)
 
 	slave->event_base = event_base_new();
 	if(slave->event_base == NULL){
-		dbg_str(DBG_ERROR,"cannot create slave event_base");
+		dbg_str(CONCURRENT_ERROR,"cannot create slave event_base");
 		exit(1);
 	}
 	event_assign(&slave->message_event,slave->event_base,slave->rcv_notify_fd,
 	              EV_READ | EV_PERSIST, slave_event_handler_process_message, arg);
 	if (event_add(&slave->message_event, 0) == -1) {
-		dbg_str(DBG_WARNNING,"event_add err");
+		dbg_str(CONCURRENT_WARNNING,"event_add err");
 	}
 	event_base_loop(slave->event_base, 0);
 	return NULL;
@@ -189,7 +189,7 @@ int concurrent_slave_add_new_event(concurrent_slave_t *slave,
 {
 	event_assign(event,slave->event_base,fd, event_flag, event_handler, task);
 	if (event_add(event, 0) == -1) {
-		dbg_str(DBG_WARNNING,"event_add err");
+		dbg_str(CONCURRENT_WARNNING,"event_add err");
 	}
 
 	return 0;
@@ -208,21 +208,21 @@ int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_i
 
 		slave->work_id = slave_id;
 		if(pipe(fds)) {
-			dbg_str(DBG_ERROR,"cannot create pipe");
+			dbg_str(CONCURRENT_ERROR,"cannot create pipe");
 			exit(1);
 		}
 		slave->rcv_notify_fd = fds[0];
 		master->snd_notify_fd[slave_id] = fds[1];
 
 		if ((ret = pthread_create(&slave->id.tid, NULL, concurrent_slave_thread, slave)) != 0) {
-			dbg_str(DBG_ERROR,"cannot slave pthread");
+			dbg_str(CONCURRENT_ERROR,"cannot slave pthread");
 			exit(1);
 		}
 
 	} else if ( master->concurrent_work_type == SERVER_WORK_TYPE_PROCESS) {
 	
 	} else {
-		dbg_str(DBG_ERROR,"not support concurrent_work_type");
+		dbg_str(CONCURRENT_ERROR,"not support concurrent_work_type");
 		return -1;
 	} 
 
@@ -235,14 +235,14 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
 	master->slave = (concurrent_slave_t *)allocator_mem_alloc(master->allocator,
 			sizeof(concurrent_slave_t) * master->slave_amount);
 	if(master->slave == NULL){
-		dbg_str(DBG_ERROR,"alloc slave err");
+		dbg_str(CONCURRENT_ERROR,"alloc slave err");
 		ret = -1;
 		goto end;
 	}
 	master->snd_notify_fd = (int *)allocator_mem_alloc(master->allocator,
 			sizeof(int) * master->slave_amount);
 	if(master->slave == NULL){
-		dbg_str(DBG_ERROR,"alloc snd_notify_fd err");
+		dbg_str(CONCURRENT_ERROR,"alloc snd_notify_fd err");
 		ret = -1;
 		goto end;
 	}
@@ -289,24 +289,38 @@ static void master_event_handler_add_new_event(
 	char buf[1];          
 
 	if (read(fd, buf, 1) != 1){
-		dbg_str(DBG_WARNNING,"cannot read form pipe");
+		dbg_str(CONCURRENT_WARNNING,"cannot read form pipe");
 		return;
 	}
 	switch (buf[0]) {
 		case 'r': 
 			l = llist_detach_front(master->new_ev_que);
+            dbg_str(CONCURRENT_DETAIL,"master_event_handler_add event");
 			message = (struct concurrent_message_s *)l->data;
 			if (event_add(message->event, message->tv) == -1) {
-				dbg_str(DBG_WARNNING,"event_add err");
+				dbg_str(CONCURRENT_WARNNING,"event_add err");
 			}
+            /*
+             *if(message->tv != NULL){
+             *    dbg_str(CONCURRENT_VIP,"add timer event to evbase");
+             *}
+             */
 			allocator_mem_free(master->allocator,l);
 			break;
 		case 'd': 
 			l = llist_detach_front(master->new_ev_que);
 			message = (struct concurrent_message_s *)l->data;
+            dbg_str(CONCURRENT_DETAIL,"master_event_handler_del event,ev_flags=%x,event addr:%p",
+                    ((struct event *)(message->event))->ev_flags,
+                    message->event);
 			if (event_del(message->event) < 0) {
-				dbg_str(DBG_WARNNING,"event_del err");
+				dbg_str(CONCURRENT_WARNNING,"event_del err");
 			}
+            /*
+             *if(message->tv != NULL){
+             *    dbg_str(CONCURRENT_VIP,"del timer event of evbase");
+             *}
+             */
 			allocator_mem_free(master->allocator,l);
 			break;
 		case 'p':
@@ -329,7 +343,7 @@ void *concurrent_master_thread(void *arg)
 	event_assign(&event,master->event_base,master->rcv_add_new_event_fd, EV_READ | EV_PERSIST,
 			master_event_handler_add_new_event, master);
 	if (event_add(&event, 0) == -1) {
-		dbg_str(DBG_WARNNING,"event_add err");
+		dbg_str(CONCURRENT_WARNNING,"event_add err");
 	}
 
 	dbg_str(CONCURRENT_DETAIL,"concurrent_master_thread end");
@@ -363,7 +377,7 @@ int concurrent_master_init(concurrent_master_t *master,
 				0);//uint8_t hmap_lock_type)
 
 	if(pipe(fds)) {
-		dbg_str(DBG_ERROR,"cannot create pipe");
+		dbg_str(CONCURRENT_ERROR,"cannot create pipe");
 		exit(1);
 	}
 
@@ -371,7 +385,7 @@ int concurrent_master_init(concurrent_master_t *master,
 	master->snd_add_new_event_fd = fds[1];
 
 	if ((ret = pthread_create(&master->id.tid, NULL, concurrent_master_thread, master)) != 0) {
-		dbg_str(DBG_ERROR,"cannot slave pthread");
+		dbg_str(CONCURRENT_ERROR,"cannot slave pthread");
 		exit(1);
 	}
 
@@ -404,7 +418,7 @@ void *concurrent_master_add_task(concurrent_master_t *master,
 
 	concurrent_task_admin_search(master->task_admin,key,&pos);
 	if(pos.hlist_node_p == NULL){
-		dbg_str(DBG_ERROR,"not found key,key=%s",key);
+		dbg_str(CONCURRENT_ERROR,"not found key,key=%s",key);
 		return NULL;
 	}
 
@@ -425,7 +439,7 @@ static void concurrent_master_notify_slave(concurrent_master_t *master,char comm
 	dbg_str(CONCURRENT_DETAIL,"concurrent_master_notify_slave,slave i=%d is assigned,notify fd=%d",i,master->snd_notify_fd[i]);
 
 	if (write(master->snd_notify_fd[i], &command, 1) != 1) {
-		dbg_str(DBG_WARNNING,"concurrent_master_notify_slave,write pipe err");
+		dbg_str(CONCURRENT_WARNNING,"concurrent_master_notify_slave,write pipe err");
 	}
 }
 int concurrent_master_add_message(concurrent_master_t *master,
@@ -467,7 +481,7 @@ concurrent_t *concurrent_create(allocator_t *allocator)
 
 	if ((c = (concurrent_t *)allocator_mem_alloc(allocator,
 			sizeof(concurrent_t))) == NULL){
-		dbg_str(DBG_ERROR,"concurrent_create err");
+		dbg_str(CONCURRENT_ERROR,"concurrent_create err");
 		return NULL;
 	}
 	c->allocator= allocator;
@@ -508,7 +522,7 @@ int concurrent_add_event_to_master(concurrent_t *c,
 
 	while(c->master->concurrent_master_inited_flag != 1);
 
-	dbg_str(CONCURRENT_DETAIL,"concurrent_add_new_event");
+	dbg_str(CONCURRENT_IMPORTANT,"concurrent_add_new_event to master");
 	event_assign(event,c->master->event_base,fd, event_flag, event_handler, arg);
 
 	message.event = event;
@@ -516,7 +530,7 @@ int concurrent_add_event_to_master(concurrent_t *c,
 	llist_push_back(c->new_ev_que,&message);
 
 	if (write(c->snd_add_new_event_fd, "r", 1) != 1) {
-		dbg_str(DBG_ERROR,"cannot write pipe");
+		dbg_str(CONCURRENT_ERROR,"cannot write pipe");
 	}
 
 	return 0;
@@ -528,14 +542,16 @@ int concurrent_del_event_of_master(concurrent_t *c,
 
 	while(c->master->concurrent_master_inited_flag != 1);
 
-	dbg_str(CONCURRENT_DETAIL,"concurrent_del_event");
-
 	message.event = event;
+
+    dbg_str(CONCURRENT_DETAIL,"concurrent_del_event_of_master,ev_flags=%x,event addr:%p",
+            ((struct event *)(message.event))->ev_flags,
+            message.event);
 
 	llist_push_back(c->new_ev_que,&message);
 
 	if (write(c->snd_add_new_event_fd, "d", 1) != 1) {
-		dbg_str(DBG_ERROR,"cannot write pipe");
+		dbg_str(CONCURRENT_ERROR,"cannot write pipe");
 	}
 
 	return 0;
@@ -558,7 +574,7 @@ concurrent_constructor()
     concurrent_t *c;
 
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
+		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_creator err");
 		return;
 	}
 	c = concurrent_create(allocator);
