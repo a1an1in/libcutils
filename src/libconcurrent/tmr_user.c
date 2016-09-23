@@ -53,44 +53,9 @@
 #include <libconcurrent/io_user.h>
 #include <libconcurrent/tmr_user.h>
 
-tmr_user_t *tmr_user(allocator_t *allocator,
-        struct timeval *tv,
-        uint16_t timer_flags,
-        void (*tmr_event_handler)(int fd, short event, void *arg),
-        void *opaque)
-{
-    concurrent_t *c = concurrent_get_global_concurrent_addr();
-	tmr_user_t *tmr_user = NULL;
+struct timeval lasttime;
+int event_is_persistent;
 
-	if ((tmr_user = (tmr_user_t *)allocator_mem_alloc(
-					allocator, sizeof(tmr_user_t))) == NULL)
-	{
-		dbg_str(DBG_ERROR,"tmr_user_create err");
-		return NULL;
-	}
-
-	tmr_user->allocator         = allocator;
-	tmr_user->tmr_user_fd       = -1;
-	tmr_user->opaque            = opaque;
-	tmr_user->tmr_event_handler = tmr_event_handler;
-	tmr_user->master            = c->master;
-    tmr_user->flags             = timer_flags;
-    tmr_user->tv                = *tv;
-
-    /*
-	 *dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
-     */
-
-    concurrent_add_event_to_master(c,
-                                   -1,//int fd,
-                                   tmr_user->flags,//int event_flag,
-                                   &tmr_user->event,//struct event *event, 
-                                   &tmr_user->tv,
-                                   tmr_user->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
-                                   tmr_user);//void *arg);
-
-	return tmr_user;
-}
 int tmr_user_destroy(tmr_user_t *tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
@@ -114,29 +79,77 @@ int tmr_user_stop(tmr_user_t *tmr_user)
 	return 0;
 }
 
-
-struct timeval lasttime;
-int event_is_persistent;
-static void
-timeout_cb(evutil_socket_t fd, short event, void *arg)
+static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
-	struct timeval newtime, difference;
-	struct event *timeout = (struct event *)arg;
-	double elapsed;
+	tmr_user_t *timer = (tmr_user_t *)arg;
 
-	evutil_gettimeofday(&newtime, NULL);
-	evutil_timersub(&newtime, &lasttime, &difference);
-	elapsed = difference.tv_sec + (difference.tv_usec / 1.0e6);
-
-	printf("timeout_cb called at %d: %.3f seconds elapsed.\n", (int)newtime.tv_sec, elapsed);
-	lasttime = newtime;
-
+	dbg_str(NET_DETAIL,"slave_work_function begin");
+	timer->process_timer_task_cb(timer);
+	dbg_str(NET_DETAIL,"slave_work_function end");
+	return ;
 }
-static void
-timeout_10s_cb(evutil_socket_t fd, short event, void *arg)
+void timer_event_handler(int fd, short event, void *arg)
 {
-	printf("timeout_10s_cb\n");
+
+	tmr_user_t *timer = (tmr_user_t *)arg;
+	concurrent_master_t *master = timer->master;
+	char key[10];
+	struct concurrent_message_s message;
+
+	dbg_str(NET_DETAIL,"timer event handler begin");
+	master->assignment_count++;//do for assigning slave
+	concurrent_master_init_message(&message, timer->slave_work_function,timer,0);
+	concurrent_master_add_message(master,&message);
+	dbg_str(NET_DETAIL,"timer event handler end");
+
+    return ;
 }
+tmr_user_t *tmr_user(allocator_t *allocator,
+        struct timeval *tv,
+        uint16_t timer_flags,
+        void (*process_timer_task_cb)(void *task),
+        void *opaque)
+{
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+	tmr_user_t *tmr_user = NULL;
+
+	if ((tmr_user = (tmr_user_t *)allocator_mem_alloc(
+					allocator, sizeof(tmr_user_t))) == NULL)
+	{
+		dbg_str(DBG_ERROR,"tmr_user_create err");
+		return NULL;
+	}
+
+	tmr_user->allocator             = allocator;
+	tmr_user->tmr_user_fd           = -1;
+	tmr_user->opaque                = opaque;
+	tmr_user->tmr_event_handler     = timer_event_handler;
+    tmr_user->slave_work_function   = slave_work_function;
+    tmr_user->process_timer_task_cb = process_timer_task_cb;
+	tmr_user->master                = c->master;
+    tmr_user->flags                 = timer_flags;
+    tmr_user->tv                    = *tv;
+
+    /*
+	 *dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
+     */
+
+    concurrent_add_event_to_master(c,
+                                   -1,//int fd,
+                                   tmr_user->flags,//int event_flag,
+                                   &tmr_user->event,//struct event *event, 
+                                   &tmr_user->tv,
+                                   tmr_user->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   tmr_user);//void *arg);
+
+	return tmr_user;
+}
+static void test_process_timer_task_callback(void *timer)
+{
+	dbg_str(DBG_DETAIL,"process_timer_task_callback begin");
+	dbg_str(DBG_DETAIL,"process_timer_task_callback end");
+}
+
 int test_tmr_user()
 {
 	allocator_t *allocator;
@@ -147,33 +160,22 @@ int test_tmr_user()
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
 		return -1;
 	}
+    dbg_str(DBG_VIP,"test_tmr_user2");
 	evutil_timerclear(&tv);
 	evutil_gettimeofday(&lasttime, NULL);
 	tv.tv_sec = 1;
-    timer = tmr_user(allocator,
-            &tv,
-            0,
-            /*
-             *EV_PERSIST,
-             */
-            timeout_cb,
-            NULL);
-
-    /*
-     *sleep(3);
-     */
-    tmr_user_destroy(timer);
-#if 0
-	evutil_timerclear(&tv);
-	tv.tv_sec = 10;
     timer = tmr_user(allocator,
             &tv,
             /*
              *0,
              */
             EV_PERSIST,
-            timeout_10s_cb,
+            test_process_timer_task_callback,
             NULL);
-#endif
+
+    pause();
+    tmr_user_destroy(timer);
+
     return 0;
 }
+

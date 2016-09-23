@@ -80,7 +80,10 @@ io_user_t *io_user(allocator_t *allocator,
 
 	concurrent_add_event_to_master(c,
 	                               io_user->user_fd,//int fd,
-	                               EV_READ | EV_PERSIST,//int event_flag,
+                                   EV_READ | EV_PERSIST,//int event_flag,
+                                   /*
+									*EV_READ,//int event_flag,
+                                    */
 	                               &io_user->event,//struct event *event, 
                                    NULL,
 	                               io_user->io_event_handler,//void (*event_handler)(int fd, short event, void *arg),

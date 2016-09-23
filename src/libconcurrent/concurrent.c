@@ -155,7 +155,7 @@ static void slave_event_handler_process_message(int fd, short event, void *arg)
 			l = llist_detach_front(slave->message_que);
 			message = (struct concurrent_message_s *)l->data;
 			message->work_func(slave,message->task);
-			allocator_mem_free(slave->allocator,l);
+            allocator_mem_free(slave->allocator,l);
 			break;
 		case 'p':
 			break;            

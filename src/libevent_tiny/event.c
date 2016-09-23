@@ -663,7 +663,9 @@ event_process_active_single_queue(struct event_base *base,
 				(*ev->ev_callback)(
 						ev->ev_fd, ev->ev_res, ev->ev_arg);
                 //alan add>>
-                ev->ev_flags = 0;
+                /*
+                 *ev->ev_flags = 0;
+                 */
                 //alan<<
 				break;
 		}

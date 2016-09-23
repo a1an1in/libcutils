@@ -92,11 +92,14 @@ void test_libthread_pool()
 }
 void test_libconcurrent()
 {
-	/*
-	 *test_concurrent3();
-	 */
+    /*
+     *test_concurrent3();
+     */
     /*
      *test_tmr_user();
+     */
+    /*
+     *test_io_user();
      */
 }
 void test_libnet()
@@ -104,21 +107,21 @@ void test_libnet()
     /*
      *test_server();
      */
-	/*
-	 *test_udp_client_recieve();
-	 */
-	/*
-	 *test_udp_client_send();
-	 */
+    /*
+     *test_udp_client_recieve();
+     */
+    /*
+     *test_udp_client_send();
+     */
     /*
      *test_tcp_client_send();
      */
 }
 int test_libevent_tiny()
 {
-	/*
-	 *test_io();
-	 */
+    /*
+     *test_io();
+     */
 	/*
 	 *test_signal();
 	 */

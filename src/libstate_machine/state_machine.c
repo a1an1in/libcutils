@@ -72,7 +72,8 @@ state_machine_t *state_machine_create(allocator_t *allocator)
 }
 
 int state_machine_init(state_machine_t *s,
-        void (*notification_event_handler)(int fd, short event, void *arg),
+        void (*state_change_event_handler)(int fd, short event, void *arg),
+        void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
         int entry_num,
         void *base)
 {
@@ -85,10 +86,11 @@ int state_machine_init(state_machine_t *s,
     s->notifier  = io_user(s->allocator,//allocator_t *allocator,
                            s->read_notify_fd,//int user_fd,
                            0,//user_type
-                           notification_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
-                           NULL,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+                           state_change_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+                           slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
                            NULL,//int (*process_task_cb)(user_task_t *task),
                            s);//void *opaque)
+	dbg_str(SM_DETAIL,"notifier fd=%d", s->read_notify_fd);
 
     return 0;
 }
@@ -96,12 +98,12 @@ int state_machine_init(state_machine_t *s,
 state_entry_t *init_state_entry(state_entry_t *e,
         state_machine_t *s,
         void (*action_callback)(state_machine_t *s,void *opaque),
-        void (*timer_event_callback)(int fd, short event, void *arg),
+        void (*process_timer_task_cb)(void *arg),
         time_t       tv_sec,     /* seconds */
         suseconds_t   tv_usec, /* microseconds */
         char *entry_name)
 {
-    e->timer_event_callback = timer_event_callback;
+    e->process_timer_task_cb = process_timer_task_cb;
     e->action_callback      = action_callback;
     e->tv.tv_sec            = tv_sec;
     e->tv.tv_usec           = tv_usec;
@@ -111,8 +113,8 @@ state_entry_t *init_state_entry(state_entry_t *e,
     return e;
 }
 state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
-        void (*action_callback)(state_machine_t *s,void *opaque),
-        void (*timer_event_callback)(int fd, short event, void *arg),
+        void (*changing_workfunc_cb)(state_machine_t *s,void *opaque),
+        void (*process_timer_task_cb)(void *arg),
         time_t       tv_sec,     /* seconds */
         suseconds_t   tv_usec, /* microseconds */
         char *entry_name)
@@ -128,8 +130,8 @@ state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
     
     e = init_state_entry(e,
                          s,
-                         action_callback,
-                         timer_event_callback,
+                         changing_workfunc_cb,
+                         process_timer_task_cb,
                          tv_sec,     /* seconds */
                          tv_usec, /* microseconds */
                          entry_name);
@@ -158,8 +160,10 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
     e->timer = tmr_user(s->allocator,
                         &e->tv,
                         EV_TIMEOUT,
-                        e->timer_event_callback,
+                        e->process_timer_task_cb,
                         (void *)s);
+
+    return 0;
 }
 int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
 {
@@ -180,6 +184,8 @@ int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
     }
 
     e->timer = NULL;
+
+    return 0;
 }
 
 int state_machine_get_cur_state(state_machine_t *s)
@@ -188,6 +194,34 @@ int state_machine_get_cur_state(state_machine_t *s)
 }
 void
 state_machine_change_state(state_machine_t *s, int state)
+{
+    char command = 'c';//c --> change state
+    state_entry_t *e,*le;;
+
+    if(state == s->current_state) return;
+
+    s->last_state    = s->current_state;
+    s->current_state = state;
+
+
+    le = (state_entry_t *)vector_get(s->vector,s->last_state);
+    e  = (state_entry_t *)vector_get(s->vector,s->current_state);
+
+    dbg_str(SM_SUC,"state_machine_change_state,from %s to %s",le->entry_name,e->entry_name);
+
+	if (write(s->write_notify_fd, &command, 1) != 1) {
+		dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
+	}
+}
+/**
+ * @synopsis    state_machine_change_state_force 
+ *              not considering whether last state equal current state
+ *
+ * @param s
+ * @param state
+ */
+void
+state_machine_change_state_force(state_machine_t *s, int state)
 {
     char command = 'c';//c --> change state
     state_entry_t *e,*le;;
@@ -204,36 +238,50 @@ state_machine_change_state(state_machine_t *s, int state)
 		dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
 	}
 }
-static void notification_event_handler(int fd, short event, void *arg)
+
+static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
     io_user_t *notifier = (io_user_t *)arg;
     state_machine_t *s  = (state_machine_t *)notifier->opaque;
     state_entry_t *e,*le;
 
+    le = (state_entry_t *)vector_get(s->vector,s->last_state);
+    state_machine_stop_entry_timer(s,s->last_state);
+
+    e = (state_entry_t *)vector_get(s->vector,s->current_state);
+    state_machine_setup_entry_timer(s,s->current_state);
+    /*
+     *dbg_str(SM_IMPORTANT," last_state=%d, current_state=%d",s->last_state,s->current_state);
+     */
+    e->action_callback(s,s->base);
+}
+static void state_change_event_handler(int fd, short event, void *arg)
+{
+    io_user_t *notifier = (io_user_t *)arg;
+	concurrent_master_t *master = notifier->master;
+    state_machine_t *s  = (state_machine_t *)notifier->opaque;
+	struct concurrent_message_s message;
 	char buf[1];          
+    void (*slave_work_func)(concurrent_slave_t *slave,void *arg);
+
 
 	if (read(s->read_notify_fd, buf, 1) != 1){
 		dbg_str(SM_WARNNING,"cannot read form pipe");
 		return;
 	}
-    /*
-     *dbg_str(DBG_DETAIL,"notification_event fd=%d",s->read_notify_fd);
-     */
 	switch (buf[0]) {
-		case 'c': 
-            le = (state_entry_t *)vector_get(s->vector,s->last_state);
-            state_machine_stop_entry_timer(s,s->last_state);
-
-            e = (state_entry_t *)vector_get(s->vector,s->current_state);
-            state_machine_setup_entry_timer(s,s->current_state);
-            /*
-             *dbg_str(SM_IMPORTANT," last_state=%d, current_state=%d",s->last_state,s->current_state);
-             */
-            e->action_callback(s,s->base);
+		case 'c': //change state
+            slave_work_func = notifier->slave_work_function;
 			break;
-		case 'b':
+		case 'b'://destroy state machine
 			break;            
 	}
+
+    concurrent_master_init_message(&message, slave_work_function,notifier,0);
+    master->assignment_count++;//do for assigning slave
+    concurrent_master_add_message(master,&message);
+    
+    return ;
 }
 
 state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base)
@@ -245,7 +293,8 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
     s = state_machine_create(allocator);
 
     state_machine_init(s,
-            notification_event_handler,//void (*notification_event_handler)(int fd, short event, void *arg),
+            state_change_event_handler,//void (*state_change_event_handler)(int fd, short event, void *arg),
+            slave_work_function,
             10,
             base);
 
@@ -253,7 +302,7 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
         if(strlen(config[i].entry_name) != 0){
             e = state_machine_construct_state_entry(s,
                     config[i].action_callback,
-                    config[i].timer_event_callback,
+                    config[i].process_timer_task_cb,
                     config[i].tv_sec,     
                     config[i].tv_usec, 
                     config[i].entry_name);
@@ -264,82 +313,3 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
     return s;
 }
 
-
-
-static void state1_timeout_callback(int fd, short event, void *arg)
-{
-    dbg_str(SM_DETAIL,"state0_timeout");
-}
-static void state1_action_callback(state_machine_t *s,void *opaque)
-{
-    dbg_str(SM_DETAIL,"state0_action");
-    state_machine_change_state(s, 2);
-}
-static void state2_timeout_callback(int fd, short event, void *arg)
-{
-    tmr_user_t *timer = (tmr_user_t *)arg;
-    state_machine_t *s = (state_machine_t *)timer->opaque;
-    dbg_str(SM_DETAIL,"state1_timeout");
-    state_machine_change_state(s, 4);
-}
-static void state2_action_callback(state_machine_t *s,void *opaque)
-{
-    dbg_str(SM_DETAIL,"state1_action");
-}
-static void state3_timeout_callback(int fd, short event, void *arg)
-{
-    dbg_str(SM_DETAIL,"state2_timeout");
-}
-static void state3_action_callback(state_machine_t *s,void *opaque)
-{
-    dbg_str(SM_DETAIL,"state2_action");
-}
-static void state4_timeout_callback(int fd, short event, void *arg)
-{
-    tmr_user_t *timer = (tmr_user_t *)arg;
-    state_machine_t *s = (state_machine_t *)timer->opaque;
-    dbg_str(SM_DETAIL,"state3_timeout");
-    state_machine_change_state(s, 5);
-}
-static void state4_action_callback(state_machine_t *s,void *opaque)
-{
-    dbg_str(SM_DETAIL,"state3_action");
-}
-static void state5_timeout_callback(int fd, short event, void *arg)
-{
-    tmr_user_t *timer = (tmr_user_t *)arg;
-    state_machine_t *s = (state_machine_t *)timer->opaque;
-    dbg_str(SM_DETAIL,"state4_timeout");
-
-    state_machine_change_state(s, 2);
-}
-static void state5_action_callback(state_machine_t *s,void *opaque)
-{
-    dbg_str(SM_DETAIL,"state4_action");
-}
-
-static state_entry_config_t entry_config[]={
-	{"uninited", NULL,NULL, 1, 0},
-	{"init",     state1_action_callback,state1_timeout_callback, 1, 0},
-	{"applying", state2_action_callback,state2_timeout_callback, 2, 0},
-	{"waiting",  state3_action_callback,state3_timeout_callback, 15, 0},
-	{"scanning", state4_action_callback,state4_timeout_callback, 13, 0},
-	{"scaned",   state5_action_callback,state5_timeout_callback, 60, 0},
-	{"",NULL,NULL,0,0},
-};
-
-void test_state_machine()
-{
-	allocator_t *allocator;
-    state_machine_t *s;
-
-    printf("test state_machine\n");
-
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(SM_ERROR,"proxy_create allocator_creator err");
-		return ;
-	}
-    s = state_machine(allocator, entry_config,NULL);
-
-    state_machine_change_state(s, 1);
-}
