@@ -30,6 +30,7 @@
 #include "liballoc/allocator.h"
 
 allocator_module_t allocator_modules[ALLOCATOR_TYPE_LAST];
+allocator_t *global_allocator_default;
 
 allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)
 {
@@ -66,4 +67,33 @@ void allocator_destroy(allocator_t * alloc)
 	}
 	dbg_str(DBG_DETAIL,"run at here");
 	free(alloc);
+}
+
+allocator_t * allocator_get_default_alloc()
+{
+    return global_allocator_default;
+}
+
+void __attribute__((constructor(111)))
+default_allocator_constructor()
+{
+	allocator_t *allocator;
+
+	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
+        exit(1);
+	}
+    global_allocator_default = allocator;
+
+    return;
+}
+
+void __attribute__((constructor(111)))
+default_allocator_destructor()
+{
+	allocator_t *allocator = allocator_get_default_alloc();
+
+    allocator_destroy(allocator);
+
+    return;
 }

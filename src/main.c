@@ -192,7 +192,7 @@ int main(int argc, char *agrv[])
 }
 #endif
 
-__attribute__((constructor(111))) void
+__attribute__((constructor(112))) void
 print_library_version()
 {
     dbg_str(DBG_DETAIL,"%s",LIBRARY_VERSION);

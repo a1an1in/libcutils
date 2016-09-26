@@ -555,7 +555,8 @@ void concurrent_destroy(concurrent_t *c)
 }
 
 #define MAX_PROXY_TASK_SIZE 128
-__attribute__((constructor(111))) void
+#define CONCURRENT_CONSTRUCTOR_PRIOR 112
+__attribute__((constructor(CONCURRENT_CONSTRUCTOR_PRIOR))) void
 concurrent_constructor()
 {
 	allocator_t *allocator;
@@ -577,7 +578,7 @@ concurrent_constructor()
 
     global_concurrent = c;
 }
-__attribute__((destructor(111))) void 
+__attribute__((destructor(CONCURRENT_CONSTRUCTOR_PRIOR))) void 
 concurrent_destructor()
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
