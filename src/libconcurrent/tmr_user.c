@@ -56,29 +56,6 @@
 struct timeval lasttime;
 int event_is_persistent;
 
-int tmr_user_destroy(tmr_user_t *tmr_user)
-{
-    concurrent_t *c = concurrent_get_global_concurrent_addr();
-    dbg_str(DBG_DETAIL,"state_machine_destroy_timer");
-    concurrent_del_event_of_master(c,
-            &tmr_user->event);
-    allocator_mem_free(tmr_user->allocator,tmr_user);
-
-	return 0;
-}
-int tmr_user_stop(tmr_user_t *tmr_user)
-{
-    concurrent_t *c = concurrent_get_global_concurrent_addr();
-    dbg_str(DBG_DETAIL,"state_machine_stop_timer");
-    concurrent_del_event_of_master(c,
-            &tmr_user->event);
-    /*
-	 *allocator_mem_free(tmr_user->allocator,tmr_user);
-     */
-
-	return 0;
-}
-
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	tmr_user_t *timer = (tmr_user_t *)arg;
@@ -93,7 +70,6 @@ void timer_event_handler(int fd, short event, void *arg)
 
 	tmr_user_t *timer = (tmr_user_t *)arg;
 	concurrent_master_t *master = timer->master;
-	char key[10];
 	struct concurrent_message_s message;
 
 	dbg_str(NET_DETAIL,"timer event handler begin");
@@ -158,6 +134,26 @@ tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user)
 
 	return tmr_user;
 }
+int tmr_user_destroy(tmr_user_t *tmr_user)
+{
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+    dbg_str(DBG_DETAIL,"state_machine_destroy_timer");
+    concurrent_del_event_of_master(c,
+            &tmr_user->event);
+    allocator_mem_free(tmr_user->allocator,tmr_user);
+
+	return 0;
+}
+int tmr_user_stop(tmr_user_t *tmr_user)
+{
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+    dbg_str(DBG_DETAIL,"state_machine_stop_timer");
+    concurrent_del_event_of_master(c,
+            &tmr_user->event);
+
+	return 0;
+}
+
 static void test_process_timer_task_callback(void *timer)
 {
 	dbg_str(DBG_DETAIL,"process_timer_task_callback begin");

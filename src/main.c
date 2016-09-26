@@ -142,7 +142,22 @@ void test_libargs(int argc, char *argv[])
 
 void test_libstate_machine()
 {
-    test_state_machine();
+    /*
+     *test_state_machine();
+     */
+}
+void test_libipc()
+{
+    /*
+     *test_udp_unix_client_recieve();
+     */
+    /*
+     *test_udp_unix_client_send();
+     */
+    test_tcp_unix_client_send();
+    /*
+     *test_tcp_unix_server();
+     */
 }
 #ifndef MAKELIB
 
@@ -167,6 +182,7 @@ int main(int argc, char *agrv[])
 	test_libnet();
 	test_libevent_tiny();
     test_libstate_machine();
+    test_libipc();
 
 	dbg_str(DBG_DETAIL,"test end");
 	pause();

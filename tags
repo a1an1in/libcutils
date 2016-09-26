@@ -57,6 +57,8 @@ CC	src/libdata_structure/vector/Makefile	/^CC = gcc$/;"	m
 CC	src/libdbg/Makefile	/^CC = gcc$/;"	m
 CC	src/libevent_tiny/Makefile	/^CC = gcc$/;"	m
 CC	src/libini/Makefile	/^CC = gcc$/;"	m
+CC	src/libipc/unix/client/Makefile	/^CC = gcc$/;"	m
+CC	src/libipc/unix/server/Makefile	/^CC = gcc$/;"	m
 CC	src/libnet/client/Makefile	/^CC = gcc$/;"	m
 CC	src/libnet/server/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/Makefile	/^CC = gcc$/;"	m
@@ -421,6 +423,8 @@ LD	src/libdata_structure/vector/Makefile	/^LD = ld$/;"	m
 LD	src/libdbg/Makefile	/^LD = ld$/;"	m
 LD	src/libevent_tiny/Makefile	/^LD = ld$/;"	m
 LD	src/libini/Makefile	/^LD = ld$/;"	m
+LD	src/libipc/unix/client/Makefile	/^LD = ld$/;"	m
+LD	src/libipc/unix/server/Makefile	/^LD = ld$/;"	m
 LD	src/libnet/client/Makefile	/^LD = ld$/;"	m
 LD	src/libnet/server/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/Makefile	/^LD = ld$/;"	m
@@ -458,8 +462,12 @@ LIST_POISON2	src/include/liballoc/list.h	25;"	d
 LIST_POISON2	src/include/libdata_structure/list.h	25;"	d
 LIST_POISON2	src/include/libdbg/list.h	34;"	d
 LIST_POISON2	src/include/libproto_analyzer/list.h	30;"	d
+MAXEPOLLSIZE	src/libipc/unix/client/client.c	52;"	d	file:
+MAXEPOLLSIZE	src/libipc/unix/server/server.c	51;"	d	file:
 MAXEPOLLSIZE	src/libnet/client/client.c	51;"	d	file:
 MAXEPOLLSIZE	src/libnet/server/server.c	51;"	d	file:
+MAXLINE	src/libipc/unix/client/client.c	53;"	d	file:
+MAXLINE	src/libipc/unix/server/server.c	52;"	d	file:
 MAXLINE	src/libnet/client/client.c	52;"	d	file:
 MAXLINE	src/libnet/server/server.c	52;"	d	file:
 MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
@@ -501,7 +509,7 @@ MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	81
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	83;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
-MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	567;"	d	file:
+MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	557;"	d	file:
 MAX_QUEUE	src/include/libthread_pool/threadpool.h	46;"	d
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
@@ -554,6 +562,8 @@ OBJS	src/libdata_structure/vector/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS)) 
 OBJS	src/libdbg/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libevent_tiny/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libini/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libipc/unix/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libipc/unix/server/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libnet/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libnet/server/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -643,6 +653,8 @@ SRCS	src/libdata_structure/vector/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdbg/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libevent_tiny/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libini/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libipc/unix/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libipc/unix/server/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libnet/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libnet/server/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -686,6 +698,8 @@ TARGET	src/libdata_structure/vector/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdbg/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libevent_tiny/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libini/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libipc/unix/client/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libipc/unix/server/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libnet/client/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libnet/server/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/Makefile	/^TARGET = build_in.o$/;"	m
@@ -908,6 +922,7 @@ __USER_H__	src/include/libconcurrent/io_user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
 __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
 __cdecl	src/libevent_tiny/signal.c	73;"	d	file:
+__client	src/libipc/unix/client/client.c	/^client_t *__client(allocator_t *allocator,$/;"	f	file:
 __client	src/libnet/client/client.c	/^client_t *__client(allocator_t *allocator,$/;"	f	file:
 __concurrent_master_create_slave	src/libconcurrent/concurrent.c	/^int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)$/;"	f
 __func__	src/include/libevent_tiny/util-internal.h	52;"	d
@@ -1002,6 +1017,7 @@ allocator	src/include/libproto_analyzer/protocol_analyzer.h	/^	allocator_t *allo
 allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *allocator;$/;"	m	struct:proto_head_list_s
 allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *allocator;$/;"	m	struct:protocol_format_set_s
 allocator	src/include/libstate_machine/state_machine.h	/^    allocator_t *allocator;$/;"	m	struct:state_machine_s
+allocator	src/libipc/unix/server/server.c	/^	allocator_t *allocator;$/;"	m	struct:server_task_s	file:
 allocator	src/libnet/server/server.c	/^	allocator_t *allocator;$/;"	m	struct:server_task_s	file:
 allocator	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
 allocator	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
@@ -1395,6 +1411,7 @@ event	src/include/libconcurrent/tmr_user.h	/^	struct event event;$/;"	m	struct:t
 event	src/include/libevent_tiny/event2/event.h	/^struct event$/;"	s
 event	src/include/libevent_tiny/event2/event_struct.h	/^struct event {$/;"	s
 event	src/include/libnet/client.h	/^	struct event *event;$/;"	m	struct:client_task_s	typeref:struct:client_task_s::event
+event	src/libipc/unix/server/server.c	/^	struct event *event;$/;"	m	struct:server_task_s	typeref:struct:server_task_s::event	file:
 event	src/libnet/server/server.c	/^	struct event *event;$/;"	m	struct:server_task_s	typeref:struct:server_task_s::event	file:
 event_active	src/libevent_tiny/event.c	/^event_active(struct event *ev, int res, short ncalls)$/;"	f
 event_active_nolock	src/libevent_tiny/event.c	/^event_active_nolock(struct event *ev, int res, short ncalls)$/;"	f
@@ -1614,6 +1631,7 @@ fatal_fn	src/libevent_tiny/log.c	/^static event_fatal_cb fatal_fn = NULL;$/;"	v	
 fd	src/include/libevent_tiny/changelist-internal.h	/^	evutil_socket_t fd;$/;"	m	struct:event_change
 fd	src/include/libnet/client.h	/^	uint32_t fd;$/;"	m	struct:client_task_s
 fd	src/libevent_tiny/evmap.c	/^	evutil_socket_t fd;$/;"	m	struct:event_map_entry	file:
+fd	src/libipc/unix/server/server.c	/^	uint32_t fd;$/;"	m	struct:server_task_s	file:
 fd	src/libnet/server/server.c	/^	uint32_t fd;$/;"	m	struct:server_task_s	file:
 fd_mask	src/libevent_tiny/select.c	/^typedef unsigned long fd_mask;$/;"	t	file:
 fdinfo_len	src/include/libevent_tiny/event-internal.h	/^	size_t fdinfo_len;$/;"	m	struct:eventop
@@ -1803,6 +1821,7 @@ key	src/include/libdata_structure/rbtree_map_struct.h	/^  	char key[1];$/;"	m	st
 key	src/include/libini/iniparser.h	/^	char **key ;$/;"	m	struct:_dictionary_
 key	src/include/libnet/client.h	/^	char key[10];$/;"	m	struct:client_task_s
 key	src/libconcurrent/test_concurrent.c	/^	char key[10];$/;"	m	struct:concurrent_task_s	file:
+key	src/libipc/unix/server/server.c	/^	char key[10];$/;"	m	struct:server_task_s	file:
 key	src/libnet/server/server.c	/^	char key[10];$/;"	m	struct:server_task_s	file:
 key_cmp_fpt	src/include/libdata_structure/map_pair.h	/^typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);$/;"	t
 key_cmp_fpt	src/include/libdata_structure/rbtree_map_struct.h	/^typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);$/;"	t
@@ -1991,6 +2010,7 @@ llist_detach_front	src/include/libdata_structure/link_list.h	/^static inline lis
 llist_end	src/include/libdata_structure/link_list.h	/^llist_end(llist_t *llist,list_pos_t *end)$/;"	f
 llist_for_each	src/include/libdata_structure/link_list.h	/^static inline void llist_for_each(llist_t *llist,void (*func)(list_t *list))$/;"	f
 llist_for_each_with_arg	src/include/libdata_structure/link_list.h	/^static inline void llist_for_each_with_arg(llist_t *llist,void (*func)(list_t *list,void *arg),void *arg)$/;"	f
+llist_for_each_with_arg2	src/include/libdata_structure/link_list.h	/^static inline void llist_for_each_with_arg2(llist_t *llist,void (*func)(list_t *list,void *arg1,void *arg2),void *arg1,void *arg2)$/;"	f
 llist_get_count	src/include/libdata_structure/link_list.h	/^static inline int llist_get_count(llist_t *llist)$/;"	f
 llist_init	src/libdata_structure/link_list/link_list.c	/^int llist_init(llist_t *llist,uint32_t data_size)$/;"	f
 llist_insert	src/libdata_structure/link_list/link_list.c	/^int llist_insert(llist_t *llist, list_pos_t *pos, void *data)$/;"	f
@@ -2042,6 +2062,7 @@ master	src/include/libconcurrent/concurrent.h	/^	concurrent_master_t *master;$/;
 master	src/include/libconcurrent/io_user.h	/^	concurrent_master_t *master;$/;"	m	struct:io_user_s
 master	src/include/libconcurrent/tmr_user.h	/^	concurrent_master_t *master;$/;"	m	struct:tmr_user_s
 master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^static void master_event_handler_add_new_event($/;"	f	file:
+master_event_handler_server_listen	src/libipc/unix/server/server.c	/^static void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f	file:
 master_event_handler_server_listen	src/libnet/server/server.c	/^void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
 mem_double	src/libini/iniparser.c	/^static void * mem_double(void * ptr, int size)$/;"	f	file:
@@ -2239,6 +2260,8 @@ print_list_data	src/libdata_structure/test/test_link_list.c	/^void print_list_da
 print_vector_data	src/libdata_structure/test/test_vector.c	/^void print_vector_data(vector_pos_t *pos)$/;"	f
 priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon4
 priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:debugger::debugger_priv
+process_task_callback	src/libipc/unix/client/test_client_rcv.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
+process_task_callback	src/libipc/unix/client/test_client_send.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libnet/client/test_client_rcv.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libnet/client/test_client_send.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_cb	src/include/libconcurrent/io_user.h	/^	int (*process_task_cb)(void *task);$/;"	m	struct:io_user_s
@@ -2336,16 +2359,22 @@ select_init	src/libevent_tiny/select.c	/^select_init(struct event_base *base)$/;
 select_resize	src/libevent_tiny/select.c	/^select_resize(struct selectop *sop, int fdsz)$/;"	f	file:
 selectop	src/libevent_tiny/select.c	/^struct selectop {$/;"	s	file:
 selectops	src/libevent_tiny/select.c	/^const struct eventop selectops = {$/;"	v	typeref:struct:eventop
-server	src/libnet/server/server.c	/^void * server(char *host,char *server)$/;"	f
+server_create_socket	src/libipc/unix/server/server.c	/^static int server_create_socket(char *server_un_path)$/;"	f	file:
 server_create_socket	src/libnet/server/server.c	/^int server_create_socket(struct addrinfo *addr)$/;"	f
+server_init_task	src/libipc/unix/server/server.c	/^static int server_init_task(server_task_t *task,$/;"	f	file:
 server_init_task	src/libnet/server/server.c	/^int server_init_task(server_task_t *task,$/;"	f
+server_release_task_without_task_admin	src/libipc/unix/server/server.c	/^static int server_release_task_without_task_admin(server_task_t *task)$/;"	f	file:
 server_release_task_without_task_admin	src/libnet/server/server.c	/^int server_release_task_without_task_admin(server_task_t *task)$/;"	f
 server_t	src/include/libnet/server.h	/^typedef struct io_user_s server_t;$/;"	t	typeref:struct:io_user_s
+server_task_s	src/libipc/unix/server/server.c	/^typedef struct server_task_s{$/;"	s	file:
 server_task_s	src/libnet/server/server.c	/^typedef struct server_task_s{$/;"	s	file:
+server_task_t	src/libipc/unix/server/server.c	/^}server_task_t;$/;"	t	typeref:struct:server_task_s	file:
 server_task_t	src/libnet/server/server.c	/^}server_task_t;$/;"	t	typeref:struct:server_task_s	file:
 set_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t set_bit_data(uint8_t *buf,uint8_t data,uint8_t bit_pos,uint8_t len)$/;"	f
 set_proto_info_attribs	src/libproto_analyzer/protocol_format_set.c	/^void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_list)$/;"	f
 set_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*set_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
+setnonblocking	src/libipc/unix/client/client.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
+setnonblocking	src/libipc/unix/server/server.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
 setnonblocking	src/libnet/client/client.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
 setnonblocking	src/libnet/server/server.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
 sh_old	src/include/libevent_tiny/evsignal-internal.h	/^	ev_sighandler_t **sh_old;$/;"	m	struct:evsig_info
@@ -2388,13 +2417,17 @@ slab_release_head_list	src/liballoc/container_alloc/allocator_ctr_slab_list.c	/^
 slab_size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t slab_size;$/;"	m	struct:slab
 slave	src/include/libconcurrent/concurrent.h	/^	concurrent_slave_t *slave;$/;"	m	struct:concurrent_master_s
 slave	src/include/libnet/client.h	/^	concurrent_slave_t *slave;$/;"	m	struct:client_task_s
+slave	src/libipc/unix/server/server.c	/^	concurrent_slave_t *slave;$/;"	m	struct:server_task_s	file:
 slave	src/libnet/server/server.c	/^	concurrent_slave_t *slave;$/;"	m	struct:server_task_s	file:
 slave_amount	src/include/libconcurrent/concurrent.h	/^	uint8_t slave_amount;$/;"	m	struct:concurrent_master_s
+slave_event_handler_process_conn_bussiness	src/libipc/unix/server/server.c	/^static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)$/;"	f	file:
 slave_event_handler_process_conn_bussiness	src/libnet/server/server.c	/^static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)$/;"	f	file:
 slave_event_handler_process_message	src/libconcurrent/concurrent.c	/^static void slave_event_handler_process_message(int fd, short event, void *arg)$/;"	f	file:
 slave_work_function	src/include/libconcurrent/io_user.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:io_user_s
 slave_work_function	src/include/libconcurrent/tmr_user.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:tmr_user_s
 slave_work_function	src/libconcurrent/tmr_user.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
+slave_work_function	src/libipc/unix/client/client.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
+slave_work_function	src/libipc/unix/server/server.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libnet/client/client.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libnet/server/server.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libstate_machine/state_machine.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
@@ -2471,6 +2504,10 @@ tasks	src/libthread_pool/tests/heavy.c	/^static int tasks[SIZE], left;$/;"	v	fil
 tasks	src/libthread_pool/tests/thrdtest.c	/^static int tasks = 0, done = 0;$/;"	v	file:
 tcp_client	src/libnet/client/client.c	/^client_t *tcp_client(allocator_t *allocator,$/;"	f
 tcp_client_send	src/libnet/client/client.c	/^int tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
+tcp_server	src/libnet/server/server.c	/^void * tcp_server(char *host,char *server)$/;"	f
+tcp_unix_client	src/libipc/unix/client/client.c	/^client_t *tcp_unix_client(allocator_t *allocator,$/;"	f
+tcp_unix_client_send	src/libipc/unix/client/client.c	/^int tcp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
+tcp_unix_server	src/libipc/unix/server/server.c	/^static void * tcp_unix_server(char *server_un_path)$/;"	f	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_allocator	src/main.c	/^void test_allocator()$/;"	f
@@ -2493,6 +2530,7 @@ test_io_user	src/libconcurrent/test_pipe.c	/^void test_io_user()$/;"	f
 test_libargs	src/main.c	/^void test_libargs(int argc, char *argv[])$/;"	f
 test_libconcurrent	src/main.c	/^void test_libconcurrent()$/;"	f
 test_libevent_tiny	src/main.c	/^int test_libevent_tiny()$/;"	f
+test_libipc	src/main.c	/^void test_libipc()$/;"	f
 test_libnet	src/main.c	/^void test_libnet()$/;"	f
 test_libstate_machine	src/main.c	/^void test_libstate_machine()$/;"	f
 test_libthread_pool	src/main.c	/^void test_libthread_pool()$/;"	f
@@ -2509,12 +2547,16 @@ test_signal	src/libevent_tiny/test_signal.c	/^int test_signal()$/;"	f
 test_signal2	src/libevent_tiny/test_signal.c	/^int test_signal2()$/;"	f
 test_state_machine	src/libstate_machine/test_state_machine.c	/^void test_state_machine()$/;"	f
 test_tcp_client_send	src/libnet/client/test_client_send.c	/^int test_tcp_client_send()$/;"	f
+test_tcp_unix_client_send	src/libipc/unix/client/test_client_send.c	/^int test_tcp_unix_client_send()$/;"	f
+test_tcp_unix_server	src/libipc/unix/server/server.c	/^int test_tcp_unix_server()$/;"	f
 test_thrdtest	src/libthread_pool/tests/thrdtest.c	/^int test_thrdtest()$/;"	f
 test_time	src/libevent_tiny/test_time.c	/^int test_time()$/;"	f
 test_time2	src/libevent_tiny/test_time.c	/^int test_time2()$/;"	f
 test_tmr_user	src/libconcurrent/tmr_user.c	/^int test_tmr_user()$/;"	f
 test_udp_client_recieve	src/libnet/client/test_client_rcv.c	/^int test_udp_client_recieve()$/;"	f
 test_udp_client_send	src/libnet/client/test_client_send.c	/^int test_udp_client_send()$/;"	f
+test_udp_unix_client_recieve	src/libipc/unix/client/test_client_rcv.c	/^int test_udp_unix_client_recieve()$/;"	f
+test_udp_unix_client_send	src/libipc/unix/client/test_client_send.c	/^int test_udp_unix_client_send()$/;"	f
 tested_for_getaddrinfo_hacks	src/libevent_tiny/evutil.c	/^static int tested_for_getaddrinfo_hacks=0;$/;"	v	file:
 th_base_lock	src/include/libevent_tiny/event-internal.h	/^	void *th_base_lock;$/;"	m	struct:event_base
 th_notify	src/include/libevent_tiny/event-internal.h	/^	struct event th_notify;$/;"	m	struct:event_base	typeref:struct:event_base::event
@@ -2560,6 +2602,7 @@ tmr_event_handler	src/include/libconcurrent/tmr_user.h	/^    void (*tmr_event_ha
 tmr_user	src/libconcurrent/tmr_user.c	/^tmr_user_t *tmr_user(allocator_t *allocator,$/;"	f
 tmr_user_destroy	src/libconcurrent/tmr_user.c	/^int tmr_user_destroy(tmr_user_t *tmr_user)$/;"	f
 tmr_user_fd	src/include/libconcurrent/tmr_user.h	/^    int32_t tmr_user_fd;$/;"	m	struct:tmr_user_s
+tmr_user_restart	src/libconcurrent/tmr_user.c	/^tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user)$/;"	f
 tmr_user_s	src/include/libconcurrent/tmr_user.h	/^typedef struct tmr_user_s{$/;"	s
 tmr_user_stop	src/libconcurrent/tmr_user.c	/^int tmr_user_stop(tmr_user_t *tmr_user)$/;"	f
 tmr_user_t	src/include/libconcurrent/tmr_user.h	/^}tmr_user_t;$/;"	t	typeref:struct:tmr_user_s
@@ -2587,6 +2630,8 @@ u8	src/include/libproto_analyzer/list.h	/^typedef unsigned char     u8;$/;"	t
 udp_client	src/libnet/client/client.c	/^client_t *udp_client(allocator_t *allocator,$/;"	f
 udp_client_create_socket	src/libnet/client/client.c	/^int udp_client_create_socket(struct addrinfo *addr)$/;"	f
 udp_client_send	src/libnet/client/client.c	/^int udp_client_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f
+udp_unix_client	src/libipc/unix/client/client.c	/^client_t *udp_unix_client(allocator_t *allocator,$/;"	f
+udp_unix_client_send	src/libipc/unix/client/client.c	/^int udp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f
 uint16_t	src/include/liballoc/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libcre/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libdbg/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
@@ -2599,6 +2644,10 @@ uint8_t	src/include/liballoc/basic_types.h	/^typedef unsigned char uint8_t;$/;"	
 uint8_t	src/include/libcre/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdbg/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned char uint8_t;$/;"	t
+unix_client_destroy	src/libipc/unix/client/client.c	/^int unix_client_destroy(client_t *client)$/;"	f
+unix_client_event_handler	src/libipc/unix/client/client.c	/^void unix_client_event_handler(int fd, short event, void *arg)$/;"	f
+unix_client_init_task	src/libipc/unix/client/client.c	/^int unix_client_init_task(client_task_t *task,$/;"	f
+unix_client_release_task	src/libipc/unix/client/client.c	/^int unix_client_release_task(client_task_t *task)$/;"	f
 update_time_cache	src/libevent_tiny/event.c	/^update_time_cache(struct event_base *base)$/;"	f	file:
 use_monotonic	src/libevent_tiny/event.c	/^static int use_monotonic;$/;"	v	file:
 used_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **used_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head

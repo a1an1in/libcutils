@@ -300,11 +300,6 @@ static void master_event_handler_add_new_event(
 			if (event_add(message->event, message->tv) == -1) {
 				dbg_str(CONCURRENT_WARNNING,"event_add err");
 			}
-            /*
-             *if(message->tv != NULL){
-             *    dbg_str(CONCURRENT_VIP,"add timer event to evbase");
-             *}
-             */
 			allocator_mem_free(master->allocator,l);
 			break;
 		case 'd': 
@@ -316,11 +311,6 @@ static void master_event_handler_add_new_event(
 			if (event_del(message->event) < 0) {
 				dbg_str(CONCURRENT_WARNNING,"event_del err");
 			}
-            /*
-             *if(message->tv != NULL){
-             *    dbg_str(CONCURRENT_VIP,"del timer event of evbase");
-             *}
-             */
 			allocator_mem_free(master->allocator,l);
 			break;
 		case 'p':

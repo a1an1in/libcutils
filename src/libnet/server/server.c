@@ -210,7 +210,7 @@ int server_create_socket(struct addrinfo *addr)
 
     return listen_fd;
 }
-void * server(char *host,char *server)
+void * tcp_server(char *host,char *server)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -249,7 +249,7 @@ void * server(char *host,char *server)
 }
 int test_server()
 {
-	server("127.0.0.1","6888");
+	tcp_server("127.0.0.1","6888");
 	return;
 }
 #if 0

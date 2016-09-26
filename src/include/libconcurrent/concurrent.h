@@ -115,6 +115,8 @@ int concurrent_add_event_to_master(concurrent_t *c,
                                    struct timeval *tv,
                                    void (*event_handler)(int fd, short event, void *arg),
                                    void *arg);
+int concurrent_del_event_of_master(concurrent_t *c,
+		                           struct event *event);
 void concurrent_destroy(concurrent_t *c);
 
 concurrent_t *concurrent_get_global_concurrent_addr();
