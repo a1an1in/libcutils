@@ -144,6 +144,20 @@ tmr_user_t *tmr_user(allocator_t *allocator,
 
 	return tmr_user;
 }
+tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user)
+{
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+
+    concurrent_add_event_to_master(c,
+                                   -1,//int fd,
+                                   tmr_user->flags,//int event_flag,
+                                   &tmr_user->event,//struct event *event, 
+                                   &tmr_user->tv,
+                                   tmr_user->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   tmr_user);//void *arg);
+
+	return tmr_user;
+}
 static void test_process_timer_task_callback(void *timer)
 {
 	dbg_str(DBG_DETAIL,"process_timer_task_callback begin");

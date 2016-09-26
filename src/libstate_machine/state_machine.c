@@ -157,11 +157,14 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
 
     dbg_str(DBG_DETAIL,"state_machine_setup_entry_timer,tv_sec=%d tv_usec=%d",e->tv.tv_sec,e->tv.tv_usec);
 
-    e->timer = tmr_user(s->allocator,
-                        &e->tv,
-                        EV_TIMEOUT,
-                        e->process_timer_task_cb,
-                        (void *)s);
+    if(e->timer == NULL)
+        e->timer = tmr_user(s->allocator,
+                            &e->tv,
+                            EV_TIMEOUT,
+                            e->process_timer_task_cb,
+                            (void *)s);
+    else
+       e->timer = tmr_user_restart(e->timer);
 
     return 0;
 }
@@ -293,19 +296,21 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
     s = state_machine_create(allocator);
 
     state_machine_init(s,
-            state_change_event_handler,//void (*state_change_event_handler)(int fd, short event, void *arg),
-            slave_work_function,
-            10,
-            base);
+                       state_change_event_handler,//void (*state_change_event_handler)(int fd, short event, void *arg),
+                       slave_work_function,
+                       10,
+                       base);
 
     for(i = 0; ; i++){
         if(strlen(config[i].entry_name) != 0){
-            e = state_machine_construct_state_entry(s,
+            e = state_machine_construct_state_entry(
+                    s,
                     config[i].action_callback,
                     config[i].process_timer_task_cb,
                     config[i].tv_sec,     
                     config[i].tv_usec, 
                     config[i].entry_name);
+
             dbg_str(SM_DETAIL,"config %d, state name :%s",i, config[i].entry_name);
         }else break;
     }
