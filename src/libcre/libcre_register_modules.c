@@ -17,7 +17,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "libcre/sync_lock/sync_lock_register_modules.h"
+#include "libcre/sync_lock/sync_lock.h"
 
 __attribute__((constructor(101))) void libcre_register_modules()
 {

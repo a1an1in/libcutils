@@ -106,6 +106,8 @@ static inline int sync_lock_destroy(struct sync_lock_s *slock)
 	return slock->lock_ops->sync_lock_destroy(slock);
 }
 
+void sync_lock_register_modules();
+
 
 #endif
 

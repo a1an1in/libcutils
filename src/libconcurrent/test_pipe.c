@@ -30,7 +30,7 @@ void test_io_user()
     int fds[2];
     if(pipe(fds)) {
         dbg_str(SM_ERROR,"cannot create pipe");
-        return NULL;
+        return ;
     }
     io_user(allocator,//allocator_t *allocator,
             fds[0],//int user_fd,

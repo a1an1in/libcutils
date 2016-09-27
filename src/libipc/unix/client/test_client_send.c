@@ -45,7 +45,7 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libnet/client.h>
+#include <libipc/unix/client.h>
 #include <sys/un.h>
 
 

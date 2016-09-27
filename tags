@@ -73,6 +73,7 @@ COMMON_TIMEOUT_IDX_SHIFT	src/libevent_tiny/event.c	408;"	d	file:
 COMMON_TIMEOUT_MAGIC	src/libevent_tiny/event.c	410;"	d	file:
 COMMON_TIMEOUT_MASK	src/libevent_tiny/event.c	409;"	d	file:
 COMMON_TIMEOUT_MICROSECONDS_MASK	src/include/libevent_tiny/event-internal.h	144;"	d
+CONCURRENT_CONSTRUCTOR_PRIOR	src/libconcurrent/concurrent.c	558;"	d	file:
 CONCURRENT_CORRECT	src/include/libdbg/debug_businesses.h	87;"	d
 CONCURRENT_DETAIL	src/include/libdbg/debug_businesses.h	91;"	d
 CONCURRENT_ERROR	src/include/libdbg/debug_businesses.h	84;"	d
@@ -918,6 +919,8 @@ __RBTREE_MAP_STRUCP_H__	src/include/libdata_structure/rbtree_map_struct.h	20;"	d
 __SERVER_H__	src/include/libnet/server.h	2;"	d
 __STATE_MACHINE_H__	src/include/libstate_machine/state_machine.h	2;"	d
 __SYNC_LOCK_H__	src/include/libcre/sync_lock/sync_lock.h	19;"	d
+__UNIX_SK_CLIENT_H__	src/include/libipc/unix/client.h	2;"	d
+__UNIX_SK_SERVER_H__	src/include/libipc/unix/server.h	2;"	d
 __USER_H__	src/include/libconcurrent/io_user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
 __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
@@ -1025,6 +1028,7 @@ allocator_creator	src/liballoc/allocator.c	/^allocator_t *allocator_creator(uint
 allocator_ctr_alloc_register	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_ctr_alloc_register(){$/;"	f
 allocator_ctr_init	src/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f
 allocator_destroy	src/liballoc/allocator.c	/^void allocator_destroy(allocator_t * alloc)$/;"	f
+allocator_get_default_alloc	src/liballoc/allocator.c	/^allocator_t * allocator_get_default_alloc()$/;"	f
 allocator_mem_alloc	src/include/liballoc/allocator.h	/^allocator_mem_alloc(allocator_t * alloc,uint32_t size)$/;"	f
 allocator_mem_free	src/include/liballoc/allocator.h	/^allocator_mem_free(allocator_t * alloc,void *addr)$/;"	f
 allocator_mem_info	src/include/liballoc/allocator.h	/^allocator_mem_info(allocator_t * alloc)$/;"	f
@@ -1266,6 +1270,8 @@ debugger_set_level_infos	src/libdbg/debug.c	/^void debugger_set_level_infos(debu
 debugger_t	src/include/libdbg/debug.h	/^typedef struct debugger debugger_t;$/;"	t	typeref:struct:debugger
 debugger_type	src/include/libdbg/debug.h	/^	uint8_t debugger_type;$/;"	m	struct:debugger
 debugger_type	src/include/libdbg/debug.h	/^enum debugger_type{$/;"	g
+default_allocator_constructor	src/liballoc/allocator.c	/^default_allocator_constructor()$/;"	f
+default_allocator_destructor	src/liballoc/allocator.c	/^default_allocator_destructor()$/;"	f
 default_hash_func	src/libdata_structure/hash_map/hash_list.c	/^static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)$/;"	f	file:
 default_key_cmp_func	src/libdata_structure/hash_map/hash_list.c	/^static inline int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f	file:
 default_key_cmp_func	src/libdata_structure/rbtree_map/rbtree_map.c	/^static int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f	file:
@@ -1664,6 +1670,7 @@ get_cont_pdu_num	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int 
 get_real_alloc_mem_size	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^uint32_t get_real_alloc_mem_size(allocator_t *alloc,uint32_t size)$/;"	f
 get_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*get_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
 gettime	src/libevent_tiny/event.c	/^static int gettime(struct event_base *base, struct timeval *tp)$/;"	f	file:
+global_allocator_default	src/liballoc/allocator.c	/^allocator_t *global_allocator_default;$/;"	v
 global_concurrent	src/libconcurrent/concurrent.c	/^concurrent_t *global_concurrent;$/;"	v
 graceful_shutdown	src/libthread_pool/threadpool.c	/^    graceful_shutdown  = 2$/;"	e	enum:__anon14	file:
 had_ipv4_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
@@ -2062,7 +2069,6 @@ master	src/include/libconcurrent/concurrent.h	/^	concurrent_master_t *master;$/;
 master	src/include/libconcurrent/io_user.h	/^	concurrent_master_t *master;$/;"	m	struct:io_user_s
 master	src/include/libconcurrent/tmr_user.h	/^	concurrent_master_t *master;$/;"	m	struct:tmr_user_s
 master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^static void master_event_handler_add_new_event($/;"	f	file:
-master_event_handler_server_listen	src/libipc/unix/server/server.c	/^static void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f	file:
 master_event_handler_server_listen	src/libnet/server/server.c	/^void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
 mem_double	src/libini/iniparser.c	/^static void * mem_double(void * ptr, int size)$/;"	f	file:
@@ -2359,7 +2365,6 @@ select_init	src/libevent_tiny/select.c	/^select_init(struct event_base *base)$/;
 select_resize	src/libevent_tiny/select.c	/^select_resize(struct selectop *sop, int fdsz)$/;"	f	file:
 selectop	src/libevent_tiny/select.c	/^struct selectop {$/;"	s	file:
 selectops	src/libevent_tiny/select.c	/^const struct eventop selectops = {$/;"	v	typeref:struct:eventop
-server_create_socket	src/libipc/unix/server/server.c	/^static int server_create_socket(char *server_un_path)$/;"	f	file:
 server_create_socket	src/libnet/server/server.c	/^int server_create_socket(struct addrinfo *addr)$/;"	f
 server_init_task	src/libipc/unix/server/server.c	/^static int server_init_task(server_task_t *task,$/;"	f	file:
 server_init_task	src/libnet/server/server.c	/^int server_init_task(server_task_t *task,$/;"	f
@@ -2483,7 +2488,7 @@ sync_lock_module	src/include/libcre/sync_lock/sync_lock.h	/^typedef struct sync_
 sync_lock_module_t	src/include/libcre/sync_lock/sync_lock.h	/^}sync_lock_module_t;$/;"	t	typeref:struct:sync_lock_module
 sync_lock_modules	src/libcre/sync_lock/sync_lock.c	/^sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];$/;"	v
 sync_lock_operations	src/include/libcre/sync_lock/sync_lock.h	/^struct sync_lock_operations{$/;"	s
-sync_lock_register_modules	src/libcre/sync_lock/sync_lock_register_modules.c	/^void sync_lock_register_modules()$/;"	f
+sync_lock_register_modules	src/libcre/sync_lock/sync_lock.c	/^void sync_lock_register_modules()$/;"	f
 sync_lock_s	src/include/libcre/sync_lock/sync_lock.h	/^typedef struct sync_lock_s{$/;"	s
 sync_lock_t	src/include/libcre/sync_lock/sync_lock.h	/^}sync_lock_t;$/;"	t	typeref:struct:sync_lock_s
 sync_lock_type	src/include/libcre/sync_lock/sync_lock.h	/^	uint8_t sync_lock_type;$/;"	m	struct:sync_lock_module
@@ -2508,6 +2513,8 @@ tcp_server	src/libnet/server/server.c	/^void * tcp_server(char *host,char *serve
 tcp_unix_client	src/libipc/unix/client/client.c	/^client_t *tcp_unix_client(allocator_t *allocator,$/;"	f
 tcp_unix_client_send	src/libipc/unix/client/client.c	/^int tcp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
 tcp_unix_server	src/libipc/unix/server/server.c	/^static void * tcp_unix_server(char *server_un_path)$/;"	f	file:
+tcp_unix_server_create_socket	src/libipc/unix/server/server.c	/^static int tcp_unix_server_create_socket(char *server_un_path)$/;"	f	file:
+tcp_unix_server_listen_event_handler	src/libipc/unix/server/server.c	/^static void tcp_unix_server_listen_event_handler(int fd, short event, void *arg)$/;"	f	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_allocator	src/main.c	/^void test_allocator()$/;"	f
