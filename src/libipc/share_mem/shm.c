@@ -34,6 +34,7 @@
 #include <stdlib.h>  
 #include <string.h>  
 #include <sys/ipc.h>  
+#include <sys/shm.h>
 #include <sys/mman.h>  
 #include <sys/types.h>  
 #include <sys/wait.h>  
@@ -43,6 +44,7 @@
 #include <sys/shm.h>  
 #include <libdbg/debug.h>
 #include <libipc/share_mem/shm.h>
+
   
 void *shm_smopen_get(share_mem_t *shm)
 {
@@ -60,6 +62,8 @@ void *shm_smopen_get(share_mem_t *shm)
         return NULL;  
     }  
     dbg_str(DBG_DETAIL,"shm_mem_addr=%p",shm->mem_addr);
+
+    semaphore_init(shm->sem);
 
     return shm->mem_addr;
 }
@@ -95,6 +99,7 @@ void *shm_open_get(share_mem_t *shm)
         printf("mmap failed, errormsg=%s errno=%d/n", strerror(errno), errno);    
         return NULL;  
     }  
+    semaphore_init(shm->sem);
 
     close(fd);
     return shm->mem_addr;
@@ -133,16 +138,22 @@ void *shm_shmget_get(share_mem_t *shm)
     }  
 
     shmctl(shmid, IPC_STAT, &buff);  
+    shm->shmid = shmid;
+
+    semaphore_init(shm->sem);
 
     return  shm->mem_addr;
 }
 int shm_shmget_del(share_mem_t *shm)
 {
-    //..........
+    struct shmid_ds  buf;
+
+    shmdt(shm->mem_addr);
+    shmctl(shm->shmid,IPC_RMID,&buf);
     semaphore_del(shm->sem);
+
+    return 0;
 }
-
-
 
 share_mem_t *shm_create()
 {
@@ -175,13 +186,10 @@ int shm_init(share_mem_t *shm)
     int ret = -1;
     if(shm->type == SHMOPEN){
         shm_smopen_get(shm);
-        semaphore_init(shm->sem);
     } else if(shm->type == OPEN) {
         shm_open_get(shm);
-        semaphore_init(shm->sem);
     } else if( shm->type == SHMGET) {
         shm_shmget_get(shm);
-        semaphore_init(shm->sem);
     } else{
     }
 

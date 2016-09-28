@@ -20,6 +20,7 @@ typedef struct share_mem_s{
     int mmap_flag;
     int mmap_off;
     int shmflg;
+    int shmid;
     int open_mode;
     struct share_mem_ops_s *shm_ops;
     semaphore_t *sem;
