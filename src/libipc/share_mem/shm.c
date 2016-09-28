@@ -1,3 +1,34 @@
+/**
+ * @file shm.c
+ * @synopsis 
+ * @author a1an1in@sina.com
+ * @version 1
+ * @date 2016-09-28
+ */
+/* Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ * derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ */
 #include <unistd.h>  
 #include <stdio.h>  
 #include <stdlib.h>  
@@ -10,50 +41,9 @@
 #include <fcntl.h>  
 #include <errno.h>  
 #include <sys/shm.h>  
+#include <libdbg/debug.h>
+#include <libipc/share_mem/shm.h>
   
-enum share_mem_type_e{  
-    SHMOPEN = 0x01,  
-    OPEN = 0x02,  
-    SHMGET = 0x04,  
-};  
-  
-typedef struct share_mem_s{
-#define MAX_SHARE_MEM_KEY_LEN 100
-    int type;
-    char shm_key[MAX_SHARE_MEM_KEY_LEN];
-#undef MAX_SHARE_MEM_KEY_LEN
-    int size;
-    void *mem_addr;
-    int oflags;
-    int mmap_prot;
-    int mmap_flag;
-    int mmap_off;
-    int shmflg;
-    int open_mode;
-}share_mem_t;
-
-share_mem_t *shm_create()
-{
-    share_mem_t *shm;
-
-    shm = (share_mem_t *)malloc(sizeof(share_mem_t));
-
-    return shm;
-}
-int shm_set(share_mem_t *shm,char *key,int size,int type)
-{
-   strncpy(shm->shm_key,key,strlen(key));
-   shm->size = size;
-   shm->type = type;
-   shm->oflags = O_RDWR | O_CREAT;
-   shm->mmap_prot = PROT_READ | PROT_WRITE;
-   shm->mmap_flag = MAP_SHARED;
-   shm->mmap_off = 0;
-   shm->shmflg = 0666|IPC_CREAT;
-   shm->open_mode = 0644;
-
-   return 1;
-}
 void *shm_smopen_get(share_mem_t *shm)
 {
     int fd = shm_open(shm->shm_key, shm->oflags, shm->open_mode);  
@@ -69,8 +59,23 @@ void *shm_smopen_get(share_mem_t *shm)
         printf("mmap failed, errormsg=%s errno=%d/n", strerror(errno), errno);    
         return NULL;  
     }  
+    dbg_str(DBG_DETAIL,"shm_mem_addr=%p",shm->mem_addr);
 
     return shm->mem_addr;
+}
+int shm_smopen_del(share_mem_t *shm)
+{
+    int ret;
+
+    ret = munmap(shm->mem_addr, shm->size);
+    if(ret){
+        dbg_str(DBG_DETAIL," munmap error");
+    }
+    ret = shm_unlink(shm->shm_key);
+    if(ret){
+        dbg_str(DBG_DETAIL,"shm_unlink error");
+    }
+    return ret;
 }
 void *shm_open_get(share_mem_t *shm)
 {
@@ -89,7 +94,22 @@ void *shm_open_get(share_mem_t *shm)
         return NULL;  
     }  
 
+    close(fd);
     return shm->mem_addr;
+}
+int shm_open_del(share_mem_t *shm)
+{
+    int ret;
+
+    ret = munmap(shm->mem_addr, shm->size);
+    if(ret){
+        dbg_str(DBG_DETAIL," munmap error");
+    }
+    ret = shm_unlink(shm->shm_key);
+    if(ret){
+        dbg_str(DBG_DETAIL,"shm_unlink error");
+    }
+    return ret;
 }
 void *shm_shmget_get(share_mem_t *shm)
 {
@@ -113,11 +133,44 @@ void *shm_shmget_get(share_mem_t *shm)
 
     return  shm->mem_addr;
 }
+int shm_shmget_del(share_mem_t *shm)
+{
+}
+
+
+
+share_mem_t *shm_create()
+{
+    share_mem_t *shm;
+
+    shm = (share_mem_t *)malloc(sizeof(share_mem_t));
+
+    shm->sem = semaphore_create();
+
+    return shm;
+}
+int shm_set(share_mem_t *shm,char *key,int size,int type,int sem_type,int sem_host_flag)
+{
+   strncpy(shm->shm_key,key,strlen(key));
+   shm->size = size;
+   shm->type = type;
+   shm->oflags = O_RDWR | O_CREAT;
+   shm->mmap_prot = PROT_READ | PROT_WRITE;
+   shm->mmap_flag = MAP_SHARED;
+   shm->mmap_off = 0;
+   shm->shmflg = 0666|IPC_CREAT;
+   shm->open_mode = 0644;
+
+   semaphore_set(shm->sem,sem_type,sem_host_flag);
+
+   return 1;
+}
 int shm_init(share_mem_t *shm)
 {
     int ret = -1;
     if(shm->type == SHMOPEN){
         shm_smopen_get(shm);
+        semaphore_init(shm->sem);
     } else if(shm->type == OPEN) {
         shm_open_get(shm);
     } else if( shm->type == SHMGET) {
@@ -127,9 +180,59 @@ int shm_init(share_mem_t *shm)
 
    return ret;
 }
+int shm_del(share_mem_t *shm) 
+{
+    int ret = -1;
+    if(shm->type == SHMOPEN){
+        shm_unlink(shm->shm_key);
+        shm_smopen_del(shm);
+        semaphore_del(shm->sem);
+    } else if(shm->type == OPEN) {
+    } else if( shm->type == SHMGET) {
+    } else{
+    }
 
-/*
- *int main()
- *{
- *}
- */
+   return ret;
+}
+
+void test_share_mem_write()
+{
+    share_mem_t *shm;
+    char *key = "test_share_mem";
+    int size = 1024;
+    char *data = "hello world!";
+
+
+    shm = shm_create();
+    shm_set(shm,key,size,SHMOPEN,SYSV_SEM,1);
+    shm_init(shm);
+
+    semaphore_p(shm->sem);
+    memcpy(shm->mem_addr,data,strlen(data));
+    dbg_str(DBG_DETAIL,"read data from shmem:%s",shm->mem_addr);
+
+    sleep(30);
+    semaphore_v(shm->sem);
+    sleep(60);
+    shm_del(shm);
+
+}
+void test_share_mem_read()
+{
+    share_mem_t *shm;
+    char *key = "test_share_mem";
+    int size = 1024;
+
+
+    shm = shm_create();
+    shm_set(shm,key,size,SHMOPEN,SYSV_SEM,0);
+    shm_init(shm);
+
+    semaphore_p(shm->sem);
+    dbg_str(DBG_DETAIL,"%s",shm->mem_addr);
+    semaphore_v(shm->sem);
+
+    sleep(60);
+    shm_del(shm);
+
+}

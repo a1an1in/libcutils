@@ -46,6 +46,7 @@ CC	src/libargs/Makefile	/^CC = gcc$/;"	m
 CC	src/libconcurrent/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/mem_alloc/Makefile	/^CC = gcc$/;"	m
+CC	src/libcre/semaphore/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/sync_lock/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/sync_lock/unix/Makefile	/^CC = gcc$/;"	m
 CC	src/libcre/sync_lock/windows/Makefile	/^CC = gcc$/;"	m
@@ -57,6 +58,7 @@ CC	src/libdata_structure/vector/Makefile	/^CC = gcc$/;"	m
 CC	src/libdbg/Makefile	/^CC = gcc$/;"	m
 CC	src/libevent_tiny/Makefile	/^CC = gcc$/;"	m
 CC	src/libini/Makefile	/^CC = gcc$/;"	m
+CC	src/libipc/share_mem/Makefile	/^CC = gcc$/;"	m
 CC	src/libipc/unix/client/Makefile	/^CC = gcc$/;"	m
 CC	src/libipc/unix/server/Makefile	/^CC = gcc$/;"	m
 CC	src/libnet/client/Makefile	/^CC = gcc$/;"	m
@@ -413,6 +415,7 @@ LD	src/libargs/Makefile	/^LD = ld$/;"	m
 LD	src/libconcurrent/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/mem_alloc/Makefile	/^LD = ld$/;"	m
+LD	src/libcre/semaphore/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/sync_lock/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/sync_lock/unix/Makefile	/^LD = ld$/;"	m
 LD	src/libcre/sync_lock/windows/Makefile	/^LD = ld$/;"	m
@@ -424,6 +427,7 @@ LD	src/libdata_structure/vector/Makefile	/^LD = ld$/;"	m
 LD	src/libdbg/Makefile	/^LD = ld$/;"	m
 LD	src/libevent_tiny/Makefile	/^LD = ld$/;"	m
 LD	src/libini/Makefile	/^LD = ld$/;"	m
+LD	src/libipc/share_mem/Makefile	/^LD = ld$/;"	m
 LD	src/libipc/unix/client/Makefile	/^LD = ld$/;"	m
 LD	src/libipc/unix/server/Makefile	/^LD = ld$/;"	m
 LD	src/libnet/client/Makefile	/^LD = ld$/;"	m
@@ -513,6 +517,8 @@ MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
 MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	557;"	d	file:
 MAX_QUEUE	src/include/libthread_pool/threadpool.h	46;"	d
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
+MAX_SHARE_MEM_KEY_LEN	src/libipc/share_mem/shm.c	23;"	d	file:
+MAX_SHARE_MEM_KEY_LEN	src/libipc/share_mem/shm.c	26;"	d	file:
 MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	100;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	54;"	d	file:
@@ -552,6 +558,7 @@ OBJS	src/libargs/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;
 OBJS	src/libconcurrent/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/mem_alloc/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libcre/semaphore/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/sync_lock/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/sync_lock/unix/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libcre/sync_lock/windows/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -563,6 +570,7 @@ OBJS	src/libdata_structure/vector/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS)) 
 OBJS	src/libdbg/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libevent_tiny/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libini/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libipc/share_mem/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libipc/unix/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libipc/unix/server/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libnet/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -572,6 +580,7 @@ OBJS	src/libproto_analyzer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #
 OBJS	src/libstate_machine/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libthread_pool/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libthread_pool/tests/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OPEN	src/libipc/share_mem/shm.c	/^    OPEN = 0x02,  $/;"	e	enum:share_mem_type_e	file:
 OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	150;"	d
 OPEN_DEBUG	src/include/libdbg/debug.h	139;"	d
 PA_CORRECT	src/include/libdbg/debug_businesses.h	109;"	d
@@ -586,6 +595,8 @@ PA_VIP	src/include/libdbg/debug_businesses.h	110;"	d
 PA_WARNNING	src/include/libdbg/debug_businesses.h	107;"	d
 PFS_SET_PROTO_INFO	src/include/libproto_analyzer/protocol_format_set.h	103;"	d
 PF_INET6	src/include/libevent_tiny/ipv6-internal.h	74;"	d
+POSIX_NAME_SEM	src/libcre/semaphore/sem.c	/^    POSIX_NAME_SEM,$/;"	e	enum:sem_type_e	file:
+POSIX_NONAME_SEM	src/libcre/semaphore/sem.c	/^    POSIX_NONAME_SEM,$/;"	e	enum:sem_type_e	file:
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
 PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon3
 PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon3
@@ -618,6 +629,8 @@ SERVER_WORK_TYPE	src/include/libconcurrent/concurrent.h	/^enum SERVER_WORK_TYPE{
 SERVER_WORK_TYPE_PROCESS	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TYPE_PROCESS$/;"	e	enum:SERVER_WORK_TYPE
 SERVER_WORK_TYPE_THREAD	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TYPE_THREAD = 0,$/;"	e	enum:SERVER_WORK_TYPE
 SHARE_TARGET	Makefile	/^SHARE_TARGET = libcutils.so$/;"	m
+SHMGET	src/libipc/share_mem/shm.c	/^    SHMGET = 0x04,  $/;"	e	enum:share_mem_type_e	file:
+SHMOPEN	src/libipc/share_mem/shm.c	/^    SHMOPEN = 0x01,  $/;"	e	enum:share_mem_type_e	file:
 SIZE	src/libthread_pool/tests/heavy.c	9;"	d	file:
 SIZE	src/libthread_pool/tests/shutdown.c	9;"	d	file:
 SLAB_ARRAY_MAX_NUM	src/include/liballoc/allocator_ctr_alloc.h	25;"	d
@@ -643,6 +656,7 @@ SRCS	src/libargs/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libconcurrent/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/mem_alloc/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libcre/semaphore/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/sync_lock/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/sync_lock/unix/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libcre/sync_lock/windows/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -654,6 +668,7 @@ SRCS	src/libdata_structure/vector/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdbg/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libevent_tiny/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libini/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libipc/share_mem/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libipc/unix/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libipc/unix/server/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libnet/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -669,6 +684,7 @@ SYNC_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	9;"	d
 SYNC_LOCK_NAME_MAX_LEN	src/include/libcre/sync_lock/sync_lock.h	58;"	d
 SYNC_LOCK_NAME_MAX_LEN	src/include/libcre/sync_lock/sync_lock.h	62;"	d
 SYNC_LOCK_TYPE_MAX_NUM	src/include/libcre/sync_lock/sync_lock.h	/^	SYNC_LOCK_TYPE_MAX_NUM,$/;"	e	enum:sync_lock_type
+SYSV_SEM	src/libcre/semaphore/sem.c	/^    SYSV_SEM = 0, $/;"	e	enum:sem_type_e	file:
 TACT_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	10;"	d
 TAILQ_END	src/include/libevent_tiny/event-internal.h	301;"	d
 TAILQ_ENTRY	src/include/libevent_tiny/event2/event_struct.h	130;"	d
@@ -688,6 +704,7 @@ TARGET	src/libargs/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libconcurrent/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/mem_alloc/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libcre/semaphore/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/sync_lock/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/sync_lock/unix/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libcre/sync_lock/windows/Makefile	/^TARGET = build_in.o$/;"	m
@@ -699,6 +716,7 @@ TARGET	src/libdata_structure/vector/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdbg/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libevent_tiny/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libini/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libipc/share_mem/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libipc/unix/client/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libipc/unix/server/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libnet/client/Makefile	/^TARGET = build_in.o$/;"	m
@@ -1059,6 +1077,7 @@ args_processor_s	src/include/libargs/cmd_args.h	/^typedef struct args_processor_
 args_processor_t	src/include/libargs/cmd_args.h	/^}args_processor_t;$/;"	t	typeref:struct:args_processor_s
 args_readable_names	src/include/libargs/cmd_args.h	/^	char *args_readable_names;$/;"	m	struct:cmd_config_s
 argument	src/libthread_pool/threadpool.c	/^    void *argument;$/;"	m	struct:__anon15	file:
+arry	src/libcre/semaphore/sem.c	/^    unsigned short *arry;  $/;"	m	union:semun	file:
 assignment_count	src/include/libconcurrent/concurrent.h	/^	uint8_t assignment_count;$/;"	m	struct:concurrent_master_s
 avoid_method	src/include/libevent_tiny/event-internal.h	/^	const char *avoid_method;$/;"	m	struct:event_config_entry
 b	src/include/libcre/sync_lock/sync_lock.h	/^		int b;$/;"	m	union:sync_lock_s::lock
@@ -1082,6 +1101,7 @@ bucket_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_p
 bucket_size	src/include/libconcurrent/concurrent.h	/^	uint32_t bucket_size;$/;"	m	struct:concurrent_task_admin_s
 bucket_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_size;$/;"	m	struct:hash_map_s
 buf	src/include/libproto_analyzer/protocol_format_set.h	/^	buffer_t buf;$/;"	m	struct:proto_info_list_s
+buf	src/libcre/semaphore/sem.c	/^    struct semid_ds *buf;  $/;"	m	union:semun	typeref:struct:semun::semid_ds	file:
 buffer	src/include/libnet/client.h	/^	uint8_t buffer[MAX_TASK_BUFFER_LEN];$/;"	m	struct:client_task_s
 buffer_len	src/include/libnet/client.h	/^	uint32_t buffer_len;$/;"	m	struct:client_task_s
 buffer_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct buffer_s{$/;"	s
@@ -1276,6 +1296,7 @@ default_hash_func	src/libdata_structure/hash_map/hash_list.c	/^static inline uin
 default_key_cmp_func	src/libdata_structure/hash_map/hash_list.c	/^static inline int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f	file:
 default_key_cmp_func	src/libdata_structure/rbtree_map/rbtree_map.c	/^static int default_key_cmp_func(void *key1,void *key2,uint32_t size)$/;"	f	file:
 del	src/include/libevent_tiny/event-internal.h	/^	int (*del)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);$/;"	m	struct:eventop
+del	src/libcre/semaphore/sem.c	/^    int (*del)(semaphore_t *sem);$/;"	m	struct:semaphore_ops_s	file:
 depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t depth;$/;"	m	struct:ctr_mem_pool
 destroy	src/include/liballoc/allocator.h	/^	void (*destroy)(allocator_t * alloc);$/;"	m	struct:allocator_operations
 destroy	src/include/libdbg/debug.h	/^	void (*destroy)(debugger_t *debugger);$/;"	m	struct:debugger_opperations
@@ -1779,6 +1800,7 @@ hmap	src/include/libconcurrent/concurrent.h	/^	hash_map_t *hmap;$/;"	m	struct:co
 hmap	src/include/libdata_structure/hash_list_struct.h	/^	struct hash_map_s *hmap;$/;"	m	struct:hash_map_pos_info	typeref:struct:hash_map_pos_info::hash_map_s
 hmap	src/include/libproto_analyzer/protocol_analyzer.h	/^	hash_map_t *hmap;$/;"	m	struct:protocol_analyzer_s
 hmap_lock_type	src/include/libconcurrent/concurrent.h	/^	uint8_t hmap_lock_type;$/;"	m	struct:concurrent_task_admin_s
+host_flag	src/libcre/semaphore/sem.c	/^    int host_flag;$/;"	m	struct:semaphore_s	file:
 ht_improve_hash	src/include/libevent_tiny/ht-internal.h	/^ht_improve_hash(unsigned h)$/;"	f
 ht_string_hash	src/include/libevent_tiny/ht-internal.h	/^ht_string_hash(const char *s)$/;"	f
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon2
@@ -1807,6 +1829,7 @@ iniparser_unset	src/libini/iniparser.c	/^void iniparser_unset(dictionary * ini, 
 init	src/include/liballoc/allocator.h	/^	int (*init)(allocator_t *alloc);$/;"	m	struct:allocator_operations
 init	src/include/libdbg/debug.h	/^	void (*init)(debugger_t *debugger);$/;"	m	struct:debugger_opperations
 init	src/include/libevent_tiny/event-internal.h	/^	void *(*init)(struct event_base *);$/;"	m	struct:eventop
+init	src/libcre/semaphore/sem.c	/^    int (*init)(semaphore_t *sem);$/;"	m	struct:semaphore_ops_s	file:
 init_proto_format_set	src/libproto_analyzer/protocol_format_set.c	/^void init_proto_format_set(int proto_base_addr,$/;"	f
 init_proto_info_list	src/libproto_analyzer/protocol_format_set.c	/^void init_proto_info_list(proto_info_list_t *info_list)$/;"	f
 init_state_changing_workfunc_cb	src/libstate_machine/test_state_machine.c	/^static void init_state_changing_workfunc_cb(state_machine_t *s,void *opaque)$/;"	f	file:
@@ -1828,6 +1851,7 @@ key	src/include/libdata_structure/rbtree_map_struct.h	/^  	char key[1];$/;"	m	st
 key	src/include/libini/iniparser.h	/^	char **key ;$/;"	m	struct:_dictionary_
 key	src/include/libnet/client.h	/^	char key[10];$/;"	m	struct:client_task_s
 key	src/libconcurrent/test_concurrent.c	/^	char key[10];$/;"	m	struct:concurrent_task_s	file:
+key	src/libcre/semaphore/sem.c	/^    key_t key;$/;"	m	struct:semaphore_s	file:
 key	src/libipc/unix/server/server.c	/^	char key[10];$/;"	m	struct:server_task_s	file:
 key	src/libnet/server/server.c	/^	char key[10];$/;"	m	struct:server_task_s	file:
 key_cmp_fpt	src/include/libdata_structure/map_pair.h	/^typedef int (*key_cmp_fpt)(void *key1,void *key2,uint32_t key_size);$/;"	t
@@ -2071,6 +2095,7 @@ master	src/include/libconcurrent/tmr_user.h	/^	concurrent_master_t *master;$/;"	
 master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^static void master_event_handler_add_new_event($/;"	f	file:
 master_event_handler_server_listen	src/libnet/server/server.c	/^void master_event_handler_server_listen(int fd, short event, void *arg)$/;"	f
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
+mem_addr	src/libipc/share_mem/shm.c	/^    void *mem_addr;$/;"	m	struct:share_mem_s	file:
 mem_double	src/libini/iniparser.c	/^static void * mem_double(void * ptr, int size)$/;"	f	file:
 mem_used	src/include/libproto_analyzer/protocol_format_set.h	/^	void *mem_used;$/;"	m	struct:proto_info_list_s
 mempool_alloc_slab_list	src/liballoc/container_alloc/allocator_ctr_mempool_list.c	/^ctr_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)$/;"	f
@@ -2119,6 +2144,9 @@ mm_realloc	src/include/libevent_tiny/mm-internal.h	47;"	d
 mm_realloc	src/include/libevent_tiny/mm-internal.h	53;"	d
 mm_strdup	src/include/libevent_tiny/mm-internal.h	46;"	d
 mm_strdup	src/include/libevent_tiny/mm-internal.h	52;"	d
+mmap_flag	src/libipc/share_mem/shm.c	/^    int mmap_flag;$/;"	m	struct:share_mem_s	file:
+mmap_off	src/libipc/share_mem/shm.c	/^    int mmap_off;$/;"	m	struct:share_mem_s	file:
+mmap_prot	src/libipc/share_mem/shm.c	/^    int mmap_prot;$/;"	m	struct:share_mem_s	file:
 mode_t	src/libevent_tiny/evutil.c	59;"	d	file:
 msg	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon12	file:
 mutex	src/include/libcre/sync_lock/sync_lock.h	/^		pthread_mutex_t mutex;$/;"	m	union:sync_lock_s::lock
@@ -2161,12 +2189,15 @@ nwrite	src/libevent_tiny/evmap.c	/^	ev_uint16_t nwrite;$/;"	m	struct:evmap_io	fi
 offsetof	src/include/libdata_structure/rbtree.h	127;"	d
 offsetof	src/include/libdata_structure/rbtree.h	128;"	d
 offsetof	src/include/libdata_structure/rbtree.h	130;"	d
+oflags	src/libipc/share_mem/shm.c	/^    int oflags;$/;"	m	struct:share_mem_s	file:
 old_events	src/include/libevent_tiny/changelist-internal.h	/^	short old_events;$/;"	m	struct:event_change
 opaque	src/include/libconcurrent/io_user.h	/^	void *opaque;$/;"	m	struct:io_user_s
 opaque	src/include/libconcurrent/tmr_user.h	/^    void *opaque;$/;"	m	struct:tmr_user_s
 open	src/libevent_tiny/evutil.c	54;"	d	file:
+open_mode	src/libipc/share_mem/shm.c	/^    int open_mode;$/;"	m	struct:share_mem_s	file:
 p	src/include/libevent_tiny/minheap-internal.h	/^    struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
 p	src/libargs/test_cmd_args.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
+p	src/libcre/semaphore/sem.c	/^    int (*p)(semaphore_t *sem);  $/;"	m	struct:semaphore_ops_s	file:
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
 pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef struct pa_array_s{$/;"	s	file:
@@ -2365,6 +2396,20 @@ select_init	src/libevent_tiny/select.c	/^select_init(struct event_base *base)$/;
 select_resize	src/libevent_tiny/select.c	/^select_resize(struct selectop *sop, int fdsz)$/;"	f	file:
 selectop	src/libevent_tiny/select.c	/^struct selectop {$/;"	s	file:
 selectops	src/libevent_tiny/select.c	/^const struct eventop selectops = {$/;"	v	typeref:struct:eventop
+sem_id	src/libcre/semaphore/sem.c	/^    int sem_id;$/;"	m	struct:semaphore_s	file:
+sem_ops	src/libcre/semaphore/sem.c	/^    struct semaphore_ops_s *sem_ops;$/;"	m	struct:semaphore_s	typeref:struct:semaphore_s::semaphore_ops_s	file:
+sem_type_e	src/libcre/semaphore/sem.c	/^enum sem_type_e{$/;"	g	file:
+semaphore_create	src/libcre/semaphore/sem.c	/^semaphore_t *semaphore_create()$/;"	f
+semaphore_del	src/libcre/semaphore/sem.c	/^int semaphore_del(semaphore_t *sem)  $/;"	f
+semaphore_init	src/libcre/semaphore/sem.c	/^int semaphore_init(semaphore_t *sem)$/;"	f
+semaphore_ops_s	src/libcre/semaphore/sem.c	/^typedef struct semaphore_ops_s{$/;"	s	file:
+semaphore_ops_t	src/libcre/semaphore/sem.c	/^}semaphore_ops_t;$/;"	t	typeref:struct:semaphore_ops_s	file:
+semaphore_p	src/libcre/semaphore/sem.c	/^int semaphore_p(semaphore_t *sem)  $/;"	f
+semaphore_s	src/libcre/semaphore/sem.c	/^typedef struct semaphore_s{$/;"	s	file:
+semaphore_set	src/libcre/semaphore/sem.c	/^int semaphore_set(semaphore_t *sem,int type,int host_flag)$/;"	f
+semaphore_t	src/libcre/semaphore/sem.c	/^}semaphore_t;$/;"	t	typeref:struct:semaphore_s	file:
+semaphore_v	src/libcre/semaphore/sem.c	/^int semaphore_v(semaphore_t *sem)  $/;"	f
+semun	src/libcre/semaphore/sem.c	/^union semun  $/;"	u	file:
 server_create_socket	src/libnet/server/server.c	/^int server_create_socket(struct addrinfo *addr)$/;"	f
 server_init_task	src/libipc/unix/server/server.c	/^static int server_init_task(server_task_t *task,$/;"	f	file:
 server_init_task	src/libnet/server/server.c	/^int server_init_task(server_task_t *task,$/;"	f
@@ -2385,6 +2430,18 @@ setnonblocking	src/libnet/server/server.c	/^static int setnonblocking(int sockfd
 sh_old	src/include/libevent_tiny/evsignal-internal.h	/^	ev_sighandler_t **sh_old;$/;"	m	struct:evsig_info
 sh_old	src/include/libevent_tiny/evsignal-internal.h	/^	struct sigaction **sh_old;$/;"	m	struct:evsig_info	typeref:struct:evsig_info::sigaction
 sh_old_max	src/include/libevent_tiny/evsignal-internal.h	/^	int sh_old_max;$/;"	m	struct:evsig_info
+share_mem_s	src/libipc/share_mem/shm.c	/^typedef struct share_mem_s{$/;"	s	file:
+share_mem_t	src/libipc/share_mem/shm.c	/^}share_mem_t;$/;"	t	typeref:struct:share_mem_s	file:
+share_mem_type_e	src/libipc/share_mem/shm.c	/^enum share_mem_type_e{  $/;"	g	file:
+shm_create	src/libipc/share_mem/shm.c	/^share_mem_t *shm_create()$/;"	f
+shm_del	src/libipc/share_mem/shm.c	/^int shm_del(share_mem_t *shm) $/;"	f
+shm_init	src/libipc/share_mem/shm.c	/^int shm_init(share_mem_t *shm)$/;"	f
+shm_key	src/libipc/share_mem/shm.c	/^    char shm_key[MAX_SHARE_MEM_KEY_LEN];$/;"	m	struct:share_mem_s	file:
+shm_open_get	src/libipc/share_mem/shm.c	/^void *shm_open_get(share_mem_t *shm)$/;"	f
+shm_set	src/libipc/share_mem/shm.c	/^int shm_set(share_mem_t *shm,char *key,int size,int type)$/;"	f
+shm_shmget_get	src/libipc/share_mem/shm.c	/^void *shm_shmget_get(share_mem_t *shm)$/;"	f
+shm_smopen_get	src/libipc/share_mem/shm.c	/^void *shm_smopen_get(share_mem_t *shm)$/;"	f
+shmflg	src/libipc/share_mem/shm.c	/^    int shmflg;$/;"	m	struct:share_mem_s	file:
 shutdown	src/libthread_pool/threadpool.c	/^  int shutdown;$/;"	m	struct:threadpool_t	file:
 sig	src/include/libevent_tiny/event-internal.h	/^	struct evsig_info sig;$/;"	m	struct:event_base	typeref:struct:event_base::evsig_info
 sigmap	src/include/libevent_tiny/event-internal.h	/^	struct event_signal_map sigmap;$/;"	m	struct:event_base	typeref:struct:event_base::event_signal_map
@@ -2403,6 +2460,7 @@ size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t size;$/;"	m	struct:s
 size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t size;$/;"	m	struct:ctr_mem_pool
 size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t size;$/;"	m	struct:ctr_mem_pool_head_list
 size	src/include/libini/iniparser.h	/^	int size;$/;"	m	struct:_dictionary_
+size	src/libipc/share_mem/shm.c	/^    int size;$/;"	m	struct:share_mem_s	file:
 sl_ops	src/include/libcre/sync_lock/sync_lock.h	/^	struct sync_lock_operations sl_ops;$/;"	m	struct:sync_lock_module	typeref:struct:sync_lock_module::sync_lock_operations
 slab	src/include/liballoc/allocator_ctr_alloc.h	/^typedef struct slab{$/;"	s
 slab_array_max_num	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t slab_array_max_num;$/;"	m	struct:ctr_alloc_s
@@ -2499,6 +2557,15 @@ sync_unlock	src/include/libcre/sync_lock/sync_lock.h	/^	int (*sync_unlock)(struc
 sync_unlock	src/include/libcre/sync_lock/sync_lock.h	/^static inline int sync_unlock(struct sync_lock_s *slock)$/;"	f
 sys_alloc_alloc	src/liballoc/sys_alloc/allocator_sys_alloc.c	/^void *sys_alloc_alloc(allocator_t *alloc,uint32_t size)$/;"	f
 sys_alloc_free	src/liballoc/sys_alloc/allocator_sys_alloc.c	/^void sys_alloc_free(allocator_t *alloc,void *addr)$/;"	f
+sysv_key	src/libcre/semaphore/sem.c	/^    key_t sysv_key;$/;"	m	struct:semaphore_s	file:
+sysv_nsems	src/libcre/semaphore/sem.c	/^    int sysv_nsems;$/;"	m	struct:semaphore_s	file:
+sysv_sem_del	src/libcre/semaphore/sem.c	/^static int sysv_sem_del(semaphore_t *sem)  $/;"	f	file:
+sysv_sem_id	src/libcre/semaphore/sem.c	/^    int sysv_sem_id;$/;"	m	struct:semaphore_s	file:
+sysv_sem_init	src/libcre/semaphore/sem.c	/^int sysv_sem_init(semaphore_t *sem)$/;"	f
+sysv_sem_ops	src/libcre/semaphore/sem.c	/^static semaphore_ops_t sysv_sem_ops = {$/;"	v	file:
+sysv_sem_p	src/libcre/semaphore/sem.c	/^static int sysv_sem_p(semaphore_t *sem)  $/;"	f	file:
+sysv_sem_v	src/libcre/semaphore/sem.c	/^static int sysv_sem_v(semaphore_t *sem)  $/;"	f	file:
+sysv_semflg	src/libcre/semaphore/sem.c	/^    int sysv_semflg;$/;"	m	struct:semaphore_s	file:
 tail	src/libthread_pool/threadpool.c	/^  int tail;$/;"	m	struct:threadpool_t	file:
 task	src/include/libconcurrent/concurrent.h	/^	void *task;$/;"	m	struct:concurrent_message_s
 task_admin	src/include/libconcurrent/concurrent.h	/^	concurrent_task_admin_t *task_admin;$/;"	m	struct:concurrent_master_s
@@ -2549,6 +2616,8 @@ test_pdu_proto_analyzer	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c
 test_pipe_event_handler	src/libconcurrent/test_pipe.c	/^static void test_pipe_event_handler(int fd, short event, void *arg)$/;"	f	file:
 test_process_timer_task_callback	src/libconcurrent/tmr_user.c	/^static void test_process_timer_task_callback(void *timer)$/;"	f	file:
 test_server	src/libnet/server/server.c	/^int test_server()$/;"	f
+test_share_mem_read	src/libipc/share_mem/shm.c	/^void test_share_mem_read()$/;"	f
+test_share_mem_write	src/libipc/share_mem/shm.c	/^void test_share_mem_write()$/;"	f
 test_shutdown	src/libthread_pool/tests/shutdown.c	/^int test_shutdown()$/;"	f
 test_signal	src/libevent_tiny/test_signal.c	/^int test_signal()$/;"	f
 test_signal2	src/libevent_tiny/test_signal.c	/^int test_signal2()$/;"	f
@@ -2622,6 +2691,8 @@ tv_cache	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_cache;$
 tv_clock_diff	src/include/libevent_tiny/event-internal.h	/^	struct timeval tv_clock_diff;$/;"	m	struct:event_base	typeref:struct:event_base::timeval
 tv_sec	src/include/libstate_machine/state_machine.h	/^     time_t tv_sec;$/;"	m	struct:state_entry_config_s
 tv_usec	src/include/libstate_machine/state_machine.h	/^     suseconds_t tv_usec;$/;"	m	struct:state_entry_config_s
+type	src/libcre/semaphore/sem.c	/^    unsigned char type;$/;"	m	struct:semaphore_s	file:
+type	src/libipc/share_mem/shm.c	/^    int type;$/;"	m	struct:share_mem_s	file:
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdata_structure/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdbg/list.h	/^typedef unsigned short    u16;$/;"	t
@@ -2660,7 +2731,9 @@ use_monotonic	src/libevent_tiny/event.c	/^static int use_monotonic;$/;"	v	file:
 used_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **used_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head
 user_fd	src/include/libconcurrent/io_user.h	/^	int user_fd;$/;"	m	struct:io_user_s
 user_type	src/include/libconcurrent/io_user.h	/^	uint8_t user_type;$/;"	m	struct:io_user_s
+v	src/libcre/semaphore/sem.c	/^    int (*v)(semaphore_t *sem);  $/;"	m	struct:semaphore_ops_s	file:
 val	src/include/libini/iniparser.h	/^	char **val;$/;"	m	struct:_dictionary_
+val	src/libcre/semaphore/sem.c	/^    int val;  $/;"	m	union:semun	file:
 value_len	src/include/libdata_structure/map_pair.h	/^	uint32_t value_len;$/;"	m	struct:pair
 value_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint8_t value_pos;\/\/value's pos at key array$/;"	m	struct:hash_map_node
 value_pos	src/include/libdata_structure/rbtree_map_struct.h	/^	uint8_t value_pos;$/;"	m	struct:rbtree_map_node

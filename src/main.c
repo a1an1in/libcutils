@@ -154,10 +154,16 @@ void test_libipc()
     /*
      *test_udp_unix_client_send();
      */
-    test_tcp_unix_client_send();
+    /*
+     *test_tcp_unix_client_send();
+     */
     /*
      *test_tcp_unix_server();
      */
+    /*
+     *test_share_mem_write();
+     */
+    test_share_mem_read();
 }
 #ifndef MAKELIB
 

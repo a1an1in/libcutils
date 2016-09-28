@@ -51,8 +51,10 @@ allocator_mem_free(allocator_t * alloc,void *addr)
 static inline void 
 allocator_mem_info(allocator_t * alloc)
 {
-	if(allocator_modules[alloc->allocator_type].alloc_ops.info)
-		allocator_modules[alloc->allocator_type].alloc_ops.info(alloc);
+    /*
+	 *if(allocator_modules[alloc->allocator_type].alloc_ops.info)
+	 *    allocator_modules[alloc->allocator_type].alloc_ops.info(alloc);
+     */
 }
 allocator_t * allocator_get_default_alloc();
 #endif
