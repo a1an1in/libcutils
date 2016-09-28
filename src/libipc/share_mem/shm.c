@@ -75,6 +75,8 @@ int shm_smopen_del(share_mem_t *shm)
     if(ret){
         dbg_str(DBG_DETAIL,"shm_unlink error");
     }
+    semaphore_del(shm->sem);
+
     return ret;
 }
 void *shm_open_get(share_mem_t *shm)
@@ -109,6 +111,7 @@ int shm_open_del(share_mem_t *shm)
     if(ret){
         dbg_str(DBG_DETAIL,"shm_unlink error");
     }
+    semaphore_del(shm->sem);
     return ret;
 }
 void *shm_shmget_get(share_mem_t *shm)
@@ -135,6 +138,8 @@ void *shm_shmget_get(share_mem_t *shm)
 }
 int shm_shmget_del(share_mem_t *shm)
 {
+    //..........
+    semaphore_del(shm->sem);
 }
 
 
@@ -149,11 +154,11 @@ share_mem_t *shm_create()
 
     return shm;
 }
-int shm_set(share_mem_t *shm,char *key,int size,int type,int sem_type,int sem_host_flag)
+int shm_set(share_mem_t *shm,char *key,int size,int shm_type,int sem_type,int sem_host_flag)
 {
    strncpy(shm->shm_key,key,strlen(key));
    shm->size = size;
-   shm->type = type;
+   shm->type = shm_type;
    shm->oflags = O_RDWR | O_CREAT;
    shm->mmap_prot = PROT_READ | PROT_WRITE;
    shm->mmap_flag = MAP_SHARED;
@@ -173,8 +178,10 @@ int shm_init(share_mem_t *shm)
         semaphore_init(shm->sem);
     } else if(shm->type == OPEN) {
         shm_open_get(shm);
+        semaphore_init(shm->sem);
     } else if( shm->type == SHMGET) {
         shm_shmget_get(shm);
+        semaphore_init(shm->sem);
     } else{
     }
 
@@ -184,12 +191,13 @@ int shm_del(share_mem_t *shm)
 {
     int ret = -1;
     if(shm->type == SHMOPEN){
-        shm_unlink(shm->shm_key);
         shm_smopen_del(shm);
-        semaphore_del(shm->sem);
     } else if(shm->type == OPEN) {
+        shm_open_del(shm);
     } else if( shm->type == SHMGET) {
+        shm_shmget_del(shm);
     } else{
+        dbg_str(DBG_WARNNING,"shm del,shm type error");
     }
 
    return ret;
