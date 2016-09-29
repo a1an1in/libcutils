@@ -102,13 +102,29 @@ void args_print_help_info(args_processor_t *p)
     printf("help_info:\n");
 	config_head = p->cmd_config;
 	for(i = 0; config_head[i].cmd != NULL; i++){
-		printf("%-15s:%s\n",r1,(config_head + i)->cmd_readable_name);
-		printf("%-15s:%s %s\n",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
+		printf("%s\n",(config_head + i)->cmd);
+		printf("%15s%s:%s %s\n","",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
         if(strlen((config_head + i)->help_info))
-            printf("%-15s:%s\n\n",r3,(config_head + i)->help_info);
-        else
-            printf("\n");
+            printf("%15s%s:%s\n","",r3,(config_head + i)->help_info);
 	}
+    /*
+	 *for(i = 0; config_head[i].cmd != NULL; i++){
+	 *    printf("%s\n",(config_head + i)->cmd_readable_name);
+	 *    printf("%15s%s:%s %s\n","",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
+     *    if(strlen((config_head + i)->help_info))
+     *        printf("%15s%s:%s\n","",r3,(config_head + i)->help_info);
+	 *}
+     */
+    /*
+	 *for(i = 0; config_head[i].cmd != NULL; i++){
+	 *    printf("%-15s:%s\n",r1,(config_head + i)->cmd_readable_name);
+	 *    printf("%-15s:%s %s\n",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
+     *    if(strlen((config_head + i)->help_info))
+     *        printf("%-15s:%s\n\n",r3,(config_head + i)->help_info);
+     *    else
+     *        printf("\n");
+	 *}
+     */
 
 	return;
 }

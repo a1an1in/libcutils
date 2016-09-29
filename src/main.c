@@ -50,93 +50,6 @@
 #include <libstate_machine/state_machine.h>
 
 #define LIBRARY_VERSION "libcutils version 2.1.1.0"
-void test_datastructure()
-{
-    test_datastructure_hashlist();
-	/*
-	 *test_datastructure_link_list();
-	 */
-	/*
-	 *test_datastructure_rbtree_map();
-	 */
-	/*
-	 *test_datastructure_vector();
-	 */
-	 
-}
-void test_analyzer()
-{
-	/*
-	 *test_pdt_proto_analyzer();
-	 */
-	/*
-	 *test_pdu_proto_analyzer();
-	 */
-}
-void test_allocator()
-{
-	/*
-	 *test_ctr_alloc();
-	 */
-}
-void test_libthread_pool()
-{
-	/*
-	 *test_shutdown();
-	 */
-	/*
-	 *test_thrdtest();
-	 */
-}
-void test_libconcurrent()
-{
-    /*
-     *test_concurrent3();
-     */
-    /*
-     *test_tmr_user();
-     */
-    /*
-     *test_io_user();
-     */
-}
-void test_libnet()
-{
-    /*
-     *test_server();
-     */
-    /*
-     *test_udp_client_recieve();
-     */
-    /*
-     *test_udp_client_send();
-     */
-    /*
-     *test_tcp_client_send();
-     */
-}
-int test_libevent_tiny()
-{
-    /*
-     *test_io();
-     */
-	/*
-	 *test_signal();
-	 */
-	/*
-	 *test_signal2();
-	 */
-	/*
-	 *test_time();
-	 */
-	/*
-	 *test_time2();
-	 */
-}
-void test_libargs(int argc, char *argv[])
-{
-	test_args(argc,argv);
-}
 
 #ifndef MAKELIB
 
@@ -148,6 +61,90 @@ typedef struct base_s{
 	args_processor_t *p;
 }base_t;
 
+static int args_process_test_analyzer(void *base,int argc,char **argv)
+{
+    test_pdt_proto_analyzer();
+	/*
+	 *test_pdu_proto_analyzer();
+	 */
+    return 1;
+}
+static int args_process_test_evtime(void *base,int argc,char **argv)
+{
+    test_time();
+	/*
+	 *test_time2();
+	 */
+    return 1;
+}
+static int args_process_test_evsignal(void *base,int argc,char **argv)
+{
+    test_signal();
+    /*
+     *test_signal2();
+     */
+    return 1;
+}
+static int args_process_test_evio(void *base,int argc,char **argv)
+{
+     test_io();
+    return 1;
+}
+static int args_process_test_io_user(void *base,int argc,char **argv)
+{
+    test_io_user();
+    return 1;
+}
+static int args_process_test_tmr_user(void *base,int argc,char **argv)
+{
+    test_tmr_user();
+    return 1;
+}
+static int args_process_test_allocator(void *base,int argc,char **argv)
+{
+    test_ctr_alloc();
+    return 1;
+}
+static int args_process_test_udp_client_send(void *base,int argc,char **argv)
+{
+    test_udp_client_send();
+    return 1;
+}
+static int args_process_test_udp_client_recieve(void *base,int argc,char **argv)
+{
+    test_udp_client_recieve();
+    return 1;
+}
+static int args_process_test_tcp_client_send(void *base,int argc,char **argv)
+{
+    test_tcp_client_send();
+    return 1;
+}
+static int args_process_test_tcp_server(void *base,int argc,char **argv)
+{
+    test_server();
+    return 1;
+}
+static int args_process_test_vector(void *base,int argc,char **argv)
+{
+    test_datastructure_vector();
+	return 1;
+}
+static int args_process_test_rbtree_map(void *base,int argc,char **argv)
+{
+    test_datastructure_rbtree_map();
+	return 1;
+}
+static int args_process_test_llist(void *base,int argc,char **argv)
+{
+    test_datastructure_link_list();
+	return 1;
+}
+static int args_process_test_hashlist(void *base,int argc,char **argv)
+{
+    test_datastructure_hashlist();
+	return 1;
+}
 static int args_process_test_state_machine(void *base,int argc,char **argv)
 {
     test_state_machine();
@@ -199,18 +196,32 @@ static int args_process_help(void *base,int argc,char **argv)
     exit(1);
 	return 0;
 }
-
 static cmd_config_t cmds[]={
-	{"test_state_machine", args_process_test_state_machine,0, "test_state_machine", "N/A",""},
-	{"test_udp_unix_client_recieve", args_process_test_udp_unix_client_recieve,0, "test_udp_unix_client_recieve", "N/A",""},
-	{"test_udp_unix_client_send", args_process_test_udp_unix_client_send,0, "test_udp_unix_client_send", "N/A",""},
-	{"test_tcp_unix_client_send", args_process_test_tcp_unix_client_send,0, "test_tcp_unix_client_send", "N/A",""},
-	{"test_tcp_unix_server", args_process_test_tcp_unix_server,0, "test_tcp_unix_server", "N/A",""},
-	{"test_shm_read", args_process_test_share_mem_read,0, "test_shm_read", "N/A",""},
-	{"test_shm_write", args_process_test_share_mem_write,0, "test_shm_write", "N/A",""},
+	{"analyzer", args_process_test_analyzer,0, "", "N/A",""},
+	{"evtime", args_process_test_evtime,0, "", "N/A",""},
+	{"evsignal", args_process_test_evsignal,0, "", "N/A",""},
+	{"evio", args_process_test_evio,0, "", "N/A",""},
+	{"io_user", args_process_test_io_user,0, "", "N/A",""},
+	{"tmr_user", args_process_test_tmr_user,0, "", "N/A",""},
+	{"allocator", args_process_test_allocator,0, "", "N/A",""},
+	{"udp_client_send", args_process_test_udp_client_send,0, "", "N/A",""},
+	{"udp_client_recieve", args_process_test_udp_client_recieve,0, "", "N/A",""},
+	{"tcp_client_send", args_process_test_tcp_client_send,0, "", "N/A",""},
+	{"tcp_server", args_process_test_tcp_server,0, "", "N/A",""},
+	{"vector", args_process_test_vector,0, "", "N/A",""},
+	{"rbtree_map", args_process_test_rbtree_map,0, "", "N/A",""},
+	{"llist", args_process_test_llist,0, "", "N/A",""},
+	{"hashlist", args_process_test_hashlist,0, "", "N/A",""},
+	{"state_machine", args_process_test_state_machine,0, "", "N/A",""},
+	{"udp_unix_client_recieve", args_process_test_udp_unix_client_recieve,0, "", "N/A",""},
+	{"udp_unix_client_send", args_process_test_udp_unix_client_send,0, "", "N/A",""},
+	{"tcp_unix_client_send", args_process_test_tcp_unix_client_send,0, "", "N/A",""},
+	{"tcp_unix_server", args_process_test_tcp_unix_server,0, "", "N/A",""},
+	{"shm_read", args_process_test_share_mem_read,0, "", "N/A",""},
+	{"shm_write", args_process_test_share_mem_write,0, "", "N/A",""},
 	{"port", args_process_port,1, "port", "NN(number)","udp port,using to send/rcv msg with neighbor"},
-	{"ip", args_process_ipaddr,1, "ip addr", "xx.xx.xx.xx","ip addr,using to send/rcv msg with neighbor"},
-	{"help", args_process_help,0, "help", "help","help info"},
+	{"ip", args_process_ipaddr,1, "ip", "xx.xx.xx.xx","ip addr,using to send/rcv msg with neighbor"},
+	{"help", args_process_help,0, "help", "N/A","help info"},
 	{NULL,NULL,0,NULL,NULL,NULL},
 };
 
@@ -227,16 +238,6 @@ int main(int argc, char *argv[])
 	dbg_str(DBG_DETAIL,"test begin");
 
 	args_process(NULL,cmds,argc, argv);
-    /*
-	 *test_libargs(argc, agrv);
-     */
-	test_allocator();
-	test_datastructure();
-	test_analyzer();
-	test_libthread_pool();
-	test_libconcurrent();
-	test_libnet();
-	test_libevent_tiny();
 
 	dbg_str(DBG_DETAIL,"test end");
 	pause();
