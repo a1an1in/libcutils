@@ -18,8 +18,8 @@
 #ifndef __SYNC_LOCK_H__
 #define __SYNC_LOCK_H__
 
-#include "libcre/libcre.h"
-#include "libcre/basic_types.h"
+#include "cre.h"
+#include "basic_types.h"
 #ifdef UNIX_LIKE_USER_MODE
 #include <pthread.h>
 #endif

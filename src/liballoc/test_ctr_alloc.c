@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include <liballoc/allocator.h>
 #include <libdbg/debug.h>
-#include "libcre/libcre.h"
+#include "cre.h"
 
 void test_ctr_alloc()
 {

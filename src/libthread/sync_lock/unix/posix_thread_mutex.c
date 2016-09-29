@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "libcre/libcre.h"
+#include "cre.h"
 #include "libthread/sync_lock.h"
 #include "libdbg/debug.h"
 

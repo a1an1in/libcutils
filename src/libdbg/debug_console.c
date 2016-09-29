@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libdbg/debug.h"
-#include "libcre/libcre.h"
+#include "cre.h"
 
 int console_print_print_str_vl(debugger_t *debugger,
 		size_t level,const char *fmt,va_list vl)
