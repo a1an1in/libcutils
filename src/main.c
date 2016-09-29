@@ -49,7 +49,7 @@
 #include <libargs/cmd_args.h>
 #include <libstate_machine/state_machine.h>
 
-#define LIBRARY_VERSION "libcutils version 2.1.0.0"
+#define LIBRARY_VERSION "libcutils version 2.1.1.0"
 void test_datastructure()
 {
     test_datastructure_hashlist();
@@ -138,48 +138,98 @@ void test_libargs(int argc, char *argv[])
 	test_args(argc,argv);
 }
 
-void test_libstate_machine()
-{
-    /*
-     *test_state_machine();
-     */
-}
-void test_libipc()
-{
-    /*
-     *test_udp_unix_client_recieve();
-     */
-    /*
-     *test_udp_unix_client_send();
-     */
-    /*
-     *test_tcp_unix_client_send();
-     */
-    /*
-     *test_tcp_unix_server();
-     */
-    /*
-     *test_share_mem_write();
-     */
-    /*
-     *test_share_mem_read();
-     */
-}
 #ifndef MAKELIB
+
+typedef struct config_list_s{
+}config_list_t;
+
+typedef struct base_s{
+	config_list_t config;
+	args_processor_t *p;
+}base_t;
+
+static int args_process_test_state_machine(void *base,int argc,char **argv)
+{
+    test_state_machine();
+	return 1;
+}
+static int args_process_test_udp_unix_client_recieve(void *base,int argc,char **argv)
+{
+    test_udp_unix_client_recieve();
+	return 1;
+}
+static int args_process_test_udp_unix_client_send(void *base,int argc,char **argv)
+{
+    test_udp_unix_client_send();
+	return 1;
+}
+static int args_process_test_tcp_unix_client_send(void *base,int argc,char **argv)
+{
+    test_tcp_unix_client_send();
+	return 1;
+}
+static int args_process_test_tcp_unix_server(void *base,int argc,char **argv)
+{
+    test_tcp_unix_server();
+	return 1;
+}
+static int args_process_test_share_mem_read(void *base,int argc,char **argv)
+{
+    test_share_mem_read();
+	return 1;
+}
+static int args_process_test_share_mem_write(void *base,int argc,char **argv)
+{
+    test_share_mem_write();
+	return 1;
+}
+static int args_process_port(void *base,int argc,char **argv)
+{
+	dbg_str(DBG_DETAIL,"args_process_port:%s",argv[0]);
+	return 1;
+}
+static int args_process_ipaddr(void *base,int argc,char **argv)
+{
+	dbg_str(DBG_DETAIL,"args_process_ipaddr:%s",argv[0]);
+	return 1;
+}
+static int args_process_help(void *base,int argc,char **argv)
+{
+	args_print_help_info(args_get_processor_globle_addr());
+    exit(1);
+	return 0;
+}
+
+static cmd_config_t cmds[]={
+	{"test_state_machine", args_process_test_state_machine,0, "test_state_machine", "N/A",""},
+	{"test_udp_unix_client_recieve", args_process_test_udp_unix_client_recieve,0, "test_udp_unix_client_recieve", "N/A",""},
+	{"test_udp_unix_client_send", args_process_test_udp_unix_client_send,0, "test_udp_unix_client_send", "N/A",""},
+	{"test_tcp_unix_client_send", args_process_test_tcp_unix_client_send,0, "test_tcp_unix_client_send", "N/A",""},
+	{"test_tcp_unix_server", args_process_test_tcp_unix_server,0, "test_tcp_unix_server", "N/A",""},
+	{"test_shm_read", args_process_test_share_mem_read,0, "test_shm_read", "N/A",""},
+	{"test_shm_write", args_process_test_share_mem_write,0, "test_shm_write", "N/A",""},
+	{"port", args_process_port,1, "port", "NN(number)","udp port,using to send/rcv msg with neighbor"},
+	{"ip", args_process_ipaddr,1, "ip addr", "xx.xx.xx.xx","ip addr,using to send/rcv msg with neighbor"},
+	{"help", args_process_help,0, "help", "help","help info"},
+	{NULL,NULL,0,NULL,NULL,NULL},
+};
 
 /*
  * The libs used modules has been registered before main func,
  * and debugger has been construct before main too. so can use
  * it derectly.
  */
-int main(int argc, char *agrv[])
+int main(int argc, char *argv[])
 {
 	int ret = 0;
 
     printf("\n\n");
 	dbg_str(DBG_DETAIL,"test begin");
 
-	test_libargs(argc, agrv);
+	args_process(NULL,cmds,argc, argv);
+    /*
+	 *test_libargs(argc, agrv);
+     */
 	test_allocator();
 	test_datastructure();
 	test_analyzer();
@@ -187,8 +237,6 @@ int main(int argc, char *agrv[])
 	test_libconcurrent();
 	test_libnet();
 	test_libevent_tiny();
-    test_libstate_machine();
-    test_libipc();
 
 	dbg_str(DBG_DETAIL,"test end");
 	pause();
