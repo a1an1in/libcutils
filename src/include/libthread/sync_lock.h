@@ -18,7 +18,7 @@
 #ifndef __SYNC_LOCK_H__
 #define __SYNC_LOCK_H__
 
-#include "cre.h"
+#include "cutils_re.h"
 #include "basic_types.h"
 #ifdef UNIX_LIKE_USER_MODE
 #include <pthread.h>

@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include <liballoc/allocator.h>
 #include <libdbg/debug.h>
-#include "cre.h"
+#include "cutils_re.h"
 
 void test_ctr_alloc()
 {

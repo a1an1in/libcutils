@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libdbg/debug.h"
-#include "cre.h"
+#include "cutils_re.h"
 #include "libthread/sync_lock.h"
 #include "libthread/posix_thread_mutex.h"
 #include "libthread/posix_thread_rwlock.h"

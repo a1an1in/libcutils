@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cre.h"
+#include "cutils_re.h"
 #include "libdbg/debug.h"
 
 #ifdef WINDOWS_USER_MODE
