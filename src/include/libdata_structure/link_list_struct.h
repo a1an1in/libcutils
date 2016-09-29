@@ -20,7 +20,7 @@
 
 #include "libdata_structure/list.h"
 #include "liballoc/allocator.h"
-#include "libcre/sync_lock/sync_lock.h"
+#include "libthread/sync_lock.h"
 
 /*
  *typedef unsigned char uint8_t;

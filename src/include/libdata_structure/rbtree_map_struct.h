@@ -22,7 +22,7 @@
 #include <liballoc/allocator.h>
 #include <libdata_structure/rbtree.h>
 #include <libdata_structure/map_pair.h>
-#include "libcre/sync_lock/sync_lock.h"
+#include "libthread/sync_lock.h"
 /*
  *typedef unsigned int uint32_t;
  *typedef unsigned short uint16_t;

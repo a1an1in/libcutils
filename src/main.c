@@ -49,7 +49,7 @@
 #include <libargs/cmd_args.h>
 #include <libstate_machine/state_machine.h>
 
-#define LIBRARY_VERSION "libcutils version 2.0.0.1"
+#define LIBRARY_VERSION "libcutils version 2.1.0.0"
 void test_datastructure()
 {
 	/*

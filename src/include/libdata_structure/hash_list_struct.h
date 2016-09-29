@@ -21,7 +21,7 @@
 #include "libdata_structure/list.h"
 #include "libdata_structure/map_pair.h"
 #include "liballoc/allocator.h"
-#include "libcre/sync_lock/sync_lock.h"
+#include "libthread/sync_lock.h"
 #include "libdata_structure/map_pair.h"
 
 /*

@@ -18,7 +18,7 @@
 #ifndef __ALLOCATOR_SGI_ALLOC_H__
 #define __ALLOCATOR_SGI_ALLOC_H__
 
-#include "libcre/sync_lock/sync_lock.h"
+#include "libthread/sync_lock.h"
 #include "libcre/basic_types.h"
 #include "libdata_structure/list.h"
 

@@ -18,7 +18,7 @@
 #ifndef __DEBUG_NETWORK_H__
 #define __DEBUG_NETWORK_H__
 
-#include "libcre/sync_lock/sync_lock.h"
+#include "libthread/sync_lock.h"
 
 /*
  *typedef struct debug_network_prive{

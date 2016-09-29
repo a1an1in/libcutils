@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libcre/libcre.h"
-#include "libcre/sync_lock/sync_lock.h"
+#include "libthread/sync_lock.h"
 #include "libdbg/debug.h"
 
 #ifdef UNIX_LIKE_USER_MODE
