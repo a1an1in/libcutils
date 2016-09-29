@@ -1,6 +1,6 @@
 #ifndef __SHM_H__
 #define __SHM_H__
-#include <libcre/semaphore/sem.h>
+#include <libipc/semaphore/sem.h>
 
 enum share_mem_type_e{  
     SHMOPEN = 0x01,  

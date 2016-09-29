@@ -160,10 +160,10 @@ void test_libipc()
     /*
      *test_tcp_unix_server();
      */
+    test_share_mem_write();
     /*
-     *test_share_mem_write();
+     *test_share_mem_read();
      */
-    test_share_mem_read();
 }
 #ifndef MAKELIB
 

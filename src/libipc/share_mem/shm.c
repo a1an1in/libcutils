@@ -41,7 +41,6 @@
 #include <sys/stat.h>  
 #include <fcntl.h>  
 #include <errno.h>  
-#include <sys/shm.h>  
 #include <libdbg/debug.h>
 #include <libipc/share_mem/shm.h>
 
