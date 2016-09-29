@@ -32,6 +32,7 @@ extern int allocator_ctr_alloc_register();
 
 __attribute__((constructor(101))) void liballoc_register_modules()
 {
+    printf("register alloc modules\n");
 	allocator_sys_alloc_register();
 	allocator_ctr_alloc_register();
 }

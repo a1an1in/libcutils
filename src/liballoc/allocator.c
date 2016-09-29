@@ -79,6 +79,8 @@ default_allocator_constructor()
 {
 	allocator_t *allocator;
 
+    dbg_str(DBG_DETAIL,"construct default allocator");
+
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
         exit(1);
@@ -88,7 +90,7 @@ default_allocator_constructor()
     return;
 }
 
-void __attribute__((constructor(111)))
+void __attribute__((destructor(111)))
 default_allocator_destructor()
 {
 	allocator_t *allocator = allocator_get_default_alloc();

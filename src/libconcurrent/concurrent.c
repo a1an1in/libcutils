@@ -564,6 +564,8 @@ concurrent_constructor()
 	uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
 
+    dbg_str(DBG_DETAIL,"construct concurrent");
+
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_creator err");
 		return;

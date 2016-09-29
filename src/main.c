@@ -52,9 +52,7 @@
 #define LIBRARY_VERSION "libcutils version 2.1.0.0"
 void test_datastructure()
 {
-	/*
-	 *test_datastructure_hashlist();
-	 */
+    test_datastructure_hashlist();
 	/*
 	 *test_datastructure_link_list();
 	 */
@@ -160,7 +158,9 @@ void test_libipc()
     /*
      *test_tcp_unix_server();
      */
-    test_share_mem_write();
+    /*
+     *test_share_mem_write();
+     */
     /*
      *test_share_mem_read();
      */
@@ -198,8 +198,8 @@ int main(int argc, char *agrv[])
 }
 #endif
 
-__attribute__((constructor(112))) void
+__attribute__((constructor(101))) void
 print_library_version()
 {
-    dbg_str(DBG_DETAIL,"%s",LIBRARY_VERSION);
+    printf("%s\n",LIBRARY_VERSION);
 }

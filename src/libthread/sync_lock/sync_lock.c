@@ -54,7 +54,7 @@
 
 sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];
 
-__attribute__((constructor(101))) void
+__attribute__((constructor(102))) void
 sync_lock_register_modules()
 {
 	/*
@@ -63,6 +63,7 @@ sync_lock_register_modules()
 	/*
 	 *memset(&sync_lock_modules[PTHREAD_RWLOCK],0,sizeof(sync_lock_module_t));
 	 */
+    printf("register sync lock modules\n");
 #ifdef UNIX_LIKE_USER_MODE
 	linux_user_mode_pthread_mutex_register();
 	linux_user_mode_pthread_rwlock_register();

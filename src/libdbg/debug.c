@@ -294,7 +294,7 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 }
 int __attribute__((constructor(110))) debugger_constructor()
 {
-	printf("debugger_constructor\n");
+	printf("construct debugger\n");
 
 	debugger_gp = debugger_creator("dbg.ini",0);
 	debugger_init(debugger_gp);
