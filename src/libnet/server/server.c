@@ -120,13 +120,12 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	dbg_str(NET_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
 	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
 	task->slave = slave;
-	concurrent_slave_add_new_event(
-			slave,
-			task->fd,//int fd,
-			EV_READ | EV_PERSIST,//int event_flag,
-			task->event,//	struct event *event,
-			slave_event_handler_process_conn_bussiness,//void (*event_handler)(int fd, short event, void *arg),
-			task);//void *task);
+	concurrent_slave_add_new_event(slave,
+			                       task->fd,//int fd,
+			                       EV_READ | EV_PERSIST,//int event_flag,
+			                       task->event,//	struct event *event,
+			                       slave_event_handler_process_conn_bussiness,//void (*event_handler)(int fd, short event, void *arg),
+			                       task);//void *task);
 	return ;
 }
 void master_event_handler_server_listen(int fd, short event, void *arg)
@@ -157,12 +156,13 @@ void master_event_handler_server_listen(int fd, short event, void *arg)
 	dbg_str(NET_DETAIL,"master_event_handler_server_listen,listen_fd=%d,connfd=%d",fd,connfd);
 
 	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
+
 	server_init_task(task,
-			connfd,//int fd, 
-			key,//void *key, 
-			NULL,//struct event *ev,
-			master->allocator,
-			NULL);
+			         connfd,//int fd, 
+			         key,//void *key, 
+			         NULL,//struct event *ev,
+			         master->allocator,
+			         NULL);
 
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, slave_work_function,task,0);
@@ -233,12 +233,12 @@ void * tcp_server(char *host,char *server)
 	}
 
 	srv = io_user(allocator,//allocator_t *allocator,
-			   server_create_socket(addr),//int user_fd,
-			   SOCK_STREAM,//user_type
-			   master_event_handler_server_listen,//void (*user_event_handler)(int fd, short event, void *arg),
-			   slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-			   NULL,//int (*process_task_cb)(user_task_t *task),
-			   NULL);//void *opaque)
+			      server_create_socket(addr),//int user_fd,
+			      SOCK_STREAM,//user_type
+			      master_event_handler_server_listen,//void (*user_event_handler)(int fd, short event, void *arg),
+			      slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+			      NULL,//int (*process_task_cb)(user_task_t *task),
+			      NULL);//void *opaque)
 	if(srv == NULL){
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;

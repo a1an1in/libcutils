@@ -136,15 +136,15 @@ void unix_client_event_handler(int fd, short event, void *arg)
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
 
 	unix_client_init_task(task,//client_task_t *task,
-			    	 master->allocator,//allocator_t *allocator,
-			    	 0,//int fd,
-			    	 NULL,//struct event *ev,
-			    	 NULL,//void *key,
-			    	 0,//uint8_t key_len,
-			    	 buf,//uint8_t *buf,
-			    	 nread,//int buf_len,
-			    	 NULL,
-			    	 client);
+			    	      master->allocator,//allocator_t *allocator,
+			    	      0,//int fd,
+			    	      NULL,//struct event *ev,
+			    	      NULL,//void *key,
+			    	      0,//uint8_t key_len,
+			    	      buf,//uint8_t *buf,
+			    	      nread,//int buf_len,
+			    	      NULL,
+			    	      client);
 
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, client->slave_work_function,task,0);

@@ -1045,8 +1045,33 @@ args_parse_args	src/libargs/cmd_args.c	/^args_parse_args(args_processor_t *p,int
 args_print_help_info	src/libargs/cmd_args.c	/^void args_print_help_info(args_processor_t *p)$/;"	f
 args_process	src/libargs/cmd_args.c	/^void args_process(void *base,cmd_config_t *cmd_configs,int argc, char *argv[])$/;"	f
 args_process_help	src/libargs/test_cmd_args.c	/^static int args_process_help(void *base,int argc,char **argv)$/;"	f	file:
+args_process_help	src/main.c	/^static int args_process_help(void *base,int argc,char **argv)$/;"	f	file:
 args_process_ipaddr	src/libargs/test_cmd_args.c	/^static int args_process_ipaddr(void *base,int argc,char **argv)$/;"	f	file:
+args_process_ipaddr	src/main.c	/^static int args_process_ipaddr(void *base,int argc,char **argv)$/;"	f	file:
 args_process_port	src/libargs/test_cmd_args.c	/^static int args_process_port(void *base,int argc,char **argv)$/;"	f	file:
+args_process_port	src/main.c	/^static int args_process_port(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_allocator	src/main.c	/^static int args_process_test_allocator(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_analyzer	src/main.c	/^static int args_process_test_analyzer(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_evio	src/main.c	/^static int args_process_test_evio(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_evsignal	src/main.c	/^static int args_process_test_evsignal(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_evtime	src/main.c	/^static int args_process_test_evtime(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_hashlist	src/main.c	/^static int args_process_test_hashlist(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_io_user	src/main.c	/^static int args_process_test_io_user(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_llist	src/main.c	/^static int args_process_test_llist(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_rbtree_map	src/main.c	/^static int args_process_test_rbtree_map(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_share_mem_read	src/main.c	/^static int args_process_test_share_mem_read(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_share_mem_write	src/main.c	/^static int args_process_test_share_mem_write(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_state_machine	src/main.c	/^static int args_process_test_state_machine(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_tcp_client_send	src/main.c	/^static int args_process_test_tcp_client_send(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_tcp_server	src/main.c	/^static int args_process_test_tcp_server(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_tcp_unix_client_send	src/main.c	/^static int args_process_test_tcp_unix_client_send(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_tcp_unix_server	src/main.c	/^static int args_process_test_tcp_unix_server(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_tmr_user	src/main.c	/^static int args_process_test_tmr_user(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_udp_client_recieve	src/main.c	/^static int args_process_test_udp_client_recieve(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_udp_client_send	src/main.c	/^static int args_process_test_udp_client_send(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_udp_unix_client_recieve	src/main.c	/^static int args_process_test_udp_unix_client_recieve(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_udp_unix_client_send	src/main.c	/^static int args_process_test_udp_unix_client_send(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_vector	src/main.c	/^static int args_process_test_vector(void *base,int argc,char **argv)$/;"	f	file:
 args_processor_s	src/include/libargs/cmd_args.h	/^typedef struct args_processor_s{$/;"	s
 args_processor_t	src/include/libargs/cmd_args.h	/^}args_processor_t;$/;"	t	typeref:struct:args_processor_s
 args_readable_names	src/include/libargs/cmd_args.h	/^	char *args_readable_names;$/;"	m	struct:cmd_config_s
@@ -1062,7 +1087,9 @@ base	src/include/libargs/cmd_args.h	/^	void *base;$/;"	m	struct:args_processor_s
 base	src/include/libevent_tiny/event-internal.h	/^	struct event_base *base;$/;"	m	struct:common_timeout_list	typeref:struct:common_timeout_list::event_base
 base	src/include/libstate_machine/state_machine.h	/^    void *base;$/;"	m	struct:state_machine_s
 base_s	src/libargs/test_cmd_args.c	/^typedef struct base_s{$/;"	s	file:
+base_s	src/main.c	/^typedef struct base_s{$/;"	s	file:
 base_t	src/libargs/test_cmd_args.c	/^}base_t;$/;"	t	typeref:struct:base_s	file:
+base_t	src/main.c	/^}base_t;$/;"	t	typeref:struct:base_s	file:
 begin	src/include/libdata_structure/hash_list_struct.h	/^	hash_map_pos_t begin,end;$/;"	m	struct:hash_map_s
 begin	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,head;$/;"	m	struct:llist_s
 begin	src/include/libdata_structure/rbtree_map_struct.h	/^	rbtree_map_pos_t begin ,end;$/;"	m	struct:rbtree_map_s
@@ -1107,6 +1134,7 @@ cmd_config_s	src/include/libargs/cmd_args.h	/^typedef struct cmd_config_s{$/;"	s
 cmd_config_t	src/include/libargs/cmd_args.h	/^}cmd_config_t;$/;"	t	typeref:struct:cmd_config_s
 cmd_readable_name	src/include/libargs/cmd_args.h	/^	char *cmd_readable_name;$/;"	m	struct:cmd_config_s
 cmds	src/libargs/test_cmd_args.c	/^cmd_config_t cmds[]={$/;"	v
+cmds	src/main.c	/^static cmd_config_t cmds[]={$/;"	v	file:
 code	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon10	file:
 color	src/include/libdbg/debug.h	/^	uint8_t color;$/;"	m	struct:debug_level_info
 common_timeout_callback	src/libevent_tiny/event.c	/^common_timeout_callback(evutil_socket_t fd, short what, void *arg)$/;"	f	file:
@@ -1160,8 +1188,11 @@ concurrent_task_t	src/libconcurrent/test_concurrent.c	/^}concurrent_task_t;$/;"	
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_master_s
 concurrent_work_type	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_work_type;$/;"	m	struct:concurrent_s
 config	src/libargs/test_cmd_args.c	/^	config_list_t config;$/;"	m	struct:base_s	file:
+config	src/main.c	/^	config_list_t config;$/;"	m	struct:base_s	file:
 config_list_s	src/libargs/test_cmd_args.c	/^typedef struct config_list_s{$/;"	s	file:
+config_list_s	src/main.c	/^typedef struct config_list_s{$/;"	s	file:
 config_list_t	src/libargs/test_cmd_args.c	/^}config_list_t;$/;"	t	typeref:struct:config_list_s	file:
+config_list_t	src/main.c	/^}config_list_t;$/;"	t	typeref:struct:config_list_s	file:
 conn	src/libconcurrent/test_concurrent.c	/^	uint32_t conn;$/;"	m	struct:concurrent_task_s	file:
 console_print_print	src/libdbg/debug_console.c	/^int console_print_print(debugger_t *debugger,size_t level,const char *fmt,...)$/;"	f
 console_print_print_str_vl	src/libdbg/debug_console.c	/^int console_print_print_str_vl(debugger_t *debugger,$/;"	f
@@ -2040,7 +2071,7 @@ log_print_print_str	src/libdbg/debug_log.c	/^int log_print_print_str(debugger_t 
 log_print_print_str_vl	src/libdbg/debug_log.c	/^int log_print_print_str_vl(debugger_t *debugger,size_t level,const char *fmt,va_list vl)$/;"	f
 log_print_regester	src/libdbg/debug_log.c	/^void log_print_regester()$/;"	f
 log_print_write_log	src/libdbg/debug_log.c	/^uint32_t log_print_write_log(FILE *fp,char *str)$/;"	f
-main	src/main.c	/^int main(int argc, char *agrv[])$/;"	f
+main	src/main.c	/^int main(int argc, char *argv[])$/;"	f
 main_switch	src/include/libdbg/debug.h	/^	uint8_t main_switch;$/;"	m	struct:debugger
 make_pair	src/include/libdata_structure/map_pair.h	/^static inline void make_pair(pair_t *p,void *key,void *value)$/;"	f
 map	src/include/libdata_structure/rbtree_map_struct.h	/^	struct rbtree_map_s *map;$/;"	m	struct:rbtree_map_pos_s	typeref:struct:rbtree_map_pos_s::rbtree_map_s
@@ -2154,6 +2185,7 @@ open_mode	src/include/libipc/share_mem/shm.h	/^    int open_mode;$/;"	m	struct:s
 p	src/include/libevent_tiny/minheap-internal.h	/^    struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
 p	src/include/libipc/semaphore/sem_struct.h	/^    int (*p)(semaphore_t *sem);  $/;"	m	struct:semaphore_ops_s
 p	src/libargs/test_cmd_args.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
+p	src/main.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
 pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef struct pa_array_s{$/;"	s	file:
@@ -2539,15 +2571,12 @@ tcp_unix_server_create_socket	src/libipc/unix/server/server.c	/^static int tcp_u
 tcp_unix_server_listen_event_handler	src/libipc/unix/server/server.c	/^static void tcp_unix_server_listen_event_handler(int fd, short event, void *arg)$/;"	f	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
-test_allocator	src/main.c	/^void test_allocator()$/;"	f
-test_analyzer	src/main.c	/^void test_analyzer()$/;"	f
 test_args	src/libargs/test_cmd_args.c	/^void test_args(int argc, char *argv[])$/;"	f
 test_concurrent1	src/libconcurrent/test_concurrent.c	/^int test_concurrent1()$/;"	f
 test_concurrent3	src/libconcurrent/test_concurrent.c	/^int test_concurrent3()$/;"	f
 test_concurrent_add_task	src/libconcurrent/test_concurrent.c	/^int test_concurrent_add_task(concurrent_master_t *master,void *task)$/;"	f
 test_concurrent_init_task	src/libconcurrent/test_concurrent.c	/^int test_concurrent_init_task(concurrent_task_t *task,int32_t conn,void *key,int8_t key_size)$/;"	f
 test_ctr_alloc	src/liballoc/test_ctr_alloc.c	/^void test_ctr_alloc()$/;"	f
-test_datastructure	src/main.c	/^void test_datastructure()$/;"	f
 test_datastructure_hashlist	src/libdata_structure/test/test_hashmap.c	/^void test_datastructure_hashlist()$/;"	f
 test_datastructure_link_list	src/libdata_structure/test/test_link_list.c	/^int test_datastructure_link_list()$/;"	f
 test_datastructure_rbtree_map	src/libdata_structure/test/test_rbtree_map.c	/^int test_datastructure_rbtree_map(void)$/;"	f
@@ -2555,13 +2584,6 @@ test_datastructure_vector	src/libdata_structure/test/test_vector.c	/^int test_da
 test_for_getaddrinfo_hacks	src/libevent_tiny/evutil.c	/^test_for_getaddrinfo_hacks(void)$/;"	f	file:
 test_io	src/libevent_tiny/test_io.c	/^int test_io()$/;"	f
 test_io_user	src/libconcurrent/test_pipe.c	/^void test_io_user()$/;"	f
-test_libargs	src/main.c	/^void test_libargs(int argc, char *argv[])$/;"	f
-test_libconcurrent	src/main.c	/^void test_libconcurrent()$/;"	f
-test_libevent_tiny	src/main.c	/^int test_libevent_tiny()$/;"	f
-test_libipc	src/main.c	/^void test_libipc()$/;"	f
-test_libnet	src/main.c	/^void test_libnet()$/;"	f
-test_libstate_machine	src/main.c	/^void test_libstate_machine()$/;"	f
-test_libthread_pool	src/main.c	/^void test_libthread_pool()$/;"	f
 test_pdt_drv_proto	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_drv_proto(protocol_format_set_t *pfs_p, allocator_t *allocator)$/;"	f
 test_pdt_proto_3008	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_proto_3008(protocol_format_set_t *pfs_p,$/;"	f
 test_pdt_proto_3019	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_proto_3019(protocol_format_set_t *pfs_p,$/;"	f

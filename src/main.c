@@ -61,20 +61,113 @@ typedef struct base_s{
 	args_processor_t *p;
 }base_t;
 
-static int args_process_test_analyzer(void *base,int argc,char **argv)
+static int args_process_help(void *base,int argc,char **argv)
 {
-    test_pdt_proto_analyzer();
-	/*
-	 *test_pdu_proto_analyzer();
-	 */
+	args_print_help_info(args_get_processor_globle_addr());
+    exit(1);
+	return 0;
+}
+static int args_process_ipaddr(void *base,int argc,char **argv)
+{
+	dbg_str(DBG_DETAIL,"args_process_ipaddr:%s",argv[0]);
+	return 1;
+}static int args_process_port(void *base,int argc,char **argv)
+{
+	dbg_str(DBG_DETAIL,"args_process_port:%s",argv[0]);
+	return 1;
+}
+static int args_process_test_share_mem_write(void *base,int argc,char **argv)
+{
+    test_share_mem_write();
+	return 1;
+}static int args_process_test_share_mem_read(void *base,int argc,char **argv)
+{
+    test_share_mem_read();
+	return 1;
+}
+static int args_process_test_tcp_unix_server(void *base,int argc,char **argv)
+{
+    test_tcp_unix_server();
+	return 1;
+}
+static int args_process_test_tcp_unix_client_send(void *base,int argc,char **argv)
+{
+    test_tcp_unix_client_send();
+	return 1;
+}
+static int args_process_test_udp_unix_client_send(void *base,int argc,char **argv)
+{
+    test_udp_unix_client_send();
+	return 1;
+}
+static int args_process_test_udp_unix_client_recieve(void *base,int argc,char **argv)
+{
+    test_udp_unix_client_recieve();
+	return 1;
+}
+static int args_process_test_state_machine(void *base,int argc,char **argv)
+{
+    test_state_machine();
+	return 1;
+}
+static int args_process_test_hashlist(void *base,int argc,char **argv)
+{
+    test_datastructure_hashlist();
+	return 1;
+}
+static int args_process_test_llist(void *base,int argc,char **argv)
+{
+    test_datastructure_link_list();
+	return 1;
+}
+static int args_process_test_rbtree_map(void *base,int argc,char **argv)
+{
+    test_datastructure_rbtree_map();
+	return 1;
+}
+static int args_process_test_vector(void *base,int argc,char **argv)
+{
+    test_datastructure_vector();
+	return 1;
+}
+static int args_process_test_tcp_server(void *base,int argc,char **argv)
+{
+    test_server();
     return 1;
 }
-static int args_process_test_evtime(void *base,int argc,char **argv)
+static int args_process_test_tcp_client_send(void *base,int argc,char **argv)
 {
-    test_time();
-	/*
-	 *test_time2();
-	 */
+    test_tcp_client_send();
+    return 1;
+}
+static int args_process_test_udp_client_recieve(void *base,int argc,char **argv)
+{
+    test_udp_client_recieve();
+    return 1;
+}
+static int args_process_test_udp_client_send(void *base,int argc,char **argv)
+{
+    test_udp_client_send();
+    return 1;
+}
+static int args_process_test_allocator(void *base,int argc,char **argv)
+{
+    test_ctr_alloc();
+    return 1;
+}
+static int args_process_test_tmr_user(void *base,int argc,char **argv)
+{
+    test_tmr_user();
+    return 1;
+}
+static int args_process_test_io_user(void *base,int argc,char **argv)
+{
+    test_io_user();
+    return 1;
+}
+static int args_process_test_evio(void *base,int argc,char **argv)
+{
+     test_io();
     return 1;
 }
 static int args_process_test_evsignal(void *base,int argc,char **argv)
@@ -85,117 +178,24 @@ static int args_process_test_evsignal(void *base,int argc,char **argv)
      */
     return 1;
 }
-static int args_process_test_evio(void *base,int argc,char **argv)
+static int args_process_test_evtime(void *base,int argc,char **argv)
 {
-     test_io();
+    test_time();
+	/*
+	 *test_time2();
+	 */
     return 1;
 }
-static int args_process_test_io_user(void *base,int argc,char **argv)
+static int args_process_test_analyzer(void *base,int argc,char **argv)
 {
-    test_io_user();
+    test_pdt_proto_analyzer();
+	/*
+	 *test_pdu_proto_analyzer();
+	 */
     return 1;
 }
-static int args_process_test_tmr_user(void *base,int argc,char **argv)
-{
-    test_tmr_user();
-    return 1;
-}
-static int args_process_test_allocator(void *base,int argc,char **argv)
-{
-    test_ctr_alloc();
-    return 1;
-}
-static int args_process_test_udp_client_send(void *base,int argc,char **argv)
-{
-    test_udp_client_send();
-    return 1;
-}
-static int args_process_test_udp_client_recieve(void *base,int argc,char **argv)
-{
-    test_udp_client_recieve();
-    return 1;
-}
-static int args_process_test_tcp_client_send(void *base,int argc,char **argv)
-{
-    test_tcp_client_send();
-    return 1;
-}
-static int args_process_test_tcp_server(void *base,int argc,char **argv)
-{
-    test_server();
-    return 1;
-}
-static int args_process_test_vector(void *base,int argc,char **argv)
-{
-    test_datastructure_vector();
-	return 1;
-}
-static int args_process_test_rbtree_map(void *base,int argc,char **argv)
-{
-    test_datastructure_rbtree_map();
-	return 1;
-}
-static int args_process_test_llist(void *base,int argc,char **argv)
-{
-    test_datastructure_link_list();
-	return 1;
-}
-static int args_process_test_hashlist(void *base,int argc,char **argv)
-{
-    test_datastructure_hashlist();
-	return 1;
-}
-static int args_process_test_state_machine(void *base,int argc,char **argv)
-{
-    test_state_machine();
-	return 1;
-}
-static int args_process_test_udp_unix_client_recieve(void *base,int argc,char **argv)
-{
-    test_udp_unix_client_recieve();
-	return 1;
-}
-static int args_process_test_udp_unix_client_send(void *base,int argc,char **argv)
-{
-    test_udp_unix_client_send();
-	return 1;
-}
-static int args_process_test_tcp_unix_client_send(void *base,int argc,char **argv)
-{
-    test_tcp_unix_client_send();
-	return 1;
-}
-static int args_process_test_tcp_unix_server(void *base,int argc,char **argv)
-{
-    test_tcp_unix_server();
-	return 1;
-}
-static int args_process_test_share_mem_read(void *base,int argc,char **argv)
-{
-    test_share_mem_read();
-	return 1;
-}
-static int args_process_test_share_mem_write(void *base,int argc,char **argv)
-{
-    test_share_mem_write();
-	return 1;
-}
-static int args_process_port(void *base,int argc,char **argv)
-{
-	dbg_str(DBG_DETAIL,"args_process_port:%s",argv[0]);
-	return 1;
-}
-static int args_process_ipaddr(void *base,int argc,char **argv)
-{
-	dbg_str(DBG_DETAIL,"args_process_ipaddr:%s",argv[0]);
-	return 1;
-}
-static int args_process_help(void *base,int argc,char **argv)
-{
-	args_print_help_info(args_get_processor_globle_addr());
-    exit(1);
-	return 0;
-}
+
+
 static cmd_config_t cmds[]={
 	{"analyzer", args_process_test_analyzer,0, "", "N/A",""},
 	{"evtime", args_process_test_evtime,0, "", "N/A",""},

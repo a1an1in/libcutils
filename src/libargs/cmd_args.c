@@ -107,24 +107,6 @@ void args_print_help_info(args_processor_t *p)
         if(strlen((config_head + i)->help_info))
             printf("%15s%s:%s\n","",r3,(config_head + i)->help_info);
 	}
-    /*
-	 *for(i = 0; config_head[i].cmd != NULL; i++){
-	 *    printf("%s\n",(config_head + i)->cmd_readable_name);
-	 *    printf("%15s%s:%s %s\n","",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
-     *    if(strlen((config_head + i)->help_info))
-     *        printf("%15s%s:%s\n","",r3,(config_head + i)->help_info);
-	 *}
-     */
-    /*
-	 *for(i = 0; config_head[i].cmd != NULL; i++){
-	 *    printf("%-15s:%s\n",r1,(config_head + i)->cmd_readable_name);
-	 *    printf("%-15s:%s %s\n",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
-     *    if(strlen((config_head + i)->help_info))
-     *        printf("%-15s:%s\n\n",r3,(config_head + i)->help_info);
-     *    else
-     *        printf("\n");
-	 *}
-     */
 
 	return;
 }

@@ -72,10 +72,10 @@ state_machine_t *state_machine_create(allocator_t *allocator)
 }
 
 int state_machine_init(state_machine_t *s,
-        void (*state_change_event_handler)(int fd, short event, void *arg),
-        void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-        int entry_num,
-        void *base)
+                       void (*state_change_event_handler)(int fd, short event, void *arg),
+                       void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+                       int entry_num,
+                       void *base)
 {
     dbg_str(SM_DETAIL,"state_machine_init");
 
@@ -96,12 +96,12 @@ int state_machine_init(state_machine_t *s,
 }
 
 state_entry_t *init_state_entry(state_entry_t *e,
-        state_machine_t *s,
-        void (*action_callback)(state_machine_t *s,void *opaque),
-        void (*process_timer_task_cb)(void *arg),
-        time_t       tv_sec,     /* seconds */
-        suseconds_t   tv_usec, /* microseconds */
-        char *entry_name)
+                                state_machine_t *s,
+                                void (*action_callback)(state_machine_t *s,void *opaque),
+                                void (*process_timer_task_cb)(void *arg),
+                                time_t       tv_sec,     /* seconds */
+                                suseconds_t   tv_usec, /* microseconds */
+                                char *entry_name)
 {
     e->process_timer_task_cb = process_timer_task_cb;
     e->action_callback      = action_callback;
@@ -119,7 +119,7 @@ state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
         suseconds_t   tv_usec, /* microseconds */
         char *entry_name)
 {
-    state_entry_t *e;
+    state_entry_t *e = NULL;
 
     dbg_str(SM_DETAIL,"state_machine_construct_state_entry");
     e = (state_entry_t *)allocator_mem_alloc(s->allocator,sizeof(state_entry_t));
