@@ -128,8 +128,8 @@ void debugger_set_businesses(debugger_t *debugger)
 				iniparser_setstr(d, level_str,"9");
 				debugger_set_business(debugger,i,1,9);
 			}else{
-				iniparser_setstr(d, level_str,"8");
-				debugger_set_business(debugger,i,1,8);
+				iniparser_setstr(d, level_str,"6");
+				debugger_set_business(debugger,i,1,6);
 			}
 		}
 		FILE *f = fopen(debugger->ini_file_name, "w");
@@ -147,7 +147,7 @@ void debugger_set_businesses(debugger_t *debugger)
 			 *printf("debugger_set_businesses,bussiness_num=%d\n",bussiness_num);
 			 */
 			sw = iniparser_getint(d, switch_str,1);
-			lv = iniparser_getint(d, level_str,8);
+			lv = iniparser_getint(d, level_str,6);
 			debugger_set_business(debugger,i,sw,lv);
 		}
 	}
