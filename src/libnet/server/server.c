@@ -250,7 +250,7 @@ void * tcp_server(char *host,char *server)
 int test_server()
 {
 	tcp_server("127.0.0.1","6888");
-	return;
+	return 0;
 }
 #if 0
 void master_event_handler_server_listen(int fd, short event, void *arg)

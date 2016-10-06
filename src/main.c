@@ -48,6 +48,11 @@
 #include <libnet/client.h>
 #include <libargs/cmd_args.h>
 #include <libstate_machine/state_machine.h>
+#include <libipc/share_mem/shm.h>
+#include <libipc/unix/client.h>
+#include <libipc/unix/server.h>
+#include <libnet/client.h>
+#include <libnet/server.h>
 
 #define LIBRARY_VERSION "libcutils version 2.1.1.0"
 

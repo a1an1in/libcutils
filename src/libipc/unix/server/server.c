@@ -234,5 +234,5 @@ static void * tcp_unix_server(char *server_un_path)
 int test_tcp_unix_server()
 {
 	tcp_unix_server("test_server_un_path");
-	return;
+	return 0;
 }

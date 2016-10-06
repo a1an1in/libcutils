@@ -1109,8 +1109,10 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 	}
 
 	/* if we are not in the right thread, we need to wake up the loop */
-	if (res != -1 && notify && EVBASE_NEED_NOTIFY(base))
-		evthread_notify_base(base);
+	/*
+	 *if (res != -1 && notify && EVBASE_NEED_NOTIFY(base))
+	 *    evthread_notify_base(base);
+	 */
 
 	return (res);
 }
@@ -1190,8 +1192,10 @@ event_del_internal(struct event *ev)
 	}
 
 	/* if we are not in the right thread, we need to wake up the loop */
-	if (res != -1 && notify && EVBASE_NEED_NOTIFY(base))
-		evthread_notify_base(base);
+	/*
+	 *if (res != -1 && notify && EVBASE_NEED_NOTIFY(base))
+	 *    evthread_notify_base(base);
+	 */
 
 	return (res);
 }
@@ -1236,8 +1240,10 @@ event_active_nolock(struct event *ev, int res, short ncalls)
 
 	event_queue_insert(base, ev, EVLIST_ACTIVE);
 
-	if (EVBASE_NEED_NOTIFY(base))
-		evthread_notify_base(base);
+	/*
+	 *if (EVBASE_NEED_NOTIFY(base))
+	 *    evthread_notify_base(base);
+	 */
 }
 	static int
 timeout_next(struct event_base *base, struct timeval **tv_p)
