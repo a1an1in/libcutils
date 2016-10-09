@@ -12,7 +12,8 @@ typedef struct server_task_s{
     server_t *server;
 }server_task_t;
 
-static void * tcp_userver(char *server_un_path,
+static void * tcp_userver(allocator_t *allocator,
+        char *server_un_path,
         int (*process_task_cb)(void *task),
         void *opaque);
 int test_tcp_userver();

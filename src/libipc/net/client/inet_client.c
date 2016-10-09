@@ -74,8 +74,6 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	dbg_str(NET_DETAIL,"slave_work_function end");
 	return ;
 }
-#if 1
-//version 4, using pipe mode,without task admin
 int client_init_task(client_task_t *task,
 					 allocator_t *allocator,
 					 int fd,
@@ -166,7 +164,6 @@ void client_event_handler(int fd, short event, void *arg)
 
     return ;
 }
-#endif
 int udp_iclient_create_socket(struct addrinfo *addr)
 {
     int listenq = 1024;

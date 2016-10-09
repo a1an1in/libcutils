@@ -189,12 +189,11 @@ static int tcp_userver_create_socket(char *server_un_path)
 
     return listen_fd;
 }
-static void * tcp_userver(char *server_un_path,
+static void * tcp_userver(allocator_t *allocator,
+        char *server_un_path,
         int (*process_task_cb)(void *task),
         void *opaque)
 {
-    concurrent_t *c = concurrent_get_global_concurrent_addr();
-	allocator_t *allocator = c->allocator;
 	server_t *srv = NULL;
     int listen_fd;
 
@@ -237,6 +236,8 @@ static int test_process_task_callback(void *task)
 }
 int test_tcp_userver()
 {
-	tcp_userver("test_server_un_path",test_process_task_callback,NULL);
+    allocator_t *allocator = allocator_get_default_alloc();
+
+	tcp_userver(allocator,"test_server_un_path",test_process_task_callback,NULL);
 	return;
 }
