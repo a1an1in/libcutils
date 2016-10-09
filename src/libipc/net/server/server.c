@@ -43,13 +43,30 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <libipc/net/inet_server.h>
 #include <libipc/net/unix_server.h>
+#include <libipc/net/server.h>
 #include <signal.h>
 
 server_t * server(allocator_t *allocator,
-        char *host_ip, char *server_port,
-        int (*process_task_cb)(void *task),
-        void *opaque)
+                  char *type,
+                  char *host_ip, 
+                  char *server_port,
+                  int (*process_task_cb)(void *task),
+                  void *opaque)
 {
+    server_t *s;
+
+    if(!strcpy(type,TCP_ISERVER_TYPE)){
+        s = tcp_iserver(allocator, host_ip, server_port, 
+                process_task_cb, opaque);
+    } else if (!strcpy(type,TCP_USERVER_TYPE)){
+        s = tcp_userver(allocator, host_ip, 
+                process_task_cb, opaque);
+    } else {
+        dbg_str(DBG_WARNNING,"server error type");
+        return NULL;
+    }
+
+    return s;
 }
 
 int server_destroy(server_t *server)
