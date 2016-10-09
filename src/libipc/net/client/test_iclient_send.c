@@ -45,8 +45,7 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libipc/unix/client.h>
-#include <sys/un.h>
+#include <libipc/net/inet_client.h>
 
 
 static int process_task_callback(client_task_t *task)
@@ -62,10 +61,12 @@ static int process_task_callback(client_task_t *task)
  *    SOCKTYPE_UNIX
  *};
  */
-int test_udp_unix_client_send()
+int test_udp_iclient_send()
 {
 	client_t *cli;
 	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
+	struct sockaddr_in raddr;
+	socklen_t destlen;
 	allocator_t *allocator;
 
 	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
@@ -73,34 +74,59 @@ int test_udp_unix_client_send()
 		return -1;
 	}
 
-	cli = udp_unix_client(
+	/*
+	 *proxy_constructor();
+	 *sleep(2);
+	 */
+
+	cli = udp_iclient(
 			allocator,
-			"test_server_unix_path",//char *host,
+			"127.0.0.1",//char *host,
+			"2016",//char *client_port,
 			process_task_callback,
 			NULL);
+	raddr.sin_family = AF_INET; 
+	raddr.sin_port = htons(atoi("1989"));  
+	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
 
-	udp_unix_client_send(
+	udp_iclient_send(
 			cli,//client_t *client,
 			buf,//const void *buf,
 			sizeof(buf),
 			0,//int flags,
-			"test_client_unix_path");//socklen_t destlen);
+			(void *)&raddr,//const struct sockaddr *destaddr,
+			sizeof(raddr));//socklen_t destlen);
 }
-int test_tcp_unix_client_send()
+int test_tcp_iclient_send()
 {
 	client_t *cli;
 	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
 	struct sockaddr_in raddr;
 	socklen_t destlen;
-	allocator_t *allocator = allocator_get_default_alloc();
+	allocator_t *allocator;
 
-	cli = tcp_unix_client(
+	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
+		return -1;
+	}
+
+	/*
+	 *proxy_constructor();
+	 *sleep(2);
+	 */
+
+	cli = tcp_iclient(
 			allocator,
-            "test_server_un_path",
+			"127.0.0.1",//char *host,
+			"6888",//char *client_port,
 			process_task_callback,
 			NULL);
 
-	tcp_client_send(
+	raddr.sin_family = AF_INET; 
+	raddr.sin_port = htons(atoi("6888"));  
+	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
+
+	tcp_iclient_send(
 			cli,//client_t *client,
 			buf,//const void *buf,
 			sizeof(buf),0);//socklen_t destlen);

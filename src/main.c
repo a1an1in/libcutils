@@ -45,7 +45,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <libdbg/debug.h>
-#include <libnet/client.h>
 #include <libargs/cmd_args.h>
 #include <libstate_machine/state_machine.h>
 
@@ -85,24 +84,24 @@ static int args_process_test_share_mem_write(void *base,int argc,char **argv)
     test_share_mem_read();
 	return 1;
 }
-static int args_process_test_tcp_unix_server(void *base,int argc,char **argv)
+static int args_process_test_tcp_userver(void *base,int argc,char **argv)
 {
-    test_tcp_unix_server();
+    test_tcp_userver();
 	return 1;
 }
-static int args_process_test_tcp_unix_client_send(void *base,int argc,char **argv)
+static int args_process_test_tcp_uclient_send(void *base,int argc,char **argv)
 {
-    test_tcp_unix_client_send();
+    test_tcp_uclient_send();
 	return 1;
 }
-static int args_process_test_udp_unix_client_send(void *base,int argc,char **argv)
+static int args_process_test_udp_uclient_send(void *base,int argc,char **argv)
 {
-    test_udp_unix_client_send();
+    test_udp_uclient_send();
 	return 1;
 }
-static int args_process_test_udp_unix_client_recieve(void *base,int argc,char **argv)
+static int args_process_test_udp_uclient_recieve(void *base,int argc,char **argv)
 {
-    test_udp_unix_client_recieve();
+    test_udp_uclient_recieve();
 	return 1;
 }
 static int args_process_test_state_machine(void *base,int argc,char **argv)
@@ -130,24 +129,24 @@ static int args_process_test_vector(void *base,int argc,char **argv)
     test_datastructure_vector();
 	return 1;
 }
-static int args_process_test_tcp_server(void *base,int argc,char **argv)
+static int args_process_test_tcp_iserver(void *base,int argc,char **argv)
 {
-    test_server();
+    test_iserver();
     return 1;
 }
-static int args_process_test_tcp_client_send(void *base,int argc,char **argv)
+static int args_process_test_tcp_iclient_send(void *base,int argc,char **argv)
 {
-    test_tcp_client_send();
+    test_tcp_iclient_send();
     return 1;
 }
-static int args_process_test_udp_client_recieve(void *base,int argc,char **argv)
+static int args_process_test_udp_iclient_recieve(void *base,int argc,char **argv)
 {
-    test_udp_client_recieve();
+    test_udp_iclient_recieve();
     return 1;
 }
-static int args_process_test_udp_client_send(void *base,int argc,char **argv)
+static int args_process_test_udp_iclient_send(void *base,int argc,char **argv)
 {
-    test_udp_client_send();
+    test_udp_iclient_send();
     return 1;
 }
 static int args_process_test_allocator(void *base,int argc,char **argv)
@@ -204,19 +203,19 @@ static cmd_config_t cmds[]={
 	{"io_user", args_process_test_io_user,0, "", "N/A",""},
 	{"tmr_user", args_process_test_tmr_user,0, "", "N/A",""},
 	{"allocator", args_process_test_allocator,0, "", "N/A",""},
-	{"udp_client_send", args_process_test_udp_client_send,0, "", "N/A",""},
-	{"udp_client_recieve", args_process_test_udp_client_recieve,0, "", "N/A",""},
-	{"tcp_client_send", args_process_test_tcp_client_send,0, "", "N/A",""},
-	{"tcp_server", args_process_test_tcp_server,0, "", "N/A",""},
+	{"udp_iclient_send", args_process_test_udp_iclient_send,0, "", "N/A",""},
+	{"udp_iclient_recieve", args_process_test_udp_iclient_recieve,0, "", "N/A",""},
+	{"tcp_iclient_send", args_process_test_tcp_iclient_send,0, "", "N/A",""},
+	{"tcp_iserver", args_process_test_tcp_iserver,0, "", "N/A",""},
 	{"vector", args_process_test_vector,0, "", "N/A",""},
 	{"rbtree_map", args_process_test_rbtree_map,0, "", "N/A",""},
 	{"llist", args_process_test_llist,0, "", "N/A",""},
 	{"hashlist", args_process_test_hashlist,0, "", "N/A",""},
 	{"state_machine", args_process_test_state_machine,0, "", "N/A",""},
-	{"udp_unix_client_recieve", args_process_test_udp_unix_client_recieve,0, "", "N/A",""},
-	{"udp_unix_client_send", args_process_test_udp_unix_client_send,0, "", "N/A",""},
-	{"tcp_unix_client_send", args_process_test_tcp_unix_client_send,0, "", "N/A",""},
-	{"tcp_unix_server", args_process_test_tcp_unix_server,0, "", "N/A",""},
+	{"udp_uclient_recieve", args_process_test_udp_uclient_recieve,0, "", "N/A",""},
+	{"udp_uclient_send", args_process_test_udp_uclient_send,0, "", "N/A",""},
+	{"tcp_uclient_send", args_process_test_tcp_uclient_send,0, "", "N/A",""},
+	{"tcp_userver", args_process_test_tcp_userver,0, "", "N/A",""},
 	{"shm_read", args_process_test_share_mem_read,0, "", "N/A",""},
 	{"shm_write", args_process_test_share_mem_write,0, "", "N/A",""},
 	{"port", args_process_port,1, "port", "NN(number)","udp port,using to send/rcv msg with neighbor"},

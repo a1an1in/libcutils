@@ -94,6 +94,7 @@ io_user_t *io_user(allocator_t *allocator,
 int io_user_destroy(io_user_t *io_user)
 {
 	allocator_mem_free(io_user->allocator,io_user);
+    //del event ...
 
 	return 0;
 }

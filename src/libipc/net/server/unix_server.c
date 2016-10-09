@@ -44,20 +44,12 @@
 #include <fcntl.h>         /* nonblocking */
 #include <sys/resource.h>  /*setrlimit */
 #include <libconcurrent/concurrent.h>
-#include <libnet/server.h>
+#include <libipc/net/unix_server.h>
 #include <signal.h>
 #include <sys/un.h>
 
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
-
-typedef struct server_task_s{
-	uint32_t fd;
-	char key[10];
-	struct event *event;
-	allocator_t *allocator;
-	concurrent_slave_t *slave;
-}server_task_t;
 
 int server_release_task(server_task_t *task,concurrent_task_admin_t *admin);
 
@@ -71,7 +63,7 @@ static int setnonblocking(int sockfd)
 }
 #if 1
 //version 4, using pipe mode,without task admin
-static int server_release_task_without_task_admin(server_task_t *task)
+static int userver_release_task_without_task_admin(server_task_t *task)
 {
 	event_del(task->event);
 	allocator_mem_free(task->allocator,task->event);
@@ -79,37 +71,26 @@ static int server_release_task_without_task_admin(server_task_t *task)
 
 	return 0;
 }
-static void slave_event_handler_process_conn_bussiness(int fd, short event, void *arg)
+static void slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
 {
-    int nread;
-    char buf[MAXLINE];
 	server_task_t *task = (server_task_t *)arg;
-    nread = read(fd, buf, MAXLINE);//读取客户端socket流
+	server_t *server = task->server;
 
-	dbg_str(DBG_VIP,"slave_work start,conn_fd=%d",fd);
-    if (nread < 0) {
-        dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		server_release_task_without_task_admin(task);
-		close(fd);//modify for test
-        return;
-    } 
-    write(fd, buf, nread);//响应客户端  
-	server_release_task_without_task_admin(task);
-	/*
-	 *close(fd);
-	 */
-	dbg_str(NET_DETAIL,"slave_work done");
+    server->process_task_cb(task);
+	userver_release_task_without_task_admin(task);
 }
-static int server_init_task(server_task_t *task,
+static int userver_init_task(server_task_t *task,
 		int fd, void *key, struct event *ev,
 		allocator_t *allocator,
-		concurrent_slave_t *slave)
+		concurrent_slave_t *slave,
+        server_t *server)
 {
-	task->fd = fd;
+	task->fd        = fd;
 	memcpy(task->key,key,10);
-	task->event = ev;
+	task->event     = ev;
 	task->allocator = allocator;
-	task->slave = slave;
+	task->slave     = slave;
+    task->server    = server;
 	return 0;
 }
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
@@ -124,11 +105,11 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 			task->fd,//int fd,
 			EV_READ | EV_PERSIST,//int event_flag,
 			task->event,//	struct event *event,
-			slave_event_handler_process_conn_bussiness,//void (*event_handler)(int fd, short event, void *arg),
+			slave_process_conn_bussiness_event_handler,//void (*event_handler)(int fd, short event, void *arg),
 			task);//void *task);
 	return ;
 }
-static void tcp_unix_server_listen_event_handler(int fd, short event, void *arg)
+static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
 {
 	server_t *server = (server_t *)arg;
 	concurrent_master_t *master = server->master;
@@ -150,15 +131,16 @@ static void tcp_unix_server_listen_event_handler(int fd, short event, void *arg)
 
 	sprintf(key,"%d",connfd);
 
-	dbg_str(NET_DETAIL,"tcp_unix_server_listen_event_handler,listen_fd=%d,connfd=%d",fd,connfd);
+	dbg_str(NET_DETAIL,"tcp_userver_listen_event_handler,listen_fd=%d,connfd=%d",fd,connfd);
 
 	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
-	server_init_task(task,
+	userver_init_task(task,
 			         connfd,//int fd, 
 			         key,//void *key, 
 			         NULL,//struct event *ev,
 			         master->allocator,
-			         NULL);
+			         NULL,
+                     server);
 
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, slave_work_function,task,0);
@@ -168,7 +150,7 @@ static void tcp_unix_server_listen_event_handler(int fd, short event, void *arg)
     return ;
 }
 #endif
-static int tcp_unix_server_create_socket(char *server_un_path)
+static int tcp_userver_create_socket(char *server_un_path)
 {
     int listenq = 1024;
     struct rlimit rt;
@@ -207,7 +189,9 @@ static int tcp_unix_server_create_socket(char *server_un_path)
 
     return listen_fd;
 }
-static void * tcp_unix_server(char *server_un_path)
+static void * tcp_userver(char *server_un_path,
+        int (*process_task_cb)(void *task),
+        void *opaque)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 	allocator_t *allocator = c->allocator;
@@ -215,15 +199,15 @@ static void * tcp_unix_server(char *server_un_path)
     int listen_fd;
 
 
-    listen_fd = tcp_unix_server_create_socket(server_un_path);
+    listen_fd = tcp_userver_create_socket(server_un_path);
 
 	srv = io_user(allocator,//allocator_t *allocator,
 			      listen_fd,//int user_fd,
 			      SOCK_STREAM,//user_type
-			      tcp_unix_server_listen_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+			      tcp_userver_listen_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
 			      slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-			      NULL,//int (*process_task_cb)(user_task_t *task),
-			      NULL);//void *opaque)
+			      process_task_cb,//int (*process_task_cb)(user_task_t *task),
+			      opaque);//void *opaque)
 	if(srv == NULL){
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;
@@ -231,8 +215,28 @@ static void * tcp_unix_server(char *server_un_path)
 
 	return srv;
 }
-int test_tcp_unix_server()
+
+static int test_process_task_callback(void *task)
 {
-	tcp_unix_server("test_server_un_path");
+    int nread;
+    char buf[MAXLINE];
+    int fd = ((server_task_t *)task)->fd;
+    nread = read(fd, buf, MAXLINE);//读取客户端socket流
+
+	dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
+    if (nread < 0) {
+        dbg_str(DBG_ERROR,"fd read err,client close the connection");
+		close(fd);//modify for test
+        return;
+    } 
+    write(fd, buf, nread);//响应客户端  
+	/*
+	 *close(fd);
+	 */
+	dbg_str(NET_DETAIL,"task done");
+}
+int test_tcp_userver()
+{
+	tcp_userver("test_server_un_path",test_process_task_callback,NULL);
 	return;
 }

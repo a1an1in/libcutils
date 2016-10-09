@@ -44,7 +44,7 @@
 #include <fcntl.h>         /* nonblocking */
 #include <sys/resource.h>  /*setrlimit */
 #include <libconcurrent/concurrent.h>
-#include <libnet/server.h>
+#include <libipc/net/inet_server.h>
 #include <signal.h>
 
 
@@ -210,7 +210,7 @@ int server_create_socket(struct addrinfo *addr)
 
     return listen_fd;
 }
-void * tcp_server(char *host,char *server)
+void * tcp_iserver(char *host,char *server)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -247,9 +247,9 @@ void * tcp_server(char *host,char *server)
 	freeaddrinfo(addr);
 	return srv;
 }
-int test_server()
+int test_iserver()
 {
-	tcp_server("127.0.0.1","6888");
+	tcp_iserver("127.0.0.1","6888");
 	return;
 }
 #if 0

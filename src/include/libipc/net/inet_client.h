@@ -44,20 +44,20 @@ client_t *client(char *host,
 int client_release_task(client_task_t *task);
 int test_client_recieve();
 int test_client_send();
-client_t *udp_client(allocator_t *allocator,
+client_t *udp_iclient(allocator_t *allocator,
 					 char *host,
 					 char *client_port,
 					 int (*process_task_cb)(client_task_t *task),
 					 void *opaque);
 
-client_t *tcp_client(allocator_t *allocator,
+client_t *tcp_iclient(allocator_t *allocator,
 					 char *server_ip,
 					 char *server_port,
 					 int (*process_task_cb)(client_task_t *task),
 					 void *opaque);
 
-int udp_client_send(client_t *client,const void *buf,size_t nbytes,int flags,
+int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
 		const struct sockaddr *destaddr,socklen_t destlen);
 
-int tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags);
+int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags);
 #endif

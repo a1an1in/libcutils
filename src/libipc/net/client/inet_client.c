@@ -3,7 +3,7 @@
  * @synopsis 
  * @author a1an1in@sina.com
  * @version 1.0
- * @date 2016-09-26
+ * @date 2016-09-03
  */
 
 /* Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
@@ -45,12 +45,15 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libnet/client.h>
-#include <sys/un.h>
+#include <libipc/net/inet_client.h>
 
 
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
+
+/*
+ *extern int process_task_callback(client_task_t *task);
+ */
 
 static int setnonblocking(int sockfd)
 {
@@ -73,7 +76,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 }
 #if 1
 //version 4, using pipe mode,without task admin
-int unix_client_init_task(client_task_t *task,
+int client_init_task(client_task_t *task,
 					 allocator_t *allocator,
 					 int fd,
 					 struct event *ev,
@@ -96,12 +99,12 @@ int unix_client_init_task(client_task_t *task,
 	task->client     = client;
 	return 0;
 }
-int unix_client_release_task(client_task_t *task)
+int client_release_task(client_task_t *task)
 {
 	allocator_mem_free(task->allocator,task);
 	return 0;
 }
-void unix_client_event_handler(int fd, short event, void *arg)
+void client_event_handler(int fd, short event, void *arg)
 {
 
 	client_t *client = (client_t *)arg;
@@ -131,20 +134,30 @@ void unix_client_event_handler(int fd, short event, void *arg)
 	} else {
 		dbg_str(NET_DETAIL,"*************read buf len=%d",nread);
 	}
+	/*
+	 *if((nread = recvfrom(fd,buf,MAXLINE,0,(void *)&raddr,&raddr_len)) < 0)
+	 *{
+	 *    perror("recvfrom()");
+	 *    exit(1);
+	 *}
+	 */
+	/*
+	 *dbg_buf(NET_DETAIL,"rcv buf:",buf,nread);
+	 */
 
 	dbg_str(NET_DETAIL,"client handler allocator=%p",master->allocator);
 	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
 
-	unix_client_init_task(task,//client_task_t *task,
-			    	      master->allocator,//allocator_t *allocator,
-			    	      0,//int fd,
-			    	      NULL,//struct event *ev,
-			    	      NULL,//void *key,
-			    	      0,//uint8_t key_len,
-			    	      buf,//uint8_t *buf,
-			    	      nread,//int buf_len,
-			    	      NULL,
-			    	      client);
+	client_init_task(task,//client_task_t *task,
+			    	 master->allocator,//allocator_t *allocator,
+			    	 0,//int fd,
+			    	 NULL,//struct event *ev,
+			    	 NULL,//void *key,
+			    	 0,//uint8_t key_len,
+			    	 buf,//uint8_t *buf,
+			    	 nread,//int buf_len,
+			    	 NULL,
+			    	 client);
 
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, client->slave_work_function,task,0);
@@ -154,8 +167,42 @@ void unix_client_event_handler(int fd, short event, void *arg)
     return ;
 }
 #endif
+int udp_iclient_create_socket(struct addrinfo *addr)
+{
+    int listenq = 1024;
+    struct rlimit rt;
+	int sockfd;
+    int opt = 1;
+
+    /* 设置每个进程允许打开的最大文件数 */
+	/*
+     *rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
+     *if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
+     *    perror("setrlimit error");
+     *    return -1;
+     *}
+	 */
+
+    if ((sockfd = socket(addr->ai_family, addr->ai_socktype, 0)) == -1) {
+        perror("can't create socket file");
+        return -1;
+    }
+
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+	if (setnonblocking(sockfd) < 0) {
+		perror("setnonblock error");
+	}
+
+    if (bind(sockfd, (struct sockaddr *)addr->ai_addr, sizeof(struct sockaddr)) == -1) {
+        perror("bind error");
+        return -1;
+    } 
+
+    return sockfd;
+}
 static inline 
-client_t *__client(allocator_t *allocator,
+client_t *__iclient(allocator_t *allocator,
 				   int user_id,
 				   uint8_t socktype,
 				   int (*process_task_cb)(client_task_t *task),
@@ -164,41 +211,40 @@ client_t *__client(allocator_t *allocator,
 	return io_user(allocator,//allocator_t *allocator,
 			       user_id,//int user_fd,
 			       socktype,//user_type
-			       unix_client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+			       client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
 			       slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
 			       (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
 			       opaque);//void *opaque)
 
 }
-client_t *udp_unix_client(allocator_t *allocator,
-                     char *client_unpath,
+client_t *udp_iclient(allocator_t *allocator,
+					 char *client_ip,
+					 char *client_port,
 					 int (*process_task_cb)(client_task_t *task),
 					 void *opaque)
 {
-    struct sockaddr_un client_un_addr;
+	struct addrinfo  *addr, hint;
 	int err;
 	int user_id;
 	client_t *client = NULL;
 
-    if((user_id = socket(PF_UNIX,SOCK_DGRAM,0)) < 0)  
-    {  
-        perror("fail to socket");  
-        exit(-1);  
-    }  
+	bzero(&hint, sizeof(hint));
+	hint.ai_family   = AF_INET;
+	hint.ai_socktype = SOCK_DGRAM;
 
-    setnonblocking(user_id);
+	if ((err = getaddrinfo(client_ip, client_port, &hint, &addr)) != 0){
+		printf("getaddrinfo error: %s", gai_strerror(err));
+		return NULL;
+	}
+	if(addr != NULL){
+		dbg_str(NET_DETAIL,"ai_family=%d type=%d",addr->ai_family,addr->ai_socktype);
+	}else{
+		dbg_str(DBG_ERROR,"getaddrinfo err");
+		return NULL;
+	}
+	user_id = udp_iclient_create_socket(addr);
 
-    bzero(&client_un_addr,sizeof(client_un_addr));  
-    client_un_addr.sun_family =   PF_UNIX;  
-    strcpy(client_un_addr.sun_path,client_unpath);  
-
-    if(bind(user_id,(struct sockaddr *)&client_un_addr,sizeof(client_un_addr)) < 0)  
-    {  
-        perror("fail to bind");  
-        exit(-1);  
-    }  
-
-	client = __client(allocator,//allocator_t *allocator,
+	client = __iclient(allocator,//allocator_t *allocator,
 					  user_id,//int user_id,
 					  SOCK_DGRAM,//uint8_t socktype,
 					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
@@ -211,18 +257,14 @@ client_t *udp_unix_client(allocator_t *allocator,
 
 	return client;
 }
-int udp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flags,
-		const char *dest_unpath)
+int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
+		const struct sockaddr *destaddr,socklen_t destlen)
 {
 	int ret = 0;
-    struct sockaddr_un dest_un_addr;
-    bzero(&dest_un_addr,sizeof(dest_un_addr));  
-    dest_un_addr.sun_family = PF_UNIX;  
-    strcpy(dest_un_addr.sun_path,dest_unpath);  
 
 	if( ret = sendto(client->user_fd,buf,nbytes,flags,
-					 (struct sockaddr *)&dest_un_addr,
-					 sizeof(struct sockaddr_un)) < 0)
+					 (struct sockaddr *)destaddr,
+					 (socklen_t)destlen) < 0)
 	{
 		perror("sendto()");  
 	}  
@@ -230,29 +272,28 @@ int udp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flag
 	return ret;
 }
 
-client_t *tcp_unix_client(allocator_t *allocator,
-				 	 char *server_unix_path,
+client_t *tcp_iclient(allocator_t *allocator,
+				 	 char *server_ip,
+				 	 char *server_port,
 				 	 int (*process_task_cb)(client_task_t *task),
 				 	 void *opaque)
 {
 	int sockfd;
-	struct sockaddr_un sa_addr;
+	struct sockaddr_in sa_addr;
 	client_t *client = NULL;
 	int ret;
-    int len;
 
-    if ((sockfd = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
+	bzero(&sa_addr, sizeof(sa_addr));
+	sa_addr.sin_family = AF_INET; 
+	sa_addr.sin_port = htons(atoi(server_port));  
+	inet_pton(AF_INET,server_ip,&sa_addr.sin_addr);
+
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("can't create socket file");
         return NULL;
     }
-    setnonblocking(sockfd);
-
-	bzero(&sa_addr, sizeof(sa_addr));
-    sa_addr.sun_family = PF_UNIX;  
-    strcpy(sa_addr.sun_path,server_unix_path);  
-    len = strlen(sa_addr.sun_path) + sizeof(sa_addr.sun_family);
-
-	ret = connect(sockfd,(struct sockaddr *)&sa_addr, len);
+	ret = connect(sockfd,(struct sockaddr *)&sa_addr,
+			                   sizeof(sa_addr));
 	if(ret < 0){
 		dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
 		close(sockfd);
@@ -261,9 +302,9 @@ client_t *tcp_unix_client(allocator_t *allocator,
 		dbg_str(NET_DETAIL,"conect suc");
 	}
 
-	client = __client(allocator,//allocator_t *allocator,
+	client = __iclient(allocator,//allocator_t *allocator,
 					  sockfd,//int user_id,
-					  SOCK_STREAM,//uint8_t socktype,
+					  SOCK_DGRAM,//uint8_t socktype,
 					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
 					  opaque);//void *opaque)
 
@@ -274,7 +315,7 @@ client_t *tcp_unix_client(allocator_t *allocator,
 
 	return client;
 }
-int tcp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
+int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
 {
 	int ret = 0;
 
@@ -284,10 +325,8 @@ int tcp_unix_client_send(client_t *client,const void *buf,size_t nbytes,int flag
 
 	return ret;
 }
-int unix_client_destroy(client_t *client)
+int client_destroy(client_t *client)
 {
-
-    close(client->user_fd);
 	allocator_mem_free(client->allocator,client);
 
 	return 0;
