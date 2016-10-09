@@ -196,7 +196,7 @@ int iserver_create_socket(struct addrinfo *addr)
 
     return listen_fd;
 }
-static void * tcp_iserver(allocator_t *allocator,
+void * tcp_iserver(allocator_t *allocator,
         char *host_ip, char *server_port,
         int (*process_task_cb)(void *task),
         void *opaque)

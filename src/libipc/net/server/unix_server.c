@@ -189,7 +189,7 @@ static int tcp_userver_create_socket(char *server_un_path)
 
     return listen_fd;
 }
-static void * tcp_userver(allocator_t *allocator,
+void * tcp_userver(allocator_t *allocator,
         char *server_un_path,
         int (*process_task_cb)(void *task),
         void *opaque)

@@ -322,7 +322,7 @@ int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
 
 	return ret;
 }
-int client_destroy(client_t *client)
+int iclient_destroy(client_t *client)
 {
 	allocator_mem_free(client->allocator,client);
 

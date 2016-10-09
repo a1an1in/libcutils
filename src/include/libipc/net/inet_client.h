@@ -1,5 +1,5 @@
-#ifndef __CLIENT_H__
-#define __CLIENT_H__
+#ifndef __INET_CLIENT_H__
+#define __INET_CLIENT_H__
 
 #include <libconcurrent/concurrent.h>
 #include <libconcurrent/io_user.h>
@@ -31,19 +31,6 @@ typedef struct client_task_s{
 }client_task_t;
 
 
-client_t *client(char *host,
-				 char *client_port,
-				 int family,
-				 int socktype,
-				 int protocol,
-				 int (*process_task_cb)(client_task_t *task),
-				 /*
-				  *void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-				  */
-				 void *opaque);
-int client_release_task(client_task_t *task);
-int test_client_recieve();
-int test_client_send();
 client_t *udp_iclient(allocator_t *allocator,
 					 char *host,
 					 char *client_port,
