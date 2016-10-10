@@ -86,6 +86,7 @@ int test_udp_uclient_send()
 			0,//int flags,
 			"test_client_unix_path");//socklen_t destlen);
 
+    sleep(5);
     uclient_destroy(cli);
 }
 int test_tcp_uclient_send()
@@ -106,4 +107,9 @@ int test_tcp_uclient_send()
 			cli,//client_t *client,
 			buf,//const void *buf,
 			sizeof(buf),0);//socklen_t destlen);
+
+    sleep(5);
+
+    uclient_destroy(cli);
+
 }

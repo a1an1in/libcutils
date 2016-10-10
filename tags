@@ -464,6 +464,8 @@ MAXLINE	src/libipc/net/client/inet_client.c	52;"	d	file:
 MAXLINE	src/libipc/net/client/unix_client.c	53;"	d	file:
 MAXLINE	src/libipc/net/server/inet_server.c	52;"	d	file:
 MAXLINE	src/libipc/net/server/inet_server_old.c	52;"	d	file:
+MAXLINE	src/libipc/net/server/server.c	106;"	d	file:
+MAXLINE	src/libipc/net/server/server.c	89;"	d	file:
 MAXLINE	src/libipc/net/server/unix_server.c	52;"	d	file:
 MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	225;"	d	file:
@@ -515,6 +517,8 @@ MAX_TASK_BUFFER_LEN	src/include/libipc/net/inet_client.h	21;"	d
 MAX_TASK_BUFFER_LEN	src/include/libipc/net/inet_client.h	30;"	d
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	42;"	d
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	48;"	d
+MAX_TYPE_STR_LEN	src/include/libconcurrent/io_user.h	19;"	d
+MAX_TYPE_STR_LEN	src/include/libconcurrent/io_user.h	22;"	d
 MEM_POOL_MAX_SIZE	src/include/liballoc/allocator_ctr_alloc.h	26;"	d
 MEM_POOL_MIN_DEPTH	src/include/liballoc/allocator_ctr_alloc.h	27;"	d
 MICROSECONDS_MASK	src/libevent_tiny/event.c	406;"	d	file:
@@ -1054,6 +1058,7 @@ args_process_port	src/main.c	/^}static int args_process_port(void *base,int argc
 args_process_test_allocator	src/main.c	/^static int args_process_test_allocator(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_analyzer	src/main.c	/^static int args_process_test_analyzer(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_client_recv_of_inet_udp	src/main.c	/^static int args_process_test_client_recv_of_inet_udp(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_client_recv_of_unix_udp	src/main.c	/^static int args_process_test_client_recv_of_unix_udp(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_evio	src/main.c	/^static int args_process_test_evio(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_evsignal	src/main.c	/^static int args_process_test_evsignal(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_evtime	src/main.c	/^static int args_process_test_evtime(void *base,int argc,char **argv)$/;"	f	file:
@@ -1061,6 +1066,7 @@ args_process_test_hashlist	src/main.c	/^static int args_process_test_hashlist(vo
 args_process_test_io_user	src/main.c	/^static int args_process_test_io_user(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_llist	src/main.c	/^static int args_process_test_llist(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_rbtree_map	src/main.c	/^static int args_process_test_rbtree_map(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_server_of_unix_udp	src/main.c	/^static int args_process_test_server_of_unix_udp(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_share_mem_read	src/main.c	/^}static int args_process_test_share_mem_read(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_share_mem_write	src/main.c	/^static int args_process_test_share_mem_write(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_state_machine	src/main.c	/^static int args_process_test_state_machine(void *base,int argc,char **argv)$/;"	f	file:
@@ -2423,7 +2429,7 @@ set_bit_data	src/libproto_analyzer/protocol_analyzer.c	/^uint8_t set_bit_data(ui
 set_proto_info_attribs	src/libproto_analyzer/protocol_format_set.c	/^void set_proto_info_attribs(char *name,void *attr_value,proto_info_list_t *info_list)$/;"	f
 set_value	src/include/libproto_analyzer/protocol_analyzer.h	/^	int (*set_value)(char *key,char *value); $/;"	m	struct:protocol_analyzer_s
 setnonblocking	src/libipc/net/client/inet_client.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
-setnonblocking	src/libipc/net/client/unix_client.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
+setnonblocking	src/libipc/net/client/unix_client.c	/^static int setnonblocking(int user_fd)$/;"	f	file:
 setnonblocking	src/libipc/net/server/inet_server.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
 setnonblocking	src/libipc/net/server/inet_server_old.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
 setnonblocking	src/libipc/net/server/unix_server.c	/^static int setnonblocking(int sockfd)$/;"	f	file:
@@ -2580,15 +2586,18 @@ task_count	src/include/libconcurrent/concurrent.h	/^	uint32_t task_count;$/;"	m	
 tcp_iclient	src/libipc/net/client/inet_client.c	/^client_t *tcp_iclient(allocator_t *allocator,$/;"	f
 tcp_iclient_send	src/libipc/net/client/inet_client.c	/^int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
 tcp_iserver	src/libipc/net/server/inet_server.c	/^server_t * tcp_iserver(allocator_t *allocator,$/;"	f
+tcp_iserver_destroy	src/libipc/net/server/inet_server.c	/^int tcp_iserver_destroy(server_t *server)$/;"	f
 tcp_uclient	src/libipc/net/client/unix_client.c	/^client_t *tcp_uclient(allocator_t *allocator,$/;"	f
 tcp_uclient_send	src/libipc/net/client/unix_client.c	/^int tcp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
 tcp_userver	src/libipc/net/server/unix_server.c	/^server_t * tcp_userver(allocator_t *allocator,$/;"	f
 tcp_userver_create_socket	src/libipc/net/server/unix_server.c	/^static int tcp_userver_create_socket(char *server_un_path)$/;"	f	file:
+tcp_userver_destroy	src/libipc/net/server/unix_server.c	/^int tcp_userver_destroy(server_t *server)$/;"	f
 tcp_userver_listen_event_handler	src/libipc/net/server/unix_server.c	/^static void tcp_userver_listen_event_handler(int fd, short event, void *arg)$/;"	f	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_args	src/libargs/test_cmd_args.c	/^void test_args(int argc, char *argv[])$/;"	f
 test_client_recv_of_inet_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_inet_udp()$/;"	f
+test_client_recv_of_unix_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_unix_udp()$/;"	f
 test_concurrent1	src/libconcurrent/test_concurrent.c	/^int test_concurrent1()$/;"	f
 test_concurrent3	src/libconcurrent/test_concurrent.c	/^int test_concurrent3()$/;"	f
 test_concurrent_add_task	src/libconcurrent/test_concurrent.c	/^int test_concurrent_add_task(concurrent_master_t *master,void *task)$/;"	f
@@ -2609,8 +2618,10 @@ test_pdt_proto_analyzer	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c
 test_pdu_proto_analyzer	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c	/^int test_pdu_proto_analyzer()$/;"	f
 test_pipe_event_handler	src/libconcurrent/test_pipe.c	/^static void test_pipe_event_handler(int fd, short event, void *arg)$/;"	f	file:
 test_process_task_callback	src/libipc/net/server/inet_server.c	/^static int test_process_task_callback(void *task)$/;"	f	file:
+test_process_task_callback	src/libipc/net/server/server.c	/^static int test_process_task_callback(void *task)$/;"	f	file:
 test_process_task_callback	src/libipc/net/server/unix_server.c	/^static int test_process_task_callback(void *task)$/;"	f	file:
 test_process_timer_task_callback	src/libconcurrent/tmr_user.c	/^static void test_process_timer_task_callback(void *timer)$/;"	f	file:
+test_server_of_unix	src/libipc/net/server/server.c	/^int test_server_of_unix()$/;"	f
 test_share_mem_read	src/libipc/share_mem/shm.c	/^void test_share_mem_read()$/;"	f
 test_share_mem_write	src/libipc/share_mem/shm.c	/^void test_share_mem_write()$/;"	f
 test_signal	src/libevent_tiny/test_signal.c	/^int test_signal()$/;"	f
@@ -2667,6 +2678,7 @@ tv_sec	src/include/libstate_machine/state_machine.h	/^     time_t tv_sec;$/;"	m	
 tv_usec	src/include/libstate_machine/state_machine.h	/^     suseconds_t tv_usec;$/;"	m	struct:state_entry_config_s
 type	src/include/libipc/semaphore/sem_struct.h	/^    unsigned char type;$/;"	m	struct:semaphore_s
 type	src/include/libipc/share_mem/shm.h	/^    int type;$/;"	m	struct:share_mem_s
+type_str	src/include/libconcurrent/io_user.h	/^    char type_str[MAX_TYPE_STR_LEN];$/;"	m	struct:io_user_s
 u16	src/include/liballoc/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdata_structure/list.h	/^typedef unsigned short    u16;$/;"	t
 u16	src/include/libdbg/list.h	/^typedef unsigned short    u16;$/;"	t
@@ -2700,6 +2712,7 @@ uint8_t	src/include/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/liballoc/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdbg/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned char uint8_t;$/;"	t
+unix_path	src/include/libconcurrent/io_user.h	/^    char unix_path[MAX_TYPE_STR_LEN];$/;"	m	struct:io_user_s
 update_time_cache	src/libevent_tiny/event.c	/^update_time_cache(struct event_base *base)$/;"	f	file:
 use_monotonic	src/libevent_tiny/event.c	/^static int use_monotonic;$/;"	v	file:
 used_slabs	src/include/liballoc/allocator_ctr_alloc.h	/^	struct list_head **used_slabs;$/;"	m	struct:ctr_alloc_s	typeref:struct:ctr_alloc_s::list_head

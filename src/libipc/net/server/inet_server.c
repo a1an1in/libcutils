@@ -204,6 +204,7 @@ server_t * tcp_iserver(allocator_t *allocator,
 	struct addrinfo  *addr, hint;
 	int err;
 	server_t *srv = NULL;
+	int user_fd;
 
 	bzero(&hint, sizeof(hint));
 	hint.ai_family = AF_INET;
@@ -218,8 +219,9 @@ server_t * tcp_iserver(allocator_t *allocator,
 		exit(1);
 	}
 
+    user_fd = iserver_create_socket(addr);
 	srv = io_user(allocator,//allocator_t *allocator,
-			      iserver_create_socket(addr),//int user_fd,
+			      user_fd,//int user_fd,
 			      SOCK_STREAM,//user_type
 			      master_iserver_listen_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
 			      slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
@@ -229,10 +231,19 @@ server_t * tcp_iserver(allocator_t *allocator,
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;
 	}
+    srv->user_fd = user_fd;
 
 	freeaddrinfo(addr);
 	return srv;
 }
+int tcp_iserver_destroy(server_t *server)
+{
+    close(server->user_fd);
+    io_user_destroy(server);
+
+	return 0;
+}
+
 static int test_process_task_callback(void *task)
 {
     int nread;

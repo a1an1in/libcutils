@@ -211,8 +211,18 @@ server_t * tcp_userver(allocator_t *allocator,
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;
 	}
+    srv->user_fd = listen_fd;
+    strcpy(srv->unix_path,server_un_path);
 
 	return srv;
+}
+int tcp_userver_destroy(server_t *server)
+{
+    unlink(server->unix_path);
+    close(server->user_fd);
+    io_user_destroy(server);
+
+	return 0;
 }
 
 static int test_process_task_callback(void *task)

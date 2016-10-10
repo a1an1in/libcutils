@@ -7,5 +7,6 @@ server_t * tcp_iserver(allocator_t *allocator,
         char *host_ip, char *server_port,
         int (*process_task_cb)(void *task),
         void *opaque);
+int tcp_iserver_destroy(server_t *server);
 int test_iserver();
 #endif

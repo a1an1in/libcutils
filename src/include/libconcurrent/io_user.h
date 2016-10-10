@@ -18,6 +18,7 @@ typedef struct io_user_s{
 	uint8_t user_type;
 #define MAX_TYPE_STR_LEN 50
     char type_str[MAX_TYPE_STR_LEN];
+    char unix_path[MAX_TYPE_STR_LEN];
 #undef MAX_TYPE_STR_LEN
 }io_user_t;
 

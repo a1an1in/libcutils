@@ -55,23 +55,83 @@ server_t * server(allocator_t *allocator,
 {
     server_t *s;
 
-    if(!strcpy(type,TCP_ISERVER_TYPE)){
+    if(!strcmp(type,TCP_ISERVER_TYPE)){
         s = tcp_iserver(allocator, host_ip, server_port, 
                 process_task_cb, opaque);
-    } else if (!strcpy(type,TCP_USERVER_TYPE)){
+    } else if (!strcmp(type,TCP_USERVER_TYPE)){
         s = tcp_userver(allocator, host_ip, 
                 process_task_cb, opaque);
     } else {
-        dbg_str(DBG_WARNNING,"server error type");
+        dbg_str(DBG_WARNNING,"server type error");
         return NULL;
     }
+
+    strcmp(s->type_str,type);
 
     return s;
 }
 
 int server_destroy(server_t *server)
 {
-    //..........
+    char *type = server->type_str;
+
+    if(!strcmp(type,TCP_ISERVER_TYPE)){
+        tcp_iserver_destroy(server);
+    } else if (!strcmp(type,TCP_USERVER_TYPE)){
+        tcp_userver_destroy(server);
+    } else {
+        dbg_str(DBG_WARNNING,"server type error");
+        return -1;
+    }
+}
+static int test_process_task_callback(void *task)
+{
+#define MAXLINE 10240
+    int nread;
+    char buf[MAXLINE];
+    int fd = ((server_task_t *)task)->fd;
+    nread = read(fd, buf, MAXLINE);//读取客户端socket流
+
+	dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
+    if (nread < 0) {
+        dbg_str(DBG_ERROR,"fd read err,client close the connection");
+		close(fd);//modify for test
+        return;
+    } 
+    write(fd, buf, nread);//响应客户端  
+	/*
+	 *close(fd);
+	 */
+	dbg_str(NET_DETAIL,"task done");
+#undef MAXLINE
+}
+int test_server_of_unix()
+{
+    allocator_t *allocator = allocator_get_default_alloc();
+
+    dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
+
+    server(allocator,
+            TCP_USERVER_TYPE,
+            "test_server_un_path", 
+            NULL,
+            test_process_task_callback,
+            NULL);
+	return;
 }
 
+int test_server_of_inet()
+{
+    allocator_t *allocator = allocator_get_default_alloc();
+
+    dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
+
+    server(allocator,
+            TCP_ISERVER_TYPE,
+            "127.0.0.1", 
+            "6888",
+            test_process_task_callback,
+            NULL);
+	return;
+}
 

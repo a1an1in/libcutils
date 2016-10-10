@@ -201,13 +201,13 @@ int udp_iclient_create_socket(struct addrinfo *addr)
 }
 static inline 
 client_t *__iclient(allocator_t *allocator,
-				   int user_id,
+				   int user_fd,
 				   uint8_t socktype,
 				   int (*process_task_cb)(client_task_t *task),
 				   void *opaque)
 {
 	return io_user(allocator,//allocator_t *allocator,
-			       user_id,//int user_fd,
+			       user_fd,//int user_fd,
 			       socktype,//user_type
 			       client_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
 			       slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
@@ -223,7 +223,7 @@ client_t *udp_iclient(allocator_t *allocator,
 {
 	struct addrinfo  *addr, hint;
 	int err;
-	int user_id;
+	int user_fd;
 	client_t *client = NULL;
 
 	bzero(&hint, sizeof(hint));
@@ -240,18 +240,19 @@ client_t *udp_iclient(allocator_t *allocator,
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
 	}
-	user_id = udp_iclient_create_socket(addr);
+	user_fd = udp_iclient_create_socket(addr);
 
 	client = __iclient(allocator,//allocator_t *allocator,
-					  user_id,//int user_id,
+					  user_fd,//int user_fd,
 					  SOCK_DGRAM,//uint8_t socktype,
 					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
 					  opaque);//void *opaque)
 
 	if(client == NULL){
-		close(user_id);
+		close(user_fd);
 		return NULL;
 	}
+    client->user_fd = user_fd;
 
 	return client;
 }
@@ -276,7 +277,7 @@ client_t *tcp_iclient(allocator_t *allocator,
 				 	 int (*process_task_cb)(client_task_t *task),
 				 	 void *opaque)
 {
-	int sockfd;
+	int user_fd;
 	struct sockaddr_in sa_addr;
 	client_t *client = NULL;
 	int ret;
@@ -286,30 +287,31 @@ client_t *tcp_iclient(allocator_t *allocator,
 	sa_addr.sin_port = htons(atoi(server_port));  
 	inet_pton(AF_INET,server_ip,&sa_addr.sin_addr);
 
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+    if ((user_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         perror("can't create socket file");
         return NULL;
     }
-	ret = connect(sockfd,(struct sockaddr *)&sa_addr,
+	ret = connect(user_fd,(struct sockaddr *)&sa_addr,
 			                   sizeof(sa_addr));
 	if(ret < 0){
 		dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
-		close(sockfd);
+		close(user_fd);
 		return NULL;
 	}else{
 		dbg_str(NET_DETAIL,"conect suc");
 	}
 
 	client = __iclient(allocator,//allocator_t *allocator,
-					  sockfd,//int user_id,
+					  user_fd,//int user_fd,
 					  SOCK_DGRAM,//uint8_t socktype,
 					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
 					  opaque);//void *opaque)
 
 	if(client == NULL){
-		close(sockfd);
+		close(user_fd);
 		return NULL;
 	}
+    client->user_fd = user_fd;
 
 	return client;
 }
