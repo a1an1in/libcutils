@@ -56,8 +56,6 @@ io_user_t *io_user(allocator_t *allocator,
 			 int (*process_task_cb)(void *task),
 			 void *opaque)
 {
-	struct addrinfo  *addr, hint;
-	int err;
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 	io_user_t *io_user = NULL;
 
@@ -93,8 +91,12 @@ io_user_t *io_user(allocator_t *allocator,
 }
 int io_user_destroy(io_user_t *io_user)
 {
+    concurrent_t *c = concurrent_get_global_concurrent_addr();
+
+    concurrent_del_event_of_master(c,
+            &io_user->event);
+
 	allocator_mem_free(io_user->allocator,io_user);
-    //del event ...
 
 	return 0;
 }

@@ -55,31 +55,34 @@ client_t *client(allocator_t *allocator,
 {
     client_t *c;
 
-    if(!strcpy(type,TCP_ICLIENT_TYPE)){
+    if(!strcmp(type,TCP_ICLIENT_TYPE)){
         c = tcp_iclient(allocator, id_str, serve_no,
                 process_task_cb, opaque);
-    } else if (!strcpy(type,UDP_ICLIENT_TYPE)){
+    } else if (!strcmp(type,UDP_ICLIENT_TYPE)){
         c = udp_iclient(allocator, id_str, serve_no,
                 process_task_cb, opaque);
-    } else if (!strcpy(type,UDP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,UDP_UCLIENT_TYPE)){
         c = udp_uclient(allocator, id_str, process_task_cb, opaque);
-    } else if (!strcpy(type,TCP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,TCP_UCLIENT_TYPE)){
         c = tcp_uclient(allocator, id_str, process_task_cb, opaque);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
         return NULL;
     }
 
+    strncpy(c->type_str,type,strlen(type));
+
     return c;
 }
 int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
-        char *type, char *dest_id_str, char *dest_srv_str)
+        char *dest_id_str, char *dest_srv_str)
 {
     int ret;
+    char *type = client->type_str;
 
-    if(!strcpy(type,TCP_ICLIENT_TYPE)){
+    if(!strcmp(type,TCP_ICLIENT_TYPE)){
         ret = tcp_iclient_send(client,buf,nbytes,flags);
-    } else if (!strcpy(type,UDP_ICLIENT_TYPE)){
+    } else if (!strcmp(type,UDP_ICLIENT_TYPE)){
         struct sockaddr_in raddr;
         raddr.sin_family = AF_INET; 
         raddr.sin_port = htons(atoi(dest_srv_str));  
@@ -88,9 +91,9 @@ int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
         ret = udp_iclient_send(client,buf,nbytes,flags,
                 (struct sockaddr *)&raddr,sizeof(raddr));
 
-    } else if (!strcpy(type,UDP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,UDP_UCLIENT_TYPE)){
         ret = udp_uclient_send(client,buf,nbytes,flags, dest_id_str);
-    } else if (!strcpy(type,TCP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,TCP_UCLIENT_TYPE)){
         ret = tcp_uclient_send(client,buf,nbytes,flags);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
@@ -101,8 +104,56 @@ int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 }
 int client_destroy(client_t *client)
 {
-	allocator_mem_free(client->allocator,client);
-    //del event.........
+    char *type = client->type_str;
+
+    if(!strcmp(type,TCP_ICLIENT_TYPE)){
+        iclient_destroy(client);
+    } else if (!strcmp(type,UDP_ICLIENT_TYPE)){
+        iclient_destroy(client);
+    } else if (!strcmp(type,UDP_UCLIENT_TYPE)){
+        uclient_destroy(client);
+    } else if (!strcmp(type,TCP_UCLIENT_TYPE)){
+        uclient_destroy(client);
+    } else {
+        dbg_str(DBG_WARNNING,"client error type");
+        return -1;
+    }
 
 	return 0;
+}
+
+static int process_task_callback(client_task_t *task)
+{
+	dbg_str(DBG_DETAIL,"process_task begin,client recv");
+	/*
+	 *user_t *user = task->client;
+	 *void *opaque = user->opaque;
+	 */
+	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
+	dbg_str(DBG_DETAIL,"process_task end");
+}
+
+void test_client_recv_of_inet_udp()
+{
+	allocator_t *allocator = allocator_get_default_alloc();
+
+    dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
+    client(allocator,
+            "127.0.0.1",//char *host,
+            "1989",//char *client_port,
+            UDP_ICLIENT_TYPE,
+            process_task_callback,
+            NULL);
+}
+void test_client_recv_of_unix_udp()
+{
+	allocator_t *allocator = allocator_get_default_alloc();
+
+    dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
+    client(allocator,
+            "test_client_unix_path",//char *host,
+            NULL,//char *client_port,
+            UDP_UCLIENT_TYPE,
+            process_task_callback,
+            NULL);
 }

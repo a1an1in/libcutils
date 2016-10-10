@@ -52,6 +52,8 @@
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
 
+static int uclient_release_task(client_task_t *task);
+
 static int setnonblocking(int sockfd)
 {
 	if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
@@ -67,7 +69,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 
 	dbg_str(NET_DETAIL,"slave_work_function begin");
 	client->process_task_cb(task);
-	client_release_task(task);
+	uclient_release_task(task);
 	dbg_str(NET_DETAIL,"slave_work_function end");
 	return ;
 }
@@ -96,7 +98,7 @@ int uclient_init_task(client_task_t *task,
 	task->client     = client;
 	return 0;
 }
-int uclient_release_task(client_task_t *task)
+static int uclient_release_task(client_task_t *task)
 {
 	allocator_mem_free(task->allocator,task);
 	return 0;
@@ -191,6 +193,7 @@ client_t *udp_uclient(allocator_t *allocator,
     bzero(&client_un_addr,sizeof(client_un_addr));  
     client_un_addr.sun_family =   PF_UNIX;  
     strcpy(client_un_addr.sun_path,client_unpath);  
+    unlink(client_unpath);
 
     if(bind(user_id,(struct sockaddr *)&client_un_addr,sizeof(client_un_addr)) < 0)  
     {  
@@ -251,6 +254,7 @@ client_t *tcp_uclient(allocator_t *allocator,
     sa_addr.sun_family = PF_UNIX;  
     strcpy(sa_addr.sun_path,server_unix_path);  
     len = strlen(sa_addr.sun_path) + sizeof(sa_addr.sun_family);
+    unlink(server_unix_path);
 
 	ret = connect(sockfd,(struct sockaddr *)&sa_addr, len);
 	if(ret < 0){
@@ -288,7 +292,7 @@ int uclient_destroy(client_t *client)
 {
 
     close(client->user_fd);
-	allocator_mem_free(client->allocator,client);
+    io_user_destroy(client);
 
 	return 0;
 }

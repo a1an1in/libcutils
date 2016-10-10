@@ -692,6 +692,12 @@ TARGET	src/libstate_machine/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/unix/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/windows/Makefile	/^TARGET = build_in.o$/;"	m
+TCP_ICLIENT_TYPE	src/include/libipc/net/client.h	7;"	d
+TCP_ISERVER_TYPE	src/include/libipc/net/server.h	7;"	d
+TCP_UCLIENT_TYPE	src/include/libipc/net/client.h	9;"	d
+TCP_USERVER_TYPE	src/include/libipc/net/server.h	8;"	d
+UDP_ICLIENT_TYPE	src/include/libipc/net/client.h	8;"	d
+UDP_UCLIENT_TYPE	src/include/libipc/net/client.h	10;"	d
 UNIX_LIKE_USER_MODE	src/include/cutils_re.h	21;"	d
 USE_INTERNAL_NTOP	src/libevent_tiny/evutil.c	1554;"	d	file:
 USE_INTERNAL_PTON	src/libevent_tiny/evutil.c	1555;"	d	file:
@@ -871,7 +877,7 @@ __BASIC_TYPES_H__	src/include/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/liballoc/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libdbg/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libproto_analyzer/my_types.h	2;"	d
-__CLIENT_H__	src/include/libipc/net/inet_client.h	2;"	d
+__CLIENT_H__	src/include/libipc/net/client.h	2;"	d
 __CMD_ARGS_H__	src/include/libargs/cmd_args.h	2;"	d
 __CONCURRENT_H__	src/include/libconcurrent/concurrent.h	2;"	d
 __DEBUG_BUSINESSES_H__	src/include/libdbg/debug_businesses.h	20;"	d
@@ -884,6 +890,8 @@ __EV_TIMER_H__	src/include/libconcurrent/tmr_user.h	2;"	d
 __HASH_LIST_H__	src/include/libdata_structure/hash_list.h	19;"	d
 __HASH_LIST_ST_H__	src/include/libdata_structure/hash_list_struct.h	19;"	d
 __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
+__INET_CLIENT_H__	src/include/libipc/net/inet_client.h	2;"	d
+__INET_SERVER_H__	src/include/libipc/net/inet_server.h	2;"	d
 __KEY_CMP_FPT__	src/include/libdata_structure/map_pair.h	31;"	d
 __KEY_CMP_FPT__	src/include/libdata_structure/rbtree_map_struct.h	33;"	d
 __LIBCRE_H__	src/include/cutils_re.h	19;"	d
@@ -899,7 +907,7 @@ __RBTREE_MAP_STRUCP_H__	src/include/libdata_structure/rbtree_map_struct.h	20;"	d
 __SEM_H__	src/include/libipc/semaphore/sem.h	2;"	d
 __SEM_STRUCT_H__	src/include/libipc/semaphore/sem_struct.h	2;"	d
 __SEM_SYSV_H__	src/include/libipc/semaphore/sem_sysv.h	2;"	d
-__SERVER_H__	src/include/libipc/net/inet_server.h	2;"	d
+__SERVER_H__	src/include/libipc/net/server.h	2;"	d
 __SHM_H__	src/include/libipc/share_mem/shm.h	2;"	d
 __STATE_MACHINE_H__	src/include/libstate_machine/state_machine.h	2;"	d
 __SYNC_LOCK_H__	src/include/libthread/sync_lock.h	19;"	d
@@ -1045,6 +1053,7 @@ args_process_port	src/libargs/test_cmd_args.c	/^static int args_process_port(voi
 args_process_port	src/main.c	/^}static int args_process_port(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_allocator	src/main.c	/^static int args_process_test_allocator(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_analyzer	src/main.c	/^static int args_process_test_analyzer(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_client_recv_of_inet_udp	src/main.c	/^static int args_process_test_client_recv_of_inet_udp(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_evio	src/main.c	/^static int args_process_test_evio(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_evsignal	src/main.c	/^static int args_process_test_evsignal(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_evtime	src/main.c	/^static int args_process_test_evtime(void *base,int argc,char **argv)$/;"	f	file:
@@ -1113,10 +1122,11 @@ check_selectop	src/libevent_tiny/select.c	/^check_selectop(struct selectop *sop)
 check_selectop	src/libevent_tiny/select.c	121;"	d	file:
 clear_time_cache	src/libevent_tiny/event.c	/^clear_time_cache(struct event_base *base)$/;"	f	file:
 client	src/include/libipc/net/inet_client.h	/^	client_t *client;$/;"	m	struct:client_task_s
-client_destroy	src/libipc/net/client/inet_client.c	/^int client_destroy(client_t *client)$/;"	f
+client	src/libipc/net/client/client.c	/^client_t *client(allocator_t *allocator,$/;"	f
+client_destroy	src/libipc/net/client/client.c	/^int client_destroy(client_t *client)$/;"	f
 client_event_handler	src/libipc/net/client/inet_client.c	/^void client_event_handler(int fd, short event, void *arg)$/;"	f
 client_init_task	src/libipc/net/client/inet_client.c	/^int client_init_task(client_task_t *task,$/;"	f
-client_release_task	src/libipc/net/client/inet_client.c	/^int client_release_task(client_task_t *task)$/;"	f
+client_send	src/libipc/net/client/client.c	/^int client_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f
 client_t	src/include/libipc/net/inet_client.h	/^typedef struct io_user_s client_t;$/;"	t	typeref:struct:io_user_s
 client_task_s	src/include/libipc/net/inet_client.h	/^typedef struct client_task_s{$/;"	s
 client_task_t	src/include/libipc/net/inet_client.h	/^}client_task_t;$/;"	t	typeref:struct:client_task_s
@@ -1794,6 +1804,8 @@ hmap_lock_type	src/include/libconcurrent/concurrent.h	/^	uint8_t hmap_lock_type;
 host_flag	src/include/libipc/semaphore/sem_struct.h	/^    int host_flag;$/;"	m	struct:semaphore_s
 ht_improve_hash	src/include/libevent_tiny/ht-internal.h	/^ht_improve_hash(unsigned h)$/;"	f
 ht_string_hash	src/include/libevent_tiny/ht-internal.h	/^ht_string_hash(const char *s)$/;"	f
+iclient_destroy	src/libipc/net/client/inet_client.c	/^int iclient_destroy(client_t *client)$/;"	f
+iclient_release_task	src/libipc/net/client/inet_client.c	/^static int iclient_release_task(client_task_t *task)$/;"	f	file:
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon2
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon1
 idxplus1	src/libevent_tiny/evmap.c	/^	int idxplus1; \/* this is the index +1, so that memset(0) will make it$/;"	m	struct:event_changelist_fdinfo	file:
@@ -2282,6 +2294,7 @@ print_list_data	src/libdata_structure/test/test_link_list.c	/^void print_list_da
 print_vector_data	src/libdata_structure/test/test_vector.c	/^void print_vector_data(vector_pos_t *pos)$/;"	f
 priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon4
 priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:debugger::debugger_priv
+process_task_callback	src/libipc/net/client/client.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libipc/net/client/test_iclient_rcv.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libipc/net/client/test_iclient_send.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libipc/net/client/test_uclient_rcv.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
@@ -2397,6 +2410,8 @@ semun	src/include/libipc/semaphore/sem_struct.h	/^union semun  $/;"	u
 server	src/include/libipc/net/unix_server.h	/^    server_t *server;$/;"	m	struct:server_task_s
 server	src/libipc/net/server/inet_server.c	/^    server_t *server;$/;"	m	struct:iserver_task_s	file:
 server	src/libipc/net/server/inet_server_old.c	/^    server_t *server;$/;"	m	struct:iserver_task_s	file:
+server	src/libipc/net/server/server.c	/^server_t * server(allocator_t *allocator,$/;"	f
+server_destroy	src/libipc/net/server/server.c	/^int server_destroy(server_t *server)$/;"	f
 server_t	src/include/libipc/net/inet_server.h	/^typedef struct io_user_s server_t;$/;"	t	typeref:struct:io_user_s
 server_task_init	src/libipc/net/server/inet_server.c	/^int server_task_init(server_task_t *task,$/;"	f
 server_task_release_without_task_admin	src/libipc/net/server/inet_server.c	/^int server_task_release_without_task_admin(server_task_t *task)$/;"	f
@@ -2564,15 +2579,16 @@ task_admin	src/libconcurrent/test_concurrent.c	/^	concurrent_task_admin_t *task_
 task_count	src/include/libconcurrent/concurrent.h	/^	uint32_t task_count;$/;"	m	struct:concurrent_task_admin_s
 tcp_iclient	src/libipc/net/client/inet_client.c	/^client_t *tcp_iclient(allocator_t *allocator,$/;"	f
 tcp_iclient_send	src/libipc/net/client/inet_client.c	/^int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
-tcp_iserver	src/libipc/net/server/inet_server.c	/^static void * tcp_iserver(char *host_ip, char *server_port,$/;"	f	file:
+tcp_iserver	src/libipc/net/server/inet_server.c	/^server_t * tcp_iserver(allocator_t *allocator,$/;"	f
 tcp_uclient	src/libipc/net/client/unix_client.c	/^client_t *tcp_uclient(allocator_t *allocator,$/;"	f
 tcp_uclient_send	src/libipc/net/client/unix_client.c	/^int tcp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags)$/;"	f
-tcp_userver	src/libipc/net/server/unix_server.c	/^static void * tcp_userver(char *server_un_path,$/;"	f	file:
+tcp_userver	src/libipc/net/server/unix_server.c	/^server_t * tcp_userver(allocator_t *allocator,$/;"	f
 tcp_userver_create_socket	src/libipc/net/server/unix_server.c	/^static int tcp_userver_create_socket(char *server_un_path)$/;"	f	file:
 tcp_userver_listen_event_handler	src/libipc/net/server/unix_server.c	/^static void tcp_userver_listen_event_handler(int fd, short event, void *arg)$/;"	f	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_args	src/libargs/test_cmd_args.c	/^void test_args(int argc, char *argv[])$/;"	f
+test_client_recv_of_inet_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_inet_udp()$/;"	f
 test_concurrent1	src/libconcurrent/test_concurrent.c	/^int test_concurrent1()$/;"	f
 test_concurrent3	src/libconcurrent/test_concurrent.c	/^int test_concurrent3()$/;"	f
 test_concurrent_add_task	src/libconcurrent/test_concurrent.c	/^int test_concurrent_add_task(concurrent_master_t *master,void *task)$/;"	f
@@ -2666,7 +2682,7 @@ u8	src/include/libproto_analyzer/list.h	/^typedef unsigned char     u8;$/;"	t
 uclient_destroy	src/libipc/net/client/unix_client.c	/^int uclient_destroy(client_t *client)$/;"	f
 uclient_event_handler	src/libipc/net/client/unix_client.c	/^void uclient_event_handler(int fd, short event, void *arg)$/;"	f
 uclient_init_task	src/libipc/net/client/unix_client.c	/^int uclient_init_task(client_task_t *task,$/;"	f
-uclient_release_task	src/libipc/net/client/unix_client.c	/^int uclient_release_task(client_task_t *task)$/;"	f
+uclient_release_task	src/libipc/net/client/unix_client.c	/^static int uclient_release_task(client_task_t *task)$/;"	f	file:
 udp_iclient	src/libipc/net/client/inet_client.c	/^client_t *udp_iclient(allocator_t *allocator,$/;"	f
 udp_iclient_create_socket	src/libipc/net/client/inet_client.c	/^int udp_iclient_create_socket(struct addrinfo *addr)$/;"	f
 udp_iclient_send	src/libipc/net/client/inet_client.c	/^int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f

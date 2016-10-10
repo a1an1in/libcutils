@@ -55,6 +55,7 @@
  *extern int process_task_callback(client_task_t *task);
  */
 
+static int iclient_release_task(client_task_t *task);
 static int setnonblocking(int sockfd)
 {
 	if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
@@ -70,7 +71,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 
 	dbg_str(NET_DETAIL,"slave_work_function begin");
 	client->process_task_cb(task);
-	client_release_task(task);
+	iclient_release_task(task);
 	dbg_str(NET_DETAIL,"slave_work_function end");
 	return ;
 }
@@ -97,7 +98,7 @@ int client_init_task(client_task_t *task,
 	task->client     = client;
 	return 0;
 }
-int client_release_task(client_task_t *task)
+static int iclient_release_task(client_task_t *task)
 {
 	allocator_mem_free(task->allocator,task);
 	return 0;
@@ -324,7 +325,8 @@ int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
 }
 int iclient_destroy(client_t *client)
 {
-	allocator_mem_free(client->allocator,client);
+    close(client->user_fd);
+    io_user_destroy(client);
 
 	return 0;
 }

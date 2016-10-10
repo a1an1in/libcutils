@@ -16,6 +16,9 @@ typedef struct io_user_s{
 	void *local_sockaddr;
 	void *remote_sockaddr;
 	uint8_t user_type;
+#define MAX_TYPE_STR_LEN 50
+    char type_str[MAX_TYPE_STR_LEN];
+#undef MAX_TYPE_STR_LEN
 }io_user_t;
 
 

@@ -85,6 +85,8 @@ int test_udp_uclient_send()
 			sizeof(buf),
 			0,//int flags,
 			"test_client_unix_path");//socklen_t destlen);
+
+    uclient_destroy(cli);
 }
 int test_tcp_uclient_send()
 {
