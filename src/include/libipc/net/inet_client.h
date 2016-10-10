@@ -43,6 +43,8 @@ client_t *tcp_iclient(allocator_t *allocator,
 					 int (*process_task_cb)(client_task_t *task),
 					 void *opaque);
 
+int iclient_destroy(client_t *client);
+
 int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
 		const struct sockaddr *destaddr,socklen_t destlen);
 

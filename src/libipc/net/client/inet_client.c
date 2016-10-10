@@ -243,16 +243,15 @@ client_t *udp_iclient(allocator_t *allocator,
 	user_fd = udp_iclient_create_socket(addr);
 
 	client = __iclient(allocator,//allocator_t *allocator,
-					  user_fd,//int user_fd,
-					  SOCK_DGRAM,//uint8_t socktype,
-					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
-					  opaque);//void *opaque)
+					   user_fd,//int user_fd,
+					   SOCK_DGRAM,//uint8_t socktype,
+					   process_task_cb,//int (*process_task_cb)(client_task_t *task),
+					   opaque);//void *opaque)
 
 	if(client == NULL){
 		close(user_fd);
 		return NULL;
 	}
-    client->user_fd = user_fd;
 
 	return client;
 }
@@ -302,16 +301,15 @@ client_t *tcp_iclient(allocator_t *allocator,
 	}
 
 	client = __iclient(allocator,//allocator_t *allocator,
-					  user_fd,//int user_fd,
-					  SOCK_DGRAM,//uint8_t socktype,
-					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
-					  opaque);//void *opaque)
+					   user_fd,//int user_fd,
+					   SOCK_DGRAM,//uint8_t socktype,
+					   process_task_cb,//int (*process_task_cb)(client_task_t *task),
+					   opaque);//void *opaque)
 
 	if(client == NULL){
 		close(user_fd);
 		return NULL;
 	}
-    client->user_fd = user_fd;
 
 	return client;
 }

@@ -211,7 +211,6 @@ server_t * tcp_userver(allocator_t *allocator,
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;
 	}
-    srv->user_fd = listen_fd;
     strcpy(srv->unix_path,server_un_path);
 
 	return srv;

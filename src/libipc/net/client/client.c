@@ -55,6 +55,8 @@ client_t *client(allocator_t *allocator,
 {
     client_t *c;
 
+    //there may add id_str check....
+
     if(!strcmp(type,TCP_ICLIENT_TYPE)){
         c = tcp_iclient(allocator, id_str, serve_no,
                 process_task_cb, opaque);

@@ -231,7 +231,6 @@ server_t * tcp_iserver(allocator_t *allocator,
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;
 	}
-    srv->user_fd = user_fd;
 
 	freeaddrinfo(addr);
 	return srv;

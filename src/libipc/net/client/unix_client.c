@@ -212,7 +212,6 @@ client_t *udp_uclient(allocator_t *allocator,
 		return NULL;
 	}
 
-    client->user_fd = user_fd;
     strcpy(client->unix_path,client_unpath);
 
     dbg_str(DBG_DETAIL,"udp_uclient,user_fd=%d",client->user_fd);
@@ -239,9 +238,9 @@ int udp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
 }
 
 client_t *tcp_uclient(allocator_t *allocator,
-				 	 char *server_unix_path,
-				 	 int (*process_task_cb)(client_task_t *task),
-				 	 void *opaque)
+				 	  char *server_unix_path,
+				 	  int (*process_task_cb)(client_task_t *task),
+				 	  void *opaque)
 {
 	int user_fd;
 	struct sockaddr_un sa_addr;
@@ -279,7 +278,6 @@ client_t *tcp_uclient(allocator_t *allocator,
 		close(user_fd);
 		return NULL;
 	}
-    client->user_fd = user_fd;
     memset(client->unix_path,0,sizeof(client->unix_path));
     dbg_str(DBG_DETAIL,"unix_path len=%d",sizeof(client->unix_path));
 
