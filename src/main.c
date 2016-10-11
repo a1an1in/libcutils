@@ -220,9 +220,17 @@ static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
     test_server_of_inet();
     return 0;
 }
+static int args_process_lab(void *base,int argc,char **argv)
+{
+    dbg_str(DBG_DETAIL,"test begin");
+    lab();
+    dbg_str(DBG_DETAIL,"test end");
+    return 0;
+}
 
 
 static cmd_config_t cmds[]={
+	{"lab", args_process_lab,0, "", "N/A","test simple code"},
 	{"inet_gserver", args_process_test_gserver_of_inet,0, "", "N/A","test general server of inet tcp"},
 	{"unix_gserver", args_process_test_gserver_of_unix,0, "", "N/A","test general server of unix tcp"},
 	{"unix_gclient_rcv", args_process_test_gclient_recv_of_unix_udp,0, "", "N/A","test general client of unix udp"},
@@ -265,13 +273,13 @@ int main(int argc, char *argv[])
 	int ret = 0;
 
     printf("\n\n");
-	dbg_str(DBG_DETAIL,"test begin");
+	dbg_str(DBG_DETAIL,"main func start");
 
 	args_process(NULL,cmds,argc, argv);
 
-	dbg_str(DBG_DETAIL,"test end");
+	dbg_str(DBG_DETAIL,"main func end");
 	pause();
-	dbg_str(DBG_DETAIL,"test end,but pause breaked");
+	dbg_str(DBG_DETAIL,"main func out,but pause breaked");
 
 	return ret;
 }

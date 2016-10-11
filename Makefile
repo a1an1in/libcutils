@@ -14,6 +14,7 @@
 #TARGET file name
 TARGET = test
 SHARE_TARGET = libcutils.so
+STATIC_TARGET = libcutils.a
 #compile tools
 CC = gcc
 LD = ld
@@ -53,6 +54,19 @@ so:
 		exit 12; \
 	else\
 		echo $(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread -lm;\
+		echo ;\
+		echo $(TARGET) has been created!;\
+		echo ;\
+	fi;
+ar:
+	@$(call build_obj);\
+	$(call check_output_dir);\
+	$(AR) cqs  $(PROJECT_PATH)/bin/$(STATIC_TARGET) $$BUILD_IN_FILES;\
+	if [ $$? -ne 0 ]; then \
+		echo "Building $(STATIC_TARGET) is failed !"; \
+		exit 12; \
+	else\
+		echo $(AR) cqs  $(PROJECT_PATH)/bin/$(STATIC_TARGET) $$BUILD_IN_FILES;\
 		echo ;\
 		echo $(TARGET) has been created!;\
 		echo ;\

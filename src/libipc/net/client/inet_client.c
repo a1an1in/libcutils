@@ -105,7 +105,6 @@ static int iclient_release_task(client_task_t *task)
 }
 void client_event_handler(int fd, short event, void *arg)
 {
-
 	client_t *client = (client_t *)arg;
 	concurrent_master_t *master = client->master;
 	int connfd;
