@@ -234,17 +234,17 @@ static int args_process_lab2(void *base,int argc,char **argv)
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
-static int args_process_test_blobmsg(void *base,int argc,char **argv)
+static int args_process_test_msgblob(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
-    test_blobmsg();
+    test_msgblob();
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
 
 
 static cmd_config_t cmds[]={
-	{"blob", args_process_test_blobmsg,0, "", "N/A","test blob message"},
+	{"blob", args_process_test_msgblob,0, "", "N/A","test blob message"},
 	{"lab2", args_process_lab2,0, "", "N/A","test simple code"},
 	{"lab", args_process_lab,0, "", "N/A","test simple code"},
 	{"inet_gserver", args_process_test_gserver_of_inet,0, "", "N/A","test general server of inet tcp"},

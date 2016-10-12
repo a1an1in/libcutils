@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-#include "blobmsg.h"
+#include "msgblob.h"
 
 static const char *indent_str = "\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
@@ -16,28 +16,28 @@ dump_table(struct blob_attr *head, int len, int indent, bool array);
 
 static void dump_attr_data(struct blob_attr *data, int indent, int next_indent)
 {
-	int type = blobmsg_type(data);
+	int type = msgblob_type(data);
 	switch(type) {
 	case BLOBMSG_TYPE_STRING:
-		indent_printf(indent, "%s\n", blobmsg_get_string(data));
+		indent_printf(indent, "%s\n", msgblob_get_string(data));
 		break;
 	case BLOBMSG_TYPE_INT8:
-		indent_printf(indent, "%d\n", blobmsg_get_u8(data));
+		indent_printf(indent, "%d\n", msgblob_get_u8(data));
 		break;
 	case BLOBMSG_TYPE_INT16:
-		indent_printf(indent, "%d\n", blobmsg_get_u16(data));
+		indent_printf(indent, "%d\n", msgblob_get_u16(data));
 		break;
 	case BLOBMSG_TYPE_INT32:
-		indent_printf(indent, "%d\n", blobmsg_get_u32(data));
+		indent_printf(indent, "%d\n", msgblob_get_u32(data));
 		break;
 	case BLOBMSG_TYPE_INT64:
-		indent_printf(indent, "%"PRIu64"\n", blobmsg_get_u64(data));
+		indent_printf(indent, "%"PRIu64"\n", msgblob_get_u64(data));
 		break;
 	case BLOBMSG_TYPE_TABLE:
 	case BLOBMSG_TYPE_ARRAY:
 		if (!indent)
 			indent_printf(indent, "\n");
-		dump_table(blobmsg_data(data), blobmsg_data_len(data),
+		dump_table(msgblob_data(data), msgblob_data_len(data),
 			   next_indent, type == BLOBMSG_TYPE_ARRAY);
 		break;
 	}
@@ -46,12 +46,12 @@ static void
 dump_table(struct blob_attr *head, int len, int indent, bool array)
 {
 	struct blob_attr *attr;
-	struct blobmsg_hdr *hdr;
+	struct msgblob_hdr *hdr;
 
 	indent_printf(indent, "{\n");
 	__blob_for_each_attr(attr, head, len) {
 		hdr = blob_data(attr);
-		if (!array)
+        if (!array)
 			indent_printf(indent + 1, "%s : ", hdr->name);
 		dump_attr_data(attr, 0, indent + 1);
 	}
@@ -65,7 +65,7 @@ enum {
 	FOO_TESTDATA
 };
 
-static const struct blobmsg_policy pol[] = {
+static const struct msgblob_policy pol[] = {
 	[FOO_MESSAGE] = {
 		.name = "message",
 		.type = BLOBMSG_TYPE_STRING,
@@ -88,20 +88,20 @@ static void dump_message(struct blob_buf *buf)
 {
 	struct blob_attr *tb[ARRAY_SIZE(pol)];
 
-	if (blobmsg_parse(pol, ARRAY_SIZE(pol), tb, blob_data(buf->head), blob_len(buf->head)) != 0) {
+	if (msgblob_parse(pol, ARRAY_SIZE(pol), tb, blob_data(buf->head), blob_len(buf->head)) != 0) {
 		fprintf(stderr, "Parse failed\n");
 		return;
 	}
 	if (tb[FOO_MESSAGE])
-		fprintf(stderr, "Message: %s\n", (char *) blobmsg_data(tb[FOO_MESSAGE]));
+		fprintf(stderr, "Message: %s\n", (char *) msgblob_data(tb[FOO_MESSAGE]));
 
 	if (tb[FOO_LIST]) {
 		fprintf(stderr, "List: ");
-		dump_table(blobmsg_data(tb[FOO_LIST]), blobmsg_data_len(tb[FOO_LIST]), 0, true);
+		dump_table(msgblob_data(tb[FOO_LIST]), msgblob_data_len(tb[FOO_LIST]), 0, true);
 	}
 	if (tb[FOO_TESTDATA]) {
 		fprintf(stderr, "Testdata: ");
-		dump_table(blobmsg_data(tb[FOO_TESTDATA]), blobmsg_data_len(tb[FOO_TESTDATA]), 0, false);
+		dump_table(msgblob_data(tb[FOO_TESTDATA]), msgblob_data_len(tb[FOO_TESTDATA]), 0, false);
 	}
 }
 
@@ -110,25 +110,25 @@ fill_message(struct blob_buf *buf)
 {
 	void *tbl;
 
-	blobmsg_add_string(buf, "message", "Hello, world!");
+	msgblob_add_string(buf, "message", "Hello, world!");
 
-	tbl = blobmsg_open_table(buf, "testdata");
-	blobmsg_add_u32(buf, "hello", 1);
-	blobmsg_add_string(buf, "world", "2");
-	blobmsg_close_table(buf, tbl);
+	tbl = msgblob_open_table(buf, "testdata");
+	msgblob_add_u32(buf, "hello", 1);
+	msgblob_add_string(buf, "world", "2");
+	msgblob_close_table(buf, tbl);
 
-	tbl = blobmsg_open_array(buf, "list");
-	blobmsg_add_u32(buf, NULL, 0);
-	blobmsg_add_u32(buf, NULL, 1);
-	blobmsg_add_u32(buf, NULL, 2);
-	blobmsg_close_table(buf, tbl);
+	tbl = msgblob_open_array(buf, "list");
+	msgblob_add_u32(buf, "a", 0);
+	msgblob_add_u32(buf, "b", 1);
+	msgblob_add_u32(buf, "c", 2);
+	msgblob_close_table(buf, tbl);
 }
 
-int test_blobmsg()
+int test_msgblob()
 {
 	static struct blob_buf buf;
 
-	blobmsg_buf_init(&buf);
+	msgblob_buf_init(&buf);
 	fill_message(&buf);
 	dump_message(&buf);
 
