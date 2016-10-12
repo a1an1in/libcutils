@@ -121,6 +121,7 @@ void client_event_handler(int fd, short event, void *arg)
 	/*
 	 *dbg_str(NET_DETAIL,"sockfd =%d",fd);
 	 */
+    dbg_str(NET_VIP,"client_event_handler");
 	nread = read(fd, buf, MAXLINE);//读取客户端socket流
 	if (nread < 0) {
 		dbg_str(DBG_ERROR,"client_event_handler,read fd error2");

@@ -69,8 +69,15 @@ int test_udp_iclient_recieve()
 		return -1;
 	}
 	udp_iclient(allocator,
-			   "127.0.0.1",//char *host,
+			   "0.0.0.0",//char *host,
 			   "1989",//char *client_port,
 			   process_task_callback,
 			   NULL);
+    /*
+	 *udp_iclient(allocator,
+	 *           "192.168.20.26",//char *host,
+	 *           "19892",//char *client_port,
+	 *           process_task_callback,
+	 *           NULL);
+     */
 }

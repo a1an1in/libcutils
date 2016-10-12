@@ -1,11 +1,10 @@
 /**
- * @file test_client_send.c
+ * @file lab.c
  * @synopsis 
  * @author a1an1in@sina.com
- * @version 1.0
- * @date 2016-09-04
+ * @version 
+ * @date 2016-10-11
  */
-
 /* Copyright (c) 2015-2020 alan lin <a1an1in@sina.com>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +29,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-
+#include <stdio.h>
+#include <libdbg/debug.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -45,39 +45,46 @@
 #include <sys/resource.h>  /*setrlimit */
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
-#include <libipc/net/inet_client.h>
+#include <libipc/net/unix_client.h>
+#include <sys/un.h>
 
+
+typedef struct core{
+    char e;
+    short f;
+    int g;
+    char str[50];
+}__attribute__ ((packed)) core_t;
+typedef struct test{
+    char a;
+    short b;
+    int c;
+    long d;
+    char buf[50];
+    core_t core;
+}__attribute__ ((packed)) test_t;
 
 static int process_task_callback(client_task_t *task)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,client send");
-	dbg_buf(DBG_DETAIL,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"process_task end");
 }
-/*
- *enum socktype_e{
- *    SOCKTYPE_UDP = 0,
- *    SOCKTYPE_TCP,
- *    SOCKTYPE_UNIX
- *};
- */
-int test_udp_iclient_send()
+int lab2()
 {
 	client_t *cli;
 	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
 	struct sockaddr_in raddr;
 	socklen_t destlen;
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
+    test_t t;
 
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return -1;
-	}
-
-	/*
-	 *proxy_constructor();
-	 *sleep(2);
-	 */
+    t.a = 1;
+    t.b = 2;
+    t.c = 3;
+    t.d = 4;
+    strcpy(t.buf,"hello world");
+    t.core.e = 5;
+    t.core.f = 6;
+    t.core.g = 7;
+    strcpy(t.core.str,"this is core");
 
 	cli = udp_iclient(
 			allocator,
@@ -85,49 +92,16 @@ int test_udp_iclient_send()
 			"2016",//char *client_port,
 			process_task_callback,
 			NULL);
-	raddr.sin_family = AF_INET; 
-	raddr.sin_port = htons(atoi("1989"));  
+
+	raddr.sin_family      = AF_INET;
+	raddr.sin_port        = htons(atoi("1989"));
 	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
 
-	udp_iclient_send(
-			cli,//client_t *client,
-			buf,//const void *buf,
-			sizeof(buf),
+    udp_iclient_send(
+            cli,//client_t *client,
+            &t,//const void *buf,
+            sizeof(test_t),
 			0,//int flags,
 			(void *)&raddr,//const struct sockaddr *destaddr,
 			sizeof(raddr));//socklen_t destlen);
-}
-int test_tcp_iclient_send()
-{
-	client_t *cli;
-	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
-	struct sockaddr_in raddr;
-	socklen_t destlen;
-	allocator_t *allocator;
-
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return -1;
-	}
-
-	/*
-	 *proxy_constructor();
-	 *sleep(2);
-	 */
-
-	cli = tcp_iclient(
-			allocator,
-			"127.0.0.1",//char *host,
-			"6888",//char *client_port,
-			process_task_callback,
-			NULL);
-
-	raddr.sin_family = AF_INET; 
-	raddr.sin_port = htons(atoi("6888"));  
-	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
-
-	tcp_iclient_send(
-			cli,//client_t *client,
-			buf,//const void *buf,
-			sizeof(buf),0);//socklen_t destlen);
 }

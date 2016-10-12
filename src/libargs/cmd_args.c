@@ -99,11 +99,11 @@ void args_print_help_info(args_processor_t *p)
 	char r2[]="format";
 	char r3[]="description";
 
-    printf("help_info:\n");
+    printf("help_info:(xxx represent the program name)\n");
 	config_head = p->cmd_config;
 	for(i = 0; config_head[i].cmd != NULL; i++){
 		printf("%s\n",(config_head + i)->cmd);
-		printf("%15s%s:%s %s\n","",r2,(config_head + i)->cmd,(config_head + i)->args_readable_names);
+		printf("%15s%s:%s %s %s\n","",r2,"xxx",(config_head + i)->cmd,(config_head + i)->args_readable_names);
         if(strlen((config_head + i)->help_info))
             printf("%15s%s:%s\n","",r3,(config_head + i)->help_info);
 	}
