@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+#include <libdbg/debug.h>
 #include "msgblob.h"
 
 static const char *indent_str = "\t\t\t\t\t\t\t\t\t\t\t\t\t";
@@ -18,27 +19,27 @@ static void dump_attr_data(struct blob_attr *data, int indent, int next_indent)
 {
 	int type = msgblob_type(data);
 	switch(type) {
-	case BLOBMSG_TYPE_STRING:
+	case MSGBLOB_TYPE_STRING:
 		indent_printf(indent, "%s\n", msgblob_get_string(data));
 		break;
-	case BLOBMSG_TYPE_INT8:
+	case MSGBLOB_TYPE_INT8:
 		indent_printf(indent, "%d\n", msgblob_get_u8(data));
 		break;
-	case BLOBMSG_TYPE_INT16:
+	case MSGBLOB_TYPE_INT16:
 		indent_printf(indent, "%d\n", msgblob_get_u16(data));
 		break;
-	case BLOBMSG_TYPE_INT32:
+	case MSGBLOB_TYPE_INT32:
 		indent_printf(indent, "%d\n", msgblob_get_u32(data));
 		break;
-	case BLOBMSG_TYPE_INT64:
+	case MSGBLOB_TYPE_INT64:
 		indent_printf(indent, "%"PRIu64"\n", msgblob_get_u64(data));
 		break;
-	case BLOBMSG_TYPE_TABLE:
-	case BLOBMSG_TYPE_ARRAY:
-		if (!indent)
+	case MSGBLOB_TYPE_TABLE:
+	case MSGBLOB_TYPE_ARRAY:
+        if (!indent)
 			indent_printf(indent, "\n");
 		dump_table(msgblob_data(data), msgblob_data_len(data),
-			   next_indent, type == BLOBMSG_TYPE_ARRAY);
+			   next_indent, type == MSGBLOB_TYPE_ARRAY);
 		break;
 	}
 }
@@ -53,6 +54,8 @@ dump_table(struct blob_attr *head, int len, int indent, bool array)
 		hdr = blob_data(attr);
         if (!array)
 			indent_printf(indent + 1, "%s : ", hdr->name);
+        else
+            fwrite(indent_str, indent + 1, 1, stderr); \
 		dump_attr_data(attr, 0, indent + 1);
 	}
 	indent_printf(indent, "}\n");
@@ -68,15 +71,15 @@ enum {
 static const struct msgblob_policy pol[] = {
 	[FOO_MESSAGE] = {
 		.name = "message",
-		.type = BLOBMSG_TYPE_STRING,
+		.type = MSGBLOB_TYPE_STRING,
 	},
 	[FOO_LIST] = {
 		.name = "list",
-		.type = BLOBMSG_TYPE_ARRAY,
+		.type = MSGBLOB_TYPE_ARRAY,
 	},
 	[FOO_TESTDATA] = {
 		.name = "testdata",
-		.type = BLOBMSG_TYPE_TABLE,
+		.type = MSGBLOB_TYPE_TABLE,
 	},
 };
 
@@ -108,32 +111,40 @@ static void dump_message(struct blob_buf *buf)
 static void
 fill_message(struct blob_buf *buf)
 {
-	void *tbl;
+	void *tbl,*tbl2;
 
 	msgblob_add_string(buf, "message", "Hello, world!");
 
 	tbl = msgblob_open_table(buf, "testdata");
-	msgblob_add_u32(buf, "hello", 1);
-	msgblob_add_string(buf, "world", "2");
+    {
+        tbl2 = msgblob_open_array(buf, "inner array");
+        msgblob_add_u32(buf, NULL, 0);
+        msgblob_add_u32(buf, NULL, 1);
+        msgblob_add_u32(buf, NULL, 2);
+        msgblob_close_table(buf, tbl2);
+    }
+	msgblob_add_u32(buf, "count", 1);
+	msgblob_add_string(buf, "test", "abcdef");
+
 	msgblob_close_table(buf, tbl);
 
 	tbl = msgblob_open_array(buf, "list");
-	msgblob_add_u32(buf, "a", 0);
-	msgblob_add_u32(buf, "b", 1);
-	msgblob_add_u32(buf, "c", 2);
+	msgblob_add_u32(buf, NULL, 0);
+	msgblob_add_u32(buf, NULL, 1);
+	msgblob_add_u32(buf, NULL, 2);
 	msgblob_close_table(buf, tbl);
 }
 
 int test_msgblob()
 {
-	static struct blob_buf buf;
+	static struct blob_buf blob_buf;
 
-	msgblob_buf_init(&buf);
-	fill_message(&buf);
-	dump_message(&buf);
+	msgblob_buf_init(&blob_buf);
+	fill_message(&blob_buf);
+	dump_message(&blob_buf);
 
-	if (buf.buf)
-		free(buf.buf);
+	if (blob_buf.buf)
+		free(blob_buf.buf);
 
 	return 0;
 }

@@ -13,27 +13,27 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#ifndef __BLOBMSG_H
-#define __BLOBMSG_H
+#ifndef __MSGBLOB_H
+#define __MSGBLOB_H
 
 #include <stdarg.h>
 #include "blob.h"
 
-#define BLOBMSG_ALIGN	2
-#define BLOBMSG_PADDING(len) (((len) + (1 << BLOBMSG_ALIGN) - 1) & ~((1 << BLOBMSG_ALIGN) - 1))
+#define MSGBLOB_ALIGN	2
+#define MSGBLOB_PADDING(len) (((len) + (1 << MSGBLOB_ALIGN) - 1) & ~((1 << MSGBLOB_ALIGN) - 1))
 
 enum msgblob_type {
-	BLOBMSG_TYPE_UNSPEC,
-	BLOBMSG_TYPE_ARRAY,
-	BLOBMSG_TYPE_TABLE,
-	BLOBMSG_TYPE_STRING,
-	BLOBMSG_TYPE_INT64,
-	BLOBMSG_TYPE_INT32,
-	BLOBMSG_TYPE_INT16,
-	BLOBMSG_TYPE_INT8,
-	__BLOBMSG_TYPE_LAST,
-	BLOBMSG_TYPE_LAST = __BLOBMSG_TYPE_LAST - 1,
-	BLOBMSG_TYPE_BOOL = BLOBMSG_TYPE_INT8,
+	MSGBLOB_TYPE_UNSPEC,
+	MSGBLOB_TYPE_ARRAY,
+	MSGBLOB_TYPE_TABLE,
+	MSGBLOB_TYPE_STRING,
+	MSGBLOB_TYPE_INT64,
+	MSGBLOB_TYPE_INT32,
+	MSGBLOB_TYPE_INT16,
+	MSGBLOB_TYPE_INT8,
+	__MSGBLOB_TYPE_LAST,
+	MSGBLOB_TYPE_LAST = __MSGBLOB_TYPE_LAST - 1,
+	MSGBLOB_TYPE_BOOL = MSGBLOB_TYPE_INT8,
 };
 
 struct msgblob_hdr {
@@ -48,7 +48,7 @@ struct msgblob_policy {
 
 static inline int msgblob_hdrlen(unsigned int namelen)
 {
-	return BLOBMSG_PADDING(sizeof(struct msgblob_hdr) + namelen + 1);
+	return MSGBLOB_PADDING(sizeof(struct msgblob_hdr) + namelen + 1);
 }
 
 static inline void msgblob_clear_name(struct blob_attr *attr)
@@ -116,34 +116,34 @@ int msgblob_add_field(struct blob_buf *buf, int type, const char *name,
 static inline int
 msgblob_add_u8(struct blob_buf *buf, const char *name, uint8_t val)
 {
-	return msgblob_add_field(buf, BLOBMSG_TYPE_INT8, name, &val, 1);
+	return msgblob_add_field(buf, MSGBLOB_TYPE_INT8, name, &val, 1);
 }
 
 static inline int
 msgblob_add_u16(struct blob_buf *buf, const char *name, uint16_t val)
 {
 	val = cpu_to_be16(val);
-	return msgblob_add_field(buf, BLOBMSG_TYPE_INT16, name, &val, 2);
+	return msgblob_add_field(buf, MSGBLOB_TYPE_INT16, name, &val, 2);
 }
 
 static inline int
 msgblob_add_u32(struct blob_buf *buf, const char *name, uint32_t val)
 {
 	val = cpu_to_be32(val);
-	return msgblob_add_field(buf, BLOBMSG_TYPE_INT32, name, &val, 4);
+	return msgblob_add_field(buf, MSGBLOB_TYPE_INT32, name, &val, 4);
 }
 
 static inline int
 msgblob_add_u64(struct blob_buf *buf, const char *name, uint64_t val)
 {
 	val = cpu_to_be64(val);
-	return msgblob_add_field(buf, BLOBMSG_TYPE_INT64, name, &val, 8);
+	return msgblob_add_field(buf, MSGBLOB_TYPE_INT64, name, &val, 8);
 }
 
 static inline int
 msgblob_add_string(struct blob_buf *buf, const char *name, const char *string)
 {
-	return msgblob_add_field(buf, BLOBMSG_TYPE_STRING, name, string, strlen(string) + 1);
+	return msgblob_add_field(buf, MSGBLOB_TYPE_STRING, name, string, strlen(string) + 1);
 }
 
 static inline int
@@ -153,18 +153,18 @@ msgblob_add_blob(struct blob_buf *buf, struct blob_attr *attr)
 				 msgblob_data(attr), msgblob_data_len(attr));
 }
 
-void *msgblob_open_nested(struct blob_buf *buf, const char *name, bool array);
+void *msgblob_nest_start(struct blob_buf *buf, const char *name, bool array);
 
 static inline void *
 msgblob_open_array(struct blob_buf *buf, const char *name)
 {
-	return msgblob_open_nested(buf, name, true);
+	return msgblob_nest_start(buf, name, true);
 }
 
 static inline void *
 msgblob_open_table(struct blob_buf *buf, const char *name)
 {
-	return msgblob_open_nested(buf, name, false);
+	return msgblob_nest_start(buf, name, false);
 }
 
 static inline void
@@ -181,7 +181,7 @@ msgblob_close_table(struct blob_buf *buf, void *cookie)
 
 static inline int msgblob_buf_init(struct blob_buf *buf)
 {
-	return blob_buf_init(buf, BLOBMSG_TYPE_TABLE);
+	return blob_buf_init(buf, MSGBLOB_TYPE_TABLE);
 }
 
 static inline uint8_t msgblob_get_u8(struct blob_attr *attr)

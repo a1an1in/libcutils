@@ -15,13 +15,13 @@
  */
 #include "msgblob.h"
 
-static const int blob_type[__BLOBMSG_TYPE_LAST] = {
-	[BLOBMSG_TYPE_INT8] = BLOB_ATTR_INT8,
-	[BLOBMSG_TYPE_INT16] = BLOB_ATTR_INT16,
-	[BLOBMSG_TYPE_INT32] = BLOB_ATTR_INT32,
-	[BLOBMSG_TYPE_INT64] = BLOB_ATTR_INT64,
-	[BLOBMSG_TYPE_STRING] = BLOB_ATTR_STRING,
-	[BLOBMSG_TYPE_UNSPEC] = BLOB_ATTR_BINARY,
+static const int blob_type[__MSGBLOB_TYPE_LAST] = {
+	[MSGBLOB_TYPE_INT8]   = BLOB_ATTR_INT8,
+	[MSGBLOB_TYPE_INT16]  = BLOB_ATTR_INT16,
+	[MSGBLOB_TYPE_INT32]  = BLOB_ATTR_INT32,
+	[MSGBLOB_TYPE_INT64]  = BLOB_ATTR_INT64,
+	[MSGBLOB_TYPE_STRING] = BLOB_ATTR_STRING,
+	[MSGBLOB_TYPE_UNSPEC] = BLOB_ATTR_BINARY,
 };
 
 static uint16_t
@@ -53,7 +53,7 @@ bool msgblob_check_attr(const struct blob_attr *attr, bool name)
 	len = msgblob_data_len(attr);
 	data = msgblob_data(attr);
 
-	if (id > BLOBMSG_TYPE_LAST)
+	if (id > MSGBLOB_TYPE_LAST)
 		return false;
 
 	if (!blob_type[id])
@@ -70,10 +70,10 @@ int msgblob_check_array(const struct blob_attr *attr, int type)
 	int size = 0;
 
 	switch (msgblob_type(attr)) {
-	case BLOBMSG_TYPE_TABLE:
+	case MSGBLOB_TYPE_TABLE:
 		name = true;
 		break;
-	case BLOBMSG_TYPE_ARRAY:
+	case MSGBLOB_TYPE_ARRAY:
 		name = false;
 		break;
 	default:
@@ -81,7 +81,7 @@ int msgblob_check_array(const struct blob_attr *attr, int type)
 	}
 
 	msgblob_for_each_attr(cur, attr, rem) {
-		if (type != BLOBMSG_TYPE_UNSPEC && msgblob_type(cur) != type)
+		if (type != MSGBLOB_TYPE_UNSPEC && msgblob_type(cur) != type)
 			return -1;
 
 		if (!msgblob_check_attr(cur, name))
@@ -106,7 +106,7 @@ int msgblob_parse_array(const struct msgblob_policy *policy, int policy_len,
 
 	memset(tb, 0, policy_len * sizeof(*tb));
 	__blob_for_each_attr(attr, data, len) {
-		if (policy[i].type != BLOBMSG_TYPE_UNSPEC &&
+		if (policy[i].type != MSGBLOB_TYPE_UNSPEC &&
 		    blob_id(attr) != policy[i].type)
 			continue;
 
@@ -148,7 +148,7 @@ int msgblob_parse(const struct msgblob_policy *policy, int policy_len,
 			if (!policy[i].name)
 				continue;
 
-			if (policy[i].type != BLOBMSG_TYPE_UNSPEC &&
+			if (policy[i].type != MSGBLOB_TYPE_UNSPEC &&
 			    blob_id(attr) != policy[i].type)
 				continue;
 
@@ -209,10 +209,10 @@ attr_to_offset(struct blob_buf *buf, struct blob_attr *attr)
 
 
 void *
-msgblob_open_nested(struct blob_buf *buf, const char *name, bool array)
+msgblob_nest_start(struct blob_buf *buf, const char *name, bool array)
 {
 	struct blob_attr *head;
-	int type = array ? BLOBMSG_TYPE_ARRAY : BLOBMSG_TYPE_TABLE;
+	int type = array ? MSGBLOB_TYPE_ARRAY : MSGBLOB_TYPE_TABLE;
 	unsigned long offset = attr_to_offset(buf, buf->head);
 	void *data;
 
@@ -258,7 +258,7 @@ msgblob_alloc_string_buffer(struct blob_buf *buf, const char *name, unsigned int
 	struct blob_attr *attr;
 	void *data_dest;
 
-	attr = msgblob_new(buf, BLOBMSG_TYPE_STRING, name, maxlen, &data_dest);
+	attr = msgblob_new(buf, MSGBLOB_TYPE_STRING, name, maxlen, &data_dest);
 	if (!attr)
 		return NULL;
 
