@@ -167,14 +167,10 @@ static void test_process_timer_task_callback(void *timer)
 
 int test_tmr_user()
 {
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
     tmr_user_t *timer;
     struct timeval tv;
 
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return -1;
-	}
     dbg_str(DBG_VIP,"test_tmr_user2");
 
 	evutil_timerclear(&tv);

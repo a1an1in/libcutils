@@ -32,7 +32,7 @@ int test_concurrent1()
 	int ret = 0;
 
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
+	allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0);
 	master = concurrent_master_create(allocator);
 	concurrent_master_init(master,
 			SERVER_WORK_TYPE_THREAD,//uint8_t concurrent_work_type,
@@ -115,7 +115,7 @@ int test_concurrent3()
 	struct event event;
 
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
+	allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	dbg_str(DBG_DETAIL,"run at here");
 	master = concurrent_master_create(allocator);

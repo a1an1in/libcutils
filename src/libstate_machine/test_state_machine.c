@@ -70,15 +70,11 @@ static state_entry_config_t entry_config[]={
 
 void test_state_machine()
 {
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
     state_machine_t *s;
 
     printf("test state_machine\n");
 
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(SM_ERROR,"proxy_create allocator_creator err");
-		return ;
-	}
     s = state_machine(allocator, entry_config,NULL);
     state_machine_change_state(s, 1);
 

@@ -66,7 +66,7 @@ void test_ctr_alloc()
 #ifdef WINDOWS_USER_MODE
 	lock_type = WINDOWS_MUTEX_LOCK;
 #endif
-	allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC,0);
+	allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
 	allocator_ctr_init(allocator, 0, 0, 1024);
 
 	printf("\n");

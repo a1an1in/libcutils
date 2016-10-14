@@ -67,12 +67,7 @@ int test_udp_iclient_send()
 	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
 	struct sockaddr_in raddr;
 	socklen_t destlen;
-	allocator_t *allocator;
-
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return -1;
-	}
+	allocator_t *allocator = allocator_get_default_alloc();
 
 	/*
 	 *proxy_constructor();
@@ -103,12 +98,7 @@ int test_tcp_iclient_send()
 	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
 	struct sockaddr_in raddr;
 	socklen_t destlen;
-	allocator_t *allocator;
-
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return -1;
-	}
+	allocator_t *allocator = allocator_get_default_alloc();
 
 	/*
 	 *proxy_constructor();

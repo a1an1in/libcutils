@@ -32,12 +32,12 @@
 allocator_module_t allocator_modules[ALLOCATOR_TYPE_LAST];
 allocator_t *global_allocator_default;
 
-allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)
+allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)
 {
 	allocator_t *p;
 	p = (allocator_t *)malloc(sizeof(allocator_t));
 	if(p == NULL){
-		dbg_str(DBG_ERROR,"allocator_creator");
+		dbg_str(DBG_ERROR,"allocator_create");
 		return p;
 	}
 	p->allocator_type = allocator_type;
@@ -47,8 +47,9 @@ allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)
 }
 //allocate mem_alloc of container i coded
 void allocator_ctr_init(allocator_t * alloc,
-		uint32_t slab_array_max_num, uint32_t data_min_size,
-		uint32_t mempool_capacity)
+		                uint32_t slab_array_max_num,
+                        uint32_t data_min_size,
+		                uint32_t mempool_capacity)
 {
 	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
 
@@ -81,7 +82,7 @@ default_allocator_constructor()
 
     dbg_str(DBG_DETAIL,"construct default allocator");
 
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
         exit(1);
 	}

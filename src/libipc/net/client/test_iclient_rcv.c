@@ -61,13 +61,9 @@ static int process_task_callback(client_task_t *task)
 
 int test_udp_iclient_recieve()
 {
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
 
     dbg_str(DBG_DETAIL,"test_udp_iclient_recieve");
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
-		return -1;
-	}
 	udp_iclient(allocator,
 			   "0.0.0.0",//char *host,
 			   "1989",//char *client_port,

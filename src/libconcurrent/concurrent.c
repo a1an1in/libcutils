@@ -566,8 +566,8 @@ concurrent_constructor()
 
     dbg_str(DBG_DETAIL,"construct concurrent");
 
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_creator err");
+	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
 		return;
 	}
 	c = concurrent_create(allocator);

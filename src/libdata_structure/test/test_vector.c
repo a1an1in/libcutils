@@ -32,8 +32,8 @@ void print_vector_data(vector_pos_t *pos)
 int test_datastructure_vector()
 {
 	vector_t *vector;
-	allocator_t *allocator;
 	vector_pos_t pos;
+	allocator_t *allocator = allocator_get_default_alloc();
 
 	struct test t1={1,2};
 	struct test t2={2,2};
@@ -41,10 +41,7 @@ int test_datastructure_vector()
 	struct test t4={4,2};
 	int ret = 0;
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
-
 	vector = vector_create(allocator,0);
-
 	vector_init(vector,sizeof(struct test),4);
 
 	vector_push_back(vector,&t1);

@@ -30,15 +30,13 @@ void test_datastructure_hashlist()
 	pair_t *pair;
 	hash_map_pos_t pos;
 	struct hash_map_node *mnode;
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
 
 	struct A t1 = {1,2};
 	struct A t2 = {2,2};
 	struct A t3 = {3,2};
 	struct A t4 = {4,2};
 	struct A t5 = {5,2};
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	pair = create_pair(2,sizeof(struct A));
 

@@ -9,7 +9,6 @@
 extern int pfs_set_proto_format_3008(protocol_format_set_t *pfp_p);
 extern int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p);
 debugger_t *debugger_gp;
-allocator_t *allocator;
 
 int test_pdt_proto_3008(protocol_format_set_t *pfs_p,
 		allocator_t *allocator)
@@ -203,7 +202,7 @@ int test_pdt_proto_analyzer()
 	protocol_format_set_t *pfs_p;
 	uint32_t ret = 0;
 
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
+	allocator_t *allocator = allocator_get_default_alloc();
 
 	pfs_p = pfs_create_proto_format_set(allocator);
 	init_proto_format_set(0x3000,100,pfs_p);

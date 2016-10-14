@@ -35,7 +35,7 @@ void print_list_data(list_t *list)
 int test_datastructure_link_list()
 {
 	llist_t *llist;
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
 
 	struct test t1={1,2};
 	struct test t2={2,2};
@@ -48,8 +48,6 @@ int test_datastructure_link_list()
 	 *allocator_ctr_init(allocator, 0, 0, 1024);
 	 *dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
 	 */
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	//ct = container_creator(CONTAINER_TYPE_LIST,allocator);
 	llist = llist_create(allocator,0);

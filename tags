@@ -458,7 +458,7 @@ LD	src/libthread/sync_lock/windows/Makefile	/^LD = ld$/;"	m
 LEN	src/libproto_analyzer/test/pdt_drv_proto_format.h	6;"	d
 LIBEVENT_VERSION	src/include/libevent_tiny/event2/event.h	1084;"	d
 LIBEVENT_VERSION_NUMBER	src/include/libevent_tiny/event2/event.h	1087;"	d
-LIBRARY_VERSION	src/main.c	58;"	d	file:
+LIBRARY_VERSION	src/main.c	52;"	d	file:
 LINKLIST_CORRECT	src/include/libdbg/debug_businesses.h	54;"	d
 LINKLIST_DETAIL	src/include/libdbg/debug_businesses.h	58;"	d
 LINKLIST_ERROR	src/include/libdbg/debug_businesses.h	51;"	d
@@ -530,10 +530,10 @@ MAX_PRINT_LEVEL_NAME_LEN	src/include/libdbg/debug.h	61;"	d
 MAX_PRINT_LEVEL_NAME_LEN	src/include/libdbg/debug.h	64;"	d
 MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	353;"	d	file:
 MAX_PROTOCOL_NUM	src/libproto_analyzer/protocol_format_set.c	366;"	d	file:
-MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	121;"	d	file:
-MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	124;"	d	file:
-MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	81;"	d	file:
-MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	83;"	d	file:
+MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	120;"	d	file:
+MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	123;"	d	file:
+MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	80;"	d	file:
+MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	82;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
 MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	557;"	d	file:
@@ -1102,8 +1102,7 @@ allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *al
 allocator	src/include/libstate_machine/state_machine.h	/^    allocator_t *allocator;$/;"	m	struct:state_machine_s
 allocator	src/libipc/net/server/inet_server.c	/^	allocator_t *allocator;$/;"	m	struct:iserver_task_s	file:
 allocator	src/libipc/net/server/inet_server_old.c	/^	allocator_t *allocator;$/;"	m	struct:iserver_task_s	file:
-allocator	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
-allocator	src/libproto_analyzer/test/test_pdt_pdu_proto_analyzer.c	/^allocator_t *allocator;$/;"	v
+allocator_create	src/liballoc/allocator.c	/^allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)$/;"	f
 allocator_creator	src/liballoc/allocator.c	/^allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)$/;"	f
 allocator_ctr_alloc_register	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_ctr_alloc_register(){$/;"	f
 allocator_ctr_init	src/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f

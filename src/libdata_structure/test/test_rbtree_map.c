@@ -15,7 +15,7 @@ int test_datastructure_rbtree_map(void)
 	int ret = 0;
 	rbtree_map_pos_t it,next,end;
 	rbtree_map_t *map;
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
 	pair_t *pair;
 	struct rbtree_map_node *mnode;
 	int key_len = 2;
@@ -25,8 +25,6 @@ int test_datastructure_rbtree_map(void)
 	struct A t3 = {3,2};
 	struct A t4 = {4,2};
 	struct A t5 = {5,2};
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	dbg_str(DBG_DETAIL,"rbtree allocator addr:%p",allocator);
 	map = rbtree_map_create(allocator,0);

@@ -112,7 +112,7 @@ int server(char *host,char *server)
 {
 	struct addrinfo  *addr, hint;
 	int err;
-	allocator_t *allocator;
+	allocator_t *allocator = allocator_get_default_alloc();
 	int ret = 0;
 	int server_fd;
 	struct event listen_event;
@@ -131,8 +131,6 @@ int server(char *host,char *server)
 		exit(1);
 	}
 	server_fd = iserver_create_socket(addr);
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	c = concurrent_create(allocator);
 	concurrent_init(c,

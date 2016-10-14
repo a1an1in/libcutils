@@ -18,8 +18,8 @@ void test_io_user()
 {
 	allocator_t *allocator;
 
-	if((allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(SM_ERROR,"proxy_create allocator_creator err");
+	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+		dbg_str(SM_ERROR,"proxy_create allocator_create err");
 		return ;
 	}
     /*

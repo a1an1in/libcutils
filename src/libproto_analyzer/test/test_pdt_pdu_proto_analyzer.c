@@ -22,7 +22,6 @@
 #include "libproto_analyzer/protocol_format_set.h"
 #include "libproto_analyzer/protocol_analyzer.h"
 
-allocator_t *allocator;
 extern int pfs_set_pdu_format_ackd(protocol_format_set_t *pfs_p);
 
 int test_pdu_proto_analyzer()
@@ -31,11 +30,8 @@ int test_pdu_proto_analyzer()
 	struct protocol_analyzer_s *pa;
 	uint32_t ret = 0;
 	proto_info_list_t *info_list = NULL; 
-
+	allocator_t *allocator = allocator_get_default_alloc();
 	struct proto_analyzer_admin_s *pa_admin = NULL;
-
-
-	allocator = allocator_creator(ALLOCATOR_TYPE_SYS_MALLOC,0);
 
 	pfs_p = pfs_create_proto_format_set(allocator);
 	init_proto_format_set(0x0,100,pfs_p);
