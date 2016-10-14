@@ -50,7 +50,8 @@ concurrent_task_admin_create(allocator_t *allocator)
 {
 	concurrent_task_admin_t *task_admin = NULL;
 
-	task_admin = (concurrent_task_admin_t *)allocator_mem_alloc(allocator,sizeof(concurrent_task_admin_t));
+	task_admin = (concurrent_task_admin_t *)allocator_mem_alloc(allocator,
+                                                                sizeof(concurrent_task_admin_t));
 	if(task_admin == NULL){
 		dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
 		exit(1);
@@ -59,33 +60,40 @@ concurrent_task_admin_create(allocator_t *allocator)
 
 	return task_admin;
 }
-int concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
-		uint8_t key_size,uint32_t data_size,uint32_t bucket_size,
-		uint8_t admin_lock_type,uint8_t hmap_lock_type)
+
+int 
+concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
+		                   uint8_t key_size,
+                           uint32_t data_size,
+                           uint32_t bucket_size,
+		                   uint8_t admin_lock_type,
+                           uint8_t hmap_lock_type)
 {
 	int ret = 0;
 
 	task_admin->admin_lock_type = admin_lock_type;
-	task_admin->hmap_lock_type = hmap_lock_type;
-	task_admin->key_size = key_size;
-	task_admin->data_size = data_size;
-	task_admin->bucket_size = bucket_size;
+	task_admin->hmap_lock_type  = hmap_lock_type;
+	task_admin->key_size        = key_size;
+	task_admin->data_size       = data_size;
+	task_admin->bucket_size     = bucket_size;
 
 	/*
 	 *task_admin->hmap = hash_map_create(allocator,PTHREAD_MUTEX_LOCK);
 	 */
 	task_admin->hmap = hash_map_create(task_admin->allocator,hmap_lock_type);
+
 	hash_map_init(task_admin->hmap,
-			key_size,//uint32_t key_size,
-			key_size + data_size,
-			bucket_size,
-			NULL,
-			NULL);
+			      key_size,//uint32_t key_size,
+			      key_size + data_size,
+			      bucket_size,
+			      NULL,
+			      NULL);
 	//if concurrent work mode is process,then the lock need be modified!!!!
 	sync_lock_init(&task_admin->admin_lock,admin_lock_type);
 
 	return ret;
 }
+
 int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void *data)
 {
 	pair_t *pair;
@@ -99,18 +107,25 @@ int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void
 
 	return 0;
 }
-int concurrent_task_admin_search(concurrent_task_admin_t *task_admin,
-		void *key,hash_map_pos_t *pos)
+
+int 
+concurrent_task_admin_search(concurrent_task_admin_t *task_admin,
+		                     void *key,
+                             hash_map_pos_t *pos)
 {
 	return hash_map_search(task_admin->hmap,key,pos);
 }
-int concurrent_task_admin_del(concurrent_task_admin_t *task_admin,
-		hash_map_pos_t *pos)
+
+int 
+concurrent_task_admin_del(concurrent_task_admin_t *task_admin,
+		                  hash_map_pos_t *pos)
 {
 	return hash_map_delete(task_admin->hmap,pos);
 }
-int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
-		void *key)
+
+int 
+concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
+		                         void *key)
 {
 	hash_map_pos_t pos;
 	int ret = 0;
@@ -119,7 +134,9 @@ int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
 	ret = hash_map_delete(task_admin->hmap, &pos);
 	return ret;
 }
-int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
+
+int 
+concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
 {
 	hash_map_destroy(task_admin->hmap);
 	sync_lock_destroy(&task_admin->admin_lock);
@@ -136,7 +153,8 @@ int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
  * @param event
  * @param arg
  */
-static void slave_event_handler_process_message(int fd, short event, void *arg)
+static void 
+slave_event_handler_process_message(int fd, short event, void *arg)
 {
 	concurrent_slave_t *slave = (concurrent_slave_t *)arg;
 	char buf[1];          
@@ -162,30 +180,42 @@ static void slave_event_handler_process_message(int fd, short event, void *arg)
 	}
 
 }
-void *concurrent_slave_thread(void *arg)
+
+void *
+concurrent_slave_thread(void *arg)
 {
 	concurrent_slave_t *slave = (concurrent_slave_t *)arg;
 
-	dbg_str(CONCURRENT_DETAIL,"concurrent_slave_thread start,concurrent_slave_thread id=%d",slave->work_id);
+	dbg_str(CONCURRENT_DETAIL,
+            "concurrent_slave_thread start,concurrent_slave_thread id=%d",
+            slave->work_id);
 
 	slave->event_base = event_base_new();
 	if(slave->event_base == NULL){
 		dbg_str(CONCURRENT_ERROR,"cannot create slave event_base");
 		exit(1);
 	}
-	event_assign(&slave->message_event,slave->event_base,slave->rcv_notify_fd,
-	              EV_READ | EV_PERSIST, slave_event_handler_process_message, arg);
+
+	event_assign(&slave->message_event,
+                 slave->event_base,
+                 slave->rcv_notify_fd,
+	             EV_READ | EV_PERSIST, 
+                 slave_event_handler_process_message, 
+                 arg);
+
 	if (event_add(&slave->message_event, 0) == -1) {
 		dbg_str(CONCURRENT_WARNNING,"event_add err");
 	}
 	event_base_loop(slave->event_base, 0);
 	return NULL;
 }
-int concurrent_slave_add_new_event(concurrent_slave_t *slave,
-		int fd,int event_flag,
-		struct event *event,
-		void (*event_handler)(int fd, short event, void *arg),
-		void *task)
+
+int 
+concurrent_slave_add_new_event(concurrent_slave_t *slave,
+		                       int fd,int event_flag,
+		                       struct event *event,
+		                       void (*event_handler)(int fd, short event, void *arg),
+		                       void *task)
 {
 	event_assign(event,slave->event_base,fd, event_flag, event_handler, task);
 	if (event_add(event, 0) == -1) {
@@ -194,7 +224,9 @@ int concurrent_slave_add_new_event(concurrent_slave_t *slave,
 
 	return 0;
 }
-int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)
+
+int 
+__concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)
 {
 	int ret = 0;
 	concurrent_slave_t *slave = &master->slave[slave_id];
@@ -228,6 +260,7 @@ int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_i
 
 	return ret;
 }
+
 int concurrent_master_create_slaves(concurrent_master_t *master)
 {
 	int i = 0, ret = 0;
@@ -255,13 +288,13 @@ end:
 	return ret;
 
 }
+
 int concurrent_master_destroy_slaves(concurrent_master_t *master)
 {
 }
 
-
-
-concurrent_master_t *concurrent_master_create(allocator_t *allocator)
+concurrent_master_t *
+concurrent_master_create(allocator_t *allocator)
 {
 	concurrent_master_t *master;
 
@@ -280,8 +313,8 @@ concurrent_master_t *concurrent_master_create(allocator_t *allocator)
  * @param event
  * @param arg
  */
-static void master_event_handler_add_new_event(
-		int fd, short event, void *arg)
+static void 
+master_event_handler_add_new_event(int fd,short event,void *arg)
 {
 	concurrent_master_t *master  = (concurrent_master_t *)arg;
 	list_t *l;
@@ -294,23 +327,30 @@ static void master_event_handler_add_new_event(
 	}
 	switch (buf[0]) {
 		case 'r': 
-			l = llist_detach_front(master->new_ev_que);
             dbg_str(CONCURRENT_DETAIL,"master_event_handler_add event");
+
+			l = llist_detach_front(master->new_ev_que);
 			message = (struct concurrent_message_s *)l->data;
+
 			if (event_add(message->event, message->tv) == -1) {
 				dbg_str(CONCURRENT_WARNNING,"event_add err");
 			}
+
 			allocator_mem_free(master->allocator,l);
 			break;
 		case 'd': 
 			l = llist_detach_front(master->new_ev_que);
 			message = (struct concurrent_message_s *)l->data;
-            dbg_str(CONCURRENT_DETAIL,"master_event_handler_del event,ev_flags=%x,event addr:%p",
+
+            dbg_str(CONCURRENT_DETAIL,
+                    "master_event_handler_del event,ev_flags=%x,event addr:%p",
                     ((struct event *)(message->event))->ev_flags,
                     message->event);
+
 			if (event_del(message->event) < 0) {
 				dbg_str(CONCURRENT_WARNNING,"event_del err");
 			}
+
 			allocator_mem_free(master->allocator,l);
 			break;
 		case 'p':
@@ -318,6 +358,7 @@ static void master_event_handler_add_new_event(
 	}
 
 }
+
 void *concurrent_master_thread(void *arg)
 {
 	concurrent_master_t *master  = (concurrent_master_t *)arg;
@@ -330,8 +371,13 @@ void *concurrent_master_thread(void *arg)
 	 *listenning rcv_add_new_event_fd, we can designe any right fd here,
 	 *we just need event base become loop state.
 	 */
-	event_assign(&event,master->event_base,master->rcv_add_new_event_fd, EV_READ | EV_PERSIST,
-			master_event_handler_add_new_event, master);
+	event_assign(&event,
+                 master->event_base,
+                 master->rcv_add_new_event_fd,
+                 EV_READ | EV_PERSIST,
+			     master_event_handler_add_new_event,
+                 master);
+
 	if (event_add(&event, 0) == -1) {
 		dbg_str(CONCURRENT_WARNNING,"event_add err");
 	}
@@ -342,10 +388,12 @@ void *concurrent_master_thread(void *arg)
 
 	return NULL;
 }
-int concurrent_master_init(concurrent_master_t *master,
-		uint8_t concurrent_work_type,
-		uint32_t task_size,
-		uint8_t slave_amount)
+
+int 
+concurrent_master_init(concurrent_master_t *master,
+		               uint8_t concurrent_work_type,
+		               uint32_t task_size,
+		               uint8_t slave_amount)
 {
 	int ret = 0;
 	int fds[2];
@@ -360,11 +408,11 @@ int concurrent_master_init(concurrent_master_t *master,
 	// create task admin
 	master->task_admin = concurrent_task_admin_create(master->allocator);
 	ret = concurrent_task_admin_init(master->task_admin,
-				4,
-				task_size,
-				10,//uint32_t bucket_size,
-				1,//uint8_t admin_lock_type,
-				0);//uint8_t hmap_lock_type)
+				                     4,
+				                     task_size,
+				                     10,//uint32_t bucket_size,
+				                     1,//uint8_t admin_lock_type,
+				                     0);//uint8_t hmap_lock_type)
 
 	if(pipe(fds)) {
 		dbg_str(CONCURRENT_ERROR,"cannot create pipe");
@@ -374,7 +422,11 @@ int concurrent_master_init(concurrent_master_t *master,
 	master->rcv_add_new_event_fd = fds[0];
 	master->snd_add_new_event_fd = fds[1];
 
-	if ((ret = pthread_create(&master->id.tid, NULL, concurrent_master_thread, master)) != 0) {
+	if ((ret = pthread_create(&master->id.tid,
+                              NULL, 
+                              concurrent_master_thread, 
+                              master)) != 0) 
+    {
 		dbg_str(CONCURRENT_ERROR,"cannot slave pthread");
 		exit(1);
 	}
@@ -382,9 +434,12 @@ int concurrent_master_init(concurrent_master_t *master,
 	concurrent_master_create_slaves(master);
 	return ret;
 }
-int concurrent_master_add_task_and_message(concurrent_master_t *master,
-		void *task,void *key,
-		void (*work_func)(concurrent_slave_t *slave,void *arg))
+
+int 
+concurrent_master_add_task_and_message(concurrent_master_t *master,
+		                               void *task,
+                                       void *key,
+		                               void (*work_func)(concurrent_slave_t *slave,void *arg))
 {
 	struct concurrent_message_s message;
 	hash_map_pos_t pos;
@@ -396,8 +451,11 @@ int concurrent_master_add_task_and_message(concurrent_master_t *master,
 
 	return 0;
 }
-void *concurrent_master_add_task(concurrent_master_t *master,
-		void *task,void *key)
+
+void *
+concurrent_master_add_task(concurrent_master_t *master,
+		                   void *task,
+                           void *key)
 {
 	hash_map_pos_t pos;
 	void *t = NULL;
@@ -417,23 +475,29 @@ void *concurrent_master_add_task(concurrent_master_t *master,
 
 	return t;
 }
+
 int concurrent_master_choose_slave(concurrent_master_t *master)
 {
 	return master->assignment_count % master->slave_amount;
 }
-static void concurrent_master_notify_slave(concurrent_master_t *master,char command)
+
+static void 
+concurrent_master_notify_slave(concurrent_master_t *master,char command)
 {
 	int i = 0;
 
 	i = concurrent_master_choose_slave(master);
-	dbg_str(CONCURRENT_DETAIL,"concurrent_master_notify_slave,slave i=%d is assigned,notify fd=%d",i,master->snd_notify_fd[i]);
+	dbg_str(CONCURRENT_DETAIL,
+            "concurrent_master_notify_slave,slave i=%d is assigned,notify fd=%d",
+            i,master->snd_notify_fd[i]);
 
 	if (write(master->snd_notify_fd[i], &command, 1) != 1) {
 		dbg_str(CONCURRENT_WARNNING,"concurrent_master_notify_slave,write pipe err");
 	}
 }
+
 int concurrent_master_add_message(concurrent_master_t *master,
-		struct concurrent_message_s *message)
+		                          struct concurrent_message_s *message)
 {
 	char command = 'c';
 
@@ -442,10 +506,12 @@ int concurrent_master_add_message(concurrent_master_t *master,
 
 	return 0;
 }
-int concurrent_master_init_message(struct concurrent_message_s *message,
-		void (*work_func)(concurrent_slave_t *slave,void *arg),
-		void *task,
-		int32_t message_id)
+
+int 
+concurrent_master_init_message(struct concurrent_message_s *message,
+		                       void (*work_func)(concurrent_slave_t *slave,void *arg),
+		                       void *task,
+		                       int32_t message_id)
 {
 	message->work_func = work_func;
 	message->task = task;
@@ -453,6 +519,7 @@ int concurrent_master_init_message(struct concurrent_message_s *message,
 
 	return 0;
 }
+
 //there may be some omited,must check carefully later
 int concurrent_master_destroy(concurrent_master_t *master)
 {
@@ -464,13 +531,14 @@ int concurrent_master_destroy(concurrent_master_t *master)
 	return 0;
 }
 
-
-concurrent_t *concurrent_create(allocator_t *allocator)
+concurrent_t *
+concurrent_create(allocator_t *allocator)
 {
 	concurrent_t *c;
 
 	if ((c = (concurrent_t *)allocator_mem_alloc(allocator,
-			sizeof(concurrent_t))) == NULL){
+			                                     sizeof(concurrent_t))) == NULL)
+    {
 		dbg_str(CONCURRENT_ERROR,"concurrent_create err");
 		return NULL;
 	}
@@ -479,18 +547,24 @@ concurrent_t *concurrent_create(allocator_t *allocator)
 
 	return c;
 }
-int concurrent_init(concurrent_t *c,
-		uint8_t concurrent_work_type,
-		uint32_t task_size,
-		uint8_t slave_amount,
-		uint8_t concurrent_lock_type)
+
+int 
+concurrent_init(concurrent_t *c,
+		        uint8_t concurrent_work_type,
+		        uint32_t task_size,
+		        uint8_t slave_amount,
+		        uint8_t concurrent_lock_type)
 {
 	int ret = 0;
 
 	dbg_str(CONCURRENT_DETAIL,"concurrent_init");
 	c->master = concurrent_master_create(c->allocator);
 	dbg_str(CONCURRENT_DETAIL,"concurrent master=%p",c->master);
-	concurrent_master_init(c->master, concurrent_work_type, task_size, slave_amount);
+
+	concurrent_master_init(c->master, 
+                           concurrent_work_type, 
+                           task_size, 
+                           slave_amount);
 
 	c->snd_add_new_event_fd  = c->master->snd_add_new_event_fd;
 
@@ -499,21 +573,31 @@ int concurrent_init(concurrent_t *c,
 	llist_init(c->new_ev_que,sizeof(struct concurrent_message_s));
 
 	sync_lock_init(&c->concurrent_lock,concurrent_lock_type);
+
 	return ret;
 }
-int concurrent_add_event_to_master(concurrent_t *c,
-		int fd,int event_flag,
-		struct event *event,
-        struct timeval *tv,
-		void (*event_handler)(int fd, short event, void *arg),
-		void *arg)
+
+int 
+concurrent_add_event_to_master(concurrent_t *c,
+		                       int fd,
+                               int event_flag,
+		                       struct event *event,
+                               struct timeval *tv,
+		                       void (*event_handler)(int fd, short event, void *arg),
+		                       void *arg)
 {
 	struct concurrent_message_s message;
 
 	while(c->master->concurrent_master_inited_flag != 1);
 
 	dbg_str(CONCURRENT_IMPORTANT,"concurrent_add_new_event to master");
-	event_assign(event,c->master->event_base,fd, event_flag, event_handler, arg);
+
+	event_assign(event,
+                 c->master->event_base,
+                 fd, 
+                 event_flag, 
+                 event_handler, 
+                 arg);
 
 	message.event = event;
     message.tv = tv;
@@ -525,8 +609,10 @@ int concurrent_add_event_to_master(concurrent_t *c,
 
 	return 0;
 }
-int concurrent_del_event_of_master(concurrent_t *c,
-		struct event *event)
+
+int 
+concurrent_del_event_of_master(concurrent_t *c,
+		                       struct event *event)
 {
 	struct concurrent_message_s message;
 
@@ -534,7 +620,8 @@ int concurrent_del_event_of_master(concurrent_t *c,
 
 	message.event = event;
 
-    dbg_str(CONCURRENT_DETAIL,"concurrent_del_event_of_master,ev_flags=%x,event addr:%p",
+    dbg_str(CONCURRENT_DETAIL,
+            "concurrent_del_event_of_master,ev_flags=%x,event addr:%p",
             ((struct event *)(message.event))->ev_flags,
             message.event);
 
@@ -546,6 +633,7 @@ int concurrent_del_event_of_master(concurrent_t *c,
 
 	return 0;
 }
+
 void concurrent_destroy(concurrent_t *c)
 {
 	concurrent_master_destroy(c->master);
@@ -580,6 +668,7 @@ concurrent_constructor()
 
     global_concurrent = c;
 }
+
 __attribute__((destructor(CONCURRENT_CONSTRUCTOR_PRIOR))) void 
 concurrent_destructor()
 {

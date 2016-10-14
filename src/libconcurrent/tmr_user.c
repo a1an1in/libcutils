@@ -58,7 +58,6 @@
  *the previous timer is using.  so libevent cann't find out the event to del and
  *quit loop.
  */
-struct timeval lasttime;
 int event_is_persistent;
 
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
@@ -79,7 +78,10 @@ void timer_event_handler(int fd, short event, void *arg)
 
 	dbg_str(NET_DETAIL,"timer event handler begin");
 	master->assignment_count++;//do for assigning slave
-	concurrent_master_init_message(&message, timer->slave_work_function,timer,0);
+	concurrent_master_init_message(&message,
+                                   timer->slave_work_function,
+                                   timer,
+                                   0);
 	concurrent_master_add_message(master,&message);
 	dbg_str(NET_DETAIL,"timer event handler end");
 
@@ -144,7 +146,7 @@ int tmr_user_destroy(tmr_user_t *tmr_user)
     concurrent_t *c = concurrent_get_global_concurrent_addr();
     dbg_str(DBG_DETAIL,"state_machine_destroy_timer");
     concurrent_del_event_of_master(c,
-            &tmr_user->event);
+                                   &tmr_user->event);
     allocator_mem_free(tmr_user->allocator,tmr_user);
 
 	return 0;
@@ -154,7 +156,7 @@ int tmr_user_stop(tmr_user_t *tmr_user)
     concurrent_t *c = concurrent_get_global_concurrent_addr();
     dbg_str(DBG_DETAIL,"state_machine_stop_timer");
     concurrent_del_event_of_master(c,
-            &tmr_user->event);
+                                   &tmr_user->event);
 
 	return 0;
 }
@@ -171,23 +173,24 @@ int test_tmr_user()
     tmr_user_t *timer;
     struct timeval tv;
 
-    dbg_str(DBG_VIP,"test_tmr_user2");
+    dbg_str(DBG_DETAIL,"test_tmr_user");
 
 	evutil_timerclear(&tv);
-	evutil_gettimeofday(&lasttime, NULL);
 	tv.tv_sec = 1;
     timer = tmr_user(allocator,
-            &tv,
-            /*
-             *0,
-             */
-            EV_PERSIST,
-            test_process_timer_task_callback,
-            NULL);
-    tmr_user_stop(timer);
-    sleep(4);
-    timer->tv.tv_sec = 5;
-    tmr_user_restart(timer);
+                     &tv,
+                     /*
+                      *0,
+                      */
+                     EV_PERSIST,
+                     test_process_timer_task_callback,
+                     NULL);
+    /*
+     *tmr_user_stop(timer);
+     *sleep(4);//this is very important,for the timer may havenot been stop,when we restart it.
+     *timer->tv.tv_sec = 5;
+     *tmr_user_restart(timer);
+     */
 
 #if 0
     tmr_user_destroy(timer);
