@@ -249,7 +249,6 @@ static int args_process_help_test(void *base,int argc,char **argv)
 	return 0;
 }
 
-
 static cmd_config_t cmds[]={
 	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
 	{"blob", args_process_test_msgblob,0, "test", "N/A","test blob message"},

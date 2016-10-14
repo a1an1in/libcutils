@@ -494,13 +494,13 @@ MAXLINE	src/libipc/net/client/inet_client.c	52;"	d	file:
 MAXLINE	src/libipc/net/client/unix_client.c	53;"	d	file:
 MAXLINE	src/libipc/net/server/inet_server.c	52;"	d	file:
 MAXLINE	src/libipc/net/server/inet_server_old.c	52;"	d	file:
-MAXLINE	src/libipc/net/server/server.c	106;"	d	file:
-MAXLINE	src/libipc/net/server/server.c	89;"	d	file:
+MAXLINE	src/libipc/net/server/server.c	112;"	d	file:
+MAXLINE	src/libipc/net/server/server.c	95;"	d	file:
 MAXLINE	src/libipc/net/server/unix_server.c	52;"	d	file:
 MAXVALSZ	src/libini/iniparser.c	157;"	d	file:
-MAX_BUFFER_STR_LEN	src/libdbg/debug.c	225;"	d	file:
+MAX_BUFFER_STR_LEN	src/libdbg/debug.c	218;"	d	file:
 MAX_BUFFER_STR_LEN	src/libdbg/debug.c	249;"	d	file:
-MAX_BUSINESSES_SETTING_LEN	src/libdbg/debug.c	154;"	d	file:
+MAX_BUSINESSES_SETTING_LEN	src/libdbg/debug.c	144;"	d	file:
 MAX_COMMON_TIMEOUTS	src/libevent_tiny/event.c	478;"	d	file:
 MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	27;"	d
 MAX_DATA_LEN	src/include/libproto_analyzer/protocol_format_set.h	51;"	d
@@ -513,9 +513,9 @@ MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	27;"	d
 MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	31;"	d
 MAX_ENTRY_NAME_LEN	src/include/libstate_machine/state_machine.h	33;"	d
 MAX_EPOLL_TIMEOUT_MSEC	src/libevent_tiny/epoll.c	102;"	d	file:
-MAX_FMT_STR_LEN	src/libdbg/debug.c	197;"	d	file:
+MAX_FMT_STR_LEN	src/libdbg/debug.c	187;"	d	file:
+MAX_FMT_STR_LEN	src/libdbg/debug.c	209;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	219;"	d	file:
-MAX_FMT_STR_LEN	src/libdbg/debug.c	226;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	250;"	d	file:
 MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	72;"	d
 MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	88;"	d
@@ -540,7 +540,7 @@ MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	645;"	d	file:
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
 MAX_SHARE_MEM_KEY_LEN	src/include/libipc/share_mem/shm.h	12;"	d
 MAX_SHARE_MEM_KEY_LEN	src/include/libipc/share_mem/shm.h	15;"	d
-MAX_STRING_LEN	src/libdbg/debug.c	105;"	d	file:
+MAX_STRING_LEN	src/libdbg/debug.c	98;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	100;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	54;"	d	file:
 MAX_TASK_BUFFER_LEN	src/include/libipc/net/inet_client.h	21;"	d

@@ -115,14 +115,17 @@ state_entry_t *init_state_entry(state_entry_t *e,
 state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
         void (*changing_workfunc_cb)(state_machine_t *s,void *opaque),
         void (*process_timer_task_cb)(void *arg),
-        time_t       tv_sec,     /* seconds */
-        suseconds_t   tv_usec, /* microseconds */
+        time_t tv_sec,     /* seconds */
+        suseconds_t tv_usec, /* microseconds */
         char *entry_name)
 {
     state_entry_t *e = NULL;
 
     dbg_str(SM_DETAIL,"state_machine_construct_state_entry");
-    e = (state_entry_t *)allocator_mem_alloc(s->allocator,sizeof(state_entry_t));
+
+    e = (state_entry_t *)
+        allocator_mem_alloc(s->allocator,sizeof(state_entry_t));
+
     if(e == NULL){
         dbg_str(SM_ERROR,"allocator_mem_alloc");
         return NULL;

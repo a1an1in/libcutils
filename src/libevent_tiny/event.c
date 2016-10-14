@@ -640,15 +640,16 @@ event_process_active_single_queue(struct event_base *base,
 		if (!(ev->ev_flags & EVLIST_INTERNAL))
 			++count;
 
-		dbg_str(EV_DETAIL,"process_active_event: event: %p, %s%scall %p,ev_closure=%d,fd=%d,event_active_count=%d,ev_flags=%x",
-					ev,
-					ev->ev_res & EV_READ ? "EV_READ " : " ",
-					ev->ev_res & EV_WRITE ? "EV_WRITE " : " ",
-					ev->ev_callback,
-                    ev->ev_closure,
-                    ev->ev_fd,
-                    base->event_count_active,
-                    ev->ev_flags);
+		dbg_str(EV_DETAIL,
+                "process_active_event: event: %p, %s%scall %p,ev_closure=%d,fd=%d,event_active_count=%d,ev_flags=%x",
+                ev,
+                ev->ev_res & EV_READ ? "EV_READ " : " ",
+                ev->ev_res & EV_WRITE ? "EV_WRITE " : " ",
+                ev->ev_callback,
+                ev->ev_closure,
+                ev->ev_fd,
+                base->event_count_active,
+                ev->ev_flags);
 
 		switch (ev->ev_closure) {
 			case EV_CLOSURE_SIGNAL:
@@ -741,7 +742,7 @@ event_base_loop(struct event_base *base, int flags)
 
 	if (base->running_loop) {
 		event_warnx("%s: reentrant invocation.  Only one event_base_loop"
-				" can run on each event_base at once.", __func__);
+				    " can run on each event_base at once.", __func__);
 		EVBASE_RELEASE_LOCK(base, th_base_lock);
 		return -1;
 	}
@@ -832,15 +833,15 @@ event_assign(struct event *ev,
 		short events,
 		void (*callback)(evutil_socket_t, short, void *), void *arg)
 {
-	ev->ev_base = base;
+	ev->ev_base     = base;
 	ev->ev_callback = callback;
-	ev->ev_arg = arg;
-	ev->ev_fd = fd;
-	ev->ev_events = events;
-	ev->ev_res = 0;
-	ev->ev_flags = EVLIST_INIT;
-	ev->ev_ncalls = 0;
-	ev->ev_pncalls = NULL;
+	ev->ev_arg      = arg;
+	ev->ev_fd       = fd;
+	ev->ev_events   = events;
+	ev->ev_res      = 0;
+	ev->ev_flags    = EVLIST_INIT;
+	ev->ev_ncalls   = 0;
+	ev->ev_pncalls  = NULL;
 
 	if (events & EV_SIGNAL) {
 		if ((events & (EV_READ|EV_WRITE)) != 0) {
@@ -992,15 +993,16 @@ event_add_internal(struct event *ev, const struct timeval *tv,
 	int res = 0;
 	int notify = 0;
 
-	dbg_str(EV_DETAIL, "add event: event: %p (fd "EV_SOCK_FMT"), %s%s%scall %p,event_flag=%x,tv_set=%d",
-				ev,
-				EV_SOCK_ARG(ev->ev_fd),
-				ev->ev_events & EV_READ ? "EV_READ " : " ",
-				ev->ev_events & EV_WRITE ? "EV_WRITE " : " ",
-				tv ? "EV_TIMEOUT " : " ",
-				ev->ev_callback,
-                ev->ev_flags,
-                ev->ev_timeout.tv_sec);
+	dbg_str(EV_DETAIL,
+            "add event: event: %p (fd "EV_SOCK_FMT"), %s%s%scall %p,event_flag=%x,tv_set=%d",
+            ev,
+            EV_SOCK_ARG(ev->ev_fd),
+            ev->ev_events & EV_READ ? "EV_READ " : " ",
+            ev->ev_events & EV_WRITE ? "EV_WRITE " : " ",
+            tv ? "EV_TIMEOUT " : " ",
+            ev->ev_callback,
+            ev->ev_flags,
+            ev->ev_timeout.tv_sec);
 
 	EVUTIL_ASSERT(!(ev->ev_flags & ~EVLIST_ALL));
 
@@ -1139,9 +1141,10 @@ event_del_internal(struct event *ev)
 	struct event_base *base;
 	int res = 0, notify = 0;
 
-    dbg_str(EV_DETAIL,"event_del: %p (fd "EV_SOCK_FMT"), callback %p,event_flags=%x",
-                ev, EV_SOCK_ARG(ev->ev_fd), ev->ev_callback,
-                ev->ev_flags);
+    dbg_str(EV_DETAIL,
+            "event_del: %p (fd "EV_SOCK_FMT"), callback %p,event_flags=%x",
+            ev, EV_SOCK_ARG(ev->ev_fd), ev->ev_callback,
+            ev->ev_flags);
 
 	/* An event without a base has not been added */
 	if (ev->ev_base == NULL)

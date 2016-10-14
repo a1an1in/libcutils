@@ -238,7 +238,6 @@ void test_share_mem_read()
     char *key = "test_share_mem";
     int size = 1024;
 
-
     shm = shm_create();
     shm_set(shm,key,size,SHMOPEN,SYSV_SEM,0);
     shm_init(shm);
