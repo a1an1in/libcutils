@@ -234,11 +234,6 @@ blob_put_u64(struct blob_buf *buf, int id, uint64_t val)
 	return blob_put(buf, id, &val, sizeof(val));
 }
 
-#define blob_put_int8	blob_put_u8
-#define blob_put_int16	blob_put_u16
-#define blob_put_int32	blob_put_u32
-#define blob_put_int64	blob_put_u64
-
 #define __blob_for_each_attr(pos, attr, rem) \
 	for (pos = (void *) attr; \
 	     rem > 0 && (blob_pad_len(pos) <= rem) && \

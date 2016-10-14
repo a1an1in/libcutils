@@ -25,19 +25,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-/*
- * calloc_a(size_t len, [void **addr, size_t len,...], NULL)
- *
- * allocate a block of memory big enough to hold multiple aligned objects.
- * the pointer to the full object (starting with the first chunk) is returned,
- * all other pointers are stored in the locations behind extra addr arguments.
- * the last argument needs to be a NULL pointer
- */
-
-#define calloc_a(len, ...) __calloc_a(len, ##__VA_ARGS__, NULL)
-
-void *__calloc_a(size_t len, ...);
-
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #endif
@@ -54,16 +41,6 @@ extern int __BUILD_BUG_ON_CONDITION_FAILED;
 	} while(0)
 #else
 #define BUILD_BUG_ON __BUILD_BUG_ON
-#endif
-
-#ifdef __APPLE__
-
-#include <mach/clock_types.h>
-#define CLOCK_REALTIME	CALENDAR_CLOCK
-#define CLOCK_MONOTONIC	SYSTEM_CLOCK
-
-int clock_gettime(int type, struct timespec *tv);
-
 #endif
 
 #ifdef __GNUC__

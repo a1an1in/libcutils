@@ -7,7 +7,7 @@ typedef struct cmd_config_s{
 	char *cmd;
 	int (*fn)(void *base, int argc, char **argv);
 	uint8_t args_count;
-	char *cmd_readable_name;
+	char *cmd_type;
 	char *args_readable_names;
 	char *help_info;
 }cmd_config_t;

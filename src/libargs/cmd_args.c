@@ -102,11 +102,32 @@ void args_print_help_info(args_processor_t *p)
     printf("help_info:(xxx represent the program name)\n");
 	config_head = p->cmd_config;
 	for(i = 0; config_head[i].cmd != NULL; i++){
-		printf("%s\n",(config_head + i)->cmd);
-		printf("%15s%s:%s %s %s\n","",r2,"xxx",(config_head + i)->cmd,(config_head + i)->args_readable_names);
+		printf("%-20s",(config_head + i)->cmd);
+		printf("%s%s:%s %s %s\n","",r2,"xxx",(config_head + i)->cmd,(config_head + i)->args_readable_names);
         if(strlen((config_head + i)->help_info))
-            printf("%15s%s:%s\n","",r3,(config_head + i)->help_info);
+            printf("%-20s%s:%s\n","",r3,(config_head + i)->help_info);
 	}
+
+	return;
+}
+void args_print_help_test_info(args_processor_t *p)
+{
+	cmd_config_t *config_head;
+	int i;
+	char r1[]="cmd name";
+	char r2[]="format";
+	char r3[]="description";
+
+    printf("help_test_info:(xxx represent the program name)\n");
+	config_head = p->cmd_config;
+    for(i = 0; config_head[i].cmd != NULL; i++){
+        if(!strcmp((config_head + i)->cmd_type,"test")) {
+            printf("%-20s",(config_head + i)->cmd);
+            printf("%s%s:%s %s %s\n","",r2,"xxx",(config_head + i)->cmd,(config_head + i)->args_readable_names);
+            if(strlen((config_head + i)->help_info))
+                printf("%-20s%s:%s\n","",r3,(config_head + i)->help_info);
+        }
+    }
 
 	return;
 }

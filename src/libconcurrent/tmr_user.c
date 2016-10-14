@@ -32,9 +32,6 @@
  */
 
 #include <sys/types.h>
-
-#include <event2/event-config.h>
-
 #include <sys/stat.h>
 #include <unistd.h>
 #include <sys/time.h>
@@ -44,6 +41,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include <event2/event-config.h>
 #include <event2/event.h>
 #include <event2/event_struct.h>
 #include <event2/util.h>
@@ -53,6 +51,13 @@
 #include <libconcurrent/io_user.h>
 #include <libconcurrent/tmr_user.h>
 
+/*
+ *warnning:
+ *the timer cann't be destroy and recreate it at once using the same
+ *event struct.for when we create a new timer,we may change the event flag which
+ *the previous timer is using.  so libevent cann't find out the event to del and
+ *quit loop.
+ */
 struct timeval lasttime;
 int event_is_persistent;
 
@@ -171,6 +176,7 @@ int test_tmr_user()
 		return -1;
 	}
     dbg_str(DBG_VIP,"test_tmr_user2");
+
 	evutil_timerclear(&tv);
 	evutil_gettimeofday(&lasttime, NULL);
 	tv.tv_sec = 1;
@@ -182,6 +188,24 @@ int test_tmr_user()
             EV_PERSIST,
             test_process_timer_task_callback,
             NULL);
+    tmr_user_stop(timer);
+    sleep(4);
+    timer->tv.tv_sec = 5;
+    tmr_user_restart(timer);
+
+#if 0
+    tmr_user_destroy(timer);
+
+	tv.tv_sec = 2;
+    timer = tmr_user(allocator,
+            &tv,
+            /*
+             *0,
+             */
+            EV_PERSIST,
+            test_process_timer_task_callback,
+            NULL);
+#endif
 
     pause();
     tmr_user_destroy(timer);

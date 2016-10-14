@@ -36,8 +36,10 @@ static void dump_attr_data(struct blob_attr *data, int indent, int next_indent)
 		break;
 	case MSGBLOB_TYPE_TABLE:
 	case MSGBLOB_TYPE_ARRAY:
-        if (!indent)
-			indent_printf(indent, "\n");
+        /*
+         *if (!indent)
+		 *    indent_printf(indent, "\n");
+         */
 		dump_table(msgblob_data(data), msgblob_data_len(data),
 			   next_indent, type == MSGBLOB_TYPE_ARRAY);
 		break;
@@ -49,11 +51,11 @@ dump_table(struct blob_attr *head, int len, int indent, bool array)
 	struct blob_attr *attr;
 	struct msgblob_hdr *hdr;
 
-	indent_printf(indent, "{\n");
+	indent_printf(0, "{\n");
 	__blob_for_each_attr(attr, head, len) {
 		hdr = blob_data(attr);
         if (!array)
-			indent_printf(indent + 1, "%s : ", hdr->name);
+			indent_printf(indent + 1, "%s:", hdr->name);
         else
             fwrite(indent_str, indent + 1, 1, stderr); \
 		dump_attr_data(attr, 0, indent + 1);

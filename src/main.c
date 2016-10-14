@@ -48,12 +48,6 @@
 #include <libargs/cmd_args.h>
 #include <libstate_machine/state_machine.h>
 #include <libipc/share_mem/shm.h>
-/*
- *#include <libipc/unix/client.h>
- *#include <libipc/unix/server.h>
- *#include <libnet/client.h>
- *#include <libnet/server.h>
- */
 
 #define LIBRARY_VERSION "libcutils version 2.1.1.0"
 
@@ -234,6 +228,13 @@ static int args_process_lab2(void *base,int argc,char **argv)
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
+static int args_process_lab3(void *base,int argc,char **argv)
+{
+    dbg_str(DBG_DETAIL,"test begin");
+    lab3();
+    dbg_str(DBG_DETAIL,"test end");
+    return 0;
+}
 static int args_process_test_msgblob(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
@@ -241,40 +242,48 @@ static int args_process_test_msgblob(void *base,int argc,char **argv)
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
+static int args_process_help_test(void *base,int argc,char **argv)
+{
+	args_print_help_test_info(args_get_processor_globle_addr());
+    exit(1);
+	return 0;
+}
 
 
 static cmd_config_t cmds[]={
-	{"blob", args_process_test_msgblob,0, "", "N/A","test blob message"},
-	{"lab2", args_process_lab2,0, "", "N/A","test simple code"},
-	{"lab", args_process_lab,0, "", "N/A","test simple code"},
-	{"inet_gserver", args_process_test_gserver_of_inet,0, "", "N/A","test general server of inet tcp"},
-	{"unix_gserver", args_process_test_gserver_of_unix,0, "", "N/A","test general server of unix tcp"},
-	{"unix_gclient_rcv", args_process_test_gclient_recv_of_unix_udp,0, "", "N/A","test general client of unix udp"},
-	{"inet_gclient_rcv", args_process_test_gclient_recv_of_inet_udp,0, "", "N/A","test general client of inet udp"},
-	{"analyzer", args_process_test_analyzer,0, "", "N/A","test analyzer"},
-	{"evtime", args_process_test_evtime,0, "", "N/A","test evtime"},
-	{"evsignal", args_process_test_evsignal,0, "", "N/A","test evsignal"},
-	{"evio", args_process_test_evio,0, "", "N/A","test evio"},
-	{"io_user", args_process_test_io_user,0, "", "N/A","test io user"},
-	{"tmr_user", args_process_test_tmr_user,0, "", "N/A","test timer user"},
-	{"allocator", args_process_test_allocator,0, "", "N/A","test_allocator"},
-	{"udp_iclient_send", args_process_test_udp_iclient_send,0, "", "N/A","test udp inet client send"},
-	{"udp_iclient_recieve", args_process_test_udp_iclient_recieve,0, "", "N/A","test_udp_iclient_recieve"},
-	{"tcp_iclient_send", args_process_test_tcp_iclient_send,0, "", "N/A","test_tcp_iclient_send"},
-	{"tcp_iserver", args_process_test_tcp_iserver,0, "", "N/A","test_tcp_iserver"},
-	{"vector", args_process_test_vector,0, "", "N/A","test_vector"},
-	{"rbtree_map", args_process_test_rbtree_map,0, "", "N/A","test_rbtree_map"},
-	{"llist", args_process_test_llist,0, "", "N/A","test_llist"},
-	{"hashlist", args_process_test_hashlist,0, "", "N/A","test_hashlist"},
-	{"state_machine", args_process_test_state_machine,0, "", "N/A","test_state_machine"},
-	{"udp_uclient_recieve", args_process_test_udp_uclient_recieve,0, "", "N/A","test_udp_uclient_recieve"},
-	{"udp_uclient_send", args_process_test_udp_uclient_send,0, "", "N/A","test_udp_uclient_send"},
-	{"tcp_uclient_send", args_process_test_tcp_uclient_send,0, "", "N/A","test_tcp_uclient_send"},
-	{"tcp_userver", args_process_test_tcp_userver,0, "", "N/A","test_tcp_userver"},
-	{"shm_read", args_process_test_share_mem_read,0, "", "N/A","test_share_mem_read"},
-	{"shm_write", args_process_test_share_mem_write,0, "", "N/A","test_share_mem_write"},
-	{"port", args_process_port,1, "port", "NN(number)","udp port,using to send/rcv msg with neighbor"},
-	{"ip", args_process_ipaddr,1, "ip", "xx.xx.xx.xx","ip addr,using to send/rcv msg with neighbor"},
+	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
+	{"blob", args_process_test_msgblob,0, "test", "N/A","test blob message"},
+	{"lab3", args_process_lab3,0, "test", "N/A","test simple code"},
+	{"lab2", args_process_lab2,0, "test", "N/A","test simple code"},
+	{"lab", args_process_lab,0, "test", "N/A","test simple code"},
+	{"inet_gserver", args_process_test_gserver_of_inet,0, "test", "N/A","test general server of inet tcp"},
+	{"unix_gserver", args_process_test_gserver_of_unix,0, "test", "N/A","test general server of unix tcp"},
+	{"unix_gclient_rcv", args_process_test_gclient_recv_of_unix_udp,0, "test", "N/A","test general client of unix udp"},
+	{"inet_gclient_rcv", args_process_test_gclient_recv_of_inet_udp,0, "test", "N/A","test general client of inet udp"},
+	{"analyzer", args_process_test_analyzer,0, "test", "N/A","test analyzer"},
+	{"evtime", args_process_test_evtime,0, "test", "N/A","test evtime"},
+	{"evsignal", args_process_test_evsignal,0, "test", "N/A","test evsignal"},
+	{"evio", args_process_test_evio,0, "test", "N/A","test evio"},
+	{"io_user", args_process_test_io_user,0, "test", "N/A","test io user"},
+	{"tmr_user", args_process_test_tmr_user,0, "test", "N/A","test timer user"},
+	{"allocator", args_process_test_allocator,0, "test", "N/A","test_allocator"},
+	{"udp_iclient_send", args_process_test_udp_iclient_send,0, "test", "N/A","test udp inet client send"},
+	{"udp_iclient_recieve", args_process_test_udp_iclient_recieve,0, "test", "N/A","test_udp_iclient_recieve"},
+	{"tcp_iclient_send", args_process_test_tcp_iclient_send,0, "test", "N/A","test_tcp_iclient_send"},
+	{"tcp_iserver", args_process_test_tcp_iserver,0, "test", "N/A","test_tcp_iserver"},
+	{"vector", args_process_test_vector,0, "test", "N/A","test_vector"},
+	{"rbtree_map", args_process_test_rbtree_map,0, "test", "N/A","test_rbtree_map"},
+	{"llist", args_process_test_llist,0, "test", "N/A","test_llist"},
+	{"hashlist", args_process_test_hashlist,0, "test", "N/A","test_hashlist"},
+	{"state_machine", args_process_test_state_machine,0, "test", "N/A","test_state_machine"},
+	{"udp_uclient_recieve", args_process_test_udp_uclient_recieve,0, "test", "N/A","test_udp_uclient_recieve"},
+	{"udp_uclient_send", args_process_test_udp_uclient_send,0, "test", "N/A","test_udp_uclient_send"},
+	{"tcp_uclient_send", args_process_test_tcp_uclient_send,0, "test", "N/A","test_tcp_uclient_send"},
+	{"tcp_userver", args_process_test_tcp_userver,0, "test", "N/A","test_tcp_userver"},
+	{"shm_read", args_process_test_share_mem_read,0, "test", "N/A","test_share_mem_read"},
+	{"shm_write", args_process_test_share_mem_write,0, "test", "N/A","test_share_mem_write"},
+	{"port", args_process_port,1, "config", "NN(number)","udp port,using to send/rcv msg with neighbor"},
+	{"ip", args_process_ipaddr,1, "config", "xx.xx.xx.xx","ip addr,using to send/rcv msg with neighbor"},
 	{"help", args_process_help,0, "help", "N/A","help info"},
 	{NULL,NULL,0,NULL,NULL,NULL},
 };
