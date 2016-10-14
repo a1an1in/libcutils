@@ -70,10 +70,12 @@ static int setnonblocking(int sockfd)
 }
 //version 4, using pipe mode,without task admin
 int server_task_init(server_task_t *task,
-		int fd, void *key, struct event *ev,
-		allocator_t *allocator,
-		concurrent_slave_t *slave,
-        server_t *server)
+		             int fd, 
+                     void *key, 
+                     struct event *ev,
+		             allocator_t *allocator,
+		             concurrent_slave_t *slave,
+                     server_t *server)
 {
     memcpy(task->key,key,10);
     task->fd        = fd;
@@ -91,7 +93,8 @@ int server_task_release_without_task_admin(server_task_t *task)
 
 	return 0;
 }
-static void slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
+static void 
+slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 	server_t *server = task->server;
@@ -99,18 +102,21 @@ static void slave_process_conn_bussiness_event_handler(int fd, short event, void
     server->process_task_cb(task);
 	server_task_release_without_task_admin(task);
 }
-static void slave_work_function(concurrent_slave_t *slave,void *arg)
+static void 
+slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 
 	dbg_str(NET_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
 	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
 	task->slave = slave;
+
 	concurrent_slave_add_new_event(slave,
 			                       task->fd,//int fd,
 			                       EV_READ | EV_PERSIST,//int event_flag,
 			                       task->event,//	struct event *event,
-			                       slave_process_conn_bussiness_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   /*void (*event_handler)(int fd, short event, void *arg)*/
+			                       slave_process_conn_bussiness_event_handler,
 			                       task);//void *task);
 	return ;
 }
@@ -197,9 +203,10 @@ int iserver_create_socket(struct addrinfo *addr)
     return listen_fd;
 }
 server_t * tcp_iserver(allocator_t *allocator,
-        char *host_ip, char *server_port,
-        int (*process_task_cb)(void *task),
-        void *opaque)
+                       char *host_ip, 
+                       char *server_port,
+                       int (*process_task_cb)(void *task),
+                       void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -220,6 +227,7 @@ server_t * tcp_iserver(allocator_t *allocator,
 	}
 
     user_fd = iserver_create_socket(addr);
+
 	srv = io_user(allocator,//allocator_t *allocator,
 			      user_fd,//int user_fd,
 			      SOCK_STREAM,//user_type
@@ -227,6 +235,7 @@ server_t * tcp_iserver(allocator_t *allocator,
 			      slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
 			      process_task_cb,//int (*process_task_cb)(user_task_t *task),
 			      opaque);//void *opaque)
+
 	if(srv == NULL){
 		dbg_str(DBG_ERROR,"create srv error");
 		return NULL;
@@ -268,6 +277,7 @@ int test_iserver()
     allocator_t *allocator = allocator_get_default_alloc();
 
 	tcp_iserver(allocator,"127.0.0.1","6888",test_process_task_callback,NULL);
+
 	return 0;
 }
 

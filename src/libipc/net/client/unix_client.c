@@ -76,15 +76,15 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 #if 1
 //version 4, using pipe mode,without task admin
 int uclient_init_task(client_task_t *task,
-					 allocator_t *allocator,
-					 int fd,
-					 struct event *ev,
-					 void *key,
-					 uint8_t key_len,
-					 uint8_t *buf,
-					 int buf_len,
-					 concurrent_slave_t *slave,
-					 client_t *client)
+					  allocator_t *allocator,
+					  int fd,
+					  struct event *ev,
+					  void *key,
+					  uint8_t key_len,
+					  uint8_t *buf,
+					  int buf_len,
+					  concurrent_slave_t *slave,
+					  client_t *client)
 {
 	task->fd = fd;
 	if(key_len)
@@ -173,9 +173,9 @@ client_t *__client(allocator_t *allocator,
 
 }
 client_t *udp_uclient(allocator_t *allocator,
-                     char *client_unpath,
-					 int (*process_task_cb)(client_task_t *task),
-					 void *opaque)
+                      char *client_unpath,
+					  int (*process_task_cb)(client_task_t *task),
+					  void *opaque)
 {
     struct sockaddr_un client_un_addr;
 	int err;
@@ -218,8 +218,11 @@ client_t *udp_uclient(allocator_t *allocator,
 
 	return client;
 }
-int udp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
-		const char *dest_unpath)
+int udp_uclient_send(client_t *client,
+                     const void *buf,
+                     size_t nbytes,
+                     int flags,
+		             const char *dest_unpath)
 {
 	int ret = 0;
     struct sockaddr_un dest_un_addr;
@@ -227,7 +230,10 @@ int udp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
     dest_un_addr.sun_family = PF_UNIX;  
     strcpy(dest_un_addr.sun_path,dest_unpath);  
 
-	if( ret = sendto(client->user_fd,buf,nbytes,flags,
+	if( ret = sendto(client->user_fd,
+                     buf,
+                     nbytes,
+                     flags,
 					 (struct sockaddr *)&dest_un_addr,
 					 sizeof(struct sockaddr_un)) < 0)
 	{

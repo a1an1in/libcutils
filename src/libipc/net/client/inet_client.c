@@ -201,10 +201,10 @@ int udp_iclient_create_socket(struct addrinfo *addr)
 }
 static inline 
 client_t *__iclient(allocator_t *allocator,
-				   int user_fd,
-				   uint8_t socktype,
-				   int (*process_task_cb)(client_task_t *task),
-				   void *opaque)
+				    int user_fd,
+				    uint8_t socktype,
+				    int (*process_task_cb)(client_task_t *task),
+				    void *opaque)
 {
 	return io_user(allocator,//allocator_t *allocator,
 			       user_fd,//int user_fd,
@@ -216,10 +216,10 @@ client_t *__iclient(allocator_t *allocator,
 
 }
 client_t *udp_iclient(allocator_t *allocator,
-					 char *client_ip,
-					 char *client_port,
-					 int (*process_task_cb)(client_task_t *task),
-					 void *opaque)
+					  char *client_ip,
+					  char *client_port,
+					  int (*process_task_cb)(client_task_t *task),
+					  void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -255,8 +255,12 @@ client_t *udp_iclient(allocator_t *allocator,
 
 	return client;
 }
-int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
-		const struct sockaddr *destaddr,socklen_t destlen)
+int udp_iclient_send(client_t *client,
+                     const void *buf,
+                     size_t nbytes,
+                     int flags,
+		             const struct sockaddr *destaddr,
+                     socklen_t destlen)
 {
 	int ret = 0;
 
@@ -271,10 +275,10 @@ int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
 }
 
 client_t *tcp_iclient(allocator_t *allocator,
-				 	 char *server_ip,
-				 	 char *server_port,
-				 	 int (*process_task_cb)(client_task_t *task),
-				 	 void *opaque)
+				 	  char *server_ip,
+				 	  char *server_port,
+				 	  int (*process_task_cb)(client_task_t *task),
+				 	  void *opaque)
 {
 	int user_fd;
 	struct sockaddr_in sa_addr;

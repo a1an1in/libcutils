@@ -76,8 +76,12 @@ client_t *client(allocator_t *allocator,
 
     return c;
 }
-int client_send(client_t *client,const void *buf,size_t nbytes,int flags,
-        char *dest_id_str, char *dest_srv_str)
+int client_send(client_t *client,
+                const void *buf,
+                size_t nbytes,
+                int flags,
+                char *dest_id_str, 
+                char *dest_srv_str)
 {
     int ret;
     char *type = client->type_str;

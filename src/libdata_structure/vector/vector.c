@@ -48,7 +48,8 @@
 #include <libdbg/debug.h>
 
 
-int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)
+int 
+vector_copy_backward(vector_t *vector, vector_pos_t *to, vector_pos_t *from, uint32_t count)
 {
 	uint32_t from_pos, to_pos;
 	void *vector_head = vector->vector_head;
@@ -68,7 +69,8 @@ int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,ui
 		memcpy(vector_head + to_pos * step, vector_head + from_pos * step, num_per * step);
 	}
 }
-int vector_copy_forward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)
+int 
+vector_copy_forward(vector_t *vector, vector_pos_t *to, vector_pos_t *from, uint32_t count)
 {
 	uint32_t from_pos = from->vector_pos;
 	uint32_t to_pos   = to->vector_pos;
@@ -77,16 +79,20 @@ int vector_copy_forward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uin
 	uint32_t num_per;
 	
 	num_per = from_pos - to_pos;
+
 	for(;count > 0;){
 		num_per = count - num_per > 0 ? num_per :count;
-		dbg_str(VECTOR_DETAIL,"to_pos=%d,from_pos=%d,num_per=%d",to_pos,from_pos,num_per);
+
+		dbg_str(VECTOR_DETAIL,"to_pos=%d,from_pos=%d,num_per=%d",
+                to_pos,from_pos,num_per);
+
 		memcpy(vector_head + to_pos * step,vector_head + from_pos * step,num_per * step);
 		to_pos += num_per;
 		from_pos += num_per;
 		count -= num_per;
 	}
 }
-int vector_copy(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)
+int vector_copy(vector_t *vector, vector_pos_t *to, vector_pos_t *from, uint32_t count)
 {
 	uint32_t from_pos = from->vector_pos;
 	uint32_t to_pos   = to->vector_pos;
@@ -169,7 +175,8 @@ int vector_push_back(vector_t *vector,void *data)
 
 	sync_unlock(&vector->vector_lock);
 
-	dbg_str(VECTOR_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,vector->capacity);
+	dbg_str(VECTOR_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",
+            push_pos,vector->capacity);
 
 	return 0;
 }
@@ -206,12 +213,17 @@ int vector_insert(vector_t *vector, vector_pos_t *it, void *data)
 	vector_pos_t to;
 	
 	vector_pos_init(&to,insert_pos + 1,vector);
-	dbg_str(VECTOR_DETAIL,"insert_pos=%d,to_pos=%d",insert_pos,to.vector_pos);
+
+	dbg_str(VECTOR_DETAIL,"insert_pos=%d,to_pos=%d",
+            insert_pos,
+            to.vector_pos);
 
 	sync_lock(&vector->vector_lock,NULL);
+
 	vector_copy(vector,&to,it,count);
 	memcpy(vector_head + insert_pos * step,data,step);
 	vector_pos_init(&vector->end,end_pos + 1,vector);
+
 	sync_unlock(&vector->vector_lock);
 
 	return 0;
@@ -226,14 +238,18 @@ int vector_delete(vector_t *vector, vector_pos_t *it)
 	vector_pos_init(&from,delete_pos + 1,vector);
 
 	sync_lock(&vector->vector_lock,0);
+
 	if(vector_pos_equal(it,&vector->end)){
 		dbg_str(VECTOR_WARNNING,"can't del end pos");
-	}else if(vector_pos_equal(it,&vector->begin)&&vector_pos_equal(&from,&vector->end)){
+	}else if(vector_pos_equal(it, &vector->begin)&&
+             vector_pos_equal(&from,&vector->end))
+    {
 		dbg_str(VECTOR_WARNNING,"vector is NULL");
 	}else{
 		vector_copy(vector,it,&from,count);
 		vector_pos_init(&vector->end,end_pos - 1,vector);
 	}
+
 	sync_unlock(&vector->vector_lock);
 
 	return 0;
@@ -249,10 +265,12 @@ int vector_set(vector_t *vector,int index,void *data)
 	dbg_str(VECTOR_DETAIL,"set_pos=%d",set_pos);
 
 	sync_lock(&vector->vector_lock,NULL);
+
 	memcpy(vector_head + set_pos * step,data,step);
 	if(set_pos > end_pos){
 		vector_pos_init(&vector->end,set_pos,vector);
 	}
+
 	sync_unlock(&vector->vector_lock);
 
 	return ret;
