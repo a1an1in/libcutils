@@ -94,6 +94,7 @@ int llist_insert(llist_t *llist, list_pos_t *pos, void *data)
 		llist_pos_init(&llist->begin,&p->list_head,llist);
 	}
 	llist->list_count++;
+
 	dbg_str(LINKLIST_DETAIL,"insert llist,listcount=%d,addr=%p",llist->list_count,&p->list_head);
 
 	sync_unlock(&llist->list_lock);
@@ -238,27 +239,3 @@ int llist_destroy(llist_t *llist)
 	return 0;
 }
 
-
-/*
- *int main()
- *{
- *    llist_t *llist;
- *    struct test t1={1,2};
- *    struct test t2={2,2};
- *    struct test t3={3,2};
- *    struct test t4={4,2};
- *    int ret = 0;
- *
- *    llist = llist_create();
- *    llist_init(llist,sizeof(struct test));
- *    llist_push_front(llist,&t1);
- *    llist_push_front(llist,&t2);
- *    llist_push_front(llist,&t3);
- *    llist_push_front(llist,&t4);
- *
- *    llist_for_each(llist,print_list_data);
- *
- *    llist_destroy(llist);
- *    return ret;
- *}
- */

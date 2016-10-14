@@ -116,14 +116,16 @@ int vector_init(vector_t *vector,uint32_t data_size,uint32_t capacity)
 	vector->step = data_size;
 	vector->data_size = data_size;
 	vector->capacity = capacity;
-	vector->vector_head = allocator_mem_alloc(
-			vector->allocator, capacity * (vector->step));
+	vector->vector_head = allocator_mem_alloc(vector->allocator,
+                                              capacity * (vector->step));
 	if(vector->vector_head == NULL){
 		dbg_str(VECTOR_ERROR,"vector_init");
 	}
+
 	dbg_str(VECTOR_DETAIL,"vector_head:%p,size=%d",
 			vector->vector_head,
 			capacity * (vector->step));
+
 	vector_pos_init(&vector->begin,0,vector);
 	vector_pos_init(&vector->end,0,vector);
 
@@ -145,23 +147,28 @@ int vector_push_back(vector_t *vector,void *data)
 	uint32_t push_pos     = vector->end.vector_pos;
 
 	sync_lock(&vector->vector_lock,NULL);
+
 	if(push_pos < capacity){
 		memcpy(vector_head + (push_pos++)*step,data,data_size);
 		vector_pos_init(&vector->end,push_pos,vector);
 	}else{
 		dbg_str(VECTOR_WARNNING,"realloc mem");
-		vector->vector_head = allocator_mem_alloc(
-				vector->allocator, 2*capacity * (vector->step));
+
+		vector->vector_head = allocator_mem_alloc(vector->allocator,
+                                                  2*capacity * (vector->step));
 		if(vector->vector_head == NULL){
 			dbg_str(VECTOR_ERROR,"vector_push_back,realloc mem");
 		}
+
 		vector->capacity = 2*capacity;
 		memcpy(vector->vector_head,vector_head,capacity*step);
 		memcpy(vector->vector_head + (push_pos++)*step,data,data_size);
 		vector_pos_init(&vector->end,push_pos,vector);
 		allocator_mem_free(vector->allocator,vector_head);
 	}
+
 	sync_unlock(&vector->vector_lock);
+
 	dbg_str(VECTOR_DETAIL,"vector_push_back,push_pos=%d,capacity=%d",push_pos,vector->capacity);
 
 	return 0;

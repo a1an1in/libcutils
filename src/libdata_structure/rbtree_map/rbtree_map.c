@@ -83,12 +83,12 @@ __rbtree_map_insert(rbtree_map_t *map,struct rb_root *root,
 {
   	struct rb_node **new = &(root->rb_node), *parent = NULL;
 	key_cmp_fpt key_cmp_func = map->key_cmp_func;
+    int result;
+    struct rbtree_map_node *this;
 
   	/* Figure out where to put new node */
   	while (*new) {
-  		struct rbtree_map_node *this = rb_entry(*new, struct rbtree_map_node, node);
-  		//int result = strcmp(new_mnode->key, this->key);
-		int result;
+  		this = rb_entry(*new, struct rbtree_map_node, node);
 		result = key_cmp_func(new_mnode->key, this->key,this->value_pos);
 
 		parent = *new;
@@ -191,7 +191,7 @@ int rbtree_map_init(rbtree_map_t *map,
 	map->key_size = key_size;
 
 	tree_root = (struct rb_root *)allocator_mem_alloc(map->allocator,
-			sizeof(struct rb_root));
+			                                          sizeof(struct rb_root));
 	tree_root->rb_node = NULL;
 	map->tree_root = tree_root;
 	rbtree_map_pos_init(&map->end,NULL,tree_root,map);
@@ -203,16 +203,17 @@ int rbtree_map_init(rbtree_map_t *map,
 rbtree_map_pos_t * 
 rbtree_map_begin(rbtree_map_t *map, rbtree_map_pos_t *begin)
 {
-	return rbtree_map_pos_init(
-			begin,map->begin.rb_node_p,
-			map->tree_root,map);
+	return rbtree_map_pos_init(begin,
+                               map->begin.rb_node_p,
+			                   map->tree_root,map);
 }
 
 rbtree_map_pos_t * rbtree_map_end(rbtree_map_t *map, rbtree_map_pos_t *end)
 {
-	return rbtree_map_pos_init(
-			end,map->end.rb_node_p,
-			map->tree_root,map);
+	return rbtree_map_pos_init(end,
+                               map->end.rb_node_p,
+			                   map->tree_root,
+                               map);
 }
 int rbtree_map_insert(rbtree_map_t *map, void *value)
 {
@@ -223,8 +224,9 @@ int rbtree_map_insert(rbtree_map_t *map, void *value)
 
 	dbg_str(DBG_DETAIL,"rbtree_map_insert");
 
-	mnode = (struct rbtree_map_node *)allocator_mem_alloc(map->allocator,
-			sizeof(struct rbtree_map_node) + data_size);
+	mnode = (struct rbtree_map_node *)
+            allocator_mem_alloc(map->allocator,
+			                    sizeof(struct rbtree_map_node) + data_size);
 	if(mnode == NULL){
 		dbg_str(DBG_ERROR,"rbtree_map_insert,malloc err");
 		return -1;
