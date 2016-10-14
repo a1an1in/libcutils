@@ -56,11 +56,17 @@ server_t * server(allocator_t *allocator,
     server_t *s;
 
     if(!strcmp(type,TCP_ISERVER_TYPE)){
-        s = tcp_iserver(allocator, host_ip, server_port, 
-                process_task_cb, opaque);
+        s = tcp_iserver(allocator,
+                        host_ip, 
+                        server_port, 
+                        process_task_cb, 
+                        opaque);
+
     } else if (!strcmp(type,TCP_USERVER_TYPE)){
-        s = tcp_userver(allocator, host_ip, 
-                process_task_cb, opaque);
+        s = tcp_userver(allocator, 
+                        host_ip, 
+                        process_task_cb, 
+                        opaque);
     } else {
         dbg_str(DBG_WARNNING,"server type error");
         return NULL;
@@ -112,11 +118,11 @@ int test_server_of_unix()
     dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
 
     server(allocator,
-            TCP_USERVER_TYPE,
-            "test_server_un_path", 
-            NULL,
-            test_process_task_callback,
-            NULL);
+           TCP_USERVER_TYPE,
+           "test_server_un_path", 
+           NULL,
+           test_process_task_callback,
+           NULL);
 	return;
 }
 
@@ -127,11 +133,11 @@ int test_server_of_inet()
     dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
 
     server(allocator,
-            TCP_ISERVER_TYPE,
-            "127.0.0.1", 
-            "6888",
-            test_process_task_callback,
-            NULL);
+           TCP_ISERVER_TYPE,
+           "127.0.0.1", 
+           "6888",
+           test_process_task_callback,
+           NULL);
 	return;
 }
 

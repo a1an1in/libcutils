@@ -67,6 +67,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	dbg_str(NET_DETAIL,"slave_work_function begin");
 	timer->process_timer_task_cb(timer);
 	dbg_str(NET_DETAIL,"slave_work_function end");
+
 	return ;
 }
 void timer_event_handler(int fd, short event, void *arg)
@@ -88,10 +89,10 @@ void timer_event_handler(int fd, short event, void *arg)
     return ;
 }
 tmr_user_t *tmr_user(allocator_t *allocator,
-        struct timeval *tv,
-        uint16_t timer_flags,
-        void (*process_timer_task_cb)(void *task),
-        void *opaque)
+                     struct timeval *tv,
+                     uint16_t timer_flags,
+                     void (*process_timer_task_cb)(void *task),
+                     void *opaque)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 	tmr_user_t *tmr_user = NULL;
@@ -113,16 +114,12 @@ tmr_user_t *tmr_user(allocator_t *allocator,
     tmr_user->flags                 = timer_flags;
     tmr_user->tv                    = *tv;
 
-    /*
-	 *dbg_str(DBG_DETAIL,"tmr_user->master=%p,allocator=%p",tmr_user->master,allocator);
-     */
-
     concurrent_add_event_to_master(c,
                                    -1,//int fd,
                                    tmr_user->flags,//int event_flag,
                                    &tmr_user->event,//struct event *event, 
                                    &tmr_user->tv,
-                                   tmr_user->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   tmr_user->tmr_event_handler,
                                    tmr_user);//void *arg);
 
 	return tmr_user;
@@ -136,7 +133,7 @@ tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user)
                                    tmr_user->flags,//int event_flag,
                                    &tmr_user->event,//struct event *event, 
                                    &tmr_user->tv,
-                                   tmr_user->tmr_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   tmr_user->tmr_event_handler,
                                    tmr_user);//void *arg);
 
 	return tmr_user;
@@ -144,6 +141,7 @@ tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user)
 int tmr_user_destroy(tmr_user_t *tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
+
     dbg_str(DBG_DETAIL,"state_machine_destroy_timer");
     concurrent_del_event_of_master(c,
                                    &tmr_user->event);
@@ -154,6 +152,7 @@ int tmr_user_destroy(tmr_user_t *tmr_user)
 int tmr_user_stop(tmr_user_t *tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
+
     dbg_str(DBG_DETAIL,"state_machine_stop_timer");
     concurrent_del_event_of_master(c,
                                    &tmr_user->event);

@@ -97,7 +97,7 @@ static void
 slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
-	server_t *server = task->server;
+	server_t *server    = task->server;
 
     server->process_task_cb(task);
 	server_task_release_without_task_admin(task);
@@ -122,7 +122,7 @@ slave_work_function(concurrent_slave_t *slave,void *arg)
 }
 void master_iserver_listen_event_handler(int fd, short event, void *arg)
 {
-	server_t *server = (server_t *)arg;
+	server_t *server            = (server_t *)arg;
 	concurrent_master_t *master = server->master;
 	/*
 	 *concurrent_master_t *master = (concurrent_master_t *)arg;
@@ -214,7 +214,7 @@ server_t * tcp_iserver(allocator_t *allocator,
 	int user_fd;
 
 	bzero(&hint, sizeof(hint));
-	hint.ai_family = AF_INET;
+	hint.ai_family   = AF_INET;
 	hint.ai_socktype = SOCK_STREAM;
 
 	if ((err = getaddrinfo(host_ip, server_port, &hint, &addr)) != 0)

@@ -94,7 +94,7 @@ int io_user_destroy(io_user_t *io_user)
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 
     concurrent_del_event_of_master(c,
-            &io_user->event);
+                                   &io_user->event);
 
 	allocator_mem_free(io_user->allocator,io_user);
 

@@ -94,7 +94,7 @@ COMMON_TIMEOUT_IDX_SHIFT	src/libevent_tiny/event.c	408;"	d	file:
 COMMON_TIMEOUT_MAGIC	src/libevent_tiny/event.c	410;"	d	file:
 COMMON_TIMEOUT_MASK	src/libevent_tiny/event.c	409;"	d	file:
 COMMON_TIMEOUT_MICROSECONDS_MASK	src/include/libevent_tiny/event-internal.h	144;"	d
-CONCURRENT_CONSTRUCTOR_PRIOR	src/libconcurrent/concurrent.c	558;"	d	file:
+CONCURRENT_CONSTRUCTOR_PRIOR	src/libconcurrent/concurrent.c	646;"	d	file:
 CONCURRENT_CORRECT	src/include/libdbg/debug_businesses.h	87;"	d
 CONCURRENT_DETAIL	src/include/libdbg/debug_businesses.h	91;"	d
 CONCURRENT_ERROR	src/include/libdbg/debug_businesses.h	84;"	d
@@ -536,7 +536,7 @@ MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	80
 MAX_PROTO_BUFFER_LEN	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	82;"	d	file:
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	25;"	d
 MAX_PROTO_DATA_LEN	src/include/libproto_analyzer/protocol_analyzer.h	9;"	d
-MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	557;"	d	file:
+MAX_PROXY_TASK_SIZE	src/libconcurrent/concurrent.c	645;"	d	file:
 MAX_SECONDS_IN_MSEC_LONG	src/libevent_tiny/evutil.c	2110;"	d	file:
 MAX_SHARE_MEM_KEY_LEN	src/include/libipc/share_mem/shm.h	12;"	d
 MAX_SHARE_MEM_KEY_LEN	src/include/libipc/share_mem/shm.h	15;"	d
@@ -982,7 +982,7 @@ __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
 __blob_for_each_attr	src/libblob/blob.h	237;"	d
 __cdecl	src/libevent_tiny/signal.c	73;"	d	file:
 __client	src/libipc/net/client/unix_client.c	/^client_t *__client(allocator_t *allocator,$/;"	f	file:
-__concurrent_master_create_slave	src/libconcurrent/concurrent.c	/^int __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)$/;"	f
+__concurrent_master_create_slave	src/libconcurrent/concurrent.c	/^__concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)$/;"	f
 __constructor	src/libblob/utils.h	137;"	d
 __destructor	src/libblob/utils.h	141;"	d
 __func__	src/include/libevent_tiny/util-internal.h	52;"	d
@@ -1103,7 +1103,6 @@ allocator	src/include/libstate_machine/state_machine.h	/^    allocator_t *alloca
 allocator	src/libipc/net/server/inet_server.c	/^	allocator_t *allocator;$/;"	m	struct:iserver_task_s	file:
 allocator	src/libipc/net/server/inet_server_old.c	/^	allocator_t *allocator;$/;"	m	struct:iserver_task_s	file:
 allocator_create	src/liballoc/allocator.c	/^allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)$/;"	f
-allocator_creator	src/liballoc/allocator.c	/^allocator_t *allocator_creator(uint8_t allocator_type,uint8_t lock_type)$/;"	f
 allocator_ctr_alloc_register	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_ctr_alloc_register(){$/;"	f
 allocator_ctr_init	src/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f
 allocator_destroy	src/liballoc/allocator.c	/^void allocator_destroy(allocator_t * alloc)$/;"	f
@@ -1289,7 +1288,7 @@ client	src/libipc/net/client/client.c	/^client_t *client(allocator_t *allocator,
 client_destroy	src/libipc/net/client/client.c	/^int client_destroy(client_t *client)$/;"	f
 client_event_handler	src/libipc/net/client/inet_client.c	/^void client_event_handler(int fd, short event, void *arg)$/;"	f
 client_init_task	src/libipc/net/client/inet_client.c	/^int client_init_task(client_task_t *task,$/;"	f
-client_send	src/libipc/net/client/client.c	/^int client_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f
+client_send	src/libipc/net/client/client.c	/^int client_send(client_t *client,$/;"	f
 client_t	src/include/libipc/net/inet_client.h	/^typedef struct io_user_s client_t;$/;"	t	typeref:struct:io_user_s
 client_task_s	src/include/libipc/net/inet_client.h	/^typedef struct client_task_s{$/;"	s
 client_task_t	src/include/libipc/net/inet_client.h	/^}client_task_t;$/;"	t	typeref:struct:client_task_s
@@ -1308,46 +1307,46 @@ common_timeout_list	src/include/libevent_tiny/event-internal.h	/^struct common_t
 common_timeout_queues	src/include/libevent_tiny/event-internal.h	/^	struct common_timeout_list **common_timeout_queues;$/;"	m	struct:event_base	typeref:struct:event_base::common_timeout_list
 common_timeout_schedule	src/libevent_tiny/event.c	/^common_timeout_schedule(struct common_timeout_list *ctl,$/;"	f	file:
 compilation_database_folder	.ycm_extra_conf.py	/^compilation_database_folder = ''$/;"	v
-concurrent_add_event_to_master	src/libconcurrent/concurrent.c	/^int concurrent_add_event_to_master(concurrent_t *c,$/;"	f
+concurrent_add_event_to_master	src/libconcurrent/concurrent.c	/^concurrent_add_event_to_master(concurrent_t *c,$/;"	f
 concurrent_constructor	src/libconcurrent/concurrent.c	/^concurrent_constructor()$/;"	f
-concurrent_create	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_create(allocator_t *allocator)$/;"	f
-concurrent_del_event_of_master	src/libconcurrent/concurrent.c	/^int concurrent_del_event_of_master(concurrent_t *c,$/;"	f
+concurrent_create	src/libconcurrent/concurrent.c	/^concurrent_create(allocator_t *allocator)$/;"	f
+concurrent_del_event_of_master	src/libconcurrent/concurrent.c	/^concurrent_del_event_of_master(concurrent_t *c,$/;"	f
 concurrent_destroy	src/libconcurrent/concurrent.c	/^void concurrent_destroy(concurrent_t *c)$/;"	f
 concurrent_destructor	src/libconcurrent/concurrent.c	/^concurrent_destructor()$/;"	f
 concurrent_get_global_concurrent_addr	src/libconcurrent/concurrent.c	/^concurrent_t *concurrent_get_global_concurrent_addr()$/;"	f
-concurrent_init	src/libconcurrent/concurrent.c	/^int concurrent_init(concurrent_t *c,$/;"	f
+concurrent_init	src/libconcurrent/concurrent.c	/^concurrent_init(concurrent_t *c,$/;"	f
 concurrent_lock	src/include/libconcurrent/concurrent.h	/^	sync_lock_t concurrent_lock;$/;"	m	struct:concurrent_s
 concurrent_master_add_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_message(concurrent_master_t *master,$/;"	f
-concurrent_master_add_task	src/libconcurrent/concurrent.c	/^void *concurrent_master_add_task(concurrent_master_t *master,$/;"	f
-concurrent_master_add_task_and_message	src/libconcurrent/concurrent.c	/^int concurrent_master_add_task_and_message(concurrent_master_t *master,$/;"	f
+concurrent_master_add_task	src/libconcurrent/concurrent.c	/^concurrent_master_add_task(concurrent_master_t *master,$/;"	f
+concurrent_master_add_task_and_message	src/libconcurrent/concurrent.c	/^concurrent_master_add_task_and_message(concurrent_master_t *master,$/;"	f
 concurrent_master_choose_slave	src/libconcurrent/concurrent.c	/^int concurrent_master_choose_slave(concurrent_master_t *master)$/;"	f
-concurrent_master_create	src/libconcurrent/concurrent.c	/^concurrent_master_t *concurrent_master_create(allocator_t *allocator)$/;"	f
+concurrent_master_create	src/libconcurrent/concurrent.c	/^concurrent_master_create(allocator_t *allocator)$/;"	f
 concurrent_master_create_slaves	src/libconcurrent/concurrent.c	/^int concurrent_master_create_slaves(concurrent_master_t *master)$/;"	f
 concurrent_master_destroy	src/libconcurrent/concurrent.c	/^int concurrent_master_destroy(concurrent_master_t *master)$/;"	f
 concurrent_master_destroy_slaves	src/libconcurrent/concurrent.c	/^int concurrent_master_destroy_slaves(concurrent_master_t *master)$/;"	f
-concurrent_master_init	src/libconcurrent/concurrent.c	/^int concurrent_master_init(concurrent_master_t *master,$/;"	f
-concurrent_master_init_message	src/libconcurrent/concurrent.c	/^int concurrent_master_init_message(struct concurrent_message_s *message,$/;"	f
+concurrent_master_init	src/libconcurrent/concurrent.c	/^concurrent_master_init(concurrent_master_t *master,$/;"	f
+concurrent_master_init_message	src/libconcurrent/concurrent.c	/^concurrent_master_init_message(struct concurrent_message_s *message,$/;"	f
 concurrent_master_inited_flag	src/include/libconcurrent/concurrent.h	/^	uint8_t concurrent_master_inited_flag;$/;"	m	struct:concurrent_master_s
-concurrent_master_notify_slave	src/libconcurrent/concurrent.c	/^static void concurrent_master_notify_slave(concurrent_master_t *master,char command)$/;"	f	file:
+concurrent_master_notify_slave	src/libconcurrent/concurrent.c	/^concurrent_master_notify_slave(concurrent_master_t *master,char command)$/;"	f	file:
 concurrent_master_process_listen_event	src/libconcurrent/test_concurrent.c	/^void concurrent_master_process_listen_event(int fd, short event, void *arg)$/;"	f
 concurrent_master_s	src/include/libconcurrent/concurrent.h	/^typedef struct concurrent_master_s{$/;"	s
 concurrent_master_t	src/include/libconcurrent/concurrent.h	/^}concurrent_master_t;$/;"	t	typeref:struct:concurrent_master_s
 concurrent_master_thread	src/libconcurrent/concurrent.c	/^void *concurrent_master_thread(void *arg)$/;"	f
 concurrent_message_s	src/include/libconcurrent/concurrent.h	/^struct concurrent_message_s{$/;"	s
 concurrent_s	src/include/libconcurrent/concurrent.h	/^typedef struct concurrent_s{$/;"	s
-concurrent_slave_add_new_event	src/libconcurrent/concurrent.c	/^int concurrent_slave_add_new_event(concurrent_slave_t *slave,$/;"	f
+concurrent_slave_add_new_event	src/libconcurrent/concurrent.c	/^concurrent_slave_add_new_event(concurrent_slave_t *slave,$/;"	f
 concurrent_slave_s	src/include/libconcurrent/concurrent.h	/^typedef struct concurrent_slave_s{$/;"	s
 concurrent_slave_t	src/include/libconcurrent/concurrent.h	/^}concurrent_slave_t;$/;"	t	typeref:struct:concurrent_slave_s
-concurrent_slave_thread	src/libconcurrent/concurrent.c	/^void *concurrent_slave_thread(void *arg)$/;"	f
+concurrent_slave_thread	src/libconcurrent/concurrent.c	/^concurrent_slave_thread(void *arg)$/;"	f
 concurrent_t	src/include/libconcurrent/concurrent.h	/^}concurrent_t;$/;"	t	typeref:struct:concurrent_s
 concurrent_task_admin_add	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void *data)$/;"	f
 concurrent_task_admin_create	src/libconcurrent/concurrent.c	/^concurrent_task_admin_create(allocator_t *allocator)$/;"	f
-concurrent_task_admin_del	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_del(concurrent_task_admin_t *task_admin,$/;"	f
-concurrent_task_admin_del_by_key	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,$/;"	f
-concurrent_task_admin_destroy	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)$/;"	f
-concurrent_task_admin_init	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_init(concurrent_task_admin_t *task_admin,$/;"	f
+concurrent_task_admin_del	src/libconcurrent/concurrent.c	/^concurrent_task_admin_del(concurrent_task_admin_t *task_admin,$/;"	f
+concurrent_task_admin_del_by_key	src/libconcurrent/concurrent.c	/^concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,$/;"	f
+concurrent_task_admin_destroy	src/libconcurrent/concurrent.c	/^concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)$/;"	f
+concurrent_task_admin_init	src/libconcurrent/concurrent.c	/^concurrent_task_admin_init(concurrent_task_admin_t *task_admin,$/;"	f
 concurrent_task_admin_s	src/include/libconcurrent/concurrent.h	/^typedef struct concurrent_task_admin_s{$/;"	s
-concurrent_task_admin_search	src/libconcurrent/concurrent.c	/^int concurrent_task_admin_search(concurrent_task_admin_t *task_admin,$/;"	f
+concurrent_task_admin_search	src/libconcurrent/concurrent.c	/^concurrent_task_admin_search(concurrent_task_admin_t *task_admin,$/;"	f
 concurrent_task_admin_t	src/include/libconcurrent/concurrent.h	/^}concurrent_task_admin_t;$/;"	t	typeref:struct:concurrent_task_admin_s
 concurrent_task_s	src/libconcurrent/test_concurrent.c	/^typedef struct concurrent_task_s{$/;"	s	file:
 concurrent_task_t	src/libconcurrent/test_concurrent.c	/^}concurrent_task_t;$/;"	t	typeref:struct:concurrent_task_s	file:
@@ -2073,7 +2072,6 @@ lab2	src/lab/lab2.c	/^int lab2()$/;"	f
 lab3	src/lab/lab3.c	/^int lab3()$/;"	f
 last_state	src/include/libstate_machine/state_machine.h	/^    int last_state;$/;"	m	struct:state_machine_s
 last_updated_clock_diff	src/include/libevent_tiny/event-internal.h	/^	time_t last_updated_clock_diff;$/;"	m	struct:event_base
-lasttime	src/libconcurrent/tmr_user.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
 lasttime	src/libevent_tiny/test_time.c	/^struct timeval lasttime;$/;"	v	typeref:struct:timeval
 le16_to_cpu	src/libblob/utils.h	110;"	d
 le16_to_cpu	src/libblob/utils.h	120;"	d
@@ -2300,7 +2298,7 @@ map_lock	src/include/libdata_structure/rbtree_map_struct.h	/^	sync_lock_t map_lo
 master	src/include/libconcurrent/concurrent.h	/^	concurrent_master_t *master;$/;"	m	struct:concurrent_s
 master	src/include/libconcurrent/io_user.h	/^	concurrent_master_t *master;$/;"	m	struct:io_user_s
 master	src/include/libconcurrent/tmr_user.h	/^	concurrent_master_t *master;$/;"	m	struct:tmr_user_s
-master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^static void master_event_handler_add_new_event($/;"	f	file:
+master_event_handler_add_new_event	src/libconcurrent/concurrent.c	/^master_event_handler_add_new_event(int fd,short event,void *arg)$/;"	f	file:
 master_iserver_listen_event_handler	src/libipc/net/server/inet_server.c	/^void master_iserver_listen_event_handler(int fd, short event, void *arg)$/;"	f
 maxlen	src/libblob/blob.h	/^	unsigned int maxlen;$/;"	m	struct:blob_attr_info
 mem_addr	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t *mem_addr;$/;"	m	struct:slab
@@ -2753,15 +2751,15 @@ slave	src/include/libipc/net/unix_server.h	/^	concurrent_slave_t *slave;$/;"	m	s
 slave	src/libipc/net/server/inet_server.c	/^	concurrent_slave_t *slave;$/;"	m	struct:iserver_task_s	file:
 slave	src/libipc/net/server/inet_server_old.c	/^	concurrent_slave_t *slave;$/;"	m	struct:iserver_task_s	file:
 slave_amount	src/include/libconcurrent/concurrent.h	/^	uint8_t slave_amount;$/;"	m	struct:concurrent_master_s
-slave_event_handler_process_message	src/libconcurrent/concurrent.c	/^static void slave_event_handler_process_message(int fd, short event, void *arg)$/;"	f	file:
-slave_process_conn_bussiness_event_handler	src/libipc/net/server/inet_server.c	/^static void slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)$/;"	f	file:
+slave_event_handler_process_message	src/libconcurrent/concurrent.c	/^slave_event_handler_process_message(int fd, short event, void *arg)$/;"	f	file:
+slave_process_conn_bussiness_event_handler	src/libipc/net/server/inet_server.c	/^slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)$/;"	f	file:
 slave_process_conn_bussiness_event_handler	src/libipc/net/server/unix_server.c	/^static void slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)$/;"	f	file:
 slave_work_function	src/include/libconcurrent/io_user.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:io_user_s
 slave_work_function	src/include/libconcurrent/tmr_user.h	/^	void (*slave_work_function)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:tmr_user_s
 slave_work_function	src/libconcurrent/tmr_user.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libipc/net/client/inet_client.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libipc/net/client/unix_client.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
-slave_work_function	src/libipc/net/server/inet_server.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
+slave_work_function	src/libipc/net/server/inet_server.c	/^slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libipc/net/server/unix_server.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 slave_work_function	src/libstate_machine/state_machine.c	/^static void slave_work_function(concurrent_slave_t *slave,void *arg)$/;"	f	file:
 snd_add_new_event_fd	src/include/libconcurrent/concurrent.h	/^	int snd_add_new_event_fd;$/;"	m	struct:concurrent_master_s
@@ -2964,9 +2962,9 @@ uclient_init_task	src/libipc/net/client/unix_client.c	/^int uclient_init_task(cl
 uclient_release_task	src/libipc/net/client/unix_client.c	/^static int uclient_release_task(client_task_t *task)$/;"	f	file:
 udp_iclient	src/libipc/net/client/inet_client.c	/^client_t *udp_iclient(allocator_t *allocator,$/;"	f
 udp_iclient_create_socket	src/libipc/net/client/inet_client.c	/^int udp_iclient_create_socket(struct addrinfo *addr)$/;"	f
-udp_iclient_send	src/libipc/net/client/inet_client.c	/^int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f
+udp_iclient_send	src/libipc/net/client/inet_client.c	/^int udp_iclient_send(client_t *client,$/;"	f
 udp_uclient	src/libipc/net/client/unix_client.c	/^client_t *udp_uclient(allocator_t *allocator,$/;"	f
-udp_uclient_send	src/libipc/net/client/unix_client.c	/^int udp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags,$/;"	f
+udp_uclient_send	src/libipc/net/client/unix_client.c	/^int udp_uclient_send(client_t *client,$/;"	f
 uint16_t	src/include/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/liballoc/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
 uint16_t	src/include/libdbg/basic_types.h	/^typedef unsigned short uint16_t;$/;"	t
@@ -2998,9 +2996,9 @@ value_size	src/include/libdata_structure/rbtree_map_struct.h	/^	uint32_t value_s
 vector	src/include/libdata_structure/vector_struct.h	/^	struct vector_s *vector;$/;"	m	struct:vector_pos_s	typeref:struct:vector_pos_s::vector_s
 vector	src/include/libstate_machine/state_machine.h	/^	vector_t *vector;$/;"	m	struct:state_machine_s
 vector_begin	src/include/libdata_structure/vector.h	/^static inline vector_pos_t * vector_begin(vector_t *vt,vector_pos_t *it)$/;"	f
-vector_copy	src/libdata_structure/vector/vector.c	/^int vector_copy(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
-vector_copy_backward	src/libdata_structure/vector/vector.c	/^int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
-vector_copy_forward	src/libdata_structure/vector/vector.c	/^int vector_copy_forward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count)$/;"	f
+vector_copy	src/libdata_structure/vector/vector.c	/^int vector_copy(vector_t *vector, vector_pos_t *to, vector_pos_t *from, uint32_t count)$/;"	f
+vector_copy_backward	src/libdata_structure/vector/vector.c	/^vector_copy_backward(vector_t *vector, vector_pos_t *to, vector_pos_t *from, uint32_t count)$/;"	f
+vector_copy_forward	src/libdata_structure/vector/vector.c	/^vector_copy_forward(vector_t *vector, vector_pos_t *to, vector_pos_t *from, uint32_t count)$/;"	f
 vector_create	src/libdata_structure/vector/vector.c	/^vector_t *vector_create(allocator_t *allocator,uint8_t lock_type)$/;"	f
 vector_delete	src/libdata_structure/vector/vector.c	/^int vector_delete(vector_t *vector, vector_pos_t *it)$/;"	f
 vector_destroy	src/libdata_structure/vector/vector.c	/^int vector_destroy(vector_t *vt)$/;"	f

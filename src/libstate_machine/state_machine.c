@@ -104,10 +104,10 @@ state_entry_t *init_state_entry(state_entry_t *e,
                                 char *entry_name)
 {
     e->process_timer_task_cb = process_timer_task_cb;
-    e->action_callback      = action_callback;
-    e->tv.tv_sec            = tv_sec;
-    e->tv.tv_usec           = tv_usec;
-    e->state_machine        = s;
+    e->action_callback       = action_callback;
+    e->tv.tv_sec             = tv_sec;
+    e->tv.tv_usec            = tv_usec;
+    e->state_machine         = s;
     strncpy(e->entry_name,entry_name,strlen(entry_name));
 
     return e;
@@ -155,7 +155,8 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
 
     e = (state_entry_t *)vector_get(s->vector,state);
 
-    dbg_str(DBG_DETAIL,"state_machine_setup_entry_timer,tv_sec=%d tv_usec=%d",e->tv.tv_sec,e->tv.tv_usec);
+    dbg_str(DBG_DETAIL,"state_machine_setup_entry_timer,tv_sec=%d tv_usec=%d",
+            e->tv.tv_sec,e->tv.tv_usec);
 
     if(e->timer == NULL)
         e->timer = tmr_user(s->allocator,
@@ -176,7 +177,8 @@ int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
 
     dbg_str(SM_DETAIL,"state_machine_stop_entry_timer");
     if(e->timer != NULL){
-        dbg_str(SM_DETAIL,"before last event flags=%x,event addr:%p",e->timer->event.ev_flags,&e->timer->event);
+        dbg_str(SM_DETAIL,"before last event flags=%x,event addr:%p",
+                e->timer->event.ev_flags,&e->timer->event);
         /*
          *while(!(e->timer->event.ev_flags & EVLIST_TIMEOUT) && e->timer->event.ev_flags & EVLIST_INIT);
          */
@@ -260,9 +262,9 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 }
 static void state_change_event_handler(int fd, short event, void *arg)
 {
-    io_user_t *notifier = (io_user_t *)arg;
+    io_user_t *notifier         = (io_user_t *)arg;
+    state_machine_t *s          = (state_machine_t *)notifier->opaque;
 	concurrent_master_t *master = notifier->master;
-    state_machine_t *s  = (state_machine_t *)notifier->opaque;
 	struct concurrent_message_s message;
 	char buf[1];          
     void (*slave_work_func)(concurrent_slave_t *slave,void *arg);
@@ -303,13 +305,12 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
 
     for(i = 0; ; i++){
         if(strlen(config[i].entry_name) != 0){
-            e = state_machine_construct_state_entry(
-                    s,
-                    config[i].action_callback,
-                    config[i].process_timer_task_cb,
-                    config[i].tv_sec,     
-                    config[i].tv_usec, 
-                    config[i].entry_name);
+            e = state_machine_construct_state_entry(s,
+                                                    config[i].action_callback,
+                                                    config[i].process_timer_task_cb,
+                                                    config[i].tv_sec,     
+                                                    config[i].tv_usec, 
+                                                    config[i].entry_name);
 
             dbg_str(SM_DETAIL,"config %d, state name :%s",i, config[i].entry_name);
         }else break;

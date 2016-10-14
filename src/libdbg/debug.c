@@ -90,14 +90,7 @@ void debugger_set_business(debugger_t *debugger,
 	debugger->debug_business[business_num].business_switch = on_off;
 	debugger->debug_business[business_num].business_debug_level = debug_level;
 }
-/*
- *enum debug_business_enum{
- *    DBG_BUSINESS_NORMAL = 0,
- *    DBG_BUSINESS_ALLOC,
- *    DBG_BUSINESS_CONTAINER,
- *    MAX_DEBUG_BUSINESS_NUM
- *};
- */
+
 void debugger_set_businesses(debugger_t *debugger)
 {
 	dictionary *d = debugger->d;;
@@ -108,9 +101,6 @@ void debugger_set_businesses(debugger_t *debugger)
 	int sw,lv;
 	char buf[MAX_STRING_LEN];
 
-	/*
-	 *printf("debugger_set_businesses\n");
-	 */
 	bussiness_num = iniparser_getint(d, (char *)"businesses:business_num",0);
 	sprintf(buf,"%d",MAX_DEBUG_BUSINESS_NUM);
 	if(bussiness_num == 0){
@@ -219,8 +209,11 @@ int debugger_dbg_str(debugger_t *debugger,uint32_t dbg_switch,const char *fmt,..
 #undef MAX_FMT_STR_LEN 
 }
 int debugger_dbg_buf(debugger_t *debugger,
-		uint32_t dbg_switch,const char* const_str,
-		uint8_t *buf,uint32_t buf_len, const char *fmt,...) 
+		             uint32_t dbg_switch,
+                     const char* const_str,
+		             uint8_t *buf,
+                     uint32_t buf_len, 
+                     const char *fmt,...) 
 {
 #define MAX_BUFFER_STR_LEN 1024*4
 #define MAX_FMT_STR_LEN 1024
@@ -243,7 +236,14 @@ int debugger_dbg_buf(debugger_t *debugger,
 	vsnprintf(fmt_str,MAX_FMT_STR_LEN,fmt,ap);
 	va_end(ap);
 	level_str = (char*)debugger_get_level_str(debugger,level);
-	ret = debugger->dbg_ops->dbg_string(debugger,level,"[%s]--[%s%s]--%s",level_str,const_str,buffer_str,fmt_str);
+
+	ret = debugger->dbg_ops->dbg_string(debugger,
+                                        level,
+                                        "[%s]--[%s%s]--%s",
+                                        level_str,
+                                        const_str,
+                                        buffer_str,
+                                        fmt_str);
 
 	return ret;
 #undef MAX_BUFFER_STR_LEN

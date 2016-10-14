@@ -74,19 +74,21 @@ static int userver_release_task_without_task_admin(server_task_t *task)
 static void slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
-	server_t *server = task->server;
+	server_t *server    = task->server;
 
     server->process_task_cb(task);
 	userver_release_task_without_task_admin(task);
 }
 static int userver_init_task(server_task_t *task,
-		int fd, void *key, struct event *ev,
-		allocator_t *allocator,
-		concurrent_slave_t *slave,
-        server_t *server)
+		                     int fd,
+                             void *key, 
+                             struct event *ev,
+		                     allocator_t *allocator,
+		                     concurrent_slave_t *slave,
+                             server_t *server)
 {
-	task->fd        = fd;
 	memcpy(task->key,key,10);
+	task->fd        = fd;
 	task->event     = ev;
 	task->allocator = allocator;
 	task->slave     = slave;
@@ -97,21 +99,23 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
 
-	dbg_str(NET_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",task->fd,task->key);
-	task->event = (struct event *)allocator_mem_alloc(slave->allocator,sizeof(struct event));
+	dbg_str(NET_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",
+            task->fd,task->key);
+
+	task->event = (struct event *)allocator_mem_alloc(slave->allocator,
+                                                      sizeof(struct event));
 	task->slave = slave;
-	concurrent_slave_add_new_event(
-			slave,
-			task->fd,//int fd,
-			EV_READ | EV_PERSIST,//int event_flag,
-			task->event,//	struct event *event,
-			slave_process_conn_bussiness_event_handler,//void (*event_handler)(int fd, short event, void *arg),
-			task);//void *task);
+	concurrent_slave_add_new_event(slave,
+			                       task->fd,//int fd,
+			                       EV_READ | EV_PERSIST,//int event_flag,
+			                       task->event,//	struct event *event,
+			                       slave_process_conn_bussiness_event_handler,
+			                       task);//void *task);
 	return ;
 }
 static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
 {
-	server_t *server = (server_t *)arg;
+	server_t *server            = (server_t *)arg;
 	concurrent_master_t *master = server->master;
 	int connfd;
 	struct sockaddr_in cliaddr;
@@ -133,14 +137,16 @@ static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
 
 	dbg_str(NET_DETAIL,"tcp_userver_listen_event_handler,listen_fd=%d,connfd=%d",fd,connfd);
 
-	task = (server_task_t *)allocator_mem_alloc(master->allocator,sizeof(server_task_t));
+	task = (server_task_t *)
+           allocator_mem_alloc(master->allocator,sizeof(server_task_t));
+
 	userver_init_task(task,
-			         connfd,//int fd, 
-			         key,//void *key, 
-			         NULL,//struct event *ev,
-			         master->allocator,
-			         NULL,
-                     server);
+			          connfd,//int fd, 
+			          key,//void *key, 
+			          NULL,//struct event *ev,
+			          master->allocator,
+			          NULL,
+                      server);
 
 	master->assignment_count++;//do for assigning slave
 	concurrent_master_init_message(&message, slave_work_function,task,0);
@@ -190,9 +196,9 @@ static int tcp_userver_create_socket(char *server_un_path)
     return listen_fd;
 }
 server_t * tcp_userver(allocator_t *allocator,
-        char *server_un_path,
-        int (*process_task_cb)(void *task),
-        void *opaque)
+                       char *server_un_path,
+                       int (*process_task_cb)(void *task),
+                       void *opaque)
 {
 	server_t *srv = NULL;
     int listen_fd;
@@ -229,7 +235,7 @@ static int test_process_task_callback(void *task)
     int nread;
     char buf[MAXLINE];
     int fd = ((server_task_t *)task)->fd;
-    nread = read(fd, buf, MAXLINE);//读取客户端socket流
+    nread  = read(fd, buf, MAXLINE);//读取客户端socket流
 
 	dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
     if (nread < 0) {
