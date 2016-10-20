@@ -52,8 +52,7 @@
 #include <libconcurrent/tmr_user.h>
 
 /*
- *warnning:
- *the timer cann't be destroy and recreate it at once using the same
+ *warnning:the timer cann't be destroy and recreate it at once using the same
  *event struct.for when we create a new timer,we may change the event flag which
  *the previous timer is using.  so libevent cann't find out the event to del and
  *quit loop.

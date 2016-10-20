@@ -158,7 +158,7 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
 
     e = (state_entry_t *)vector_get(s->vector,state);
 
-    dbg_str(DBG_DETAIL,"state_machine_setup_entry_timer,tv_sec=%d tv_usec=%d",
+    dbg_str(SM_DETAIL,"state_machine_setup_entry_timer,tv_sec=%d tv_usec=%d",
             e->tv.tv_sec,e->tv.tv_usec);
 
     if(e->timer == NULL)
