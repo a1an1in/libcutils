@@ -55,14 +55,14 @@ server_t * server(allocator_t *allocator,
 {
     server_t *s;
 
-    if(!strcmp(type,TCP_ISERVER_TYPE)){
+    if(!strcmp(type,SERVER_TYPE_TCP_INET)){
         s = tcp_iserver(allocator,
                         host_ip, 
                         server_port, 
                         process_task_cb, 
                         opaque);
 
-    } else if (!strcmp(type,TCP_USERVER_TYPE)){
+    } else if (!strcmp(type,SERVER_TYPE_TCP_UNIX)){
         s = tcp_userver(allocator, 
                         host_ip, 
                         process_task_cb, 
@@ -81,9 +81,9 @@ int server_destroy(server_t *server)
 {
     char *type = server->type_str;
 
-    if(!strcmp(type,TCP_ISERVER_TYPE)){
+    if(!strcmp(type,SERVER_TYPE_TCP_INET)){
         tcp_iserver_destroy(server);
-    } else if (!strcmp(type,TCP_USERVER_TYPE)){
+    } else if (!strcmp(type,SERVER_TYPE_TCP_UNIX)){
         tcp_userver_destroy(server);
     } else {
         dbg_str(DBG_WARNNING,"server type error");
@@ -118,7 +118,7 @@ int test_server_of_unix()
     dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
 
     server(allocator,
-           TCP_USERVER_TYPE,
+           SERVER_TYPE_TCP_UNIX,
            "test_server_un_path", 
            NULL,
            test_process_task_callback,
@@ -133,7 +133,7 @@ int test_server_of_inet()
     dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
 
     server(allocator,
-           TCP_ISERVER_TYPE,
+           SERVER_TYPE_TCP_INET,
            "127.0.0.1", 
            "6888",
            test_process_task_callback,

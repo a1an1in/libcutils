@@ -47,9 +47,9 @@
 #include <libdbg/debug.h>
 
 client_t *client(allocator_t *allocator,
+                 char *type,
                  char *id_str,
                  char *serve_no,
-                 char *type,
                  int (*process_task_cb)(client_task_t *task),
                  void *opaque)
 {
@@ -57,15 +57,15 @@ client_t *client(allocator_t *allocator,
 
     //there may add id_str check....
 
-    if(!strcmp(type,TCP_ICLIENT_TYPE)){
+    if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
         c = tcp_iclient(allocator, id_str, serve_no,
                 process_task_cb, opaque);
-    } else if (!strcmp(type,UDP_ICLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
         c = udp_iclient(allocator, id_str, serve_no,
                 process_task_cb, opaque);
-    } else if (!strcmp(type,UDP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
         c = udp_uclient(allocator, id_str, process_task_cb, opaque);
-    } else if (!strcmp(type,TCP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
         c = tcp_uclient(allocator, id_str, process_task_cb, opaque);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
@@ -86,9 +86,9 @@ int client_send(client_t *client,
     int ret;
     char *type = client->type_str;
 
-    if(!strcmp(type,TCP_ICLIENT_TYPE)){
+    if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
         ret = tcp_iclient_send(client,buf,nbytes,flags);
-    } else if (!strcmp(type,UDP_ICLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
         struct sockaddr_in raddr;
         raddr.sin_family = AF_INET; 
         raddr.sin_port = htons(atoi(dest_srv_str));  
@@ -97,9 +97,9 @@ int client_send(client_t *client,
         ret = udp_iclient_send(client,buf,nbytes,flags,
                 (struct sockaddr *)&raddr,sizeof(raddr));
 
-    } else if (!strcmp(type,UDP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
         ret = udp_uclient_send(client,buf,nbytes,flags, dest_id_str);
-    } else if (!strcmp(type,TCP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
         ret = tcp_uclient_send(client,buf,nbytes,flags);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
@@ -112,13 +112,13 @@ int client_destroy(client_t *client)
 {
     char *type = client->type_str;
 
-    if(!strcmp(type,TCP_ICLIENT_TYPE)){
+    if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
         iclient_destroy(client);
-    } else if (!strcmp(type,UDP_ICLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
         iclient_destroy(client);
-    } else if (!strcmp(type,UDP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
         uclient_destroy(client);
-    } else if (!strcmp(type,TCP_UCLIENT_TYPE)){
+    } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
         uclient_destroy(client);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
@@ -146,9 +146,9 @@ void test_client_recv_of_inet_udp()
     dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
 
     client(allocator,
+           CLIENT_TYPE_UDP_INET,
            "127.0.0.1",//char *host,
            "1989",//char *client_port,
-           UDP_ICLIENT_TYPE,
            process_task_callback,
            NULL);
 }
@@ -159,9 +159,9 @@ void test_client_recv_of_unix_udp()
     dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
 
     client(allocator,
+           CLIENT_TYPE_UDP_UNIX,
            "test_client_unix_path",//char *host,
            NULL,//char *client_port,
-           UDP_UCLIENT_TYPE,
            process_task_callback,
            NULL);
 }
