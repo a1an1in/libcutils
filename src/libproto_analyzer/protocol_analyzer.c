@@ -428,14 +428,14 @@ void pa_set_protocol_bit_data(uint32_t data,
 
 	for(i = 0; t_len > 0; i++){
 		/* get data len you wana set */
-		t_len_get = (t_len > t_pos_set % 8 + 1)?(t_pos_set % 8 + 1):t_len;
+		t_len_get  = (t_len > t_pos_set % 8 + 1)?(t_pos_set % 8 + 1):t_len;
 		/*get data you want to set*/
 		t_data_get = get_bit_data(data, t_len - t_len_get, t_len_get);
 		/* set data */
 		set_bit_data(&dp[byte_pos + i],t_data_get,t_pos_set % 8 + 1 - t_len_get,t_len_get);
 		dbg_str(PA_DETAIL,"-------t_data_get=%x,t_data_set=%x,t_len_get=%d,t_pos_set=%d",
 				t_data_get,dp[byte_pos + i],t_len_get,t_pos_set);
-		t_len -= t_len_get;
+		t_len     -= t_len_get;
 		t_pos_set -= t_len_get;
 		/* if t_pos_set is less than zero,it must be set 7 */
 		if(t_pos_set < 0){

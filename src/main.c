@@ -248,8 +248,14 @@ static int args_process_help_test(void *base,int argc,char **argv)
     exit(1);
 	return 0;
 }
+static int args_process_test_pa_admin(void *base,int argc,char **argv)
+{
+    test_pa_admin();
+	return 0;
+}
 
 static cmd_config_t cmds[]={
+	{"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},
 	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
 	{"blob", args_process_test_msgblob,0, "test", "N/A","test blob message"},
 	{"lab3", args_process_lab3,0, "test", "N/A","test simple code"},

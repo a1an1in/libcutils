@@ -70,6 +70,7 @@ hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 		dbg_str(DBG_ERROR,"allocator_mem_alloc(map->allocator err");
 		return NULL;
 	}
+    memset(map,0,sizeof(hash_map_t));
 	map->allocator = allocator;
 	map->lock_type = lock_type;
 	dbg_str(HMAP_DETAIL,"hash_map_create");
@@ -96,6 +97,7 @@ int hash_map_init(hash_map_t *hmap,
 	}else{
 		map->key_cmp_func = key_cmp_func;
 	}
+
 	if(hash_func == NULL){
 		hmap->hash_func = default_hash_func;
 	}else{
@@ -188,16 +190,19 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 	dbg_str(HMAP_DETAIL,"hash_map_search,bucket_pos=%d",bucket_pos);
 
 	sync_lock(&hmap->map_lock,NULL);
+    if(key_cmp_func == NULL){
+        return -1;
+    } 
 	hlist_for_each_safe(pos, next, &hlist[bucket_pos]){
 		mnode = container_of(pos,struct hash_map_node,hlist_node);
-		if(!key_cmp_func(mnode->key,key,key_size)){
-			sync_unlock(&hmap->map_lock);
-			return hash_map_pos_init(ret, pos, bucket_pos, hlist,hmap);
-		}
-	}
-	sync_unlock(&hmap->map_lock);
-	dbg_str(HMAP_IMPORTANT,"not found key");
-	return -1;
+        if(!key_cmp_func(mnode->key,key,key_size)){
+            sync_unlock(&hmap->map_lock);
+            return hash_map_pos_init(ret, pos, bucket_pos, hlist,hmap);
+        }
+    }
+    sync_unlock(&hmap->map_lock);
+    dbg_str(HMAP_IMPORTANT,"not found key");
+    return -1;
 }
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 {

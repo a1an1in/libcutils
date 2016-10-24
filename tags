@@ -87,6 +87,10 @@ CC	src/libstate_machine/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread/sync_lock/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread/sync_lock/unix/Makefile	/^CC = gcc$/;"	m
 CC	src/libthread/sync_lock/windows/Makefile	/^CC = gcc$/;"	m
+CLIENT_TYPE_TCP_INET	src/include/libipc/net/client.h	7;"	d
+CLIENT_TYPE_TCP_UNIX	src/include/libipc/net/client.h	9;"	d
+CLIENT_TYPE_UDP_INET	src/include/libipc/net/client.h	8;"	d
+CLIENT_TYPE_UDP_UNIX	src/include/libipc/net/client.h	10;"	d
 CLOCK_SYNC_INTERVAL	src/libevent_tiny/event.c	107;"	d	file:
 COMMON_TIMEOUT_IDX	src/libevent_tiny/event.c	411;"	d	file:
 COMMON_TIMEOUT_IDX_MASK	src/libevent_tiny/event.c	407;"	d	file:
@@ -519,6 +523,8 @@ MAX_FMT_STR_LEN	src/libdbg/debug.c	219;"	d	file:
 MAX_FMT_STR_LEN	src/libdbg/debug.c	250;"	d	file:
 MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	72;"	d
 MAX_INI_FILE_NAME_LEN	src/include/libdbg/debug.h	88;"	d
+MAX_KEY_LEN	src/libproto_analyzer/pa_admin.c	199;"	d	file:
+MAX_KEY_LEN	src/libproto_analyzer/pa_admin.c	201;"	d	file:
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	108;"	d	file:
 MAX_LOG_PRINT_BUFFER_LEN	src/libdbg/debug_log.c	128;"	d	file:
 MAX_NAME_LEN	src/include/libproto_analyzer/protocol_format_set.h	26;"	d
@@ -613,6 +619,102 @@ OBJS	src/libthread/sync_lock/windows/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS
 OPEN	src/include/libipc/share_mem/shm.h	/^    OPEN = 0x02,  $/;"	e	enum:share_mem_type_e
 OPEN_CONSOLE_DEBUG	src/include/libdbg/debug.h	150;"	d
 OPEN_DEBUG	src/include/libdbg/debug.h	139;"	d
+PA_0X3000	src/libproto_analyzer/pa_admin.h	25;"	d
+PA_0X3001	src/libproto_analyzer/pa_admin.h	26;"	d
+PA_0X3002	src/libproto_analyzer/pa_admin.h	27;"	d
+PA_0X3003	src/libproto_analyzer/pa_admin.h	28;"	d
+PA_0X3004	src/libproto_analyzer/pa_admin.h	29;"	d
+PA_0X3005	src/libproto_analyzer/pa_admin.h	30;"	d
+PA_0X3006	src/libproto_analyzer/pa_admin.h	31;"	d
+PA_0X3007	src/libproto_analyzer/pa_admin.h	32;"	d
+PA_0X3008	src/libproto_analyzer/pa_admin.h	33;"	d
+PA_0X3009	src/libproto_analyzer/pa_admin.h	34;"	d
+PA_0X300A	src/libproto_analyzer/pa_admin.h	35;"	d
+PA_0X300B	src/libproto_analyzer/pa_admin.h	36;"	d
+PA_0X300C	src/libproto_analyzer/pa_admin.h	37;"	d
+PA_0X300D	src/libproto_analyzer/pa_admin.h	38;"	d
+PA_0X300E	src/libproto_analyzer/pa_admin.h	39;"	d
+PA_0X300F	src/libproto_analyzer/pa_admin.h	40;"	d
+PA_0X3010	src/libproto_analyzer/pa_admin.h	42;"	d
+PA_0X3011	src/libproto_analyzer/pa_admin.h	43;"	d
+PA_0X3012	src/libproto_analyzer/pa_admin.h	44;"	d
+PA_0X3013	src/libproto_analyzer/pa_admin.h	45;"	d
+PA_0X3014	src/libproto_analyzer/pa_admin.h	46;"	d
+PA_0X3015	src/libproto_analyzer/pa_admin.h	47;"	d
+PA_0X3016	src/libproto_analyzer/pa_admin.h	48;"	d
+PA_0X3017	src/libproto_analyzer/pa_admin.h	49;"	d
+PA_0X3018	src/libproto_analyzer/pa_admin.h	50;"	d
+PA_0X3019	src/libproto_analyzer/pa_admin.h	51;"	d
+PA_0X301A	src/libproto_analyzer/pa_admin.h	52;"	d
+PA_0X301B	src/libproto_analyzer/pa_admin.h	53;"	d
+PA_0X301C	src/libproto_analyzer/pa_admin.h	54;"	d
+PA_0X301D	src/libproto_analyzer/pa_admin.h	55;"	d
+PA_0X301E	src/libproto_analyzer/pa_admin.h	56;"	d
+PA_0X301F	src/libproto_analyzer/pa_admin.h	57;"	d
+PA_0X3020	src/libproto_analyzer/pa_admin.h	59;"	d
+PA_0X3021	src/libproto_analyzer/pa_admin.h	60;"	d
+PA_0X3022	src/libproto_analyzer/pa_admin.h	61;"	d
+PA_0X3023	src/libproto_analyzer/pa_admin.h	62;"	d
+PA_0X3024	src/libproto_analyzer/pa_admin.h	63;"	d
+PA_0X3025	src/libproto_analyzer/pa_admin.h	64;"	d
+PA_0X3026	src/libproto_analyzer/pa_admin.h	65;"	d
+PA_0X3027	src/libproto_analyzer/pa_admin.h	66;"	d
+PA_0X3028	src/libproto_analyzer/pa_admin.h	67;"	d
+PA_0X3029	src/libproto_analyzer/pa_admin.h	68;"	d
+PA_0X302A	src/libproto_analyzer/pa_admin.h	69;"	d
+PA_0X302B	src/libproto_analyzer/pa_admin.h	70;"	d
+PA_0X302C	src/libproto_analyzer/pa_admin.h	71;"	d
+PA_0X302D	src/libproto_analyzer/pa_admin.h	72;"	d
+PA_0X302E	src/libproto_analyzer/pa_admin.h	73;"	d
+PA_0X302F	src/libproto_analyzer/pa_admin.h	74;"	d
+PA_0X3030	src/libproto_analyzer/pa_admin.h	76;"	d
+PA_0X3031	src/libproto_analyzer/pa_admin.h	77;"	d
+PA_0X3032	src/libproto_analyzer/pa_admin.h	78;"	d
+PA_0X3033	src/libproto_analyzer/pa_admin.h	79;"	d
+PA_0X3034	src/libproto_analyzer/pa_admin.h	80;"	d
+PA_0X3035	src/libproto_analyzer/pa_admin.h	81;"	d
+PA_0X3036	src/libproto_analyzer/pa_admin.h	82;"	d
+PA_0X3037	src/libproto_analyzer/pa_admin.h	83;"	d
+PA_0X3038	src/libproto_analyzer/pa_admin.h	84;"	d
+PA_0X3039	src/libproto_analyzer/pa_admin.h	85;"	d
+PA_0X303A	src/libproto_analyzer/pa_admin.h	86;"	d
+PA_0X303B	src/libproto_analyzer/pa_admin.h	87;"	d
+PA_0X303C	src/libproto_analyzer/pa_admin.h	88;"	d
+PA_0X303D	src/libproto_analyzer/pa_admin.h	89;"	d
+PA_0X303E	src/libproto_analyzer/pa_admin.h	90;"	d
+PA_0X303F	src/libproto_analyzer/pa_admin.h	91;"	d
+PA_0X3040	src/libproto_analyzer/pa_admin.h	93;"	d
+PA_0X3041	src/libproto_analyzer/pa_admin.h	94;"	d
+PA_0X3042	src/libproto_analyzer/pa_admin.h	95;"	d
+PA_0X3043	src/libproto_analyzer/pa_admin.h	96;"	d
+PA_0X3044	src/libproto_analyzer/pa_admin.h	97;"	d
+PA_0X3045	src/libproto_analyzer/pa_admin.h	98;"	d
+PA_0X3046	src/libproto_analyzer/pa_admin.h	99;"	d
+PA_0X3047	src/libproto_analyzer/pa_admin.h	100;"	d
+PA_0X3048	src/libproto_analyzer/pa_admin.h	101;"	d
+PA_0X3049	src/libproto_analyzer/pa_admin.h	102;"	d
+PA_0X304A	src/libproto_analyzer/pa_admin.h	103;"	d
+PA_0X304B	src/libproto_analyzer/pa_admin.h	104;"	d
+PA_0X304C	src/libproto_analyzer/pa_admin.h	105;"	d
+PA_0X304D	src/libproto_analyzer/pa_admin.h	106;"	d
+PA_0X304E	src/libproto_analyzer/pa_admin.h	107;"	d
+PA_0X304F	src/libproto_analyzer/pa_admin.h	108;"	d
+PA_0X3050	src/libproto_analyzer/pa_admin.h	110;"	d
+PA_0X3051	src/libproto_analyzer/pa_admin.h	111;"	d
+PA_0X3052	src/libproto_analyzer/pa_admin.h	112;"	d
+PA_0X3053	src/libproto_analyzer/pa_admin.h	113;"	d
+PA_0X3054	src/libproto_analyzer/pa_admin.h	114;"	d
+PA_0X3055	src/libproto_analyzer/pa_admin.h	115;"	d
+PA_0X3056	src/libproto_analyzer/pa_admin.h	116;"	d
+PA_0X3057	src/libproto_analyzer/pa_admin.h	117;"	d
+PA_0X3058	src/libproto_analyzer/pa_admin.h	118;"	d
+PA_0X3059	src/libproto_analyzer/pa_admin.h	119;"	d
+PA_0X305A	src/libproto_analyzer/pa_admin.h	120;"	d
+PA_0X305B	src/libproto_analyzer/pa_admin.h	121;"	d
+PA_0X305C	src/libproto_analyzer/pa_admin.h	122;"	d
+PA_0X305D	src/libproto_analyzer/pa_admin.h	123;"	d
+PA_0X305E	src/libproto_analyzer/pa_admin.h	124;"	d
+PA_0X305F	src/libproto_analyzer/pa_admin.h	125;"	d
 PA_CORRECT	src/include/libdbg/debug_businesses.h	109;"	d
 PA_DETAIL	src/include/libdbg/debug_businesses.h	113;"	d
 PA_ERROR	src/include/libdbg/debug_businesses.h	106;"	d
@@ -653,6 +755,8 @@ RB_ROOT	src/include/libdata_structure/rbtree.h	172;"	d
 RED	src/include/libdbg/debug.h	106;"	d
 REVERSE_COLOR_FLAG	src/include/libdbg/debug.h	115;"	d
 SELECT_ALLOC_SIZE	src/libevent_tiny/select.c	62;"	d	file:
+SERVER_TYPE_TCP_INET	src/include/libipc/net/server.h	7;"	d
+SERVER_TYPE_TCP_UNIX	src/include/libipc/net/server.h	8;"	d
 SERVER_WORK_TYPE	src/include/libconcurrent/concurrent.h	/^enum SERVER_WORK_TYPE{$/;"	g
 SERVER_WORK_TYPE_PROCESS	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TYPE_PROCESS$/;"	e	enum:SERVER_WORK_TYPE
 SERVER_WORK_TYPE_THREAD	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TYPE_THREAD = 0,$/;"	e	enum:SERVER_WORK_TYPE
@@ -745,12 +849,6 @@ TARGET	src/libstate_machine/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/unix/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/windows/Makefile	/^TARGET = build_in.o$/;"	m
-TCP_ICLIENT_TYPE	src/include/libipc/net/client.h	7;"	d
-TCP_ISERVER_TYPE	src/include/libipc/net/server.h	7;"	d
-TCP_UCLIENT_TYPE	src/include/libipc/net/client.h	9;"	d
-TCP_USERVER_TYPE	src/include/libipc/net/server.h	8;"	d
-UDP_ICLIENT_TYPE	src/include/libipc/net/client.h	8;"	d
-UDP_UCLIENT_TYPE	src/include/libipc/net/client.h	10;"	d
 UNIX_LIKE_USER_MODE	src/include/cutils_re.h	21;"	d
 USE_INTERNAL_NTOP	src/libevent_tiny/evutil.c	1554;"	d	file:
 USE_INTERNAL_PTON	src/libevent_tiny/evutil.c	1555;"	d	file:
@@ -962,6 +1060,7 @@ __MAP_PAIR_H__	src/include/libdata_structure/map_pair.h	22;"	d
 __MODULE_REGESTER_H__	src/include/liballoc/liballoc_register_modules.h	2;"	d
 __MSGBLOB_H	src/libblob/msgblob.h	17;"	d
 __MSGBLOB_TYPE_LAST	src/libblob/msgblob.h	/^	__MSGBLOB_TYPE_LAST,$/;"	e	enum:msgblob_type
+__PA_ADMIN_H__	src/libproto_analyzer/pa_admin.h	20;"	d
 __PDT_PROTO_FORMAT__	src/libproto_analyzer/test/pdt_drv_proto_format.h	2;"	d
 __PROTOCOLO_ANALYZER__	src/include/libproto_analyzer/protocol_analyzer.h	2;"	d
 __PROTOCOL_FORMAT_SET__	src/include/libproto_analyzer/protocol_format_set.h	2;"	d
@@ -1102,6 +1201,7 @@ allocator	src/include/libproto_analyzer/protocol_format_set.h	/^	allocator_t *al
 allocator	src/include/libstate_machine/state_machine.h	/^    allocator_t *allocator;$/;"	m	struct:state_machine_s
 allocator	src/libipc/net/server/inet_server.c	/^	allocator_t *allocator;$/;"	m	struct:iserver_task_s	file:
 allocator	src/libipc/net/server/inet_server_old.c	/^	allocator_t *allocator;$/;"	m	struct:iserver_task_s	file:
+allocator	src/libproto_analyzer/pa_admin.h	/^	allocator_t *allocator;$/;"	m	struct:pa_admin_s
 allocator_create	src/liballoc/allocator.c	/^allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)$/;"	f
 allocator_ctr_alloc_register	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^int allocator_ctr_alloc_register(){$/;"	f
 allocator_ctr_init	src/liballoc/allocator.c	/^void allocator_ctr_init(allocator_t * alloc,$/;"	f
@@ -1154,6 +1254,7 @@ args_process_test_hashlist	src/main.c	/^static int args_process_test_hashlist(vo
 args_process_test_io_user	src/main.c	/^static int args_process_test_io_user(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_llist	src/main.c	/^static int args_process_test_llist(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_msgblob	src/main.c	/^static int args_process_test_msgblob(void *base,int argc,char **argv)$/;"	f	file:
+args_process_test_pa_admin	src/main.c	/^static int args_process_test_pa_admin(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_rbtree_map	src/main.c	/^static int args_process_test_rbtree_map(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_share_mem_read	src/main.c	/^}static int args_process_test_share_mem_read(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_share_mem_write	src/main.c	/^static int args_process_test_share_mem_write(void *base,int argc,char **argv)$/;"	f	file:
@@ -1896,6 +1997,7 @@ had_ipv6_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces
 hash	src/include/libini/iniparser.h	/^	unsigned *hash;$/;"	m	struct:_dictionary_
 hash_func	src/include/libdata_structure/hash_list_struct.h	/^	hash_func_fpt hash_func;$/;"	m	struct:hash_map_s
 hash_func_fpt	src/include/libdata_structure/hash_list_struct.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
+hash_map	src/libproto_analyzer/pa_admin.h	/^	hash_map_t *hash_map;$/;"	m	struct:pa_admin_s
 hash_map_begin	src/include/libdata_structure/hash_list.h	/^hash_map_begin(hash_map_t *hmap,hash_map_pos_t *begin)$/;"	f
 hash_map_create	src/libdata_structure/hash_map/hash_list.c	/^hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)$/;"	f
 hash_map_delete	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)$/;"	f
@@ -2454,6 +2556,15 @@ p	src/libargs/test_cmd_args.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
 p	src/main.c	/^	args_processor_t *p;$/;"	m	struct:base_s	file:
 pa_addr_to_buffer	src/libproto_analyzer/protocol_analyzer.c	/^void pa_addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f
 pa_admin	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct proto_analyzer_admin_s *pa_admin;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::proto_analyzer_admin_s
+pa_admin	src/libproto_analyzer/pa_admin.c	/^pa_admin_t *pa_admin;$/;"	v
+pa_admin_add_protocol_analyzer	src/libproto_analyzer/pa_admin.c	/^void pa_admin_add_protocol_analyzer(pa_admin_t *admin,void *key,struct protocol_analyzer_s *pa)$/;"	f
+pa_admin_create	src/libproto_analyzer/pa_admin.c	/^pa_admin_t *pa_admin_create(allocator_t *allocator, protocol_format_set_t *pfs)$/;"	f
+pa_admin_destroy	src/libproto_analyzer/pa_admin.c	/^void pa_admin_destroy(pa_admin_t *admin)$/;"	f
+pa_admin_generate_key	src/libproto_analyzer/pa_admin.c	/^void pa_admin_generate_key(int proto_num,char *key)$/;"	f
+pa_admin_get_protocol_analyzer	src/libproto_analyzer/pa_admin.c	/^pa_admin_get_protocol_analyzer(pa_admin_t *admin ,void *key)$/;"	f
+pa_admin_register_protocol_analyzers	src/libproto_analyzer/pa_admin.c	/^void pa_admin_register_protocol_analyzers(pa_admin_t *admin)$/;"	f
+pa_admin_s	src/libproto_analyzer/pa_admin.h	/^typedef struct pa_admin_s{$/;"	s
+pa_admin_t	src/libproto_analyzer/pa_admin.h	/^}pa_admin_t;$/;"	t	typeref:struct:pa_admin_s
 pa_array_s	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^typedef struct pa_array_s{$/;"	s	file:
 pa_array_t	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^}pa_array_t;$/;"	t	typeref:struct:pa_array_s	file:
 pa_buffer_to_addr	src/libproto_analyzer/protocol_analyzer.c	/^void *pa_buffer_to_addr(uint8_t *buffer)$/;"	f
@@ -2484,11 +2595,13 @@ pa_set_value	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_value(const 
 pa_set_variable_length_flag	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_variable_length_flag(struct protocol_analyzer_s *pa)$/;"	f
 pa_set_variable_length_value	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_variable_length_value(char *key,uint32_t value,$/;"	f
 pair	src/include/libdata_structure/map_pair.h	/^typedef struct pair{$/;"	s
+pair	src/libproto_analyzer/pa_admin.h	/^	pair_t *pair;$/;"	m	struct:pa_admin_s
 pair_t	src/include/libdata_structure/map_pair.h	/^}pair_t;$/;"	t	typeref:struct:pair
 parse_numeric_servname	src/libevent_tiny/evutil.c	/^parse_numeric_servname(const char *servname)$/;"	f	file:
 pdt_drv_proto_init_3019	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int pdt_drv_proto_init_3019(uint16_t proto_id,uint16_t lab,$/;"	f
 pdt_drv_proto_parse_3019	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^pdt_drv_proto_parse_3019(protocol_format_set_t *pfs_p,$/;"	f
 pf_list_head_p	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_head *pf_list_head_p;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::list_head
+pfs	src/libproto_analyzer/pa_admin.h	/^	protocol_format_set_t *pfs;$/;"	m	struct:pa_admin_s
 pfs_add_list	src/libproto_analyzer/protocol_format_set.c	/^void pfs_add_list(struct list_head *new_head,struct list_head *hl_head)$/;"	f
 pfs_add_proto_link_list	src/libproto_analyzer/protocol_format_set.c	/^int pfs_add_proto_link_list(uint32_t llist_num,$/;"	f
 pfs_create_head_list	src/libproto_analyzer/protocol_format_set.c	/^struct list_head *pfs_create_head_list(allocator_t *allocator)$/;"	f
@@ -2871,6 +2984,7 @@ test_io	src/libevent_tiny/test_io.c	/^int test_io()$/;"	f
 test_io_user	src/libconcurrent/test_pipe.c	/^void test_io_user()$/;"	f
 test_iserver	src/libipc/net/server/inet_server.c	/^int test_iserver()$/;"	f
 test_msgblob	src/libblob/msgblob-example.c	/^int test_msgblob()$/;"	f
+test_pa_admin	src/libproto_analyzer/pa_admin.c	/^void test_pa_admin()$/;"	f
 test_pdt_drv_proto	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_drv_proto(protocol_format_set_t *pfs_p, allocator_t *allocator)$/;"	f
 test_pdt_proto_3008	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_proto_3008(protocol_format_set_t *pfs_p,$/;"	f
 test_pdt_proto_3019	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_proto_3019(protocol_format_set_t *pfs_p,$/;"	f
@@ -2973,6 +3087,7 @@ uint32_t	src/include/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/liballoc/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libdbg/basic_types.h	/^typedef unsigned int uint32_t;$/;"	t
 uint32_t	src/include/libproto_analyzer/my_types.h	/^typedef unsigned int uint32_t;$/;"	t
+uint64_t	src/libproto_analyzer/pa_admin.c	/^typedef long long uint64_t;$/;"	t	file:
 uint8_t	src/include/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/liballoc/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
 uint8_t	src/include/libdbg/basic_types.h	/^typedef unsigned char uint8_t;$/;"	t
