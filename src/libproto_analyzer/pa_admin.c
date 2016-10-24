@@ -118,7 +118,7 @@ void pa_admin_add_protocol_analyzer(pa_admin_t *admin,void *key,struct protocol_
     addr = (uint64_t)pa;
 
     for(i = 0; i < sizeof(pa); i++){
-        addr_buffer[i] = (addr >> ((7 - i) * 8)) & 0xff;
+        addr_buffer[i] = (addr >> ((sizeof(pa) - 1 - i) * 8)) & 0xff;
     }
 
 	/*
