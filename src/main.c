@@ -253,8 +253,14 @@ static int args_process_test_pa_admin(void *base,int argc,char **argv)
     test_pa_admin();
 	return 0;
 }
+static int args_process_ubusd(void *base,int argc,char **argv)
+{
+    ubus_client_main(argc,argv);
+	return 0;
+}
 
 static cmd_config_t cmds[]={
+	{"ubusd", args_process_ubusd,0, "app", "N/A","ubus deamon"},
 	{"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},
 	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
 	{"blob", args_process_test_msgblob,0, "test", "N/A","test blob message"},

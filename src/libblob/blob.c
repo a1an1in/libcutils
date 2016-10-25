@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "blob.h"
+#include "libblob/blob.h"
 
 static bool
 blob_buffer_grow(struct blob_buf *buf, int minlen)

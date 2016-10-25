@@ -45,7 +45,7 @@ state_machine_t *state_machine_create(allocator_t *allocator)
     dbg_str(SM_DETAIL,"state_machine_create");
 
     if((s = (state_machine_t *)allocator_mem_alloc(allocator,
-                    sizeof(state_machine_t))) == NULL)
+                                                   sizeof(state_machine_t))) == NULL)
     {
         dbg_str(SM_ERROR,"allocator_mem_alloc");
         return NULL;

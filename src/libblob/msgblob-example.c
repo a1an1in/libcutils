@@ -2,7 +2,7 @@
 #include <inttypes.h>
 
 #include <libdbg/debug.h>
-#include "msgblob.h"
+#include "libblob/msgblob.h"
 
 static const char *indent_str = "\t\t\t\t\t\t\t\t\t\t\t\t\t";
 

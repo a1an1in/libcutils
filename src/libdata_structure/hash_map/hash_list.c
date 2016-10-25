@@ -78,11 +78,11 @@ hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 	return map;
 }
 int hash_map_init(hash_map_t *hmap,
-		uint32_t key_size,
-		uint32_t data_size,
-		uint32_t bucket_size,
-		hash_func_fpt hash_func,
-		key_cmp_fpt key_cmp_func)
+		          uint32_t key_size,
+		          uint32_t data_size,
+		          uint32_t bucket_size,
+		          hash_func_fpt hash_func,
+		          key_cmp_fpt key_cmp_func)
 {
 	dbg_str(HMAP_DETAIL,"hash_map_init");
 
@@ -105,7 +105,7 @@ int hash_map_init(hash_map_t *hmap,
 	}
 
 	map->hlist = allocator_mem_alloc(map->allocator,
-			sizeof(struct hlist_head)*bucket_size);
+			                         sizeof(struct hlist_head)*bucket_size);
 	if(map->hlist == NULL){
 		dbg_str(DBG_ERROR,"hash map init");
 		return -1;
@@ -131,7 +131,7 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 	hash_map_pos_t *begin_pos = &hmap->begin;;
 
 	mnode = (struct hash_map_node *)allocator_mem_alloc(hmap->allocator,
-			sizeof(struct hash_map_node) + data_size);
+			                                            sizeof(struct hash_map_node) + data_size);
 	if(mnode == NULL){
 		dbg_str(DBG_ERROR,"hash_map_insert,allocator_mem_alloc(map->allocator err");
 		return -1;
@@ -223,8 +223,8 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 		 */
 		hash_map_pos_next(pos,&next);
 		hash_map_pos_init(&hmap->begin,
-				next.hlist_node_p, 
-				next.bucket_pos, hlist, hmap);
+				          next.hlist_node_p, 
+				          next.bucket_pos, hlist, hmap);
 	}
 	hlist_del(pos->hlist_node_p);
 	hmap->node_count--;
@@ -261,7 +261,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 	struct hlist_node *hlist_node_p;
 	uint32_t bucket_pos      = pos->bucket_pos;
 	struct hlist_head *hlist = pos->hlist;
-	hash_map_t *hmap          = pos->hmap;
+	hash_map_t *hmap         = pos->hmap;
 	uint32_t bucket_size     = hmap->bucket_size;
 	int ret = 0;
 
@@ -271,7 +271,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 	}
 	if(pos->hlist_node_p->next){
 		hlist_node_p = pos->hlist_node_p->next;
-		ret = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);
+		ret          = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);
 		dbg_str(HMAP_DETAIL,"find next iter ,list next is not null,bucket_pos=%d,node:%p,next:%p",
 				bucket_pos,hlist_node_p,hlist_node_p->next);
 		return ret;
@@ -279,7 +279,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 		for(++bucket_pos; bucket_pos < bucket_size;bucket_pos++){
 			if(hlist[bucket_pos].first){
 				hlist_node_p = hlist[bucket_pos].first;
-				ret = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);
+				ret          = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);
 				dbg_str(HMAP_DETAIL,"find new head,bucket_pos=%d,node:%p,next:%p",
 						bucket_pos,hlist_node_p,hlist_node_p->next);
 				return ret;
