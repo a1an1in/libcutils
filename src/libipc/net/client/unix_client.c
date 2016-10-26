@@ -182,6 +182,7 @@ client_t *udp_uclient(allocator_t *allocator,
 	int user_fd;
 	client_t *client = NULL;
 
+    dbg_str(DBG_DETAIL,"udp_uclient");
     if((user_fd = socket(PF_UNIX,SOCK_DGRAM,0)) < 0)  
     {  
         perror("fail to socket");  
@@ -230,6 +231,7 @@ int udp_uclient_send(client_t *client,
     dest_un_addr.sun_family = PF_UNIX;  
     strcpy(dest_un_addr.sun_path,dest_unpath);  
 
+    dbg_str(DBG_DETAIL,"udp_uclient_send,dest_unpath:%s",dest_unpath);
 	if( ret = sendto(client->user_fd,
                      buf,
                      nbytes,
