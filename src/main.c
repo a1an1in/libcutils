@@ -130,6 +130,11 @@ static int args_process_test_vector(void *base,int argc,char **argv)
     test_datastructure_vector();
 	return 0;
 }
+static int args_process_test_ring_buffer(void *base,int argc,char **argv)
+{
+    test_datastructure_ring_buffer();
+	return 0;
+}
 static int args_process_test_tcp_iserver(void *base,int argc,char **argv)
 {
     test_iserver();
@@ -217,21 +222,16 @@ static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
 static int args_process_lab(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
-    lab();
-    dbg_str(DBG_DETAIL,"test end");
-    return 0;
-}
-static int args_process_lab2(void *base,int argc,char **argv)
-{
-    dbg_str(DBG_DETAIL,"test begin");
-    lab2();
-    dbg_str(DBG_DETAIL,"test end");
-    return 0;
-}
-static int args_process_lab3(void *base,int argc,char **argv)
-{
-    dbg_str(DBG_DETAIL,"test begin");
-    lab3();
+    /*
+     *lab();
+     */
+    /*
+     *lab2();
+     */
+    /*
+     *lab3();
+     */
+    lab4();
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
@@ -266,8 +266,6 @@ static cmd_config_t cmds[]={
 	{"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},
 	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
 	{"blob", args_process_test_msgblob,0, "test", "N/A","test blob message"},
-	{"lab3", args_process_lab3,0, "test", "N/A","test simple code"},
-	{"lab2", args_process_lab2,0, "test", "N/A","test simple code"},
 	{"lab", args_process_lab,0, "test", "N/A","test simple code"},
 	{"inet_gserver", args_process_test_gserver_of_inet,0, "test", "N/A","test general server of inet tcp"},
 	{"unix_gserver", args_process_test_gserver_of_unix,0, "test", "N/A","test general server of unix tcp"},
@@ -284,6 +282,7 @@ static cmd_config_t cmds[]={
 	{"udp_iclient_recieve", args_process_test_udp_iclient_recieve,0, "test", "N/A","test_udp_iclient_recieve"},
 	{"tcp_iclient_send", args_process_test_tcp_iclient_send,0, "test", "N/A","test_tcp_iclient_send"},
 	{"tcp_iserver", args_process_test_tcp_iserver,0, "test", "N/A","test_tcp_iserver"},
+	{"ring_buffer", args_process_test_ring_buffer,0, "test", "N/A","test_ring_buffer"},
 	{"vector", args_process_test_vector,0, "test", "N/A","test_vector"},
 	{"rbtree_map", args_process_test_rbtree_map,0, "test", "N/A","test_rbtree_map"},
 	{"llist", args_process_test_llist,0, "test", "N/A","test_llist"},
