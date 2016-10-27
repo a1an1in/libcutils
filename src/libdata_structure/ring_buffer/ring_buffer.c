@@ -36,6 +36,8 @@
 
 int rbuf_set_buffer_addr(ring_buffer_t *rbuf,void *value,uint32_t len)
 {
+    len = !!len;//to clear compile warnning
+
     rbuf->buffer_addr = (char *)value;
     dbg_str(DBG_DETAIL,"rbuf_set_buffer_addr:%p",rbuf->buffer_addr);
 
@@ -50,6 +52,8 @@ int rbuf_get_buffer_addr(ring_buffer_t *rbuf,char *value)
 }
 int rbuf_set_buffer_len(ring_buffer_t *rbuf,void *value,uint32_t len)
 {
+    len = !!len;
+
     rbuf->buffer_len = *(uint32_t*)value;
     dbg_str(DBG_DETAIL,"rbuf_set_buffer_len:%d",rbuf->buffer_len);
 
@@ -118,6 +122,7 @@ int rbuf_write(ring_buffer_t *rbuf,void *value)
     dbg_str(DBG_DETAIL,"rbuf_write,write_index =%d",rbuf->write_index);
 
     if(rbuf_is_full(rbuf,len)) {
+        dbg_str(DBG_DETAIL,"rbuf is full");
         return 0;
     } else if(rbuf->write_index + len > rbuf->buffer_len){
         int32_t first_write_len,residue;
@@ -145,10 +150,9 @@ int rbuf_read(ring_buffer_t *rbuf,void *value_out)
     dbg_str(DBG_DETAIL,"rbuf_write,read_index =%d",rbuf->read_index);
 
     if(rbuf_is_null(rbuf)){
-        dbg_str(DBG_DETAIL,"run at here");
+        dbg_str(DBG_DETAIL,"rbuf is null");
         return 0;
     } else if(rbuf->read_index + len > rbuf->buffer_len){
-        dbg_str(DBG_DETAIL,"run at here");
         int32_t first_read_len,residue;
         first_read_len = rbuf->buffer_len - rbuf->read_index;
         residue = len - first_read_len;
@@ -157,7 +161,6 @@ int rbuf_read(ring_buffer_t *rbuf,void *value_out)
         memcpy((char *)value_out + first_read_len,(char *)rbuf->buffer_addr + rbuf->read_index,residue);
         rbuf->read_index += residue;
     } else{
-        dbg_str(DBG_DETAIL,"run at here");
         memcpy(value_out,(char *)rbuf->buffer_addr + rbuf->read_index,len);
         rbuf->read_index += len;
     }
@@ -225,39 +228,21 @@ void test_datastructure_ring_buffer()
     ret = rbuf_read(rbuf,value_out);
     if(ret > 0)
         print_test((struct test_s*)value_out);
-    else{
-        dbg_str(DBG_DETAIL,"read error");
-    }
     ret = rbuf_read(rbuf,value_out);
     if(ret > 0)
         print_test((struct test_s*)value_out);
-    else{
-        dbg_str(DBG_DETAIL,"read error");
-    }
     ret = rbuf_read(rbuf,value_out);
     if(ret > 0)
         print_test((struct test_s*)value_out);
-    else{
-        dbg_str(DBG_DETAIL,"read error");
-    }
     ret = rbuf_read(rbuf,value_out);
     if(ret > 0)
         print_test((struct test_s*)value_out);
-    else{
-        dbg_str(DBG_DETAIL,"read error");
-    }
     ret = rbuf_read(rbuf,value_out);
     if(ret > 0)
         print_test((struct test_s*)value_out);
-    else{
-        dbg_str(DBG_DETAIL,"read error");
-    }
     ret = rbuf_read(rbuf,value_out);
     if(ret > 0)
         print_test((struct test_s*)value_out);
-    else{
-        dbg_str(DBG_DETAIL,"read error");
-    }
 
     rbuf_destroy(rbuf);
 
