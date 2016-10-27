@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <libdbg/debug.h>
+#include <miscellany/net.h>
 
 void print_mac(unsigned char *mac)
 {
@@ -50,14 +51,13 @@ void print_ipaddr(char *ipaddr)
 
 int get_local_ip(char *ifname,char *ipaddr)  
 {  
-  
     int sk;  
     struct   sockaddr_in *sin;  
     struct   ifreq ifreq;     
 
     if ((sk=socket(AF_INET, SOCK_STREAM, 0)) == -1)  
     {  
-        printf("socket create failse...GetLocalIp!/n");  
+        printf("socket create failse...GetLocalIp!\n");  
         return -1;  
     }  
 
@@ -86,7 +86,7 @@ int set_local_ip(char *ifname,const char *ipaddr)
         return -1;  
   
     if((sk = socket( AF_INET, SOCK_STREAM, 0 )) == -1){  
-        perror("socket create failse...SetLocalIp!/n");  
+        perror("socket create failse...SetLocalIp!\n");  
         return -1;  
     }  
    
@@ -99,7 +99,7 @@ int set_local_ip(char *ifname,const char *ipaddr)
   
     if( ioctl( sk, SIOCSIFADDR, &ifr_set_ip) < 0 )  
     {  
-        perror( "Not setup interface/n");  
+        perror( "Not setup interface\n");  
         return -1;  
     }  
   
@@ -109,7 +109,7 @@ int set_local_ip(char *ifname,const char *ipaddr)
     //get the status of the device  
     if( ioctl( sk, SIOCSIFFLAGS, &ifr_set_ip ) < 0 )  
     {  
-         perror("SIOCSIFFLAGS");  
+         perror("SIOCSIFFLAGS\n");  
          return -1;  
     }  
   
@@ -124,7 +124,7 @@ int get_local_netmask(char *ifname,char *netmask_addr)
           
     sk = socket( AF_INET, SOCK_STREAM, 0 );  
     if( sk == -1)  {  
-        perror("create socket failture...GetLocalNetMask/n");  
+        perror("create socket failture...GetLocalNetMask\n");  
         return -1;  
     }  
       
@@ -132,7 +132,7 @@ int get_local_netmask(char *ifname,char *netmask_addr)
     strncpy(ifreq.ifr_name, ifname, sizeof(ifreq.ifr_name )-1);     
   
     if( (ioctl( sk, SIOCGIFNETMASK, &ifreq ) ) < 0 ) {  
-        printf("mac ioctl error/n");  
+        printf("mac ioctl error\n");  
         return -1;  
     }  
       
@@ -146,13 +146,12 @@ int get_local_netmask(char *ifname,char *netmask_addr)
 int set_local_netmask(char *ifname,char *netmask_addr)  
 {  
     int sk;  
-  
     struct ifreq ifreq;  
     struct sockaddr_in *sin;  
           
     sk = socket( AF_INET, SOCK_STREAM, 0 );  
     if( sk == -1) {  
-        perror("Not create network socket connect/n");  
+        perror("Not create network socket connect\n");  
         return -1;  
     }  
       
@@ -163,14 +162,14 @@ int set_local_netmask(char *ifname,char *netmask_addr)
     inet_pton(AF_INET, netmask_addr, &sin->sin_addr);  
   
     if(ioctl(sk, SIOCSIFNETMASK, &ifreq ) < 0) {  
-        printf("sk ioctl error/n");  
+        printf("sk ioctl error\n");  
         return -1;  
     }  
 
     return 1;
 }  
 
-int lab4()
+int test_miscellany_net()
 {
     unsigned char  mac_addr[6];
     char ip_addr[100];
