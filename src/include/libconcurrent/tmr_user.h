@@ -23,5 +23,5 @@ tmr_user_t *tmr_user(allocator_t *allocator,
         void *opaque);
 int tmr_user_destroy(tmr_user_t *tmr_user);
 int tmr_user_stop(tmr_user_t *tmr_user);
-tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user);
+tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user);
 #endif

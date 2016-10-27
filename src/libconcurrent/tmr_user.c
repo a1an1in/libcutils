@@ -123,7 +123,7 @@ tmr_user_t *tmr_user(allocator_t *allocator,
 
 	return tmr_user;
 }
-tmr_user_t *tmr_user_restart(tmr_user_t * tmr_user)
+tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 

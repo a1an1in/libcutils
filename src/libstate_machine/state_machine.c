@@ -168,7 +168,7 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
                             e->process_timer_task_cb,
                             (void *)s);
     else
-       e->timer = tmr_user_restart(e->timer);
+       e->timer = tmr_user_reuse(e->timer);
 
     return 0;
 }
@@ -191,7 +191,9 @@ int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
         dbg_str(DBG_WARNNING,"state_machine_stop_entry_timer,timer is NULL");
     }
 
-    e->timer = NULL;
+    /*
+     *e->timer = NULL;
+     */
 
     return 0;
 }
