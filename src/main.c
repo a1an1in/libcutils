@@ -49,7 +49,7 @@
 #include <libstate_machine/state_machine.h>
 #include <libipc/share_mem/shm.h>
 
-#define LIBRARY_VERSION "libcutils version 2.1.1.0"
+#define LIBRARY_VERSION "libcutils version: 2.1.1.1"
 
 #ifndef MAKELIB
 
@@ -255,16 +255,20 @@ static int args_process_test_pa_admin(void *base,int argc,char **argv)
     test_pa_admin();
 	return 0;
 }
-static int args_process_ubusd(void *base,int argc,char **argv)
+static int args_process_busd(void *base,int argc,char **argv)
 {
-    /*
-     *ubus_client_main(argc,argv);
-     */
+    test_bus_daemon();
+	return 0;
+}
+static int args_process_busc(void *base,int argc,char **argv)
+{
+    test_bus_client();
 	return 0;
 }
 
 static cmd_config_t cmds[]={
-	{"ubus", args_process_ubusd,0, "app", "N/A","ubus"},
+	{"busc", args_process_busc,0, "test", "N/A","bus"},
+	{"busd", args_process_busd,0, "app", "N/A","bus"},
 	{"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},
 	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
 	{"blob", args_process_test_msgblob,0, "test", "N/A","test blob message"},

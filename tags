@@ -68,6 +68,7 @@ CC	src/liballoc/container_alloc/Makefile	/^CC = gcc$/;"	m
 CC	src/liballoc/sys_alloc/Makefile	/^CC = gcc$/;"	m
 CC	src/libargs/Makefile	/^CC = gcc$/;"	m
 CC	src/libblob/Makefile	/^CC = gcc$/;"	m
+CC	src/libbus/Makefile	/^CC = gcc$/;"	m
 CC	src/libconcurrent/Makefile	/^CC = gcc$/;"	m
 CC	src/libdata_structure/hash_map/Makefile	/^CC = gcc$/;"	m
 CC	src/libdata_structure/link_list/Makefile	/^CC = gcc$/;"	m
@@ -82,6 +83,7 @@ CC	src/libipc/net/client/Makefile	/^CC = gcc$/;"	m
 CC	src/libipc/net/server/Makefile	/^CC = gcc$/;"	m
 CC	src/libipc/semaphore/Makefile	/^CC = gcc$/;"	m
 CC	src/libipc/share_mem/Makefile	/^CC = gcc$/;"	m
+CC	src/libipc/shm_queue/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/Makefile	/^CC = gcc$/;"	m
 CC	src/libproto_analyzer/test/Makefile	/^CC = gcc$/;"	m
 CC	src/libstate_machine/Makefile	/^CC = gcc$/;"	m
@@ -442,6 +444,7 @@ LD	src/liballoc/container_alloc/Makefile	/^LD = ld$/;"	m
 LD	src/liballoc/sys_alloc/Makefile	/^LD = ld$/;"	m
 LD	src/libargs/Makefile	/^LD = ld$/;"	m
 LD	src/libblob/Makefile	/^LD = ld$/;"	m
+LD	src/libbus/Makefile	/^LD = ld$/;"	m
 LD	src/libconcurrent/Makefile	/^LD = ld$/;"	m
 LD	src/libdata_structure/hash_map/Makefile	/^LD = ld$/;"	m
 LD	src/libdata_structure/link_list/Makefile	/^LD = ld$/;"	m
@@ -456,6 +459,7 @@ LD	src/libipc/net/client/Makefile	/^LD = ld$/;"	m
 LD	src/libipc/net/server/Makefile	/^LD = ld$/;"	m
 LD	src/libipc/semaphore/Makefile	/^LD = ld$/;"	m
 LD	src/libipc/share_mem/Makefile	/^LD = ld$/;"	m
+LD	src/libipc/shm_queue/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/Makefile	/^LD = ld$/;"	m
 LD	src/libproto_analyzer/test/Makefile	/^LD = ld$/;"	m
 LD	src/libstate_machine/Makefile	/^LD = ld$/;"	m
@@ -605,6 +609,7 @@ OBJS	src/liballoc/container_alloc/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS)) 
 OBJS	src/liballoc/sys_alloc/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libargs/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libblob/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libbus/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libconcurrent/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libdata_structure/hash_map/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libdata_structure/link_list/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -619,6 +624,7 @@ OBJS	src/libipc/net/client/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子�
 OBJS	src/libipc/net/server/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libipc/semaphore/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libipc/share_mem/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
+OBJS	src/libipc/shm_queue/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libproto_analyzer/test/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
 OBJS	src/libstate_machine/Makefile	/^OBJS = $(patsubst %.c,%.o,$(SRCS))  #子目录obj$/;"	m
@@ -776,6 +782,8 @@ SERVER_WORK_TYPE_THREAD	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TY
 SHARE_TARGET	Makefile	/^SHARE_TARGET = libcutils.so$/;"	m
 SHMGET	src/include/libipc/share_mem/shm.h	/^    SHMGET = 0x04,  $/;"	e	enum:share_mem_type_e
 SHMOPEN	src/include/libipc/share_mem/shm.h	/^    SHMOPEN = 0x01,  $/;"	e	enum:share_mem_type_e
+SHM_QUEUE_MAX_NAME_LEN	src/include/libipc/shm_queue/shm_queue.h	16;"	d
+SHM_QUEUE_MAX_NAME_LEN	src/include/libipc/shm_queue/shm_queue.h	8;"	d
 SLAB_ARRAY_MAX_NUM	src/include/liballoc/allocator_ctr_alloc.h	25;"	d
 SLC_DATA	src/libproto_analyzer/test/pdt_drv_proto_format.h	12;"	d
 SLC_INFO	src/libproto_analyzer/test/pdt_drv_proto_format.h	11;"	d
@@ -798,6 +806,7 @@ SRCS	src/liballoc/container_alloc/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/liballoc/sys_alloc/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libargs/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libblob/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libbus/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libconcurrent/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdata_structure/hash_map/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libdata_structure/link_list/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -812,6 +821,7 @@ SRCS	src/libipc/net/client/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libipc/net/server/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libipc/semaphore/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libipc/share_mem/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
+SRCS	src/libipc/shm_queue/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libproto_analyzer/test/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
 SRCS	src/libstate_machine/Makefile	/^SRCS = $(wildcard *.c)$/;"	m
@@ -845,6 +855,7 @@ TARGET	src/liballoc/container_alloc/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/liballoc/sys_alloc/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libargs/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libblob/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libbus/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libconcurrent/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdata_structure/hash_map/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libdata_structure/link_list/Makefile	/^TARGET = build_in.o$/;"	m
@@ -859,6 +870,7 @@ TARGET	src/libipc/net/client/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libipc/net/server/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libipc/semaphore/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libipc/share_mem/Makefile	/^TARGET = build_in.o$/;"	m
+TARGET	src/libipc/shm_queue/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libproto_analyzer/test/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libstate_machine/Makefile	/^TARGET = build_in.o$/;"	m
@@ -1050,6 +1062,7 @@ __BASIC_TYPES_H__	src/include/libdbg/basic_types.h	2;"	d
 __BASIC_TYPES_H__	src/include/libproto_analyzer/my_types.h	2;"	d
 __BIG_ENDIAN	src/include/libblob/utils.h	75;"	d
 __BUILD_BUG_ON	src/include/libblob/utils.h	32;"	d
+__BUS_H__	src/include/libbus/bus.h	2;"	d
 __BYTE_ORDER	src/include/libblob/utils.h	72;"	d
 __CLIENT_H__	src/include/libipc/net/client.h	2;"	d
 __CMD_ARGS_H__	src/include/libargs/cmd_args.h	2;"	d
@@ -1090,6 +1103,7 @@ __SEM_STRUCT_H__	src/include/libipc/semaphore/sem_struct.h	2;"	d
 __SEM_SYSV_H__	src/include/libipc/semaphore/sem_sysv.h	2;"	d
 __SERVER_H__	src/include/libipc/net/server.h	2;"	d
 __SHM_H__	src/include/libipc/share_mem/shm.h	2;"	d
+__SHM_RWQUEUE_H__	src/include/libipc/shm_queue/shm_queue.h	2;"	d
 __STATE_MACHINE_H__	src/include/libstate_machine/state_machine.h	2;"	d
 __SYNC_LOCK_H__	src/include/libthread/sync_lock.h	19;"	d
 __UNIX_SK_CLIENT_H__	src/include/libipc/net/unix_client.h	2;"	d
@@ -1251,6 +1265,8 @@ args_parse_args	src/libargs/cmd_args.c	/^args_parse_args(args_processor_t *p,int
 args_print_help_info	src/libargs/cmd_args.c	/^void args_print_help_info(args_processor_t *p)$/;"	f
 args_print_help_test_info	src/libargs/cmd_args.c	/^void args_print_help_test_info(args_processor_t *p)$/;"	f
 args_process	src/libargs/cmd_args.c	/^void args_process(void *base,cmd_config_t *cmd_configs,int argc, char *argv[])$/;"	f
+args_process_busc	src/main.c	/^static int args_process_busc(void *base,int argc,char **argv)$/;"	f	file:
+args_process_busd	src/main.c	/^static int args_process_busd(void *base,int argc,char **argv)$/;"	f	file:
 args_process_help	src/libargs/test_cmd_args.c	/^static int args_process_help(void *base,int argc,char **argv)$/;"	f	file:
 args_process_help	src/main.c	/^static int args_process_help(void *base,int argc,char **argv)$/;"	f	file:
 args_process_help_test	src/main.c	/^static int args_process_help_test(void *base,int argc,char **argv)$/;"	f	file:
@@ -1288,7 +1304,6 @@ args_process_test_udp_iclient_send	src/main.c	/^static int args_process_test_udp
 args_process_test_udp_uclient_recieve	src/main.c	/^static int args_process_test_udp_uclient_recieve(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_udp_uclient_send	src/main.c	/^static int args_process_test_udp_uclient_send(void *base,int argc,char **argv)$/;"	f	file:
 args_process_test_vector	src/main.c	/^static int args_process_test_vector(void *base,int argc,char **argv)$/;"	f	file:
-args_process_ubusd	src/main.c	/^static int args_process_ubusd(void *base,int argc,char **argv)$/;"	f	file:
 args_processor_s	src/include/libargs/cmd_args.h	/^typedef struct args_processor_s{$/;"	s
 args_processor_t	src/include/libargs/cmd_args.h	/^}args_processor_t;$/;"	t	typeref:struct:args_processor_s
 args_readable_names	src/include/libargs/cmd_args.h	/^	char *args_readable_names;$/;"	m	struct:cmd_config_s
@@ -1983,6 +1998,8 @@ fd	src/libipc/net/server/inet_server_old.c	/^	uint32_t fd;$/;"	m	struct:iserver_
 fd_mask	src/libevent_tiny/select.c	/^typedef unsigned long fd_mask;$/;"	t	file:
 fdinfo_len	src/include/libevent_tiny/event-internal.h	/^	size_t fdinfo_len;$/;"	m	struct:eventop
 features	src/include/libevent_tiny/event-internal.h	/^	enum event_method_feature features;$/;"	m	struct:eventop	typeref:enum:eventop::event_method_feature
+fifo_fd	src/include/libipc/shm_queue/shm_queue.h	/^    uint32_t fifo_fd;$/;"	m	struct:shm_queue_s
+fifo_name	src/include/libipc/shm_queue/shm_queue.h	/^    char fifo_name[SHM_QUEUE_MAX_NAME_LEN];$/;"	m	struct:shm_queue_s
 fifo_read	src/libevent_tiny/test_io.c	/^fifo_read(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
 fill_message	src/libblob/msgblob-example.c	/^fill_message(struct blob_buf *buf)$/;"	f	file:
 find_key	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_head * (*find_key)(char *key); $/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::find_key
@@ -2872,18 +2889,26 @@ share_mem_ops_t	src/include/libipc/share_mem/shm.h	/^}share_mem_ops_t;$/;"	t	typ
 share_mem_s	src/include/libipc/share_mem/shm.h	/^typedef struct share_mem_s{$/;"	s
 share_mem_t	src/include/libipc/share_mem/shm.h	/^}share_mem_t;$/;"	t	typeref:struct:share_mem_s
 share_mem_type_e	src/include/libipc/share_mem/shm.h	/^enum share_mem_type_e{  $/;"	g
+shm	src/include/libipc/shm_queue/shm_queue.h	/^    share_mem_t *shm;$/;"	m	struct:shm_queue_s
 shm_create	src/libipc/share_mem/shm.c	/^share_mem_t *shm_create()$/;"	f
 shm_del	src/libipc/share_mem/shm.c	/^int shm_del(share_mem_t *shm) $/;"	f
 shm_init	src/libipc/share_mem/shm.c	/^int shm_init(share_mem_t *shm)$/;"	f
 shm_key	src/include/libipc/share_mem/shm.h	/^    char shm_key[MAX_SHARE_MEM_KEY_LEN];$/;"	m	struct:share_mem_s
+shm_name	src/include/libipc/shm_queue/shm_queue.h	/^    char shm_name[SHM_QUEUE_MAX_NAME_LEN];$/;"	m	struct:shm_queue_s
 shm_open_del	src/libipc/share_mem/shm.c	/^int shm_open_del(share_mem_t *shm)$/;"	f
 shm_open_get	src/libipc/share_mem/shm.c	/^void *shm_open_get(share_mem_t *shm)$/;"	f
 shm_ops	src/include/libipc/share_mem/shm.h	/^    struct share_mem_ops_s *shm_ops;$/;"	m	struct:share_mem_s	typeref:struct:share_mem_s::share_mem_ops_s
+shm_queue_create	src/libipc/shm_queue/shm_queue.c	/^shm_queue_t *shm_queue_create(allocator_t *allocator)$/;"	f
+shm_queue_s	src/include/libipc/shm_queue/shm_queue.h	/^typedef struct shm_queue_s{$/;"	s
+shm_queue_set	src/libipc/shm_queue/shm_queue.c	/^int shm_queue_set(shm_queue_t *que)$/;"	f
+shm_queue_t	src/include/libipc/shm_queue/shm_queue.h	/^}shm_queue_t;$/;"	t	typeref:struct:shm_queue_s
 shm_set	src/libipc/share_mem/shm.c	/^int shm_set(share_mem_t *shm,char *key,int size,int shm_type,int sem_type,int sem_host_flag)$/;"	f
 shm_shmget_del	src/libipc/share_mem/shm.c	/^int shm_shmget_del(share_mem_t *shm)$/;"	f
 shm_shmget_get	src/libipc/share_mem/shm.c	/^void *shm_shmget_get(share_mem_t *shm)$/;"	f
+shm_size	src/include/libipc/shm_queue/shm_queue.h	/^    uint32_t shm_size;$/;"	m	struct:shm_queue_s
 shm_smopen_del	src/libipc/share_mem/shm.c	/^int shm_smopen_del(share_mem_t *shm)$/;"	f
 shm_smopen_get	src/libipc/share_mem/shm.c	/^void *shm_smopen_get(share_mem_t *shm)$/;"	f
+shm_type	src/include/libipc/shm_queue/shm_queue.h	/^    uint8_t shm_type;$/;"	m	struct:shm_queue_s
 shmflg	src/include/libipc/share_mem/shm.h	/^    int shmflg;$/;"	m	struct:share_mem_s
 shmid	src/include/libipc/share_mem/shm.h	/^    int shmid;$/;"	m	struct:share_mem_s
 sig	src/include/libevent_tiny/event-internal.h	/^	struct evsig_info sig;$/;"	m	struct:event_base	typeref:struct:event_base::evsig_info
@@ -3031,6 +3056,8 @@ test	src/lab/lab2.c	/^typedef struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_args	src/libargs/test_cmd_args.c	/^void test_args(int argc, char *argv[])$/;"	f
+test_bus_client	src/libbus/bus.c	/^void test_bus_client()$/;"	f
+test_bus_daemon	src/libbus/bus.c	/^void test_bus_daemon()$/;"	f
 test_client_recv_of_inet_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_inet_udp()$/;"	f
 test_client_recv_of_unix_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_unix_udp()$/;"	f
 test_concurrent1	src/libconcurrent/test_concurrent.c	/^int test_concurrent1()$/;"	f
