@@ -77,35 +77,20 @@ int busd_init(busd_t *busd,
     return 1;
 }
 
-static int process_server_receive_data_callback(void *task)
+static int busd_process_receiving_data_callback(void *task)
 {
-#define SERVER_RECEIVE_DATA_MAX_LEN 1024
-    int nread;
-    char buf[SERVER_RECEIVE_DATA_MAX_LEN];
-    int fd = ((server_task_t *)task)->fd;
+	server_data_task_t *t = (server_data_task_t *)task;;
 
-    nread = read(fd, buf, SERVER_RECEIVE_DATA_MAX_LEN);
-
-	dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
-    if (nread < 0) {
-        dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		close(fd);//modify for test
-        return -1;
-    } 
-
-    write(fd, buf, nread); //ack back 
-
-	dbg_str(NET_DETAIL,"task done");
+    write(t->fd, t->buffer,t->buffer_len);//响应客户端  
 
     return 0;
-#undef SERVER_RECEIVE_DATA_MAX_LEN
 }
 
 void test_bus_daemon()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     busd_t *busd;
-    char *server_host = NULL;
+    char *server_host = "bus_server_path";
     char *server_srv = NULL;
     
     dbg_str(DBG_DETAIL,"test_busd_daemon");
@@ -114,6 +99,6 @@ void test_bus_daemon()
     busd_init(busd,//busd_t *busd,
               server_host,//char *server_host,
               server_srv,//char *server_srv,
-              process_server_receive_data_callback);
+              busd_process_receiving_data_callback);
 }
 

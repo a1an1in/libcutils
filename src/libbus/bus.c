@@ -72,8 +72,26 @@ int bus_init(bus_t *bus,
     return 1;
                          
 }
+int bus_send(bus_t *bus,
+			 void *buf,
+			 size_t buf_len)
+{
+	int ret = 0;
+	ret = client_send(bus->client,
+				   	  buf,//const void *buf,
+					  buf_len,//size_t nbytes,
+					  0,//int flags,
+					  bus->server_host,//char *dest_id_str, 
+				      bus->server_srv);//char *dest_srv_str)
+	if(ret < 0){
+		dbg_str(DBG_WARNNING,"bus send err");
+	}
 
-static int process_clinet_receive_data_callback(client_task_t *task)
+	return ret;
+}
+
+
+static int bus_process_receiving_data_callback(client_task_t *task)
 {
 	dbg_str(DBG_DETAIL,"process_task begin,unix client recv");
 	/*
@@ -81,6 +99,7 @@ static int process_clinet_receive_data_callback(client_task_t *task)
 	 *void *opaque = user->opaque;
 	 */
 	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
+	dbg_str(DBG_DETAIL,"%s",task->buffer);
 	dbg_str(DBG_DETAIL,"process_task end");
 
     return 0;
@@ -90,8 +109,10 @@ void test_bus_client()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     bus_t *bus;
-    char *server_host = NULL;
+    char *server_host = "bus_server_path";
     char *server_srv = NULL;
+	char buf[1024] = "hello world!";
+	int buf_len = strlen(buf);
     
     dbg_str(DBG_DETAIL,"test_busd_daemon");
     bus = bus_create(allocator);
@@ -99,7 +120,9 @@ void test_bus_client()
     bus_init(bus,//busd_t *busd,
              server_host,//char *server_host,
              server_srv,//char *server_srv,
-             process_clinet_receive_data_callback);
+             bus_process_receiving_data_callback);
 
     dbg_str(DBG_DETAIL,"test_bus_client");
+	
+	bus_send(bus, buf,buf_len);
 }
