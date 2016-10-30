@@ -265,8 +265,14 @@ static int args_process_busc(void *base,int argc,char **argv)
     test_bus_client();
 	return 0;
 }
+static int args_process_buss(void *base,int argc,char **argv)
+{
+    test_bus_server();
+	return 0;
+}
 
 static cmd_config_t cmds[]={
+	{"buss", args_process_buss,0, "test", "N/A","bus"},
 	{"busc", args_process_busc,0, "test", "N/A","bus"},
 	{"busd", args_process_busd,0, "app", "N/A","bus"},
 	{"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},

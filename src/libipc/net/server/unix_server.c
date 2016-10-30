@@ -95,6 +95,10 @@ static void slave_process_conn_bussiness_event_handler(int fd, short event, void
         dbg_str(DBG_ERROR,"fd read err,close the connection");
 		close(fd);//modify for test
         return;
+	} else if(data_task->buffer_len== 0){
+		dbg_str(DBG_ERROR,"client_event_handler,socket has broken,del client event");
+		event_del(task->event);
+		return;
     } 
 
 	data_task->fd = task->fd;
@@ -105,7 +109,9 @@ static void slave_process_conn_bussiness_event_handler(int fd, short event, void
 
 	allocator_mem_free(server->allocator,data_task);
 
-	userver_release_task_without_task_admin(task);
+	/*
+	 *userver_release_task_without_task_admin(task);
+	 */
 	//...............fd havn't release
 #undef MAX_TASK_BUFFER_LEN
 }

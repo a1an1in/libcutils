@@ -33,6 +33,7 @@ ARGS_SUC	src/include/libdbg/debug_businesses.h	119;"	d
 ARGS_VIP	src/include/libdbg/debug_businesses.h	121;"	d
 ARGS_WARNNING	src/include/libdbg/debug_businesses.h	118;"	d
 ARRAY_SIZE	src/include/libblob/utils.h	29;"	d
+ARRAY_SIZE	src/include/libbus/bus.h	13;"	d
 ARRAY_SIZE	src/libblob/msgblob-example.c	89;"	d	file:
 ASCIILINESZ	src/libini/iniparser.c	29;"	d	file:
 ASCIILINESZ	src/libini/iniparser.c	417;"	d	file:
@@ -60,6 +61,20 @@ BLOB_COOKIE	src/include/libblob/blob.h	31;"	d
 BLUE	src/include/libdbg/debug.h	109;"	d
 BUILD_BUG_ON	src/include/libblob/utils.h	36;"	d
 BUILD_BUG_ON	src/include/libblob/utils.h	43;"	d
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	120;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	122;"	d	file:
+BUS_METHOD	src/include/libbus/bus.h	16;"	d
+BUS_REQ_ADD_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_ADD_OBJECT,$/;"	e	enum:bus_req_type
+BUS_REQ_DATA	src/include/libbus/bus.h	/^	BUS_REQ_DATA,$/;"	e	enum:bus_req_type
+BUS_REQ_HELLO	src/include/libbus/bus.h	/^	BUS_REQ_HELLO,$/;"	e	enum:bus_req_type
+BUS_REQ_INVOKE	src/include/libbus/bus.h	/^	BUS_REQ_INVOKE,$/;"	e	enum:bus_req_type
+BUS_REQ_LOOKUP	src/include/libbus/bus.h	/^	BUS_REQ_LOOKUP,$/;"	e	enum:bus_req_type
+BUS_REQ_NOTIFY	src/include/libbus/bus.h	/^	BUS_REQ_NOTIFY,$/;"	e	enum:bus_req_type
+BUS_REQ_PING	src/include/libbus/bus.h	/^	BUS_REQ_PING,$/;"	e	enum:bus_req_type
+BUS_REQ_REMOVE_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_REMOVE_OBJECT,$/;"	e	enum:bus_req_type
+BUS_REQ_STATUS	src/include/libbus/bus.h	/^	BUS_REQ_STATUS,$/;"	e	enum:bus_req_type
+BUS_REQ_SUBSCRIBE	src/include/libbus/bus.h	/^	BUS_REQ_SUBSCRIBE,$/;"	e	enum:bus_req_type
+BUS_REQ_UNSUBSCRIBE	src/include/libbus/bus.h	/^	BUS_REQ_UNSUBSCRIBE,$/;"	e	enum:bus_req_type
 CC	Makefile	/^CC = gcc$/;"	m
 CC	src/Makefile	/^CC = gcc$/;"	m
 CC	src/lab/Makefile	/^CC = gcc$/;"	m
@@ -383,6 +398,8 @@ GET_SIGNAL_SLOT	src/libevent_tiny/evmap.c	149;"	d	file:
 GET_SIGNAL_SLOT_AND_CTOR	src/libevent_tiny/evmap.c	156;"	d	file:
 GREEN	src/include/libdbg/debug.h	107;"	d
 GetCompilationInfoForFile	.ycm_extra_conf.py	/^def GetCompilationInfoForFile( filename ):$/;"	f
+HELLO_ID	src/libbus/bus_server.c	/^	HELLO_ID,$/;"	e	enum:__anon15	file:
+HELLO_MSG	src/libbus/bus_server.c	/^	HELLO_MSG,$/;"	e	enum:__anon15	file:
 HIGHLIGHT_FLAG	src/include/libdbg/debug.h	116;"	d
 HLIST_HEAD	src/include/liballoc/list.h	636;"	d
 HLIST_HEAD	src/include/libdata_structure/list.h	642;"	d
@@ -561,6 +578,10 @@ MAX_STR_LEN	src/libdbg/debug_console.c	100;"	d	file:
 MAX_STR_LEN	src/libdbg/debug_console.c	54;"	d	file:
 MAX_TASK_BUFFER_LEN	src/include/libipc/net/inet_client.h	21;"	d
 MAX_TASK_BUFFER_LEN	src/include/libipc/net/inet_client.h	30;"	d
+MAX_TASK_BUFFER_LEN	src/include/libipc/net/unix_server.h	16;"	d
+MAX_TASK_BUFFER_LEN	src/include/libipc/net/unix_server.h	25;"	d
+MAX_TASK_BUFFER_LEN	src/libipc/net/server/unix_server.c	116;"	d	file:
+MAX_TASK_BUFFER_LEN	src/libipc/net/server/unix_server.c	77;"	d	file:
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	42;"	d
 MAX_TASK_KEY_LEN	src/include/libconcurrent/concurrent.h	48;"	d
 MAX_TYPE_STR_LEN	src/include/libconcurrent/io_user.h	19;"	d
@@ -772,8 +793,6 @@ RW_FLAG_INIT	src/include/libdata_structure/ring_buffer.h	/^    RW_FLAG_INIT = 0,
 RW_FLAG_READ	src/include/libdata_structure/ring_buffer.h	/^    RW_FLAG_READ,$/;"	e	enum:rw_flag_e
 RW_FLAG_WRITE	src/include/libdata_structure/ring_buffer.h	/^    RW_FLAG_WRITE,$/;"	e	enum:rw_flag_e
 SELECT_ALLOC_SIZE	src/libevent_tiny/select.c	62;"	d	file:
-SERVER_RECEIVE_DATA_MAX_LEN	src/libbus/busd.c	101;"	d	file:
-SERVER_RECEIVE_DATA_MAX_LEN	src/libbus/busd.c	82;"	d	file:
 SERVER_TYPE_TCP_INET	src/include/libipc/net/server.h	7;"	d
 SERVER_TYPE_TCP_UNIX	src/include/libipc/net/server.h	8;"	d
 SERVER_WORK_TYPE	src/include/libconcurrent/concurrent.h	/^enum SERVER_WORK_TYPE{$/;"	g
@@ -878,6 +897,9 @@ TARGET	src/libthread/sync_lock/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/unix/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/libthread/sync_lock/windows/Makefile	/^TARGET = build_in.o$/;"	m
 TARGET	src/miscellany/Makefile	/^TARGET = build_in.o$/;"	m
+UBUSD_ID	src/include/libbus/busd.h	/^	UBUSD_ID,$/;"	e	enum:__anon14
+UBUSD_METHORDS	src/include/libbus/busd.h	/^	UBUSD_METHORDS,$/;"	e	enum:__anon14
+UBUSD_TEST	src/include/libbus/busd.h	/^	UBUSD_TEST,$/;"	e	enum:__anon14
 UNIX_LIKE_USER_MODE	src/include/cutils_re.h	21;"	d
 USE_INTERNAL_NTOP	src/libevent_tiny/evutil.c	1554;"	d	file:
 USE_INTERNAL_PTON	src/libevent_tiny/evutil.c	1555;"	d	file:
@@ -1064,6 +1086,7 @@ __BIG_ENDIAN	src/include/libblob/utils.h	75;"	d
 __BUILD_BUG_ON	src/include/libblob/utils.h	32;"	d
 __BUSD_H__	src/include/libbus/busd.h	2;"	d
 __BUS_H__	src/include/libbus/bus.h	2;"	d
+__BUS_REQ_LAST	src/include/libbus/bus.h	/^	__BUS_REQ_LAST,$/;"	e	enum:bus_req_type
 __BYTE_ORDER	src/include/libblob/utils.h	72;"	d
 __CLIENT_H__	src/include/libipc/net/client.h	2;"	d
 __CMD_ARGS_H__	src/include/libargs/cmd_args.h	2;"	d
@@ -1077,6 +1100,7 @@ __DEBUG_STRING_H__	src/include/libdbg/debug_string.h	20;"	d
 __EV_TIMER_H__	src/include/libconcurrent/tmr_user.h	2;"	d
 __HASH_LIST_H__	src/include/libdata_structure/hash_list.h	19;"	d
 __HASH_LIST_ST_H__	src/include/libdata_structure/hash_list_struct.h	19;"	d
+__HELLO_MAX	src/libbus/bus_server.c	/^	__HELLO_MAX$/;"	e	enum:__anon15	file:
 __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
 __INET_CLIENT_H__	src/include/libipc/net/inet_client.h	2;"	d
 __INET_SERVER_H__	src/include/libipc/net/inet_server.h	2;"	d
@@ -1107,6 +1131,7 @@ __SHM_H__	src/include/libipc/share_mem/shm.h	2;"	d
 __SHM_RWQUEUE_H__	src/include/libipc/shm_queue/shm_queue.h	2;"	d
 __STATE_MACHINE_H__	src/include/libstate_machine/state_machine.h	2;"	d
 __SYNC_LOCK_H__	src/include/libthread/sync_lock.h	19;"	d
+__UBUSD_MAX	src/include/libbus/busd.h	/^	__UBUSD_MAX$/;"	e	enum:__anon14
 __UNIX_SK_CLIENT_H__	src/include/libipc/net/unix_client.h	2;"	d
 __UNIX_SK_SERVER_H__	src/include/libipc/net/unix_server.h	2;"	d
 __USER_H__	src/include/libconcurrent/io_user.h	2;"	d
@@ -1231,6 +1256,7 @@ allocator	src/include/libdata_structure/link_list_struct.h	/^	allocator_t *alloc
 allocator	src/include/libdata_structure/rbtree_map_struct.h	/^	allocator_t *allocator;$/;"	m	struct:rbtree_map_s
 allocator	src/include/libdata_structure/vector_struct.h	/^	allocator_t *allocator;$/;"	m	struct:vector_s
 allocator	src/include/libipc/net/inet_client.h	/^	allocator_t *allocator;$/;"	m	struct:client_task_s
+allocator	src/include/libipc/net/unix_server.h	/^	allocator_t *allocator;$/;"	m	struct:server_data_task_s
 allocator	src/include/libipc/net/unix_server.h	/^	allocator_t *allocator;$/;"	m	struct:server_task_s
 allocator	src/include/libproto_analyzer/pa_admin.h	/^	allocator_t *allocator;$/;"	m	struct:pa_admin_s
 allocator	src/include/libproto_analyzer/protocol_analyzer.h	/^	allocator_t *allocator;$/;"	m	struct:protocol_analyzer_s
@@ -1270,6 +1296,7 @@ args_print_help_test_info	src/libargs/cmd_args.c	/^void args_print_help_test_inf
 args_process	src/libargs/cmd_args.c	/^void args_process(void *base,cmd_config_t *cmd_configs,int argc, char *argv[])$/;"	f
 args_process_busc	src/main.c	/^static int args_process_busc(void *base,int argc,char **argv)$/;"	f	file:
 args_process_busd	src/main.c	/^static int args_process_busd(void *base,int argc,char **argv)$/;"	f	file:
+args_process_buss	src/main.c	/^static int args_process_buss(void *base,int argc,char **argv)$/;"	f	file:
 args_process_help	src/libargs/test_cmd_args.c	/^static int args_process_help(void *base,int argc,char **argv)$/;"	f	file:
 args_process_help	src/main.c	/^static int args_process_help(void *base,int argc,char **argv)$/;"	f	file:
 args_process_help_test	src/main.c	/^static int args_process_help_test(void *base,int argc,char **argv)$/;"	f	file:
@@ -1404,18 +1431,34 @@ buf	src/include/libproto_analyzer/protocol_format_set.h	/^	buffer_t buf;$/;"	m	s
 buf	src/lab/lab.c	/^    char buf[50];$/;"	m	struct:test	file:
 buf	src/lab/lab2.c	/^    char buf[50];$/;"	m	struct:test	file:
 buffer	src/include/libipc/net/inet_client.h	/^	uint8_t buffer[MAX_TASK_BUFFER_LEN];$/;"	m	struct:client_task_s
+buffer	src/include/libipc/net/unix_server.h	/^	uint8_t buffer[MAX_TASK_BUFFER_LEN];$/;"	m	struct:server_data_task_s
 buffer_addr	src/include/libdata_structure/ring_buffer.h	/^    char *buffer_addr;$/;"	m	struct:ring_buffer_s
 buffer_len	src/include/libdata_structure/ring_buffer.h	/^    uint32_t buffer_len;$/;"	m	struct:ring_buffer_s
 buffer_len	src/include/libipc/net/inet_client.h	/^	uint32_t buffer_len;$/;"	m	struct:client_task_s
+buffer_len	src/include/libipc/net/unix_server.h	/^	uint32_t buffer_len;$/;"	m	struct:server_data_task_s
 buffer_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct buffer_s{$/;"	s
 buffer_t	src/include/libproto_analyzer/protocol_format_set.h	/^}buffer_t;$/;"	t	typeref:struct:buffer_s
 buflen	src/include/libblob/blob.h	/^	int buflen;$/;"	m	struct:blob_buf
+bus_add_object	src/libbus/bus.c	/^int bus_add_object(bus_t *bus,struct bus_object *obj)$/;"	f
 bus_create	src/libbus/bus.c	/^bus_t * bus_create(allocator_t *allocator)$/;"	f
+bus_handler_t	src/include/libbus/bus.h	/^typedef int (*bus_handler_t)(struct bus_s *bus,$/;"	t
 bus_init	src/libbus/bus.c	/^int bus_init(bus_t *bus,$/;"	f
+bus_method	src/include/libbus/bus.h	/^struct bus_method {$/;"	s
+bus_object	src/include/libbus/bus.h	/^struct bus_object {$/;"	s
+bus_process_receiving_data_callback	src/libbus/bus_client.c	/^static int bus_process_receiving_data_callback(client_task_t *task)$/;"	f	file:
+bus_process_receiving_data_callback	src/libbus/bus_server.c	/^static int bus_process_receiving_data_callback(client_task_t *task)$/;"	f	file:
+bus_push_args_to_msgblob	src/libbus/bus.c	/^int bus_push_args_to_msgblob(struct blob_buf *blob_buf,struct bus_method *method)$/;"	f
+bus_push_method_to_msgblob	src/libbus/bus.c	/^int bus_push_method_to_msgblob(struct blob_buf *blob_buf,struct bus_object *obj)$/;"	f
+bus_req_type	src/include/libbus/bus.h	/^enum bus_req_type {$/;"	g
+bus_reqhdr	src/include/libbus/bus.h	/^typedef struct bus_reqhdr {$/;"	s
+bus_reqhdr_t	src/include/libbus/bus.h	/^}__attribute__((packed)) bus_reqhdr_t;$/;"	t	typeref:struct:bus_reqhdr
 bus_s	src/include/libbus/bus.h	/^typedef struct bus_s{$/;"	s
+bus_send	src/libbus/bus.c	/^int bus_send(bus_t *bus,$/;"	f
 bus_t	src/include/libbus/bus.h	/^}bus_t;$/;"	t	typeref:struct:bus_s
+busd_cmd_callback	src/include/libbus/busd.h	/^typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr **attr);$/;"	t
 busd_create	src/libbus/busd.c	/^busd_t * busd_create(allocator_t *allocator)$/;"	f
 busd_init	src/libbus/busd.c	/^int busd_init(busd_t *busd,$/;"	f
+busd_process_receiving_data_callback	src/libbus/busd.c	/^static int busd_process_receiving_data_callback(void *task)$/;"	f	file:
 busd_s	src/include/libbus/busd.h	/^typedef struct busd_s{$/;"	s
 busd_t	src/include/libbus/busd.h	/^}busd_t;$/;"	t	typeref:struct:busd_s
 business_debug_level	src/include/libdbg/debug.h	/^	uint8_t business_debug_level;$/;"	m	struct:debug_business
@@ -1567,6 +1610,7 @@ d	src/include/libdbg/debug.h	/^	dictionary *d;$/;"	m	struct:debugger
 d	src/lab/lab.c	/^    long d;$/;"	m	struct:test	file:
 d	src/lab/lab2.c	/^    long d;$/;"	m	struct:test	file:
 d	src/libdata_structure/ring_buffer/ring_buffer.c	/^    int d;$/;"	m	struct:test_s	file:
+d_id	src/include/libbus/bus.h	/^	uint32_t d_id;$/;"	m	struct:bus_reqhdr
 data	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t data[0];$/;"	m	struct:slab
 data	src/include/libblob/blob.h	/^	char data[];$/;"	m	struct:blob_attr
 data	src/include/libdata_structure/link_list_struct.h	/^	uint8_t data[1];$/;"	m	struct:llist_list_s
@@ -1782,6 +1826,7 @@ event	src/include/libconcurrent/tmr_user.h	/^	struct event event;$/;"	m	struct:t
 event	src/include/libevent_tiny/event2/event.h	/^struct event$/;"	s
 event	src/include/libevent_tiny/event2/event_struct.h	/^struct event {$/;"	s
 event	src/include/libipc/net/inet_client.h	/^	struct event *event;$/;"	m	struct:client_task_s	typeref:struct:client_task_s::event
+event	src/include/libipc/net/unix_server.h	/^	struct event *event;$/;"	m	struct:server_data_task_s	typeref:struct:server_data_task_s::event
 event	src/include/libipc/net/unix_server.h	/^	struct event *event;$/;"	m	struct:server_task_s	typeref:struct:server_task_s::event
 event	src/libipc/net/server/inet_server.c	/^	struct event *event;$/;"	m	struct:iserver_task_s	typeref:struct:iserver_task_s::event	file:
 event	src/libipc/net/server/inet_server_old.c	/^	struct event *event;$/;"	m	struct:iserver_task_s	typeref:struct:iserver_task_s::event	file:
@@ -2004,6 +2049,7 @@ f	src/lab/lab2.c	/^    short f;$/;"	m	struct:core	file:
 fatal_fn	src/libevent_tiny/log.c	/^static event_fatal_cb fatal_fn = NULL;$/;"	v	file:
 fd	src/include/libevent_tiny/changelist-internal.h	/^	evutil_socket_t fd;$/;"	m	struct:event_change
 fd	src/include/libipc/net/inet_client.h	/^	uint32_t fd;$/;"	m	struct:client_task_s
+fd	src/include/libipc/net/unix_server.h	/^	uint32_t fd;$/;"	m	struct:server_data_task_s
 fd	src/include/libipc/net/unix_server.h	/^	uint32_t fd;$/;"	m	struct:server_task_s
 fd	src/libevent_tiny/evmap.c	/^	evutil_socket_t fd;$/;"	m	struct:event_map_entry	file:
 fd	src/libipc/net/server/inet_server.c	/^	uint32_t fd;$/;"	m	struct:iserver_task_s	file:
@@ -2052,6 +2098,8 @@ global_concurrent	src/libconcurrent/concurrent.c	/^concurrent_t *global_concurre
 grow	src/include/libblob/blob.h	/^	bool (*grow)(struct blob_buf *buf, int minlen);$/;"	m	struct:blob_buf
 had_ipv4_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
 had_ipv6_address	src/libevent_tiny/evutil.c	/^static int have_checked_interfaces, had_ipv4_address, had_ipv6_address;$/;"	v	file:
+handler	src/include/libbus/bus.h	/^	bus_handler_t handler;$/;"	m	struct:bus_method
+handlers	src/libbus/busd.c	/^static busd_cmd_callback handlers[__BUS_REQ_LAST] = {$/;"	v	file:
 hash	src/include/libini/iniparser.h	/^	unsigned *hash;$/;"	m	struct:_dictionary_
 hash_func	src/include/libdata_structure/hash_list_struct.h	/^	hash_func_fpt hash_func;$/;"	m	struct:hash_map_s
 hash_func_fpt	src/include/libdata_structure/hash_list_struct.h	/^typedef uint32_t (*hash_func_fpt)(void *key,uint32_t key_size,uint32_t bucket_size);$/;"	t
@@ -2082,6 +2130,7 @@ head	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,he
 head	src/libdata_structure/ring_buffer/ring_buffer.c	/^    rbuf_msg_head_t head;$/;"	m	struct:test_s	file:
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	sync_lock_t head_lock;    $/;"	m	struct:ctr_mem_pool_head_list
 head_lock	src/include/liballoc/allocator_ctr_alloc.h	/^	sync_lock_t head_lock;    $/;"	m	struct:slab_head_list
+hello_policy	src/libbus/bus_server.c	/^static const struct msgblob_policy hello_policy[] = {$/;"	v	typeref:struct:msgblob_policy	file:
 help_info	src/include/libargs/cmd_args.h	/^	char *help_info;$/;"	m	struct:cmd_config_s
 hexstr2num	src/libproto_analyzer/protocol_format_set.c	/^int hexstr2num(const char* const_str)$/;"	f
 hlist	src/include/libdata_structure/hash_list_struct.h	/^	struct hlist_head *hlist;$/;"	m	struct:hash_map_s	typeref:struct:hash_map_s::hlist_head
@@ -2163,6 +2212,7 @@ ht_improve_hash	src/include/libevent_tiny/ht-internal.h	/^ht_improve_hash(unsign
 ht_string_hash	src/include/libevent_tiny/ht-internal.h	/^ht_string_hash(const char *s)$/;"	f
 iclient_destroy	src/libipc/net/client/inet_client.c	/^int iclient_destroy(client_t *client)$/;"	f
 iclient_release_task	src/libipc/net/client/inet_client.c	/^static int iclient_release_task(client_task_t *task)$/;"	f	file:
+id	src/include/libbus/bus.h	/^	uint32_t id;$/;"	m	struct:bus_object
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon13
 id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon12
 id_len	src/include/libblob/blob.h	/^	uint32_t id_len;$/;"	m	struct:blob_attr
@@ -2215,6 +2265,7 @@ key	src/include/libdata_structure/hash_list_struct.h	/^	char key[1];$/;"	m	struc
 key	src/include/libdata_structure/rbtree_map_struct.h	/^  	char key[1];$/;"	m	struct:rbtree_map_node
 key	src/include/libini/iniparser.h	/^	char **key ;$/;"	m	struct:_dictionary_
 key	src/include/libipc/net/inet_client.h	/^	char key[10];$/;"	m	struct:client_task_s
+key	src/include/libipc/net/unix_server.h	/^	char key[10];$/;"	m	struct:server_data_task_s
 key	src/include/libipc/net/unix_server.h	/^	char key[10];$/;"	m	struct:server_task_s
 key	src/include/libipc/semaphore/sem_struct.h	/^    key_t key;$/;"	m	struct:semaphore_s
 key	src/libconcurrent/test_concurrent.c	/^	char key[10];$/;"	m	struct:concurrent_task_s	file:
@@ -2485,6 +2536,7 @@ message_event	src/include/libconcurrent/concurrent.h	/^	struct event message_eve
 message_id	src/include/libconcurrent/concurrent.h	/^	uint32_t message_id;$/;"	m	struct:concurrent_message_s
 message_que	src/include/libconcurrent/concurrent.h	/^	llist_t *message_que;$/;"	m	struct:concurrent_master_s
 message_que	src/include/libconcurrent/concurrent.h	/^	llist_t *message_que;$/;"	m	struct:concurrent_slave_s
+methods	src/include/libbus/bus.h	/^	struct bus_method *methods;$/;"	m	struct:bus_object	typeref:struct:bus_object::bus_method
 min_depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t min_depth;$/;"	m	struct:ctr_mem_pool
 min_heap	src/include/libevent_tiny/minheap-internal.h	/^typedef struct min_heap$/;"	s
 min_heap_ctor	src/include/libevent_tiny/minheap-internal.h	/^void min_heap_ctor(min_heap_t* s) { s->p = 0; s->n = 0; s->a = 0; }$/;"	f
@@ -2568,10 +2620,14 @@ n_changes	src/include/libevent_tiny/event-internal.h	/^	int n_changes;$/;"	m	str
 n_common_timeouts	src/include/libevent_tiny/event-internal.h	/^	int n_common_timeouts;$/;"	m	struct:event_base
 n_common_timeouts_allocated	src/include/libevent_tiny/event-internal.h	/^	int n_common_timeouts_allocated;$/;"	m	struct:event_base
 n_cpus_hint	src/include/libevent_tiny/event-internal.h	/^	int n_cpus_hint;$/;"	m	struct:event_config
+n_methods	src/include/libbus/bus.h	/^	int n_methods;$/;"	m	struct:bus_object
+n_policy	src/include/libbus/bus.h	/^	int n_policy;$/;"	m	struct:bus_method
 nactivequeues	src/include/libevent_tiny/event-internal.h	/^	int nactivequeues;$/;"	m	struct:event_base
 name	src/include/liballoc/allocator.h	/^	char name[COTAINOR_NAME_MAX_LEN];$/;"	m	struct:allocator
 name	src/include/libblob/msgblob.h	/^	const char *name;$/;"	m	struct:msgblob_policy
 name	src/include/libblob/msgblob.h	/^	uint8_t name[];$/;"	m	struct:msgblob_hdr
+name	src/include/libbus/bus.h	/^	const char *name;$/;"	m	struct:bus_method
+name	src/include/libbus/bus.h	/^	const char *name;$/;"	m	struct:bus_object
 name	src/include/libevent_tiny/event-internal.h	/^	const char *name;$/;"	m	struct:eventop
 name	src/include/libproto_analyzer/protocol_format_set.h	/^	char name[MAX_NAME_LEN];$/;"	m	struct:proto_info_list_s
 name	src/include/libthread/sync_lock.h	/^	char name[SYNC_LOCK_NAME_MAX_LEN];$/;"	m	struct:sync_lock_module
@@ -2659,6 +2715,7 @@ pair	src/include/libdata_structure/map_pair.h	/^typedef struct pair{$/;"	s
 pair	src/include/libproto_analyzer/pa_admin.h	/^	pair_t *pair;$/;"	m	struct:pa_admin_s
 pair_t	src/include/libdata_structure/map_pair.h	/^}pair_t;$/;"	t	typeref:struct:pair
 parse_numeric_servname	src/libevent_tiny/evutil.c	/^parse_numeric_servname(const char *servname)$/;"	f	file:
+path	src/include/libbus/bus.h	/^	const char *path;$/;"	m	struct:bus_object
 pdt_drv_proto_init_3019	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int pdt_drv_proto_init_3019(uint16_t proto_id,uint16_t lab,$/;"	f
 pdt_drv_proto_parse_3019	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^pdt_drv_proto_parse_3019(protocol_format_set_t *pfs_p,$/;"	f
 pf_list_head_p	src/include/libproto_analyzer/protocol_analyzer.h	/^	struct list_head *pf_list_head_p;$/;"	m	struct:protocol_analyzer_s	typeref:struct:protocol_analyzer_s::list_head
@@ -2685,6 +2742,7 @@ pfs_set_proto_info	src/libproto_analyzer/protocol_format_set.c	/^pfs_set_proto_i
 pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon13
 pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon12
 pol	src/libblob/msgblob-example.c	/^static const struct msgblob_policy pol[] = {$/;"	v	typeref:struct:msgblob_policy	file:
+policy	src/include/libbus/bus.h	/^	const struct msgblob_policy *policy;$/;"	m	struct:bus_method	typeref:struct:bus_method::msgblob_policy
 poll_add	src/libevent_tiny/poll.c	/^poll_add(struct event_base *base, int fd, short old, short events, void *_idx)$/;"	f	file:
 poll_check_ok	src/libevent_tiny/poll.c	/^poll_check_ok(struct pollop *pop)$/;"	f	file:
 poll_check_ok	src/libevent_tiny/poll.c	113;"	d	file:
@@ -2729,8 +2787,6 @@ print_vector_data	src/libdata_structure/test/test_vector.c	/^void print_vector_d
 printf_buffer	src/lab/lab5.c	/^void printf_buffer(unsigned char *buf, int len)$/;"	f
 priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon9
 priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:debugger::debugger_priv
-process_clinet_receive_data_callback	src/libbus/bus.c	/^static int process_clinet_receive_data_callback(client_task_t *task)$/;"	f	file:
-process_server_receive_data_callback	src/libbus/busd.c	/^static int process_server_receive_data_callback(void *task)$/;"	f	file:
 process_task_callback	src/lab/lab.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/lab/lab2.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/libipc/net/client/client.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
@@ -2838,6 +2894,7 @@ rw_flag	src/include/libdata_structure/ring_buffer.h	/^    uint8_t rw_flag;$/;"	m
 rw_flag_e	src/include/libdata_structure/ring_buffer.h	/^enum rw_flag_e{$/;"	g
 rwlock	src/include/libthread/sync_lock.h	/^		pthread_rwlock_t rwlock;$/;"	m	union:sync_lock_s::lock
 s6_addr	src/include/libevent_tiny/ipv6-internal.h	/^	ev_uint8_t s6_addr[16];$/;"	m	struct:in6_addr
+s_id	src/include/libbus/bus.h	/^	uint32_t s_id;$/;"	m	struct:bus_reqhdr
 sa_family_t	src/include/libevent_tiny/ipv6-internal.h	/^typedef int sa_family_t;$/;"	t
 scanned_state_changing_workfunc_cb	src/libstate_machine/test_state_machine.c	/^static void scanned_state_changing_workfunc_cb(state_machine_t *s,void *opaque)$/;"	f	file:
 scanned_state_timeoutworkfunc_cb	src/libstate_machine/test_state_machine.c	/^static void scanned_state_timeoutworkfunc_cb(void *arg)$/;"	f	file:
@@ -2868,10 +2925,13 @@ semaphore_t	src/include/libipc/semaphore/sem_struct.h	/^}semaphore_t;$/;"	t	type
 semaphore_v	src/libipc/semaphore/sem.c	/^int semaphore_v(semaphore_t *sem)  $/;"	f
 semun	src/include/libipc/semaphore/sem_struct.h	/^union semun  $/;"	u
 server	src/include/libbus/busd.h	/^    server_t *server;$/;"	m	struct:busd_s
+server	src/include/libipc/net/unix_server.h	/^    server_t *server;$/;"	m	struct:server_data_task_s
 server	src/include/libipc/net/unix_server.h	/^    server_t *server;$/;"	m	struct:server_task_s
 server	src/libipc/net/server/inet_server.c	/^    server_t *server;$/;"	m	struct:iserver_task_s	file:
 server	src/libipc/net/server/inet_server_old.c	/^    server_t *server;$/;"	m	struct:iserver_task_s	file:
 server	src/libipc/net/server/server.c	/^server_t * server(allocator_t *allocator,$/;"	f
+server_data_task_s	src/include/libipc/net/unix_server.h	/^typedef struct server_data_task_s{$/;"	s
+server_data_task_t	src/include/libipc/net/unix_server.h	/^}server_data_task_t;$/;"	t	typeref:struct:server_data_task_s
 server_destroy	src/libipc/net/server/server.c	/^int server_destroy(server_t *server)$/;"	f
 server_host	src/include/libbus/bus.h	/^    char *server_host;$/;"	m	struct:bus_s
 server_host	src/include/libbus/busd.h	/^    char *server_host;$/;"	m	struct:busd_s
@@ -2962,6 +3022,7 @@ slab_release_head_list	src/liballoc/container_alloc/allocator_ctr_slab_list.c	/^
 slab_size	src/include/liballoc/allocator_ctr_alloc.h	/^	uint16_t slab_size;$/;"	m	struct:slab
 slave	src/include/libconcurrent/concurrent.h	/^	concurrent_slave_t *slave;$/;"	m	struct:concurrent_master_s
 slave	src/include/libipc/net/inet_client.h	/^	concurrent_slave_t *slave;$/;"	m	struct:client_task_s
+slave	src/include/libipc/net/unix_server.h	/^	concurrent_slave_t *slave;$/;"	m	struct:server_data_task_s
 slave	src/include/libipc/net/unix_server.h	/^	concurrent_slave_t *slave;$/;"	m	struct:server_task_s
 slave	src/libipc/net/server/inet_server.c	/^	concurrent_slave_t *slave;$/;"	m	struct:iserver_task_s	file:
 slave	src/libipc/net/server/inet_server_old.c	/^	concurrent_slave_t *slave;$/;"	m	struct:iserver_task_s	file:
@@ -3070,8 +3131,9 @@ test	src/lab/lab2.c	/^typedef struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_link_list.c	/^struct test{$/;"	s	file:
 test	src/libdata_structure/test/test_vector.c	/^struct test{$/;"	s	file:
 test_args	src/libargs/test_cmd_args.c	/^void test_args(int argc, char *argv[])$/;"	f
-test_bus_client	src/libbus/bus.c	/^void test_bus_client()$/;"	f
+test_bus_client	src/libbus/bus_client.c	/^void test_bus_client()$/;"	f
 test_bus_daemon	src/libbus/busd.c	/^void test_bus_daemon()$/;"	f
+test_bus_server	src/libbus/bus_server.c	/^void test_bus_server()$/;"	f
 test_client_recv_of_inet_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_inet_udp()$/;"	f
 test_client_recv_of_unix_udp	src/libipc/net/client/client.c	/^void test_client_recv_of_unix_udp()$/;"	f
 test_concurrent1	src/libconcurrent/test_concurrent.c	/^int test_concurrent1()$/;"	f
@@ -3085,11 +3147,14 @@ test_datastructure_rbtree_map	src/libdata_structure/test/test_rbtree_map.c	/^int
 test_datastructure_ring_buffer	src/libdata_structure/ring_buffer/ring_buffer.c	/^void test_datastructure_ring_buffer()$/;"	f
 test_datastructure_vector	src/libdata_structure/test/test_vector.c	/^int test_datastructure_vector()$/;"	f
 test_for_getaddrinfo_hacks	src/libevent_tiny/evutil.c	/^test_for_getaddrinfo_hacks(void)$/;"	f	file:
+test_hello	src/libbus/bus_server.c	/^static int test_hello(struct bus_s *bus,$/;"	f	file:
 test_io	src/libevent_tiny/test_io.c	/^int test_io()$/;"	f
 test_io_user	src/libconcurrent/test_pipe.c	/^void test_io_user()$/;"	f
 test_iserver	src/libipc/net/server/inet_server.c	/^int test_iserver()$/;"	f
+test_methods	src/libbus/bus_server.c	/^static const struct bus_method test_methods[] = {$/;"	v	typeref:struct:bus_method	file:
 test_miscellany_net	src/miscellany/net.c	/^int test_miscellany_net()$/;"	f
 test_msgblob	src/libblob/msgblob-example.c	/^int test_msgblob()$/;"	f
+test_object	src/libbus/bus_server.c	/^static struct bus_object test_object = {$/;"	v	typeref:struct:bus_object	file:
 test_pa_admin	src/libproto_analyzer/pa_admin.c	/^void test_pa_admin()$/;"	f
 test_pdt_drv_proto	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_drv_proto(protocol_format_set_t *pfs_p, allocator_t *allocator)$/;"	f
 test_pdt_proto_3008	src/libproto_analyzer/test/test_pdt_drv_proto_analyzer.c	/^int test_pdt_proto_3008(protocol_format_set_t *pfs_p,$/;"	f
@@ -3162,6 +3227,7 @@ tv_sec	src/include/libstate_machine/state_machine.h	/^     time_t tv_sec;$/;"	m	
 tv_usec	src/include/libstate_machine/state_machine.h	/^     suseconds_t tv_usec;$/;"	m	struct:state_entry_config_s
 type	src/include/libblob/blob.h	/^	unsigned int type;$/;"	m	struct:blob_attr_info
 type	src/include/libblob/msgblob.h	/^	enum msgblob_type type;$/;"	m	struct:msgblob_policy	typeref:enum:msgblob_policy::msgblob_type
+type	src/include/libbus/bus.h	/^	uint8_t type;$/;"	m	struct:bus_reqhdr
 type	src/include/libipc/semaphore/sem_struct.h	/^    unsigned char type;$/;"	m	struct:semaphore_s
 type	src/include/libipc/share_mem/shm.h	/^    int type;$/;"	m	struct:share_mem_s
 type_str	src/include/libconcurrent/io_user.h	/^    char type_str[MAX_TYPE_STR_LEN];$/;"	m	struct:io_user_s
@@ -3177,6 +3243,9 @@ u8	src/include/liballoc/list.h	/^typedef unsigned char     u8;$/;"	t
 u8	src/include/libdata_structure/list.h	/^typedef unsigned char     u8;$/;"	t
 u8	src/include/libdbg/list.h	/^typedef unsigned char     u8;$/;"	t
 u8	src/include/libproto_analyzer/list.h	/^typedef unsigned char     u8;$/;"	t
+ubusd_handle_add_object	src/libbus/busd.c	/^int ubusd_handle_add_object(busd_t *busd,  struct blob_attr **attr)$/;"	f
+ubusd_parse_method	src/libbus/busd.c	/^int ubusd_parse_method(struct blob_attr *attr)$/;"	f
+ubusd_policy	src/libbus/busd.c	/^static const struct msgblob_policy ubusd_policy[] = {$/;"	v	typeref:struct:msgblob_policy	file:
 uclient_destroy	src/libipc/net/client/unix_client.c	/^int uclient_destroy(client_t *client)$/;"	f
 uclient_event_handler	src/libipc/net/client/unix_client.c	/^void uclient_event_handler(int fd, short event, void *arg)$/;"	f
 uclient_init_task	src/libipc/net/client/unix_client.c	/^int uclient_init_task(client_task_t *task,$/;"	f
@@ -3247,6 +3316,7 @@ vector_push_front	src/libdata_structure/vector/vector.c	/^int vector_push_front(
 vector_s	src/include/libdata_structure/vector_struct.h	/^typedef struct vector_s{$/;"	s
 vector_set	src/libdata_structure/vector/vector.c	/^int vector_set(vector_t *vector,int index,void *data)$/;"	f
 vector_t	src/include/libdata_structure/vector_struct.h	/^}vector_t;$/;"	t	typeref:struct:vector_s
+version	src/include/libbus/bus.h	/^	uint8_t version;$/;"	m	struct:bus_reqhdr
 virtual_event_count	src/include/libevent_tiny/event-internal.h	/^	int virtual_event_count;$/;"	m	struct:event_base
 vlenth_flag	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_flag:1;$/;"	m	struct:proto_info_list_s
 vlenth_flag_bak	src/include/libproto_analyzer/protocol_format_set.h	/^	uint8_t vlenth_flag_bak:1;$/;"	m	struct:proto_info_list_s

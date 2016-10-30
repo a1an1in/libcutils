@@ -89,40 +89,61 @@ int bus_send(bus_t *bus,
 
 	return ret;
 }
-
-
-static int bus_process_receiving_data_callback(client_task_t *task)
+int bus_push_args_to_msgblob(struct blob_buf *blob_buf,struct bus_method *method)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,unix client recv");
-	/*
-	 *user_t *user = task->client;
-	 *void *opaque = user->opaque;
-	 */
-	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"%s",task->buffer);
-	dbg_str(DBG_DETAIL,"process_task end");
+	void *tbl_arg;
+	int i;
 
-    return 0;
+	for(i = 0; i < method->n_policy; i++) {
+		msgblob_add_u32(blob_buf, method->policy[i].name, method->policy[i].type);
+	}
 }
 
-void test_bus_client()
+int bus_push_method_to_msgblob(struct blob_buf *blob_buf,struct bus_object *obj)
 {
-    allocator_t *allocator = allocator_get_default_alloc();
-    bus_t *bus;
-    char *server_host = "bus_server_path";
-    char *server_srv = NULL;
-	char buf[1024] = "hello world!";
-	int buf_len = strlen(buf);
-    
-    dbg_str(DBG_DETAIL,"test_busd_daemon");
-    bus = bus_create(allocator);
+	void *tbl_method;
+	int i;
 
-    bus_init(bus,//busd_t *busd,
-             server_host,//char *server_host,
-             server_srv,//char *server_srv,
-             bus_process_receiving_data_callback);
+	for (i = 0; i < obj->n_methods; i++){
+		tbl_method = msgblob_open_table(blob_buf, obj->methods[i].name);
+		bus_push_args_to_msgblob(blob_buf,&(obj->methods[i]));
+		msgblob_close_table(blob_buf, tbl_method);
+	}
 
-    dbg_str(DBG_DETAIL,"test_bus_client");
-	
-	bus_send(bus, buf,buf_len);
+	return 0;
 }
+int bus_add_object(bus_t *bus,struct bus_object *obj)
+{
+	bus_reqhdr_t hdr;
+	static struct blob_buf blob_buf;
+	void *tbl_methods;
+#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
+	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
+	uint32_t buffer_len;
+
+	memset(&hdr,0,sizeof(hdr));
+
+	hdr.type = BUS_REQ_ADD_OBJECT;
+
+	msgblob_buf_init(&blob_buf);
+
+	msgblob_add_string(&blob_buf, "test", "Hello, world!");
+	msgblob_add_u32(&blob_buf, "id", 1);
+
+	tbl_methods = msgblob_open_table(&blob_buf, "methods");
+	bus_push_method_to_msgblob(&blob_buf, obj);
+	msgblob_close_table(&blob_buf, tbl_methods);
+
+	memcpy(buffer,&hdr, sizeof(hdr));
+	buffer_len = sizeof(hdr);
+	memcpy(buffer + buffer_len,blob_data(blob_buf.head),blob_len(blob_buf.head));
+	buffer_len += blob_len(blob_buf.head);
+
+	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
+	bus_send(bus, buffer, buffer_len);
+
+	return 0;
+}
+
+
