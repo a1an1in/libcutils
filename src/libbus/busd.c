@@ -36,6 +36,32 @@
 #include <libbus/bus.h>
 #include <libipc/net/server.h>
 
+void busd_dump_object_method_args(list_t *list)
+{
+	struct busd_object_method_arg_s *arg = (struct busd_object_method_arg_s *)
+										   list->data;
+
+	printf("args name:%s\n",arg->name);
+}
+
+void busd_dump_object_method(vector_pos_t *pos)
+{
+	struct busd_object_method *method = (struct busd_object_method *)
+										vector_pos_get_pointer(pos);
+	printf("method name:%s\n",method->name);
+
+	llist_for_each(method->args,busd_dump_object_method_args);
+}
+
+int busd_dump_object(struct busd_object *obj)
+{
+	printf("obj_name:%s\n",obj->name);
+
+	vector_for_each(obj->methods,(void (*)(void *))(busd_dump_object_method));
+
+    return 0;
+}
+
 busd_t * busd_create(allocator_t *allocator)
 {
     busd_t *d;
@@ -85,7 +111,7 @@ int busd_get_object_method(struct busd_object_method * method,
 {
 	struct busd_object_method_arg_s arg;
 	struct blob_attr *attrib,*head;
-	int len;
+	uint32_t len;
 	struct msgblob_hdr *hdr = (struct msgblob_hdr *)blob_data(attr);
 
 	dbg_str(DBG_DETAIL,"method name:%s",hdr->name);
@@ -106,15 +132,15 @@ int busd_get_object_method(struct busd_object_method * method,
 		llist_push_back(method->args,&arg);
 	}
 
+    return 0;
 }
 
-int busd_dump_object(struct busd_object *obj);
-
-int busd_create_bus_object(busd_t *busd,char *name, struct blob_attr *attr)
+struct busd_object *
+busd_create_bus_object(busd_t *busd,char *name, struct blob_attr *attr)
 {
 	struct busd_object *obj;
 	struct blob_attr *attrib,*head;
-	int len;
+	uint32_t len;
 	struct busd_object_method method; 
 	allocator_t *allocator = busd->allocator;
 
@@ -122,9 +148,11 @@ int busd_create_bus_object(busd_t *busd,char *name, struct blob_attr *attr)
 													sizeof(struct busd_object));
 	if(obj == NULL) {
 		dbg_str(DBG_ERROR,"allocator_mem_alloc");
-		return -1;
+		return NULL;
 	}
+
 	obj->name = (char *)allocator_mem_alloc(allocator,strlen(name));
+    strncpy(obj->name,name,strlen(name));
 	obj->methods = vector_create(allocator, 0);
 
 	vector_init(obj->methods,sizeof(struct busd_object_method),2);
@@ -139,67 +167,46 @@ int busd_create_bus_object(busd_t *busd,char *name, struct blob_attr *attr)
 
 	busd_dump_object(obj);
 
-	return 0;
-}
-void busd_dump_object_method_args(list_t *list)
-{
-	struct busd_object_method_arg_s *arg = (struct busd_object_method_arg_s *)
-										   list->data;
-
-	printf("args name:%s\n",arg->name);
+	return obj;
 }
 
-void busd_dump_object_method(vector_pos_t *pos)
-{
-	struct busd_object_method *method = (struct busd_object_method *)
-										vector_pos_get_pointer(pos);
-	printf("method name:%s\n",method->name);
-
-	llist_for_each(method->args,busd_dump_object_method_args);
-}
-int busd_dump_object(struct busd_object *obj)
-{
-	printf("obj_name:%s\n",obj->name);
-
-	vector_for_each(obj->methods,(void (*)(void *))(busd_dump_object_method));
-
-}
 int busd_handle_add_object(busd_t *busd,  struct blob_attr **attr)
 {
 	dbg_str(DBG_DETAIL,"ubusd_handle_add_object");
 
-	if (attr[UBUSD_ID]){
-		dbg_str(DBG_DETAIL,"rcv id:%d",msgblob_get_u32(attr[UBUSD_ID]));
+	if (attr[BUSD_ID]){
+		dbg_str(DBG_DETAIL,"object id:%d",msgblob_get_u32(attr[BUSD_ID]));
 	}
+	if (attr[BUSD_OBJNAME]) {
+		dbg_str(DBG_DETAIL,"object name:%s",msgblob_get_string(attr[BUSD_OBJNAME]));
+	}
+    if (attr[BUSD_METHORDS]) {
+        struct busd_object *obj;
 
-	if (attr[UBUSD_TEST]) {
-		dbg_str(DBG_DETAIL,"rcv test:%s",msgblob_get_string(attr[UBUSD_TEST]));
-	}
-	if (attr[UBUSD_METHORDS]) {
-		busd_create_bus_object(busd,"object name", attr[UBUSD_METHORDS]);
+		obj = busd_create_bus_object(busd,msgblob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS]);
+        if(obj != NULL){
+        }
 	}
 
 	return 0;
 }
-
 
 static busd_cmd_callback handlers[__BUS_REQ_LAST] = {
 	[BUS_REQ_ADD_OBJECT] = busd_handle_add_object,
 };
 
 static const struct msgblob_policy ubusd_policy[] = {
-	[UBUSD_ID] = { .name = "id", .type = MSGBLOB_TYPE_INT32 },
-	[UBUSD_TEST] = { .name = "test", .type = MSGBLOB_TYPE_STRING },
-	[UBUSD_METHORDS] = { .name = "methods", .type = MSGBLOB_TYPE_TABLE },
+	[BUSD_ID]       = { .name = "id", .type = MSGBLOB_TYPE_INT32 },
+	[BUSD_OBJNAME]  = { .name = "object_name", .type = MSGBLOB_TYPE_STRING },
+	[BUSD_METHORDS] = { .name = "methods", .type = MSGBLOB_TYPE_TABLE },
 };
-
 
 static int busd_process_receiving_data_callback(void *task)
 {
 	server_data_task_t *t = (server_data_task_t *)task;;
 	bus_reqhdr_t *hdr;
 	struct blob_attr *blob_attr;
-	struct blob_attr *tb[__UBUSD_MAX];
+	struct blob_attr *tb[__BUSD_MAX];
 	busd_cmd_callback cb = NULL;
 	server_t *server = t->server;
 	busd_t *busd = (busd_t *)server->opaque;
@@ -222,6 +229,7 @@ static int busd_process_receiving_data_callback(void *task)
 
 	cb(busd,tb);
 
+    printf_buffer(t->buffer,t->buffer_len);
 	/*
      *write(t->fd, t->buffer,t->buffer_len);//响应客户端  
 	 */
@@ -233,7 +241,7 @@ void test_bus_daemon()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     busd_t *busd;
-    char *server_host = "bus_server_path";
+    char *server_host = (char *)"bus_server_path";
     char *server_srv = NULL;
     
     dbg_str(DBG_DETAIL,"test_busd_daemon");

@@ -7,10 +7,10 @@
 
 
 enum {
-	UBUSD_ID,
-	UBUSD_TEST,
-	UBUSD_METHORDS,
-	__UBUSD_MAX
+	BUSD_ID,
+	BUSD_OBJNAME,
+	BUSD_METHORDS,
+	__BUSD_MAX
 };
 
 typedef struct busd_s{

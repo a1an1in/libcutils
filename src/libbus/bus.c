@@ -128,7 +128,7 @@ int bus_add_object(bus_t *bus,struct bus_object *obj)
 
 	msgblob_buf_init(&blob_buf);
 
-	msgblob_add_string(&blob_buf, "test", "Hello, world!");
+	msgblob_add_string(&blob_buf, "object_name", obj->name);
 	msgblob_add_u32(&blob_buf, "id", 1);
 
 	tbl_methods = msgblob_open_table(&blob_buf, "methods");

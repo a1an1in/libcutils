@@ -30,7 +30,7 @@ void printf_buffer(unsigned char *buf, int len)
 	buffer_len = strlen(buffer);
 	
 	for(i = 0; i < len; i++) {                   
-		snprintf(buffer + buffer_len , MAX_PRINT_BUFFER_LEN,"%x ",buf[i]);               
+		snprintf(buffer + buffer_len , MAX_PRINT_BUFFER_LEN,"%c ",buf[i]);               
 		buffer_len = strlen(buffer);
 	}                           
 

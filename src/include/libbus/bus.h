@@ -17,7 +17,7 @@ typedef int (*bus_handler_t)(struct bus_s *bus,
 {\
 	.name = _name,\
 	.handler = _handler,\
-	.policy = (struct blobmsg_policy *)_policy,\
+	.policy = (struct msgblob_policy *)_policy,\
 	.n_policy = ARRAY_SIZE(_policy),\
 }
 
@@ -31,25 +31,18 @@ typedef struct bus_reqhdr {
 enum bus_req_type {
 	/* initial server message */
 	BUS_REQ_HELLO,
-
 	/* generic command response */
 	BUS_REQ_STATUS,
-
 	/* data message response */
 	BUS_REQ_DATA,
-
 	/* ping request */
 	BUS_REQ_PING,
-
 	/* look up one or more objects */
 	BUS_REQ_LOOKUP,
-
 	/* invoke a method on a single object */
 	BUS_REQ_INVOKE,
-
 	BUS_REQ_ADD_OBJECT,
 	BUS_REQ_REMOVE_OBJECT,
-
 	/*
 	 * subscribe/unsubscribe to object notifications
 	 * The unsubscribe message is sent from busd when
@@ -57,29 +50,27 @@ enum bus_req_type {
 	 */
 	BUS_REQ_SUBSCRIBE,
 	BUS_REQ_UNSUBSCRIBE,
-
 	/*
 	 * send a notification to all subscribers of an object.
 	 * when sent from the server, it indicates a subscription
 	 * status change
 	 */
 	BUS_REQ_NOTIFY,
-
 	/* must be last */
 	__BUS_REQ_LAST,
 };
 
 struct bus_method {
-	const char *name;
+	char *name;
 	bus_handler_t handler;
-	const struct msgblob_policy *policy;
+	struct msgblob_policy *policy;
 	int n_policy;
 };
 
 struct bus_object {
-	const char *name;
+	char *name;
 	uint32_t id;
-	const char *path;
+	char *path;
 	struct bus_method *methods;
 	int n_methods;
 };
