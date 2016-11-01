@@ -3,6 +3,7 @@
 
 #include <libipc/net/server.h>
 #include <libdata_structure/vector.h>
+#include <libdata_structure/hash_list.h>
 #include <libblob/blob.h>
 
 
@@ -19,6 +20,10 @@ typedef struct busd_s{
     char *server_sk_type;
     char *server_host;
     char *server_srv;
+	hash_map_t *obj_hmap;
+    pair_t *pair;
+    uint8_t key_size;
+    uint8_t bucket_size;
 }busd_t;
 
 struct busd_object_method_arg_s{
@@ -30,11 +35,11 @@ struct busd_object_method {
 	llist_t *args;
 };
 
-struct busd_object {
+typedef struct busd_object {
 	char *name;
 	uint32_t id;
 	vector_t *methods;
-};
+}busd_object_t;
 
 typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr_s **attr);
 

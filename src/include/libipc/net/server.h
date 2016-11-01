@@ -13,6 +13,7 @@ server_t * server(allocator_t *allocator,
                   char *server_port,
                   int (*process_task_cb)(void *task),
                   void *opaque);
+int server_destroy(server_t *server);
 
 int test_server_of_unix();
 int test_server_of_inet();

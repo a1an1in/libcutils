@@ -102,7 +102,29 @@ int busd_init(busd_t *busd,
         return -1;
     }
 
+    if(busd->key_size == 0) {
+        busd->key_size = 10;
+    }
+    if(busd->bucket_size == 0) {
+        busd->bucket_size = 20;
+    }
+	busd->pair = create_pair(busd->key_size,sizeof(busd_object_t));
+
+	busd->obj_hmap = hash_map_create(busd->allocator,0);
+    if(busd->obj_hmap == NULL) {
+        server_destroy(busd->server);
+        return -1;
+    }
+
+	hash_map_init(busd->obj_hmap,
+			      busd->key_size,//uint32_t key_size,
+			      sizeof(busd_object_t)+ busd->key_size,
+			      busd->bucket_size,
+			      NULL,
+			      NULL);
+
     return 1;
+    
 }
 
 int busd_get_object_method(struct busd_object_method * method,
@@ -124,6 +146,7 @@ int busd_get_object_method(struct busd_object_method * method,
     len  = blob_get_data_len(attr);
 
     dbg_buf(DBG_DETAIL,"arg:",(uint8_t *)head,len);
+
     blob_for_each_attr(pos, head, len) {
         dbg_str(DBG_DETAIL,"arg name:%s",blob_get_name(pos));
         arg.name = (char *)allocator_mem_alloc(allocator,strlen(blob_get_name(pos)));
@@ -171,21 +194,26 @@ busd_create_bus_object(busd_t *busd,char *name, struct blob_attr_s *attr)
 
 int busd_handle_add_object(busd_t *busd,  struct blob_attr_s **attr)
 {
+    struct busd_object *obj;
 	dbg_str(DBG_DETAIL,"ubusd_handle_add_object");
 
 	if (attr[BUSD_ID]){
-		dbg_str(DBG_DETAIL,"object id:%d",blob_get_u32(attr[BUSD_ID]));
+		dbg_str(DBG_DETAIL,"add object id:%d",blob_get_u32(attr[BUSD_ID]));
 	}
 	if (attr[BUSD_OBJNAME]) {
-		dbg_str(DBG_DETAIL,"object name:%s",blob_get_string(attr[BUSD_OBJNAME]));
+		dbg_str(DBG_DETAIL,"add object name:%s",blob_get_string(attr[BUSD_OBJNAME]));
 	}
     if (attr[BUSD_METHORDS]) {
-
-        struct busd_object *obj;
+        dbg_str(DBG_DETAIL,"add object methods");
         obj = busd_create_bus_object(busd,blob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS]);
         if(obj != NULL){
+            make_pair(busd->pair,blob_get_string(attr[BUSD_OBJNAME]),obj);
+            hash_map_insert(busd->obj_hmap,busd->pair->data);
+
+            hash_map_pos_t pos;
+            hash_map_search(busd->obj_hmap,"test",&pos);
         }
-	}
+    }
 
 	return 0;
 }
@@ -195,9 +223,9 @@ static busd_cmd_callback handlers[__BUS_REQ_LAST] = {
 };
 
 static const struct blob_policy_s busd_policy[] = {
-	[BUSD_ID]       = { .name = "id", .type = BLOB_TYPE_INT32 },
-	[BUSD_OBJNAME]  = { .name = "object_name", .type = BLOB_TYPE_STRING },
-	[BUSD_METHORDS] = { .name = "methods", .type = BLOB_TYPE_TABLE },
+	[BUSD_ID]       = { .name = "id",         .type = BLOB_TYPE_INT32 },
+	[BUSD_OBJNAME]  = { .name = "object_name",.type = BLOB_TYPE_STRING },
+	[BUSD_METHORDS] = { .name = "methods",    .type = BLOB_TYPE_TABLE },
 };
 
 static int busd_process_receiving_data_callback(void *task)
@@ -209,6 +237,7 @@ static int busd_process_receiving_data_callback(void *task)
 	busd_cmd_callback cb = NULL;
 	server_t *server = t->server;
 	busd_t *busd = (busd_t *)server->opaque;
+    int len;
 
 	hdr = (bus_reqhdr_t *)t->buffer;
 	blob_attr = (struct blob_attr_s *)(t->buffer + sizeof(bus_reqhdr_t));
@@ -220,13 +249,10 @@ static int busd_process_receiving_data_callback(void *task)
 
 	cb = handlers[hdr->type];
 
-    /*
-     *printf_buffer(blob_attr,blob_get_data_len(blob_attr));
-     */
-
-    int len = blob_get_data_len(blob_attr);
+    len = blob_get_data_len(blob_attr);
     blob_attr =(blob_attr_t*) blob_get_data(blob_attr);
     dbg_buf(DBG_DETAIL,"rcv oject:",(uint8_t *)blob_attr,len);
+
     blob_parse(busd_policy,
                ARRAY_SIZE(busd_policy),
                tb,
