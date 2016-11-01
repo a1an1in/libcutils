@@ -136,13 +136,10 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 		dbg_str(DBG_ERROR,"hash_map_insert,allocator_mem_alloc(map->allocator err");
 		return -1;
 	}
-    memset(mnode, 0 , sizeof(struct hash_map_node) + data_size);
 
 	memcpy(mnode->key,data,data_size);
 	mnode->value_pos = key_size;
 	mnode->data_size = data_size;
-
-    dbg_buf(DBG_DETAIL,"key:",mnode->key,key_size);
 
 	INIT_HLIST_NODE(&mnode->hlist_node);
 
@@ -186,12 +183,11 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 	key_cmp_fpt key_cmp_func = hmap->key_cmp_func;
 	uint32_t bucket_size     = hmap->bucket_size;;
 	struct hlist_node *pos,*next;
-#define HASH_MAP_SEARCH_MAX_KEY_LEN 50
-    uint8_t search_key[HASH_MAP_SEARCH_MAX_KEY_LEN];
 
-    memset(search_key, 0 ,HASH_MAP_SEARCH_MAX_KEY_LEN);
-    memcpy(search_key,key, strlen(key));
-	bucket_pos = hash_func(search_key,key_size,bucket_size); 
+    if(strlen(key) < key_size) {
+        key_size = strlen(key);
+    }
+	bucket_pos = hash_func(key,key_size,bucket_size); 
 	assert(bucket_pos <= bucket_size);
 
 	dbg_str(HMAP_DETAIL,"hash_map_search,bucket_pos=%d",bucket_pos);
@@ -202,7 +198,7 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
     } 
 	hlist_for_each_safe(pos, next, &hlist[bucket_pos]){
 		mnode = container_of(pos,struct hash_map_node,hlist_node);
-        if(!key_cmp_func(mnode->key,search_key,key_size)){
+        if(!key_cmp_func(mnode->key,key,key_size)){
             sync_unlock(&hmap->map_lock);
             dbg_str(HMAP_IMPORTANT,"found key:%s",key);
             return hash_map_pos_init(ret, pos, bucket_pos, hlist,hmap);
@@ -211,7 +207,6 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
     sync_unlock(&hmap->map_lock);
     dbg_str(HMAP_IMPORTANT,"not found key");
     return -1;
-#undef HASH_MAP_SEARCH_MAX_KEY_LEN
 }
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 {
