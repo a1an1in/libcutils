@@ -49,28 +49,22 @@ int blob_add(blob_t *blob, uint8_t type, char *name, void *value, uint16_t value
     name_len = strlen(name) + 1;
     new_attrib->name_len = cpu_to_be16(name_len);
 
-    dbg_str(DBG_DETAIL,"blob add");
     if(name != NULL){
-        /*
-         *dbg_str(DBG_DETAIL,"run at here,name_len=%d",new_attrib->name_len);
-         */
         strncpy((char *)(new_attrib->value),(char *) name, name_len);
-        dbg_buf(DBG_DETAIL,"add name:",(char *)(new_attrib->value),name_len);
-        dbg_str(DBG_DETAIL,"run at here");
+        /*
+         *dbg_buf(DBG_DETAIL,"add name:",(char *)(new_attrib->value),name_len);
+         */
     }
 
-    dbg_str(DBG_DETAIL,"run at here");
     if(value != NULL)
         memcpy(new_attrib->value + name_len,value,value_len);
 
 
-    dbg_str(DBG_DETAIL,"run at here");
     attr_len = sizeof(new_attrib->type) + sizeof(new_attrib->len) +
                       sizeof(new_attrib->name_len) + name_len + value_len;
     new_attrib->len = cpu_to_be16(attr_len);
 
     blob->tail += attr_len;
-    dbg_str(DBG_DETAIL,"blob end");
 
     return attr_len;
 }
@@ -107,11 +101,11 @@ int blob_add_table_start(blob_t *blob, char *name)
 {
     blob_attr_t *new_table = (blob_attr_t *)blob->tail;
 
-    dbg_str(DBG_DETAIL,"table start,addr:%p",new_table);
     array_stack_push(blob->tbl_stack, &new_table);
 
     return blob_add(blob, BLOB_TYPE_TABLE, name, NULL,0);
 }
+
 int blob_add_table_end(blob_t *blob)
 {
     uint8_t *table_start = NULL;
@@ -121,8 +115,6 @@ int blob_add_table_end(blob_t *blob)
 
     table_len = blob->tail - table_start;
 
-    dbg_str(DBG_DETAIL,"array_stack_pop,addr:%p",table_start);
-    dbg_str(DBG_DETAIL,"table_end,table_len=%d",table_len);
     ((blob_attr_t *)table_start)->len = cpu_to_be16(table_len);
 
     return 0;
@@ -130,51 +122,53 @@ int blob_add_table_end(blob_t *blob)
 
 blob_attr_t *blob_next(blob_attr_t *attr)
 {
-    /*
-     *dbg_str(DBG_DETAIL,"blob_next");
-     */
     blob_attr_t *ret =(blob_attr_t *)((uint8_t *)attr + be16_to_cpu(attr->len));
 
     return ret;
 }
+
 char *blob_get_name(blob_attr_t *attr)
 {
-    /*
-     *dbg_str(DBG_DETAIL,"blob_get_name:%s",(char *)(attr->value));
-     */
     return (char *)(attr->value);
 }
+
 uint8_t *blob_get_data(blob_attr_t *attr)
 {
     return attr->value + be16_to_cpu(attr->name_len); 
 }
-uint8_t *blob_get_len(blob_attr_t *attr)
+
+uint16_t blob_get_len(blob_attr_t *attr)
 {
     return be16_to_cpu(attr->len); 
 }
+
 uint32_t blob_get_data_len(blob_attr_t *attr)
 {
     uint8_t * data_addr = blob_get_data(attr);
     return be16_to_cpu(attr->len) - (uint8_t)(data_addr - (uint8_t *)attr); 
 }
+
 uint8_t blob_get_u8(blob_attr_t *attr)
 {
     uint8_t *body_addr = blob_get_data(attr);
 
     return body_addr[0];
 }
+
 uint32_t blob_get_u32(blob_attr_t *attr)
 {
     uint32_t *body_addr = (uint32_t*)blob_get_data(attr);
 
     return be32_to_cpu(*body_addr);
 }
+
 char * blob_get_string(blob_attr_t *attr)
 {
     char *body_addr = (char *) blob_get_data(attr);
 
     return body_addr;
 }
+
 int blob_parse(const struct blob_policy_s *policy,                               
                uint8_t policy_count,
                blob_attr_t **tb,
@@ -241,7 +235,6 @@ static const struct blob_policy_s pol[] = {
         .type = BLOB_TYPE_STRING,   
     },
 };
-
 
 void test_blob()
 {

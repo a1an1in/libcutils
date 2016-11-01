@@ -93,16 +93,22 @@ int bus_send(bus_t *bus,
 int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)
 {
 	int i;
-	blob_attr_t *t1,*t2;
+    /*
+	 *blob_attr_t *t1,*t2;
+     */
 
-    t1 = blob->tail;
+    /*
+     *t1 = blob->tail;
+     */
 	for(i = 0; i < method->n_policy; i++) {
 		blob_add_u32(blob, method->policy[i].name, method->policy[i].type);
 	}
-    t2 = blob->tail;
-    uint16_t len = (uint8_t *)t2 - (uint8_t *)t1;
-
-    dbg_buf(DBG_DETAIL,"***********push args:",(void *)t1, len);
+    /*
+     *t2 = blob->tail;
+     *uint16_t len = (uint8_t *)t2 - (uint8_t *)t1;
+     *dbg_buf(DBG_DETAIL,"***********push args:",(void *)t1, len);
+     */
+    return 0;
 }
 
 int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)
@@ -151,12 +157,16 @@ int bus_add_object(bus_t *bus,struct bus_object *obj)
     }
     blob_add_table_end(blob);
 
-    dbg_str(DBG_DETAIL,"run at here");
+    /*
+     *dbg_str(DBG_DETAIL,"run at here");
+     */
 	memcpy(buffer,&hdr, sizeof(hdr));
 	buffer_len = sizeof(hdr);
-    dbg_buf(DBG_DETAIL,"object:",blob->head,blob_get_len(blob->head));
-	memcpy(buffer + buffer_len,blob->head,blob_get_len(blob->head));
-	buffer_len += blob_get_len(blob->head);
+    /*
+     *dbg_buf(DBG_DETAIL,"object:",blob->head,blob_get_len(blob->head));
+     */
+	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+	buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
 	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
 	bus_send(bus, buffer, buffer_len);

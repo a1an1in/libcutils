@@ -123,7 +123,7 @@ int busd_get_object_method(struct busd_object_method * method,
     head = (blob_attr_t *)blob_get_data(attr);
     len  = blob_get_data_len(attr);
 
-    dbg_buf(DBG_DETAIL,"arg:",head,len);
+    dbg_buf(DBG_DETAIL,"arg:",(uint8_t *)head,len);
     blob_for_each_attr(pos, head, len) {
         dbg_str(DBG_DETAIL,"arg name:%s",blob_get_name(pos));
         arg.name = (char *)allocator_mem_alloc(allocator,strlen(blob_get_name(pos)));
@@ -164,9 +164,7 @@ busd_create_bus_object(busd_t *busd,char *name, struct blob_attr_s *attr)
 		vector_push_back(obj->methods,&method);
 	}
 
-    /*
-	 *busd_dump_object(obj);
-     */
+    busd_dump_object(obj);
 
 	return obj;
 }
@@ -182,8 +180,8 @@ int busd_handle_add_object(busd_t *busd,  struct blob_attr_s **attr)
 		dbg_str(DBG_DETAIL,"object name:%s",blob_get_string(attr[BUSD_OBJNAME]));
 	}
     if (attr[BUSD_METHORDS]) {
-        struct busd_object *obj;
 
+        struct busd_object *obj;
         obj = busd_create_bus_object(busd,blob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS]);
         if(obj != NULL){
         }
@@ -227,8 +225,8 @@ static int busd_process_receiving_data_callback(void *task)
      */
 
     int len = blob_get_data_len(blob_attr);
-    blob_attr = blob_get_data(blob_attr);
-    dbg_buf(DBG_DETAIL,"rcv oject:",blob_attr,len);
+    blob_attr =(blob_attr_t*) blob_get_data(blob_attr);
+    dbg_buf(DBG_DETAIL,"rcv oject:",(uint8_t *)blob_attr,len);
     blob_parse(busd_policy,
                ARRAY_SIZE(busd_policy),
                tb,
