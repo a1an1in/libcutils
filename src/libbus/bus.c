@@ -33,6 +33,7 @@
 #include <unistd.h>
 #include <libdbg/debug.h>
 #include <libbus/bus.h>
+#include <libblob/blob.h>
 
 bus_t * bus_create(allocator_t *allocator)
 {
@@ -89,56 +90,73 @@ int bus_send(bus_t *bus,
 
 	return ret;
 }
-int bus_push_args_to_msgblob(struct blob_buf *blob_buf,struct bus_method *method)
+int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)
 {
-	void *tbl_arg;
 	int i;
+	blob_attr_t *t1,*t2;
 
+    t1 = blob->tail;
 	for(i = 0; i < method->n_policy; i++) {
-		msgblob_add_u32(blob_buf, method->policy[i].name, method->policy[i].type);
+		blob_add_u32(blob, method->policy[i].name, method->policy[i].type);
 	}
+    t2 = blob->tail;
+    uint16_t len = (uint8_t *)t2 - (uint8_t *)t1;
+
+    dbg_buf(DBG_DETAIL,"***********push args:",(void *)t1, len);
 }
 
-int bus_push_method_to_msgblob(struct blob_buf *blob_buf,struct bus_object *obj)
+int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)
 {
-	void *tbl_method;
 	int i;
 
+    dbg_str(DBG_DETAIL,"bus_push_method_to_blob,n_methods=%d",obj->n_methods);
+
 	for (i = 0; i < obj->n_methods; i++){
-		tbl_method = msgblob_open_table(blob_buf, obj->methods[i].name);
-		bus_push_args_to_msgblob(blob_buf,&(obj->methods[i]));
-		msgblob_close_table(blob_buf, tbl_method);
+        dbg_str(DBG_DETAIL,"push method:%s",obj->methods[i].name);
+        blob_add_table_start(blob, obj->methods[i].name);
+        bus_push_args_to_blob(blob,&(obj->methods[i]));
+        blob_add_table_end(blob);
+        dbg_str(DBG_DETAIL,"push method end");
 	}
 
+    dbg_str(DBG_DETAIL,"bus_push_methods_to_blob end");
 	return 0;
 }
 int bus_add_object(bus_t *bus,struct bus_object *obj)
 {
 	bus_reqhdr_t hdr;
-	static struct blob_buf blob_buf;
-	void *tbl_methods;
+    static blob_t *blob;
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
 	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
 	uint32_t buffer_len;
+	allocator_t *allocator = bus->allocator;
 
 	memset(&hdr,0,sizeof(hdr));
 
 	hdr.type = BUS_REQ_ADD_OBJECT;
 
-	msgblob_buf_init(&blob_buf);
+    blob = blob_create(allocator);
+    blob_init(blob);
 
-	msgblob_add_string(&blob_buf, "object_name", obj->name);
-	msgblob_add_u32(&blob_buf, "id", 1);
+    blob_add_table_start(blob,(char *)"object");
+    {
+        blob_add_string(blob, (char *)"object_name", obj->name);
+        blob_add_u32(blob, (char *)"id", 1);
+        blob_add_table_start(blob, (char *)"methods");
+        {
+            bus_push_methods_to_blob(blob, obj);
+        }
+        blob_add_table_end(blob);
+    }
+    blob_add_table_end(blob);
 
-	tbl_methods = msgblob_open_table(&blob_buf, "methods");
-	bus_push_method_to_msgblob(&blob_buf, obj);
-	msgblob_close_table(&blob_buf, tbl_methods);
-
+    dbg_str(DBG_DETAIL,"run at here");
 	memcpy(buffer,&hdr, sizeof(hdr));
 	buffer_len = sizeof(hdr);
-	memcpy(buffer + buffer_len,blob_data(blob_buf.head),blob_len(blob_buf.head));
-	buffer_len += blob_len(blob_buf.head);
+    dbg_buf(DBG_DETAIL,"object:",blob->head,blob_get_len(blob->head));
+	memcpy(buffer + buffer_len,blob->head,blob_get_len(blob->head));
+	buffer_len += blob_get_len(blob->head);
 
 	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
 	bus_send(bus, buffer, buffer_len);

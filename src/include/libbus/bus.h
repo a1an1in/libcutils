@@ -2,12 +2,11 @@
 #define __BUS_H__
 
 #include <libipc/net/client.h>
-#include <libblob/msgblob.h>
 #include <libblob/blob.h>
 
 struct bus_s;
 typedef int (*bus_handler_t)(struct bus_s *bus,
-							 struct blob_attr *msg);
+							 struct blob_attr_s *msg);
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
@@ -17,7 +16,7 @@ typedef int (*bus_handler_t)(struct bus_s *bus,
 {\
 	.name = _name,\
 	.handler = _handler,\
-	.policy = (struct msgblob_policy *)_policy,\
+	.policy = (struct blob_policy_s *)_policy,\
 	.n_policy = ARRAY_SIZE(_policy),\
 }
 
@@ -63,7 +62,7 @@ enum bus_req_type {
 struct bus_method {
 	char *name;
 	bus_handler_t handler;
-	struct msgblob_policy *policy;
+	struct blob_policy_s *policy;
 	int n_policy;
 };
 

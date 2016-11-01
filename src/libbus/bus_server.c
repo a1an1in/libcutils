@@ -8,22 +8,24 @@ enum {
 	__HELLO_MAX
 };
 
-static const struct msgblob_policy hello_policy[] = {
-	[HELLO_ID] = { .name = "id", .type = MSGBLOB_TYPE_INT32 },
-	[HELLO_MSG] = { .name = "msg", .type = MSGBLOB_TYPE_STRING },
+static const struct blob_policy_s hello_policy[] = {
+	[HELLO_ID] = { .name = "abc", .type = BLOB_TYPE_INT32 },
+	[HELLO_MSG] = { .name = "def", .type = BLOB_TYPE_STRING },
 };
 
 static int test_hello(struct bus_s *bus,
-		      		  struct blob_attr *msg)
+		      		  struct blob_attr_s *msg)
 {
-	struct blob_attr *tb[__HELLO_MAX];
+	struct blob_attr_s *tb[__HELLO_MAX];
 
     printf("run test hello\n");
-	msgblob_parse(hello_policy, ARRAY_SIZE(hello_policy), tb, blob_data(msg), blob_len(msg));
+    /*
+	 *blob_parse(hello_policy, ARRAY_SIZE(hello_policy), tb, blob_data(msg), blob_len(msg));
+     */
 
     /*
 	 *if (tb[HELLO_MSG])
-	 *    msgstr = msgblob_data(tb[HELLO_MSG]);
+	 *    msgstr = blob_data(tb[HELLO_MSG]);
      */
 
 	return 0;
@@ -35,22 +37,24 @@ enum {
 	__SET_MAX
 };
 
-static const struct msgblob_policy set_policy[] = {
-	[SET_ID] = { .name = "id", .type = MSGBLOB_TYPE_INT32 },
-	[SET_MSG] = { .name = "msg", .type = MSGBLOB_TYPE_STRING },
+static const struct blob_policy_s set_policy[] = {
+	[SET_ID] = { .name = "hijklmn", .type = BLOB_TYPE_INT32 },
+	[SET_MSG] = { .name = "opqrst", .type = BLOB_TYPE_STRING },
 };
 
 static int test_set(struct bus_s *bus,
-		      		  struct blob_attr *msg)
+		      		  struct blob_attr_s *msg)
 {
-	struct blob_attr *tb[__SET_MAX];
+	struct blob_attr_s *tb[__SET_MAX];
 
     printf("run set set\n");
-	msgblob_parse(set_policy, ARRAY_SIZE(set_policy), tb, blob_data(msg), blob_len(msg));
+    /*
+	 *blob_parse(set_policy, ARRAY_SIZE(set_policy), tb, blob_data(msg), blob_len(msg));
+     */
 
     /*
 	 *if (tb[SET_MSG])
-	 *    msgstr = msgblob_data(tb[SET_MSG]);
+	 *    msgstr = blob_data(tb[SET_MSG]);
      */
 
 	return 0;
@@ -63,8 +67,8 @@ static const struct bus_method test_methods[] = {
 };
 
 static struct bus_object test_object = {
-	.name = (char *)"test",
-	.methods = (struct bus_method *)test_methods,
+	.name      = (char *)"test",
+	.methods   = (struct bus_method *)test_methods,
 	.n_methods = ARRAY_SIZE(test_methods),
 };
 
@@ -82,9 +86,9 @@ void test_bus_server()
     allocator_t *allocator = allocator_get_default_alloc();
     bus_t *bus;
     char *server_host = (char *)"bus_server_path";
-    char *server_srv = NULL;
-	char buf[1024] = "hello world!";
-	int buf_len = strlen(buf);
+    char *server_srv  = NULL;
+	char buf[1024]    = "hello world!";
+	int buf_len       = strlen(buf);
     
     dbg_str(DBG_DETAIL,"test_bus_server");
     bus = bus_create(allocator);

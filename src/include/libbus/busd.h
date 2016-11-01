@@ -36,6 +36,6 @@ struct busd_object {
 	vector_t *methods;
 };
 
-typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr **attr);
+typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr_s **attr);
 
 #endif

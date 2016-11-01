@@ -107,39 +107,38 @@ int busd_init(busd_t *busd,
 
 int busd_get_object_method(struct busd_object_method * method,
 						   allocator_t *allocator,
-						   struct blob_attr *attr)
+						   struct blob_attr_s *attr)
 {
 	struct busd_object_method_arg_s arg;
-	struct blob_attr *attrib,*head;
+	blob_attr_t *pos,*head;
 	uint32_t len;
-	struct msgblob_hdr *hdr = (struct msgblob_hdr *)blob_data(attr);
 
-	dbg_str(DBG_DETAIL,"method name:%s",hdr->name);
-	method->name = (char *)allocator_mem_alloc(allocator,strlen((char *)hdr->name));
-	strncpy(method->name,(char *)hdr->name,strlen((char *)hdr->name));
+	dbg_str(DBG_DETAIL,"method name:%s",blob_get_name(attr));
+	method->name = (char *)allocator_mem_alloc(allocator,strlen(blob_get_name(attr)));
+	strncpy(method->name,(char *)blob_get_name(attr),strlen(blob_get_name(attr)));
 
-	method->args = llist_create(allocator,0);
-	llist_init(method->args,sizeof(struct busd_object_method_arg_s));
+    method->args = llist_create(allocator,0);
+    llist_init(method->args,sizeof(struct busd_object_method_arg_s));
 
-	head = (struct blob_attr *)msgblob_data(attr);
-	len  = msgblob_data_len(attr);
+    head = (blob_attr_t *)blob_get_data(attr);
+    len  = blob_get_data_len(attr);
 
-	__blob_for_each_attr(attrib, head, len) {
-		hdr = (struct msgblob_hdr *)blob_data(attrib);
-		dbg_str(DBG_DETAIL,"arg name:%s",hdr->name);
-		arg.name = (char *)allocator_mem_alloc(allocator,strlen((char *)hdr->name));
-		strncpy(arg.name, (char *)hdr->name, strlen((char *)hdr->name));
-		llist_push_back(method->args,&arg);
-	}
+    dbg_buf(DBG_DETAIL,"arg:",head,len);
+    blob_for_each_attr(pos, head, len) {
+        dbg_str(DBG_DETAIL,"arg name:%s",blob_get_name(pos));
+        arg.name = (char *)allocator_mem_alloc(allocator,strlen(blob_get_name(pos)));
+        strncpy(arg.name, (char *)blob_get_name(pos), strlen(blob_get_name(pos)));
+        llist_push_back(method->args,&arg);
+    }
 
     return 0;
 }
 
 struct busd_object *
-busd_create_bus_object(busd_t *busd,char *name, struct blob_attr *attr)
+busd_create_bus_object(busd_t *busd,char *name, struct blob_attr_s *attr)
 {
 	struct busd_object *obj;
-	struct blob_attr *attrib,*head;
+	struct blob_attr_s *attrib,*head;
 	uint32_t len;
 	struct busd_object_method method; 
 	allocator_t *allocator = busd->allocator;
@@ -157,33 +156,35 @@ busd_create_bus_object(busd_t *busd,char *name, struct blob_attr *attr)
 
 	vector_init(obj->methods,sizeof(struct busd_object_method),2);
 
-	head = (struct blob_attr *)msgblob_data(attr);
-	len  = msgblob_data_len(attr);
+	head = (struct blob_attr_s *)blob_get_data(attr);
+	len  = blob_get_data_len(attr);
 
-	__blob_for_each_attr(attrib, head, len) {
+	blob_for_each_attr(attrib, head, len) {
 		busd_get_object_method(&method,allocator,attrib);
 		vector_push_back(obj->methods,&method);
 	}
 
-	busd_dump_object(obj);
+    /*
+	 *busd_dump_object(obj);
+     */
 
 	return obj;
 }
 
-int busd_handle_add_object(busd_t *busd,  struct blob_attr **attr)
+int busd_handle_add_object(busd_t *busd,  struct blob_attr_s **attr)
 {
 	dbg_str(DBG_DETAIL,"ubusd_handle_add_object");
 
 	if (attr[BUSD_ID]){
-		dbg_str(DBG_DETAIL,"object id:%d",msgblob_get_u32(attr[BUSD_ID]));
+		dbg_str(DBG_DETAIL,"object id:%d",blob_get_u32(attr[BUSD_ID]));
 	}
 	if (attr[BUSD_OBJNAME]) {
-		dbg_str(DBG_DETAIL,"object name:%s",msgblob_get_string(attr[BUSD_OBJNAME]));
+		dbg_str(DBG_DETAIL,"object name:%s",blob_get_string(attr[BUSD_OBJNAME]));
 	}
     if (attr[BUSD_METHORDS]) {
         struct busd_object *obj;
 
-		obj = busd_create_bus_object(busd,msgblob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS]);
+        obj = busd_create_bus_object(busd,blob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS]);
         if(obj != NULL){
         }
 	}
@@ -195,24 +196,24 @@ static busd_cmd_callback handlers[__BUS_REQ_LAST] = {
 	[BUS_REQ_ADD_OBJECT] = busd_handle_add_object,
 };
 
-static const struct msgblob_policy ubusd_policy[] = {
-	[BUSD_ID]       = { .name = "id", .type = MSGBLOB_TYPE_INT32 },
-	[BUSD_OBJNAME]  = { .name = "object_name", .type = MSGBLOB_TYPE_STRING },
-	[BUSD_METHORDS] = { .name = "methods", .type = MSGBLOB_TYPE_TABLE },
+static const struct blob_policy_s busd_policy[] = {
+	[BUSD_ID]       = { .name = "id", .type = BLOB_TYPE_INT32 },
+	[BUSD_OBJNAME]  = { .name = "object_name", .type = BLOB_TYPE_STRING },
+	[BUSD_METHORDS] = { .name = "methods", .type = BLOB_TYPE_TABLE },
 };
 
 static int busd_process_receiving_data_callback(void *task)
 {
 	server_data_task_t *t = (server_data_task_t *)task;;
 	bus_reqhdr_t *hdr;
-	struct blob_attr *blob_attr;
-	struct blob_attr *tb[__BUSD_MAX];
+	struct blob_attr_s *blob_attr;
+	struct blob_attr_s *tb[__BUSD_MAX];
 	busd_cmd_callback cb = NULL;
 	server_t *server = t->server;
 	busd_t *busd = (busd_t *)server->opaque;
 
 	hdr = (bus_reqhdr_t *)t->buffer;
-	blob_attr = (struct blob_attr *)(t->buffer + sizeof(bus_reqhdr_t));
+	blob_attr = (struct blob_attr_s *)(t->buffer + sizeof(bus_reqhdr_t));
 
 	if(hdr->type > __BUS_REQ_LAST) {
 		dbg_str(DBG_WARNNING,"busd receive err proto type");
@@ -221,15 +222,24 @@ static int busd_process_receiving_data_callback(void *task)
 
 	cb = handlers[hdr->type];
 
-	msgblob_parse(ubusd_policy,
-				  ARRAY_SIZE(ubusd_policy),
-				  tb,
-				  blob_attr,
-				  t->buffer_len - sizeof(bus_reqhdr_t));
+    /*
+     *printf_buffer(blob_attr,blob_get_data_len(blob_attr));
+     */
 
-	cb(busd,tb);
+    int len = blob_get_data_len(blob_attr);
+    blob_attr = blob_get_data(blob_attr);
+    dbg_buf(DBG_DETAIL,"rcv oject:",blob_attr,len);
+    blob_parse(busd_policy,
+               ARRAY_SIZE(busd_policy),
+               tb,
+               blob_attr,
+               len);
 
-    printf_buffer(t->buffer,t->buffer_len);
+    cb(busd,tb);
+
+    /*
+     *printf_buffer(t->buffer,t->buffer_len);
+     */
 	/*
      *write(t->fd, t->buffer,t->buffer_len);//响应客户端  
 	 */

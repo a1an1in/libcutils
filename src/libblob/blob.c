@@ -1,287 +1,274 @@
-/*
- * blob - library for generating/parsing tagged binary data
- *
- * Copyright (C) 2010 Felix Fietkau <nbd@openwrt.org>
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
- * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
- * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
+#include <stdio.h>
+#include <libblob/utils.h>
+#include <libdbg/debug.h>
+#include <libblob/blob.h>
 
-#include "libblob/blob.h"
-
-static bool
-blob_buffer_grow(struct blob_buf *buf, int minlen)
+blob_t *blob_create(allocator_t *allocator)
 {
-	struct blob_buf *new;
-	int delta = ((minlen / 256) + 1) * 256;
-	new = realloc(buf->buf, buf->buflen + delta);
-	if (new) {
-		buf->buf = new;
-		memset(buf->buf + buf->buflen, 0, delta);
-		buf->buflen += delta;
-	}
-	return !!new;
+    blob_t *b;
+
+    if((b = (blob_t *)allocator_mem_alloc(allocator,sizeof(blob_t))) == NULL){
+        dbg_str(DBG_DETAIL,"allocator_mem_alloc");
+        return NULL;
+    }
+
+    memset(b, 0,  sizeof(blob_t));
+
+    b->allocator = allocator;
+
+    return b;
 }
 
-static void
-blob_init(struct blob_attr *attr, int id, unsigned int len)
+int blob_init(blob_t *blob)
 {
-	len &= BLOB_ATTR_LEN_MASK;
-	len |= (id << BLOB_ATTR_ID_SHIFT) & BLOB_ATTR_ID_MASK;
-	attr->id_len = cpu_to_be32(len);
+    allocator_t *allocator = blob->allocator;
+
+    if(blob->len == 0) {
+        blob->len = 512;
+        blob->head = (uint8_t *) allocator_mem_alloc(allocator,blob->len);
+        if(blob->head == NULL) {
+            dbg_str(DBG_WARNNING,"allocator_mem_alloc");
+            return -1;
+        }
+        memset(blob->head, 0 , blob->len);
+        blob->tail = blob->head;
+    }
+
+    blob->tbl_stack = array_stack_create(allocator);
+    array_stack_init(blob->tbl_stack);
+
+    return 0;
 }
 
-static inline struct blob_attr *
-offset_to_attr(struct blob_buf *buf, int offset)
+int blob_add(blob_t *blob, uint8_t type, char *name, void *value, uint16_t value_len)
 {
-	void *ptr = (char *)buf->buf + offset - BLOB_COOKIE;
-	return ptr;
+    blob_attr_t *new_attrib = (blob_attr_t *)blob->tail;
+    uint16_t name_len,attr_len;
+
+    new_attrib->type = type;
+    name_len = strlen(name) + 1;
+    new_attrib->name_len = cpu_to_be16(name_len);
+
+    dbg_str(DBG_DETAIL,"blob add");
+    if(name != NULL){
+        /*
+         *dbg_str(DBG_DETAIL,"run at here,name_len=%d",new_attrib->name_len);
+         */
+        strncpy((char *)(new_attrib->value),(char *) name, name_len);
+        dbg_buf(DBG_DETAIL,"add name:",(char *)(new_attrib->value),name_len);
+        dbg_str(DBG_DETAIL,"run at here");
+    }
+
+    dbg_str(DBG_DETAIL,"run at here");
+    if(value != NULL)
+        memcpy(new_attrib->value + name_len,value,value_len);
+
+
+    dbg_str(DBG_DETAIL,"run at here");
+    attr_len = sizeof(new_attrib->type) + sizeof(new_attrib->len) +
+                      sizeof(new_attrib->name_len) + name_len + value_len;
+    new_attrib->len = cpu_to_be16(attr_len);
+
+    blob->tail += attr_len;
+    dbg_str(DBG_DETAIL,"blob end");
+
+    return attr_len;
 }
 
-static inline int
-attr_to_offset(struct blob_buf *buf, struct blob_attr *attr)
+int blob_add_u8(blob_t *blob, char *name, uint8_t val)
 {
-	return (char *)attr - (char *) buf->buf + BLOB_COOKIE;
+    return blob_add(blob, BLOB_TYPE_INT8, name, &val, sizeof(val));
 }
 
-bool
-blob_buf_grow(struct blob_buf *buf, int required)
+int blob_add_u16(blob_t *blob, char *name, uint16_t val)
 {
-	int offset_head = attr_to_offset(buf, buf->head);
-
-	if (!buf->grow || !buf->grow(buf, required))
-		return false;
-
-	buf->head = offset_to_attr(buf, offset_head);
-	return true;
+    val = cpu_to_be16(val);
+    return blob_add(blob, BLOB_TYPE_INT16, name, &val, sizeof(val));
 }
 
-static struct blob_attr *
-blob_add(struct blob_buf *buf, struct blob_attr *pos, int id, int payload)
+int blob_add_u32(blob_t *blob, char *name, uint32_t val)
 {
-	int offset = attr_to_offset(buf, pos);
-	int required = (offset - BLOB_COOKIE + sizeof(struct blob_attr) + payload) - buf->buflen;
-	struct blob_attr *attr;
-
-	if (required > 0) {
-		if (!blob_buf_grow(buf, required))
-			return NULL;
-		attr = offset_to_attr(buf, offset);
-	} else {
-		attr = pos;
-	}
-
-	blob_init(attr, id, payload + sizeof(struct blob_attr));
-	blob_fill_pad(attr);
-	return attr;
+    val = cpu_to_be32(val);
+    return blob_add(blob, BLOB_TYPE_INT32, name, &val, sizeof(val));
 }
 
-int
-blob_buf_init(struct blob_buf *buf, int id)
+int blob_add_u64(blob_t *blob, char *name, uint64_t val)
 {
-	if (!buf->grow)
-		buf->grow = blob_buffer_grow;
-
-	buf->head = buf->buf;
-	if (blob_add(buf, buf->buf, id, 0) == NULL)
-		return -ENOMEM;
-
-	return 0;
+    val = cpu_to_be64(val);
+    return blob_add(blob, BLOB_TYPE_INT64, name, &val, sizeof(val));
 }
 
-void
-blob_buf_free(struct blob_buf *buf)
+int blob_add_string(blob_t *blob, char *name, char *str)
 {
-	free(buf->buf);
-	buf->buf = NULL;
-	buf->buflen = 0;
+    return blob_add(blob, BLOB_TYPE_STRING, name, str, strlen(str) + 1);
 }
 
-void
-blob_fill_pad(struct blob_attr *attr)
+int blob_add_table_start(blob_t *blob, char *name)
 {
-	char *buf = (char *) attr;
-	int len = blob_pad_len(attr);
-	int delta = len - blob_raw_len(attr);
+    blob_attr_t *new_table = (blob_attr_t *)blob->tail;
 
-	if (delta > 0)
-		memset(buf + len - delta, 0, delta);
+    dbg_str(DBG_DETAIL,"table start,addr:%p",new_table);
+    array_stack_push(blob->tbl_stack, &new_table);
+
+    return blob_add(blob, BLOB_TYPE_TABLE, name, NULL,0);
+}
+int blob_add_table_end(blob_t *blob)
+{
+    uint8_t *table_start = NULL;
+    uint16_t table_len;
+
+    array_stack_pop(blob->tbl_stack, &table_start);
+
+    table_len = blob->tail - table_start;
+
+    dbg_str(DBG_DETAIL,"array_stack_pop,addr:%p",table_start);
+    dbg_str(DBG_DETAIL,"table_end,table_len=%d",table_len);
+    ((blob_attr_t *)table_start)->len = cpu_to_be16(table_len);
+
+    return 0;
 }
 
-void
-blob_set_raw_len(struct blob_attr *attr, unsigned int len)
+blob_attr_t *blob_next(blob_attr_t *attr)
 {
-	len &= BLOB_ATTR_LEN_MASK;
-	attr->id_len &= ~cpu_to_be32(BLOB_ATTR_LEN_MASK);
-	attr->id_len |= cpu_to_be32(len);
+    /*
+     *dbg_str(DBG_DETAIL,"blob_next");
+     */
+    blob_attr_t *ret =(blob_attr_t *)((uint8_t *)attr + be16_to_cpu(attr->len));
+
+    return ret;
+}
+char *blob_get_name(blob_attr_t *attr)
+{
+    /*
+     *dbg_str(DBG_DETAIL,"blob_get_name:%s",(char *)(attr->value));
+     */
+    return (char *)(attr->value);
+}
+uint8_t *blob_get_data(blob_attr_t *attr)
+{
+    return attr->value + be16_to_cpu(attr->name_len); 
+}
+uint8_t *blob_get_len(blob_attr_t *attr)
+{
+    return be16_to_cpu(attr->len); 
+}
+uint32_t blob_get_data_len(blob_attr_t *attr)
+{
+    uint8_t * data_addr = blob_get_data(attr);
+    return be16_to_cpu(attr->len) - (uint8_t)(data_addr - (uint8_t *)attr); 
+}
+uint8_t blob_get_u8(blob_attr_t *attr)
+{
+    uint8_t *body_addr = blob_get_data(attr);
+
+    return body_addr[0];
+}
+uint32_t blob_get_u32(blob_attr_t *attr)
+{
+    uint32_t *body_addr = (uint32_t*)blob_get_data(attr);
+
+    return be32_to_cpu(*body_addr);
+}
+char * blob_get_string(blob_attr_t *attr)
+{
+    char *body_addr = (char *) blob_get_data(attr);
+
+    return body_addr;
+}
+int blob_parse(const struct blob_policy_s *policy,                               
+               uint8_t policy_count,
+               blob_attr_t **tb,
+               void *data,
+               unsigned int len) 
+{
+    int i;
+    blob_attr_t *pos,*head = (blob_attr_t *)data;
+
+    blob_for_each_attr(pos, head, len){
+        for(i = 0; i < policy_count; i++) {
+            if(!strncmp(blob_get_name((blob_attr_t *)pos), policy[i].name,strlen(policy[i].name))) {
+                tb[i] = (blob_attr_t *)pos;
+                dbg_str(DBG_DETAIL,"found policy %d,name=%s",  i, policy[i].name);
+            }
+        }
+    }
+
+#if 0
+    int i;
+    uint8_t *pos;
+    uint8_t *end = (uint8_t *)data + len;
+
+    for(pos = (uint8_t *)data; pos < end; pos = (uint8_t *)blob_next((blob_attr_t *)pos)) {
+        for(i = 0; i < policy_count; i++) {
+            if(!strncmp(blob_get_name((blob_attr_t *)pos), policy[i].name,strlen(policy[i].name))) {
+                tb[i] = (blob_attr_t *)pos;
+                dbg_str(DBG_DETAIL,"found policy %d,name=%s",  i, policy[i].name);
+            }
+        }
+    }
+#endif
+
+    return 0;
 }
 
-struct blob_attr *
-blob_new(struct blob_buf *buf, int id, int payload)
-{
-	struct blob_attr *attr;
+enum {                    
+    FOO_U8,          
+    FOO_STRING, 
+    FOO_TABLE,
+    FOO_TABLE2,
+    FOO_U32
+}; 
 
-	attr = blob_add(buf, blob_next(buf->head), id, payload);
-	if (!attr)
-		return NULL;
-
-	blob_set_raw_len(buf->head, blob_pad_len(buf->head) + blob_pad_len(attr));
-	return attr;
-}
-
-struct blob_attr *
-blob_put_raw(struct blob_buf *buf, const void *ptr, unsigned int len)
-{
-	struct blob_attr *attr;
-
-	if (len < sizeof(struct blob_attr) || !ptr)
-		return NULL;
-
-	attr = blob_add(buf, blob_next(buf->head), 0, len - sizeof(struct blob_attr));
-	if (!attr)
-		return NULL;
-	blob_set_raw_len(buf->head, blob_pad_len(buf->head) + len);
-	memcpy(attr, ptr, len);
-	return attr;
-}
-
-struct blob_attr *
-blob_put(struct blob_buf *buf, int id, const void *ptr, unsigned int len)
-{
-	struct blob_attr *attr;
-
-	attr = blob_new(buf, id, len);
-	if (!attr)
-		return NULL;
-
-	if (ptr)
-		memcpy(blob_data(attr), ptr, len);
-	return attr;
-}
-
-void *
-blob_nest_start(struct blob_buf *buf, int id)
-{
-	unsigned long offset = attr_to_offset(buf, buf->head);
-	buf->head = blob_new(buf, id, 0);
-	if (!buf->head)
-		return NULL;
-	return (void *) offset;
-}
-
-void
-blob_nest_end(struct blob_buf *buf, void *cookie)
-{
-	struct blob_attr *attr = offset_to_attr(buf, (unsigned long) cookie);
-	blob_set_raw_len(attr, blob_pad_len(attr) + blob_len(buf->head));
-	buf->head = attr;
-}
-
-static const int blob_type_minlen[BLOB_ATTR_LAST] = {
-	[BLOB_ATTR_STRING] = 1,
-	[BLOB_ATTR_INT8]   = sizeof(uint8_t),
-	[BLOB_ATTR_INT16]  = sizeof(uint16_t),
-	[BLOB_ATTR_INT32]  = sizeof(uint32_t),
-	[BLOB_ATTR_INT64]  = sizeof(uint64_t),
+static const struct blob_policy_s pol[] = {
+    [FOO_U8] = {     
+        .name = (char *)"u8",
+        .type = BLOB_TYPE_STRING,   
+    },
+    [FOO_STRING] = {
+        .name = (char *)"value",
+        .type = BLOB_TYPE_ARRAY,    
+    },
+    [FOO_TABLE] = {
+        .name = (char *)"table1",
+        .type = BLOB_TYPE_TABLE,    
+    },
+    [FOO_TABLE2] = {
+        .name = (char *)"table2",
+        .type = BLOB_TYPE_TABLE,    
+    },
+    [FOO_U32] = {     
+        .name = (char *)"u32",
+        .type = BLOB_TYPE_STRING,   
+    },
 };
 
-bool
-blob_check_type(const void *ptr, unsigned int len, int type)
+
+void test_blob()
 {
-	const char *data = ptr;
+    blob_t *blob;
+    blob_attr_t *tb[ARRAY_SIZE(pol)];
+	allocator_t *allocator = allocator_get_default_alloc();
+    
+    blob = blob_create(allocator);
+    blob_init(blob);
 
-	if (type >= BLOB_ATTR_LAST)
-		return false;
+    blob_add_u8(blob, (char *)"u8",8);
+    blob_add_string(blob,(char *)"value",(char *)"hello world!");
 
-	if (type >= BLOB_ATTR_INT8 && type <= BLOB_ATTR_INT64) {
-		if (len != blob_type_minlen[type])
-			return false;
-	} else {
-		if (len < blob_type_minlen[type])
-			return false;
-	}
+    blob_add_table_start(blob,(char *)"table1");
+    blob_add_u8(blob, (char *)"u8",8);
+    blob_add_u16(blob,(char *)"u16",16);
+    blob_add_u32(blob,(char *)"u32",32);
 
-	if (type == BLOB_ATTR_STRING && data[len - 1] != 0)
-		return false;
+    blob_add_table_start(blob,(char *)"table2");
+    blob_add_u8(blob, (char *)"u8",8);
+    blob_add_u16(blob,(char *)"u16",16);
+    blob_add_u32(blob,(char *)"u32",32);
+    blob_add_table_end(blob);
 
-	return true;
-}
+    blob_add_table_end(blob);
 
-int
-blob_parse(struct blob_attr *attr, struct blob_attr **data, const struct blob_attr_info *info, int max)
-{
-	struct blob_attr *pos;
-	int found = 0;
-	int rem;
+    blob_add_u32(blob,(char *)"u32",32);
 
-	memset(data, 0, sizeof(struct blob_attr *) * max);
-	blob_for_each_attr(pos, attr, rem) {
-		int id = blob_id(pos);
-		int len = blob_len(pos);
-
-		if (id >= max)
-			continue;
-
-		if (info) {
-			int type = info[id].type;
-
-			if (type < BLOB_ATTR_LAST) {
-				if (!blob_check_type(blob_data(pos), len, type))
-					continue;
-			}
-
-			if (info[id].minlen && len < info[id].minlen)
-				continue;
-
-			if (info[id].maxlen && len > info[id].maxlen)
-				continue;
-
-			if (info[id].validate && !info[id].validate(&info[id], pos))
-				continue;
-		}
-
-		if (!data[id])
-			found++;
-
-		data[id] = pos;
-	}
-	return found;
-}
-
-bool
-blob_attr_equal(const struct blob_attr *a1, const struct blob_attr *a2)
-{
-	if (!a1 && !a2)
-		return true;
-
-	if (!a1 || !a2)
-		return false;
-
-	if (blob_pad_len(a1) != blob_pad_len(a2))
-		return false;
-
-	return !memcmp(a1, a2, blob_pad_len(a1));
-}
-
-struct blob_attr *
-blob_memdup(struct blob_attr *attr)
-{
-	struct blob_attr *ret;
-	int size = blob_pad_len(attr);
-
-	ret = malloc(size);
-	if (!ret)
-		return NULL;
-
-	memcpy(ret, attr, size);
-	return ret;
+    blob_parse(pol,5, tb, (void *)blob->head, (uint32_t)(blob->tail - blob->head)) ;
 }
