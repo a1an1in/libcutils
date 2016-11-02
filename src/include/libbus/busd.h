@@ -41,6 +41,6 @@ typedef struct busd_object {
 	vector_t *methods;
 }busd_object_t;
 
-typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr_s **attr);
+typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr_s **attr,int fd);
 
 #endif

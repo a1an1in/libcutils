@@ -192,7 +192,7 @@ busd_create_bus_object(busd_t *busd,char *name, struct blob_attr_s *attr)
 	return obj;
 }
 
-int busd_handle_add_object(busd_t *busd,  struct blob_attr_s **attr)
+int busd_handle_add_object(busd_t *busd,  struct blob_attr_s **attr,int fd)
 {
     struct busd_object *obj;
 	dbg_str(DBG_DETAIL,"ubusd_handle_add_object");
@@ -207,19 +207,88 @@ int busd_handle_add_object(busd_t *busd,  struct blob_attr_s **attr)
         dbg_str(DBG_DETAIL,"add object methods");
         obj = busd_create_bus_object(busd,blob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS]);
         if(obj != NULL){
-            make_pair(busd->pair,blob_get_string(attr[BUSD_OBJNAME]),obj);
+            dbg_str(DBG_DETAIL,"insert obj:%p",obj);
+            make_pair(busd->pair,blob_get_string(attr[BUSD_OBJNAME]),&obj);
             hash_map_insert(busd->obj_hmap,busd->pair->data);
-
-            hash_map_pos_t pos;
-            hash_map_search(busd->obj_hmap,"test",&pos);
         }
     }
 
 	return 0;
 }
 
+int busd_reply_lookup_object(busd_t *busd,struct busd_object *obj,int fd)
+{
+	bus_reqhdr_t hdr;
+    blob_t *blob;
+#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
+	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
+	uint32_t buffer_len;
+	allocator_t *allocator = busd->allocator;
+
+    dbg_str(DBG_DETAIL," busd_reply_lookup_object");
+	memset(&hdr,0,sizeof(hdr));
+
+	hdr.type = BUS_REQ_ADD_OBJECT;
+
+    blob = blob_create(allocator);
+    if(blob == NULL) {
+        dbg_str(DBG_WARNNING,"blob_create");
+        return -1;
+    }
+    blob_init(blob);
+    blob_add_table_start(blob,(char *)"object");
+    {
+        blob_add_string(blob, (char *)"object_name", obj->name);
+        blob_add_u32(blob, (char *)"id", 1);
+        blob_add_table_start(blob, (char *)"methods");
+        {
+            /*
+             *bus_push_methods_to_blob(blob, obj);
+             */
+        }
+        dbg_str(DBG_DETAIL,"run at here");
+        blob_add_table_end(blob);
+    }
+    dbg_str(DBG_DETAIL,"run at here");
+    blob_add_table_end(blob);
+
+    dbg_str(DBG_DETAIL,"run at here");
+	memcpy(buffer,&hdr, sizeof(hdr));
+	buffer_len = sizeof(hdr);
+    dbg_buf(DBG_DETAIL,"object:",blob->head,blob_get_len(blob->head));
+	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+
+	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
+
+    write(fd, buffer, buffer_len);  
+
+	return 0;
+}
+int busd_handle_lookup_object(busd_t *busd,  struct blob_attr_s **attr,int fd)
+{
+    struct busd_object *obj;
+    int ret;
+
+	dbg_str(DBG_DETAIL,"busd_handle_lookup_object");
+    if (attr[BUSD_OBJNAME]) {
+        hash_map_pos_t pos;
+        char *key = blob_get_string(attr[BUSD_OBJNAME]);
+        dbg_str(DBG_DETAIL,"lookup object name:%s", key);
+        if(key != NULL) {
+            ret = hash_map_search(busd->obj_hmap, key ,&pos);
+            if(ret > 0) {
+                obj = (struct busd_object *)hash_map_pos_get_pointer(&pos);
+                dbg_buf(DBG_DETAIL,"obj buf:",obj, 8);
+                busd_reply_lookup_object(busd,obj,fd);
+            }
+        }
+    }
+}
 static busd_cmd_callback handlers[__BUS_REQ_LAST] = {
 	[BUS_REQ_ADD_OBJECT] = busd_handle_add_object,
+	[BUS_REQ_LOOKUP]     = busd_handle_lookup_object,
 };
 
 static const struct blob_policy_s busd_policy[] = {
@@ -259,14 +328,7 @@ static int busd_process_receiving_data_callback(void *task)
                blob_attr,
                len);
 
-    cb(busd,tb);
-
-    /*
-     *printf_buffer(t->buffer,t->buffer_len);
-     */
-	/*
-     *write(t->fd, t->buffer,t->buffer_len);//响应客户端  
-	 */
+    cb(busd,tb,t->fd);
 
     return 0;
 }

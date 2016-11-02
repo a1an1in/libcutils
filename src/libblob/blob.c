@@ -40,6 +40,14 @@ int blob_init(blob_t *blob)
     return 0;
 }
 
+int blob_reset(blob_t *blob)
+{
+    memset(blob->head, 0 , blob->len);
+    blob->tail = blob->head;
+
+    return 0;
+}
+
 int blob_add(blob_t *blob, uint8_t type, char *name, void *value, uint16_t value_len)
 {
     blob_attr_t *new_attrib = (blob_attr_t *)blob->tail;

@@ -187,6 +187,7 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
     if(strlen(key) < key_size) {
         key_size = strlen(key);
     }
+
 	bucket_pos = hash_func(key,key_size,bucket_size); 
 	assert(bucket_pos <= bucket_size);
 
@@ -201,7 +202,8 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
         if(!key_cmp_func(mnode->key,key,key_size)){
             sync_unlock(&hmap->map_lock);
             dbg_str(HMAP_IMPORTANT,"found key:%s",key);
-            return hash_map_pos_init(ret, pos, bucket_pos, hlist,hmap);
+            hash_map_pos_init(ret, pos, bucket_pos, hlist,hmap);
+            return 1;
         }
     }
     sync_unlock(&hmap->map_lock);

@@ -29,7 +29,7 @@ int array_stack_init(array_stack_t *as)
     }
     
     if(as->step == 0) {
-        as->step = 4;
+        as->step = 8;
     }
 
     as->top = (uint8_t *)allocator_mem_alloc(as->allocator,as->size);

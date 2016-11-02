@@ -70,6 +70,14 @@ int bus_init(bus_t *bus,
                          process_client_task_cb,
                          bus);
 
+    bus->blob = blob_create(bus->allocator);
+    if(bus->blob == NULL) {
+        client_destroy(bus->client);
+        dbg_str(DBG_WARNNING,"blob_create");
+        return -1;
+    }
+    blob_init(bus->blob);
+
     return 1;
                          
 }
@@ -126,31 +134,26 @@ int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)
 	}
 
     dbg_str(DBG_DETAIL,"bus_push_methods_to_blob end");
+
 	return 0;
 }
 int bus_add_object(bus_t *bus,struct bus_object *obj)
 {
 	bus_reqhdr_t hdr;
-    static blob_t *blob;
+    blob_t *blob = bus->blob;
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
 	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
 	uint32_t buffer_len;
-	allocator_t *allocator = bus->allocator;
 
 	memset(&hdr,0,sizeof(hdr));
 
 	hdr.type = BUS_REQ_ADD_OBJECT;
 
-    blob = blob_create(allocator);
-    blob_init(blob);
-
-    blob_add_table_start(blob,(char *)"object");
-    {
+    blob_add_table_start(blob,(char *)"object"); {
         blob_add_string(blob, (char *)"object_name", obj->name);
         blob_add_u32(blob, (char *)"id", 1);
-        blob_add_table_start(blob, (char *)"methods");
-        {
+        blob_add_table_start(blob, (char *)"methods"); {
             bus_push_methods_to_blob(blob, obj);
         }
         blob_add_table_end(blob);
@@ -174,4 +177,37 @@ int bus_add_object(bus_t *bus,struct bus_object *obj)
 	return 0;
 }
 
+int bus_lookup(bus_t *bus, char *key)
+{
+	bus_reqhdr_t hdr;
+    blob_t *blob = bus->blob;
+#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
+	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
+	uint32_t buffer_len;
 
+	memset(&hdr,0,sizeof(hdr));
+
+	hdr.type = BUS_REQ_LOOKUP;
+
+    blob_add_table_start(blob,(char *)"lookup"); {
+        blob_add_string(blob, (char *)"object_name", key);
+    }
+    blob_add_table_end(blob);
+
+    /*
+     *dbg_str(DBG_DETAIL,"run at here");
+     */
+	memcpy(buffer,&hdr, sizeof(hdr));
+	buffer_len = sizeof(hdr);
+    /*
+     *dbg_buf(DBG_DETAIL,"object:",blob->head,blob_get_len(blob->head));
+     */
+	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+
+	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
+	bus_send(bus, buffer, buffer_len);
+
+	return 0;
+}

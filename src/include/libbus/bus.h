@@ -80,6 +80,7 @@ typedef struct bus_s{
     char *client_sk_type;
     char *server_host;
     char *server_srv;
+    blob_t *blob;
 }bus_t;
 
 

@@ -28,16 +28,6 @@ void test_bus_client()
              server_srv,//char *server_srv,
              bus_process_receiving_data_callback);
 
-    dbg_str(DBG_DETAIL,"test_bus_client");
+    bus_lookup(bus, "test");
 	
-	bus_send(bus, buf,buf_len);
-	sleep(1);
-	bus_send(bus, buf,buf_len);
-	sleep(1);
-	bus_send(bus, buf,buf_len);
-	sleep(1);
-	bus_send(bus, buf,buf_len);
-	sleep(1);
-	bus_send(bus, buf,buf_len);
-	sleep(1);
 }

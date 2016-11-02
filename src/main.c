@@ -264,9 +264,7 @@ static int args_process_busd(void *base,int argc,char **argv)
 }
 static int args_process_busc(void *base,int argc,char **argv)
 {
-    /*
-     *test_bus_client();
-     */
+    test_bus_client();
 	return 0;
 }
 static int args_process_buss(void *base,int argc,char **argv)
