@@ -4,9 +4,23 @@
 #include <libipc/net/client.h>
 #include <libblob/blob.h>
 
+enum {
+	BUS_ID,
+	BUS_OBJNAME,
+	BUS_METHORDS,
+	BUS_INVOKE_SRC_FD,
+	BUS_INVOKE_DST_FD,
+	BUS_INVOKE_METHOD,
+	BUS_INVOKE_ARGS,
+	__BUS_MAX
+};
+
 struct bus_s;
+typedef struct bus_s bus_t;
+
 typedef int (*bus_handler_t)(struct bus_s *bus,
 							 struct blob_attr_s *msg);
+typedef int (*bus_cmd_callback)(bus_t *bus,  blob_attr_t **attr);
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
@@ -27,7 +41,7 @@ typedef struct bus_reqhdr {
 	uint32_t d_id;
 }__attribute__((packed)) bus_reqhdr_t;
 
-enum bus_req_type {
+enum bus_communication_type {
 	/* initial server message */
 	BUS_REQ_HELLO,
 	/* generic command response */
@@ -38,9 +52,13 @@ enum bus_req_type {
 	BUS_REQ_PING,
 	/* look up one or more objects */
 	BUS_REQ_LOOKUP,
+	BUSD_REPLY_LOOKUP,
 	/* invoke a method on a single object */
 	BUS_REQ_INVOKE,
+	BUSD_REPLY_INVOKE,
+	BUSD_FORWARD_INVOKE,
 	BUS_REQ_ADD_OBJECT,
+	BUSD_REPLY_ADD_OBJECT,
 	BUS_REQ_REMOVE_OBJECT,
 	/*
 	 * subscribe/unsubscribe to object notifications
@@ -74,14 +92,14 @@ struct bus_object {
 	int n_methods;
 };
 
-typedef struct bus_s{
+struct bus_s{
     allocator_t *allocator;
     client_t *client;
     char *client_sk_type;
     char *server_host;
     char *server_srv;
     blob_t *blob;
-}bus_t;
+};
 
 
 bus_t * bus_create(allocator_t *allocator);
@@ -94,4 +112,8 @@ int bus_send(bus_t *bus,
 			 size_t buf_len);
 
 int bus_add_object(bus_t *bus,struct bus_object *obj);
+
+bus_t * bus_client_create(allocator_t *allocator,
+                          char *server_host,
+                          char *server_srv);
 #endif

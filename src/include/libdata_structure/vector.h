@@ -45,6 +45,17 @@ static inline void vector_for_each(vector_t *vector,void (*func)(void *))
 	}
 }
 
+static inline void vector_for_each_with_arg(vector_t *vector,void (*func)(void *,void *arg),void *arg)
+{
+	vector_pos_t pos,next;
+
+	for(	vector_begin(vector, &pos), vector_pos_next(&pos,&next);
+			!vector_pos_equal(&pos,&vector->end);
+			pos = next, vector_pos_next(&pos,&next))
+	{
+        func(&pos,arg);
+	}
+}
 int vector_copy_backward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count);
 int vector_copy_forward(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count);
 int vector_copy(vector_t *vector,vector_pos_t *to,vector_pos_t *from,uint32_t count);

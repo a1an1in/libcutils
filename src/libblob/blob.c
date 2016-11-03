@@ -128,6 +128,16 @@ int blob_add_table_end(blob_t *blob)
     return 0;
 }
 
+int blob_catenate(blob_t *blob, blob_attr_t *attr)
+{
+    uint8_t *joint = (uint8_t *)blob->tail;
+
+    memcpy(joint, attr,blob_get_len(attr));
+
+    blob->tail += blob_get_len(attr);
+
+    return 0;
+}
 blob_attr_t *blob_next(blob_attr_t *attr)
 {
     blob_attr_t *ret =(blob_attr_t *)((uint8_t *)attr + be16_to_cpu(attr->len));

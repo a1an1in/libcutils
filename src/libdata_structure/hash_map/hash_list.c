@@ -129,6 +129,7 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 	hash_func_fpt hash_func  = hmap->hash_func;
 	uint32_t bucket_size     = hmap->bucket_size;;
 	hash_map_pos_t *begin_pos = &hmap->begin;;
+    int ret;
 
 	mnode = (struct hash_map_node *)allocator_mem_alloc(hmap->allocator,
 			                                            sizeof(struct hash_map_node) + data_size);
@@ -155,7 +156,7 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 		 *dbg_str(DBG_WARNNING,"change begin pos");
 		 */
 	}
-	hmap->node_count++;
+	ret = hmap->node_count++;
 	dbg_str(HMAP_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,insert_hash_node_pos=%p",
 			hmap->node_count,
 			bucket_pos,
@@ -171,7 +172,7 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 
 	sync_unlock(&hmap->map_lock);
 
-	return 0;
+	return ret;
 }
 int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 {
@@ -256,6 +257,7 @@ int hash_map_destroy(hash_map_t *hmap)
 		 dbg_str(HMAP_DETAIL,"destroy node:%p",it.hlist_node_p);
 		 hash_map_delete(hmap,&it);
 	 }
+
 	 if(hash_map_pos_equal(&hmap->end,&it)){
 		 dbg_str(HMAP_IMPORTANT,"hash_map_destroy,hash_map is NULL");
 		 sync_lock_destroy(&hmap->map_lock);
@@ -275,6 +277,7 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 		dbg_str(DBG_WARNNING,"hlist_node_p is nULL");
 		return -1;
 	}
+
 	if(pos->hlist_node_p->next){
 		hlist_node_p = pos->hlist_node_p->next;
 		ret          = hash_map_pos_init(next, hlist_node_p, bucket_pos, hlist, hmap);

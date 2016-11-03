@@ -72,15 +72,6 @@ static struct bus_object test_object = {
 	.n_methods = ARRAY_SIZE(test_methods),
 };
 
-static int bus_process_receiving_data_callback(client_task_t *task)
-{
-	dbg_str(DBG_DETAIL,"process_task begin,unix client recv");
-	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"process_task end");
-
-    return 0;
-}
-
 void test_bus_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();
@@ -90,17 +81,12 @@ void test_bus_server()
 	char buf[1024]    = "hello world!";
 	int buf_len       = strlen(buf);
     
-    dbg_str(DBG_DETAIL,"test_bus_server");
-    bus = bus_create(allocator);
-
-    bus_init(bus,//busd_t *busd,
-             server_host,//char *server_host,
-             server_srv,//char *server_srv,
-             bus_process_receiving_data_callback);
+    bus = bus_client_create(allocator,
+                            server_host,
+                            server_srv);
 
     dbg_str(DBG_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);
-	
 	/*
 	 *bus_send(bus, buf,buf_len);
 	 *sleep(1);

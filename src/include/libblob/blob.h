@@ -54,6 +54,7 @@ int blob_add_u32(blob_t *blob, char *name, uint32_t val);
 int blob_add_string(blob_t *blob, char *name, char *str);
 int blob_add_table_start(blob_t *blob, char *name);
 int blob_add_table_end(blob_t *blob);
+int blob_catenate(blob_t *blob, blob_attr_t *attr);
 blob_attr_t *blob_next(blob_attr_t *attr);
 char *blob_get_name(blob_attr_t *attr);
 uint8_t *blob_get_data(blob_attr_t *attr);
