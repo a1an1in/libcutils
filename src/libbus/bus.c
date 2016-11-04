@@ -73,7 +73,7 @@ static void *buffer_to_addr(uint8_t *buffer)
 	return ret;
 }
 
-bus_t * bus_create(allocator_t *allocator)
+bus_t * bus_alloc(allocator_t *allocator)
 {
     bus_t *b;
 
@@ -580,7 +580,7 @@ bus_t * bus_client_create(allocator_t *allocator,
     bus_t *bus;
     
     dbg_str(DBG_DETAIL,"bus_client_create");
-    bus = bus_create(allocator);
+    bus = bus_alloc(allocator);
 
     bus_init(bus,//bus_t *bus,
              server_host,//char *server_host,

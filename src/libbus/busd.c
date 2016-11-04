@@ -627,7 +627,7 @@ void test_bus_daemon()
     dbg_str(DBG_DETAIL,"test_busd_daemon");
 
     busd = busd_create(allocator,
-                             server_host,
-                             server_srv);
+                       server_host,
+                       server_srv);
 }
 
