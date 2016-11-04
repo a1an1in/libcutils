@@ -412,6 +412,7 @@ bus_get_method_handler(bus_object_t *obj,char *method)
 
     return NULL;
 }
+
 blob_policy_t * 
 bus_get_policy(bus_object_t *obj,char *method)
 {

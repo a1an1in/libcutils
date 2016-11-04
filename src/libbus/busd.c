@@ -44,7 +44,7 @@ static const struct blob_policy_s busd_policy[] = {
 	[BUSD_INVOKE_METHORD] = { .name = "invoke_method",   .type = BLOB_TYPE_STRING },
 	[BUSD_INVOKE_ARGC]    = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
 	[BUSD_INVOKE_ARGS]    = { .name = "invoke_args",     .type = BLOB_TYPE_STRING },
-	[BUSD_STATE]          = { .name = "state",     .type = BLOB_TYPE_INT32 },
+	[BUSD_STATE]          = { .name = "state",           .type = BLOB_TYPE_INT32 },
 	[BUSD_INVOKE_SRC_FD]  = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
 };
 
@@ -602,6 +602,21 @@ static int busd_process_receiving_data_callback(void *task)
     return 0;
 }
 
+busd_t *bus_daemon_create(allocator_t *allocator,
+                          char *server_host,
+                          char *server_srv)
+{
+    busd_t *busd;
+    
+    dbg_str(DBG_DETAIL,"bus_daemon_create");
+    busd = busd_create(allocator);
+
+    busd_init(busd,//busd_t *busd,
+              server_host,//char *server_host,
+              server_srv,//char *server_srv,
+              busd_process_receiving_data_callback);
+}
+
 void test_bus_daemon()
 {
     allocator_t *allocator = allocator_get_default_alloc();
@@ -610,11 +625,9 @@ void test_bus_daemon()
     char *server_srv = NULL;
     
     dbg_str(DBG_DETAIL,"test_busd_daemon");
-    busd = busd_create(allocator);
 
-    busd_init(busd,//busd_t *busd,
-              server_host,//char *server_host,
-              server_srv,//char *server_srv,
-              busd_process_receiving_data_callback);
+    busd = bus_daemon_create(allocator,
+                             server_host,
+                             server_srv);
 }
 
