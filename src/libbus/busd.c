@@ -36,6 +36,18 @@
 #include <libbus/bus.h>
 #include <libipc/net/server.h>
 
+static const struct blob_policy_s busd_policy[] = {
+	[BUSD_ID]             = { .name = "id",              .type = BLOB_TYPE_INT32 },
+	[BUSD_OBJNAME]        = { .name = "object_name",     .type = BLOB_TYPE_STRING },
+	[BUSD_METHORDS]       = { .name = "methods",         .type = BLOB_TYPE_TABLE },
+	[BUSD_INVOKE_KEY]     = { .name = "invoke_key",      .type = BLOB_TYPE_STRING },
+	[BUSD_INVOKE_METHORD] = { .name = "invoke_method",   .type = BLOB_TYPE_STRING },
+	[BUSD_INVOKE_ARGC]    = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
+	[BUSD_INVOKE_ARGS]    = { .name = "invoke_args",     .type = BLOB_TYPE_STRING },
+	[BUSD_STATE]          = { .name = "state",     .type = BLOB_TYPE_INT32 },
+	[BUSD_INVOKE_SRC_FD]  = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
+};
+
 static void addr_to_buffer(void *addr,uint8_t *buffer)
 {
 	unsigned long data = (unsigned long)addr;
@@ -405,7 +417,7 @@ int busd_forward_invoke(busd_t *busd, int src_fd,int dest_fd,char *obj_name, cha
         blob_add_u32(blob, (char *)"destination_fd", dest_fd);
         blob_add_string(blob, (char *)"object_name", obj_name);
         blob_add_string(blob, (char *)"invoke_method", method);
-        blob_add_u32(blob, (char *)"invoke_argc", argc);
+        blob_add_u8(blob, (char *)"invoke_argc", argc);
         blob_catenate(blob, args);
     }
     blob_add_table_end(blob);
@@ -462,7 +474,7 @@ int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)
         method = blob_get_string(attr[BUSD_INVOKE_METHORD]);
     }
     if (attr[BUSD_INVOKE_ARGC]) {
-        argc = blob_get_u32(attr[BUSD_INVOKE_ARGC]); 
+        argc = blob_get_u8(attr[BUSD_INVOKE_ARGC]); 
 		dbg_str(DBG_DETAIL,"invoke argc:%d",argc);
     }
     if (attr[BUSD_INVOKE_ARGS]) {
@@ -475,19 +487,83 @@ int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)
     return 0;
 }
 
+int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,int source_fd)
+{
+	bus_reqhdr_t hdr;
+    blob_t *blob;
+#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
+	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
+	uint32_t buffer_len;
+	allocator_t *allocator = busd->allocator;
+
+    dbg_str(DBG_DETAIL,"busd_reply_lookup_object");
+	memset(&hdr,0,sizeof(hdr));
+
+	hdr.type = BUSD_REPLY_INVOKE;
+
+    blob = blob_create(allocator);
+    if(blob == NULL) {
+        dbg_str(DBG_WARNNING,"blob_create");
+        return -1;
+    }
+    blob_init(blob);
+    blob_add_table_start(blob,(char *)"invoke_reply"); {
+        blob_add_u32(blob, (char *)"state", state);
+        blob_add_string(blob, (char *)"object_name", obj_name);
+        blob_add_string(blob, (char *)"invoke_method", method);
+    }
+    blob_add_table_end(blob);
+
+	memcpy(buffer,&hdr, sizeof(hdr));
+	buffer_len = sizeof(hdr);
+    /*
+     *dbg_buf(DBG_DETAIL,"object:",(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+     */
+	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+
+	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
+
+    write(source_fd, buffer, buffer_len);  
+
+	return 0;
+}
+int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
+{
+    int state;
+    char *method;
+    char *obj_name;
+    int src_fd;
+
+    dbg_str(DBG_DETAIL,"busd_handle_forward_invoke_reply");
+
+    if (attr[BUSD_STATE]) {
+        state = blob_get_u32(attr[BUSD_STATE]); 
+		dbg_str(DBG_DETAIL,"forward invoke reply state=%d",state);
+    }
+    if (attr[BUSD_INVOKE_METHORD]) {
+        method = blob_get_string(attr[BUSD_INVOKE_METHORD]); 
+		dbg_str(DBG_DETAIL,"method:%s",method);
+    }
+    if (attr[BUSD_OBJNAME]) {
+        obj_name = blob_get_string(attr[BUSD_OBJNAME]); 
+		dbg_str(DBG_DETAIL,"obj_name:%s",obj_name);
+    }
+    if (attr[BUSD_INVOKE_SRC_FD]) {
+        src_fd = blob_get_u32(attr[BUSD_INVOKE_SRC_FD]); 
+		dbg_str(DBG_DETAIL,"source fd=%d",src_fd);
+    }
+
+    busd_reply_invoke(busd,obj_name,method,state,src_fd);
+
+    return 0;
+}
 static busd_cmd_callback handlers[__BUS_REQ_LAST] = {
-	[BUS_REQ_ADD_OBJECT] = busd_handle_add_object,
-	[BUS_REQ_LOOKUP]     = busd_handle_lookup_object,
-	[BUS_REQ_INVOKE]     = busd_handle_invoke_method,
-};
-static const struct blob_policy_s busd_policy[] = {
-	[BUSD_ID]             = { .name = "id",              .type = BLOB_TYPE_INT32 },
-	[BUSD_OBJNAME]        = { .name = "object_name",     .type = BLOB_TYPE_STRING },
-	[BUSD_METHORDS]       = { .name = "methods",         .type = BLOB_TYPE_TABLE },
-	[BUSD_INVOKE_KEY]     = { .name = "invoke_key",      .type = BLOB_TYPE_STRING },
-	[BUSD_INVOKE_METHORD] = { .name = "invoke_method",   .type = BLOB_TYPE_STRING },
-	[BUSD_INVOKE_ARGC]    = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
-	[BUSD_INVOKE_ARGS]    = { .name = "invoke_args",     .type = BLOB_TYPE_STRING },
+	[BUS_REQ_ADD_OBJECT]       = busd_handle_add_object,
+	[BUS_REQ_LOOKUP]           = busd_handle_lookup_object,
+	[BUS_REQ_INVOKE]           = busd_handle_invoke_method,
+	[BUS_REPLY_FORWARD_INVOKE] = busd_handle_forward_invoke_reply,
 };
 
 static int busd_process_receiving_data_callback(void *task)

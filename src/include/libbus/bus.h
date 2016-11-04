@@ -23,7 +23,9 @@ typedef struct bus_s bus_t;
 
 typedef int (*bus_handler_t)(struct bus_s *bus,
                              int argc,
-		      		         struct blob_attr_s **args);
+		      		         struct blob_attr_s **args,
+                             void *out_data,
+                             int *out_data_len);
 typedef int (*bus_cmd_callback)(bus_t *bus,  blob_attr_t **attr);
 
 #ifndef ARRAY_SIZE
@@ -61,6 +63,7 @@ enum bus_communication_type {
 	BUS_REQ_INVOKE,
 	BUSD_REPLY_INVOKE,
 	BUSD_FORWARD_INVOKE,
+	BUS_REPLY_FORWARD_INVOKE,
 	BUS_REQ_ADD_OBJECT,
 	BUSD_REPLY_ADD_OBJECT,
 	BUS_REQ_REMOVE_OBJECT,

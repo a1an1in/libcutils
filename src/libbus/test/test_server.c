@@ -2,40 +2,32 @@
 #include <libbus/bus.h>
 #include <unistd.h>
 
-enum {
-	HELLO_ID,
-	HELLO_MSG,
-	__HELLO_MAX
-};
-
 static const struct blob_policy_s hello_policy[] = {
-	[HELLO_ID]  = { .name = "arg", .type = BLOB_TYPE_INT32 },
-	[HELLO_MSG] = { .name = "def", .type = BLOB_TYPE_STRING },
+	[0] = { .name = "arg", .type = BLOB_TYPE_INT32 },
+	[1] = { .name = "def", .type = BLOB_TYPE_STRING },
 };
 
 static int test_hello(struct bus_s *bus,
                       int argc,
-		      		  struct blob_attr_s **args)
+		      		  struct blob_attr_s **args,
+                      void *out_data,
+                      int *out_data_len)
 {
     printf("run test hello\n");
 
-	return 0;
+	return 1;
 }
 
-enum {
-	SET_ID,
-	SET_MSG,
-	__SET_MAX
-};
-
 static const struct blob_policy_s set_policy[] = {
-	[SET_ID]  = { .name = "hijklmn", .type = BLOB_TYPE_INT32 },
-	[SET_MSG] = { .name = "opqrst", .type = BLOB_TYPE_STRING },
+	[0] = { .name = "hijklmn", .type = BLOB_TYPE_INT32 },
+	[1] = { .name = "opqrst", .type = BLOB_TYPE_STRING },
 };
 
 static int test_set(struct bus_s *bus,
                     int argc,
-		      		struct blob_attr_s **args)
+		      		struct blob_attr_s **args,
+                    void *out_data,
+                    int *out_data_len)
 {
     printf("run set set\n");
 	return 0;

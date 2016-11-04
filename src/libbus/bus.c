@@ -139,7 +139,6 @@ int bus_init(bus_t *bus,
 			      NULL);
 
     return 1;
-                         
 }
 
 int bus_send(bus_t *bus,
@@ -315,6 +314,8 @@ int bus_lookup(bus_t *bus, char *key)
 int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)
 {
     struct bus_object *obj;
+    blob_attr_t *attrib,*head;
+    uint32_t len;
     int ret;
 
 	dbg_str(DBG_DETAIL,"bus_handle_lookup_object_reply");
@@ -327,8 +328,6 @@ int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)
 	}
     if (attr[BUS_METHORDS]) {
         dbg_str(DBG_DETAIL,"object methods");
-        blob_attr_t *attrib,*head;
-        uint32_t len;
 
         head = (blob_attr_t *)blob_get_data(attr[BUS_METHORDS]);
         len  = blob_get_data_len(attr[BUS_METHORDS]);
@@ -356,7 +355,7 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
     blob_add_table_start(blob,(char *)"invoke"); {
         blob_add_string(blob, (char *)"invoke_key", key);
         blob_add_string(blob, (char *)"invoke_method", method);
-        blob_add_u32(blob, (char *)"invoke_argc", argc);
+        blob_add_u8(blob, (char *)"invoke_argc", argc);
         blob_add_table_start(blob, (char *)"invoke_args"); {
             for(i = 0; i < argc; i++) {
                 blob_add_string(blob, (char *)"arg", args[i]);
@@ -379,11 +378,29 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
 
 int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
 {
+    char *obj_name, *method_name;
+    int state;
+
 	dbg_str(DBG_DETAIL,"bus_handle_invoke_reply");
 
+	if (attr[BUS_STATE]){
+        state = blob_get_u32(attr[BUS_STATE]);
+		dbg_str(DBG_DETAIL,"state:%d",state);
+	}
+	if (attr[BUS_OBJNAME]) {
+		obj_name = blob_get_string(attr[BUS_OBJNAME]);
+		dbg_str(DBG_DETAIL,"object name:%s",obj_name);
+	}
+    if (attr[BUS_INVOKE_METHOD]) {
+		method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
+		dbg_str(DBG_DETAIL,"method name:%s",method_name);
+    }
+
+    return 0;
 }
 
-bus_handler_t bus_get_method_handler(bus_object_t *obj,char *method)
+bus_handler_t 
+bus_get_method_handler(bus_object_t *obj,char *method)
 {
     int i;
 
@@ -395,7 +412,8 @@ bus_handler_t bus_get_method_handler(bus_object_t *obj,char *method)
 
     return NULL;
 }
-blob_policy_t* bus_get_policy(bus_object_t *obj,char *method)
+blob_policy_t * 
+bus_get_policy(bus_object_t *obj,char *method)
 {
     int i;
 
@@ -408,7 +426,50 @@ blob_policy_t* bus_get_policy(bus_object_t *obj,char *method)
     return NULL;
 }
 
-int bus_handle_busd_forward_invoke(bus_t *bus,  blob_attr_t **attr)
+int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)
+{
+	bus_reqhdr_t hdr;
+    blob_t *blob;
+#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
+	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
+	uint32_t buffer_len;
+	allocator_t *allocator = bus->allocator;
+
+	dbg_str(DBG_DETAIL,"bus_reply_forward_invoke,ret = %d", ret);
+	memset(&hdr,0,sizeof(hdr));
+
+	hdr.type = BUS_REPLY_FORWARD_INVOKE;
+
+    blob = blob_create(allocator);
+    if(blob == NULL) {
+        dbg_str(DBG_WARNNING,"blob_create");
+        return -1;
+    }
+    blob_init(blob);
+    blob_add_table_start(blob,(char *)"reply_forward_invoke"); {
+        blob_add_string(blob, (char *)"object_name", obj_name);
+        blob_add_string(blob, (char *)"invoke_method", method_name);
+        blob_add_u32(blob, (char *)"state", ret);
+        blob_add_u32(blob, (char *)"source_fd", src_fd);
+    }
+    blob_add_table_end(blob);
+
+	memcpy(buffer,&hdr, sizeof(hdr));
+	buffer_len = sizeof(hdr);
+    /*
+     *dbg_buf(DBG_DETAIL,"object:",(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+     */
+	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+
+	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
+
+	bus_send(bus, buffer, buffer_len);
+
+	return 0;
+}
+int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 {
     bus_object_t *obj = NULL;
     blob_attr_t *args = NULL;
@@ -416,8 +477,15 @@ int bus_handle_busd_forward_invoke(bus_t *bus,  blob_attr_t **attr)
     char *method_name = NULL;
     char *obj_name;
     int src_fd = -1;
-    int ret;
-	dbg_str(DBG_VIP,"bus_handle_busd_forward_invoke");
+    hash_map_pos_t pos;
+    bus_handler_t method;
+    uint8_t *p;
+    blob_policy_t *policy;
+    struct blob_attr_s *tb[10];
+    char buffer[1024];
+    int ret, buffer_len;
+
+	dbg_str(DBG_VIP,"bus_handle_forward_invoke");
 
 	if (attr[BUS_INVOKE_SRC_FD]) {
         src_fd = blob_get_u32(attr[BUS_INVOKE_SRC_FD]);
@@ -428,7 +496,7 @@ int bus_handle_busd_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 		dbg_str(DBG_DETAIL,"invoke method_name:%s",method_name);
 	}
 	if (attr[BUS_INVOKE_ARGC]) {
-        argc = blob_get_u32(attr[BUS_INVOKE_ARGC]);
+        argc = blob_get_u8(attr[BUS_INVOKE_ARGC]);
         dbg_str(DBG_DETAIL,"invoke argc=%d",argc);
 	}
 	if (attr[BUS_INVOKE_ARGS]) {
@@ -441,10 +509,6 @@ int bus_handle_busd_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 	}
 
     if (method_name != NULL) {
-        hash_map_pos_t pos;
-        bus_handler_t method;
-        uint8_t *p;
-        blob_policy_t *policy;
         ret = hash_map_search(bus->obj_hmap, obj_name ,&pos);
         if(ret > 0) {
             p = (uint8_t *)hash_map_pos_get_pointer(&pos);
@@ -454,19 +518,20 @@ int bus_handle_busd_forward_invoke(bus_t *bus,  blob_attr_t **attr)
             method = bus_get_method_handler(obj,method_name);
             policy = bus_get_policy(obj,method_name);
 
-            struct blob_attr_s *tb[10];
             blob_parse(policy, ARRAY_SIZE(policy), tb, blob_get_data(args), blob_get_data_len(args));
-            method(bus,argc,tb);
+            ret = method(bus,argc,tb,buffer,&buffer_len);
+            bus_reply_forward_invoke(bus,obj_name,method_name, ret, buffer, buffer_len,src_fd);
         }
-    
     }
+
+    return 0;
 }
 
 static bus_cmd_callback handlers[__BUS_REQ_LAST] = {
 	[BUSD_REPLY_ADD_OBJECT] = bus_handle_add_object_reply,
 	[BUSD_REPLY_LOOKUP]     = bus_handle_lookup_object_reply,
 	[BUSD_REPLY_INVOKE]     = bus_handle_invoke_reply,
-	[BUSD_FORWARD_INVOKE]   = bus_handle_busd_forward_invoke,
+	[BUSD_FORWARD_INVOKE]   = bus_handle_forward_invoke,
 };
 
 static int bus_process_receiving_data_callback(client_task_t *task)
