@@ -3,14 +3,17 @@
 
 #include <libipc/net/client.h>
 #include <libblob/blob.h>
+#include <libdata_structure/hash_list.h>
 
 enum {
 	BUS_ID,
 	BUS_OBJNAME,
 	BUS_METHORDS,
+	BUS_STATE,
 	BUS_INVOKE_SRC_FD,
 	BUS_INVOKE_DST_FD,
 	BUS_INVOKE_METHOD,
+	BUS_INVOKE_ARGC,
 	BUS_INVOKE_ARGS,
 	__BUS_MAX
 };
@@ -19,7 +22,8 @@ struct bus_s;
 typedef struct bus_s bus_t;
 
 typedef int (*bus_handler_t)(struct bus_s *bus,
-							 struct blob_attr_s *msg);
+                             int argc,
+		      		         struct blob_attr_s **args);
 typedef int (*bus_cmd_callback)(bus_t *bus,  blob_attr_t **attr);
 
 #ifndef ARRAY_SIZE
@@ -84,13 +88,13 @@ struct bus_method {
 	int n_policy;
 };
 
-struct bus_object {
+typedef struct bus_object {
 	char *name;
 	uint32_t id;
 	char *path;
 	struct bus_method *methods;
 	int n_methods;
-};
+}bus_object_t;
 
 struct bus_s{
     allocator_t *allocator;
@@ -99,6 +103,10 @@ struct bus_s{
     char *server_host;
     char *server_srv;
     blob_t *blob;
+	hash_map_t *obj_hmap;
+    pair_t *pair;
+    uint8_t key_size;
+    uint8_t bucket_size;
 };
 
 

@@ -9,24 +9,15 @@ enum {
 };
 
 static const struct blob_policy_s hello_policy[] = {
-	[HELLO_ID] = { .name = "abc", .type = BLOB_TYPE_INT32 },
+	[HELLO_ID]  = { .name = "arg", .type = BLOB_TYPE_INT32 },
 	[HELLO_MSG] = { .name = "def", .type = BLOB_TYPE_STRING },
 };
 
 static int test_hello(struct bus_s *bus,
-		      		  struct blob_attr_s *msg)
+                      int argc,
+		      		  struct blob_attr_s **args)
 {
-	struct blob_attr_s *tb[__HELLO_MAX];
-
     printf("run test hello\n");
-    /*
-	 *blob_parse(hello_policy, ARRAY_SIZE(hello_policy), tb, blob_data(msg), blob_len(msg));
-     */
-
-    /*
-	 *if (tb[HELLO_MSG])
-	 *    msgstr = blob_data(tb[HELLO_MSG]);
-     */
 
 	return 0;
 }
@@ -38,28 +29,17 @@ enum {
 };
 
 static const struct blob_policy_s set_policy[] = {
-	[SET_ID] = { .name = "hijklmn", .type = BLOB_TYPE_INT32 },
+	[SET_ID]  = { .name = "hijklmn", .type = BLOB_TYPE_INT32 },
 	[SET_MSG] = { .name = "opqrst", .type = BLOB_TYPE_STRING },
 };
 
 static int test_set(struct bus_s *bus,
-		      		  struct blob_attr_s *msg)
+                    int argc,
+		      		struct blob_attr_s **args)
 {
-	struct blob_attr_s *tb[__SET_MAX];
-
     printf("run set set\n");
-    /*
-	 *blob_parse(set_policy, ARRAY_SIZE(set_policy), tb, blob_data(msg), blob_len(msg));
-     */
-
-    /*
-	 *if (tb[SET_MSG])
-	 *    msgstr = blob_data(tb[SET_MSG]);
-     */
-
 	return 0;
 }
-
 
 static const struct bus_method test_methods[] = {
 	BUS_METHOD("hello", test_hello, hello_policy),
@@ -87,18 +67,7 @@ void test_bus_server()
 
     dbg_str(DBG_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);
-	/*
-	 *bus_send(bus, buf,buf_len);
-	 *sleep(1);
-	 *bus_send(bus, buf,buf_len);
-	 *sleep(1);
-	 *bus_send(bus, buf,buf_len);
-	 *sleep(1);
-	 *bus_send(bus, buf,buf_len);
-	 *sleep(1);
-	 *bus_send(bus, buf,buf_len);
-	 *sleep(1);
-	 */
+
 	while(1) sleep(1);
 }
 

@@ -33,7 +33,7 @@ ARGS_SUC	src/include/libdbg/debug_businesses.h	119;"	d
 ARGS_VIP	src/include/libdbg/debug_businesses.h	121;"	d
 ARGS_WARNNING	src/include/libdbg/debug_businesses.h	118;"	d
 ARRAY_SIZE	src/include/libblob/utils.h	29;"	d
-ARRAY_SIZE	src/include/libbus/bus.h	22;"	d
+ARRAY_SIZE	src/include/libbus/bus.h	27;"	d
 ASCIILINESZ	src/libini/iniparser.c	29;"	d	file:
 ASCIILINESZ	src/libini/iniparser.c	417;"	d	file:
 B64_DECODE_LEN	src/include/libblob/utils.h	170;"	d
@@ -64,18 +64,24 @@ BUSD_OBJNAME	src/include/libbus/busd.h	/^	BUSD_OBJNAME,$/;"	e	enum:__anon8
 BUSD_REPLY_ADD_OBJECT	src/include/libbus/bus.h	/^	BUSD_REPLY_ADD_OBJECT,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_INVOKE	src/include/libbus/bus.h	/^	BUSD_REPLY_INVOKE,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_LOOKUP	src/include/libbus/bus.h	/^	BUSD_REPLY_LOOKUP,$/;"	e	enum:bus_communication_type
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	153;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	155;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	193;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	195;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	228;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	230;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	254;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	256;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	339;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	341;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	158;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	160;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	215;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	217;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	277;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	279;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	227;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	229;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	298;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	300;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	383;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	385;"	d	file:
 BUS_ID	src/include/libbus/bus.h	/^	BUS_ID,$/;"	e	enum:__anon7
-BUS_METHOD	src/include/libbus/bus.h	25;"	d
+BUS_INVOKE_ARGS	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGS,$/;"	e	enum:__anon7
+BUS_INVOKE_DST_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_DST_FD,$/;"	e	enum:__anon7
+BUS_INVOKE_METHOD	src/include/libbus/bus.h	/^	BUS_INVOKE_METHOD,$/;"	e	enum:__anon7
+BUS_INVOKE_SRC_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_SRC_FD,$/;"	e	enum:__anon7
+BUS_METHOD	src/include/libbus/bus.h	30;"	d
 BUS_METHORDS	src/include/libbus/bus.h	/^	BUS_METHORDS,$/;"	e	enum:__anon7
 BUS_OBJNAME	src/include/libbus/bus.h	/^	BUS_OBJNAME,$/;"	e	enum:__anon7
 BUS_REQ_ADD_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_ADD_OBJECT,$/;"	e	enum:bus_communication_type
@@ -89,6 +95,7 @@ BUS_REQ_REMOVE_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_REMOVE_OBJECT,$/;"	e	e
 BUS_REQ_STATUS	src/include/libbus/bus.h	/^	BUS_REQ_STATUS,$/;"	e	enum:bus_communication_type
 BUS_REQ_SUBSCRIBE	src/include/libbus/bus.h	/^	BUS_REQ_SUBSCRIBE,$/;"	e	enum:bus_communication_type
 BUS_REQ_UNSUBSCRIBE	src/include/libbus/bus.h	/^	BUS_REQ_UNSUBSCRIBE,$/;"	e	enum:bus_communication_type
+BUS_STATE	src/include/libbus/bus.h	/^	BUS_STATE,$/;"	e	enum:__anon7
 CC	Makefile	/^CC = gcc$/;"	m
 CC	src/Makefile	/^CC = gcc$/;"	m
 CC	src/lab/Makefile	/^CC = gcc$/;"	m
@@ -1407,6 +1414,7 @@ blob_add_u64	src/libblob/blob.c	/^int blob_add_u64(blob_t *blob, char *name, uin
 blob_add_u8	src/libblob/blob.c	/^int blob_add_u8(blob_t *blob, char *name, uint8_t val)$/;"	f
 blob_attr_s	src/include/libblob/blob.h	/^typedef struct blob_attr_s{$/;"	s
 blob_attr_t	src/include/libblob/blob.h	/^}__attribute__((packed)) blob_attr_t;$/;"	t	typeref:struct:blob_attr_s
+blob_catenate	src/libblob/blob.c	/^int blob_catenate(blob_t *blob, blob_attr_t *attr)$/;"	f
 blob_create	src/libblob/blob.c	/^blob_t *blob_create(allocator_t *allocator)$/;"	f
 blob_for_each_attr	src/include/libblob/blob.h	7;"	d
 blob_get_data	src/libblob/blob.c	/^uint8_t *blob_get_data(blob_attr_t *attr)$/;"	f
@@ -1478,7 +1486,7 @@ busd_create_bus_object	src/libbus/busd.c	/^busd_create_bus_object(busd_t *busd,c
 busd_dump_object	src/libbus/busd.c	/^int busd_dump_object(struct busd_object *obj)$/;"	f
 busd_dump_object_method	src/libbus/busd.c	/^void busd_dump_object_method(vector_pos_t *pos)$/;"	f
 busd_dump_object_method_args	src/libbus/busd.c	/^void busd_dump_object_method_args(list_t *list)$/;"	f
-busd_forward_invoke	src/libbus/busd.c	/^int busd_forward_invoke(busd_t *busd,  blob_attr_t **attr,int src_fd,int dest_fd)$/;"	f
+busd_forward_invoke	src/libbus/busd.c	/^int busd_forward_invoke(busd_t *busd, int src_fd,int dest_fd, char *method, blob_attr_t *args)$/;"	f
 busd_get_object_method	src/libbus/busd.c	/^int busd_get_object_method(struct busd_object_method * method,$/;"	f
 busd_handle_add_object	src/libbus/busd.c	/^int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)$/;"	f
 busd_handle_invoke_method	src/libbus/busd.c	/^int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)$/;"	f
@@ -1490,6 +1498,7 @@ busd_object_method_arg_s	src/include/libbus/busd.h	/^struct busd_object_method_a
 busd_object_t	src/include/libbus/busd.h	/^}busd_object_t;$/;"	t	typeref:struct:busd_object
 busd_policy	src/libbus/busd.c	/^static const struct blob_policy_s busd_policy[] = {$/;"	v	typeref:struct:blob_policy_s	file:
 busd_process_receiving_data_callback	src/libbus/busd.c	/^static int busd_process_receiving_data_callback(void *task)$/;"	f	file:
+busd_reply_add_object	src/libbus/busd.c	/^int busd_reply_add_object(busd_t *busd, int state, int fd)$/;"	f
 busd_reply_lookup_object	src/libbus/busd.c	/^int busd_reply_lookup_object(busd_t *busd,struct busd_object *obj,int fd)$/;"	f
 busd_s	src/include/libbus/busd.h	/^typedef struct busd_s{$/;"	s
 busd_t	src/include/libbus/busd.h	/^}busd_t;$/;"	t	typeref:struct:busd_s
