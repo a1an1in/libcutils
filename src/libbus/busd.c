@@ -99,7 +99,7 @@ int busd_dump_object(struct busd_object *obj)
     return 0;
 }
 
-busd_t * busd_create(allocator_t *allocator)
+busd_t * busd_alloc(allocator_t *allocator)
 {
     busd_t *d;
 
@@ -602,14 +602,14 @@ static int busd_process_receiving_data_callback(void *task)
     return 0;
 }
 
-busd_t *bus_daemon_create(allocator_t *allocator,
+busd_t *busd_create(allocator_t *allocator,
                           char *server_host,
                           char *server_srv)
 {
     busd_t *busd;
     
     dbg_str(DBG_DETAIL,"bus_daemon_create");
-    busd = busd_create(allocator);
+    busd = busd_alloc(allocator);
 
     busd_init(busd,//busd_t *busd,
               server_host,//char *server_host,
@@ -626,7 +626,7 @@ void test_bus_daemon()
     
     dbg_str(DBG_DETAIL,"test_busd_daemon");
 
-    busd = bus_daemon_create(allocator,
+    busd = busd_create(allocator,
                              server_host,
                              server_srv);
 }
