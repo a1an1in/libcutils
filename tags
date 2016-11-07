@@ -33,7 +33,7 @@ ARGS_SUC	src/include/libdbg/debug_businesses.h	119;"	d
 ARGS_VIP	src/include/libdbg/debug_businesses.h	121;"	d
 ARGS_WARNNING	src/include/libdbg/debug_businesses.h	118;"	d
 ARRAY_SIZE	src/include/libblob/utils.h	29;"	d
-ARRAY_SIZE	src/include/libbus/bus.h	27;"	d
+ARRAY_SIZE	src/include/libbus/bus.h	32;"	d
 ASCIILINESZ	src/libini/iniparser.c	29;"	d	file:
 ASCIILINESZ	src/libini/iniparser.c	417;"	d	file:
 B64_DECODE_LEN	src/include/libblob/utils.h	170;"	d
@@ -55,35 +55,44 @@ BLUE	src/include/libdbg/debug.h	109;"	d
 BUILD_BUG_ON	src/include/libblob/utils.h	36;"	d
 BUILD_BUG_ON	src/include/libblob/utils.h	43;"	d
 BUSD_FORWARD_INVOKE	src/include/libbus/bus.h	/^	BUSD_FORWARD_INVOKE,$/;"	e	enum:bus_communication_type
-BUSD_ID	src/include/libbus/busd.h	/^	BUSD_ID,$/;"	e	enum:__anon8
-BUSD_INVOKE_ARGS	src/include/libbus/busd.h	/^    BUSD_INVOKE_ARGS,$/;"	e	enum:__anon8
-BUSD_INVOKE_KEY	src/include/libbus/busd.h	/^    BUSD_INVOKE_KEY,$/;"	e	enum:__anon8
-BUSD_INVOKE_METHORD	src/include/libbus/busd.h	/^	BUSD_INVOKE_METHORD,$/;"	e	enum:__anon8
-BUSD_METHORDS	src/include/libbus/busd.h	/^	BUSD_METHORDS,$/;"	e	enum:__anon8
-BUSD_OBJNAME	src/include/libbus/busd.h	/^	BUSD_OBJNAME,$/;"	e	enum:__anon8
+BUSD_ID	src/include/libbus/busd.h	/^	BUSD_ID,$/;"	e	enum:__anon6
+BUSD_INVOKE_ARGC	src/include/libbus/busd.h	/^    BUSD_INVOKE_ARGC,$/;"	e	enum:__anon6
+BUSD_INVOKE_ARGS	src/include/libbus/busd.h	/^    BUSD_INVOKE_ARGS,$/;"	e	enum:__anon6
+BUSD_INVOKE_KEY	src/include/libbus/busd.h	/^    BUSD_INVOKE_KEY,$/;"	e	enum:__anon6
+BUSD_INVOKE_METHORD	src/include/libbus/busd.h	/^	BUSD_INVOKE_METHORD,$/;"	e	enum:__anon6
+BUSD_INVOKE_SRC_FD	src/include/libbus/busd.h	/^    BUSD_INVOKE_SRC_FD,$/;"	e	enum:__anon6
+BUSD_METHORDS	src/include/libbus/busd.h	/^	BUSD_METHORDS,$/;"	e	enum:__anon6
+BUSD_OBJNAME	src/include/libbus/busd.h	/^	BUSD_OBJNAME,$/;"	e	enum:__anon6
 BUSD_REPLY_ADD_OBJECT	src/include/libbus/bus.h	/^	BUSD_REPLY_ADD_OBJECT,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_INVOKE	src/include/libbus/bus.h	/^	BUSD_REPLY_INVOKE,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_LOOKUP	src/include/libbus/bus.h	/^	BUSD_REPLY_LOOKUP,$/;"	e	enum:bus_communication_type
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	158;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	160;"	d	file:
+BUSD_STATE	src/include/libbus/busd.h	/^    BUSD_STATE,$/;"	e	enum:__anon6
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	215;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	217;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	277;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	279;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	227;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	229;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	298;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	300;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	383;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	385;"	d	file:
-BUS_ID	src/include/libbus/bus.h	/^	BUS_ID,$/;"	e	enum:__anon7
-BUS_INVOKE_ARGS	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGS,$/;"	e	enum:__anon7
-BUS_INVOKE_DST_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_DST_FD,$/;"	e	enum:__anon7
-BUS_INVOKE_METHOD	src/include/libbus/bus.h	/^	BUS_INVOKE_METHOD,$/;"	e	enum:__anon7
-BUS_INVOKE_SRC_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_SRC_FD,$/;"	e	enum:__anon7
-BUS_METHOD	src/include/libbus/bus.h	30;"	d
-BUS_METHORDS	src/include/libbus/bus.h	/^	BUS_METHORDS,$/;"	e	enum:__anon7
-BUS_OBJNAME	src/include/libbus/bus.h	/^	BUS_OBJNAME,$/;"	e	enum:__anon7
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	283;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	285;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	345;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	347;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	434;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	436;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	239;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	241;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	313;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	315;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	398;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	400;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	494;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	496;"	d	file:
+BUS_ID	src/include/libbus/bus.h	/^	BUS_ID,$/;"	e	enum:__anon5
+BUS_INVOKE_ARGC	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGC,$/;"	e	enum:__anon5
+BUS_INVOKE_ARGS	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGS,$/;"	e	enum:__anon5
+BUS_INVOKE_DST_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_DST_FD,$/;"	e	enum:__anon5
+BUS_INVOKE_METHOD	src/include/libbus/bus.h	/^	BUS_INVOKE_METHOD,$/;"	e	enum:__anon5
+BUS_INVOKE_SRC_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_SRC_FD,$/;"	e	enum:__anon5
+BUS_METHOD	src/include/libbus/bus.h	35;"	d
+BUS_METHORDS	src/include/libbus/bus.h	/^	BUS_METHORDS,$/;"	e	enum:__anon5
+BUS_OBJNAME	src/include/libbus/bus.h	/^	BUS_OBJNAME,$/;"	e	enum:__anon5
+BUS_REPLY_FORWARD_INVOKE	src/include/libbus/bus.h	/^	BUS_REPLY_FORWARD_INVOKE,$/;"	e	enum:bus_communication_type
 BUS_REQ_ADD_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_ADD_OBJECT,$/;"	e	enum:bus_communication_type
 BUS_REQ_DATA	src/include/libbus/bus.h	/^	BUS_REQ_DATA,$/;"	e	enum:bus_communication_type
 BUS_REQ_HELLO	src/include/libbus/bus.h	/^	BUS_REQ_HELLO,$/;"	e	enum:bus_communication_type
@@ -95,7 +104,7 @@ BUS_REQ_REMOVE_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_REMOVE_OBJECT,$/;"	e	e
 BUS_REQ_STATUS	src/include/libbus/bus.h	/^	BUS_REQ_STATUS,$/;"	e	enum:bus_communication_type
 BUS_REQ_SUBSCRIBE	src/include/libbus/bus.h	/^	BUS_REQ_SUBSCRIBE,$/;"	e	enum:bus_communication_type
 BUS_REQ_UNSUBSCRIBE	src/include/libbus/bus.h	/^	BUS_REQ_UNSUBSCRIBE,$/;"	e	enum:bus_communication_type
-BUS_STATE	src/include/libbus/bus.h	/^	BUS_STATE,$/;"	e	enum:__anon7
+BUS_STATE	src/include/libbus/bus.h	/^	BUS_STATE,$/;"	e	enum:__anon5
 CC	Makefile	/^CC = gcc$/;"	m
 CC	src/Makefile	/^CC = gcc$/;"	m
 CC	src/lab/Makefile	/^CC = gcc$/;"	m
@@ -408,11 +417,11 @@ EV_VIP	src/include/libdbg/debug_businesses.h	143;"	d
 EV_WARNNING	src/include/libdbg/debug_businesses.h	140;"	d
 EV_WRITE	src/include/libevent_tiny/event2/event.h	735;"	d
 FDINFO_OFFSET	src/libevent_tiny/evmap.c	174;"	d	file:
-FOO_STRING	src/libblob/blob.c	/^    FOO_STRING, $/;"	e	enum:__anon14	file:
-FOO_TABLE	src/libblob/blob.c	/^    FOO_TABLE,$/;"	e	enum:__anon14	file:
-FOO_TABLE2	src/libblob/blob.c	/^    FOO_TABLE2,$/;"	e	enum:__anon14	file:
-FOO_U32	src/libblob/blob.c	/^    FOO_U32$/;"	e	enum:__anon14	file:
-FOO_U8	src/libblob/blob.c	/^    FOO_U8,          $/;"	e	enum:__anon14	file:
+FOO_STRING	src/libblob/blob.c	/^    FOO_STRING, $/;"	e	enum:__anon12	file:
+FOO_TABLE	src/libblob/blob.c	/^    FOO_TABLE,$/;"	e	enum:__anon12	file:
+FOO_TABLE2	src/libblob/blob.c	/^    FOO_TABLE2,$/;"	e	enum:__anon12	file:
+FOO_U32	src/libblob/blob.c	/^    FOO_U32$/;"	e	enum:__anon12	file:
+FOO_U8	src/libblob/blob.c	/^    FOO_U8,          $/;"	e	enum:__anon12	file:
 FTC	src/include/libdbg/debug.h	120;"	d
 FlagsForFile	.ycm_extra_conf.py	/^def FlagsForFile( filename, **kwargs ):$/;"	f
 GET_IO_SLOT	src/libevent_tiny/evmap.c	101;"	d	file:
@@ -423,8 +432,6 @@ GET_SIGNAL_SLOT	src/libevent_tiny/evmap.c	149;"	d	file:
 GET_SIGNAL_SLOT_AND_CTOR	src/libevent_tiny/evmap.c	156;"	d	file:
 GREEN	src/include/libdbg/debug.h	107;"	d
 GetCompilationInfoForFile	.ycm_extra_conf.py	/^def GetCompilationInfoForFile( filename ):$/;"	f
-HELLO_ID	src/libbus/test/test_server.c	/^	HELLO_ID,$/;"	e	enum:__anon1	file:
-HELLO_MSG	src/libbus/test/test_server.c	/^	HELLO_MSG,$/;"	e	enum:__anon1	file:
 HIGHLIGHT_FLAG	src/include/libdbg/debug.h	116;"	d
 HLIST_HEAD	src/include/liballoc/list.h	636;"	d
 HLIST_HEAD	src/include/libdata_structure/list.h	642;"	d
@@ -784,18 +791,18 @@ PF_INET6	src/include/libevent_tiny/ipv6-internal.h	74;"	d
 POSIX_NAME_SEM	src/include/libipc/semaphore/sem_struct.h	/^    POSIX_NAME_SEM,$/;"	e	enum:sem_type_e
 POSIX_NONAME_SEM	src/include/libipc/semaphore/sem_struct.h	/^    POSIX_NONAME_SEM,$/;"	e	enum:sem_type_e
 PROJECT_PATH	Makefile	/^export PROJECT_PATH = $(shell pwd)$/;"	m
-PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon5
-PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon5
-PROTO_0x3002	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3002,	$/;"	e	enum:__anon5
-PROTO_0x3003	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3003,	$/;"	e	enum:__anon5
-PROTO_0x3004	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3004,	$/;"	e	enum:__anon5
-PROTO_0x3005	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3005,	$/;"	e	enum:__anon5
-PROTO_0x3006	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3006,	$/;"	e	enum:__anon5
-PROTO_0x3007	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3007,	$/;"	e	enum:__anon5
-PROTO_0x3008	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3008 ,	$/;"	e	enum:__anon5
-PROTO_0x3009	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3009 ,	$/;"	e	enum:__anon5
-PROTO_0x300A	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300A,	$/;"	e	enum:__anon5
-PROTO_0x300B	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300B,	$/;"	e	enum:__anon5
+PROTO_0x3000	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3000 = 0x3000,	$/;"	e	enum:__anon3
+PROTO_0x3001	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3001,	$/;"	e	enum:__anon3
+PROTO_0x3002	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3002,	$/;"	e	enum:__anon3
+PROTO_0x3003	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3003,	$/;"	e	enum:__anon3
+PROTO_0x3004	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3004,	$/;"	e	enum:__anon3
+PROTO_0x3005	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3005,	$/;"	e	enum:__anon3
+PROTO_0x3006	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3006,	$/;"	e	enum:__anon3
+PROTO_0x3007	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3007,	$/;"	e	enum:__anon3
+PROTO_0x3008	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3008 ,	$/;"	e	enum:__anon3
+PROTO_0x3009	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x3009 ,	$/;"	e	enum:__anon3
+PROTO_0x300A	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300A,	$/;"	e	enum:__anon3
+PROTO_0x300B	src/include/libproto_analyzer/protocol_format_set.h	/^	PROTO_0x300B,	$/;"	e	enum:__anon3
 PROTO_NUM	src/libproto_analyzer/test/pdt_drv_proto_format.h	4;"	d
 PTHREAD_MUTEX_LOCK	src/include/libthread/sync_lock.h	/^	PTHREAD_MUTEX_LOCK = 1,$/;"	e	enum:sync_lock_type
 PTHREAD_RWLOCK	src/include/libthread/sync_lock.h	/^	PTHREAD_RWLOCK,$/;"	e	enum:sync_lock_type
@@ -817,8 +824,6 @@ SERVER_TYPE_TCP_UNIX	src/include/libipc/net/server.h	8;"	d
 SERVER_WORK_TYPE	src/include/libconcurrent/concurrent.h	/^enum SERVER_WORK_TYPE{$/;"	g
 SERVER_WORK_TYPE_PROCESS	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TYPE_PROCESS$/;"	e	enum:SERVER_WORK_TYPE
 SERVER_WORK_TYPE_THREAD	src/include/libconcurrent/concurrent.h	/^	SERVER_WORK_TYPE_THREAD = 0,$/;"	e	enum:SERVER_WORK_TYPE
-SET_ID	src/libbus/test/test_server.c	/^	SET_ID,$/;"	e	enum:__anon2	file:
-SET_MSG	src/libbus/test/test_server.c	/^	SET_MSG,$/;"	e	enum:__anon2	file:
 SHARE_TARGET	Makefile	/^SHARE_TARGET = libcutils.so$/;"	m
 SHMGET	src/include/libipc/share_mem/shm.h	/^    SHMGET = 0x04,  $/;"	e	enum:share_mem_type_e
 SHMOPEN	src/include/libipc/share_mem/shm.h	/^    SHMOPEN = 0x01,  $/;"	e	enum:share_mem_type_e
@@ -1108,9 +1113,9 @@ __BIG_ENDIAN	src/include/libblob/utils.h	75;"	d
 __BLOB_H__	src/include/libblob/blob.h	2;"	d
 __BUILD_BUG_ON	src/include/libblob/utils.h	32;"	d
 __BUSD_H__	src/include/libbus/busd.h	2;"	d
-__BUSD_MAX	src/include/libbus/busd.h	/^	__BUSD_MAX$/;"	e	enum:__anon8
+__BUSD_MAX	src/include/libbus/busd.h	/^	__BUSD_MAX$/;"	e	enum:__anon6
 __BUS_H__	src/include/libbus/bus.h	2;"	d
-__BUS_MAX	src/include/libbus/bus.h	/^	__BUS_MAX$/;"	e	enum:__anon7
+__BUS_MAX	src/include/libbus/bus.h	/^	__BUS_MAX$/;"	e	enum:__anon5
 __BUS_REQ_LAST	src/include/libbus/bus.h	/^	__BUS_REQ_LAST,$/;"	e	enum:bus_communication_type
 __BYTE_ORDER	src/include/libblob/utils.h	72;"	d
 __CLIENT_H__	src/include/libipc/net/client.h	2;"	d
@@ -1125,7 +1130,6 @@ __DEBUG_STRING_H__	src/include/libdbg/debug_string.h	20;"	d
 __EV_TIMER_H__	src/include/libconcurrent/tmr_user.h	2;"	d
 __HASH_LIST_H__	src/include/libdata_structure/hash_list.h	19;"	d
 __HASH_LIST_ST_H__	src/include/libdata_structure/hash_list_struct.h	19;"	d
-__HELLO_MAX	src/libbus/test/test_server.c	/^	__HELLO_MAX$/;"	e	enum:__anon1	file:
 __INC_FILES_H__	src/include/libdbg/inc_files.h	2;"	d
 __INET_CLIENT_H__	src/include/libipc/net/inet_client.h	2;"	d
 __INET_SERVER_H__	src/include/libipc/net/inet_server.h	2;"	d
@@ -1150,7 +1154,6 @@ __SEM_H__	src/include/libipc/semaphore/sem.h	2;"	d
 __SEM_STRUCT_H__	src/include/libipc/semaphore/sem_struct.h	2;"	d
 __SEM_SYSV_H__	src/include/libipc/semaphore/sem_sysv.h	2;"	d
 __SERVER_H__	src/include/libipc/net/server.h	2;"	d
-__SET_MAX	src/libbus/test/test_server.c	/^	__SET_MAX$/;"	e	enum:__anon2	file:
 __SHM_H__	src/include/libipc/share_mem/shm.h	2;"	d
 __SHM_RWQUEUE_H__	src/include/libipc/shm_queue/shm_queue.h	2;"	d
 __STATE_MACHINE_H__	src/include/libstate_machine/state_machine.h	2;"	d
@@ -1160,6 +1163,7 @@ __UNIX_SK_SERVER_H__	src/include/libipc/net/unix_server.h	2;"	d
 __USER_H__	src/include/libconcurrent/io_user.h	2;"	d
 __VECTOR_H__	src/include/libdata_structure/vector.h	2;"	d
 __VECTOR_STRUCT_H__	src/include/libdata_structure/vector_struct.h	2;"	d
+__bus_add_obj	src/libbus/bus.c	/^int __bus_add_obj(bus_t *bus,struct bus_object *obj)$/;"	f
 __cdecl	src/libevent_tiny/signal.c	73;"	d	file:
 __client	src/libipc/net/client/unix_client.c	/^client_t *__client(allocator_t *allocator,$/;"	f	file:
 __concurrent_master_create_slave	src/libconcurrent/concurrent.c	/^__concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)$/;"	f
@@ -1219,7 +1223,7 @@ __uint16_s	src/lab/lab3.c	/^typedef struct __uint16_s{$/;"	s	file:
 __uint32_s	src/lab/lab3.c	/^typedef struct __uint32_s{$/;"	s	file:
 __uint8_s	src/lab/lab3.c	/^typedef struct __uint8_s{$/;"	s	file:
 _dictionary_	src/include/libini/iniparser.h	/^typedef struct _dictionary_ {$/;"	s
-_ev	src/include/libevent_tiny/event2/event_struct.h	/^	} _ev;$/;"	m	struct:event	typeref:union:event::__anon11
+_ev	src/include/libevent_tiny/event2/event_struct.h	/^	} _ev;$/;"	m	struct:event	typeref:union:event::__anon9
 _event_debugx	src/libevent_tiny/log.c	/^_event_debugx(const char *fmt, ...)$/;"	f
 _evsig_restore_handler	src/libevent_tiny/signal.c	/^_evsig_restore_handler(struct event_base *base, int evsignal)$/;"	f
 _evsig_set_handler	src/libevent_tiny/signal.c	/^_evsig_set_handler(struct event_base *base,$/;"	f
@@ -1247,6 +1251,7 @@ action_callback	src/include/libstate_machine/state_machine.h	/^     void (*actio
 action_callback	src/include/libstate_machine/state_machine.h	/^    void (*action_callback)(state_machine_t *s,void *opaque);$/;"	m	struct:state_entry_s
 activequeues	src/include/libevent_tiny/event-internal.h	/^	struct event_list *activequeues;$/;"	m	struct:event_base	typeref:struct:event_base::event_list
 add	src/include/libevent_tiny/event-internal.h	/^	int (*add)(struct event_base *, evutil_socket_t fd, short old, short events, void *fdinfo);$/;"	m	struct:eventop
+addr_to_buffer	src/libbus/bus.c	/^static void addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f	file:
 addr_to_buffer	src/libbus/busd.c	/^static void addr_to_buffer(void *addr,uint8_t *buffer)$/;"	f	file:
 addrinfo_from_hostent	src/libevent_tiny/evutil.c	/^addrinfo_from_hostent(const struct hostent *ent,$/;"	f	file:
 admin_lock	src/include/libconcurrent/concurrent.h	/^	sync_lock_t admin_lock;$/;"	m	struct:concurrent_task_admin_s
@@ -1440,6 +1445,7 @@ bswap_64	src/include/libblob/utils.h	60;"	d
 bswap_64	src/include/libblob/utils.h	64;"	d
 bswap_64	src/include/libblob/utils.h	68;"	d
 bucket_pos	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_pos;\/\/bucket pos$/;"	m	struct:hash_map_pos_info
+bucket_size	src/include/libbus/bus.h	/^    uint8_t bucket_size;$/;"	m	struct:bus_s
 bucket_size	src/include/libbus/busd.h	/^    uint8_t bucket_size;$/;"	m	struct:busd_s
 bucket_size	src/include/libconcurrent/concurrent.h	/^	uint32_t bucket_size;$/;"	m	struct:concurrent_task_admin_s
 bucket_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t bucket_size;$/;"	m	struct:hash_map_s
@@ -1455,14 +1461,17 @@ buffer_len	src/include/libipc/net/inet_client.h	/^	uint32_t buffer_len;$/;"	m	st
 buffer_len	src/include/libipc/net/unix_server.h	/^	uint32_t buffer_len;$/;"	m	struct:server_data_task_s
 buffer_s	src/include/libproto_analyzer/protocol_format_set.h	/^typedef struct buffer_s{$/;"	s
 buffer_t	src/include/libproto_analyzer/protocol_format_set.h	/^}buffer_t;$/;"	t	typeref:struct:buffer_s
+buffer_to_addr	src/libbus/bus.c	/^static void *buffer_to_addr(uint8_t *buffer)$/;"	f	file:
 buffer_to_addr	src/libbus/busd.c	/^static void *buffer_to_addr(uint8_t *buffer)$/;"	f	file:
 bus_add_object	src/libbus/bus.c	/^int bus_add_object(bus_t *bus,struct bus_object *obj)$/;"	f
+bus_alloc	src/libbus/bus.c	/^bus_t * bus_alloc(allocator_t *allocator)$/;"	f
 bus_client_create	src/libbus/bus.c	/^bus_t * bus_client_create(allocator_t *allocator,$/;"	f
 bus_cmd_callback	src/include/libbus/bus.h	/^typedef int (*bus_cmd_callback)(bus_t *bus,  blob_attr_t **attr);$/;"	t
 bus_communication_type	src/include/libbus/bus.h	/^enum bus_communication_type {$/;"	g
-bus_create	src/libbus/bus.c	/^bus_t * bus_create(allocator_t *allocator)$/;"	f
+bus_get_method_handler	src/libbus/bus.c	/^bus_get_method_handler(bus_object_t *obj,char *method)$/;"	f
+bus_get_policy	src/libbus/bus.c	/^bus_get_policy(bus_object_t *obj,char *method)$/;"	f
 bus_handle_add_object_reply	src/libbus/bus.c	/^int bus_handle_add_object_reply(bus_t *bus,  blob_attr_t **attr)$/;"	f
-bus_handle_busd_forward_invoke	src/libbus/bus.c	/^int bus_handle_busd_forward_invoke(bus_t *bus,  blob_attr_t **attr)$/;"	f
+bus_handle_forward_invoke	src/libbus/bus.c	/^int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)$/;"	f
 bus_handle_invoke_reply	src/libbus/bus.c	/^int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)$/;"	f
 bus_handle_lookup_object_reply	src/libbus/bus.c	/^int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)$/;"	f
 bus_handler_t	src/include/libbus/bus.h	/^typedef int (*bus_handler_t)(struct bus_s *bus,$/;"	t
@@ -1470,25 +1479,29 @@ bus_init	src/libbus/bus.c	/^int bus_init(bus_t *bus,$/;"	f
 bus_invoke	src/libbus/bus.c	/^int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
 bus_lookup	src/libbus/bus.c	/^int bus_lookup(bus_t *bus, char *key)$/;"	f
 bus_method	src/include/libbus/bus.h	/^struct bus_method {$/;"	s
-bus_object	src/include/libbus/bus.h	/^struct bus_object {$/;"	s
+bus_object	src/include/libbus/bus.h	/^typedef struct bus_object {$/;"	s
+bus_object_t	src/include/libbus/bus.h	/^}bus_object_t;$/;"	t	typeref:struct:bus_object
 bus_policy	src/libbus/bus.c	/^static const blob_policy_t bus_policy[] = {$/;"	v	file:
 bus_process_receiving_data_callback	src/libbus/bus.c	/^static int bus_process_receiving_data_callback(client_task_t *task)$/;"	f	file:
 bus_push_args_to_blob	src/libbus/bus.c	/^int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)$/;"	f
 bus_push_methods_to_blob	src/libbus/bus.c	/^int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)$/;"	f
+bus_reply_forward_invoke	src/libbus/bus.c	/^int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)$/;"	f
 bus_reqhdr	src/include/libbus/bus.h	/^typedef struct bus_reqhdr {$/;"	s
 bus_reqhdr_t	src/include/libbus/bus.h	/^}__attribute__((packed)) bus_reqhdr_t;$/;"	t	typeref:struct:bus_reqhdr
 bus_s	src/include/libbus/bus.h	/^struct bus_s{$/;"	s
 bus_send	src/libbus/bus.c	/^int bus_send(bus_t *bus,$/;"	f
 bus_t	src/include/libbus/bus.h	/^typedef struct bus_s bus_t;$/;"	t	typeref:struct:bus_s
+busd_alloc	src/libbus/busd.c	/^busd_t * busd_alloc(allocator_t *allocator)$/;"	f
 busd_cmd_callback	src/include/libbus/busd.h	/^typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr_s **attr,int fd);$/;"	t
-busd_create	src/libbus/busd.c	/^busd_t * busd_create(allocator_t *allocator)$/;"	f
+busd_create	src/libbus/busd.c	/^busd_t *busd_create(allocator_t *allocator,$/;"	f
 busd_create_bus_object	src/libbus/busd.c	/^busd_create_bus_object(busd_t *busd,char *name, blob_attr_t *attr,int fd)$/;"	f
 busd_dump_object	src/libbus/busd.c	/^int busd_dump_object(struct busd_object *obj)$/;"	f
 busd_dump_object_method	src/libbus/busd.c	/^void busd_dump_object_method(vector_pos_t *pos)$/;"	f
 busd_dump_object_method_args	src/libbus/busd.c	/^void busd_dump_object_method_args(list_t *list)$/;"	f
-busd_forward_invoke	src/libbus/busd.c	/^int busd_forward_invoke(busd_t *busd, int src_fd,int dest_fd, char *method, blob_attr_t *args)$/;"	f
+busd_forward_invoke	src/libbus/busd.c	/^int busd_forward_invoke(busd_t *busd, int src_fd,int dest_fd,char *obj_name, char *method,int argc, blob_attr_t *args)$/;"	f
 busd_get_object_method	src/libbus/busd.c	/^int busd_get_object_method(struct busd_object_method * method,$/;"	f
 busd_handle_add_object	src/libbus/busd.c	/^int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)$/;"	f
+busd_handle_forward_invoke_reply	src/libbus/busd.c	/^int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)$/;"	f
 busd_handle_invoke_method	src/libbus/busd.c	/^int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)$/;"	f
 busd_handle_lookup_object	src/libbus/busd.c	/^int busd_handle_lookup_object(busd_t *busd,  blob_attr_t **attr,int fd)$/;"	f
 busd_init	src/libbus/busd.c	/^int busd_init(busd_t *busd,$/;"	f
@@ -1498,7 +1511,8 @@ busd_object_method_arg_s	src/include/libbus/busd.h	/^struct busd_object_method_a
 busd_object_t	src/include/libbus/busd.h	/^}busd_object_t;$/;"	t	typeref:struct:busd_object
 busd_policy	src/libbus/busd.c	/^static const struct blob_policy_s busd_policy[] = {$/;"	v	typeref:struct:blob_policy_s	file:
 busd_process_receiving_data_callback	src/libbus/busd.c	/^static int busd_process_receiving_data_callback(void *task)$/;"	f	file:
-busd_reply_add_object	src/libbus/busd.c	/^int busd_reply_add_object(busd_t *busd, int state, int fd)$/;"	f
+busd_reply_add_object	src/libbus/busd.c	/^int busd_reply_add_object(busd_t *busd, int state,char *obj_name, int fd)$/;"	f
+busd_reply_invoke	src/libbus/busd.c	/^int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,int source_fd)$/;"	f
 busd_reply_lookup_object	src/libbus/busd.c	/^int busd_reply_lookup_object(busd_t *busd,struct busd_object *obj,int fd)$/;"	f
 busd_s	src/include/libbus/busd.h	/^typedef struct busd_s{$/;"	s
 busd_t	src/include/libbus/busd.h	/^}busd_t;$/;"	t	typeref:struct:busd_s
@@ -1539,7 +1553,7 @@ cmd_config_t	src/include/libargs/cmd_args.h	/^}cmd_config_t;$/;"	t	typeref:struc
 cmd_type	src/include/libargs/cmd_args.h	/^	char *cmd_type;$/;"	m	struct:cmd_config_s
 cmds	src/libargs/test_cmd_args.c	/^cmd_config_t cmds[]={$/;"	v
 cmds	src/main.c	/^static cmd_config_t cmds[]={$/;"	v	file:
-code	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon15	file:
+code	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon13	file:
 color	src/include/libdbg/debug.h	/^	uint8_t color;$/;"	m	struct:debug_level_info
 common_timeout_callback	src/libevent_tiny/event.c	/^common_timeout_callback(evutil_socket_t fd, short what, void *arg)$/;"	f	file:
 common_timeout_list	src/include/libevent_tiny/event-internal.h	/^struct common_timeout_list {$/;"	s
@@ -1631,7 +1645,7 @@ cpu_to_le32	src/include/libblob/utils.h	115;"	d
 cpu_to_le64	src/include/libblob/utils.h	104;"	d
 cpu_to_le64	src/include/libblob/utils.h	114;"	d
 create_pair	src/include/libdata_structure/map_pair.h	/^static inline pair_t * create_pair(int key_len,int value_len)$/;"	f
-ctr_alloc	src/include/liballoc/allocator.h	/^		ctr_alloc_t ctr_alloc;$/;"	m	union:allocator::__anon6
+ctr_alloc	src/include/liballoc/allocator.h	/^		ctr_alloc_t ctr_alloc;$/;"	m	union:allocator::__anon4
 ctr_alloc_alloc	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)$/;"	f
 ctr_alloc_destroy	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^void ctr_alloc_destroy(allocator_t *alloc)$/;"	f
 ctr_alloc_free	src/liballoc/container_alloc/allocator_ctr_alloc.c	/^void ctr_alloc_free(allocator_t *alloc,void *addr)$/;"	f
@@ -1751,7 +1765,7 @@ end	src/include/libdata_structure/hash_list_struct.h	/^	hash_map_pos_t begin,end
 end	src/include/libdata_structure/link_list_struct.h	/^	list_pos_t begin,end,head;$/;"	m	struct:llist_s
 end	src/include/libdata_structure/rbtree_map_struct.h	/^	rbtree_map_pos_t begin ,end;$/;"	m	struct:rbtree_map_s
 end	src/include/libdata_structure/vector_struct.h	/^	vector_pos_t begin,end;$/;"	m	struct:vector_s
-ent	src/libevent_tiny/evmap.c	/^	} ent;$/;"	m	struct:event_map_entry	typeref:union:event_map_entry::__anon16	file:
+ent	src/libevent_tiny/evmap.c	/^	} ent;$/;"	m	struct:event_map_entry	typeref:union:event_map_entry::__anon14	file:
 entries	src/include/libevent_tiny/event-internal.h	/^	TAILQ_HEAD(event_configq, event_config_entry) entries;$/;"	m	struct:event_config
 entries	src/include/libevent_tiny/event-internal.h	/^	void **entries;$/;"	m	struct:event_signal_map
 entry_config	src/libstate_machine/test_state_machine.c	/^static state_entry_config_t entry_config[]={$/;"	v	file:
@@ -1804,36 +1818,36 @@ ev_intptr_t	src/include/libevent_tiny/event2/util.h	176;"	d
 ev_intptr_t	src/include/libevent_tiny/event2/util.h	179;"	d
 ev_intptr_t	src/include/libevent_tiny/event2/util.h	182;"	d
 ev_intptr_t	src/include/libevent_tiny/event2/util.h	185;"	d
-ev_io	src/include/libevent_tiny/event2/event_struct.h	/^		} ev_io;$/;"	m	union:event::__anon11	typeref:struct:event::__anon11::__anon12
+ev_io	src/include/libevent_tiny/event2/event_struct.h	/^		} ev_io;$/;"	m	union:event::__anon9	typeref:struct:event::__anon9::__anon10
 ev_io_next	src/include/libevent_tiny/event-internal.h	49;"	d
-ev_io_next	src/include/libevent_tiny/event2/event_struct.h	/^			TAILQ_ENTRY(event) ev_io_next;$/;"	m	struct:event::__anon11::__anon12
+ev_io_next	src/include/libevent_tiny/event2/event_struct.h	/^			TAILQ_ENTRY(event) ev_io_next;$/;"	m	struct:event::__anon9::__anon10
 ev_io_timeout	src/include/libevent_tiny/event-internal.h	50;"	d
 ev_n_signals_added	src/include/libevent_tiny/evsignal-internal.h	/^	int ev_n_signals_added;$/;"	m	struct:evsig_info
 ev_ncalls	src/include/libevent_tiny/event-internal.h	53;"	d
-ev_ncalls	src/include/libevent_tiny/event2/event_struct.h	/^			short ev_ncalls;$/;"	m	struct:event::__anon11::__anon13
+ev_ncalls	src/include/libevent_tiny/event2/event_struct.h	/^			short ev_ncalls;$/;"	m	struct:event::__anon9::__anon11
 ev_next	src/include/libevent_tiny/event2/event_struct.h	/^	TAILQ_ENTRY(event) ev_next;$/;"	m	struct:event
-ev_next_with_common_timeout	src/include/libevent_tiny/event2/event_struct.h	/^		TAILQ_ENTRY(event) ev_next_with_common_timeout;$/;"	m	union:event::__anon10
+ev_next_with_common_timeout	src/include/libevent_tiny/event2/event_struct.h	/^		TAILQ_ENTRY(event) ev_next_with_common_timeout;$/;"	m	union:event::__anon8
 ev_off_t	src/include/libevent_tiny/event2/util.h	197;"	d
 ev_off_t	src/include/libevent_tiny/event2/util.h	199;"	d
 ev_pncalls	src/include/libevent_tiny/event-internal.h	54;"	d
-ev_pncalls	src/include/libevent_tiny/event2/event_struct.h	/^			short *ev_pncalls;$/;"	m	struct:event::__anon11::__anon13
+ev_pncalls	src/include/libevent_tiny/event2/event_struct.h	/^			short *ev_pncalls;$/;"	m	struct:event::__anon9::__anon11
 ev_pri	src/include/libevent_tiny/event2/event_struct.h	/^	ev_uint8_t ev_pri;	\/* smaller numbers are higher priority *\/$/;"	m	struct:event
 ev_res	src/include/libevent_tiny/event2/event_struct.h	/^	short ev_res;		\/* result passed to event callback *\/$/;"	m	struct:event
 ev_sighandler_t	src/include/libevent_tiny/evsignal-internal.h	/^typedef void (*ev_sighandler_t)(int);$/;"	t
-ev_signal	src/include/libevent_tiny/event2/event_struct.h	/^		} ev_signal;$/;"	m	union:event::__anon11	typeref:struct:event::__anon11::__anon13
+ev_signal	src/include/libevent_tiny/event2/event_struct.h	/^		} ev_signal;$/;"	m	union:event::__anon9	typeref:struct:event::__anon9::__anon11
 ev_signal	src/include/libevent_tiny/evsignal-internal.h	/^	struct event ev_signal;$/;"	m	struct:evsig_info	typeref:struct:evsig_info::event
 ev_signal_added	src/include/libevent_tiny/evsignal-internal.h	/^	int ev_signal_added;$/;"	m	struct:evsig_info
 ev_signal_next	src/include/libevent_tiny/event-internal.h	48;"	d
-ev_signal_next	src/include/libevent_tiny/event2/event_struct.h	/^			TAILQ_ENTRY(event) ev_signal_next;$/;"	m	struct:event::__anon11::__anon13
+ev_signal_next	src/include/libevent_tiny/event2/event_struct.h	/^			TAILQ_ENTRY(event) ev_signal_next;$/;"	m	struct:event::__anon9::__anon11
 ev_signal_pair	src/include/libevent_tiny/evsignal-internal.h	/^	evutil_socket_t ev_signal_pair[2];$/;"	m	struct:evsig_info
 ev_socklen_t	src/include/libevent_tiny/event2/util.h	254;"	d
 ev_socklen_t	src/include/libevent_tiny/event2/util.h	256;"	d
 ev_socklen_t	src/include/libevent_tiny/event2/util.h	258;"	d
 ev_ssize_t	src/include/libevent_tiny/event2/util.h	191;"	d
 ev_ssize_t	src/include/libevent_tiny/event2/util.h	193;"	d
-ev_timeout	src/include/libevent_tiny/event2/event_struct.h	/^			struct timeval ev_timeout;$/;"	m	struct:event::__anon11::__anon12	typeref:struct:event::__anon11::__anon12::timeval
+ev_timeout	src/include/libevent_tiny/event2/event_struct.h	/^			struct timeval ev_timeout;$/;"	m	struct:event::__anon9::__anon10	typeref:struct:event::__anon9::__anon10::timeval
 ev_timeout	src/include/libevent_tiny/event2/event_struct.h	/^	struct timeval ev_timeout;$/;"	m	struct:event	typeref:struct:event::timeval
-ev_timeout_pos	src/include/libevent_tiny/event2/event_struct.h	/^	} ev_timeout_pos;$/;"	m	struct:event	typeref:union:event::__anon10
+ev_timeout_pos	src/include/libevent_tiny/event2/event_struct.h	/^	} ev_timeout_pos;$/;"	m	struct:event	typeref:union:event::__anon8
 ev_uint16_t	src/include/libevent_tiny/event2/util.h	145;"	d
 ev_uint16_t	src/include/libevent_tiny/event2/util.h	148;"	d
 ev_uint16_t	src/include/libevent_tiny/event2/util.h	151;"	d
@@ -1973,7 +1987,7 @@ events	src/libevent_tiny/epoll.c	/^	struct epoll_event *events;$/;"	m	struct:epo
 events	src/libevent_tiny/evmap.c	/^	struct event_list events;$/;"	m	struct:evmap_io	typeref:struct:evmap_io::event_list	file:
 events	src/libevent_tiny/evmap.c	/^	struct event_list events;$/;"	m	struct:evmap_signal	typeref:struct:evmap_signal::event_list	file:
 evmap_check_integrity	src/libevent_tiny/evmap.c	/^evmap_check_integrity(struct event_base *base)$/;"	f
-evmap_io	src/libevent_tiny/evmap.c	/^		struct evmap_io evmap_io;$/;"	m	union:event_map_entry::__anon16	typeref:struct:event_map_entry::__anon16::evmap_io	file:
+evmap_io	src/libevent_tiny/evmap.c	/^		struct evmap_io evmap_io;$/;"	m	union:event_map_entry::__anon14	typeref:struct:event_map_entry::__anon14::evmap_io	file:
 evmap_io	src/libevent_tiny/evmap.c	/^struct evmap_io {$/;"	s	file:
 evmap_io_active	src/libevent_tiny/evmap.c	/^evmap_io_active(struct event_base *base, evutil_socket_t fd, short events)$/;"	f
 evmap_io_add	src/libevent_tiny/evmap.c	/^evmap_io_add(struct event_base *base, evutil_socket_t fd, struct event *ev)$/;"	f
@@ -2255,8 +2269,8 @@ iclient_destroy	src/libipc/net/client/inet_client.c	/^int iclient_destroy(client
 iclient_release_task	src/libipc/net/client/inet_client.c	/^static int iclient_release_task(client_task_t *task)$/;"	f	file:
 id	src/include/libbus/bus.h	/^	uint32_t id;$/;"	m	struct:bus_object
 id	src/include/libbus/busd.h	/^	uint32_t id;$/;"	m	struct:busd_object
-id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon4
-id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon3
+id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_master_s	typeref:union:concurrent_master_s::__anon2
+id	src/include/libconcurrent/concurrent.h	/^	}id;$/;"	m	struct:concurrent_slave_s	typeref:union:concurrent_slave_s::__anon1
 idxplus1	src/libevent_tiny/evmap.c	/^	int idxplus1; \/* this is the index +1, so that memset(0) will make it$/;"	m	struct:event_changelist_fdinfo	file:
 idxplus1	src/libevent_tiny/poll.c	/^	int idxplus1;$/;"	m	struct:pollidx	file:
 in6_addr	src/include/libevent_tiny/ipv6-internal.h	/^struct in6_addr {$/;"	s
@@ -2315,6 +2329,7 @@ key_cmp_fpt	src/include/libdata_structure/rbtree_map_struct.h	/^typedef int (*ke
 key_cmp_func	src/include/libdata_structure/hash_list_struct.h	/^	key_cmp_fpt key_cmp_func;$/;"	m	struct:hash_map_s
 key_cmp_func	src/include/libdata_structure/rbtree_map_struct.h	/^	key_cmp_fpt key_cmp_func;$/;"	m	struct:rbtree_map_s
 key_len	src/include/libdata_structure/map_pair.h	/^	uint32_t key_len;$/;"	m	struct:pair
+key_size	src/include/libbus/bus.h	/^    uint8_t key_size;$/;"	m	struct:bus_s
 key_size	src/include/libbus/busd.h	/^    uint8_t key_size;$/;"	m	struct:busd_s
 key_size	src/include/libconcurrent/concurrent.h	/^	uint8_t key_size;$/;"	m	struct:concurrent_task_admin_s
 key_size	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t key_size;$/;"	m	struct:hash_map_s
@@ -2588,7 +2603,7 @@ min_heap_elem_init	src/include/libevent_tiny/minheap-internal.h	/^void min_heap_
 min_heap_elt_is_top	src/include/libevent_tiny/minheap-internal.h	/^int min_heap_elt_is_top(const struct event *e)$/;"	f
 min_heap_empty	src/include/libevent_tiny/minheap-internal.h	/^int min_heap_empty(min_heap_t* s) { return 0u == s->n; }$/;"	f
 min_heap_erase	src/include/libevent_tiny/minheap-internal.h	/^int min_heap_erase(min_heap_t* s, struct event* e)$/;"	f
-min_heap_idx	src/include/libevent_tiny/event2/event_struct.h	/^		int min_heap_idx;$/;"	m	union:event::__anon10
+min_heap_idx	src/include/libevent_tiny/event2/event_struct.h	/^		int min_heap_idx;$/;"	m	union:event::__anon8
 min_heap_pop	src/include/libevent_tiny/minheap-internal.h	/^struct event* min_heap_pop(min_heap_t* s)$/;"	f
 min_heap_push	src/include/libevent_tiny/minheap-internal.h	/^int min_heap_push(min_heap_t* s, struct event* e)$/;"	f
 min_heap_reserve	src/include/libevent_tiny/minheap-internal.h	/^int min_heap_reserve(min_heap_t* s, unsigned n)$/;"	f
@@ -2611,7 +2626,7 @@ mmap_flag	src/include/libipc/share_mem/shm.h	/^    int mmap_flag;$/;"	m	struct:s
 mmap_off	src/include/libipc/share_mem/shm.h	/^    int mmap_off;$/;"	m	struct:share_mem_s
 mmap_prot	src/include/libipc/share_mem/shm.h	/^    int mmap_prot;$/;"	m	struct:share_mem_s
 mode_t	src/libevent_tiny/evutil.c	59;"	d	file:
-msg	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon15	file:
+msg	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	m	struct:__anon13	file:
 msgblob_type	src/include/libblob/blob.h	/^enum msgblob_type {       $/;"	g
 mutex	src/include/libthread/sync_lock.h	/^		pthread_mutex_t mutex;$/;"	m	union:sync_lock_s::lock
 n	src/include/libevent_tiny/minheap-internal.h	/^    unsigned n, a;$/;"	m	struct:min_heap
@@ -2658,6 +2673,7 @@ node_count	src/include/libdata_structure/hash_list_struct.h	/^	uint32_t node_cou
 notifier	src/include/libstate_machine/state_machine.h	/^    io_user_t *notifier;$/;"	m	struct:state_machine_s
 nread	src/libevent_tiny/evmap.c	/^	ev_uint16_t nread;$/;"	m	struct:evmap_io	file:
 nwrite	src/libevent_tiny/evmap.c	/^	ev_uint16_t nwrite;$/;"	m	struct:evmap_io	file:
+obj_hmap	src/include/libbus/bus.h	/^	hash_map_t *obj_hmap;$/;"	m	struct:bus_s
 obj_hmap	src/include/libbus/busd.h	/^	hash_map_t *obj_hmap;$/;"	m	struct:busd_s
 offsetof	src/include/libdata_structure/rbtree.h	127;"	d
 offsetof	src/include/libdata_structure/rbtree.h	128;"	d
@@ -2712,6 +2728,7 @@ pa_set_protocol_byte_data	src/libproto_analyzer/protocol_analyzer.c	/^void pa_se
 pa_set_value	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_value(const char *key,uint32_t value,struct protocol_analyzer_s *pa)$/;"	f
 pa_set_variable_length_flag	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_variable_length_flag(struct protocol_analyzer_s *pa)$/;"	f
 pa_set_variable_length_value	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_variable_length_value(char *key,uint32_t value,$/;"	f
+pair	src/include/libbus/bus.h	/^    pair_t *pair;$/;"	m	struct:bus_s
 pair	src/include/libbus/busd.h	/^    pair_t *pair;$/;"	m	struct:busd_s
 pair	src/include/libdata_structure/map_pair.h	/^typedef struct pair{$/;"	s
 pair	src/include/libproto_analyzer/pa_admin.h	/^	pair_t *pair;$/;"	m	struct:pa_admin_s
@@ -2741,8 +2758,8 @@ pfs_set_pdu_format_ackd	src/libproto_analyzer/test/pdt_pdu_proto_format.c	/^int 
 pfs_set_proto_format_3008	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^int pfs_set_proto_format_3008(protocol_format_set_t *pfs_p)$/;"	f
 pfs_set_proto_format_3019	src/libproto_analyzer/test/pdt_drv_proto_format.c	/^int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p)$/;"	f
 pfs_set_proto_info	src/libproto_analyzer/protocol_format_set.c	/^pfs_set_proto_info($/;"	f
-pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon4
-pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon3
+pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_master_s::__anon2
+pid	src/include/libconcurrent/concurrent.h	/^		pid_t pid;$/;"	m	union:concurrent_slave_s::__anon1
 pol	src/libblob/blob.c	/^static const struct blob_policy_s pol[] = {$/;"	v	typeref:struct:blob_policy_s	file:
 policy	src/include/libbus/bus.h	/^	struct blob_policy_s *policy;$/;"	m	struct:bus_method	typeref:struct:bus_method::blob_policy_s
 poll_add	src/libevent_tiny/poll.c	/^poll_add(struct event_base *base, int fd, short old, short events, void *_idx)$/;"	f	file:
@@ -2787,7 +2804,7 @@ print_test	src/libdata_structure/ring_buffer/ring_buffer.c	/^void print_test(str
 print_time_stamp	src/lab/lab5.c	/^void print_time_stamp()  $/;"	f
 print_vector_data	src/libdata_structure/test/test_vector.c	/^void print_vector_data(vector_pos_t *pos)$/;"	f
 printf_buffer	src/lab/lab5.c	/^void printf_buffer(unsigned char *buf, int len)$/;"	f
-priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon6
+priv	src/include/liballoc/allocator.h	/^	}priv;$/;"	m	struct:allocator	typeref:union:allocator::__anon4
 priv	src/include/libdbg/debug.h	/^	}priv;$/;"	m	struct:debugger	typeref:union:debugger::debugger_priv
 process_task_callback	src/lab/lab.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
 process_task_callback	src/lab/lab2.c	/^static int process_task_callback(client_task_t *task)$/;"	f	file:
@@ -3058,11 +3075,11 @@ sockaddr_storage	src/include/libevent_tiny/util-internal.h	/^struct sockaddr_sto
 socklen_t	src/include/libevent_tiny/util-internal.h	111;"	d
 ss_family	src/include/libevent_tiny/event2/util.h	264;"	d
 ss_family	src/include/libevent_tiny/util-internal.h	227;"	d
-ss_padding	src/include/libevent_tiny/util-internal.h	/^		char ss_padding[128];$/;"	m	union:sockaddr_storage::__anon9
-ss_sa	src/include/libevent_tiny/util-internal.h	/^		struct sockaddr ss_sa;$/;"	m	union:sockaddr_storage::__anon9	typeref:struct:sockaddr_storage::__anon9::sockaddr
-ss_sin	src/include/libevent_tiny/util-internal.h	/^		struct sockaddr_in ss_sin;$/;"	m	union:sockaddr_storage::__anon9	typeref:struct:sockaddr_storage::__anon9::sockaddr_in
-ss_sin6	src/include/libevent_tiny/util-internal.h	/^		struct sockaddr_in6 ss_sin6;$/;"	m	union:sockaddr_storage::__anon9	typeref:struct:sockaddr_storage::__anon9::sockaddr_in6
-ss_union	src/include/libevent_tiny/util-internal.h	/^	} ss_union;$/;"	m	struct:sockaddr_storage	typeref:union:sockaddr_storage::__anon9
+ss_padding	src/include/libevent_tiny/util-internal.h	/^		char ss_padding[128];$/;"	m	union:sockaddr_storage::__anon7
+ss_sa	src/include/libevent_tiny/util-internal.h	/^		struct sockaddr ss_sa;$/;"	m	union:sockaddr_storage::__anon7	typeref:struct:sockaddr_storage::__anon7::sockaddr
+ss_sin	src/include/libevent_tiny/util-internal.h	/^		struct sockaddr_in ss_sin;$/;"	m	union:sockaddr_storage::__anon7	typeref:struct:sockaddr_storage::__anon7::sockaddr_in
+ss_sin6	src/include/libevent_tiny/util-internal.h	/^		struct sockaddr_in6 ss_sin6;$/;"	m	union:sockaddr_storage::__anon7	typeref:struct:sockaddr_storage::__anon7::sockaddr_in6
+ss_union	src/include/libevent_tiny/util-internal.h	/^	} ss_union;$/;"	m	struct:sockaddr_storage	typeref:union:sockaddr_storage::__anon7
 start	src/include/liballoc/allocator_ctr_alloc.h	/^	void *start;$/;"	m	struct:ctr_mem_pool
 stat	src/libevent_tiny/evutil.c	58;"	d	file:
 stat_flag	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t stat_flag;$/;"	m	struct:slab
@@ -3210,8 +3227,8 @@ th_notify	src/include/libevent_tiny/event-internal.h	/^	struct event th_notify;$
 th_notify_fd	src/include/libevent_tiny/event-internal.h	/^	evutil_socket_t th_notify_fd[2];$/;"	m	struct:event_base
 th_notify_fn	src/include/libevent_tiny/event-internal.h	/^	int (*th_notify_fn)(struct event_base *base);$/;"	m	struct:event_base
 th_owner_id	src/include/libevent_tiny/event-internal.h	/^	unsigned long th_owner_id;$/;"	m	struct:event_base
-tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon4
-tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon3
+tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_master_s::__anon2
+tid	src/include/libconcurrent/concurrent.h	/^		pthread_t tid;$/;"	m	union:concurrent_slave_s::__anon1
 timeheap	src/include/libevent_tiny/event-internal.h	/^	struct min_heap timeheap;$/;"	m	struct:event_base	typeref:struct:event_base::min_heap
 timeout_add	src/include/libevent_tiny/event2/event_compat.h	188;"	d
 timeout_cb	src/libevent_tiny/test_time.c	/^timeout_cb(evutil_socket_t fd, short event, void *arg)$/;"	f	file:
@@ -3348,7 +3365,7 @@ windows_mutex_lock	src/libthread/sync_lock/windows/windows_mutex.c	/^int windows
 windows_mutex_lock_destroy	src/libthread/sync_lock/windows/windows_mutex.c	/^int windows_mutex_lock_destroy(struct sync_lock_s *slock)$/;"	f
 windows_mutex_trylock	src/libthread/sync_lock/windows/windows_mutex.c	/^int windows_mutex_trylock(struct sync_lock_s *slock,void *arg)$/;"	f
 windows_mutex_unlock	src/libthread/sync_lock/windows/windows_mutex.c	/^int windows_mutex_unlock(struct sync_lock_s *slock)$/;"	f
-windows_socket_errors	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	v	typeref:struct:__anon15	file:
+windows_socket_errors	src/libevent_tiny/evutil.c	/^static struct { int code; const char *msg; } windows_socket_errors[] = {$/;"	v	typeref:struct:__anon13	file:
 windows_user_mode_mutex_register	src/libthread/sync_lock/windows/windows_mutex.c	/^int  windows_user_mode_mutex_register(){$/;"	f
 work	src/libconcurrent/test_concurrent.c	/^void work(concurrent_slave_t *slave,void *arg)$/;"	f
 work_func	src/include/libconcurrent/concurrent.h	/^	void (*work_func)(concurrent_slave_t *slave,void *arg);$/;"	m	struct:concurrent_message_s

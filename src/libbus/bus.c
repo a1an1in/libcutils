@@ -138,6 +138,28 @@ int bus_init(bus_t *bus,
 			      NULL,
 			      NULL);
 
+    /*create req hash map*/
+    if(bus->req_key_size == 0) {
+        bus->req_key_size = 10;
+    }
+    if(bus->req_bucket_size == 0) {
+        bus->req_bucket_size = 20;
+    }
+	bus->req_pair = create_pair(bus->req_key_size,sizeof(bus_req_t));
+
+	bus->req_hmap = hash_map_create(bus->allocator,0);
+    if(bus->req_hmap == NULL) {
+        //.........
+        return -1;
+    }
+
+	hash_map_init(bus->req_hmap,
+			      bus->req_key_size,//uint32_t req_key_size,
+			      sizeof(bus_object_t)+ bus->req_key_size,
+			      bus->req_bucket_size,
+			      NULL,
+			      NULL);
+
     return 1;
 }
 
@@ -348,6 +370,7 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
 	uint32_t buffer_len;
     int i;
 
+    /*compose req proto*/
 	memset(&hdr,0,sizeof(hdr));
 
 	hdr.type = BUS_REQ_INVOKE;
@@ -370,16 +393,66 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
 	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
 	buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
+    /*send req proto*/
 	dbg_buf(DBG_DETAIL,"bus send:",buffer,buffer_len);
 	bus_send(bus, buffer, buffer_len);
 
 	return 0;
 }
+int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
+{
+/*
+ *    bus_req_t req;
+ *
+ *    bus_invoke(bus,key, method,argc, args);
+ *
+ *    req.method = method;
+ *    req.state = -1;
+ *
+ *    make_pair(bus->pair,method,&req);
+ *    hash_map_insert(bus->obj_hmap,bus->pair->data);
+ */
+
+    return 0;
+}
+int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)
+{
+    bus_req_t req,*req_back;
+    hash_map_pos_t out;
+    int ret;
+
+    req.method = method;
+    req.state = 0xffff;
+
+    make_pair(bus->req_pair,method,&req);
+
+    ret = hash_map_insert_wb(bus->req_hmap,bus->req_pair->data,&out);
+    if (ret < 0) {
+        dbg_str(DBG_WARNNING,"bus_invoke_sync");
+        return ret;
+    }
+
+    bus_invoke(bus,key, method,argc, args);
+
+    req_back = (bus_req_t *)hash_map_pos_get_pointer(&out);
+
+    while(req_back->state == 0xffff) {
+        sleep(1);
+    }
+
+    dbg_str(DBG_DETAIL,"bus_invoke_sync,rev return state =%d",req_back->state);
+
+
+    return 0;
+}
 
 int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
 {
     char *obj_name, *method_name;
+    hash_map_pos_t pos;
+    bus_req_t *req;
     int state;
+    int ret;
 
 	dbg_str(DBG_DETAIL,"bus_handle_invoke_reply");
 
@@ -394,6 +467,15 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
     if (attr[BUS_INVOKE_METHOD]) {
 		method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
 		dbg_str(DBG_DETAIL,"method name:%s",method_name);
+    }
+
+    if(method_name != NULL) {
+        ret = hash_map_search(bus->req_hmap, method_name ,&pos);
+        if(ret > 0) {
+            req = (bus_req_t *)hash_map_pos_get_pointer(&pos);
+            req->state = state;
+            dbg_str(DBG_DETAIL,"method_name:%s,state:%d",req->method,req->state);
+        }
     }
 
     return 0;

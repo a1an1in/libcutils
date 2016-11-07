@@ -20,6 +20,10 @@ void test_bus_client()
      *bus_lookup(bus, "test");
      */
 
-    bus_invoke(bus,"test", "hello",2, args);
+    /*
+     *bus_invoke(bus,"test", "hello",2, args);
+     */
+
+    bus_invoke_sync(bus,"test", "hello",2, args);
 	
 }

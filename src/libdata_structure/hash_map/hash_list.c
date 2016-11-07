@@ -174,6 +174,63 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 
 	return ret;
 }
+int hash_map_insert_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)
+{
+	struct hash_map_node *mnode;
+	uint32_t bucket_pos;
+	uint32_t data_size       = hmap->data_size;
+	uint32_t key_size        = hmap->key_size;
+	struct hlist_head *hlist = hmap->hlist;
+	hash_func_fpt hash_func  = hmap->hash_func;
+	uint32_t bucket_size     = hmap->bucket_size;;
+	hash_map_pos_t *begin_pos = &hmap->begin;;
+    int ret;
+
+	mnode = (struct hash_map_node *)allocator_mem_alloc(hmap->allocator,
+			                                            sizeof(struct hash_map_node) + data_size);
+	if(mnode == NULL){
+		dbg_str(DBG_ERROR,"hash_map_insert,allocator_mem_alloc(map->allocator err");
+		return -1;
+	}
+
+	memcpy(mnode->key,data,data_size);
+	mnode->value_pos = key_size;
+	mnode->data_size = data_size;
+
+	INIT_HLIST_NODE(&mnode->hlist_node);
+
+	bucket_pos = hash_func(mnode->key,key_size,bucket_size); 
+	assert(bucket_pos <= bucket_size);
+
+	sync_lock(&hmap->map_lock,NULL);
+
+	hlist_add_head(&mnode->hlist_node, &hlist[bucket_pos]);
+	if(begin_pos->hlist_node_p == NULL || bucket_pos <= begin_pos->bucket_pos){
+		hash_map_pos_init(&hmap->begin, hlist[bucket_pos].first, bucket_pos, hlist,hmap);
+		/*
+		 *dbg_str(DBG_WARNNING,"change begin pos");
+		 */
+	}
+	ret = hmap->node_count++;
+	dbg_str(HMAP_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,insert_hash_node_pos=%p",
+			hmap->node_count,
+			bucket_pos,
+			&mnode->hlist_node);
+	/*
+	 *dbg_str(HMAP_IMPORTANT,"hash_map_insert,node_count=%d,bucket_pos =%d,first =%p,next=%p,begin.hash_map_pos=%p",
+	 *        hmap->node_count,
+	 *        bucket_pos,
+	 *        hlist[bucket_pos].first,
+	 *        hlist[bucket_pos].first->next,
+	 *        hmap->begin.hlist_node_p);
+	 */
+
+	sync_unlock(&hmap->map_lock);
+
+    hash_map_pos_init(out, &mnode->hlist_node, bucket_pos, hlist,hmap);
+
+	return ret;
+}
 int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 {
 	struct hash_map_node *mnode = NULL;

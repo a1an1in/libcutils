@@ -99,6 +99,11 @@ typedef struct bus_object {
 	int n_methods;
 }bus_object_t;
 
+typedef struct bus_req_s{
+    char *method;
+    short state;
+}bus_req_t;
+
 struct bus_s{
     allocator_t *allocator;
     client_t *client;
@@ -106,10 +111,16 @@ struct bus_s{
     char *server_host;
     char *server_srv;
     blob_t *blob;
+
 	hash_map_t *obj_hmap;
     pair_t *pair;
     uint8_t key_size;
     uint8_t bucket_size;
+
+	hash_map_t *req_hmap;
+    pair_t *req_pair;
+    uint8_t req_key_size;
+    uint8_t req_bucket_size;
 };
 
 
