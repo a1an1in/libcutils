@@ -55,6 +55,7 @@ typedef struct rbtree_map_s{
 	allocator_t *allocator;
 	struct rb_root *tree_root;
 	rbtree_map_pos_t begin ,end;
+    pair_t *pair;
 }rbtree_map_t;
 
 #endif
