@@ -10,6 +10,8 @@ void test_bus_client()
     char *server_srv = NULL;
 	char buf[1024] = "hello world!";
 	int buf_len = strlen(buf);
+	char out[1024];
+    uint8_t out_len;
     
     dbg_str(DBG_DETAIL,"test_bus_client");
 
@@ -24,6 +26,6 @@ void test_bus_client()
      *bus_invoke(bus,"test", "hello",2, args);
      */
 
-    bus_invoke_sync(bus,"test", "hello",2, args);
+    bus_invoke_sync(bus,"test", "hello",2, args,out,&out_len);
 	
 }

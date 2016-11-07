@@ -105,6 +105,11 @@ int blob_add_string(blob_t *blob, char *name, char *str)
     return blob_add(blob, BLOB_TYPE_STRING, name, str, strlen(str) + 1);
 }
 
+int blob_add_buffer(blob_t *blob, char *name, uint8_t *buf, int len)
+{
+    return blob_add(blob, BLOB_TYPE_BUFFER, name, buf, len);
+}
+
 int blob_add_table_start(blob_t *blob, char *name)
 {
     blob_attr_t *new_table = (blob_attr_t *)blob->tail;
@@ -194,6 +199,13 @@ char * blob_get_string(blob_attr_t *attr)
     return body_addr;
 }
 
+int blob_get_buffer(blob_attr_t *attr,uint8_t *out)
+{
+    memcpy(out, blob_get_data(attr),blob_get_data_len(attr));
+
+    return blob_get_data_len(attr);
+}
+
 int blob_parse(const struct blob_policy_s *policy,                               
                uint8_t policy_count,
                blob_attr_t **tb,
@@ -233,6 +245,7 @@ int blob_parse(const struct blob_policy_s *policy,
 enum {                    
     FOO_U8,          
     FOO_STRING, 
+    FOO_BUFFER, 
     FOO_TABLE,
     FOO_TABLE2,
     FOO_U32
@@ -245,6 +258,10 @@ static const struct blob_policy_s pol[] = {
     },
     [FOO_STRING] = {
         .name = (char *)"value",
+        .type = BLOB_TYPE_ARRAY,    
+    },
+    [FOO_BUFFER] = {
+        .name = (char *)"buffer",
         .type = BLOB_TYPE_ARRAY,    
     },
     [FOO_TABLE] = {
@@ -266,6 +283,7 @@ void test_blob()
     blob_t *blob;
     blob_attr_t *tb[ARRAY_SIZE(pol)];
 	allocator_t *allocator = allocator_get_default_alloc();
+    char buffer[] = "01234234214234234234234";
     
     blob = blob_create(allocator);
     blob_init(blob);
@@ -287,6 +305,8 @@ void test_blob()
     blob_add_table_end(blob);
 
     blob_add_u32(blob,(char *)"u32",32);
+
+    blob_add_buffer(blob,(char *)"buffer",buffer,sizeof(buffer));
 
     blob_parse(pol,5, tb, (void *)blob->head, (uint32_t)(blob->tail - blob->head)) ;
 }

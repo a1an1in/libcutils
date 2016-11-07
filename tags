@@ -43,6 +43,7 @@ BITFIELD_SIZE	src/include/libblob/utils.h	152;"	d
 BITS_PER_LONG	src/include/libblob/utils.h	149;"	d
 BLACK	src/include/libdbg/debug.h	105;"	d
 BLOB_TYPE_ARRAY	src/include/libblob/blob.h	/^    BLOB_TYPE_ARRAY,$/;"	e	enum:msgblob_type
+BLOB_TYPE_BUFFER	src/include/libblob/blob.h	/^    BLOB_TYPE_BUFFER,$/;"	e	enum:msgblob_type
 BLOB_TYPE_INT16	src/include/libblob/blob.h	/^    BLOB_TYPE_INT16,$/;"	e	enum:msgblob_type
 BLOB_TYPE_INT32	src/include/libblob/blob.h	/^    BLOB_TYPE_INT32,$/;"	e	enum:msgblob_type
 BLOB_TYPE_INT64	src/include/libblob/blob.h	/^    BLOB_TYPE_INT64,$/;"	e	enum:msgblob_type
@@ -63,6 +64,7 @@ BUSD_INVOKE_METHORD	src/include/libbus/busd.h	/^	BUSD_INVOKE_METHORD,$/;"	e	enum
 BUSD_INVOKE_SRC_FD	src/include/libbus/busd.h	/^    BUSD_INVOKE_SRC_FD,$/;"	e	enum:__anon6
 BUSD_METHORDS	src/include/libbus/busd.h	/^	BUSD_METHORDS,$/;"	e	enum:__anon6
 BUSD_OBJNAME	src/include/libbus/busd.h	/^	BUSD_OBJNAME,$/;"	e	enum:__anon6
+BUSD_OPAQUE	src/include/libbus/busd.h	/^    BUSD_OPAQUE,$/;"	e	enum:__anon6
 BUSD_REPLY_ADD_OBJECT	src/include/libbus/bus.h	/^	BUSD_REPLY_ADD_OBJECT,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_INVOKE	src/include/libbus/bus.h	/^	BUSD_REPLY_INVOKE,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_LOOKUP	src/include/libbus/bus.h	/^	BUSD_REPLY_LOOKUP,$/;"	e	enum:bus_communication_type
@@ -417,6 +419,7 @@ EV_VIP	src/include/libdbg/debug_businesses.h	143;"	d
 EV_WARNNING	src/include/libdbg/debug_businesses.h	140;"	d
 EV_WRITE	src/include/libevent_tiny/event2/event.h	735;"	d
 FDINFO_OFFSET	src/libevent_tiny/evmap.c	174;"	d	file:
+FOO_BUFFER	src/libblob/blob.c	/^    FOO_BUFFER, $/;"	e	enum:__anon12	file:
 FOO_STRING	src/libblob/blob.c	/^    FOO_STRING, $/;"	e	enum:__anon12	file:
 FOO_TABLE	src/libblob/blob.c	/^    FOO_TABLE,$/;"	e	enum:__anon12	file:
 FOO_TABLE2	src/libblob/blob.c	/^    FOO_TABLE2,$/;"	e	enum:__anon12	file:
@@ -1410,6 +1413,7 @@ bitfield_set	src/include/libblob/utils.h	/^static inline void bitfield_set(unsig
 bitfield_test	src/include/libblob/utils.h	/^static inline bool bitfield_test(unsigned long *bits, int bit)$/;"	f
 blob	src/include/libbus/bus.h	/^    blob_t *blob;$/;"	m	struct:bus_s
 blob_add	src/libblob/blob.c	/^int blob_add(blob_t *blob, uint8_t type, char *name, void *value, uint16_t value_len)$/;"	f
+blob_add_buffer	src/libblob/blob.c	/^int blob_add_buffer(blob_t *blob, char *name, uint8_t *buf, int len)$/;"	f
 blob_add_string	src/libblob/blob.c	/^int blob_add_string(blob_t *blob, char *name, char *str)$/;"	f
 blob_add_table_end	src/libblob/blob.c	/^int blob_add_table_end(blob_t *blob)$/;"	f
 blob_add_table_start	src/libblob/blob.c	/^int blob_add_table_start(blob_t *blob, char *name)$/;"	f
@@ -1422,6 +1426,7 @@ blob_attr_t	src/include/libblob/blob.h	/^}__attribute__((packed)) blob_attr_t;$/
 blob_catenate	src/libblob/blob.c	/^int blob_catenate(blob_t *blob, blob_attr_t *attr)$/;"	f
 blob_create	src/libblob/blob.c	/^blob_t *blob_create(allocator_t *allocator)$/;"	f
 blob_for_each_attr	src/include/libblob/blob.h	7;"	d
+blob_get_buffer	src/libblob/blob.c	/^int blob_get_buffer(blob_attr_t *attr,uint8_t **out)$/;"	f
 blob_get_data	src/libblob/blob.c	/^uint8_t *blob_get_data(blob_attr_t *attr)$/;"	f
 blob_get_data_len	src/libblob/blob.c	/^uint32_t blob_get_data_len(blob_attr_t *attr)$/;"	f
 blob_get_len	src/libblob/blob.c	/^uint16_t blob_get_len(blob_attr_t *attr)$/;"	f
@@ -1478,7 +1483,7 @@ bus_handler_t	src/include/libbus/bus.h	/^typedef int (*bus_handler_t)(struct bus
 bus_init	src/libbus/bus.c	/^int bus_init(bus_t *bus,$/;"	f
 bus_invoke	src/libbus/bus.c	/^int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
 bus_invoke_async	src/libbus/bus.c	/^int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
-bus_invoke_sync	src/libbus/bus.c	/^int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
+bus_invoke_sync	src/libbus/bus.c	/^int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args,char *out_buf,char *out_len)$/;"	f
 bus_lookup	src/libbus/bus.c	/^int bus_lookup(bus_t *bus, char *key)$/;"	f
 bus_method	src/include/libbus/bus.h	/^struct bus_method {$/;"	s
 bus_object	src/include/libbus/bus.h	/^typedef struct bus_object {$/;"	s
@@ -2741,6 +2746,7 @@ pair	src/include/libbus/bus.h	/^    pair_t *pair;$/;"	m	struct:bus_s
 pair	src/include/libbus/busd.h	/^    pair_t *pair;$/;"	m	struct:busd_s
 pair	src/include/libdata_structure/hash_list_struct.h	/^    pair_t *pair;$/;"	m	struct:hash_map_s
 pair	src/include/libdata_structure/map_pair.h	/^typedef struct pair{$/;"	s
+pair	src/include/libdata_structure/rbtree_map_struct.h	/^    pair_t *pair;$/;"	m	struct:rbtree_map_s
 pair	src/include/libproto_analyzer/pa_admin.h	/^	pair_t *pair;$/;"	m	struct:pa_admin_s
 pair_t	src/include/libdata_structure/map_pair.h	/^}pair_t;$/;"	t	typeref:struct:pair
 parse_numeric_servname	src/libevent_tiny/evutil.c	/^parse_numeric_servname(const char *servname)$/;"	f	file:
@@ -2881,7 +2887,9 @@ rbtree_map_delete	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map
 rbtree_map_destroy	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map_destroy(rbtree_map_t *map)$/;"	f
 rbtree_map_end	src/libdata_structure/rbtree_map/rbtree_map.c	/^rbtree_map_pos_t * rbtree_map_end(rbtree_map_t *map, rbtree_map_pos_t *end)$/;"	f
 rbtree_map_init	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map_init(rbtree_map_t *map,$/;"	f
-rbtree_map_insert	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map_insert(rbtree_map_t *map, void *value)$/;"	f
+rbtree_map_insert	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map_insert(rbtree_map_t *map,void *key,void *value)$/;"	f
+rbtree_map_insert_data	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map_insert_data(rbtree_map_t *map, void *value)$/;"	f
+rbtree_map_make_pair	src/libdata_structure/rbtree_map/rbtree_map.c	/^void rbtree_map_make_pair(rbtree_map_t *map,void *key,void *value)$/;"	f
 rbtree_map_node	src/include/libdata_structure/rbtree_map_struct.h	/^struct rbtree_map_node {$/;"	s
 rbtree_map_pos_equal	src/libdata_structure/rbtree_map/rbtree_map.c	/^int rbtree_map_pos_equal(rbtree_map_pos_t *it1,rbtree_map_pos_t *it2)$/;"	f
 rbtree_map_pos_get_pointer	src/libdata_structure/rbtree_map/rbtree_map.c	/^void *rbtree_map_pos_get_pointer(rbtree_map_pos_t *it)$/;"	f

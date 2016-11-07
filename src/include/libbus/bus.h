@@ -10,6 +10,7 @@ enum {
 	BUS_OBJNAME,
 	BUS_METHORDS,
 	BUS_STATE,
+	BUS_OPAQUE,
 	BUS_INVOKE_SRC_FD,
 	BUS_INVOKE_DST_FD,
 	BUS_INVOKE_METHOD,
@@ -102,6 +103,10 @@ typedef struct bus_object {
 typedef struct bus_req_s{
     char *method;
     short state;
+#define BUS_REQ_MAX_OPAQUE_LEN 1024
+    uint8_t opaque[ BUS_REQ_MAX_OPAQUE_LEN];
+#undef BUS_REQ_MAX_OPAQUE_LEN
+    uint16_t opaque_len;
 }bus_req_t;
 
 struct bus_s{

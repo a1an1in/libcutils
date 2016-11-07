@@ -45,6 +45,7 @@ static const struct blob_policy_s busd_policy[] = {
 	[BUSD_INVOKE_ARGC]    = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
 	[BUSD_INVOKE_ARGS]    = { .name = "invoke_args",     .type = BLOB_TYPE_STRING },
 	[BUSD_STATE]          = { .name = "state",           .type = BLOB_TYPE_INT32 },
+	[BUSD_OPAQUE]         = { .name = "opaque",          .type = BLOB_TYPE_INT32 },
 	[BUSD_INVOKE_SRC_FD]  = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
 };
 
@@ -485,7 +486,7 @@ int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)
     return 0;
 }
 
-int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,int source_fd)
+int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,uint8_t *opaque,int opaque_len, int source_fd)
 {
 	bus_reqhdr_t hdr;
     blob_t *blob;
@@ -508,6 +509,7 @@ int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,int sou
     blob_init(blob);
     blob_add_table_start(blob,(char *)"invoke_reply"); {
         blob_add_u32(blob, (char *)"state", state);
+        blob_add_buffer(blob, (char *)"opaque", opaque, opaque_len);
         blob_add_string(blob, (char *)"object_name", obj_name);
         blob_add_string(blob, (char *)"invoke_method", method);
     }
@@ -533,6 +535,8 @@ int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
     char *method;
     char *obj_name;
     int src_fd;
+    uint8_t buffer[1024];
+    int buffer_len = 0;
 
     dbg_str(DBG_DETAIL,"busd_handle_forward_invoke_reply");
 
@@ -552,8 +556,12 @@ int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
         src_fd = blob_get_u32(attr[BUSD_INVOKE_SRC_FD]); 
 		dbg_str(DBG_DETAIL,"source fd=%d",src_fd);
     }
+    if (attr[BUSD_OPAQUE]) {
+        buffer_len = blob_get_buffer(attr[BUSD_OPAQUE],buffer);
+        dbg_buf(DBG_DETAIL,"busd_handle_forward_invoke_reply,buffer:",buffer,buffer_len);
+    }
 
-    busd_reply_invoke(busd,obj_name,method,state,src_fd);
+    busd_reply_invoke(busd,obj_name,method,state,buffer,buffer_len,src_fd);
 
     return 0;
 }

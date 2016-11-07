@@ -40,6 +40,7 @@ static const blob_policy_t bus_policy[] = {
 	[BUS_OBJNAME]       = { .name = "object_name",     .type = BLOB_TYPE_STRING },
 	[BUS_METHORDS]      = { .name = "methods",         .type = BLOB_TYPE_TABLE },
 	[BUS_STATE]         = { .name = "state",           .type = BLOB_TYPE_INT32 },
+	[BUS_OPAQUE]        = { .name = "opaque",          .type = BLOB_TYPE_BUFFER },
 	[BUS_INVOKE_SRC_FD] = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
 	[BUS_INVOKE_DST_FD] = { .name = "destination_fd",  .type = BLOB_TYPE_INT32 },
 	[BUS_INVOKE_METHOD] = { .name = "invoke_method",   .type = BLOB_TYPE_STRING },
@@ -412,7 +413,7 @@ int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
 
     return 0;
 }
-int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)
+int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args,char *out_buf,char *out_len)
 {
     bus_req_t req,*req_back;
     hash_map_pos_t out;
@@ -442,6 +443,7 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)
     }
 
     dbg_str(DBG_DETAIL,"bus_invoke_sync,rev return state =%d",req_back->state);
+    dbg_buf(DBG_DETAIL,"opaque:",req_back->opaque,req_back->opaque_len);
 
     return req_back->state;
 }
@@ -453,6 +455,8 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
     bus_req_t *req;
     int state;
     int ret;
+    char buffer[1024];
+    int buffer_len = 0;
 
 	dbg_str(DBG_DETAIL,"bus_handle_invoke_reply");
 
@@ -468,12 +472,18 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
 		method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
 		dbg_str(DBG_DETAIL,"method name:%s",method_name);
     }
+	if (attr[BUS_OPAQUE]){
+        buffer_len = blob_get_buffer(attr[BUS_OPAQUE],buffer);
+        dbg_buf(DBG_DETAIL,"bus_handle_invoke_reply,buffer:",buffer,buffer_len);
+	}
 
     if(method_name != NULL) {
         ret = hash_map_search(bus->req_hmap, method_name ,&pos);
         if(ret > 0) {
             req = (bus_req_t *)hash_map_pos_get_pointer(&pos);
             req->state = state;
+            memcpy(req->opaque,buffer,buffer_len);
+            req->opaque_len = buffer_len;
             dbg_str(DBG_DETAIL,"method_name:%s,state:%d",req->method,req->state);
         }
     }
@@ -534,6 +544,7 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
         blob_add_string(blob, (char *)"object_name", obj_name);
         blob_add_string(blob, (char *)"invoke_method", method_name);
         blob_add_u32(blob, (char *)"state", ret);
+        blob_add_buffer(blob, (char *)"opaque", buf, buf_len);
         blob_add_u32(blob, (char *)"source_fd", src_fd);
     }
     blob_add_table_end(blob);
@@ -565,8 +576,8 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
     uint8_t *p;
     blob_policy_t *policy;
     struct blob_attr_s *tb[10];
-    char buffer[1024];
-    int ret, buffer_len;
+    char buffer[1024] = {1,2,3,4,5,6,7,8,9};
+    int ret, buffer_len = 9;
 
 	dbg_str(DBG_VIP,"bus_handle_forward_invoke");
 
