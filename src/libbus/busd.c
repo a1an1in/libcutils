@@ -296,7 +296,7 @@ int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)
 
             addr_to_buffer(obj,addr_buffer);
             make_pair(busd->pair,blob_get_string(attr[BUSD_OBJNAME]),addr_buffer);
-            hash_map_insert(busd->obj_hmap,busd->pair->data);
+            hash_map_insert_data(busd->obj_hmap,busd->pair->data);
             state = 1;
         }
     }

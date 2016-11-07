@@ -49,13 +49,13 @@ void test_datastructure_hashlist()
 			      NULL);
 
 	make_pair(pair,"11",&t1);
-	hash_map_insert(hmap,pair->data);
+	hash_map_insert_data(hmap,pair->data);
 	make_pair(pair,"22",&t2);
-	hash_map_insert(hmap,pair->data);
+	hash_map_insert_data(hmap,pair->data);
 	make_pair(pair,"33",&t3);
-	hash_map_insert(hmap,pair->data);
+	hash_map_insert_data(hmap,pair->data);
 	make_pair(pair,"55",&t4);
-	hash_map_insert(hmap,pair->data);
+	hash_map_insert_data(hmap,pair->data);
 
 	dbg_str(DBG_DETAIL,"hash map search");
 	struct A *p;

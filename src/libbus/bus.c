@@ -226,7 +226,7 @@ int __bus_add_obj(bus_t *bus,struct bus_object *obj)
 
     addr_to_buffer(obj,addr_buffer);
     make_pair(bus->pair,obj->name,addr_buffer);
-    hash_map_insert(bus->obj_hmap,bus->pair->data);
+    hash_map_insert_data(bus->obj_hmap,bus->pair->data);
 
     return 0;
 }
@@ -410,7 +410,7 @@ int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
  *    req.state = -1;
  *
  *    make_pair(bus->pair,method,&req);
- *    hash_map_insert(bus->obj_hmap,bus->pair->data);
+ *    hash_map_insert_data(bus->obj_hmap,bus->pair->data);
  */
 
     return 0;
@@ -420,13 +420,14 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)
     bus_req_t req,*req_back;
     hash_map_pos_t out;
     int ret;
+    int count = 0;
 
     req.method = method;
     req.state = 0xffff;
 
     make_pair(bus->req_pair,method,&req);
 
-    ret = hash_map_insert_wb(bus->req_hmap,bus->req_pair->data,&out);
+    ret = hash_map_insert_data_wb(bus->req_hmap,bus->req_pair->data,&out);
     if (ret < 0) {
         dbg_str(DBG_WARNNING,"bus_invoke_sync");
         return ret;
@@ -438,12 +439,16 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)
 
     while(req_back->state == 0xffff) {
         sleep(1);
+        count++;
+        if(count > 5) {
+            req_back->state = -99;
+            break;
+        }
     }
 
     dbg_str(DBG_DETAIL,"bus_invoke_sync,rev return state =%d",req_back->state);
 
-
-    return 0;
+    return req_back->state;
 }
 
 int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)

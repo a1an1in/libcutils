@@ -102,7 +102,7 @@ int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void
 	
 	pair = create_pair(task_admin->key_size,task_admin->data_size);
 	make_pair(pair,key,data);
-	hash_map_insert(task_admin->hmap,pair->data);
+	hash_map_insert_data(task_admin->hmap,pair->data);
 	destroy_pair(pair);
 
 	return 0;

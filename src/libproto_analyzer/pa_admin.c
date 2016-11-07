@@ -125,7 +125,7 @@ void pa_admin_add_protocol_analyzer(pa_admin_t *admin,void *key,struct protocol_
 	 *dbg_str(DBG_DETAIL,"pa_admin_add_protocol_analyzer,key=%s,pa addr=%p",key,pa);
 	 */
 	make_pair(admin->pair,key,(void *)addr_buffer);
-	hash_map_insert(admin->hash_map,admin->pair->data);
+	hash_map_insert_data(admin->hash_map,admin->pair->data);
 }
 /*
  *通过key，索引想用的解析器

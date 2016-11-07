@@ -198,7 +198,7 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 		info_list = container_of(pos,proto_info_list_t,list_head);
 		pa_addr_to_buffer(info_list,addr_buffer);
 		make_pair(pair,info_list->name,addr_buffer);
-		hash_map_insert(hmap,pair->data);
+		hash_map_insert_data(hmap,pair->data);
 	}
 
 	pa->hmap = hmap;

@@ -67,14 +67,14 @@ BUSD_REPLY_ADD_OBJECT	src/include/libbus/bus.h	/^	BUSD_REPLY_ADD_OBJECT,$/;"	e	e
 BUSD_REPLY_INVOKE	src/include/libbus/bus.h	/^	BUSD_REPLY_INVOKE,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_LOOKUP	src/include/libbus/bus.h	/^	BUSD_REPLY_LOOKUP,$/;"	e	enum:bus_communication_type
 BUSD_STATE	src/include/libbus/busd.h	/^    BUSD_STATE,$/;"	e	enum:__anon6
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	215;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	217;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	283;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	285;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	345;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	347;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	434;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	436;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	237;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	239;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	305;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	307;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	367;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	369;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	521;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	523;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	239;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	241;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	313;"	d	file:
@@ -1477,6 +1477,8 @@ bus_handle_lookup_object_reply	src/libbus/bus.c	/^int bus_handle_lookup_object_r
 bus_handler_t	src/include/libbus/bus.h	/^typedef int (*bus_handler_t)(struct bus_s *bus,$/;"	t
 bus_init	src/libbus/bus.c	/^int bus_init(bus_t *bus,$/;"	f
 bus_invoke	src/libbus/bus.c	/^int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
+bus_invoke_async	src/libbus/bus.c	/^int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
+bus_invoke_sync	src/libbus/bus.c	/^int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)$/;"	f
 bus_lookup	src/libbus/bus.c	/^int bus_lookup(bus_t *bus, char *key)$/;"	f
 bus_method	src/include/libbus/bus.h	/^struct bus_method {$/;"	s
 bus_object	src/include/libbus/bus.h	/^typedef struct bus_object {$/;"	s
@@ -1486,6 +1488,8 @@ bus_process_receiving_data_callback	src/libbus/bus.c	/^static int bus_process_re
 bus_push_args_to_blob	src/libbus/bus.c	/^int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)$/;"	f
 bus_push_methods_to_blob	src/libbus/bus.c	/^int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)$/;"	f
 bus_reply_forward_invoke	src/libbus/bus.c	/^int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)$/;"	f
+bus_req_s	src/include/libbus/bus.h	/^typedef struct bus_req_s{$/;"	s
+bus_req_t	src/include/libbus/bus.h	/^}bus_req_t;$/;"	t	typeref:struct:bus_req_s
 bus_reqhdr	src/include/libbus/bus.h	/^typedef struct bus_reqhdr {$/;"	s
 bus_reqhdr_t	src/include/libbus/bus.h	/^}__attribute__((packed)) bus_reqhdr_t;$/;"	t	typeref:struct:bus_reqhdr
 bus_s	src/include/libbus/bus.h	/^struct bus_s{$/;"	s
@@ -2167,6 +2171,7 @@ hash_map_end	src/include/libdata_structure/hash_list.h	/^hash_map_end(hash_map_t
 hash_map_for_each	src/include/libdata_structure/hash_list.h	/^hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))$/;"	f
 hash_map_init	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_init(hash_map_t *hmap,$/;"	f
 hash_map_insert	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert(hash_map_t *hmap,void *data)$/;"	f
+hash_map_insert_wb	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)$/;"	f
 hash_map_node	src/include/libdata_structure/hash_list_struct.h	/^struct hash_map_node {$/;"	s
 hash_map_pos_equal	src/include/libdata_structure/hash_list.h	/^static inline int hash_map_pos_equal(hash_map_pos_t *pos1,hash_map_pos_t *pos2)$/;"	f
 hash_map_pos_get_pointer	src/include/libdata_structure/hash_list.h	/^static inline void *hash_map_pos_get_pointer(hash_map_pos_t *pos)$/;"	f
@@ -2592,6 +2597,7 @@ message_event	src/include/libconcurrent/concurrent.h	/^	struct event message_eve
 message_id	src/include/libconcurrent/concurrent.h	/^	uint32_t message_id;$/;"	m	struct:concurrent_message_s
 message_que	src/include/libconcurrent/concurrent.h	/^	llist_t *message_que;$/;"	m	struct:concurrent_master_s
 message_que	src/include/libconcurrent/concurrent.h	/^	llist_t *message_que;$/;"	m	struct:concurrent_slave_s
+method	src/include/libbus/bus.h	/^    char *method;$/;"	m	struct:bus_req_s
 methods	src/include/libbus/bus.h	/^	struct bus_method *methods;$/;"	m	struct:bus_object	typeref:struct:bus_object::bus_method
 methods	src/include/libbus/busd.h	/^	vector_t *methods;$/;"	m	struct:busd_object
 min_depth	src/include/liballoc/allocator_ctr_alloc.h	/^	uint32_t min_depth;$/;"	m	struct:ctr_mem_pool
@@ -2912,6 +2918,10 @@ read_index	src/include/libdata_structure/ring_buffer.h	/^    uint32_t read_index
 read_notify_fd	src/include/libstate_machine/state_machine.h	/^    int read_notify_fd;$/;"	m	struct:state_machine_s
 realloc_copy	src/libevent_tiny/poll.c	/^	int realloc_copy;		\/* True iff we must realloc$/;"	m	struct:pollop	file:
 remote_sockaddr	src/include/libconcurrent/io_user.h	/^	void *remote_sockaddr;$/;"	m	struct:io_user_s
+req_bucket_size	src/include/libbus/bus.h	/^    uint8_t req_bucket_size;$/;"	m	struct:bus_s
+req_hmap	src/include/libbus/bus.h	/^	hash_map_t *req_hmap;$/;"	m	struct:bus_s
+req_key_size	src/include/libbus/bus.h	/^    uint8_t req_key_size;$/;"	m	struct:bus_s
+req_pair	src/include/libbus/bus.h	/^    pair_t *req_pair;$/;"	m	struct:bus_s
 require_features	src/include/libevent_tiny/event-internal.h	/^	enum event_method_feature require_features;$/;"	m	struct:event_config	typeref:enum:event_config::event_method_feature
 resize_out_sets	src/libevent_tiny/select.c	/^	int resize_out_sets;$/;"	m	struct:selectop	file:
 ring_buffer_s	src/include/libdata_structure/ring_buffer.h	/^typedef struct ring_buffer_s{$/;"	s
@@ -3083,6 +3093,7 @@ ss_union	src/include/libevent_tiny/util-internal.h	/^	} ss_union;$/;"	m	struct:s
 start	src/include/liballoc/allocator_ctr_alloc.h	/^	void *start;$/;"	m	struct:ctr_mem_pool
 stat	src/libevent_tiny/evutil.c	58;"	d	file:
 stat_flag	src/include/liballoc/allocator_ctr_alloc.h	/^	uint8_t stat_flag;$/;"	m	struct:slab
+state	src/include/libbus/bus.h	/^    short state;$/;"	m	struct:bus_req_s
 state_change_event_handler	src/libstate_machine/state_machine.c	/^static void state_change_event_handler(int fd, short event, void *arg)$/;"	f	file:
 state_entry_config_s	src/include/libstate_machine/state_machine.h	/^typedef struct state_entry_config_s{$/;"	s
 state_entry_config_t	src/include/libstate_machine/state_machine.h	/^}state_entry_config_t;$/;"	t	typeref:struct:state_entry_config_s

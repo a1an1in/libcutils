@@ -22,8 +22,8 @@
 #include "libdata_structure/hash_list_struct.h"
 
 hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type);
-int hash_map_insert(hash_map_t *hmap,void *data);
-int hash_map_insert_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out);
+int hash_map_insert_data(hash_map_t *hmap,void *data);
+int hash_map_insert_data_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out);
 int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret);
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos);
 int hash_map_destroy(hash_map_t *hmap);

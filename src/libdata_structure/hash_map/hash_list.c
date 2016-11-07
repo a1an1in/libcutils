@@ -119,7 +119,7 @@ int hash_map_init(hash_map_t *hmap,
 	
 	return 0;
 }
-int hash_map_insert(hash_map_t *hmap,void *data)
+int hash_map_insert_data(hash_map_t *hmap,void *data)
 {
 	struct hash_map_node *mnode;
 	uint32_t bucket_pos;
@@ -174,7 +174,7 @@ int hash_map_insert(hash_map_t *hmap,void *data)
 
 	return ret;
 }
-int hash_map_insert_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)
+int hash_map_insert_data_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)
 {
 	struct hash_map_node *mnode;
 	uint32_t bucket_pos;
