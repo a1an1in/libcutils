@@ -49,17 +49,18 @@ typedef struct hash_map_s{
 	uint32_t bucket_size;
 	uint32_t data_size;
 	uint32_t key_size;
+
 	hash_func_fpt hash_func;
 	key_cmp_fpt key_cmp_func;
+
 	struct hlist_head *hlist;
 	hash_map_pos_t begin,end;
-	/*
-	 *pthread_rwlock_t map_lock;
-	 */
 	uint8_t lock_type;
 	sync_lock_t map_lock;
 	allocator_t *allocator;
 	uint32_t node_count;
+
+    pair_t *pair;
 }hash_map_t;
 
 #endif

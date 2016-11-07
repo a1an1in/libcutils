@@ -118,7 +118,6 @@ struct bus_s{
     uint8_t bucket_size;
 
 	hash_map_t *req_hmap;
-    pair_t *req_pair;
     uint8_t req_key_size;
     uint8_t req_bucket_size;
 };

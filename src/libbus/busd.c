@@ -148,7 +148,6 @@ int busd_init(busd_t *busd,
     if(busd->bucket_size == 0) {
         busd->bucket_size = 20;
     }
-	busd->pair = create_pair(busd->key_size,sizeof(busd_object_t));
 
 	busd->obj_hmap = hash_map_create(busd->allocator,0);
     if(busd->obj_hmap == NULL) {
@@ -295,8 +294,7 @@ int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)
             uint8_t addr_buffer[8];
 
             addr_to_buffer(obj,addr_buffer);
-            make_pair(busd->pair,blob_get_string(attr[BUSD_OBJNAME]),addr_buffer);
-            hash_map_insert_data(busd->obj_hmap,busd->pair->data);
+            hash_map_insert(busd->obj_hmap,blob_get_string(attr[BUSD_OBJNAME]),addr_buffer);
             state = 1;
         }
     }

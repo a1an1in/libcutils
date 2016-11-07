@@ -67,22 +67,22 @@ BUSD_REPLY_ADD_OBJECT	src/include/libbus/bus.h	/^	BUSD_REPLY_ADD_OBJECT,$/;"	e	e
 BUSD_REPLY_INVOKE	src/include/libbus/bus.h	/^	BUSD_REPLY_INVOKE,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_LOOKUP	src/include/libbus/bus.h	/^	BUSD_REPLY_LOOKUP,$/;"	e	enum:bus_communication_type
 BUSD_STATE	src/include/libbus/busd.h	/^    BUSD_STATE,$/;"	e	enum:__anon6
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	237;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	239;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	305;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	307;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	367;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	369;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	521;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	523;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	239;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	241;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	234;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	236;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	302;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	304;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	364;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	366;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	516;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	518;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	238;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	240;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	311;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	313;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	315;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	396;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	398;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	400;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	492;"	d	file:
 BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	494;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	496;"	d	file:
 BUS_ID	src/include/libbus/bus.h	/^	BUS_ID,$/;"	e	enum:__anon5
 BUS_INVOKE_ARGC	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGC,$/;"	e	enum:__anon5
 BUS_INVOKE_ARGS	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGS,$/;"	e	enum:__anon5
@@ -2170,8 +2170,11 @@ hash_map_destroy	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_destr
 hash_map_end	src/include/libdata_structure/hash_list.h	/^hash_map_end(hash_map_t *hmap,hash_map_pos_t *end)$/;"	f
 hash_map_for_each	src/include/libdata_structure/hash_list.h	/^hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))$/;"	f
 hash_map_init	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_init(hash_map_t *hmap,$/;"	f
-hash_map_insert	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert(hash_map_t *hmap,void *data)$/;"	f
-hash_map_insert_wb	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)$/;"	f
+hash_map_insert	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert(hash_map_t *hmap,void *key,void *value)$/;"	f
+hash_map_insert_data	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert_data(hash_map_t *hmap,void *data)$/;"	f
+hash_map_insert_data_wb	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert_data_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)$/;"	f
+hash_map_insert_wb	src/libdata_structure/hash_map/hash_list.c	/^int hash_map_insert_wb(hash_map_t *hmap,void *key,void *value, hash_map_pos_t *out)$/;"	f
+hash_map_make_pair	src/libdata_structure/hash_map/hash_list.c	/^void hash_map_make_pair(hash_map_t *hmap,void *key,void *value)$/;"	f
 hash_map_node	src/include/libdata_structure/hash_list_struct.h	/^struct hash_map_node {$/;"	s
 hash_map_pos_equal	src/include/libdata_structure/hash_list.h	/^static inline int hash_map_pos_equal(hash_map_pos_t *pos1,hash_map_pos_t *pos2)$/;"	f
 hash_map_pos_get_pointer	src/include/libdata_structure/hash_list.h	/^static inline void *hash_map_pos_get_pointer(hash_map_pos_t *pos)$/;"	f
@@ -2736,6 +2739,7 @@ pa_set_variable_length_flag	src/libproto_analyzer/protocol_analyzer.c	/^int pa_s
 pa_set_variable_length_value	src/libproto_analyzer/protocol_analyzer.c	/^int pa_set_variable_length_value(char *key,uint32_t value,$/;"	f
 pair	src/include/libbus/bus.h	/^    pair_t *pair;$/;"	m	struct:bus_s
 pair	src/include/libbus/busd.h	/^    pair_t *pair;$/;"	m	struct:busd_s
+pair	src/include/libdata_structure/hash_list_struct.h	/^    pair_t *pair;$/;"	m	struct:hash_map_s
 pair	src/include/libdata_structure/map_pair.h	/^typedef struct pair{$/;"	s
 pair	src/include/libproto_analyzer/pa_admin.h	/^	pair_t *pair;$/;"	m	struct:pa_admin_s
 pair_t	src/include/libdata_structure/map_pair.h	/^}pair_t;$/;"	t	typeref:struct:pair
@@ -2921,7 +2925,6 @@ remote_sockaddr	src/include/libconcurrent/io_user.h	/^	void *remote_sockaddr;$/;
 req_bucket_size	src/include/libbus/bus.h	/^    uint8_t req_bucket_size;$/;"	m	struct:bus_s
 req_hmap	src/include/libbus/bus.h	/^	hash_map_t *req_hmap;$/;"	m	struct:bus_s
 req_key_size	src/include/libbus/bus.h	/^    uint8_t req_key_size;$/;"	m	struct:bus_s
-req_pair	src/include/libbus/bus.h	/^    pair_t *req_pair;$/;"	m	struct:bus_s
 require_features	src/include/libevent_tiny/event-internal.h	/^	enum event_method_feature require_features;$/;"	m	struct:event_config	typeref:enum:event_config::event_method_feature
 resize_out_sets	src/libevent_tiny/select.c	/^	int resize_out_sets;$/;"	m	struct:selectop	file:
 ring_buffer_s	src/include/libdata_structure/ring_buffer.h	/^typedef struct ring_buffer_s{$/;"	s

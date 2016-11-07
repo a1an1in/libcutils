@@ -52,6 +52,7 @@ static inline int default_key_cmp_func(void *key1,void *key2,uint32_t size)
 {
 	return memcmp(key1,key2,size);
 }
+
 static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bucket_size)
 {
 	uint32_t sum = 0;
@@ -61,9 +62,12 @@ static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bu
 	}
 	return sum % bucket_size;
 }
+
 hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 {
 	hash_map_t *map;
+
+	dbg_str(HMAP_DETAIL,"hash_map_create");
 
 	map = (hash_map_t *)allocator_mem_alloc(allocator,sizeof(hash_map_t));
 	if(map == NULL){
@@ -73,10 +77,10 @@ hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
     memset(map,0,sizeof(hash_map_t));
 	map->allocator = allocator;
 	map->lock_type = lock_type;
-	dbg_str(HMAP_DETAIL,"hash_map_create");
-	
+
 	return map;
 }
+
 int hash_map_init(hash_map_t *hmap,
 		          uint32_t key_size,
 		          uint32_t data_size,
@@ -91,6 +95,12 @@ int hash_map_init(hash_map_t *hmap,
 	map->key_size     = key_size;
 	map->bucket_size  = bucket_size;
 	map->node_count   = 0;
+
+    map->pair = create_pair(key_size,data_size - key_size);
+    if(map->pair == NULL) {
+        dbg_str(DBG_ERROR,"hash_map_init,create_pair");
+        return -1;
+    }
 
 	if(key_cmp_func == NULL){
 		hmap->key_cmp_func = default_key_cmp_func;
@@ -119,6 +129,14 @@ int hash_map_init(hash_map_t *hmap,
 	
 	return 0;
 }
+
+void hash_map_make_pair(hash_map_t *hmap,void *key,void *value)
+{
+	sync_lock(&hmap->map_lock,NULL);
+    make_pair(hmap->pair,key,value);
+	sync_unlock(&hmap->map_lock);
+}
+
 int hash_map_insert_data(hash_map_t *hmap,void *data)
 {
 	struct hash_map_node *mnode;
@@ -174,6 +192,7 @@ int hash_map_insert_data(hash_map_t *hmap,void *data)
 
 	return ret;
 }
+
 int hash_map_insert_data_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)
 {
 	struct hash_map_node *mnode;
@@ -231,6 +250,20 @@ int hash_map_insert_data_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)
 
 	return ret;
 }
+
+int hash_map_insert(hash_map_t *hmap,void *key,void *value)
+{
+    hash_map_make_pair(hmap,key,value);
+
+    return  hash_map_insert_data(hmap,hmap->pair->data);
+}
+
+int hash_map_insert_wb(hash_map_t *hmap,void *key,void *value, hash_map_pos_t *out)
+{
+    hash_map_make_pair(hmap,key,value);
+
+    return  hash_map_insert_data_wb(hmap,hmap->pair->data,out);
+}
 int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 {
 	struct hash_map_node *mnode = NULL;
@@ -268,6 +301,7 @@ int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
     dbg_str(HMAP_IMPORTANT,"not found key");
     return -1;
 }
+
 int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 {
 	struct hash_map_node *mnode;
@@ -303,10 +337,15 @@ int hash_map_delete(hash_map_t *hmap, hash_map_pos_t *pos)
 	}
 	return 0;
 }
+
 int hash_map_destroy(hash_map_t *hmap)
 {
-	 dbg_str(HMAP_DETAIL,"hash_map_destroy");
 	 hash_map_pos_t it;
+
+	 dbg_str(HMAP_DETAIL,"hash_map_destroy");
+
+     destroy_pair(hmap->pair);
+
 	 for(	 hash_map_begin(hmap,&it);
 			 !hash_map_pos_equal(&it,&hmap->end);
 			 hash_map_begin(hmap,&it))
@@ -320,7 +359,12 @@ int hash_map_destroy(hash_map_t *hmap)
 		 sync_lock_destroy(&hmap->map_lock);
 		 allocator_mem_free(hmap->allocator,hmap->hlist);
 	 }
+
+     allocator_mem_free(hmap->allocator,hmap);
+
+     return 0;
 }
+
 int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 {
 	struct hlist_node *hlist_node_p;
@@ -361,10 +405,12 @@ int hash_map_pos_next(hash_map_pos_t *pos,hash_map_pos_t *next)
 
 	return ret;
 }
+
 void hash_map_print_mnode(struct hash_map_node *mnode)
 {
 	dbg_buf(HMAP_DETAIL,"data:",mnode->key,mnode->data_size);
 }
+
 
 /*
  *int main()

@@ -123,7 +123,6 @@ int bus_init(bus_t *bus,
     if(bus->bucket_size == 0) {
         bus->bucket_size = 20;
     }
-	bus->pair = create_pair(bus->key_size,sizeof(bus_object_t));
 
 	bus->obj_hmap = hash_map_create(bus->allocator,0);
     if(bus->obj_hmap == NULL) {
@@ -145,7 +144,6 @@ int bus_init(bus_t *bus,
     if(bus->req_bucket_size == 0) {
         bus->req_bucket_size = 20;
     }
-	bus->req_pair = create_pair(bus->req_key_size,sizeof(bus_req_t));
 
 	bus->req_hmap = hash_map_create(bus->allocator,0);
     if(bus->req_hmap == NULL) {
@@ -225,8 +223,7 @@ int __bus_add_obj(bus_t *bus,struct bus_object *obj)
     uint8_t addr_buffer[8];
 
     addr_to_buffer(obj,addr_buffer);
-    make_pair(bus->pair,obj->name,addr_buffer);
-    hash_map_insert_data(bus->obj_hmap,bus->pair->data);
+    hash_map_insert(bus->obj_hmap,obj->name,addr_buffer);
 
     return 0;
 }
@@ -425,9 +422,7 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args)
     req.method = method;
     req.state = 0xffff;
 
-    make_pair(bus->req_pair,method,&req);
-
-    ret = hash_map_insert_data_wb(bus->req_hmap,bus->req_pair->data,&out);
+    ret = hash_map_insert_wb(bus->req_hmap,method,&req,&out);
     if (ret < 0) {
         dbg_str(DBG_WARNNING,"bus_invoke_sync");
         return ret;
