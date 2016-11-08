@@ -104,9 +104,10 @@ typedef struct bus_req_s{
     char *method;
     short state;
 #define BUS_REQ_MAX_OPAQUE_LEN 1024
-    uint8_t opaque[ BUS_REQ_MAX_OPAQUE_LEN];
+    uint8_t *opaque;
 #undef BUS_REQ_MAX_OPAQUE_LEN
     uint16_t opaque_len;
+    uint16_t opaque_buffer_len;
 }bus_req_t;
 
 struct bus_s{

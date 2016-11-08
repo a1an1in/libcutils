@@ -413,15 +413,24 @@ int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
 
     return 0;
 }
+
 int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args,char *out_buf,char *out_len)
 {
     bus_req_t req,*req_back;
     hash_map_pos_t out;
     int ret;
     int count = 0;
+    int state = 0;
 
-    req.method = method;
-    req.state = 0xffff;
+#define MAX_BUFFER_LEN 2048
+    char buffer[MAX_BUFFER_LEN];
+#undef MAX_BUFFER_LEN
+
+    req.method            = method;
+    req.state             = 0xffff;
+    req.opaque            = NULL;
+    req.opaque_len        = 0;
+    req.opaque_buffer_len = 0;
 
     ret = hash_map_insert_wb(bus->req_hmap,method,&req,&out);
     if (ret < 0) {
@@ -429,9 +438,11 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args,cha
         return ret;
     }
 
-    bus_invoke(bus,key, method,argc, args);
+    req_back                    = (bus_req_t *)hash_map_pos_get_pointer(&out);
+    req_back->opaque            = buffer;
+    req_back->opaque_buffer_len = sizeof(buffer);
 
-    req_back = (bus_req_t *)hash_map_pos_get_pointer(&out);
+    bus_invoke(bus,key, method,argc, args);
 
     while(req_back->state == 0xffff) {
         sleep(1);
@@ -445,7 +456,14 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args,cha
     dbg_str(DBG_DETAIL,"bus_invoke_sync,rev return state =%d",req_back->state);
     dbg_buf(DBG_DETAIL,"opaque:",req_back->opaque,req_back->opaque_len);
 
-    return req_back->state;
+    memcpy(out_buf,req_back->opaque,req_back->opaque_len);
+    *out_len = req_back->opaque_len;
+
+    state = req_back->state;
+
+    hash_map_delete(bus->req_hmap, &out);
+
+    return state;
 }
 
 int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
@@ -455,7 +473,7 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
     bus_req_t *req;
     int state;
     int ret;
-    char buffer[1024];
+    char *buffer = NULL;
     int buffer_len = 0;
 
 	dbg_str(DBG_DETAIL,"bus_handle_invoke_reply");
@@ -473,7 +491,7 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
 		dbg_str(DBG_DETAIL,"method name:%s",method_name);
     }
 	if (attr[BUS_OPAQUE]){
-        buffer_len = blob_get_buffer(attr[BUS_OPAQUE],buffer);
+        buffer_len = blob_get_buffer(attr[BUS_OPAQUE],&buffer);
         dbg_buf(DBG_DETAIL,"bus_handle_invoke_reply,buffer:",buffer,buffer_len);
 	}
 
@@ -482,8 +500,11 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
         if(ret > 0) {
             req = (bus_req_t *)hash_map_pos_get_pointer(&pos);
             req->state = state;
-            memcpy(req->opaque,buffer,buffer_len);
+            if(req->opaque_buffer_len < buffer_len) {
+                dbg_str(DBG_WARNNING,"opaque buffer is too small , please check");
+            }
             req->opaque_len = buffer_len;
+            memcpy(req->opaque,buffer,buffer_len);
             dbg_str(DBG_DETAIL,"method_name:%s,state:%d",req->method,req->state);
         }
     }
@@ -521,12 +542,11 @@ bus_get_policy(bus_object_t *obj,char *method)
 
 int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)
 {
+#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 2048
 	bus_reqhdr_t hdr;
     blob_t *blob;
-#define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
 	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
-#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
-	uint32_t buffer_len;
+	uint32_t buffer_len,tmp_len;
 	allocator_t *allocator = bus->allocator;
 
 	dbg_str(DBG_DETAIL,"bus_reply_forward_invoke,ret = %d", ret);
@@ -551,9 +571,14 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
 
 	memcpy(buffer,&hdr, sizeof(hdr));
 	buffer_len = sizeof(hdr);
-    /*
-     *dbg_buf(DBG_DETAIL,"object:",(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
-     */
+
+    tmp_len = buffer_len + blob_get_len((blob_attr_t *)blob->head);
+
+    if(tmp_len > BUS_ADD_OBJECT_MAX_BUFFER_LEN) {
+        dbg_str(DBG_WARNNING,"buffer is too small,please check");
+        return -1;
+    }
+
 	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
 	buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
@@ -562,6 +587,7 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
 	bus_send(bus, buffer, buffer_len);
 
 	return 0;
+#undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
 }
 int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 {
@@ -576,7 +602,8 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
     uint8_t *p;
     blob_policy_t *policy;
     struct blob_attr_s *tb[10];
-    char buffer[1024] = {1,2,3,4,5,6,7,8,9};
+#define MAX_BUFFER_LEN 2048
+    char buffer[MAX_BUFFER_LEN];
     int ret, buffer_len = 9;
 
 	dbg_str(DBG_VIP,"bus_handle_forward_invoke");
@@ -614,11 +641,15 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 
             blob_parse(policy, ARRAY_SIZE(policy), tb, blob_get_data(args), blob_get_data_len(args));
             ret = method(bus,argc,tb,buffer,&buffer_len);
+            if(buffer_len > MAX_BUFFER_LEN) {
+                dbg_str(DBG_WARNNING,"buffer is too small,please check");
+            } 
             bus_reply_forward_invoke(bus,obj_name,method_name, ret, buffer, buffer_len,src_fd);
         }
     }
 
     return 0;
+#undef MAX_BUFFER_LEN 
 }
 
 static bus_cmd_callback handlers[__BUS_REQ_LAST] = {

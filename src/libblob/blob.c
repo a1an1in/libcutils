@@ -199,9 +199,12 @@ char * blob_get_string(blob_attr_t *attr)
     return body_addr;
 }
 
-int blob_get_buffer(blob_attr_t *attr,uint8_t *out)
+int blob_get_buffer(blob_attr_t *attr,uint8_t **out)
 {
-    memcpy(out, blob_get_data(attr),blob_get_data_len(attr));
+    /*
+     *memcpy(out, blob_get_data(attr),blob_get_data_len(attr));
+     */
+    *out = blob_get_data(attr);
 
     return blob_get_data_len(attr);
 }

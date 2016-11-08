@@ -14,6 +14,10 @@ static int test_hello(struct bus_s *bus,
                       int *out_data_len)
 {
     printf("run test hello\n");
+    char buffer[] = {1,2,3,4,5,6,7,8,9};
+
+    memcpy(out_data,buffer,sizeof(buffer));
+    *out_data_len = sizeof(buffer);
 
 	return 1;
 }

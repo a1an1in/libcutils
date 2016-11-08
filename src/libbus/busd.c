@@ -535,7 +535,7 @@ int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
     char *method;
     char *obj_name;
     int src_fd;
-    uint8_t buffer[1024];
+    uint8_t *buffer = NULL;
     int buffer_len = 0;
 
     dbg_str(DBG_DETAIL,"busd_handle_forward_invoke_reply");
@@ -557,7 +557,7 @@ int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
 		dbg_str(DBG_DETAIL,"source fd=%d",src_fd);
     }
     if (attr[BUSD_OPAQUE]) {
-        buffer_len = blob_get_buffer(attr[BUSD_OPAQUE],buffer);
+        buffer_len = blob_get_buffer(attr[BUSD_OPAQUE],&buffer);
         dbg_buf(DBG_DETAIL,"busd_handle_forward_invoke_reply,buffer:",buffer,buffer_len);
     }
 

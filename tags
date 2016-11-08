@@ -33,7 +33,7 @@ ARGS_SUC	src/include/libdbg/debug_businesses.h	119;"	d
 ARGS_VIP	src/include/libdbg/debug_businesses.h	121;"	d
 ARGS_WARNNING	src/include/libdbg/debug_businesses.h	118;"	d
 ARRAY_SIZE	src/include/libblob/utils.h	29;"	d
-ARRAY_SIZE	src/include/libbus/bus.h	32;"	d
+ARRAY_SIZE	src/include/libbus/bus.h	33;"	d
 ASCIILINESZ	src/libini/iniparser.c	29;"	d	file:
 ASCIILINESZ	src/libini/iniparser.c	417;"	d	file:
 B64_DECODE_LEN	src/include/libblob/utils.h	170;"	d
@@ -69,37 +69,40 @@ BUSD_REPLY_ADD_OBJECT	src/include/libbus/bus.h	/^	BUSD_REPLY_ADD_OBJECT,$/;"	e	e
 BUSD_REPLY_INVOKE	src/include/libbus/bus.h	/^	BUSD_REPLY_INVOKE,$/;"	e	enum:bus_communication_type
 BUSD_REPLY_LOOKUP	src/include/libbus/bus.h	/^	BUSD_REPLY_LOOKUP,$/;"	e	enum:bus_communication_type
 BUSD_STATE	src/include/libbus/busd.h	/^    BUSD_STATE,$/;"	e	enum:__anon6
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	234;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	236;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	302;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	304;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	364;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	366;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	516;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	518;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	238;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	240;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	311;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	313;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	396;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	398;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	492;"	d	file:
-BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	494;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	235;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	237;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	303;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	305;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	365;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	367;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	526;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/bus.c	528;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	239;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	241;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	312;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	314;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	397;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	399;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	493;"	d	file:
+BUS_ADD_OBJECT_MAX_BUFFER_LEN	src/libbus/busd.c	495;"	d	file:
 BUS_ID	src/include/libbus/bus.h	/^	BUS_ID,$/;"	e	enum:__anon5
 BUS_INVOKE_ARGC	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGC,$/;"	e	enum:__anon5
 BUS_INVOKE_ARGS	src/include/libbus/bus.h	/^	BUS_INVOKE_ARGS,$/;"	e	enum:__anon5
 BUS_INVOKE_DST_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_DST_FD,$/;"	e	enum:__anon5
 BUS_INVOKE_METHOD	src/include/libbus/bus.h	/^	BUS_INVOKE_METHOD,$/;"	e	enum:__anon5
 BUS_INVOKE_SRC_FD	src/include/libbus/bus.h	/^	BUS_INVOKE_SRC_FD,$/;"	e	enum:__anon5
-BUS_METHOD	src/include/libbus/bus.h	35;"	d
+BUS_METHOD	src/include/libbus/bus.h	36;"	d
 BUS_METHORDS	src/include/libbus/bus.h	/^	BUS_METHORDS,$/;"	e	enum:__anon5
 BUS_OBJNAME	src/include/libbus/bus.h	/^	BUS_OBJNAME,$/;"	e	enum:__anon5
+BUS_OPAQUE	src/include/libbus/bus.h	/^	BUS_OPAQUE,$/;"	e	enum:__anon5
 BUS_REPLY_FORWARD_INVOKE	src/include/libbus/bus.h	/^	BUS_REPLY_FORWARD_INVOKE,$/;"	e	enum:bus_communication_type
 BUS_REQ_ADD_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_ADD_OBJECT,$/;"	e	enum:bus_communication_type
 BUS_REQ_DATA	src/include/libbus/bus.h	/^	BUS_REQ_DATA,$/;"	e	enum:bus_communication_type
 BUS_REQ_HELLO	src/include/libbus/bus.h	/^	BUS_REQ_HELLO,$/;"	e	enum:bus_communication_type
 BUS_REQ_INVOKE	src/include/libbus/bus.h	/^	BUS_REQ_INVOKE,$/;"	e	enum:bus_communication_type
 BUS_REQ_LOOKUP	src/include/libbus/bus.h	/^	BUS_REQ_LOOKUP,$/;"	e	enum:bus_communication_type
+BUS_REQ_MAX_OPAQUE_LEN	src/include/libbus/bus.h	106;"	d
+BUS_REQ_MAX_OPAQUE_LEN	src/include/libbus/bus.h	108;"	d
 BUS_REQ_NOTIFY	src/include/libbus/bus.h	/^	BUS_REQ_NOTIFY,$/;"	e	enum:bus_communication_type
 BUS_REQ_PING	src/include/libbus/bus.h	/^	BUS_REQ_PING,$/;"	e	enum:bus_communication_type
 BUS_REQ_REMOVE_OBJECT	src/include/libbus/bus.h	/^	BUS_REQ_REMOVE_OBJECT,$/;"	e	enum:bus_communication_type
@@ -1426,7 +1429,7 @@ blob_attr_t	src/include/libblob/blob.h	/^}__attribute__((packed)) blob_attr_t;$/
 blob_catenate	src/libblob/blob.c	/^int blob_catenate(blob_t *blob, blob_attr_t *attr)$/;"	f
 blob_create	src/libblob/blob.c	/^blob_t *blob_create(allocator_t *allocator)$/;"	f
 blob_for_each_attr	src/include/libblob/blob.h	7;"	d
-blob_get_buffer	src/libblob/blob.c	/^int blob_get_buffer(blob_attr_t *attr,uint8_t **out)$/;"	f
+blob_get_buffer	src/libblob/blob.c	/^int blob_get_buffer(blob_attr_t *attr,uint8_t *out)$/;"	f
 blob_get_data	src/libblob/blob.c	/^uint8_t *blob_get_data(blob_attr_t *attr)$/;"	f
 blob_get_data_len	src/libblob/blob.c	/^uint32_t blob_get_data_len(blob_attr_t *attr)$/;"	f
 blob_get_len	src/libblob/blob.c	/^uint16_t blob_get_len(blob_attr_t *attr)$/;"	f
@@ -1521,7 +1524,7 @@ busd_object_t	src/include/libbus/busd.h	/^}busd_object_t;$/;"	t	typeref:struct:b
 busd_policy	src/libbus/busd.c	/^static const struct blob_policy_s busd_policy[] = {$/;"	v	typeref:struct:blob_policy_s	file:
 busd_process_receiving_data_callback	src/libbus/busd.c	/^static int busd_process_receiving_data_callback(void *task)$/;"	f	file:
 busd_reply_add_object	src/libbus/busd.c	/^int busd_reply_add_object(busd_t *busd, int state,char *obj_name, int fd)$/;"	f
-busd_reply_invoke	src/libbus/busd.c	/^int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,int source_fd)$/;"	f
+busd_reply_invoke	src/libbus/busd.c	/^int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,uint8_t *opaque,int opaque_len, int source_fd)$/;"	f
 busd_reply_lookup_object	src/libbus/busd.c	/^int busd_reply_lookup_object(busd_t *busd,struct busd_object *obj,int fd)$/;"	f
 busd_s	src/include/libbus/busd.h	/^typedef struct busd_s{$/;"	s
 busd_t	src/include/libbus/busd.h	/^}busd_t;$/;"	t	typeref:struct:busd_s
@@ -2694,8 +2697,10 @@ offsetof	src/include/libdata_structure/rbtree.h	128;"	d
 offsetof	src/include/libdata_structure/rbtree.h	130;"	d
 oflags	src/include/libipc/share_mem/shm.h	/^    int oflags;$/;"	m	struct:share_mem_s
 old_events	src/include/libevent_tiny/changelist-internal.h	/^	short old_events;$/;"	m	struct:event_change
+opaque	src/include/libbus/bus.h	/^    uint8_t opaque[ BUS_REQ_MAX_OPAQUE_LEN];$/;"	m	struct:bus_req_s
 opaque	src/include/libconcurrent/io_user.h	/^	void *opaque;$/;"	m	struct:io_user_s
 opaque	src/include/libconcurrent/tmr_user.h	/^    void *opaque;$/;"	m	struct:tmr_user_s
+opaque_len	src/include/libbus/bus.h	/^    uint16_t opaque_len;$/;"	m	struct:bus_req_s
 open	src/libevent_tiny/evutil.c	54;"	d	file:
 open_mode	src/include/libipc/share_mem/shm.h	/^    int open_mode;$/;"	m	struct:share_mem_s
 p	src/include/libevent_tiny/minheap-internal.h	/^    struct event** p;$/;"	m	struct:min_heap	typeref:struct:min_heap::event
