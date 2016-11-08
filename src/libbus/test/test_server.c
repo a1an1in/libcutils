@@ -61,7 +61,7 @@ void test_bus_server()
                             server_host,
                             server_srv);
 
-    dbg_str(DBG_DETAIL,"bus add object");
+    dbg_str(BUS_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);
 
 	while(1) sleep(1);

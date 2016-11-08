@@ -14,6 +14,7 @@ debug_business_names[MAX_DEBUG_BUSINESS_NUM] = {
 	"protocol_analyzer",
 	"args_processor",
     "state_machine",
-    "libevent"
+    "libevent",
+    "libbus"
 };
 

@@ -31,6 +31,7 @@ enum debug_business_enum{
 	DBG_BUSINESS_ARGS,
 	DBG_BUSINESS_SM,
 	DBG_BUSINESS_EV,
+	DBG_BUSINESS_BUS,
 	MAX_DEBUG_BUSINESS_NUM
 };
 extern char *debug_business_names[MAX_DEBUG_BUSINESS_NUM];
@@ -144,4 +145,16 @@ extern char *debug_business_names[MAX_DEBUG_BUSINESS_NUM];
 #define EV_FLOW				     DBG_BUSINESS_EV		 << 8 | DBG_FLOW 
 #define EV_IMPORTANT			 DBG_BUSINESS_EV		 << 8 | DBG_IMPORTANT 
 #define EV_DETAIL				 DBG_BUSINESS_EV		 << 8 | DBG_DETAIL 
+
+#define BUS_ARGSNIC			     DBG_BUSINESS_BUS		 << 8 | DBG_DBG_ARGSNIC 
+#define BUS_FATAL				 DBG_BUSINESS_BUS		 << 8 | DBG_FATAL 
+#define BUS_ERROR				 DBG_BUSINESS_BUS		 << 8 | DBG_ERROR 
+#define BUS_WARNNING			 DBG_BUSINESS_BUS		 << 8 | DBG_WARNNING 
+#define BUS_SUC				     DBG_BUSINESS_BUS		 << 8 | DBG_SUC 
+#define BUS_CORRECT			     DBG_BUSINESS_BUS		 << 8 | DBG_CORRECT 
+#define BUS_VIP 				 DBG_BUSINESS_BUS		 << 8 | DBG_VIP 
+#define BUS_FLOW				 DBG_BUSINESS_BUS		 << 8 | DBG_FLOW 
+#define BUS_IMPORTANT			 DBG_BUSINESS_BUS		 << 8 | DBG_IMPORTANT 
+#define BUS_DETAIL				 DBG_BUSINESS_BUS		 << 8 | DBG_DETAIL 
+
 #endif
