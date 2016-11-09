@@ -368,6 +368,7 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
 	uint32_t buffer_len;
     int i;
 
+    dbg_str(BUS_SUC,"bus_invoke");
     /*compose req proto*/
 	memset(&hdr,0,sizeof(hdr));
 
@@ -475,7 +476,7 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
     char *buffer = NULL;
     int buffer_len = 0;
 
-	dbg_str(BUS_DETAIL,"bus_handle_invoke_reply");
+	dbg_str(BUS_SUC,"bus_handle_invoke_reply");
 
 	if (attr[BUS_STATE]){
         state = blob_get_u32(attr[BUS_STATE]);
@@ -548,7 +549,7 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
 	uint32_t buffer_len,tmp_len;
 	allocator_t *allocator = bus->allocator;
 
-	dbg_str(BUS_DETAIL,"bus_reply_forward_invoke,ret = %d", ret);
+	dbg_str(BUS_SUC,"bus_reply_forward_invoke");
 	memset(&hdr,0,sizeof(hdr));
 
 	hdr.type = BUS_REPLY_FORWARD_INVOKE;
@@ -605,7 +606,7 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
     char buffer[MAX_BUFFER_LEN];
     int ret, buffer_len = 9;
 
-	dbg_str(BUS_VIP,"bus_handle_forward_invoke");
+	dbg_str(BUS_SUC,"bus_handle_forward_invoke");
 
 	if (attr[BUS_INVOKE_SRC_FD]) {
         src_fd = blob_get_u32(attr[BUS_INVOKE_SRC_FD]);

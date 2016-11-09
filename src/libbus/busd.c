@@ -242,7 +242,7 @@ int busd_reply_add_object(busd_t *busd, int state,char *obj_name, int fd)
 	uint32_t buffer_len;
 	allocator_t *allocator = busd->allocator;
 
-    dbg_str(BUS_DETAIL,"busd_reply_lookup_object");
+    dbg_str(BUS_SUC,"busd_reply_lookup_object");
 	memset(&hdr,0,sizeof(hdr));
 
 	hdr.type = BUSD_REPLY_ADD_OBJECT;
@@ -449,7 +449,7 @@ int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)
     blob_attr_t *args = NULL;
     int argc = 0; 
 
-    dbg_str(BUS_DETAIL,"busd_handle_invoke_method");
+    dbg_str(BUS_SUC,"busd_handle_invoke_method");
 
     if (attr[BUSD_INVOKE_KEY]) {
         obj_name = blob_get_string(attr[BUSD_INVOKE_KEY]);
@@ -496,7 +496,7 @@ int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,uint8_t
 	uint32_t buffer_len;
 	allocator_t *allocator = busd->allocator;
 
-    dbg_str(BUS_DETAIL,"busd_reply_lookup_object");
+    dbg_str(BUS_SUC,"busd_reply_invoke");
 	memset(&hdr,0,sizeof(hdr));
 
 	hdr.type = BUSD_REPLY_INVOKE;
@@ -538,7 +538,7 @@ int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
     uint8_t *buffer = NULL;
     int buffer_len = 0;
 
-    dbg_str(BUS_DETAIL,"busd_handle_forward_invoke_reply");
+    dbg_str(BUS_SUC,"busd_handle_forward_invoke_reply");
 
     if (attr[BUSD_STATE]) {
         state = blob_get_u32(attr[BUSD_STATE]); 
