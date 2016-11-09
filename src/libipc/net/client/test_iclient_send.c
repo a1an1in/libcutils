@@ -50,7 +50,7 @@
 
 static int process_task_callback(client_task_t *task)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,client send");
+	dbg_str(DBG_DETAIL,"process_task begin,client send recv data");
 	dbg_buf(DBG_DETAIL,"task buffer:",task->buffer,task->buffer_len);
 	dbg_str(DBG_DETAIL,"process_task end");
 }

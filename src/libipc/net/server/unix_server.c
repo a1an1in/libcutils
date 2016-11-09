@@ -49,9 +49,6 @@
 #include <sys/un.h>
 
 #define MAXEPOLLSIZE 10000
-#define MAXLINE 10240
-
-int server_release_task(server_task_t *task,concurrent_task_admin_t *admin);
 
 static int setnonblocking(int sockfd)
 {

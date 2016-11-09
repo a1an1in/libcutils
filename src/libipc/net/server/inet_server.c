@@ -49,16 +49,6 @@
 
 
 #define MAXEPOLLSIZE 10000
-#define MAXLINE 10240
-
-typedef struct iserver_task_s{
-	uint32_t fd;
-	char key[10];
-	struct event *event;
-	allocator_t *allocator;
-	concurrent_slave_t *slave;
-    server_t *server;
-}server_task_t;
 
 static int setnonblocking(int sockfd)
 {
@@ -68,7 +58,6 @@ static int setnonblocking(int sockfd)
 	return 0;
 
 }
-//version 4, using pipe mode,without task admin
 int server_task_init(server_task_t *task,
 		             int fd, 
                      void *key, 
@@ -96,12 +85,48 @@ int server_task_release_without_task_admin(server_task_t *task)
 static void 
 slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
 {
+#define MAX_TASK_BUFFER_LEN 1024
 	server_task_t *task = (server_task_t *)arg;
 	server_t *server    = task->server;
+	server_data_task_t *data_task = NULL;
 
-    server->process_task_cb(task);
-	server_task_release_without_task_admin(task);
+	data_task = (server_data_task_t *)allocator_mem_alloc(server->allocator,
+													      sizeof(server_data_task_t));
+	if(data_task == NULL){
+		dbg_str(DBG_ERROR,"allocator_mem_alloc,close the connection");
+		close(fd);//modify for test
+		return;
+	}
+    data_task->buffer_len = read(task->fd,
+								 data_task->buffer,
+								 MAX_TASK_BUFFER_LEN);//读取客户端socket流
+
+	dbg_str(DBG_DETAIL,"buffer_len=%d",data_task->buffer_len);
+    if (data_task->buffer_len < 0) {
+        dbg_str(DBG_ERROR,"fd read err,close the connection");
+		close(fd);//modify for test
+        return;
+	} else if(data_task->buffer_len== 0){
+		dbg_str(DBG_ERROR,"client_event_handler,socket has broken,del client event");
+		event_del(task->event);
+		return;
+    } 
+
+	data_task->fd = task->fd;
+	data_task->allocator = server->allocator;
+	data_task->server = server;
+
+    server->process_task_cb(data_task);
+
+	allocator_mem_free(server->allocator,data_task);
+
+	/*
+	 *userver_release_task_without_task_admin(task);
+	 */
+	//...............fd havn't release
+#undef MAX_TASK_BUFFER_LEN
 }
+
 static void 
 slave_work_function(concurrent_slave_t *slave,void *arg)
 {
@@ -254,23 +279,9 @@ int tcp_iserver_destroy(server_t *server)
 
 static int test_process_task_callback(void *task)
 {
-    int nread;
-    char buf[MAXLINE];
-    int fd = ((server_task_t *)task)->fd;
+	server_data_task_t *t = (server_data_task_t *)task;;
 
-    nread = read(fd, buf, MAXLINE);
-
-	dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
-    if (nread < 0) {
-        dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		close(fd);//modify for test
-        return;
-    } 
-    write(fd, buf, nread); //ack back 
-	/*
-	 *close(fd);
-	 */
-	dbg_str(NET_DETAIL,"task done");
+    write(t->fd, t->buffer,t->buffer_len);//响应客户端  
 }
 int test_iserver()
 {

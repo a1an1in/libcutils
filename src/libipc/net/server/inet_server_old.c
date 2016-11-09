@@ -48,6 +48,7 @@
 #include <signal.h>
 
 
+#if 0
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
 
@@ -69,7 +70,6 @@ static int setnonblocking(int sockfd)
 
 }
 
-#if 0
 void master_iserver_listen_event_handler(int fd, short event, void *arg)
 {
 	concurrent_master_t *master = (concurrent_master_t *)arg;
