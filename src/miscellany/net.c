@@ -49,6 +49,30 @@ void print_ipaddr(char *ipaddr)
     printf("ipaddr:%s\n",ipaddr);
 }
 
+int get_local_ip_num(char *ifname)  
+{  
+    int sk;  
+    struct   sockaddr_in *sin;  
+    struct   ifreq ifreq;     
+
+    if ((sk=socket(AF_INET, SOCK_STREAM, 0)) == -1)  
+    {  
+        printf("socket create failse...GetLocalIp!\n");  
+        return -1;  
+    }  
+
+    memset(&ifreq, 0, sizeof(ifreq));     
+    strncpy(ifreq.ifr_name, ifname, sizeof(ifreq.ifr_name) - 1);     
+
+    if(ioctl( sk, SIOCGIFADDR, &ifreq) < 0) {     
+        return -1;     
+    }       
+    sin = (struct sockaddr_in *)&ifreq.ifr_addr;     
+
+    close(sk);  
+
+    return sin->sin_addr.s_addr;         
+}  
 int get_local_ip(char *ifname,char *ipaddr)  
 {  
     int sk;  
@@ -168,6 +192,28 @@ int set_local_netmask(char *ifname,char *netmask_addr)
 
     return 1;
 }  
+int inet_str2num(int af,char *ip)
+{
+    struct in_addr in;
+
+    inet_pton(af,ip,&in);
+    dbg_str(DBG_DETAIL,"ip str to num:%s->%u",ip, in.s_addr);
+
+    return in.s_addr;
+}
+
+int inet_num2str(int af,uint32_t ip_num,char *ip_str)
+{
+    struct in_addr s;
+
+    s.s_addr = ip_num;
+
+    inet_ntop(af, (void *)&s, ip_str, 16);
+
+    dbg_str(DBG_DETAIL,"ip num to str:%u->%s",s.s_addr,ip_str);
+
+    return 0;
+}
 
 int test_miscellany_net()
 {
@@ -192,7 +238,10 @@ int test_miscellany_net()
     get_local_netmask((char *)"eth0",ip_addr); 
     print_ipaddr(ip_addr);
 
-    dbg_str(DBG_DETAIL,"get_gateway");
+    dbg_str(DBG_DETAIL,"ip and str convert");
+    inet_str2num(AF_INET,(char *)"192.168.20.2");
+    
+    inet_num2str(AF_INET,34908352,ip_addr);
 
     return 0;
 }

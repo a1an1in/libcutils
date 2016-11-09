@@ -219,6 +219,7 @@ int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)
 
 	return 0;
 }
+
 int __bus_add_obj(bus_t *bus,struct bus_object *obj)
 {
     uint8_t addr_buffer[8];
@@ -228,6 +229,7 @@ int __bus_add_obj(bus_t *bus,struct bus_object *obj)
 
     return 0;
 }
+
 int bus_add_object(bus_t *bus,struct bus_object *obj)
 {
 	bus_reqhdr_t hdr;
@@ -375,6 +377,7 @@ int bus_blob_add_args(blob_t *blob,int argc, bus_method_args_t *args)
 
     return 0;
 }
+
 int bus_invoke(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args)
 {
 	bus_reqhdr_t hdr;
@@ -412,6 +415,7 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *a
 
 	return 0;
 }
+
 int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
 {
 /*
@@ -574,6 +578,7 @@ bus_get_n_policy(bus_object_t *obj,char *method)
 
     return -1;
 }
+
 int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)
 {
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 2048
@@ -623,6 +628,7 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
 	return 0;
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
 }
+
 int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 {
     bus_object_t *obj = NULL;

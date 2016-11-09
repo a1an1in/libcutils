@@ -58,6 +58,7 @@ static void addr_to_buffer(void *addr,uint8_t *buffer)
 		buffer[i] = data >> 8 * (sizeof(int *) - 1 - i);
 	}
 }
+
 static void *buffer_to_addr(uint8_t *buffer)
 {
 	void *ret = NULL;
@@ -273,6 +274,7 @@ int busd_reply_add_object(busd_t *busd, int state,char *obj_name, int fd)
 
 	return 0;
 }
+
 int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)
 {
     struct busd_object *obj;
@@ -529,6 +531,7 @@ int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,uint8_t
 
 	return 0;
 }
+
 int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
 {
     int state;
@@ -565,6 +568,7 @@ int busd_handle_forward_invoke_reply(busd_t *busd,  blob_attr_t **attr,int fd)
 
     return 0;
 }
+
 static busd_cmd_callback handlers[__BUS_REQ_LAST] = {
 	[BUS_REQ_ADD_OBJECT]       = busd_handle_add_object,
 	[BUS_REQ_LOOKUP]           = busd_handle_lookup_object,

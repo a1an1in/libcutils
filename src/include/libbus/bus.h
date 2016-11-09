@@ -158,6 +158,8 @@ int bus_send(bus_t *bus,
 
 int bus_add_object(bus_t *bus,struct bus_object *obj);
 
+int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args,char *out_buf,char *out_len);
+
 bus_t * bus_client_create(allocator_t *allocator,
                           char *server_host,
                           char *server_srv);

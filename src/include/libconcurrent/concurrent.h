@@ -11,6 +11,7 @@ enum SERVER_WORK_TYPE{
 	SERVER_WORK_TYPE_PROCESS
 };
 
+typedef struct concurrent_master_s concurrent_master_t;
 
 typedef struct concurrent_task_admin_s{
 	sync_lock_t admin_lock;
@@ -36,6 +37,7 @@ typedef struct concurrent_slave_s{
 	uint8_t work_id;
 	llist_t *message_que;
 	concurrent_task_admin_t *task_admin;
+    concurrent_master_t *master;
 }concurrent_slave_t;
 
 struct concurrent_message_s{
@@ -68,6 +70,7 @@ typedef struct concurrent_master_s{
 	int rcv_add_new_event_fd;
 	int snd_add_new_event_fd;
 	uint8_t concurrent_master_inited_flag;
+	uint8_t concurrent_slave_inited_flag;
 }concurrent_master_t;
 
 typedef struct concurrent_s{

@@ -185,6 +185,7 @@ void *
 concurrent_slave_thread(void *arg)
 {
 	concurrent_slave_t *slave = (concurrent_slave_t *)arg;
+	concurrent_master_t *master = slave->master;
 
 	dbg_str(CONCURRENT_DETAIL,
             "concurrent_slave_thread start,concurrent_slave_thread id=%d",
@@ -206,7 +207,11 @@ concurrent_slave_thread(void *arg)
 	if (event_add(&slave->message_event, 0) == -1) {
 		dbg_str(CONCURRENT_WARNNING,"event_add err");
 	}
+
+    master->concurrent_slave_inited_flag = 1;
+
 	event_base_loop(slave->event_base, 0);
+
 	return NULL;
 }
 
@@ -233,8 +238,9 @@ __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)
 	int fds[2];
 
 	slave->message_que = master->message_que;
-	slave->allocator = master->allocator;
-	slave->task_admin = master->task_admin;
+	slave->allocator   = master->allocator;
+	slave->task_admin  = master->task_admin;
+    slave->master      = master;
 
 	if(master->concurrent_work_type == SERVER_WORK_TYPE_THREAD) {
 
@@ -284,6 +290,8 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
 		ret = __concurrent_master_create_slave(master, i);
 	}
 
+    while(master->concurrent_slave_inited_flag != 1);
+
 end:
 	return ret;
 
@@ -302,6 +310,7 @@ concurrent_master_create(allocator_t *allocator)
 			sizeof(struct concurrent_master_s));
 	master->allocator = allocator;
 	master->concurrent_master_inited_flag = 0;
+    master->concurrent_slave_inited_flag = 0;
 	master->assignment_count = 0;
 
 	return master;
