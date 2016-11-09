@@ -32,4 +32,6 @@ io_user_t *io_user(
 		int (*process_task_cb)(void *task),
 		void *opaque);
 
+int io_user_destroy(io_user_t *io_user);
+
 #endif

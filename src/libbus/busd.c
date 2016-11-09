@@ -627,8 +627,13 @@ void test_bus_daemon()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     busd_t *busd;
-    char *server_host = (char *)"bus_server_path";
+#if 0
+    char *server_host = "bus_server_path";
     char *server_srv = NULL;
+#else
+    char *server_host = "127.0.0.1";
+    char *server_srv = "12345";
+#endif
     
     dbg_str(BUS_DETAIL,"test_busd_daemon");
 
