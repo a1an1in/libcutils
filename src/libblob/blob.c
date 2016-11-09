@@ -294,17 +294,18 @@ void test_blob()
     blob_add_u8(blob, (char *)"u8",8);
     blob_add_string(blob,(char *)"value",(char *)"hello world!");
 
-    blob_add_table_start(blob,(char *)"table1");
-    blob_add_u8(blob, (char *)"u8",8);
-    blob_add_u16(blob,(char *)"u16",16);
-    blob_add_u32(blob,(char *)"u32",32);
+    blob_add_table_start(blob,(char *)"table1");{
+        blob_add_u8(blob, (char *)"u8",8);
+        blob_add_u16(blob,(char *)"u16",16);
+        blob_add_u32(blob,(char *)"u32",32);
 
-    blob_add_table_start(blob,(char *)"table2");
-    blob_add_u8(blob, (char *)"u8",8);
-    blob_add_u16(blob,(char *)"u16",16);
-    blob_add_u32(blob,(char *)"u32",32);
-    blob_add_table_end(blob);
-
+        blob_add_table_start(blob,(char *)"table2");{
+            blob_add_u8(blob, (char *)"u8",8);
+            blob_add_u16(blob,(char *)"u16",16);
+            blob_add_u32(blob,(char *)"u32",32);
+        }
+        blob_add_table_end(blob);
+    }
     blob_add_table_end(blob);
 
     blob_add_u32(blob,(char *)"u32",32);

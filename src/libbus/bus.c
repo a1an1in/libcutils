@@ -358,7 +358,24 @@ int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)
     }
 }
 
-int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
+int bus_blob_add_args(blob_t *blob,int argc, bus_method_args_t *args)
+{
+    int i;
+
+    for(i = 0; i < argc; i++) {
+        if(args[i].type == ARG_TYPE_STRING) {
+            blob_add_string(blob, (char *)args[i].name, args[i].value);
+        } else if (args[i].type == ARG_TYPE_INT32) {
+            blob_add_u32(blob, (char *)args[i].name, atoi(args[i].value));
+        } else {
+            dbg_str(DBG_WARNNING,"bus_blob_add_args,not support type = %d",args[i].type);
+        }
+        dbg_str(DBG_DETAIL,"bus_blob_add_arg:name \"%s\" value \"%s\"",args[i].name, args[i].value);
+    }
+
+    return 0;
+}
+int bus_invoke(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args)
 {
 	bus_reqhdr_t hdr;
     blob_t *blob = bus->blob;
@@ -366,7 +383,6 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
 	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
 	uint32_t buffer_len;
-    int i;
 
     dbg_str(BUS_SUC,"bus_invoke");
     /*compose req proto*/
@@ -379,9 +395,7 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, char **args)
         blob_add_string(blob, (char *)"invoke_method", method);
         blob_add_u8(blob, (char *)"invoke_argc", argc);
         blob_add_table_start(blob, (char *)"invoke_args"); {
-            for(i = 0; i < argc; i++) {
-                blob_add_string(blob, (char *)"arg", args[i]);
-            }
+            bus_blob_add_args(blob,argc,args);
         }
         blob_add_table_end(blob);
     }
@@ -415,7 +429,14 @@ int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
     return 0;
 }
 
-int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, char **args,char *out_buf,char *out_len)
+/*
+ *bus_method_args_t args[2] = {
+ *    [0] = {ARG_TYPE_INT32,"id", "123"},
+ *    [0] = {ARG_TYPE_STRING,"content", "hello_world"},
+ *};
+ */
+
+int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args,char *out_buf,char *out_len)
 {
     bus_req_t req,*req_back;
     hash_map_pos_t out;
@@ -540,6 +561,19 @@ bus_get_policy(bus_object_t *obj,char *method)
     return NULL;
 }
 
+int
+bus_get_n_policy(bus_object_t *obj,char *method)
+{
+    int i;
+
+    for(i = 0; i < obj->n_methods; i++) {
+        if(!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
+            return obj->methods[i].n_policy;
+        }
+    }
+
+    return -1;
+}
 int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)
 {
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 2048
@@ -601,6 +635,7 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
     bus_handler_t method;
     uint8_t *p;
     blob_policy_t *policy;
+    int n_policy;
     struct blob_attr_s *tb[10];
 #define MAX_BUFFER_LEN 2048
     char buffer[MAX_BUFFER_LEN];
@@ -638,8 +673,10 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 
             method = bus_get_method_handler(obj,method_name);
             policy = bus_get_policy(obj,method_name);
+            n_policy = bus_get_n_policy(obj,method_name);
 
-            blob_parse(policy, ARRAY_SIZE(policy), tb, blob_get_data(args), blob_get_data_len(args));
+            dbg_str(DBG_DETAIL,"policy addr:%p,size=%d",policy,ARRAY_SIZE(policy));
+            blob_parse(policy, n_policy, tb, blob_get_data(args), blob_get_data_len(args));
             ret = method(bus,argc,tb,buffer,&buffer_len);
             if(buffer_len > MAX_BUFFER_LEN) {
                 dbg_str(BUS_WARNNING,"buffer is too small,please check");

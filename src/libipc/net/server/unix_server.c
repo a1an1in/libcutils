@@ -58,8 +58,7 @@ static int setnonblocking(int sockfd)
 	return 0;
 
 }
-#if 1
-//version 4, using pipe mode,without task admin
+
 static int userver_release_task_without_task_admin(server_task_t *task)
 {
 	event_del(task->event);
@@ -188,7 +187,7 @@ static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
 
     return ;
 }
-#endif
+
 static int tcp_userver_create_socket(char *server_un_path)
 {
     int listenq = 1024;

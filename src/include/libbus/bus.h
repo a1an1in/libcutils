@@ -41,6 +41,24 @@ typedef int (*bus_cmd_callback)(bus_t *bus,  blob_attr_t **attr);
 	.n_policy = ARRAY_SIZE(_policy),\
 }
 
+enum bus_method_arg_type_e {       
+    ARG_TYPE_UNSPEC,  
+    ARG_TYPE_ARRAY,
+    ARG_TYPE_TABLE,
+    ARG_TYPE_STRING,
+    ARG_TYPE_BUFFER,
+    ARG_TYPE_INT64,
+    ARG_TYPE_INT32,
+    ARG_TYPE_INT16,
+    ARG_TYPE_INT8,
+    ARG_TYPE_LAST,
+}; 
+typedef struct bus_method_args_s{
+    uint8_t type;
+    char *name;
+    char *value;
+}bus_method_args_t;
+
 typedef struct bus_reqhdr {
 	uint8_t version;
 	uint8_t type;

@@ -3,8 +3,8 @@
 #include <unistd.h>
 
 static const struct blob_policy_s hello_policy[] = {
-	[0] = { .name = "arg", .type = BLOB_TYPE_INT32 },
-	[1] = { .name = "def", .type = BLOB_TYPE_STRING },
+	[0] = { .name = "id", .type = BLOB_TYPE_INT32 },
+	[1] = { .name = "content", .type = BLOB_TYPE_STRING },
 };
 
 static int test_hello(struct bus_s *bus,
@@ -15,6 +15,12 @@ static int test_hello(struct bus_s *bus,
 {
     printf("run test hello\n");
     char buffer[] = {1,2,3,4,5,6,7,8,9};
+    char *content;
+    int id;
+
+    id = blob_get_u32(args[0]);
+    content = blob_get_string(args[1]);
+    dbg_str(DBG_DETAIL,"test hello,rcv args id=%d,content=%s",id,content);
 
     memcpy(out_data,buffer,sizeof(buffer));
     *out_data_len = sizeof(buffer);
@@ -62,6 +68,7 @@ void test_bus_server()
 	char buf[1024]    = "hello world!";
 	int buf_len       = strlen(buf);
     
+    dbg_str(DBG_DETAIL,"hello policy addr:%p",hello_policy);
     bus = bus_client_create(allocator,
                             server_host,
                             server_srv);
