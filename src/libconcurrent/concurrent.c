@@ -661,7 +661,7 @@ concurrent_constructor()
 	uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
 
-    dbg_str(DBG_DETAIL,"construct concurrent");
+    dbg_str(DBG_DETAIL,"construct concurrent start,prior 112");
 
 	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
@@ -676,6 +676,7 @@ concurrent_constructor()
 		            lock_type);//uint8_t concurrent_lock_type);
 
     global_concurrent = c;
+    dbg_str(DBG_DETAIL,"construct concurrent end");
 }
 
 __attribute__((destructor(CONCURRENT_CONSTRUCTOR_PRIOR))) void 

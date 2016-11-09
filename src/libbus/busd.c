@@ -601,11 +601,11 @@ static int busd_process_receiving_data_callback(void *task)
     blob_attr =(blob_attr_t*) blob_get_data(blob_attr);
     dbg_buf(BUS_DETAIL,"rcv oject:",(uint8_t *)blob_attr,len);
 
-    blob_parse(busd_policy,
-               ARRAY_SIZE(busd_policy),
-               tb,
-               blob_attr,
-               len);
+    blob_parse_to_attr(busd_policy,
+                       ARRAY_SIZE(busd_policy),
+                       tb,
+                       blob_attr,
+                       len);
 
     cb(busd,tb,t->fd);
 

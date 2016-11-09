@@ -80,13 +80,15 @@ default_allocator_constructor()
 {
 	allocator_t *allocator;
 
-    dbg_str(DBG_DETAIL,"construct default allocator");
+    dbg_str(DBG_DETAIL,"construct default allocator start,prior 111");
 
 	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
         exit(1);
 	}
     global_allocator_default = allocator;
+
+    dbg_str(DBG_DETAIL,"construct default allocator end");
 
     return;
 }

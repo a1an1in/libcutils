@@ -22,7 +22,9 @@ extern void log_print_regester();
 
 __attribute__((constructor(101))) void libdbg_register_modules()
 {
+    printf("register libdbg modules start,prior 101\n");
 	console_print_regester();
 	//network_print_regester();
 	log_print_regester();
+    printf("register libdbg modules end\n");
 }

@@ -682,7 +682,7 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
             n_policy = bus_get_n_policy(obj,method_name);
 
             dbg_str(DBG_DETAIL,"policy addr:%p,size=%d",policy,ARRAY_SIZE(policy));
-            blob_parse(policy, n_policy, tb, blob_get_data(args), blob_get_data_len(args));
+            blob_parse_to_attr(policy, n_policy, tb, blob_get_data(args), blob_get_data_len(args));
             ret = method(bus,argc,tb,buffer,&buffer_len);
             if(buffer_len > MAX_BUFFER_LEN) {
                 dbg_str(BUS_WARNNING,"buffer is too small,please check");
@@ -728,11 +728,11 @@ static int bus_process_receiving_data_callback(client_task_t *task)
     len = blob_get_data_len(blob_attr);
     blob_attr =(blob_attr_t*) blob_get_data(blob_attr);
 
-    blob_parse(bus_policy,
-               ARRAY_SIZE(bus_policy),
-               tb,
-               blob_attr,
-               len);
+    blob_parse_to_attr(bus_policy,
+                       ARRAY_SIZE(bus_policy),
+                       tb,
+                       blob_attr,
+                       len);
 
     cb(bus,tb);
 

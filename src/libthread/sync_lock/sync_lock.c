@@ -63,7 +63,7 @@ sync_lock_register_modules()
 	/*
 	 *memset(&sync_lock_modules[PTHREAD_RWLOCK],0,sizeof(sync_lock_module_t));
 	 */
-    printf("register sync lock modules\n");
+    printf("register sync lock modules start\n");
 #ifdef UNIX_LIKE_USER_MODE
 	linux_user_mode_pthread_mutex_register();
 	linux_user_mode_pthread_rwlock_register();
@@ -71,6 +71,8 @@ sync_lock_register_modules()
 #ifdef WINDOWS_USER_MODE
 	windows_user_mode_mutex_register();
 #endif
+
+    printf("register sync lock modules end\n");
 }
 
 

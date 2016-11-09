@@ -66,11 +66,11 @@ uint32_t blob_get_u32(blob_attr_t *attr);
 char * blob_get_string(blob_attr_t *attr);
 uint16_t blob_get_len(blob_attr_t *attr);
 
-int blob_parse(const struct blob_policy_s *policy,                               
-               uint8_t policy_count,
-               blob_attr_t **tb,
-               void *data,
-               unsigned int len);
+int blob_parse_to_attr(const struct blob_policy_s *policy,                               
+                       uint8_t policy_count,
+                       blob_attr_t **tb,
+                       void *data,
+                       unsigned int len);
 
 
 

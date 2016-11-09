@@ -209,11 +209,11 @@ int blob_get_buffer(blob_attr_t *attr,uint8_t **out)
     return blob_get_data_len(attr);
 }
 
-int blob_parse(const struct blob_policy_s *policy,                               
-               uint8_t policy_count,
-               blob_attr_t **tb,
-               void *data,
-               unsigned int len) 
+int blob_parse_to_attr(const struct blob_policy_s *policy,                               
+                       uint8_t policy_count,
+                       blob_attr_t **tb,
+                       void *data,
+                       unsigned int len) 
 {
     int i;
     blob_attr_t *pos,*head = (blob_attr_t *)data;
@@ -312,6 +312,6 @@ void test_blob()
 
     blob_add_buffer(blob,(char *)"buffer",buffer,sizeof(buffer));
 
-    blob_parse(pol,5, tb, (void *)blob->head, (uint32_t)(blob->tail - blob->head)) ;
+    blob_parse_to_attr(pol,5, tb, (void *)blob->head, (uint32_t)(blob->tail - blob->head)) ;
 }
 
