@@ -35,6 +35,7 @@
 #include <libbus/busd.h>
 #include <libbus/bus.h>
 #include <libipc/net/server.h>
+#include <miscellany/addr_convert.h>
 
 static const struct blob_policy_s busd_policy[] = {
 	[BUSD_ID]             = { .name = "id",              .type = BLOB_TYPE_INT32 },
@@ -48,32 +49,6 @@ static const struct blob_policy_s busd_policy[] = {
 	[BUSD_OPAQUE]         = { .name = "opaque",          .type = BLOB_TYPE_INT32 },
 	[BUSD_INVOKE_SRC_FD]  = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
 };
-
-static void addr_to_buffer(void *addr,uint8_t *buffer)
-{
-	unsigned long data = (unsigned long)addr;
-	int i;
-
-	for(i = 0; i < sizeof(int *); i++){
-		buffer[i] = data >> 8 * (sizeof(int *) - 1 - i);
-	}
-}
-
-static void *buffer_to_addr(uint8_t *buffer)
-{
-	void *ret = NULL;
-	unsigned long d = 0, t = 0;
-	int i;
-
-	for ( i = 0; i < sizeof(int *); i++){
-		t = buffer[i];
-		d |= t << 8 * (sizeof(int *) - 1 - i); 
-	}
-
-	ret = (void *)d;
-
-	return ret;
-}
 
 void busd_dump_object_method_args(list_t *list)
 {

@@ -34,6 +34,7 @@
 #include <libdbg/debug.h>
 #include <libbus/bus.h>
 #include <libblob/blob.h>
+#include <miscellany/addr_convert.h>
 
 static const blob_policy_t bus_policy[] = {
 	[BUS_ID]            = { .name = "id",              .type = BLOB_TYPE_INT32 },
@@ -47,32 +48,6 @@ static const blob_policy_t bus_policy[] = {
 	[BUS_INVOKE_ARGC]   = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
 	[BUS_INVOKE_ARGS]   = { .name = "invoke_args",     .type = BLOB_TYPE_TABLE },
 };
-
-static void addr_to_buffer(void *addr,uint8_t *buffer)
-{
-	unsigned long data = (unsigned long)addr;
-	int i;
-
-	for(i = 0; i < sizeof(int *); i++){
-		buffer[i] = data >> 8 * (sizeof(int *) - 1 - i);
-	}
-}
-
-static void *buffer_to_addr(uint8_t *buffer)
-{
-	void *ret = NULL;
-	unsigned long d = 0, t = 0;
-	int i;
-
-	for ( i = 0; i < sizeof(int *); i++){
-		t = buffer[i];
-		d |= t << 8 * (sizeof(int *) - 1 - i); 
-	}
-
-	ret = (void *)d;
-
-	return ret;
-}
 
 bus_t * bus_alloc(allocator_t *allocator)
 {
