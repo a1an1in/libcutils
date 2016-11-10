@@ -34,7 +34,7 @@
 #include <libdbg/debug.h>
 #include <libbus/bus.h>
 #include <libblob/blob.h>
-#include <miscellany/addr_convert.h>
+#include <miscellany/buffer_convert.h>
 
 static const blob_policy_t bus_policy[] = {
 	[BUS_ID]            = { .name = "id",              .type = BLOB_TYPE_INT32 },

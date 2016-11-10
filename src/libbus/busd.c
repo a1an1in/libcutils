@@ -35,7 +35,7 @@
 #include <libbus/busd.h>
 #include <libbus/bus.h>
 #include <libipc/net/server.h>
-#include <miscellany/addr_convert.h>
+#include <miscellany/buffer_convert.h>
 
 static const struct blob_policy_s busd_policy[] = {
 	[BUSD_ID]             = { .name = "id",              .type = BLOB_TYPE_INT32 },
@@ -625,7 +625,7 @@ void test_bus_daemon()
     char *server_host = "bus_server_path";
     char *server_srv = NULL;
 #else
-    char *server_host = "127.0.0.1";
+    char *server_host = "192.168.20.122";
     char *server_srv = "12345";
 #endif
     

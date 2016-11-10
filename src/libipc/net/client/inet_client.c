@@ -298,6 +298,7 @@ client_t *tcp_iclient(allocator_t *allocator,
 			                   sizeof(sa_addr));
 	if(ret < 0){
 		dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
+        perror("connect:");
 		close(user_fd);
 		return NULL;
 	}else{

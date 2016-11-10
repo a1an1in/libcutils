@@ -53,7 +53,7 @@ static struct bus_object test_object = {
 	.methods   = (struct bus_method *)test_methods,
 	.n_methods = ARRAY_SIZE(test_methods),
 };
-
+#if 0
 void test_bus_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();
@@ -79,4 +79,29 @@ void test_bus_server()
 	while(1) sleep(1);
 }
 
+#else
+void test_bus_server()
+{
+    allocator_t *allocator = allocator_get_default_alloc();
+    bus_t *bus;
+#if 0
+    char *server_host = "bus_server_path";
+    char *server_srv = NULL;
+#else
+    char *server_host = "192.168.20.122";
+    char *server_srv = "12345";
+#endif
+	char buf[1024]    = "hello world!";
+	int buf_len       = strlen(buf);
+    
+    dbg_str(DBG_DETAIL,"hello policy addr:%p",hello_policy);
+    bus = bus_client_create(allocator,
+                            server_host,
+                            server_srv);
 
+    dbg_str(BUS_DETAIL,"bus add object");
+	bus_add_object(bus,&test_object);
+
+	while(1) sleep(1);
+}
+#endif

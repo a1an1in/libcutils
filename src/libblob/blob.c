@@ -66,6 +66,7 @@ int blob_init(blob_t *blob)
     }
 
     blob->tbl_stack = array_stack_create(allocator);
+    blob->tbl_stack->step = sizeof(void *);
     array_stack_init(blob->tbl_stack);
 
     return 0;
@@ -145,6 +146,7 @@ int blob_add_table_start(blob_t *blob, char *name)
 {
     blob_attr_t *new_table = (blob_attr_t *)blob->tail;
 
+    dbg_str(DBG_DETAIL,"blob_add_table_start,push addr:%p",new_table);
     array_stack_push(blob->tbl_stack, &new_table);
 
     return blob_add(blob, BLOB_TYPE_TABLE, name, NULL,0);
@@ -156,6 +158,8 @@ int blob_add_table_end(blob_t *blob)
     uint16_t table_len;
 
     array_stack_pop(blob->tbl_stack, &table_start);
+
+    dbg_str(DBG_DETAIL,"blob_add_table_end,pop addr:%p",table_start);
 
     table_len = blob->tail - table_start;
 
