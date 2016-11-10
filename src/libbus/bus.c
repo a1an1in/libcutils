@@ -66,6 +66,18 @@ bus_t * bus_alloc(allocator_t *allocator)
     return b;
 }
 
+int bus_set(bus_t *bus,char *attrib_name, char *value, int value_len)
+{
+    if(!strcmp(attrib_name,"client_sk_type")){
+        bus->client_sk_type = value;
+    }else{
+        dbg_str(DBG_WARNNING,"not support attrib setting,please check");
+    }
+
+    return 0;
+}
+
+
 int bus_init(bus_t *bus,
              char *server_host,
              char *server_srv,
@@ -723,6 +735,8 @@ bus_t * bus_client_create(allocator_t *allocator,
     
     dbg_str(BUS_DETAIL,"bus_client_create");
     bus = bus_alloc(allocator);
+
+    bus_set(bus,"client_sk_type", CLIENT_TYPE_TCP_INET, 0);
 
     bus_init(bus,//bus_t *bus,
              server_host,//char *server_host,

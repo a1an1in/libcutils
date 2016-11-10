@@ -93,6 +93,19 @@ busd_t * busd_alloc(allocator_t *allocator)
     return d;
 }
 
+int busd_set(busd_t *busd,char *attrib_name, char *value, int value_len)
+{
+    if(!strcmp(attrib_name,"server_sk_type")){
+        busd->server_sk_type = value;
+    }else if(!strcmp(attrib_name,"server_host")){
+        busd->server_host = value;
+    }else{
+        dbg_str(DBG_WARNNING,"not support attrib setting,please check");
+    }
+
+    return 0;
+}
+
 int busd_init(busd_t *busd,
               char *server_host,
               char *server_srv,
@@ -595,6 +608,8 @@ busd_t *busd_create(allocator_t *allocator,
     
     dbg_str(BUS_DETAIL,"bus_daemon_create");
     busd = busd_alloc(allocator);
+
+    busd_set(busd, (char *)"server_sk_type", (char *)SERVER_TYPE_TCP_INET, 0);
 
     busd_init(busd,//busd_t *busd,
               server_host,//char *server_host,
