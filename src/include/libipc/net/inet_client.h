@@ -18,7 +18,7 @@
 typedef struct io_user_s client_t;
 
 typedef struct client_task_s{
-#define MAX_TASK_BUFFER_LEN 1024
+#define MAX_TASK_BUFFER_LEN 1024 * 20
 	uint32_t fd;
 	char key[10];
 	struct event *event;

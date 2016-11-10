@@ -48,7 +48,7 @@ cp:
 so:
 	@$(call build_obj);\
 	$(call check_output_dir);\
-	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread ;\
+	$(CC) -shared -o $(PROJECT_PATH)/bin/$(SHARE_TARGET) $$BUILD_IN_FILES -lpthread -lrt ;\
 	if [ $$? -ne 0 ]; then \
 		echo "Building $(SHARE_TARGET) is failed !"; \
 		exit 12; \

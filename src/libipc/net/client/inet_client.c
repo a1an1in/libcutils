@@ -49,7 +49,7 @@
 
 
 #define MAXEPOLLSIZE 10000
-#define MAXLINE 10240
+#define MAXLINE 1024 * 20
 
 /*
  *extern int process_task_callback(client_task_t *task);
@@ -70,6 +70,8 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	client_t *client = task->client;
 
 	dbg_str(NET_DETAIL,"slave_work_function begin");
+
+	dbg_str(NET_DETAIL,"task_len=%d",task->buffer_len);
 	client->process_task_cb(task);
 	iclient_release_task(task);
 	dbg_str(NET_DETAIL,"slave_work_function end");
@@ -96,6 +98,7 @@ int client_init_task(client_task_t *task,
 	task->allocator  = allocator;
 	task->slave      = slave;
 	task->client     = client;
+    dbg_str(DBG_DETAIL,"task len=%d",task->buffer_len);
 	return 0;
 }
 static int iclient_release_task(client_task_t *task)
@@ -131,7 +134,7 @@ void client_event_handler(int fd, short event, void *arg)
 		event_del(&client->event);
 		return;
 	} else {
-		dbg_str(NET_DETAIL,"*************read buf len=%d",nread);
+		dbg_str(DBG_DETAIL,"read buf len=%d",nread);
 	}
 	/*
 	 *if((nread = recvfrom(fd,buf,MAXLINE,0,(void *)&raddr,&raddr_len)) < 0)

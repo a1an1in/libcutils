@@ -35,7 +35,7 @@
 #include <libbus/busd.h>
 #include <libbus/bus.h>
 #include <libipc/net/server.h>
-#include <miscellany/buffer_convert.h>
+#include <miscellany/buffer.h>
 
 static const struct blob_policy_s busd_policy[] = {
 	[BUSD_ID]             = { .name = "id",              .type = BLOB_TYPE_INT32 },
@@ -602,37 +602,19 @@ static int busd_process_receiving_data_callback(void *task)
 
 busd_t *busd_create(allocator_t *allocator,
                           char *server_host,
-                          char *server_srv)
+                          char *server_srv,
+                          char *socket_type)
 {
     busd_t *busd;
     
     dbg_str(BUS_DETAIL,"bus_daemon_create");
     busd = busd_alloc(allocator);
 
-    busd_set(busd, (char *)"server_sk_type", (char *)SERVER_TYPE_TCP_INET, 0);
+    busd_set(busd, (char *)"server_sk_type", socket_type, 0);
 
     busd_init(busd,//busd_t *busd,
               server_host,//char *server_host,
               server_srv,//char *server_srv,
               busd_process_receiving_data_callback);
-}
-
-void test_bus_daemon()
-{
-    allocator_t *allocator = allocator_get_default_alloc();
-    busd_t *busd;
-#if 0
-    char *server_host = "bus_server_path";
-    char *server_srv = NULL;
-#else
-    char *server_host = "192.168.20.122";
-    char *server_srv = "12345";
-#endif
-    
-    dbg_str(BUS_DETAIL,"test_busd_daemon");
-
-    busd = busd_create(allocator,
-                       server_host,
-                       server_srv);
 }
 

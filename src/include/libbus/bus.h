@@ -162,5 +162,6 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, bus_method_args
 
 bus_t * bus_client_create(allocator_t *allocator,
                           char *server_host,
-                          char *server_srv);
+                          char *server_srv,
+                          char *socket_type);
 #endif

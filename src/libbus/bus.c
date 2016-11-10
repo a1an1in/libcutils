@@ -34,7 +34,7 @@
 #include <libdbg/debug.h>
 #include <libbus/bus.h>
 #include <libblob/blob.h>
-#include <miscellany/buffer_convert.h>
+#include <miscellany/buffer.h>
 
 static const blob_policy_t bus_policy[] = {
 	[BUS_ID]            = { .name = "id",              .type = BLOB_TYPE_INT32 },
@@ -729,14 +729,15 @@ static int bus_process_receiving_data_callback(client_task_t *task)
 
 bus_t * bus_client_create(allocator_t *allocator,
                           char *server_host,
-                          char *server_srv)
+                          char *server_srv,
+                          char *socket_type)
 {
     bus_t *bus;
     
     dbg_str(BUS_DETAIL,"bus_client_create");
     bus = bus_alloc(allocator);
 
-    bus_set(bus,"client_sk_type", CLIENT_TYPE_TCP_INET, 0);
+    bus_set(bus,"client_sk_type", socket_type, 0);
 
     bus_init(bus,//bus_t *bus,
              server_host,//char *server_host,

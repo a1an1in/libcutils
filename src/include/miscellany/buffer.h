@@ -5,5 +5,6 @@
 
 void addr_to_buffer(void *addr,uint8_t *buffer);
 void *buffer_to_addr(uint8_t *buffer);
+void printf_buffer(unsigned char *buf, int len);
 
 #endif

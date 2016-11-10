@@ -70,7 +70,8 @@ void test_bus_server()
     dbg_str(DBG_DETAIL,"hello policy addr:%p",hello_policy);
     bus = bus_client_create(allocator,
                             server_host,
-                            server_srv);
+                            server_srv, 
+                            CLIENT_TYPE_TCP_INET);
 
     dbg_str(BUS_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);
