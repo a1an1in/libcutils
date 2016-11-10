@@ -32,7 +32,6 @@ typedef struct busd_s{
     char *server_srv;
 
 	hash_map_t *obj_hmap;
-    pair_t *pair;
     uint8_t key_size;
     uint8_t bucket_size;
 }busd_t;

@@ -137,7 +137,6 @@ struct bus_s{
     blob_t *blob;
 
 	hash_map_t *obj_hmap;
-    pair_t *pair;
     uint8_t key_size;
     uint8_t bucket_size;
 
