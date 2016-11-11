@@ -9,7 +9,7 @@ void test_bus_client()
     char *server_host = "bus_server_path";
     char *server_srv = NULL;
 #else
-    char *server_host = "192.168.20.122";
+    char *server_host = "192.168.20.49";
     char *server_srv = "12345";
 #endif
 	char buf[1024] = "hello world!";

@@ -114,6 +114,7 @@ int bus_init(bus_t *bus,
 
 	bus->obj_hmap = hash_map_create(bus->allocator,0);
     if(bus->obj_hmap == NULL) {
+        dbg_str(DBG_ERROR,"hash_map_create");
         //.........
         return -1;
     }
@@ -135,6 +136,7 @@ int bus_init(bus_t *bus,
 
 	bus->req_hmap = hash_map_create(bus->allocator,0);
     if(bus->req_hmap == NULL) {
+        dbg_str(DBG_ERROR,"hash_map_create");
         //.........
         return -1;
     }
@@ -170,21 +172,11 @@ int bus_send(bus_t *bus,
 int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)
 {
 	int i;
-    /*
-	 *blob_attr_t *t1,*t2;
-     */
 
-    /*
-     *t1 = blob->tail;
-     */
 	for(i = 0; i < method->n_policy; i++) {
 		blob_add_u32(blob, method->policy[i].name, method->policy[i].type);
 	}
-    /*
-     *t2 = blob->tail;
-     *uint16_t len = (uint8_t *)t2 - (uint8_t *)t1;
-     *dbg_buf(BUS_DETAIL,"***********push args:",(void *)t1, len);
-     */
+
     return 0;
 }
 
@@ -419,13 +411,6 @@ int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
 
     return 0;
 }
-
-/*
- *bus_method_args_t args[2] = {
- *    [0] = {ARG_TYPE_INT32,"id", "123"},
- *    [0] = {ARG_TYPE_STRING,"content", "hello_world"},
- *};
- */
 
 int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args,char *out_buf,char *out_len)
 {
