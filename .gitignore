@@ -36,3 +36,6 @@
 *.swp
 *.c~
 *.cc
+cscope*
+tags
+dbg.ini
