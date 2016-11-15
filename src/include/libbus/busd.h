@@ -53,5 +53,9 @@ typedef struct busd_object {
 }busd_object_t;
 
 typedef int (*busd_cmd_callback)(busd_t *busd,  struct blob_attr_s **attr,int fd);
+busd_t *busd_create(allocator_t *allocator,
+                    char *server_host,
+                    char *server_srv,
+                    char *socket_type);
 
 #endif

@@ -601,9 +601,9 @@ static int busd_process_receiving_data_callback(void *task)
 }
 
 busd_t *busd_create(allocator_t *allocator,
-                          char *server_host,
-                          char *server_srv,
-                          char *socket_type)
+                    char *server_host,
+                    char *server_srv,
+                    char *socket_type)
 {
     busd_t *busd;
     

@@ -84,6 +84,7 @@ static int process_task_callback(client_task_t *task)
 	dbg_str(DBG_DETAIL,"process_task end");
     return 0;
 }
+#if 0
 int lab()
 {
 	client_t *cli;
@@ -100,52 +101,26 @@ int lab()
 			NULL);
 }
 
-#if 0
+#else
 int lab()
 {
 	client_t *cli;
-	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
+	char buf[] = {1,2,3,4,5,6,7,8,9,10};
 	struct sockaddr_in raddr;
 	socklen_t destlen;
 	allocator_t *allocator = allocator_get_default_alloc();
 
 
-	/*
-	 *proxy_constructor();
-	 *sleep(2);
-	 */
+	cli = udp_iclient(allocator,
+			          "192.168.20.97",//char *host,
+			          "1989",//char *client_port,
+			          process_task_callback,
+			          NULL);
 
-	cli = udp_iclient(
-			allocator,
-			"192.168.20.26",//char *host,
-			"2016",//char *client_port,
-			process_task_callback,
-			NULL);
-
-	raddr.sin_family      = AF_INET;
-	raddr.sin_port        = htons(atoi("1989"));
-    raddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+    udp_iclient_broadcast(cli,(char *)"1989",buf,sizeof(buf));
 
     /*
-     *inet_pton(AF_INET,"255.255.20.255",&raddr.sin_addr);
+     *udp_iclient_send(cli, buf,sizeof(buf), 0, "192.168.20.128", "1989");
      */
-    /*
-     *inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
-     */
-
-    /*
-     *int broadcast = 1;
-     *if( setsockopt(cli->user_fd,SOL_SOCKET,SO_BROADCAST,&broadcast,sizeof(broadcast)) == -1) {
-     *    perror("setsockopt function!\n");
-     *    exit(1);
-     *}
-     */
-    udp_iclient_send(
-            cli,//client_t *client,
-            buf,//const void *buf,
-            sizeof(buf),
-			0,//int flags,
-			(void *)&raddr,//const struct sockaddr *destaddr,
-			sizeof(raddr));//socklen_t destlen);
 }
 #endif

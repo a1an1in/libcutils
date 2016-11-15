@@ -45,8 +45,14 @@ client_t *tcp_iclient(allocator_t *allocator,
 
 int iclient_destroy(client_t *client);
 
-int udp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags,
-		const struct sockaddr *destaddr,socklen_t destlen);
+int udp_iclient_send(client_t *client,
+                     void *buf,
+                     size_t nbytes,
+                     int flags,
+                     char *dest_id_str, 
+                     char *dest_srv_str);
+
+int udp_iclient_broadcast(client_t *cli,char *dest_port,void *buf,uint32_t len);
 
 int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags);
 #endif

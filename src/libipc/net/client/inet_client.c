@@ -258,12 +258,12 @@ client_t *udp_iclient(allocator_t *allocator,
 
 	return client;
 }
-int udp_iclient_send(client_t *client,
-                     const void *buf,
-                     size_t nbytes,
-                     int flags,
-		             const struct sockaddr *destaddr,
-                     socklen_t destlen)
+int __udp_iclient_send(client_t *client,
+                       const void *buf,
+                       size_t nbytes,
+                       int flags,
+		               const struct sockaddr *destaddr,
+                       socklen_t destlen)
 {
 	int ret = 0;
 
@@ -273,8 +273,51 @@ int udp_iclient_send(client_t *client,
 	{
 		perror("sendto()");  
 	}  
+    dbg_buf(DBG_DETAIL,"__udp_iclient_send:",buf,nbytes);
 
 	return ret;
+}
+
+int udp_iclient_send(client_t *client,
+                     void *buf,
+                     size_t nbytes,
+                     int flags,
+                     char *dest_id_str, 
+                     char *dest_srv_str)
+{
+    int ret;
+    char *type = client->type_str;
+
+    struct sockaddr_in raddr;
+    raddr.sin_family = AF_INET; 
+    raddr.sin_port = htons(atoi(dest_srv_str));  
+    inet_pton(AF_INET,dest_id_str,&raddr.sin_addr);
+
+    ret = __udp_iclient_send(client,buf,nbytes,flags,
+                           (struct sockaddr *)&raddr,sizeof(raddr));
+
+    return ret;
+}
+int udp_iclient_broadcast(client_t *cli,char *dest_port,void *buf,uint32_t len)
+{
+	struct sockaddr_in raddr;
+
+	raddr.sin_family      = AF_INET;
+	raddr.sin_port        = htons(atoi(dest_port));
+    raddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+
+    int broadcast = 1;
+    if( setsockopt(cli->user_fd,SOL_SOCKET,SO_BROADCAST,&broadcast,sizeof(broadcast)) == -1) {
+        perror("setsockopt function!\n");
+        exit(1);
+    }
+
+    __udp_iclient_send(cli,//client_t *client,
+                       buf,//const void *buf,
+                       len,
+			           0,//int flags,
+			           (void *)&raddr,//const struct sockaddr *destaddr,
+			           sizeof(raddr));//socklen_t destlen);
 }
 
 client_t *tcp_iclient(allocator_t *allocator,

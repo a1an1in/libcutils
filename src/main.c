@@ -222,9 +222,7 @@ static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
 static int args_process_lab(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
-    /*
-     *lab();
-     */
+    lab();
     /*
      *lab2();
      */
@@ -283,7 +281,16 @@ static int args_process_as(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_miscellany_net(void *base,int argc,char **argv)
+{
+    test_miscellany_net();
+
+	return 0;
+}
+
+
 static cmd_config_t cmds[]={
+	{"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
 	{"as", args_process_as,0, "test", "N/A","array_stack"},
 	{"buss", args_process_buss,0, "test", "N/A","bus"},
 	{"busc", args_process_busc,0, "test", "N/A","bus"},

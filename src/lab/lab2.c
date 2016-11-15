@@ -97,7 +97,7 @@ int lab2()
 	raddr.sin_port        = htons(atoi("1989"));
 	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
 
-    udp_iclient_send(
+    __udp_iclient_send(
             cli,//client_t *client,
             &t,//const void *buf,
             sizeof(test_t),

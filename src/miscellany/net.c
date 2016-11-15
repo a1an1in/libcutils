@@ -197,7 +197,9 @@ int inet_str2num(int af,char *ip)
     struct in_addr in;
 
     inet_pton(af,ip,&in);
-    dbg_str(DBG_DETAIL,"ip str to num:%s->%u",ip, in.s_addr);
+    /*
+     *dbg_str(DBG_DETAIL,"ip str to num:%s->%x",ip, in.s_addr);
+     */
 
     return in.s_addr;
 }
@@ -210,13 +212,64 @@ int inet_num2str(int af,uint32_t ip_num,char *ip_str)
 
     inet_ntop(af, (void *)&s, ip_str, 16);
 
-    dbg_str(DBG_DETAIL,"ip num to str:%u->%s",s.s_addr,ip_str);
+    /*
+     *dbg_str(DBG_DETAIL,"ip num to str:%x->%s",s.s_addr,ip_str);
+     */
 
     return 0;
 }
 
+int inet_is_2ips_in_same_subnet(char *ip1, char *ip2,char *net_mask)
+{
+    uint32_t ip_addr1, ip_addr2, netmask_addr;
+
+    ip_addr1     = inet_str2num(AF_INET,ip1);
+    ip_addr2     = inet_str2num(AF_INET,ip2);
+    netmask_addr = inet_str2num(AF_INET,net_mask);
+    
+    if((ip_addr1 & netmask_addr) == (ip_addr2 & netmask_addr)) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int inet_is_in_same_subnet(char *ip_str,char *net_if_name)
+{
+    char ip_addr[50];
+    uint32_t ip1, ip2;
+
+    char net_mask_addr[50];
+    uint32_t net_mask;
+
+    get_local_ip(net_if_name,ip_addr);
+    ip1 = inet_str2num(AF_INET,ip_addr);
+    /*
+     *dbg_str(DBG_DETAIL,"ip=%x",ip1);
+     */
+
+    ip2 = inet_str2num(AF_INET,ip_str);
+    /*
+     *dbg_str(DBG_DETAIL,"ip=%x",ip2);
+     */
+
+    get_local_netmask(net_if_name,net_mask_addr); 
+    print_ipaddr(net_mask_addr);
+    net_mask = inet_str2num(AF_INET,net_mask_addr);
+    /*
+     *dbg_str(DBG_DETAIL,"net_mask=%x",net_mask);
+     */
+
+    if((ip1 & net_mask) == (ip2 & net_mask)) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 int test_miscellany_net()
 {
+#if 0
     unsigned char  mac_addr[6];
     char ip_addr[100];
 
@@ -242,6 +295,15 @@ int test_miscellany_net()
     inet_str2num(AF_INET,(char *)"192.168.20.2");
     
     inet_num2str(AF_INET,34908352,ip_addr);
+#endif
 
+    if(inet_is_in_same_subnet("192.168.2.32","eth0")) {
+        /*
+         *dbg_str(DBG_DETAIL,"this ip addr add local addr is in the same net");
+         */
+    } else {
+        dbg_str(DBG_DETAIL,"this ip addr add local addr is not in the same net");
+    }
     return 0;
 }
+

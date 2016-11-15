@@ -89,14 +89,7 @@ int client_send(client_t *client,
     if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
         ret = tcp_iclient_send(client,buf,nbytes,flags);
     } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
-        struct sockaddr_in raddr;
-        raddr.sin_family = AF_INET; 
-        raddr.sin_port = htons(atoi(dest_srv_str));  
-        inet_pton(AF_INET,dest_id_str,&raddr.sin_addr);
-
-        ret = udp_iclient_send(client,buf,nbytes,flags,
-                (struct sockaddr *)&raddr,sizeof(raddr));
-
+        udp_iclient_send(client,(char *)buf, nbytes, flags, dest_id_str, dest_srv_str);
     } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
         ret = udp_uclient_send(client,buf,nbytes,flags, dest_id_str);
     } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
