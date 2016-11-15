@@ -219,35 +219,14 @@ int inet_num2str(int af,uint32_t ip_num,char *ip_str)
     return 0;
 }
 
-int inet_is_2ips_in_same_subnet(char *ip1, char *ip2,char *net_mask)
-{
-    uint32_t ip_addr1, ip_addr2, netmask_addr;
-
-    ip_addr1     = inet_str2num(AF_INET,ip1);
-    ip_addr2     = inet_str2num(AF_INET,ip2);
-    netmask_addr = inet_str2num(AF_INET,net_mask);
-    
-    if((ip_addr1 & netmask_addr) == (ip_addr2 & netmask_addr)) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
 int inet_is_in_same_subnet(char *ip_str,char *net_if_name)
 {
     char ip_addr[50];
-    uint32_t ip1, ip2;
-
     char net_mask_addr[50];
-    uint32_t net_mask;
+    uint32_t ip1, ip2, net_mask;
 
     get_local_ip(net_if_name,ip_addr);
     ip1 = inet_str2num(AF_INET,ip_addr);
-    /*
-     *dbg_str(DBG_DETAIL,"ip=%x",ip1);
-     */
-
     ip2 = inet_str2num(AF_INET,ip_str);
     /*
      *dbg_str(DBG_DETAIL,"ip=%x",ip2);

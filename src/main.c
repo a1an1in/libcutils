@@ -235,15 +235,6 @@ static int args_process_lab(void *base,int argc,char **argv)
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
-static int args_process_test_msgblob(void *base,int argc,char **argv)
-{
-    dbg_str(DBG_DETAIL,"test begin");
-    /*
-     *test_msgblob();
-     */
-    dbg_str(DBG_DETAIL,"test end");
-    return 0;
-}
 static int args_process_help_test(void *base,int argc,char **argv)
 {
 	args_print_help_test_info(args_get_processor_globle_addr());
@@ -275,7 +266,7 @@ static int args_process_buss(void *base,int argc,char **argv)
     test_bus_server();
 	return 0;
 }
-static int args_process_as(void *base,int argc,char **argv)
+static int args_process_test_as(void *base,int argc,char **argv)
 {
     test_array_stack();
 	return 0;
@@ -291,14 +282,13 @@ static int args_process_test_miscellany_net(void *base,int argc,char **argv)
 
 static cmd_config_t cmds[]={
 	{"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
-	{"as", args_process_as,0, "test", "N/A","array_stack"},
+	{"as", args_process_test_as,0, "test", "N/A","array_stack"},
 	{"buss", args_process_buss,0, "test", "N/A","bus"},
 	{"busc", args_process_busc,0, "test", "N/A","bus"},
 	{"busd", args_process_busd,0, "app", "N/A","bus"},
 	{"blob", args_process_test_blob,0, "test", "N/A","bus"},
 	{"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},
 	{"help_test", args_process_help_test,0, "help", "N/A","help info"},
-	{"msgblob", args_process_test_msgblob,0, "test", "N/A","test blob message"},
 	{"lab", args_process_lab,0, "test", "N/A","test simple code"},
 	{"inet_gserver", args_process_test_gserver_of_inet,0, "test", "N/A","test general server of inet tcp"},
 	{"unix_gserver", args_process_test_gserver_of_unix,0, "test", "N/A","test general server of unix tcp"},

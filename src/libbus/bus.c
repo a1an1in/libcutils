@@ -71,7 +71,7 @@ int bus_set(bus_t *bus,char *attrib_name, char *value, int value_len)
     if(!strcmp(attrib_name,"client_sk_type")){
         bus->client_sk_type = value;
     }else{
-        dbg_str(DBG_WARNNING,"not support attrib setting,please check");
+        dbg_str(BUS_WARNNING,"not support attrib setting,please check");
     }
 
     return 0;
@@ -114,7 +114,7 @@ int bus_init(bus_t *bus,
 
 	bus->obj_hmap = hash_map_create(bus->allocator,0);
     if(bus->obj_hmap == NULL) {
-        dbg_str(DBG_ERROR,"hash_map_create");
+        dbg_str(BUS_ERROR,"hash_map_create");
         //.........
         return -1;
     }
@@ -136,7 +136,7 @@ int bus_init(bus_t *bus,
 
 	bus->req_hmap = hash_map_create(bus->allocator,0);
     if(bus->req_hmap == NULL) {
-        dbg_str(DBG_ERROR,"hash_map_create");
+        dbg_str(BUS_ERROR,"hash_map_create");
         //.........
         return -1;
     }
@@ -349,9 +349,9 @@ int bus_blob_add_args(blob_t *blob,int argc, bus_method_args_t *args)
         } else if (args[i].type == ARG_TYPE_INT32) {
             blob_add_u32(blob, (char *)args[i].name, atoi(args[i].value));
         } else {
-            dbg_str(DBG_WARNNING,"bus_blob_add_args,not support type = %d",args[i].type);
+            dbg_str(BUS_WARNNING,"bus_blob_add_args,not support type = %d",args[i].type);
         }
-        dbg_str(DBG_DETAIL,"bus_blob_add_arg:name \"%s\" value \"%s\"",args[i].name, args[i].value);
+        dbg_str(BUS_DETAIL,"bus_blob_add_arg:name \"%s\" value \"%s\"",args[i].name, args[i].value);
     }
 
     return 0;
@@ -653,7 +653,7 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
             policy = bus_get_policy(obj,method_name);
             n_policy = bus_get_n_policy(obj,method_name);
 
-            dbg_str(DBG_DETAIL,"policy addr:%p,size=%d",policy,ARRAY_SIZE(policy));
+            dbg_str(BUS_DETAIL,"policy addr:%p,size=%d",policy,ARRAY_SIZE(policy));
             blob_parse_to_attr(policy, n_policy, tb, blob_get_data(args), blob_get_data_len(args));
             ret = method(bus,argc,tb,buffer,&buffer_len);
             if(buffer_len > MAX_BUFFER_LEN) {

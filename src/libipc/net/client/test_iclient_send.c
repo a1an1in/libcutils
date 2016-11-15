@@ -54,13 +54,7 @@ static int process_task_callback(client_task_t *task)
 	dbg_buf(DBG_DETAIL,"task buffer:",task->buffer,task->buffer_len);
 	dbg_str(DBG_DETAIL,"process_task end");
 }
-/*
- *enum socktype_e{
- *    SOCKTYPE_UDP = 0,
- *    SOCKTYPE_TCP,
- *    SOCKTYPE_UNIX
- *};
- */
+
 int test_udp_iclient_send()
 {
 	client_t *cli;
@@ -69,28 +63,42 @@ int test_udp_iclient_send()
 	socklen_t destlen;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-	/*
-	 *proxy_constructor();
-	 *sleep(2);
-	 */
-
-	cli = udp_iclient(
-			allocator,
-			"192.168.20.26",//char *host,
-			"2016",//char *client_port,
-			process_task_callback,
-			NULL);
+	cli = udp_iclient(allocator,
+			          "192.168.20.26",//char *host,
+			          "2016",//char *client_port,
+			          process_task_callback,
+			          NULL);
 	raddr.sin_family = AF_INET; 
 	raddr.sin_port = htons(atoi("1989"));  
 	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
 
-	__udp_iclient_send(
-			cli,//client_t *client,
-			buf,//const void *buf,
-			sizeof(buf),
-			0,//int flags,
-			(void *)&raddr,//const struct sockaddr *destaddr,
-			sizeof(raddr));//socklen_t destlen);
+	__udp_iclient_send(cli,//client_t *client,
+			           buf,//const void *buf,
+			           sizeof(buf),
+			           0,//int flags,
+			           (void *)&raddr,//const struct sockaddr *destaddr,
+			           sizeof(raddr));//socklen_t destlen);
+}
+
+/**
+ *test broadcast, the client addr must be 0.0.0.0, 
+ *if not it cant recv data
+ */
+int test_udp_iclient_broadcast()
+{
+	client_t *cli;
+	char buf[] = {1,2,3,4,5,6,7,8,9,10};
+	struct sockaddr_in raddr;
+	socklen_t destlen;
+	allocator_t *allocator = allocator_get_default_alloc();
+
+	cli = udp_iclient(allocator,
+			          "192.168.20.97",//char *host,
+			          "1989",//char *client_port,
+			          process_task_callback,
+			          NULL);
+
+    udp_iclient_broadcast(cli,(char *)"1989",buf,sizeof(buf));
 }
 int test_tcp_iclient_send()
 {
@@ -100,24 +108,17 @@ int test_tcp_iclient_send()
 	socklen_t destlen;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-	/*
-	 *proxy_constructor();
-	 *sleep(2);
-	 */
-
-	cli = tcp_iclient(
-			allocator,
-			"127.0.0.1",//char *host,
-			"6888",//char *client_port,
-			process_task_callback,
-			NULL);
+	cli = tcp_iclient(allocator,
+			          "127.0.0.1",//char *host,
+			          "6888",//char *client_port,
+			          process_task_callback,
+			          NULL);
 
 	raddr.sin_family = AF_INET; 
 	raddr.sin_port = htons(atoi("6888"));  
 	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
 
-	tcp_iclient_send(
-			cli,//client_t *client,
-			buf,//const void *buf,
-			sizeof(buf),0);//socklen_t destlen);
+	tcp_iclient_send(cli,//client_t *client,
+			         buf,//const void *buf,
+			         sizeof(buf),0);//socklen_t destlen);
 }

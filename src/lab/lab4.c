@@ -48,7 +48,7 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
-int lab()
+int lab4()
 {
+    return 0;
 }
-

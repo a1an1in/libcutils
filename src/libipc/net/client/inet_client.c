@@ -273,7 +273,7 @@ int __udp_iclient_send(client_t *client,
 	{
 		perror("sendto()");  
 	}  
-    dbg_buf(DBG_DETAIL,"__udp_iclient_send:",buf,nbytes);
+    dbg_buf(DBG_DETAIL,"__udp_iclient_send:",(uint8_t *)buf,nbytes);
 
 	return ret;
 }
