@@ -98,7 +98,9 @@ int client_init_task(client_task_t *task,
 	task->allocator  = allocator;
 	task->slave      = slave;
 	task->client     = client;
-    dbg_str(DBG_DETAIL,"task len=%d",task->buffer_len);
+    /*
+     *dbg_str(DBG_DETAIL,"task len=%d",task->buffer_len);
+     */
 	return 0;
 }
 static int iclient_release_task(client_task_t *task)
@@ -134,7 +136,9 @@ void client_event_handler(int fd, short event, void *arg)
 		event_del(&client->event);
 		return;
 	} else {
-		dbg_str(DBG_DETAIL,"read buf len=%d",nread);
+        /*
+		 *dbg_str(DBG_DETAIL,"read buf len=%d",nread);
+         */
 	}
 	/*
 	 *if((nread = recvfrom(fd,buf,MAXLINE,0,(void *)&raddr,&raddr_len)) < 0)
@@ -273,7 +277,9 @@ int __udp_iclient_send(client_t *client,
 	{
 		perror("sendto()");  
 	}  
-    dbg_buf(DBG_DETAIL,"__udp_iclient_send:",(uint8_t *)buf,nbytes);
+    /*
+     *dbg_buf(DBG_DETAIL,"__udp_iclient_send:",(uint8_t *)buf,nbytes);
+     */
 
 	return ret;
 }

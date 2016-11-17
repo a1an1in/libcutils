@@ -233,7 +233,9 @@ int inet_is_in_same_subnet(char *ip_str,char *net_if_name)
      */
 
     get_local_netmask(net_if_name,net_mask_addr); 
-    print_ipaddr(net_mask_addr);
+    /*
+     *print_ipaddr(net_mask_addr);
+     */
     net_mask = inet_str2num(AF_INET,net_mask_addr);
     /*
      *dbg_str(DBG_DETAIL,"net_mask=%x",net_mask);

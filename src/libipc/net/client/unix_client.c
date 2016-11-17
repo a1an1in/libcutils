@@ -182,7 +182,7 @@ client_t *udp_uclient(allocator_t *allocator,
 	int user_fd;
 	client_t *client = NULL;
 
-    dbg_str(DBG_DETAIL,"udp_uclient");
+    dbg_str(NET_DETAIL,"udp_uclient");
     if((user_fd = socket(PF_UNIX,SOCK_DGRAM,0)) < 0)  
     {  
         perror("fail to socket");  
@@ -215,7 +215,7 @@ client_t *udp_uclient(allocator_t *allocator,
 
     strcpy(client->unix_path,client_unpath);
 
-    dbg_str(DBG_DETAIL,"udp_uclient,user_fd=%d",client->user_fd);
+    dbg_str(NET_DETAIL,"udp_uclient,user_fd=%d",client->user_fd);
 
 	return client;
 }
@@ -231,7 +231,8 @@ int udp_uclient_send(client_t *client,
     dest_un_addr.sun_family = PF_UNIX;  
     strcpy(dest_un_addr.sun_path,dest_unpath);  
 
-    dbg_str(DBG_DETAIL,"udp_uclient_send,dest_unpath:%s",dest_unpath);
+    dbg_str(NET_DETAIL,"udp_uclient_send,dest_unpath:%s",dest_unpath);
+
 	if( ret = sendto(client->user_fd,
                      buf,
                      nbytes,
@@ -287,7 +288,7 @@ client_t *tcp_uclient(allocator_t *allocator,
 		return NULL;
 	}
     memset(client->unix_path,0,sizeof(client->unix_path));
-    dbg_str(DBG_DETAIL,"unix_path len=%d",sizeof(client->unix_path));
+    dbg_str(NET_DETAIL,"unix_path len=%d",sizeof(client->unix_path));
 
 	return client;
 }
@@ -306,7 +307,7 @@ int uclient_destroy(client_t *client)
     if(strlen(client->unix_path))
         unlink(client->unix_path);
     else{
-        dbg_str(DBG_DETAIL,"unix path is NULL");
+        dbg_str(NET_DETAIL,"unix path is NULL");
     }
     close(client->user_fd);
     io_user_destroy(client);
