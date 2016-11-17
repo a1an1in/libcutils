@@ -839,7 +839,9 @@ event_assign(struct event *ev,
 	ev->ev_fd       = fd;
 	ev->ev_events   = events;
 	ev->ev_res      = 0;
-	ev->ev_flags    = EVLIST_INIT;
+    /*
+	 *ev->ev_flags    = EVLIST_INIT;
+     */
 	ev->ev_ncalls   = 0;
 	ev->ev_pncalls  = NULL;
 
@@ -976,6 +978,7 @@ event_add(struct event *ev, const struct timeval *tv)
 	}
 
 	EVBASE_ACQUIRE_LOCK(ev->ev_base, th_base_lock);
+	ev->ev_flags    = EVLIST_INIT;
 	res = event_add_internal(ev, tv, 0);
 	EVBASE_RELEASE_LOCK(ev->ev_base, th_base_lock);
 

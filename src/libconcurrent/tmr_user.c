@@ -127,6 +127,7 @@ tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 
+    dbg_str(DBG_DETAIL,"state_machine_reuse_timer");
     concurrent_add_event_to_master(c,
                                    -1,//int fd,
                                    tmr_user->flags,//int event_flag,
@@ -174,7 +175,7 @@ int test_tmr_user()
     dbg_str(DBG_DETAIL,"test_tmr_user");
 
 	evutil_timerclear(&tv);
-	tv.tv_sec = 1;
+	tv.tv_sec = 2;
     timer = tmr_user(allocator,
                      &tv,
                      /*
@@ -183,26 +184,12 @@ int test_tmr_user()
                      EV_PERSIST,
                      test_process_timer_task_callback,
                      NULL);
-    /*
-     *tmr_user_stop(timer);
-     *sleep(4);//this is very important,for the timer may havenot been stop,when we restart it.
-     *timer->tv.tv_sec = 5;
-     *tmr_user_restart(timer);
-     */
+    tmr_user_stop(timer);
 
-#if 0
-    tmr_user_destroy(timer);
+    timer->tv.tv_sec = 1;
+    tmr_user_reuse(timer);
+    tmr_user_stop(timer);
 
-	tv.tv_sec = 2;
-    timer = tmr_user(allocator,
-            &tv,
-            /*
-             *0,
-             */
-            EV_PERSIST,
-            test_process_timer_task_callback,
-            NULL);
-#endif
 
     pause();
     tmr_user_destroy(timer);
