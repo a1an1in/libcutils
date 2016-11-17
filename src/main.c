@@ -49,7 +49,7 @@
 #include <libstate_machine/state_machine.h>
 #include <libipc/share_mem/shm.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.1.1.1"
+#define LIBRARY_VERSION "libcutils version: 2.1.2.0"
 
 #ifndef MAKELIB
 

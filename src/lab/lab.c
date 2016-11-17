@@ -48,7 +48,21 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
+int check_endian( )
+{
+    union w {  
+        int a;
+        char b;
+    } c;
+    c.a = 1;
+    return(c.b ==1);
+}
 int lab()
 {
+    if(check_endian()) {
+        dbg_str(DBG_DETAIL,"little endian");
+    } else {
+        dbg_str(DBG_DETAIL,"big endian");
+    }
 }
 

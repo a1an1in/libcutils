@@ -193,6 +193,9 @@ int hash_map_insert_data(hash_map_t *hmap,void *data)
 	return ret;
 }
 
+/*
+ * hash map insert data with writing back
+ * */
 int hash_map_insert_data_wb(hash_map_t *hmap,void *data, hash_map_pos_t *out)
 {
 	struct hash_map_node *mnode;
