@@ -74,7 +74,7 @@ concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
 	task_admin->admin_lock_type = admin_lock_type;
 	task_admin->hmap_lock_type  = hmap_lock_type;
 	task_admin->key_size        = key_size;
-	task_admin->data_size       = value_size;
+	task_admin->value_size       = value_size;
 	task_admin->bucket_size     = bucket_size;
 
 	/*
@@ -98,7 +98,7 @@ int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void
 
 	//malloc problem ,need modify
 	
-	pair = create_pair(task_admin->key_size,task_admin->data_size);
+	pair = create_pair(task_admin->key_size,task_admin->value_size);
 	make_pair(pair,key,data);
 	hash_map_insert_data(task_admin->hmap,pair->data);
 	destroy_pair(pair);

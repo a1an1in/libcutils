@@ -21,7 +21,7 @@ typedef struct concurrent_task_admin_s{
 	uint32_t task_count;
 	allocator_t *allocator;
 	uint8_t key_size;
-	uint32_t data_size;
+	uint32_t value_size;
 	uint32_t bucket_size;
 }concurrent_task_admin_t;
 
