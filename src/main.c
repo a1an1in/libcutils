@@ -49,7 +49,7 @@
 #include <libstate_machine/state_machine.h>
 #include <libipc/share_mem/shm.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.1.2.2"
+#define LIBRARY_VERSION "libcutils version: 2.1.3.0"
 
 #ifndef MAKELIB
 
@@ -108,6 +108,11 @@ static int args_process_test_udp_uclient_recieve(void *base,int argc,char **argv
 static int args_process_test_state_machine(void *base,int argc,char **argv)
 {
     test_state_machine();
+	return 0;
+}
+static int args_process_test_map(void *base,int argc,char **argv)
+{
+    test_map();
 	return 0;
 }
 static int args_process_test_hashlist(void *base,int argc,char **argv)
@@ -305,6 +310,7 @@ static cmd_config_t cmds[]={
 	{"udp_iclient_recieve", args_process_test_udp_iclient_recieve,0, "test", "N/A","test_udp_iclient_recieve"},
 	{"tcp_iclient_send", args_process_test_tcp_iclient_send,0, "test", "N/A","test_tcp_iclient_send"},
 	{"tcp_iserver", args_process_test_tcp_iserver,0, "test", "N/A","test_tcp_iserver"},
+	{"map", args_process_test_map,0, "test", "N/A","test_map"},
 	{"ring_buffer", args_process_test_ring_buffer,0, "test", "N/A","test_ring_buffer"},
 	{"vector", args_process_test_vector,0, "test", "N/A","test_vector"},
 	{"rbtree_map", args_process_test_rbtree_map,0, "test", "N/A","test_rbtree_map"},

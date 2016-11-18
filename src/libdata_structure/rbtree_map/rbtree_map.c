@@ -106,6 +106,7 @@ __rbtree_map_insert(rbtree_map_t *map,struct rb_root *root,
 
 	return 1;
 }
+
 rbtree_map_pos_t* 
 rbtree_map_pos_init(rbtree_map_pos_t *pos,
 		struct rb_node *node,
@@ -118,6 +119,7 @@ rbtree_map_pos_init(rbtree_map_pos_t *pos,
 
 	return pos;
 }
+
 rbtree_map_pos_t * 
 rbtree_map_pos_next(rbtree_map_pos_t *it,rbtree_map_pos_t *next)
 {
@@ -130,6 +132,7 @@ rbtree_map_pos_next(rbtree_map_pos_t *it,rbtree_map_pos_t *next)
 	}
 	return rbtree_map_pos_init(next, node, it->tree_root, it->map);
 }
+
 rbtree_map_pos_t* 
 rbtree_map_pos_prev(rbtree_map_pos_t *it,rbtree_map_pos_t *prev)
 {
@@ -142,10 +145,12 @@ rbtree_map_pos_prev(rbtree_map_pos_t *it,rbtree_map_pos_t *prev)
 	}
 	return rbtree_map_pos_init(prev, node, it->tree_root, it->map);
 }
+
 int rbtree_map_pos_equal(rbtree_map_pos_t *it1,rbtree_map_pos_t *it2)
 {
 	return it1->rb_node_p == it2->rb_node_p;
 }
+
 void *rbtree_map_pos_get_pointer(rbtree_map_pos_t *it)
 {
 	struct rbtree_map_node *mnode;
@@ -154,6 +159,7 @@ void *rbtree_map_pos_get_pointer(rbtree_map_pos_t *it)
 
 	return &mnode->key[mnode->value_pos];
 }
+
 rbtree_map_t * 
 rbtree_map_alloc(allocator_t *allocator)
 {
@@ -257,12 +263,14 @@ int rbtree_map_insert_data(rbtree_map_t *map, void *value)
 
 	return 0;
 }
+
 int rbtree_map_insert(rbtree_map_t *map,void *key,void *value)
 {
     rbtree_map_make_pair(map,key,value);
 
     return  rbtree_map_insert_data(map,map->pair->data);
 }
+
 int rbtree_map_delete(rbtree_map_t *map, rbtree_map_pos_t *it)
 {
 	struct rbtree_map_node *mnode;
@@ -286,6 +294,7 @@ int rbtree_map_delete(rbtree_map_t *map, rbtree_map_pos_t *it)
 	}
 	return 0;
 }
+
 rbtree_map_pos_t *
 rbtree_map_search(rbtree_map_t *map, void *key, rbtree_map_pos_t *it)
 {
@@ -307,6 +316,7 @@ rbtree_map_search(rbtree_map_t *map, void *key, rbtree_map_pos_t *it)
 
 	return it;
 }
+
 int rbtree_map_destroy(rbtree_map_t *map)
 {
 	rbtree_map_pos_t it,end;

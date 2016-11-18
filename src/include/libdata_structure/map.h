@@ -1,68 +1,91 @@
 #ifndef __MAP_H__
 #define __MAP_H__
 
-#include <basic_types.h>
-#include <libdata_structure/hash_list.h>
-#include <libdata_structure/rbtree_map.h>
+#include <libdata_structure/map_struct.h>
 
-enum map_type{
-    MAP_TYPE_RBTREE_MAP,
-    MAP_TYPE_HASH_MAP,
-    MAP_TYPE_MAX_NUM
-};
+static inline int map_set(map_t *map, char *attrib, char *value)
+{
+    return map->map_ops->map_set(map,attrib,value);
+}
 
-typedef struct map_interator{
-    union{
-        rbtree_map_pos_t rbtree_map_pos;
-        hash_map_pos_t hash_map_pos;
-    }pos;
-}map_interator_t;
+static inline int map_init(map_t *map, uint32_t key_size, uint32_t data_size)
+{
+    return map->map_ops->map_init(map,key_size,data_size);
+}
 
+static inline int map_insert(map_t *map, char *key, void *value)
+{
+    return map->map_ops->map_insert(map, key, value);
+}
 
-typedef struct map{
-#	define MAP_NAME_MAX_LEN 40
-    char name[MAP_NAME_MAX_LEN];
-    uint8_t map_type;
-    allocator_t *allocator;
-    struct map_operations *c_ops_p;
-    struct map_interator_operations *it_ops_p;
-    struct map_interator begin,end,cur;
-    pthread_rwlock_t head_lock;    
-    union{
-        rbtree_map_t *rbtree_map;
-        hash_map_t *hash_map;
-    }priv;
-#	undef MAP_NAME_MAX_LEN
-}map_t;
+static inline int map_search(map_t *map, void *key,map_iterator_t *it)
+{
+    return map->map_ops->map_search(map,key,it);
+}
 
-struct map_operations{
-    int (*init)(map_t *);
-    int (*map_init)(map_t *ct, uint32_t key_size, uint32_t value_size, key_cmp_fpt key_cmp_func);
-    map_interator_t (*begin)(map_t *ct);
-    map_interator_t (*end)(map_t *ct);
-    int (*map_insert)(map_t *ct,void *value);
-    map_interator_t (*map_search)(map_t *ct, void *key);
-    int (*del)(map_t *ct, map_interator_t it);
-    int (*destroy)(map_t *ct);
-};
+static inline int map_del(map_t *map, map_iterator_t *it)
+{
+    return map->map_ops->map_del(map,it);
+}
 
-struct map_interator_operations{
-    map_interator_t (*next)(map_interator_t it);
-    map_interator_t (*prev)(map_interator_t it);
-    int (*equal)(map_interator_t it1,map_interator_t it2);
-    void *(*map_interator_get_pointer)(map_interator_t it);
-};
+static inline int map_destroy(map_t *map)
+{
+    return map->map_ops->map_destroy(map);
+}
 
-typedef struct map_module{
-#	define MAP_NAME_MAX_LEN 20
-    char name[MAP_NAME_MAX_LEN];
-    uint8_t map_type;
-    struct map_operations c_ops;
-    struct map_interator_operations it_ops;
-    struct map_interator begin,end;
-#	undef MAP_NAME_MAX_LEN
-}map_module_t;
+static inline int map_begin(map_t *map, map_iterator_t *it)
+{
+    map->map_ops->map_begin(map, it);
+    it->map = map;
 
-extern map_module_t map_modules[MAP_TYPE_MAX_NUM];
+    return 0;
+}
+
+static inline int map_end(map_t *map, map_iterator_t *it)
+{
+    map->map_ops->map_end(map, it);
+    it->map = map;
+
+    return 0;
+}
+
+static inline int  map_next(map_iterator_t *it, map_iterator_t *next)
+{
+    it->map->it_ops->map_next(it,next);
+    next->map = it->map;
+
+    return 0;
+}
+
+static inline int map_prev(map_iterator_t *it, map_iterator_t *prev)
+{
+    it->map->it_ops->map_prev(it,prev);
+    prev->map = it->map;
+
+    return 0;
+}
+
+static inline int map_equal(map_iterator_t *it1,map_iterator_t *it2)
+{
+    return it1->map->it_ops->map_equal(it1,it2);
+}
+
+static inline void * map_get_pointer(map_iterator_t *it)
+{
+    return it->map->it_ops->map_get_pointer(it);
+}
+
+static inline void 
+map_for_each(map_t *map,void (*func)(map_iterator_t *it))
+{
+	map_iterator_t it,next,end;
+
+    map_end(map, &end);
+	for(	map_begin(map,&it),map_next(&it,&next); 
+			!map_equal(&it,&end);
+			it = next,map_next(&it,&next)){
+		func(&it);
+	}
+}
 
 #endif

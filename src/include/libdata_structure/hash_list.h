@@ -22,7 +22,7 @@
 #include "libdata_structure/hash_list_struct.h"
 
 hash_map_t * hash_map_alloc(allocator_t *allocator);
-
+int hash_map_set(hash_map_t *hmap,char *attrib,char *value);
 int hash_map_init(hash_map_t *hmap,
 		          uint32_t key_size,
 		          uint32_t data_size,

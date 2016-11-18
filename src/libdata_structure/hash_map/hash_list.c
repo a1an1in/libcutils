@@ -109,6 +109,10 @@ int hash_map_init(hash_map_t *hmap,
         return -1;
     }
 
+    if(map->bucket_size == 0) {
+        hmap->bucket_size = 20;
+        bucket_size = hmap->bucket_size;
+    }
 	if(hmap->key_cmp_func == NULL){
 		hmap->key_cmp_func = default_key_cmp_func;
 	}
@@ -152,6 +156,8 @@ int hash_map_insert_data(hash_map_t *hmap,void *data)
 	hash_map_pos_t *begin_pos = &hmap->begin;;
     int ret;
 
+    dbg_str(DBG_DETAIL,"hash_map_insert_data");
+
 	mnode = (struct hash_map_node *)allocator_mem_alloc(hmap->allocator,
 			                                            sizeof(struct hash_map_node) + data_size);
 	if(mnode == NULL){
@@ -193,6 +199,7 @@ int hash_map_insert_data(hash_map_t *hmap,void *data)
 
 	sync_unlock(&hmap->map_lock);
 
+    dbg_str(DBG_DETAIL,"hash_map_insert_data end");
 	return ret;
 }
 

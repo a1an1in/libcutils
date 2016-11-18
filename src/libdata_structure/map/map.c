@@ -1,18 +1,78 @@
 #include <libdata_structure/map.h>
 
-
-/*
- *map_t * map_create(allocator_t *allocator,uint8_t lock_type);
- *int map_insert_data(map_t *hmap,void *data);
- *int map_insert_data_wb(map_t *hmap,void *data, map_pos_t *out);
- *int map_insert(map_t *hmap,void *key,void *value);
- *int map_insert_wb(map_t *hmap,void *key,void *value, map_pos_t *out);
- *int map_search(map_t *hmap, void *key,map_pos_t *ret);
- *int map_delete(map_t *hmap, map_pos_t *pos);
- *int map_destroy(map_t *hmap);
- *int map_init(map_t *hmap, uint32_t key_size, uint32_t data_size, uint32_t bucket_size, hash_func_fpt hash_func, key_cmp_fpt key_cmp_func);
- *int map_pos_next(map_pos_t *pos,map_pos_t *next);
- *void map_print_mnode(struct map_node *mnode);
- */
-
 map_module_t map_modules[MAP_TYPE_MAX_NUM];
+
+map_t * map_alloc(allocator_t *allocator,uint8_t type)
+{
+    map_t *map;
+    int ret;
+
+    map            = (map_t *)allocator_mem_alloc(allocator,sizeof(map_t));
+    map->map_type  = type;
+    map->map_ops   = &map_modules[type].map_ops;
+    map->it_ops    = &map_modules[type].it_ops;
+    map->allocator = allocator;
+
+    ret = map->map_ops->map_alloc(map);
+    if( ret < 0 ) {
+        dbg_str(DBG_ERROR,"map_alloc");
+        return NULL;
+    }
+
+    return map;
+}
+
+__attribute__((constructor(103))) void
+register_map_modules()
+{
+    printf("register map_modules\n");
+    hash_map_pk_register();
+
+}
+
+struct A{
+	int a;
+	int b;
+};
+
+void test_print_context(map_iterator_t *it)
+{
+    struct A *p = (struct A *)map_get_pointer(it);
+    dbg_str(DBG_DETAIL,"a =%d, b=%d",p->a,p->b);
+}
+void test_map()
+{
+	map_t *map;
+	map_iterator_t it;
+	allocator_t *allocator = allocator_get_default_alloc();
+
+	struct A t1 = {1,2};
+	struct A t2 = {2,2};
+	struct A t3 = {3,2};
+	struct A t4 = {4,2};
+
+    map = map_alloc(allocator,MAP_TYPE_HASH_MAP);
+    map_init(map, 2, sizeof(struct A)+ 2);
+
+    dbg_str(DBG_DETAIL,"------------map insert------------");
+
+    map_insert(map,(char *)"11",&t1);
+    map_insert(map,(char *)"22",&t2);
+    map_insert(map,(char *)"55",&t4);
+    map_insert(map,(char *)"33",&t3);
+
+    dbg_str(DBG_DETAIL,"------------map search------------");
+    struct A *p;
+    map_search(map,(char *)"33",&it);
+
+    p = (struct A *)map_get_pointer(&it);
+    dbg_str(DBG_DETAIL,"a =%d, b=%d",p->a,p->b);
+
+    dbg_str(DBG_DETAIL,"------------map for each------------");
+    map_for_each(map,test_print_context);
+
+    dbg_str(DBG_DETAIL,"------------map destroy------------");
+    map_destroy(map);
+
+}
+
