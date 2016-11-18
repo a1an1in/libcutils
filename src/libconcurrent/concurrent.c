@@ -80,14 +80,12 @@ concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
 	/*
 	 *task_admin->hmap = hash_map_create(allocator,PTHREAD_MUTEX_LOCK);
 	 */
-	task_admin->hmap = hash_map_create(task_admin->allocator,hmap_lock_type);
+	task_admin->hmap = hash_map_alloc(task_admin->allocator);
 
 	hash_map_init(task_admin->hmap,
 			      key_size,//uint32_t key_size,
 			      key_size + data_size,
-			      bucket_size,
-			      NULL,
-			      NULL);
+			      bucket_size);
 	//if concurrent work mode is process,then the lock need be modified!!!!
 	sync_lock_init(&task_admin->admin_lock,admin_lock_type);
 

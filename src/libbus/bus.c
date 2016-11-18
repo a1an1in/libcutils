@@ -112,7 +112,7 @@ int bus_init(bus_t *bus,
         bus->bucket_size = 20;
     }
 
-	bus->obj_hmap = hash_map_create(bus->allocator,0);
+	bus->obj_hmap = hash_map_alloc(bus->allocator);
     if(bus->obj_hmap == NULL) {
         dbg_str(BUS_ERROR,"hash_map_create");
         //.........
@@ -122,9 +122,7 @@ int bus_init(bus_t *bus,
 	hash_map_init(bus->obj_hmap,
 			      bus->key_size,//uint32_t key_size,
 			      sizeof(bus_object_t)+ bus->key_size,
-			      bus->bucket_size,
-			      NULL,
-			      NULL);
+			      bus->bucket_size);
 
     /*create req hash map*/
     if(bus->req_key_size == 0) {
@@ -134,7 +132,7 @@ int bus_init(bus_t *bus,
         bus->req_bucket_size = 20;
     }
 
-	bus->req_hmap = hash_map_create(bus->allocator,0);
+	bus->req_hmap = hash_map_alloc(bus->allocator);
     if(bus->req_hmap == NULL) {
         dbg_str(BUS_ERROR,"hash_map_create");
         //.........
@@ -144,9 +142,7 @@ int bus_init(bus_t *bus,
 	hash_map_init(bus->req_hmap,
 			      bus->req_key_size,//uint32_t req_key_size,
 			      sizeof(bus_object_t)+ bus->req_key_size,
-			      bus->req_bucket_size,
-			      NULL,
-			      NULL);
+			      bus->req_bucket_size);
 
     return 1;
 }

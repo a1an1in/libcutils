@@ -15,4 +15,6 @@
  *void map_print_mnode(struct map_node *mnode);
  */
 
-map_module_t map_modules[MAP_TYPE_MAX_NUM];
+/*
+ *map_module_t map_modules[MAP_TYPE_MAX_NUM];
+ */

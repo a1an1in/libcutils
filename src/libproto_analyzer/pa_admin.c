@@ -68,7 +68,7 @@ pa_admin_t *pa_admin_create(allocator_t *allocator,
 
 	admin->allocator = allocator;
 
-	hmap = hash_map_create(allocator,0);
+	hmap = hash_map_alloc(allocator);
 	if(hmap == NULL){
 		dbg_str(DBG_ERROR,"hash_map_create");
 		goto err_create_hash_map;
@@ -76,9 +76,7 @@ pa_admin_t *pa_admin_create(allocator_t *allocator,
 	data_size = sizeof(struct protocol_analyzer_s *);
 	hash_map_init(hmap, key_size,//uint32_t key_size,
 			      data_size + key_size,//uint32_t data_size
-			      bucket_size,//uint32_t bucket_size
-			      NULL,
-			      NULL);
+			      bucket_size);
 	admin->hash_map = hmap;
 
 	pair = create_pair(key_size,data_size);

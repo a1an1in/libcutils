@@ -139,7 +139,7 @@ int busd_init(busd_t *busd,
         busd->bucket_size = 20;
     }
 
-	busd->obj_hmap = hash_map_create(busd->allocator,0);
+	busd->obj_hmap = hash_map_alloc(busd->allocator);
     if(busd->obj_hmap == NULL) {
         server_destroy(busd->server);
         return -1;
@@ -148,9 +148,7 @@ int busd_init(busd_t *busd,
 	hash_map_init(busd->obj_hmap,
 			      busd->key_size,//uint32_t key_size,
 			      sizeof(busd_object_t)+ busd->key_size,
-			      busd->bucket_size,
-			      NULL,
-			      NULL);
+			      busd->bucket_size);
 
     return 1;
 }

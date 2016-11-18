@@ -63,7 +63,7 @@ static inline uint32_t default_hash_func(void *key,uint32_t key_size,uint32_t bu
 	return sum % bucket_size;
 }
 
-hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
+hash_map_t * hash_map_alloc(allocator_t *allocator)
 {
 	hash_map_t *map;
 
@@ -76,17 +76,24 @@ hash_map_t * hash_map_create(allocator_t *allocator,uint8_t lock_type)
 	}
     memset(map,0,sizeof(hash_map_t));
 	map->allocator = allocator;
-	map->lock_type = lock_type;
 
 	return map;
+}
+
+int hash_map_set(hash_map_t *hmap,char *attrib,char *value)
+{
+    if(!strcmp(attrib,"lock_type")){
+        hmap->lock_type = atoi((char *)value);
+    } else {
+        dbg_str(DBG_WARNNING,"not support attrib setting,please check");
+        return -1;
+    }
 }
 
 int hash_map_init(hash_map_t *hmap,
 		          uint32_t key_size,
 		          uint32_t data_size,
-		          uint32_t bucket_size,
-		          hash_func_fpt hash_func,
-		          key_cmp_fpt key_cmp_func)
+		          uint32_t bucket_size)
 {
 	dbg_str(HMAP_DETAIL,"hash_map_init");
 
@@ -102,16 +109,12 @@ int hash_map_init(hash_map_t *hmap,
         return -1;
     }
 
-	if(key_cmp_func == NULL){
+	if(hmap->key_cmp_func == NULL){
 		hmap->key_cmp_func = default_key_cmp_func;
-	}else{
-		map->key_cmp_func = key_cmp_func;
 	}
 
-	if(hash_func == NULL){
+	if(hmap->hash_func == NULL){
 		hmap->hash_func = default_hash_func;
-	}else{
-		map->hash_func    = hash_func;
 	}
 
 	map->hlist = allocator_mem_alloc(map->allocator,
@@ -267,6 +270,7 @@ int hash_map_insert_wb(hash_map_t *hmap,void *key,void *value, hash_map_pos_t *o
 
     return  hash_map_insert_data_wb(hmap,hmap->pair->data,out);
 }
+
 int hash_map_search(hash_map_t *hmap, void *key,hash_map_pos_t *ret)
 {
 	struct hash_map_node *mnode = NULL;
@@ -414,40 +418,3 @@ void hash_map_print_mnode(struct hash_map_node *mnode)
 	dbg_buf(HMAP_DETAIL,"data:",mnode->key,mnode->data_size);
 }
 
-
-/*
- *int main()
- *{
- *    hash_map_t *hmap;
- *    pair_t *pair;
- *    hash_map_pos_t pos;
- *    struct hash_map_node *mnode;
- *
- *    struct A t1 = {1,2};
- *    struct A t2 = {2,2};
- *    struct A t3 = {3,2};
- *    struct A t4 = {4,2};
- *    struct A t5 = {5,2};
- *
- *    pair = create_pair(2,sizeof(struct A));
- *    hash_map_init(&hmap,
- *            2,//uint32_t key_size,
- *            sizeof(struct A)+ 2,
- *            10,
- *            default_hash_func,
- *            default_key_cmp_func);
- *
- *    make_pair(pair,"11",&t1);
- *    hash_map_insert(hmap,pair->data);
- *    make_pair(pair,"22",&t2);
- *    hash_map_insert(hmap,pair->data);
- *    make_pair(pair,"33",&t3);
- *    hash_map_insert(hmap,pair->data);
- *    make_pair(pair,"44",&t4);
- *    hash_map_insert(hmap,pair->data);
- *
- *    hash_map_for_each(hmap,hash_map_print_mnode);
- *
- *    hash_map_destroy(hmap);
- *}
- */

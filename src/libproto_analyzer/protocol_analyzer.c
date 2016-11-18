@@ -180,13 +180,11 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 	//change later,not relase it
 	pair = create_pair(key_size,data_size);
 
-	hmap = hash_map_create(pa->allocator,0);
+	hmap = hash_map_alloc(pa->allocator);
 	hash_map_init(hmap,
 			key_size,//uint32_t key_size,
 			data_size + key_size,
-			bucket_size,//uint32_t bucket_size,
-			NULL,
-			NULL);
+			bucket_size);
 
 	if(hl_head == NULL){
 		dbg_str(PA_ERROR,"a_copy_protocol_format err,hl_head is NULL");
