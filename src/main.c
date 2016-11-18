@@ -49,7 +49,7 @@
 #include <libstate_machine/state_machine.h>
 #include <libipc/share_mem/shm.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.1.2.1"
+#define LIBRARY_VERSION "libcutils version: 2.1.2.2"
 
 #ifndef MAKELIB
 
@@ -309,7 +309,7 @@ static cmd_config_t cmds[]={
 	{"vector", args_process_test_vector,0, "test", "N/A","test_vector"},
 	{"rbtree_map", args_process_test_rbtree_map,0, "test", "N/A","test_rbtree_map"},
 	{"llist", args_process_test_llist,0, "test", "N/A","test_llist"},
-	{"hashmap", args_process_test_hashlist,0, "test", "N/A","test_hashlist"},
+	{"hash_map", args_process_test_hashlist,0, "test", "N/A","test_hashlist"},
 	{"state_machine", args_process_test_state_machine,0, "test", "N/A","test_state_machine"},
 	{"udp_uclient_recieve", args_process_test_udp_uclient_recieve,0, "test", "N/A","test_udp_uclient_recieve"},
 	{"udp_uclient_send", args_process_test_udp_uclient_send,0, "test", "N/A","test_udp_uclient_send"},

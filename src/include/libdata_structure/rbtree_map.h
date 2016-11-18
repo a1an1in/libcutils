@@ -21,13 +21,14 @@
 
 #include <libdata_structure/rbtree_map_struct.h>
 
-rbtree_map_pos_t* rbtree_map_pos_init(rbtree_map_pos_t *pos, struct rb_node *node, struct rb_root *tree_root, rbtree_map_t *map);
+rbtree_map_t * rbtree_map_alloc(allocator_t *allocator);
+int rbtree_map_init(rbtree_map_t *map,
+		            uint32_t key_size,
+		            uint32_t data_size);
 rbtree_map_pos_t * rbtree_map_pos_next(rbtree_map_pos_t *it,rbtree_map_pos_t *next);
 rbtree_map_pos_t* rbtree_map_pos_prev(rbtree_map_pos_t *it,rbtree_map_pos_t *prev);
 int rbtree_map_pos_equal(rbtree_map_pos_t *it1,rbtree_map_pos_t *it2);
 void *rbtree_map_pos_get_pointer(rbtree_map_pos_t *it);
-rbtree_map_t * rbtree_map_create(allocator_t *allocator,uint8_t lock_type);
-int rbtree_map_init(rbtree_map_t *map, uint32_t key_size, uint32_t data_size, key_cmp_fpt key_cmp_func);
 rbtree_map_pos_t * rbtree_map_begin(rbtree_map_t *map, rbtree_map_pos_t *begin);
 rbtree_map_pos_t * rbtree_map_end(rbtree_map_t *map, rbtree_map_pos_t *end);
 int rbtree_map_insert_data(rbtree_map_t *map, void *value);

@@ -88,9 +88,9 @@ int test_datastructure_rbtree_map(void)
 	struct A t5 = {5,2};
 
 	dbg_str(DBG_DETAIL,"rbtree allocator addr:%p",allocator);
-	map = rbtree_map_create(allocator,0);
+	map = rbtree_map_alloc(allocator);
 
-	rbtree_map_init(map,key_len,sizeof(struct A) + key_len,NULL); 
+	rbtree_map_init(map,key_len,sizeof(struct A) + key_len); 
 
 
 	rbtree_map_insert(map,"44",&t4);

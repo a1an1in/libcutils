@@ -155,7 +155,7 @@ void *rbtree_map_pos_get_pointer(rbtree_map_pos_t *it)
 	return &mnode->key[mnode->value_pos];
 }
 rbtree_map_t * 
-rbtree_map_create(allocator_t *allocator,uint8_t lock_type)
+rbtree_map_alloc(allocator_t *allocator)
 {
 	rbtree_map_t *map;
 	map = (rbtree_map_t *)allocator_mem_alloc(allocator,sizeof(rbtree_map_t));
@@ -163,16 +163,19 @@ rbtree_map_create(allocator_t *allocator,uint8_t lock_type)
 		dbg_str(DBG_ERROR,"rbtree_map_create err");
 		return NULL;
 	}
+    memset(map,0, sizeof(rbtree_map_t)); 
 	map->allocator = allocator;
-	map->lock_type = lock_type;
+    /*
+	 *map->lock_type = lock_type;
+     */
 	dbg_str(DBG_DETAIL,"hash_map_create suc");
 	
 	return map;
 }
+
 int rbtree_map_init(rbtree_map_t *map,
-		uint32_t key_size,
-		uint32_t data_size,
-		key_cmp_fpt key_cmp_func)
+		            uint32_t key_size,
+		            uint32_t data_size)
 {
 	struct rb_root *tree_root;
 
@@ -187,10 +190,8 @@ int rbtree_map_init(rbtree_map_t *map,
         return -1;
     }
 
-	if(key_cmp_func == NULL){
+	if(map->key_cmp_func == NULL){
 		map->key_cmp_func = default_key_cmp_func;
-	}else{
-		map->key_cmp_func = key_cmp_func;
 	}
 	map->data_size = data_size;
 	map->key_size = key_size;
