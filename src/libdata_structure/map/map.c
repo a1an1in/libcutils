@@ -52,7 +52,7 @@ void test_map()
 	struct A t4 = {4,2};
 
     map = map_alloc(allocator,MAP_TYPE_HASH_MAP);
-    map_init(map, 2, sizeof(struct A)+ 2);
+    map_init(map, 2, sizeof(struct A));
 
     dbg_str(DBG_DETAIL,"------------map insert------------");
 

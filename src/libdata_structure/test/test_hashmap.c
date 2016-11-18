@@ -87,7 +87,7 @@ void test_datastructure_hashlist()
 	hmap = hash_map_alloc(allocator);
 	hash_map_init(hmap,
 			      2,//uint32_t key_size,
-			      sizeof(struct A)+ 2,
+			      sizeof(struct A),
 			      10);
 
     hash_map_insert(hmap,"11",&t1);

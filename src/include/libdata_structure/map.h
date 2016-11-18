@@ -8,9 +8,9 @@ static inline int map_set(map_t *map, char *attrib, char *value)
     return map->map_ops->map_set(map,attrib,value);
 }
 
-static inline int map_init(map_t *map, uint32_t key_size, uint32_t data_size)
+static inline int map_init(map_t *map, uint32_t key_size, uint32_t value_size)
 {
-    return map->map_ops->map_init(map,key_size,data_size);
+    return map->map_ops->map_init(map,key_size,value_size);
 }
 
 static inline int map_insert(map_t *map, char *key, void *value)

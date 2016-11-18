@@ -90,13 +90,13 @@ int test_datastructure_rbtree_map(void)
 	dbg_str(DBG_DETAIL,"rbtree allocator addr:%p",allocator);
 	map = rbtree_map_alloc(allocator);
 
-	rbtree_map_init(map,key_len,sizeof(struct A) + key_len); 
+	rbtree_map_init(map,key_len,sizeof(struct A)); 
 
 
-	rbtree_map_insert(map,"44",&t4);
-	rbtree_map_insert(map,"33",&t3);
-	rbtree_map_insert(map,"22",&t2);
-	rbtree_map_insert(map,"11",&t1);
+	rbtree_map_insert(map,(char *)"44",&t4);
+	rbtree_map_insert(map,(char *)"33",&t3);
+	rbtree_map_insert(map,(char *)"22",&t2);
+	rbtree_map_insert(map,(char *)"11",&t1);
 
 
 	dbg_str(DBG_DETAIL,"foreach ordinal print");

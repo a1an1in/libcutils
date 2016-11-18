@@ -92,18 +92,18 @@ int hash_map_set(hash_map_t *hmap,char *attrib,char *value)
 
 int hash_map_init(hash_map_t *hmap,
 		          uint32_t key_size,
-		          uint32_t data_size,
+		          uint32_t value_size,
 		          uint32_t bucket_size)
 {
 	dbg_str(HMAP_DETAIL,"hash_map_init");
 
 	hash_map_t *map   = hmap;
-	map->data_size    = data_size;
+	map->data_size    = value_size + key_size; 
 	map->key_size     = key_size;
 	map->bucket_size  = bucket_size;
 	map->node_count   = 0;
 
-    map->pair = create_pair(key_size,data_size - key_size);
+    map->pair = create_pair(key_size,value_size);
     if(map->pair == NULL) {
         dbg_str(DBG_ERROR,"hash_map_init,create_pair");
         return -1;

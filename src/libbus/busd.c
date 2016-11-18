@@ -147,7 +147,7 @@ int busd_init(busd_t *busd,
 
 	hash_map_init(busd->obj_hmap,
 			      busd->key_size,//uint32_t key_size,
-			      sizeof(busd_object_t)+ busd->key_size,
+			      sizeof(busd_object_t),
 			      busd->bucket_size);
 
     return 1;

@@ -25,7 +25,7 @@ hash_map_t * hash_map_alloc(allocator_t *allocator);
 int hash_map_set(hash_map_t *hmap,char *attrib,char *value);
 int hash_map_init(hash_map_t *hmap,
 		          uint32_t key_size,
-		          uint32_t data_size,
+		          uint32_t value_size,
 		          uint32_t bucket_size);
 
 int hash_map_insert_data(hash_map_t *hmap,void *data);

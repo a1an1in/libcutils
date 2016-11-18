@@ -181,7 +181,7 @@ rbtree_map_alloc(allocator_t *allocator)
 
 int rbtree_map_init(rbtree_map_t *map,
 		            uint32_t key_size,
-		            uint32_t data_size)
+		            uint32_t value_size)
 {
 	struct rb_root *tree_root;
 
@@ -190,7 +190,7 @@ int rbtree_map_init(rbtree_map_t *map,
 	/*
 	 *strcpy(ct->name,"rbtree_map container");
 	 */
-    map->pair = create_pair(key_size,data_size - key_size);
+    map->pair = create_pair(key_size,value_size);
     if(map->pair == NULL) {
         dbg_str(DBG_ERROR,"hash_map_init,create_pair");
         return -1;
@@ -199,7 +199,7 @@ int rbtree_map_init(rbtree_map_t *map,
 	if(map->key_cmp_func == NULL){
 		map->key_cmp_func = default_key_cmp_func;
 	}
-	map->data_size = data_size;
+	map->data_size = key_size + value_size;
 	map->key_size = key_size;
 
 	tree_root = (struct rb_root *)allocator_mem_alloc(map->allocator,

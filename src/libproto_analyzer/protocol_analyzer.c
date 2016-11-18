@@ -167,7 +167,7 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 	pair_t *pair;
 	struct hash_map_node *mnode;
 	uint8_t key_size = 15;
-	uint8_t data_size = sizeof(proto_info_list_t *);
+	uint8_t value_size = sizeof(proto_info_list_t *);
 	uint8_t bucket_size = 10;
 	int ret = 0;
 	struct list_head *hl_head = pa->pa_list_head_p;
@@ -178,12 +178,12 @@ int pa_create_hash_table(struct protocol_analyzer_s *pa)
 	uint32_t addr;
 
 	//change later,not relase it
-	pair = create_pair(key_size,data_size);
+	pair = create_pair(key_size,value_size);
 
 	hmap = hash_map_alloc(pa->allocator);
 	hash_map_init(hmap,
 			key_size,//uint32_t key_size,
-			data_size + key_size,
+			value_size,
 			bucket_size);
 
 	if(hl_head == NULL){

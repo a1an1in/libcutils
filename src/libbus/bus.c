@@ -121,7 +121,7 @@ int bus_init(bus_t *bus,
 
 	hash_map_init(bus->obj_hmap,
 			      bus->key_size,//uint32_t key_size,
-			      sizeof(bus_object_t)+ bus->key_size,
+			      sizeof(bus_object_t),
 			      bus->bucket_size);
 
     /*create req hash map*/
@@ -141,7 +141,7 @@ int bus_init(bus_t *bus,
 
 	hash_map_init(bus->req_hmap,
 			      bus->req_key_size,//uint32_t req_key_size,
-			      sizeof(bus_object_t)+ bus->req_key_size,
+			      sizeof(bus_object_t),
 			      bus->req_bucket_size);
 
     return 1;

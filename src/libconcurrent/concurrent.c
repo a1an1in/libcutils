@@ -64,7 +64,7 @@ concurrent_task_admin_create(allocator_t *allocator)
 int 
 concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
 		                   uint8_t key_size,
-                           uint32_t data_size,
+                           uint32_t value_size,
                            uint32_t bucket_size,
 		                   uint8_t admin_lock_type,
                            uint8_t hmap_lock_type)
@@ -74,7 +74,7 @@ concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
 	task_admin->admin_lock_type = admin_lock_type;
 	task_admin->hmap_lock_type  = hmap_lock_type;
 	task_admin->key_size        = key_size;
-	task_admin->data_size       = data_size;
+	task_admin->data_size       = value_size;
 	task_admin->bucket_size     = bucket_size;
 
 	/*
@@ -84,7 +84,7 @@ concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
 
 	hash_map_init(task_admin->hmap,
 			      key_size,//uint32_t key_size,
-			      key_size + data_size,
+			      value_size,
 			      bucket_size);
 	//if concurrent work mode is process,then the lock need be modified!!!!
 	sync_lock_init(&task_admin->admin_lock,admin_lock_type);
