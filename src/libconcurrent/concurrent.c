@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libconcurrent/concurrent.h>
+#include <constructor_priority.h>
 
 concurrent_t *global_concurrent;
 uint8_t g_slave_amount = 1;
@@ -650,8 +651,7 @@ void concurrent_destroy(concurrent_t *c)
 }
 
 #define MAX_PROXY_TASK_SIZE 128
-#define CONCURRENT_CONSTRUCTOR_PRIOR 112
-__attribute__((constructor(CONCURRENT_CONSTRUCTOR_PRIOR))) void
+__attribute__((constructor(CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR))) void
 concurrent_constructor()
 {
 	allocator_t *allocator;
@@ -659,7 +659,8 @@ concurrent_constructor()
 	uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
 
-    dbg_str(DBG_DETAIL,"construct concurrent start,prior 112");
+    printf("CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR=%d,construct concurrent\n",
+			CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR);
 
 	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
@@ -674,10 +675,9 @@ concurrent_constructor()
 		            lock_type);//uint8_t concurrent_lock_type);
 
     global_concurrent = c;
-    dbg_str(DBG_DETAIL,"construct concurrent end");
 }
 
-__attribute__((destructor(CONCURRENT_CONSTRUCTOR_PRIOR))) void 
+__attribute__((destructor(CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR))) void 
 concurrent_destructor()
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();

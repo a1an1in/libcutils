@@ -26,13 +26,16 @@
  * 
  */
 #include <stdio.h>
+#include <constructor_priority.h>
 
 extern int allocator_sys_alloc_register();
 extern int allocator_ctr_alloc_register();
 
-__attribute__((constructor(101))) void liballoc_register_modules()
+__attribute__((constructor(CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES))) 
+void liballoc_register_modules()
 {
-    printf("register alloc modules\n");
+    printf("CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES=%d,register alloc modules\n",
+			CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES);
 	allocator_sys_alloc_register();
 	allocator_ctr_alloc_register();
 }

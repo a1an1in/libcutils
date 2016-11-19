@@ -26,6 +26,7 @@
  * 
  */
 #include <stdio.h>
+#include <constructor_priority.h>
 #include "libdbg/debug.h"
 #include "liballoc/allocator.h"
 
@@ -75,12 +76,13 @@ allocator_t * allocator_get_default_alloc()
     return global_allocator_default;
 }
 
-void __attribute__((constructor(111)))
+void __attribute__((constructor(CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR)))
 default_allocator_constructor()
 {
 	allocator_t *allocator;
 
-    dbg_str(DBG_DETAIL,"construct default allocator start,prior 111");
+    printf("CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR=%d,construct default allocator\n",
+			CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
 
 	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
@@ -88,12 +90,10 @@ default_allocator_constructor()
 	}
     global_allocator_default = allocator;
 
-    dbg_str(DBG_DETAIL,"construct default allocator end");
-
     return;
 }
 
-void __attribute__((destructor(111)))
+void __attribute__((destructor(CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR)))
 default_allocator_destructor()
 {
 	allocator_t *allocator = allocator_get_default_alloc();

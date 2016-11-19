@@ -46,6 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <constructor_priority.h>
 #include "libdbg/debug.h"
 #include "libdbg/debug_string.h"
 
@@ -292,17 +293,19 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 	return debugger;
 
 }
-int __attribute__((constructor(110))) debugger_constructor()
+int __attribute__((constructor(CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR))) 
+debugger_constructor()
 {
-	printf("construct debugger start,prior 110\n");
+	printf("CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR=%d, construct debugger\n",
+			CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR);
 
 	debugger_gp = debugger_creator("dbg.ini",0);
 	debugger_init(debugger_gp);
 
-	printf("construct debugger end\n");
 	return 0;
 }
-int  __attribute__((destructor(110))) debugger_destructor()
+int  __attribute__((destructor(CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR))) 
+debugger_destructor()
 {
 	printf("debugger_destructor\n");
 	debugger_destroy(debugger_gp);

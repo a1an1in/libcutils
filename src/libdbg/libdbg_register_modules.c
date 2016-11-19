@@ -17,14 +17,17 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <constructor_priority.h>
+
 extern void console_print_regester();
 extern void log_print_regester();
 
-__attribute__((constructor(101))) void libdbg_register_modules()
+__attribute__((constructor(CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES))) 
+void libdbg_register_modules()
 {
-    printf("register libdbg modules start,prior 101\n");
+    printf("CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES=%d,register libdbg modules\n",
+			CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES);
 	console_print_regester();
 	//network_print_regester();
 	log_print_regester();
-    printf("register libdbg modules end\n");
 }

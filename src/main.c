@@ -46,9 +46,10 @@
 #include <unistd.h>
 #include <libdbg/debug.h>
 #include <libargs/cmd_args.h>
+#include <constructor_priority.h>
 #include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.1.3.3"
+#define LIBRARY_VERSION "libcutils version: 2.1.3.4"
 
 #ifndef MAKELIB
 
@@ -338,7 +339,6 @@ int main(int argc, char *argv[])
 {
 	int ret = 0;
 
-    printf("\n\n");
 	dbg_str(DBG_DETAIL,"main func start");
 
 	args_process(NULL,cmds,argc, argv);
@@ -351,8 +351,10 @@ int main(int argc, char *argv[])
 }
 #endif
 
-__attribute__((constructor(101))) void
+__attribute__((constructor(CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION))) void
 print_library_version()
 {
-    printf("%s\n",LIBRARY_VERSION);
+    printf("CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION=%d,%s\n",
+			CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION,
+			LIBRARY_VERSION);
 }
