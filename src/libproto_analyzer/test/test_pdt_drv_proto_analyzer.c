@@ -8,6 +8,7 @@
 
 extern int pfs_set_proto_format_3008(protocol_format_set_t *pfp_p);
 extern int pfs_set_proto_format_3019(protocol_format_set_t *pfs_p);
+extern void pfs_set_pdt_drv_proto_format(protocol_format_set_t *pfs_p);
 debugger_t *debugger_gp;
 
 int test_pdt_proto_3008(protocol_format_set_t *pfs_p,

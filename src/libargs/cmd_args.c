@@ -32,6 +32,7 @@
 
 #include <libdbg/debug.h>
 #include <libargs/cmd_args.h>
+#include <test.h>
 
 args_processor_t processor_globle;
 args_processor_t *args_get_processor_globle_addr()

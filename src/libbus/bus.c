@@ -484,7 +484,7 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
 		dbg_str(BUS_DETAIL,"method name:%s",method_name);
     }
 	if (attr[BUS_OPAQUE]){
-        buffer_len = blob_get_buffer(attr[BUS_OPAQUE],&buffer);
+        buffer_len = blob_get_buffer(attr[BUS_OPAQUE],(uint8_t**)&buffer);
         dbg_buf(BUS_DETAIL,"bus_handle_invoke_reply,buffer:",buffer,buffer_len);
 	}
 

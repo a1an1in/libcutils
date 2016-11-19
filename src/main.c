@@ -46,10 +46,9 @@
 #include <unistd.h>
 #include <libdbg/debug.h>
 #include <libargs/cmd_args.h>
-#include <libstate_machine/state_machine.h>
-#include <libipc/share_mem/shm.h>
+#include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.1.3.2"
+#define LIBRARY_VERSION "libcutils version: 2.1.3.3"
 
 #ifndef MAKELIB
 
@@ -60,6 +59,7 @@ typedef struct base_s{
 	config_list_t config;
 	args_processor_t *p;
 }base_t;
+
 
 static int args_process_help(void *base,int argc,char **argv)
 {

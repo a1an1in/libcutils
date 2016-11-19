@@ -367,14 +367,13 @@ int pfs_add_proto_link_list(uint32_t llist_num,
 }
 
 proto_info_list_t * 
-pfs_set_proto_info(
-		char *name,char *name_value,
-		char *byte_pos,char *byte_pos_value,
-		char *bit_pos,char *bit_pos_value,
-		char *len,char *len_value,
-		char *len_unit,char *len_unit_value,
-		char *vlenth_index,char *vlenth_index_value,
-		struct list_head *hl_head)
+pfs_set_proto_info(char *name,char *name_value,
+				   char *byte_pos,char *byte_pos_value,
+				   char *bit_pos,char *bit_pos_value,
+				   char *len,char *len_value,
+				   char *len_unit,char *len_unit_value,
+				   char *vlenth_index,char *vlenth_index_value,
+				   struct list_head *hl_head)
 {
 	proto_head_list_t *head_list;
 	proto_info_list_t *info_list;
@@ -437,7 +436,8 @@ void pfs_destroy_protocol_format_set(protocol_format_set_t *pfp)
 
 }
 void init_proto_format_set(int proto_base_addr,
-		int max_proto_num, protocol_format_set_t *pfs_p)
+						   int max_proto_num,
+						   protocol_format_set_t *pfs_p)
 {
 	pfs_p->proto_base_addr = proto_base_addr;
 

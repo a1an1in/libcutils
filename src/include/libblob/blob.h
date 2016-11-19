@@ -48,6 +48,7 @@ int blob_add_u16(blob_t *blob, char *name, uint16_t val);
 int blob_add_u32(blob_t *blob, char *name, uint32_t val);
 int blob_add_u64(blob_t *blob, char *name, uint64_t val);
 int blob_add_string(blob_t *blob, char *name, char *str);
+int blob_add_buffer(blob_t *blob, char *name, uint8_t *buf, int len);
 int blob_add_table_start(blob_t *blob, char *name);
 int blob_add_table_end(blob_t *blob);
 int blob_catenate(blob_t *blob, blob_attr_t *attr);
@@ -58,6 +59,7 @@ uint32_t blob_get_data_len(blob_attr_t *attr);
 uint8_t blob_get_u8(blob_attr_t *attr);
 uint16_t blob_get_u16(blob_attr_t *attr);
 uint32_t blob_get_u32(blob_attr_t *attr);
+int blob_get_buffer(blob_attr_t *attr,uint8_t **out);
 char * blob_get_string(blob_attr_t *attr);
 uint16_t blob_get_len(blob_attr_t *attr);
 

@@ -267,11 +267,14 @@ static int test_process_task_callback(void *task)
 	server_data_task_t *t = (server_data_task_t *)task;;
 
     write(t->fd, t->buffer,t->buffer_len);//响应客户端  
+
+	return 0;
 }
 int test_tcp_userver()
 {
     allocator_t *allocator = allocator_get_default_alloc();
 
 	tcp_userver(allocator,"test_server_un_path",test_process_task_callback,NULL);
-	return;
+
+	return 0;
 }

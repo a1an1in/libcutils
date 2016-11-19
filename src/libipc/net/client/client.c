@@ -59,10 +59,10 @@ client_t *client(allocator_t *allocator,
 
     if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
         c = tcp_iclient(allocator, id_str, serve_no,
-                process_task_cb, opaque);
+                		process_task_cb, opaque);
     } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
         c = udp_iclient(allocator, id_str, serve_no,
-                process_task_cb, opaque);
+                		process_task_cb, opaque);
     } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
         c = udp_uclient(allocator, id_str, process_task_cb, opaque);
     } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){

@@ -17,4 +17,5 @@ int server_destroy(server_t *server);
 
 int test_server_of_unix();
 int test_server_of_inet();
+int test_tcp_userver();
 #endif

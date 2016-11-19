@@ -3,6 +3,9 @@
 
 #include <libdata_structure/map_struct.h>
 
+int hash_map_pk_register();
+void test_map();
+
 static inline int map_set(map_t *map, char *attrib, char *value)
 {
     return map->map_ops->map_set(map,attrib,value);

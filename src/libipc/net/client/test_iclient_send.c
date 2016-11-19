@@ -58,26 +58,21 @@ static int process_task_callback(client_task_t *task)
 int test_udp_iclient_send()
 {
 	client_t *cli;
-	const char buf[] = {1,2,3,4,5,6,7,8,9,10};
-	struct sockaddr_in raddr;
-	socklen_t destlen;
+	char buf[] = {1,2,3,4,5,6,7,8,9,10};
 	allocator_t *allocator = allocator_get_default_alloc();
 
 	cli = udp_iclient(allocator,
-			          "192.168.20.26",//char *host,
+			          "127.0.0.1",//char *host,
 			          "2016",//char *client_port,
 			          process_task_callback,
 			          NULL);
-	raddr.sin_family = AF_INET; 
-	raddr.sin_port = htons(atoi("1989"));  
-	inet_pton(AF_INET,"0.0.0.0",&raddr.sin_addr);
 
-	__udp_iclient_send(cli,//client_t *client,
+	udp_iclient_send(cli,//client_t *client,
 			           buf,//const void *buf,
 			           sizeof(buf),
 			           0,//int flags,
-			           (void *)&raddr,//const struct sockaddr *destaddr,
-			           sizeof(raddr));//socklen_t destlen);
+			          "127.0.0.1",//char *host,
+			          "1989");//char *client_port,
 }
 
 /**

@@ -102,7 +102,7 @@ static int test_process_task_callback(void *task)
     if (nread < 0) {
         dbg_str(DBG_ERROR,"fd read err,client close the connection");
 		close(fd);//modify for test
-        return;
+        return -1;
     } 
     write(fd, buf, nread);//响应客户端  
 	/*
@@ -123,7 +123,8 @@ int test_server_of_unix()
            NULL,
            test_process_task_callback,
            NULL);
-	return;
+
+	return 0;
 }
 
 int test_server_of_inet()
@@ -138,6 +139,7 @@ int test_server_of_inet()
            "6888",
            test_process_task_callback,
            NULL);
-	return;
+
+	return 0;
 }
 

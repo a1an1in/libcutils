@@ -21,5 +21,8 @@ int client_destroy(client_t *client);
 
 void test_client_recv_of_inet_udp();
 void test_client_recv_of_unix_udp();
+int test_tcp_uclient_send();
+int test_udp_uclient_send();
+int test_udp_uclient_recieve();
 
 #endif

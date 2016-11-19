@@ -51,6 +51,8 @@ typedef long long uint64_t;
 
 pa_admin_t *pa_admin;
 
+extern void pfs_set_pdt_drv_proto_format(protocol_format_set_t *pfs_p);
+
 pa_admin_t *pa_admin_create(allocator_t *allocator,
                             uint8_t key_size,uint8_t bucket_size)
 {
