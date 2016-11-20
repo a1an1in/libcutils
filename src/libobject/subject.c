@@ -2,46 +2,46 @@
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
 
-int subject_construct(struct subject_s *subject,char *init_str)
+static int subject_construct(struct subject_s *subject,char *init_str)
 {
 	dbg_str(DBG_SUC,"subject construct, subject addr:%p",subject);
 
 	return 0;
 }
 
-int subject_deconstrcut(struct subject_s *subject)
+static int subject_deconstrcut(struct subject_s *subject)
 {
 	dbg_str(DBG_SUC,"subject deconstruct,subject addr:%p",subject);
 
 	return 0;
 }
 
-int subject_move(struct subject_s *subject)
+static int subject_move(struct subject_s *subject)
 {
 	dbg_str(DBG_DETAIL,"subject move");
 }
 
-int subject_show(struct subject_s *subject)
+static int subject_show(struct subject_s *subject)
 {
 	dbg_str(DBG_DETAIL,"subject show");
 }
 
-int subject_add_x_speed(struct subject_s *subject, float v) 
+static int subject_add_x_speed(struct subject_s *subject, float v) 
 {
 	dbg_str(DBG_DETAIL,"subject_add_x_speed");
 }
 
-int subject_add_y_speed(struct subject_s *subject, float v) 
+static int subject_add_y_speed(struct subject_s *subject, float v) 
 {
 	dbg_str(DBG_DETAIL,"subject_add_x_speed");
 }
 
-int subject_is_touching(struct subject_s *me,struct subject_s *subject)
+static int subject_is_touching(struct subject_s *me,struct subject_s *subject)
 {
 	dbg_str(DBG_DETAIL,"subject_is_touching");
 }
 
-int subject_set(subject_t *subject, char *attrib, void *value)
+static int subject_set(subject_t *subject, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		subject->set = value;
@@ -103,7 +103,6 @@ void test_obj_subject()
 {
 	subject_t *subject;
 	allocator_t *allocator = allocator_get_default_alloc();
-	object_deamon_t *deamon = object_deamon_get_global_object_deamon();
 
 	dbg_str(DBG_DETAIL,"subject_subject");
 	dbg_str(DBG_DETAIL,"subject_construct addr:%p",subject_construct);

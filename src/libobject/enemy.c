@@ -14,26 +14,26 @@ typedef struct enemy_s{
 
 }enemy_t;
 
-int enemy_construct(struct enemy_s *enemy,char *init_str)
+static int enemy_construct(struct enemy_s *enemy,char *init_str)
 {
 	dbg_str(DBG_SUC,"enemy construct, enemy addr:%p",enemy);
 
 	return 0;
 }
 
-int enemy_deconstrcut(struct enemy_s *enemy)
+static int enemy_deconstrcut(struct enemy_s *enemy)
 {
 	dbg_str(DBG_SUC,"enemy deconstruct,enemy addr:%p",enemy);
 
 	return 0;
 }
 
-int enemy_move(struct enemy_s*enemy)
+static int enemy_move(struct enemy_s*enemy)
 {
 	dbg_str(DBG_SUC,"enemy move");
 }
 
-int enemy_set(enemy_t *enemy, char *attrib, void *value)
+static int enemy_set(enemy_t *enemy, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		enemy->set = value;
@@ -41,6 +41,8 @@ int enemy_set(enemy_t *enemy, char *attrib, void *value)
 		enemy->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		enemy->deconstruct = value;
+	} else if(strcmp(attrib, "move") == 0) {
+		enemy->move = value;
 	} else {
 		dbg_str(DBG_DETAIL,"enemy set, not support %s setting",attrib);
 	}
