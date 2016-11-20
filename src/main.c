@@ -228,10 +228,10 @@ static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
 static int args_process_lab(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
-    lab();
-    /*
-     *lab2();
-     */
+	/*
+     *lab();
+	 */
+	lab2();
     /*
      *lab3();
      */
@@ -285,12 +285,23 @@ static int args_process_test_miscellany_net(void *base,int argc,char **argv)
 }
 static int args_process_test_obj(void *base,int argc,char **argv)
 {
-    test_obj();
-
+	test_obj();
 	return 0;
 }
 
+static int args_process_test_obj_subject(void *base,int argc,char **argv)
+{
+	test_obj_subject();
+	return 0;
+}
+static int args_process_test_obj_enemy(void *base,int argc,char **argv)
+{
+	test_obj_enemy();
+	return 0;
+}
 static cmd_config_t cmds[]={
+	{"enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
+	{"subject", args_process_test_obj_subject,0, "test", "N/A","obj"},
 	{"obj", args_process_test_obj,0, "test", "N/A","obj"},
 	{"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
 	{"as", args_process_test_as,0, "test", "N/A","array_stack"},

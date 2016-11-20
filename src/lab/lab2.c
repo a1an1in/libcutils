@@ -48,7 +48,35 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
+/*
+ *#define min(x, y) ({                \  
+ *        typeof(x) _min1 = (x);          \  
+ *        typeof(y) _min2 = (y);          \  
+ *        (void) (&_min1 == &_min2);      \  
+ *        _min1 < _min2 ? _min1 : _min2; }) 
+ */
+
+#define f(x) \
+({\
+	dbg_str(DBG_DETAIL,"typeof a  size =%d",sizeof(typeof(x)));\
+ })
 
 int lab2()
 {
+	struct A{
+		int a;
+		int b;
+		int c;
+		int d;
+	} a;
+	struct B{
+		int a;
+		int b;
+		int c;
+		int d;
+		struct A t;
+	} b;
+
+
+	f(b);
 }
