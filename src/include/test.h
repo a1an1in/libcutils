@@ -40,5 +40,6 @@ extern int test_array_stack();
 extern int test_miscellany_net();
 extern int lab();
 extern void args_print_help_test_info(args_processor_t *p);
+void test_obj();
 
 #endif

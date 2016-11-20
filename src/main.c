@@ -277,16 +277,21 @@ static int args_process_test_as(void *base,int argc,char **argv)
     test_array_stack();
 	return 0;
 }
-
 static int args_process_test_miscellany_net(void *base,int argc,char **argv)
 {
     test_miscellany_net();
 
 	return 0;
 }
+static int args_process_test_obj(void *base,int argc,char **argv)
+{
+    test_obj();
 
+	return 0;
+}
 
 static cmd_config_t cmds[]={
+	{"obj", args_process_test_obj,0, "test", "N/A","obj"},
 	{"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
 	{"as", args_process_test_as,0, "test", "N/A","array_stack"},
 	{"buss", args_process_buss,0, "test", "N/A","bus"},
