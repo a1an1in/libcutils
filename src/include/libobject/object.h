@@ -1,5 +1,5 @@
-#ifndef __OBJ_H__
-#define __OBJ_H__
+#ifndef __OBJECT_H__
+#define __OBJECT_H__
 
 #include <libobject/object_deamon.h>
 #include <libobject/object_struct.h>
@@ -19,7 +19,7 @@ int object_init(void *obj, char *type_name);
 		obj = NULL;\
 	} else { \
 		memset(obj,0, sizeof(type));\
-		((obj_t *)obj)->allocator = allocator;\
+		((Obj *)obj)->allocator = allocator;\
 	}\
 	\
 	obj;\

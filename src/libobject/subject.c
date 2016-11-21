@@ -2,46 +2,46 @@
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
 
-static int subject_construct(struct subject_s *subject,char *init_str)
+static int subject_construct(Subject *subject,char *init_str)
 {
 	dbg_str(DBG_SUC,"subject construct, subject addr:%p",subject);
 
 	return 0;
 }
 
-static int subject_deconstrcut(struct subject_s *subject)
+static int subject_deconstrcut(Subject *subject)
 {
 	dbg_str(DBG_SUC,"subject deconstruct,subject addr:%p",subject);
 
 	return 0;
 }
 
-static int subject_move(struct subject_s *subject)
+static int subject_move(Subject *subject)
 {
 	dbg_str(DBG_DETAIL,"subject move");
 }
 
-static int subject_show(struct subject_s *subject)
+static int subject_show(Subject *subject)
 {
 	dbg_str(DBG_DETAIL,"subject show");
 }
 
-static int subject_add_x_speed(struct subject_s *subject, float v) 
+static int subject_add_x_speed(Subject *subject, float v) 
 {
 	dbg_str(DBG_DETAIL,"subject_add_x_speed");
 }
 
-static int subject_add_y_speed(struct subject_s *subject, float v) 
+static int subject_add_y_speed(Subject *subject, float v) 
 {
 	dbg_str(DBG_DETAIL,"subject_add_x_speed");
 }
 
-static int subject_is_touching(struct subject_s *me,struct subject_s *subject)
+static int subject_is_touching(Subject *me,Subject *subject)
 {
 	dbg_str(DBG_DETAIL,"subject_is_touching");
 }
 
-static int subject_set(subject_t *subject, char *attrib, void *value)
+static int subject_set(Subject *subject, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		subject->set = value;
@@ -67,7 +67,7 @@ static int subject_set(subject_t *subject, char *attrib, void *value)
 }
 
 static class_info_entry_t subject_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"obj_t","obj",NULL,sizeof(void *)},
+	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_NORMAL_POINTER,"allocator_t","allocator",NULL,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",subject_set,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",subject_construct,sizeof(void *)},
@@ -94,22 +94,22 @@ register_class()
 
     printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",
 			CONSTRUCTOR_PRIORITY_REGISTER_CLASS,
-			"subject_t");
+			"Subject");
 
-	object_deamon_register_class(deamon,(char *)"subject_t", subject_class_info);
+	object_deamon_register_class(deamon,(char *)"Subject", subject_class_info);
 }
 
 void test_obj_subject()
 {
-	subject_t *subject;
+	Subject *subject;
 	allocator_t *allocator = allocator_get_default_alloc();
 
 	dbg_str(DBG_DETAIL,"subject_subject");
 	dbg_str(DBG_DETAIL,"subject_construct addr:%p",subject_construct);
 	dbg_str(DBG_DETAIL,"subject_class addr:%p",subject_class_info);
 
-	subject = OBJECT_ALLOC(allocator, subject_t);
-	object_init(subject,"subject_t");
+	subject = OBJECT_ALLOC(allocator, Subject);
+	object_init(subject,"Subject");
 
 	dbg_str(DBG_DETAIL,"run at here");
 	subject->move(subject);

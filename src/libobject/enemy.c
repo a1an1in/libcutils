@@ -2,38 +2,40 @@
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
 
-typedef struct enemy_s{
-	struct subject_s subject;
+typedef struct enemy_s Enemy;
 
-	int (*construct)(struct enemy_s *enemy,char *init_str);
-	int (*deconstruct)(struct enemy_s *enemy);
-	int (*set)(struct enemy_s *enemy, char *attrib, void *value);
+struct enemy_s{
+	Subject subject;
+
+	int (*construct)(Enemy *enemy,char *init_str);
+	int (*deconstruct)(Enemy *enemy);
+	int (*set)(Enemy *enemy, char *attrib, void *value);
 
 	/*virtual methods reimplement*/
-	int (*move)(struct enemy_s*enemy);
+	int (*move)(Enemy *enemy);
 
-}enemy_t;
+};
 
-static int enemy_construct(struct enemy_s *enemy,char *init_str)
+static int enemy_construct(Enemy *enemy,char *init_str)
 {
 	dbg_str(DBG_SUC,"enemy construct, enemy addr:%p",enemy);
 
 	return 0;
 }
 
-static int enemy_deconstrcut(struct enemy_s *enemy)
+static int enemy_deconstrcut(Enemy *enemy)
 {
 	dbg_str(DBG_SUC,"enemy deconstruct,enemy addr:%p",enemy);
 
 	return 0;
 }
 
-static int enemy_move(struct enemy_s*enemy)
+static int enemy_move(Enemy *enemy)
 {
 	dbg_str(DBG_SUC,"enemy move");
 }
 
-static int enemy_set(enemy_t *enemy, char *attrib, void *value)
+static int enemy_set(Enemy *enemy, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		enemy->set = value;
@@ -51,7 +53,7 @@ static int enemy_set(enemy_t *enemy, char *attrib, void *value)
 }
 
 static class_info_entry_t enemy_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"subject_t","subject",NULL,sizeof(void *)},
+	[0] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_NORMAL_POINTER,"allocator_t","allocator",NULL,sizeof(void *)},
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","set",enemy_set,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",enemy_construct,sizeof(void *)},
@@ -68,18 +70,18 @@ register_class()
 
     printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",
 			CONSTRUCTOR_PRIORITY_REGISTER_CLASS,
-			"enemy_t");
+			"Enemy");
 
-	object_deamon_register_class(deamon,(char *)"enemy_t", enemy_class_info);
+	object_deamon_register_class(deamon,(char *)"Enemy", enemy_class_info);
 }
 
 void test_obj_enemy()
 {
-    subject_t *subject;
+    Subject *subject;
 
 	allocator_t *allocator = allocator_get_default_alloc();
 
-    subject = OBJECT_NEW(allocator, enemy_t,"");
+    subject = OBJECT_NEW(allocator, Enemy,"");
 
 	subject->move(subject);
 }

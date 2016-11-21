@@ -32,7 +32,6 @@ void * object_get_construct_func_pointer(void *class_info_addr)
 	return 0;
 }
 
-
 class_info_entry_t * object_get_subclass_info(void *class_info_addr)
 {
 	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
@@ -102,8 +101,8 @@ object_find_reimplement_func_pointer(char *method_name,
 	}	
 
 	return object_find_reimplement_func_pointer(method_name,
-										 subclass_name,
-										 end_type_name);
+										        subclass_name,
+										        end_type_name);
 }
 
 int object_cover_vitual_func_pointer(void *obj,
@@ -119,8 +118,9 @@ int object_cover_vitual_func_pointer(void *obj,
 	if(strcmp(cur_type_name,type_name) == 0) return 0;
 
 	deamon = object_deamon_get_global_object_deamon();
-	entry  = (class_info_entry_t *)object_deamon_search_class(deamon,
-															  (char *)cur_type_name);
+	entry  = (class_info_entry_t *)
+             object_deamon_search_class(deamon, (char *)cur_type_name);
+
  	set    = object_get_set_func_pointer(entry);
 	if(set == NULL) {
 		dbg_str(DBG_WARNNING,"obj_init_func_pointer,set func is NULL");
@@ -175,34 +175,28 @@ int object_init(void *obj, char *type_name)
 	__object_init(obj, type_name, type_name);
 }
 
-int obj_construct(struct obj_s *obj,char *init_str)
+int obj_construct(Obj *obj,char *init_str)
 {
 	dbg_str(DBG_SUC,"obj construct, obj addr:%p",obj);
 
 	return 0;
 }
 
-int obj_deconstrcut(struct obj_s *obj)
+int obj_deconstrcut(Obj *obj)
 {
 	dbg_str(DBG_SUC,"obj deconstruct,obj addr:%p",obj);
 
 	return 0;
 }
 
-int obj_set(obj_t *obj, char *attrib, void *value)
+int obj_set(Obj *obj, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		obj->set = value;
-		dbg_str(DBG_DETAIL,"**********obj set %s addr %p,obj->set addr:%p",
-				attrib,value,obj->construct);
 	} else if(strcmp(attrib, "construct") == 0) {
 		obj->construct = value;
-		dbg_str(DBG_DETAIL,"**********obj set %s addr %p,obj->construct addr:%p",
-				attrib,value,obj->construct);
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		obj->deconstruct = value;
-		dbg_str(DBG_DETAIL,"*********obj set %s addr %p,obj->deconstruct addr:%p",
-				attrib,value,obj->deconstruct);
 	} else {
 		dbg_str(DBG_DETAIL,"obj set, not support %s setting",attrib);
 	}
@@ -225,23 +219,17 @@ register_class()
 	object_deamon_t *deamon = object_deamon_get_global_object_deamon();
 
     printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",
-			CONSTRUCTOR_PRIORITY_REGISTER_CLASS,
-			"obj_t");
+			CONSTRUCTOR_PRIORITY_REGISTER_CLASS, "Obj");
 
-	object_deamon_register_class(deamon,(char *)"obj_t", obj_class_info);
+	object_deamon_register_class(deamon,(char *)"Obj", obj_class_info);
 }
 
 void test_obj()
 {
-	obj_t *obj;
+	Obj *obj;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-	dbg_str(DBG_DETAIL,"test_obj");
-	dbg_str(DBG_DETAIL,"obj_construct addr:%p",obj_construct);
-	dbg_str(DBG_DETAIL,"obj_class addr:%p",obj_class_info);
-
-	obj = OBJECT_ALLOC(allocator, obj_t);
-	object_init(obj,"obj_t");
+    obj = OBJECT_NEW(allocator, Obj,"");
 }
 
 

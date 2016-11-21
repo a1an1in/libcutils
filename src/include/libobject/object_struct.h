@@ -8,6 +8,6 @@ typedef struct obj_s{
 	int (*construct)(struct obj_s *obj,char *init_str);
 	int (*deconstruct)(struct obj_s *obj);
 	int (*set)(struct obj_s *obj, char *attrib, void *value);
-}obj_t;
+}Obj;
 
 #endif
