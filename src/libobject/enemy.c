@@ -75,19 +75,11 @@ register_class()
 
 void test_obj_enemy()
 {
-	enemy_t *enemy;
     subject_t *subject;
 
 	allocator_t *allocator = allocator_get_default_alloc();
-	object_deamon_t *deamon = object_deamon_get_global_object_deamon();
 
-	dbg_str(DBG_DETAIL,"enemy_enemy");
-	dbg_str(DBG_DETAIL,"enemy_construct addr:%p",enemy_construct);
-	dbg_str(DBG_DETAIL,"enemy_class addr:%p",enemy_class_info);
-
-	enemy = OBJECT_ALLOC(allocator, enemy_t);
-	object_init(enemy,"enemy_t");
-    subject = (subject_t *)enemy;
+    subject = OBJECT_NEW(allocator, enemy_t,"");
 
 	subject->move(subject);
 }

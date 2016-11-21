@@ -56,27 +56,9 @@
  *        _min1 < _min2 ? _min1 : _min2; }) 
  */
 
-#define f(x) \
-({\
-	dbg_str(DBG_DETAIL,"typeof a  size =%d",sizeof(typeof(x)));\
- })
-
+#define object_new(enemy_t,setting_str) \
+    printf("%s %s\n",#enemy_t,setting_str);
 int lab2()
 {
-	struct A{
-		int a;
-		int b;
-		int c;
-		int d;
-	} a;
-	struct B{
-		int a;
-		int b;
-		int c;
-		int d;
-		struct A t;
-	} b;
-
-
-	f(b);
+    object_new(int,"hellow world");
 }

@@ -25,28 +25,13 @@ int object_init(void *obj, char *type_name);
 	obj;\
  })
 
-/*
- *#define OBJECT_INIT(obj, type_name) \
- *({\
- *    object_deamon_t *deamon;\
- *    void *class_info_addr;\
- * 	class_info_entry_t * subclass_info_addr;\
- *    \
- *    deamon = object_deamon_get_global_object_deamon();\
- *    \
- *    class_info_addr = object_deamon_search_class(deamon,(char *)type_name);\
- *    dbg_str(DBG_DETAIL,"obj_class addr:%p",class_info_addr);\
- *    \
- * 	subclass_info_addr = object_get_subclass_info(class_info_addr);\
- * 	if(subclass_info_addr != NULL) {\
- * 		OBJECT_INIT(obj,subclass_info_addr->type_name);\
- * 	}\
- *    object_init_func_pointer(obj,class_info_addr);\
- *    \
- *    dbg_str(DBG_DETAIL,"obj addr:%p",obj);\
- *    obj->construct(obj,NULL);\
- *    \
- *})
- */
+#define OBJECT_NEW(allocator,type,setting_str) \
+({\
+    void *obj;\
+    obj = OBJECT_ALLOC(allocator,type);\
+    object_init(obj,#type);\
+    obj;\
+})
+
 
 #endif
