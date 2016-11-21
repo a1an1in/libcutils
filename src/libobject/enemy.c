@@ -76,6 +76,8 @@ register_class()
 void test_obj_enemy()
 {
 	enemy_t *enemy;
+    subject_t *subject;
+
 	allocator_t *allocator = allocator_get_default_alloc();
 	object_deamon_t *deamon = object_deamon_get_global_object_deamon();
 
@@ -85,8 +87,9 @@ void test_obj_enemy()
 
 	enemy = OBJECT_ALLOC(allocator, enemy_t);
 	object_init(enemy,"enemy_t");
+    subject = (subject_t *)enemy;
 
-	enemy->subject.move((subject_t *)enemy);
+	subject->move(subject);
 }
 
 
