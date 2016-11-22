@@ -353,9 +353,6 @@ int test_json(void)
 
     out = cjson_print(root);
 
-    printf("-----------------interate cjson-----------------\n");
-    cjson_iterate(root);
-    printf("-----------------cjson_delete-----------------\n");
     cjson_delete(root);
     printf("%s\n", out);
     free(out);

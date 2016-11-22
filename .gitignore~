@@ -34,7 +34,6 @@
 *.swn
 *.swo
 *.swp
-*.swm
 *.c~
 *.cc
 cscope*

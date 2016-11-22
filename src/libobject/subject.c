@@ -75,7 +75,7 @@ static int subject_set(Subject *subject, char *attrib, void *value)
 	} else if(strcmp(attrib, "height") == 0) {
         subject->height = *((uint32_t *)value);
 	} else {
-		dbg_str(DBG_DETAIL,"subject set,  \"%s\" setting is not support",attrib);
+		dbg_str(DBG_WARNNING,"subject set,  \"%s\" setting is not support",attrib);
 	}
 
 	return 0;
@@ -83,22 +83,21 @@ static int subject_set(Subject *subject, char *attrib, void *value)
 
 static class_info_entry_t subject_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_NORMAL_POINTER,"allocator_t","allocator",NULL,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",subject_set,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",subject_construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",subject_deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",subject_move,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","show",subject_show,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_x_speed",subject_add_x_speed,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_y_speed",subject_add_y_speed,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","is_touching",subject_is_touching,sizeof(void *)},
-	[10] = {ENTRY_TYPE_INT32_T,"int","x",NULL,sizeof(int)},
-	[11] = {ENTRY_TYPE_INT32_T,"int","y",NULL,sizeof(int)},
-	[12] = {ENTRY_TYPE_INT32_T,"int","width",NULL,sizeof(int)},
-	[13] = {ENTRY_TYPE_INT32_T,"int","height",NULL,sizeof(int)},
-	[14] = {ENTRY_TYPE_FLOAT_T,"float","x_speed",NULL,sizeof(float)},
-	[15] = {ENTRY_TYPE_FLOAT_T,"float","y_speed",NULL,sizeof(float)},
-	[16] = {ENTRY_TYPE_END},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",subject_set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",subject_construct,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",subject_deconstrcut,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",subject_move,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","show",subject_show,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_x_speed",subject_add_x_speed,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_y_speed",subject_add_y_speed,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","is_touching",subject_is_touching,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_INT32_T,"int","x",NULL,sizeof(int)},
+	[10] = {ENTRY_TYPE_INT32_T,"int","y",NULL,sizeof(int)},
+	[11] = {ENTRY_TYPE_INT32_T,"int","width",NULL,sizeof(int)},
+	[12] = {ENTRY_TYPE_INT32_T,"int","height",NULL,sizeof(int)},
+	[13] = {ENTRY_TYPE_FLOAT_T,"float","x_speed",NULL,sizeof(float)},
+	[14] = {ENTRY_TYPE_FLOAT_T,"float","y_speed",NULL,sizeof(float)},
+	[15] = {ENTRY_TYPE_END},
 
 };
 

@@ -20,6 +20,9 @@ struct enemy_s{
 
 	/*virtual methods reimplement*/
 	int (*move)(Enemy *enemy);
+#define MAX_NAME_LEN 50
+    char name[MAX_NAME_LEN];
+#undef MAX_NAME_LEN
 
 };
 
@@ -52,6 +55,11 @@ static int enemy_set(Enemy *enemy, char *attrib, void *value)
 		enemy->deconstruct = value;
 	} else if(strcmp(attrib, "move") == 0) {
 		enemy->move = value;
+	} else if(strcmp(attrib, "name") == 0) {
+        /*
+         *dbg_str(DBG_SUC,"set enemy name:value %s",value);
+         */
+        strncpy(enemy->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"enemy set, not support %s setting",attrib);
 	}
@@ -66,7 +74,8 @@ static class_info_entry_t enemy_class_info[] = {
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",enemy_construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",enemy_deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",enemy_move,sizeof(void *)},
-	[6] = {ENTRY_TYPE_END},
+	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[7] = {ENTRY_TYPE_END},
 
 };
 
@@ -82,48 +91,39 @@ register_class()
 	object_deamon_register_class(deamon,(char *)"Enemy", enemy_class_info);
 }
 
-cjson_t *enemy_gen_setstr()
-{
-    cjson_t *root;
-    cjson_t *enemy;
-    cjson_t *subject;
-
-    root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Enemy", enemy = cjson_create_object());{
-            cjson_add_item_to_object(enemy, "Subject", subject = cjson_create_object());{
-                cjson_add_number_to_object(subject, "x", 1);
-                cjson_add_number_to_object(subject, "y", 25);
-                cjson_add_number_to_object(subject, "width", 5);
-                cjson_add_number_to_object(subject, "height", 125);
-            }
-        }
-    }
-
-
-    return root;
-}
-
-
 void test_obj_enemy()
 {
     Subject *subject;
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
-    cjson_t *root;
+    cjson_t *root, *e, *s;
 
-    /*
-     *subject = OBJECT_NEW(allocator, Enemy,"");
-	 *subject->move(subject);
-     */
+    root = cjson_create_object();{
+        cjson_add_item_to_object(root, "Enemy", e = cjson_create_object());{
+            cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
+                cjson_add_number_to_object(s, "x", 1);
+                cjson_add_number_to_object(s, "y", 25);
+                cjson_add_number_to_object(s, "width", 5);
+                cjson_add_number_to_object(s, "height", 125);
+            }
+            cjson_add_string_to_object(e, "name", "alan");
+        }
+    }
 
-    root = enemy_gen_setstr(set_str);
     set_str = cjson_print(root);
 
-    subject = OBJECT_ALLOC(allocator,Enemy);
+    /*
+     *subject = OBJECT_ALLOC(allocator,Enemy);
+     *object_set(subject, "Enemy", set_str);
+     *dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
+     */
 
-    object_set(subject, "Enemy", set_str);
-
+    subject = OBJECT_NEW(allocator, Enemy,set_str);
+    /*
+     *subject->move(subject);
+     */
     dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
+    dbg_str(DBG_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
 
     free(set_str);
 

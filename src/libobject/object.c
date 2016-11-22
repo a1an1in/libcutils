@@ -67,10 +67,15 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
 	}
 
 	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-		dbg_str(DBG_DETAIL,"value_name %s, value %p",
-				entry[i].value_name,
-				entry[i].value);
-		set(obj, (char *)entry[i].value_name, entry[i].value);
+        if(     entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
+                entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER)
+        {
+            dbg_str(DBG_DETAIL,"value_name %s, value %p",
+                    entry[i].value_name,
+                    entry[i].value);
+
+            set(obj, (char *)entry[i].value_name, entry[i].value);
+        }
 	}	
 
 	return 0;
@@ -174,7 +179,11 @@ static int __object_set(void *obj,
                 /*
                  *dbg_str(DBG_DETAIL,"object name %s,set %s",object->string, c->string);
                  */
-                set(obj,c->string,&(c->valueint));
+                if(c->type & CJSON_NUMBER) {
+                    set(obj,c->string,&(c->valueint));
+                } else if(c->type & CJSON_STRING) {
+                    set(obj,c->string,c->valuestring);
+                }
             }
         }
 
@@ -254,7 +263,7 @@ int obj_set(Obj *obj, char *attrib, void *value)
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		obj->deconstruct = value;
 	} else {
-		dbg_str(DBG_DETAIL,"obj set, not support %s setting",attrib);
+		dbg_str(DBG_WARNNING,"obj set, \"%s\" setting is not supported",attrib);
 	}
 
 	return 0;
