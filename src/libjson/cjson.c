@@ -52,7 +52,24 @@
     #error "Failed to determine the size of an integer"
 #endif
 
+typedef struct
+{
+    char *buffer;
+    int length;
+    int offset;
+}printbuffer;
+
 static const char *global_ep;
+static void *(*cjson_malloc)(size_t sz) = malloc;
+static void (*cjson_free)(void *ptr) = free;
+
+/* Predeclare these prototypes. */
+static const char *parse_value(cjson_t *item, const char *value, const char **ep);
+static char *print_value(const cjson_t *item, int depth, int fmt, printbuffer *p);
+static const char *parse_array(cjson_t *item, const char *value, const char **ep);
+static char *print_array(const cjson_t *item, int depth, int fmt, printbuffer *p);
+static const char *parse_object(cjson_t *item, const char *value, const char **ep);
+static char *print_object(const cjson_t *item, int depth, int fmt, printbuffer *p);
 
 const char *cjson_get_error_ptr(void)
 {
@@ -77,9 +94,6 @@ static int cjson_strcasecmp(const char *s1, const char *s2)
 
     return tolower(*(const unsigned char *)s1) - tolower(*(const unsigned char *)s2);
 }
-
-static void *(*cjson_malloc)(size_t sz) = malloc;
-static void (*cjson_free)(void *ptr) = free;
 
 static char* cjson_strdup(const char* str)
 {
@@ -218,13 +232,6 @@ static int pow2gt (int x)
 
     return x + 1;
 }
-
-typedef struct
-{
-    char *buffer;
-    int length;
-    int offset;
-} printbuffer;
 
 /* realloc printbuffer if necessary to have at least "needed" bytes more */
 static char* ensure(printbuffer *p, int needed)
@@ -666,14 +673,6 @@ static char *print_string(const cjson_t *item, printbuffer *p)
 {
     return print_string_ptr(item->valuestring, p);
 }
-
-/* Predeclare these prototypes. */
-static const char *parse_value(cjson_t *item, const char *value, const char **ep);
-static char *print_value(const cjson_t *item, int depth, int fmt, printbuffer *p);
-static const char *parse_array(cjson_t *item, const char *value, const char **ep);
-static char *print_array(const cjson_t *item, int depth, int fmt, printbuffer *p);
-static const char *parse_object(cjson_t *item, const char *value, const char **ep);
-static char *print_object(const cjson_t *item, int depth, int fmt, printbuffer *p);
 
 /* Utility to jump whitespace and cr/lf */
 static const char *skip(const char *in)

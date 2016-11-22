@@ -146,6 +146,55 @@ int object_cover_vitual_func_pointer(void *obj,
 	return 0;
 }
 
+static int __object_set(void *obj,
+                             cjson_t *c,
+	                         int (*set)(void *obj, char *attrib, void *value)) 
+{
+	object_deamon_t *deamon;
+	void *class_info_addr;
+    cjson_t *next;
+    cjson_t *object;
+    int (*sub_set)(void *obj, char *attrib, void *value); 
+
+    while (c) {
+        if(c->type & CJSON_OBJECT) {
+            object = c;
+            if(object->string) {
+                dbg_str(DBG_DETAIL,"object name:%s",object->string);
+                deamon          = object_deamon_get_global_object_deamon();
+                class_info_addr = object_deamon_search_class(deamon,object->string);
+                sub_set         = object_get_set_func_pointer(class_info_addr);
+            }
+
+            if (c->child) {
+                __object_set(obj,c->child, sub_set);
+            }
+        } else {
+            if(set) {
+                /*
+                 *dbg_str(DBG_DETAIL,"object name %s,set %s",object->string, c->string);
+                 */
+                set(obj,c->string,&(c->valueint));
+            }
+        }
+
+        c = c->next;
+    }
+
+}
+int object_set(void *obj, char *type_name, char *set_str) 
+{
+    cjson_t *root;
+
+    dbg_str(DBG_DETAIL,"%s",set_str);
+
+    root = cjson_parse(set_str);
+    __object_set(obj, root,NULL);
+    cjson_delete(root);
+
+    return 0;
+}
+
 int __object_init(void *obj, char *cur_type_name, char *type_name) 
 {
 	object_deamon_t *deamon;
@@ -177,10 +226,6 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 	return 0;
 }
 
-int object_set(void *obj, char *type_name, char *set_str) 
-{
-    return 0;
-}
 int object_init(void *obj, char *type_name) 
 {
 	__object_init(obj, type_name, type_name);

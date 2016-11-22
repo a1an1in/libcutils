@@ -82,14 +82,51 @@ register_class()
 	object_deamon_register_class(deamon,(char *)"Enemy", enemy_class_info);
 }
 
+cjson_t *enemy_gen_setstr()
+{
+    cjson_t *root;
+    cjson_t *enemy;
+    cjson_t *subject;
+
+    root = cjson_create_object();{
+        cjson_add_item_to_object(root, "Enemy", enemy = cjson_create_object());{
+            cjson_add_item_to_object(enemy, "Subject", subject = cjson_create_object());{
+                cjson_add_number_to_object(subject, "x", 1);
+                cjson_add_number_to_object(subject, "y", 25);
+                cjson_add_number_to_object(subject, "width", 5);
+                cjson_add_number_to_object(subject, "height", 125);
+            }
+        }
+    }
+
+
+    return root;
+}
+
+
 void test_obj_enemy()
 {
     Subject *subject;
 	allocator_t *allocator = allocator_get_default_alloc();
+    char *set_str;
+    cjson_t *root;
 
-    subject = OBJECT_NEW(allocator, Enemy,"");
+    /*
+     *subject = OBJECT_NEW(allocator, Enemy,"");
+	 *subject->move(subject);
+     */
 
-	subject->move(subject);
+    root = enemy_gen_setstr(set_str);
+    set_str = cjson_print(root);
+
+    subject = OBJECT_ALLOC(allocator,Enemy);
+
+    object_set(subject, "Enemy", set_str);
+
+    dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
+
+    free(set_str);
+
 }
 
 

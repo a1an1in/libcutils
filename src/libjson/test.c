@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <libjson/cjson.h>
 
+void cjson_iterate(cjson_t *c);
+
 /* Parse text to JSON, then render back to text, and print! */
 void doit(char *text)
 {
@@ -222,6 +224,7 @@ void create_objects(void)
     free(out);
 }
 
+#if 0
 int test_json(void)
 {
     /* a bunch of json: */
@@ -318,3 +321,46 @@ int test_json(void)
 
     return 0;
 }
+#else
+int test_json(void)
+{
+    cjson_t *root;
+    cjson_t *fmt;
+    cjson_t *img;
+    cjson_t *thm;
+    cjson_t *fld;
+    char *out;
+    int i;
+    int ids[4] = { 116, 943, 234, 38793 };
+
+    root = cjson_create_object();{
+        cjson_add_item_to_object(root, "Image", img = cjson_create_object());{
+            cjson_add_number_to_object(img, "Width", 800);
+            cjson_add_number_to_object(img, "Height", 600);
+            cjson_add_string_to_object(img, "Title", "View from 15th Floor");
+            cjson_add_item_to_object(img, "Thumbnail", thm = cjson_create_object());{
+                cjson_add_string_to_object(thm, "Url", "http:/*www.example.com/image/481989943");
+                cjson_add_number_to_object(thm, "Height", 125);
+                cjson_add_string_to_object(thm, "Width", "100");
+            }
+            cjson_add_item_to_object(img, "IDs", cjson_create_int_array(ids, 4));
+        }
+        cjson_add_string_to_object(root, "type", "rect");
+        cjson_add_number_to_object(root, "width", 1920);
+        cjson_add_number_to_object(root, "height", 1080);
+        cjson_add_false_to_object (root, "interlace");
+    }
+
+    out = cjson_print(root);
+
+    printf("-----------------interate cjson-----------------\n");
+    cjson_iterate(root);
+    printf("-----------------cjson_delete-----------------\n");
+    cjson_delete(root);
+    printf("%s\n", out);
+    free(out);
+
+    return 0;
+}
+#endif
+

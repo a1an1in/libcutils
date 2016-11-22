@@ -3,6 +3,7 @@
 
 #include <libobject/object_deamon.h>
 #include <libobject/object_struct.h>
+#include <libjson/cjson.h>
 
 void * object_get_set_func_pointer(void *class_info_addr);
 int object_init_func_pointer(void *obj,void *class_info_addr);

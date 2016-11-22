@@ -66,8 +66,16 @@ static int subject_set(Subject *subject, char *attrib, void *value)
 		subject->add_y_speed = value;
 	} else if(strcmp(attrib, "is_touching") == 0) {
 		subject->is_touching = value;
+	} else if(strcmp(attrib, "x") == 0) {
+        subject->x = *((uint32_t *)value);
+	} else if(strcmp(attrib, "y") == 0) {
+        subject->y = *((uint32_t *)value);
+	} else if(strcmp(attrib, "width") == 0) {
+        subject->width = *((uint32_t *)value);
+	} else if(strcmp(attrib, "height") == 0) {
+        subject->height = *((uint32_t *)value);
 	} else {
-		dbg_str(DBG_DETAIL,"subject set, not support %s setting",attrib);
+		dbg_str(DBG_DETAIL,"subject set,  \"%s\" setting is not support",attrib);
 	}
 
 	return 0;
@@ -113,7 +121,7 @@ void test_obj_subject()
 
     subject = OBJECT_NEW(allocator, Subject,"");
 
-	subject->move(subject);
+    subject->move(subject);
 }
 
 
