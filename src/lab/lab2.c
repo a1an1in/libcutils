@@ -48,13 +48,6 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
-/*
- *#define min(x, y) ({                \  
- *        typeof(x) _min1 = (x);          \  
- *        typeof(y) _min2 = (y);          \  
- *        (void) (&_min1 == &_min2);      \  
- *        _min1 < _min2 ? _min1 : _min2; }) 
- */
 
 #define object_new(enemy_t,setting_str) \
     printf("%s %s\n",#enemy_t,setting_str);

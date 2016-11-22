@@ -8,6 +8,7 @@ void * object_get_set_func_pointer(void *class_info_addr);
 int object_init_func_pointer(void *obj,void *class_info_addr);
 class_info_entry_t * object_get_subclass_info(void *class_info_addr);
 int object_init(void *obj, char *type_name);
+int object_set(void *obj, char *type_name, char *set_str);
 
 #define OBJECT_ALLOC(allocator, type) \
 ({\
@@ -25,11 +26,18 @@ int object_init(void *obj, char *type_name);
 	obj;\
  })
 
-#define OBJECT_NEW(allocator,type,setting_str) \
+#define OBJECT_NEW(allocator,type,set_str) \
 ({\
     void *obj;\
+    int ret;\
     obj = OBJECT_ALLOC(allocator,type);\
-    object_init(obj,#type);\
+    ret = object_set(obj, #type, set_str);\
+    if( ret < 0) {\
+        dbg_str(DBG_ERROR,"object_set error");\
+        obj = NULL;\
+    } else {\
+        object_init(obj,#type);\
+    }\
     obj;\
 })
 

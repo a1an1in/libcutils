@@ -1,3 +1,10 @@
+/**
+ * @file object.c
+ * @synopsis 
+ * @author alan(a1an1in@sina.com)
+ * @version 1
+ * @date 2016-11-21
+ */
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libobject/object.h>
@@ -170,6 +177,10 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 	return 0;
 }
 
+int object_set(void *obj, char *type_name, char *set_str) 
+{
+    return 0;
+}
 int object_init(void *obj, char *type_name) 
 {
 	__object_init(obj, type_name, type_name);

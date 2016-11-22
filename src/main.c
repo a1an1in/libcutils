@@ -49,7 +49,7 @@
 #include <constructor_priority.h>
 #include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.1.3.5"
+#define LIBRARY_VERSION "libcutils version: 2.2.0.0"
 
 #ifndef MAKELIB
 
@@ -228,10 +228,10 @@ static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
 static int args_process_lab(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
-	/*
+    /*
      *lab();
-	 */
-	lab2();
+     */
+    lab2();
     /*
      *lab3();
      */
@@ -299,7 +299,13 @@ static int args_process_test_obj_enemy(void *base,int argc,char **argv)
 	test_obj_enemy();
 	return 0;
 }
+static int args_process_test_json(void *base,int argc,char **argv)
+{
+    test_json();
+	return 0;
+}
 static cmd_config_t cmds[]={
+	{"json", args_process_test_json,0, "test", "N/A","test"},
 	{"enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
 	{"subject", args_process_test_obj_subject,0, "test", "N/A","obj"},
 	{"obj", args_process_test_obj,0, "test", "N/A","obj"},

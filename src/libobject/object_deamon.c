@@ -1,3 +1,10 @@
+/**
+ * @file object_deamon.c
+ * @synopsis 
+ * @author alan(a1an1in@sina.com)
+ * @version 1
+ * @date 2016-11-21
+ */
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libobject/object_deamon.h>

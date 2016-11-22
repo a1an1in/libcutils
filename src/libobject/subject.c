@@ -1,3 +1,10 @@
+/**
+ * @file subject.c
+ * @synopsis 
+ * @author alan(a1an1in@sina.com)
+ * @version 1
+ * @date 2016-11-21
+ */
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
@@ -104,14 +111,8 @@ void test_obj_subject()
 	Subject *subject;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-	dbg_str(DBG_DETAIL,"subject_subject");
-	dbg_str(DBG_DETAIL,"subject_construct addr:%p",subject_construct);
-	dbg_str(DBG_DETAIL,"subject_class addr:%p",subject_class_info);
+    subject = OBJECT_NEW(allocator, Subject,"");
 
-	subject = OBJECT_ALLOC(allocator, Subject);
-	object_init(subject,"Subject");
-
-	dbg_str(DBG_DETAIL,"run at here");
 	subject->move(subject);
 }
 

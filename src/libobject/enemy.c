@@ -1,3 +1,10 @@
+/**
+ * @file enemy.c
+ * @synopsis 
+ * @author alan(a1an1in@sina.com)
+ * @version 1
+ * @date 2016-11-21
+ */
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
@@ -78,7 +85,6 @@ register_class()
 void test_obj_enemy()
 {
     Subject *subject;
-
 	allocator_t *allocator = allocator_get_default_alloc();
 
     subject = OBJECT_NEW(allocator, Enemy,"");
