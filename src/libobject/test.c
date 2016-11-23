@@ -128,6 +128,7 @@ void test_obj_enemy()
      */
 
     object_dump(subject, "Enemy", buf, 2048);
+    dbg_str(DBG_DETAIL,"Enemy dump: %s",buf);
 
     free(set_str);
 

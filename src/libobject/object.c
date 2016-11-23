@@ -9,36 +9,6 @@
 #include <libdbg/debug.h>
 #include <libobject/object.h>
 
-void * object_get_set_func_pointer(void *class_info_addr)
-{
-	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
-	int i;
-
-	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-		if(		strcmp((char *)entry[i].value_name,"set") == 0 && 
-				entry[i].type == ENTRY_TYPE_FUNC_POINTER) {
-			return entry[i].value;
-		}
-	}	
-
-	return 0;
-}
-
-void * object_get_construct_func_pointer(void *class_info_addr)
-{
-	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
-	int i;
-
-	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-		if(		strcmp((char *)entry[i].value_name,"construct") == 0 && 
-				entry[i].type == ENTRY_TYPE_FUNC_POINTER) {
-			return entry[i].value;
-		}
-	}	
-
-	return 0;
-}
-
 void * object_get_func_pointer(void *class_info_addr, char *func_pointer_name)
 {
 	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
@@ -75,7 +45,7 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
 
 	int (*set)(void *obj, char *attrib, void *value);
 
- 	set = object_get_set_func_pointer(class_info_addr);
+ 	set = object_get_func_pointer(class_info_addr,"set");
 	if(set == NULL) {
 		dbg_str(DBG_WARNNING,"obj_init_func_pointer,set func is NULL");
 		return -1;
@@ -148,7 +118,7 @@ int object_cover_vitual_func_pointer(void *obj,
 	entry  = (class_info_entry_t *)
              object_deamon_search_class(deamon, (char *)cur_type_name);
 
- 	set    = object_get_set_func_pointer(entry);
+ 	set    = object_get_func_pointer(entry,"set");
 	if(set == NULL) {
 		dbg_str(DBG_WARNNING,"obj_init_func_pointer,set func is NULL");
 		return -1;
@@ -183,7 +153,7 @@ static int __object_set(void *obj,
                 dbg_str(DBG_DETAIL,"object name:%s",object->string);
                 deamon          = object_deamon_get_global_object_deamon();
                 class_info_addr = object_deamon_search_class(deamon,object->string);
-                sub_set         = object_get_set_func_pointer(class_info_addr);
+                sub_set         = object_get_func_pointer(class_info_addr,"set");
             }
 
             if (c->child) {
@@ -275,6 +245,7 @@ int object_dump(void *obj, char *type_name, char *buf, int max_len)
     cjson_t *root;
     cjson_t *item;
     char *out;
+    int len;
 
     root = cjson_create_object();
     item = cjson_create_object();
@@ -283,8 +254,11 @@ int object_dump(void *obj, char *type_name, char *buf, int max_len)
     __object_dump(obj, type_name, item);
 
     out = cjson_print(root);
+    len = strlen(out);
+    len = len > max_len ? max_len: len; 
+    strncpy(buf,out,len);
+
     strncpy(buf,out,max_len);
-    printf("%s\n", out);
     cjson_delete(root);
     free(out);
 }
@@ -300,7 +274,7 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 
 	deamon             = object_deamon_get_global_object_deamon();
 	class_info_addr    = object_deamon_search_class(deamon,(char *)cur_type_name);
-	construct          = object_get_construct_func_pointer(class_info_addr);
+	construct          = object_get_func_pointer(class_info_addr,"construct");
  	subclass_info_addr = object_get_subclass_info(class_info_addr);
 
 	dbg_str(DBG_DETAIL,"obj_class addr:%p",class_info_addr);
