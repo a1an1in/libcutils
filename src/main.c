@@ -49,7 +49,7 @@
 #include <constructor_priority.h>
 #include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.3.1.0"
+#define LIBRARY_VERSION "libcutils version: 2.3.2.0"
 
 #ifndef MAKELIB
 

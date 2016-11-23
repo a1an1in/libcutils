@@ -78,18 +78,7 @@ static class_info_entry_t enemy_class_info[] = {
 	[7] = {ENTRY_TYPE_END},
 
 };
-
-__attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_CLASS))) static void
-register_class()
-{
-	object_deamon_t *deamon = object_deamon_get_global_object_deamon();
-
-    printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",
-			CONSTRUCTOR_PRIORITY_REGISTER_CLASS,
-			"Enemy");
-
-	object_deamon_register_class(deamon,(char *)"Enemy", enemy_class_info);
-}
+REGISTER_CLASS("Enemy",enemy_class_info);
 
 void test_obj_enemy()
 {
@@ -122,9 +111,8 @@ void test_obj_enemy()
     dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
     dbg_str(DBG_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
 
-    /*
-     *subject->move(subject);
-     */
+    subject->move(subject);
+
     free(set_str);
 
 }

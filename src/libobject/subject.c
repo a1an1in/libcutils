@@ -100,18 +100,7 @@ static class_info_entry_t subject_class_info[] = {
 	[15] = {ENTRY_TYPE_END},
 
 };
-
-__attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_CLASS))) static void
-register_class()
-{
-	object_deamon_t *deamon = object_deamon_get_global_object_deamon();
-
-    printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",
-			CONSTRUCTOR_PRIORITY_REGISTER_CLASS,
-			"Subject");
-
-	object_deamon_register_class(deamon,(char *)"Subject", subject_class_info);
-}
+REGISTER_CLASS("Subject",subject_class_info);
 
 void test_obj_subject()
 {

@@ -4,6 +4,18 @@
 #include <libdata_structure/map.h>
 #include <constructor_priority.h>
 
+#define REGISTER_CLASS(class_name, class_info) \
+    __attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_CLASS))) static void\
+    register_class()\
+    {\
+        object_deamon_t *deamon = object_deamon_get_global_object_deamon();\
+        \
+        printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",\
+                CONSTRUCTOR_PRIORITY_REGISTER_CLASS, class_name);\
+        \
+        object_deamon_register_class(deamon,class_name, class_info);\
+    }
+
 typedef struct object_deamon_s{
 	allocator_t *allocator;
 	map_t *map;
