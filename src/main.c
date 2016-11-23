@@ -49,7 +49,7 @@
 #include <constructor_priority.h>
 #include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.3.2.0"
+#define LIBRARY_VERSION "libcutils version: 2.3.3.0"
 
 #ifndef MAKELIB
 
@@ -377,6 +377,5 @@ __attribute__((constructor(CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION))) void
 print_library_version()
 {
     printf("CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION=%d,%s\n",
-			CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION,
-			LIBRARY_VERSION);
+			CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION, LIBRARY_VERSION);
 }

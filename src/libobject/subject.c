@@ -52,6 +52,8 @@ static int subject_set(Subject *subject, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		subject->set = value;
+    } else if(strcmp(attrib, "get") == 0) {
+		subject->get = value;
 	} else if(strcmp(attrib, "construct") == 0) {
 		subject->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
@@ -81,23 +83,45 @@ static int subject_set(Subject *subject, char *attrib, void *value)
 	return 0;
 }
 
+void * subject_get(Subject *obj, char *attrib)
+{
+    if(strcmp(attrib, "x") == 0) 
+        return &obj->x;
+    else if(strcmp(attrib, "y") == 0) 
+        return &obj->y;
+    else if(strcmp(attrib, "width") == 0) 
+        return &obj->width;
+    else if(strcmp(attrib, "height") == 0) 
+        return &obj->height;
+    else if(strcmp(attrib, "x_speed") == 0) 
+        return &obj->x_speed;
+    else if(strcmp(attrib, "y_speed") == 0) {
+        return &obj->y_speed;
+    } else {
+        dbg_str(DBG_WARNNING,"subject get, \"%s\" getting attrib is not supported",attrib);
+        return NULL;
+    }
+    return NULL;
+}
+
 static class_info_entry_t subject_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",subject_set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",subject_construct,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",subject_deconstrcut,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",subject_move,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","show",subject_show,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_x_speed",subject_add_x_speed,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_y_speed",subject_add_y_speed,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","is_touching",subject_is_touching,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_INT32_T,"int","x",NULL,sizeof(int)},
-	[10] = {ENTRY_TYPE_INT32_T,"int","y",NULL,sizeof(int)},
-	[11] = {ENTRY_TYPE_INT32_T,"int","width",NULL,sizeof(int)},
-	[12] = {ENTRY_TYPE_INT32_T,"int","height",NULL,sizeof(int)},
-	[13] = {ENTRY_TYPE_FLOAT_T,"float","x_speed",NULL,sizeof(float)},
-	[14] = {ENTRY_TYPE_FLOAT_T,"float","y_speed",NULL,sizeof(float)},
-	[15] = {ENTRY_TYPE_END},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",subject_get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",subject_construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",subject_deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",subject_move,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","show",subject_show,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_x_speed",subject_add_x_speed,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_y_speed",subject_add_y_speed,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","is_touching",subject_is_touching,sizeof(void *)},
+	[10] = {ENTRY_TYPE_INT32_T,"int","x",NULL,sizeof(int)},
+	[11] = {ENTRY_TYPE_INT32_T,"int","y",NULL,sizeof(int)},
+	[12] = {ENTRY_TYPE_INT32_T,"int","width",NULL,sizeof(int)},
+	[13] = {ENTRY_TYPE_INT32_T,"int","height",NULL,sizeof(int)},
+	[14] = {ENTRY_TYPE_FLOAT_T,"float","x_speed",NULL,sizeof(float)},
+	[15] = {ENTRY_TYPE_FLOAT_T,"float","y_speed",NULL,sizeof(float)},
+	[16] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Subject",subject_class_info);

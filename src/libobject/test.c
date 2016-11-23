@@ -17,6 +17,7 @@ struct enemy_s{
 	int (*construct)(Enemy *enemy,char *init_str);
 	int (*deconstruct)(Enemy *enemy);
 	int (*set)(Enemy *enemy, char *attrib, void *value);
+    void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
 	int (*move)(Enemy *enemy);
@@ -49,6 +50,8 @@ static int enemy_set(Enemy *enemy, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		enemy->set = value;
+    } else if(strcmp(attrib, "get") == 0) {
+		enemy->get = value;
 	} else if(strcmp(attrib, "construct") == 0) {
 		enemy->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
@@ -56,9 +59,6 @@ static int enemy_set(Enemy *enemy, char *attrib, void *value)
 	} else if(strcmp(attrib, "move") == 0) {
 		enemy->move = value;
 	} else if(strcmp(attrib, "name") == 0) {
-        /*
-         *dbg_str(DBG_SUC,"set enemy name:value %s",value);
-         */
         strncpy(enemy->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"enemy set, not support %s setting",attrib);
@@ -67,10 +67,21 @@ static int enemy_set(Enemy *enemy, char *attrib, void *value)
 	return 0;
 }
 
+void *enemy_get(Enemy *obj, char *attrib)
+{
+    if(strcmp(attrib, "name") == 0) {
+        return obj->name;
+    } else {
+        dbg_str(DBG_WARNNING,"enemy get, \"%s\" getting attrib is not supported",attrib);
+        return NULL;
+    }
+    return NULL;
+}
+
 static class_info_entry_t enemy_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_NORMAL_POINTER,"allocator_t","allocator",NULL,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","set",enemy_set,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",enemy_set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",enemy_get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",enemy_construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",enemy_deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",enemy_move,sizeof(void *)},
@@ -86,6 +97,7 @@ void test_obj_enemy()
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
     cjson_t *root, *e, *s;
+    char buf[2048];
 
     root = cjson_create_object();{
         cjson_add_item_to_object(root, "Enemy", e = cjson_create_object());{
@@ -108,10 +120,14 @@ void test_obj_enemy()
      */
 
     subject = OBJECT_NEW(allocator, Enemy,set_str);
-    dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
-    dbg_str(DBG_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
 
-    subject->move(subject);
+    /*
+     *dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
+     *dbg_str(DBG_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
+     *subject->move(subject);
+     */
+
+    object_dump(subject, "Enemy", buf, 2048);
 
     free(set_str);
 

@@ -39,6 +39,21 @@ void * object_get_construct_func_pointer(void *class_info_addr)
 	return 0;
 }
 
+void * object_get_func_pointer(void *class_info_addr, char *func_pointer_name)
+{
+	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
+	int i;
+
+	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
+		if(		strcmp((char *)entry[i].value_name, func_pointer_name) == 0 && 
+				entry[i].type == ENTRY_TYPE_FUNC_POINTER) {
+			return entry[i].value;
+		}
+	}	
+
+	return 0;
+}
+
 class_info_entry_t * object_get_subclass_info(void *class_info_addr)
 {
 	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
@@ -152,8 +167,8 @@ int object_cover_vitual_func_pointer(void *obj,
 }
 
 static int __object_set(void *obj,
-                             cjson_t *c,
-	                         int (*set)(void *obj, char *attrib, void *value)) 
+                        cjson_t *c,
+	                    int (*set)(void *obj, char *attrib, void *value)) 
 {
 	object_deamon_t *deamon;
 	void *class_info_addr;
@@ -204,6 +219,76 @@ int object_set(void *obj, char *type_name, char *set_str)
     return 0;
 }
 
+int __object_dump(void *obj, char *type_name, cjson_t *object) 
+{
+	object_deamon_t *deamon;
+	class_info_entry_t *entry;
+    void *(*get)(void *obj, char *attrib);
+    int len;
+    int i;
+    cjson_t *item;
+    void *value;
+    char *name;
+
+    printf("dump object %s start\n",type_name);
+	deamon = object_deamon_get_global_object_deamon();
+	entry  = (class_info_entry_t *)object_deamon_search_class(deamon,(char *)type_name);
+    get    = object_get_func_pointer(entry,(char *)"get");
+    if(get == NULL) {
+        dbg_str(DBG_WARNNING,"get func pointer is NULL");
+        return -1;
+    }
+
+	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
+		if(entry[i].type == ENTRY_TYPE_OBJ){
+            item = cjson_create_object();
+            cjson_add_item_to_object(object, entry[i].type_name, item);
+            __object_dump(obj, entry[i].type_name, item);
+		} else {
+            value = get(obj,entry[i].value_name);
+            if(value == NULL) continue;
+            name = entry[i].value_name;
+            if(entry[i].type == ENTRY_TYPE_INT8_T || entry[i].type == ENTRY_TYPE_UINT8_T){
+                cjson_add_number_to_object(object, name, *((char *)value));
+            } else if(entry[i].type == ENTRY_TYPE_INT16_T || entry[i].type == ENTRY_TYPE_UINT16_T) {
+                cjson_add_number_to_object(object, name, *((short *)value));
+            } else if(entry[i].type == ENTRY_TYPE_INT32_T || entry[i].type == ENTRY_TYPE_UINT32_T) {
+                cjson_add_number_to_object(object, name, *((int *)value));
+            } else if(entry[i].type == ENTRY_TYPE_INT64_T || entry[i].type == ENTRY_TYPE_UINT64_T) {
+            } else if(entry[i].type == ENTRY_TYPE_STRING) {
+                cjson_add_string_to_object(object, name, (char *)value);
+            } else if(entry[i].type == ENTRY_TYPE_NORMAL_POINTER ||
+                    entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
+                    entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER ||
+                    entry[i].type == ENTRY_TYPE_OBJ_POINTER) 
+            {
+            } else {
+                dbg_str(DBG_WARNNING,"type error,please check");
+            }
+        }
+	}	
+    printf("dump object %s end\n",type_name);
+}
+
+int object_dump(void *obj, char *type_name, char *buf, int max_len) 
+{
+    cjson_t *root;
+    cjson_t *item;
+    char *out;
+
+    root = cjson_create_object();
+    item = cjson_create_object();
+    cjson_add_item_to_object(root, type_name, item);
+
+    __object_dump(obj, type_name, item);
+
+    out = cjson_print(root);
+    strncpy(buf,out,max_len);
+    printf("%s\n", out);
+    cjson_delete(root);
+    free(out);
+}
+
 int __object_init(void *obj, char *cur_type_name, char *type_name) 
 {
 	object_deamon_t *deamon;
@@ -239,52 +324,4 @@ int object_init(void *obj, char *type_name)
 {
 	__object_init(obj, type_name, type_name);
 }
-
-int obj_construct(Obj *obj,char *init_str)
-{
-	dbg_str(DBG_SUC,"obj construct, obj addr:%p",obj);
-
-	return 0;
-}
-
-int obj_deconstrcut(Obj *obj)
-{
-	dbg_str(DBG_SUC,"obj deconstruct,obj addr:%p",obj);
-
-	return 0;
-}
-
-int obj_set(Obj *obj, char *attrib, void *value)
-{
-	if(strcmp(attrib, "set") == 0) {
-		obj->set = value;
-	} else if(strcmp(attrib, "construct") == 0) {
-		obj->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
-		obj->deconstruct = value;
-	} else {
-		dbg_str(DBG_WARNNING,"obj set, \"%s\" setting is not supported",attrib);
-	}
-
-	return 0;
-}
-
-static class_info_entry_t obj_class_info[] = {
-	[0] = {ENTRY_TYPE_NORMAL_POINTER,"allocator_t","allocator",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",obj_set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","construct",obj_construct,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",obj_deconstrcut,sizeof(void *)},
-	[4] = {ENTRY_TYPE_END},
-
-};
-REGISTER_CLASS("Obj",obj_class_info);
-
-void test_obj()
-{
-	Obj *obj;
-	allocator_t *allocator = allocator_get_default_alloc();
-
-    obj = OBJECT_NEW(allocator, Obj,"");
-}
-
 

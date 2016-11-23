@@ -2,7 +2,7 @@
 #define __OBJECT_H__
 
 #include <libobject/object_deamon.h>
-#include <libobject/object_struct.h>
+#include <libobject/obj.h>
 #include <libjson/cjson.h>
 
 void * object_get_set_func_pointer(void *class_info_addr);

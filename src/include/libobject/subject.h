@@ -11,6 +11,7 @@ struct subject_s{
 	int (*construct)(Subject *subject,char *init_str);
 	int (*deconstruct)(Subject *subject);
 	int (*set)(Subject *subject, char *attrib, void *value);
+    void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods*/
 	int (*move)(Subject *subject);
