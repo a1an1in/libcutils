@@ -119,12 +119,12 @@ void test_obj_enemy()
      */
 
     subject = OBJECT_NEW(allocator, Enemy,set_str);
-    /*
-     *subject->move(subject);
-     */
     dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
     dbg_str(DBG_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
 
+    /*
+     *subject->move(subject);
+     */
     free(set_str);
 
 }
