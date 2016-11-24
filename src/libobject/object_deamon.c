@@ -63,8 +63,8 @@ int object_deamon_init(object_deamon_t *object_deamon)
 }
 
 int object_deamon_register_class(object_deamon_t *object_deamon,
-							  char *class_name,
-							  void *class_info_addr)
+							     char *class_name,
+							     void *class_info_addr)
 {
 	uint8_t addr_buf[6];
 
