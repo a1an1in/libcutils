@@ -59,7 +59,7 @@ void *button_get(Button *obj, char *attrib)
 }
 
 static class_info_entry_t button_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
+	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",button_set,sizeof(void *)},
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",button_get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",button_construct,sizeof(void *)},
@@ -76,19 +76,26 @@ void test_ui_button()
     Subject *subject;
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
-    cjson_t *root, *e, *s;
+    cjson_t *root,*b, *c, *e, *s;
     char buf[2048];
 
     root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
-            cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                cjson_add_number_to_object(s, "x", 1);
-                cjson_add_number_to_object(s, "y", 25);
-                cjson_add_number_to_object(s, "width", 5);
-                cjson_add_number_to_object(s, "height", 125);
+        cjson_add_item_to_object(root, "Button", b = cjson_create_object());{
+            cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
+                cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
+                    cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
+                        cjson_add_number_to_object(s, "x", 1);
+                        cjson_add_number_to_object(s, "y", 25);
+                        cjson_add_number_to_object(s, "width", 5);
+                        cjson_add_number_to_object(s, "height", 125);
+                    }
+                    cjson_add_string_to_object(e, "name", "subject");
+                }
+                cjson_add_string_to_object(c, "name", "container");
             }
-            cjson_add_string_to_object(e, "name", "alan");
+            cjson_add_string_to_object(c, "name", "component");
         }
+        cjson_add_string_to_object(b, "name", "button");
     }
 
     set_str = cjson_print(root);

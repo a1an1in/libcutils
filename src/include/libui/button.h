@@ -3,12 +3,12 @@
 
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libui/container.h>
+#include <libui/component.h>
 
 typedef struct button_s Button;
 
 struct button_s{
-	Container container;
+	Component component;
 
 	int (*construct)(Button *button,char *init_str);
 	int (*deconstruct)(Button *button);
