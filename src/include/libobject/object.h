@@ -22,6 +22,7 @@ int object_set(void *obj, char *type_name, char *set_str);
 	} else { \
 		memset(obj,0, sizeof(type));\
 		((Obj *)obj)->allocator = allocator;\
+        dbg_str(DBG_DETAIL,"***********allocator addr:%p",allocator);\
 	}\
 	\
 	obj;\

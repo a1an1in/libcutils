@@ -33,6 +33,9 @@ int obj_set(Obj *obj, char *attrib, void *value)
 		obj->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		obj->deconstruct = value;
+    } else if(strcmp(attrib, "allocator") == 0) {
+        obj->allocator = value;
+        dbg_str(DBG_DETAIL,"****************allocator addr:%p",obj->allocator);
 	} else {
 		dbg_str(DBG_WARNNING,"obj set, \"%s\" setting is not supported",attrib);
 	}
@@ -43,10 +46,7 @@ int obj_set(Obj *obj, char *attrib, void *value)
 void *obj_get(Obj *obj, char *attrib)
 {
     if(strcmp(attrib, "allocator") == 0) {
-        return NULL;
-        /*
-         *return obj->allocator;
-         */
+        return obj->allocator;
     } else {
         dbg_str(DBG_WARNNING,"obj get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

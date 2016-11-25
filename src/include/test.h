@@ -42,5 +42,6 @@ extern int lab();
 extern void args_print_help_test_info(args_processor_t *p);
 void test_obj();
 int test_json(void);
-
+void test_ui_container();
+void test_ui_button();
 #endif

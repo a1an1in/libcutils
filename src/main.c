@@ -49,7 +49,7 @@
 #include <constructor_priority.h>
 #include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.3.3.0"
+#define LIBRARY_VERSION "libcutils version: 2.3.4.0"
 
 #ifndef MAKELIB
 
@@ -304,7 +304,19 @@ static int args_process_test_json(void *base,int argc,char **argv)
     test_json();
 	return 0;
 }
+static int args_process_test_ui_container(void *base,int argc,char **argv)
+{
+    test_ui_container();
+	return 0;
+}
+static int args_process_test_ui_button(void *base,int argc,char **argv)
+{
+    test_ui_button();
+	return 0;
+}
 static cmd_config_t cmds[]={
+	{"button", args_process_test_ui_button,0, "test", "N/A","test"},
+	{"container", args_process_test_ui_container,0, "test", "N/A","test"},
 	{"json", args_process_test_json,0, "test", "N/A","test"},
 	{"enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
 	{"subject", args_process_test_obj_subject,0, "test", "N/A","obj"},
