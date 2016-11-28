@@ -7,26 +7,26 @@
  */
 #include <libui/button.h>
 
-static int button_construct(Button *button,char *init_str)
+static int __construct(Button *button,char *init_str)
 {
 	dbg_str(DBG_SUC,"button construct, button addr:%p",button);
 
 	return 0;
 }
 
-static int button_deconstrcut(Button *button)
+static int __deconstrcut(Button *button)
 {
 	dbg_str(DBG_SUC,"button deconstruct,button addr:%p",button);
 
 	return 0;
 }
 
-static int button_move(Button *button)
+static int __move(Button *button)
 {
 	dbg_str(DBG_SUC,"button move");
 }
 
-static int button_set(Button *button, char *attrib, void *value)
+static int __set(Button *button, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		button->set = value;
@@ -47,7 +47,7 @@ static int button_set(Button *button, char *attrib, void *value)
 	return 0;
 }
 
-void *button_get(Button *obj, char *attrib)
+static void *__get(Button *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
@@ -60,11 +60,11 @@ void *button_get(Button *obj, char *attrib)
 
 static class_info_entry_t button_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",button_set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",button_get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",button_construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",button_deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",button_move,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
 	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
 	[7] = {ENTRY_TYPE_END},
 

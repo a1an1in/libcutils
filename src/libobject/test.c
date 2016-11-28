@@ -9,9 +9,9 @@
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
 
-typedef struct enemy_s Enemy;
+typedef struct __s Enemy;
 
-struct enemy_s{
+struct __s{
 	Subject subject;
 
 	int (*construct)(Enemy *enemy,char *init_str);
@@ -27,26 +27,26 @@ struct enemy_s{
 
 };
 
-static int enemy_construct(Enemy *enemy,char *init_str)
+static int __construct(Enemy *enemy,char *init_str)
 {
 	dbg_str(DBG_SUC,"enemy construct, enemy addr:%p",enemy);
 
 	return 0;
 }
 
-static int enemy_deconstrcut(Enemy *enemy)
+static int __deconstrcut(Enemy *enemy)
 {
 	dbg_str(DBG_SUC,"enemy deconstruct,enemy addr:%p",enemy);
 
 	return 0;
 }
 
-static int enemy_move(Enemy *enemy)
+static int __move(Enemy *enemy)
 {
 	dbg_str(DBG_SUC,"enemy move");
 }
 
-static int enemy_set(Enemy *enemy, char *attrib, void *value)
+static int __set(Enemy *enemy, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		enemy->set = value;
@@ -67,7 +67,7 @@ static int enemy_set(Enemy *enemy, char *attrib, void *value)
 	return 0;
 }
 
-void *enemy_get(Enemy *obj, char *attrib)
+static void *__get(Enemy *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
@@ -80,11 +80,11 @@ void *enemy_get(Enemy *obj, char *attrib)
 
 static class_info_entry_t enemy_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",enemy_set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",enemy_get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",enemy_construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",enemy_deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",enemy_move,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
 	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
 	[7] = {ENTRY_TYPE_END},
 

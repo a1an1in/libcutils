@@ -1,7 +1,7 @@
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
 
-#include <libobject/object_deamon.h>
+#include <libobject/class_info.h>
 #include <libobject/obj.h>
 #include <libjson/cjson.h>
 

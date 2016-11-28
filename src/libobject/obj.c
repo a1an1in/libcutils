@@ -9,21 +9,21 @@
 #include <libdbg/debug.h>
 #include <libobject/object.h>
 
-int obj_construct(Obj *obj,char *init_str)
+static int __construct(Obj *obj,char *init_str)
 {
 	dbg_str(DBG_SUC,"obj construct, obj addr:%p",obj);
 
 	return 0;
 }
 
-int obj_deconstrcut(Obj *obj)
+static int __deconstrcut(Obj *obj)
 {
 	dbg_str(DBG_SUC,"obj deconstruct,obj addr:%p",obj);
 
 	return 0;
 }
 
-int obj_set(Obj *obj, char *attrib, void *value)
+static int __set(Obj *obj, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		obj->set = value;
@@ -43,7 +43,7 @@ int obj_set(Obj *obj, char *attrib, void *value)
 	return 0;
 }
 
-void *obj_get(Obj *obj, char *attrib)
+static void *__get(Obj *obj, char *attrib)
 {
     if(strcmp(attrib, "allocator") == 0) {
         return obj->allocator;
@@ -56,10 +56,10 @@ void *obj_get(Obj *obj, char *attrib)
 
 static class_info_entry_t obj_class_info[] = {
 	[0] = {ENTRY_TYPE_NORMAL_POINTER,"allocator_t","allocator",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",obj_set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",obj_get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",obj_construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",obj_deconstrcut,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Obj",obj_class_info);

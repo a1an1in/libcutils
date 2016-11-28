@@ -314,13 +314,25 @@ static int args_process_test_ui_button(void *base,int argc,char **argv)
     test_ui_button();
 	return 0;
 }
+static int args_process_test_string(void *base,int argc,char **argv)
+{
+    test_obj_string();
+	return 0;
+}
+static int args_process_test_Map(void *base,int argc,char **argv)
+{
+    test_obj_map();
+	return 0;
+}
 static cmd_config_t cmds[]={
-	{"button", args_process_test_ui_button,0, "test", "N/A","test"},
-	{"container", args_process_test_ui_container,0, "test", "N/A","test"},
+	{"Map", args_process_test_Map,0, "test", "N/A","test"},
+	{"String", args_process_test_string,0, "test", "N/A","test"},
+	{"Button", args_process_test_ui_button,0, "test", "N/A","test"},
+	{"Container", args_process_test_ui_container,0, "test", "N/A","test"},
 	{"json", args_process_test_json,0, "test", "N/A","test"},
-	{"enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
-	{"subject", args_process_test_obj_subject,0, "test", "N/A","obj"},
-	{"obj", args_process_test_obj,0, "test", "N/A","obj"},
+	{"Enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
+	{"Subject", args_process_test_obj_subject,0, "test", "N/A","obj"},
+	{"Obj", args_process_test_obj,0, "test", "N/A","obj"},
 	{"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
 	{"as", args_process_test_as,0, "test", "N/A","array_stack"},
 	{"buss", args_process_buss,0, "test", "N/A","bus"},

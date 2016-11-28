@@ -7,26 +7,26 @@
  */
 #include <libui/container.h>
 
-static int container_construct(Container *container,char *init_str)
+static int __construct(Container *container,char *init_str)
 {
 	dbg_str(DBG_SUC,"container construct, container addr:%p",container);
 
 	return 0;
 }
 
-static int container_deconstrcut(Container *container)
+static int __deconstrcut(Container *container)
 {
 	dbg_str(DBG_SUC,"container deconstruct,container addr:%p",container);
 
 	return 0;
 }
 
-static int container_move(Container *container)
+static int __move(Container *container)
 {
 	dbg_str(DBG_SUC,"container move");
 }
 
-static int container_set(Container *container, char *attrib, void *value)
+static int __set(Container *container, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		container->set = value;
@@ -47,7 +47,7 @@ static int container_set(Container *container, char *attrib, void *value)
 	return 0;
 }
 
-void *container_get(Container *obj, char *attrib)
+static void *__get(Container *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
@@ -60,11 +60,11 @@ void *container_get(Container *obj, char *attrib)
 
 static class_info_entry_t container_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",container_set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",container_get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",container_construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",container_deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",container_move,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
 	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
 	[7] = {ENTRY_TYPE_END},
 

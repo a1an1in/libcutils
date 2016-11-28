@@ -3,6 +3,7 @@
 
 #include <libdata_structure/map.h>
 #include <constructor_priority.h>
+#include <libobject/class_info.h>
 
 #define REGISTER_CLASS(class_name, class_info) \
     __attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_CLASS))) static void\
@@ -23,35 +24,6 @@ typedef struct object_deamon_s{
 	uint8_t map_key_len;
 	uint8_t map_value_size;
 }object_deamon_t;
-
-enum class_info_type_e{
-	UNDEFINED = 0, 
-	ENTRY_TYPE_INT8_T,
-	ENTRY_TYPE_UINT8_T,
-	ENTRY_TYPE_INT16_T,
-	ENTRY_TYPE_UINT16_T,
-	ENTRY_TYPE_INT32_T,
-	ENTRY_TYPE_UINT32_T,
-	ENTRY_TYPE_INT64_T,
-	ENTRY_TYPE_UINT64_T,
-	ENTRY_TYPE_FLOAT_T,
-	ENTRY_TYPE_STRING,
-	ENTRY_TYPE_OBJ,
-	ENTRY_TYPE_NORMAL_POINTER,
-	ENTRY_TYPE_FUNC_POINTER,
-	ENTRY_TYPE_VIRTUAL_FUNC_POINTER,
-	ENTRY_TYPE_OBJ_POINTER,
-	ENTRY_TYPE_END,
-	ENTRY_TYPE_MAX_TYPE,
-};
-
-typedef struct class_info_entry_s{
-	uint8_t type;
-	char *type_name;
-	char *value_name;
-	void *value;
-	int value_len;
-}class_info_entry_t;
 
 extern object_deamon_t *global_object_deamon;
 

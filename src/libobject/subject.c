@@ -9,46 +9,46 @@
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
 
-static int subject_construct(Subject *subject,char *init_str)
+static int __construct(Subject *subject,char *init_str)
 {
 	dbg_str(DBG_SUC,"subject construct, subject addr:%p",subject);
 
 	return 0;
 }
 
-static int subject_deconstrcut(Subject *subject)
+static int __deconstrcut(Subject *subject)
 {
 	dbg_str(DBG_SUC,"subject deconstruct,subject addr:%p",subject);
 
 	return 0;
 }
 
-static int subject_move(Subject *subject)
+static int __move(Subject *subject)
 {
 	dbg_str(DBG_DETAIL,"subject move");
 }
 
-static int subject_show(Subject *subject)
+static int __show(Subject *subject)
 {
 	dbg_str(DBG_DETAIL,"subject show");
 }
 
-static int subject_add_x_speed(Subject *subject, float v) 
+static int __add_x_speed(Subject *subject, float v) 
 {
-	dbg_str(DBG_DETAIL,"subject_add_x_speed");
+	dbg_str(DBG_DETAIL,"__add_x_speed");
 }
 
-static int subject_add_y_speed(Subject *subject, float v) 
+static int __add_y_speed(Subject *subject, float v) 
 {
-	dbg_str(DBG_DETAIL,"subject_add_x_speed");
+	dbg_str(DBG_DETAIL,"__add_x_speed");
 }
 
-static int subject_is_touching(Subject *me,Subject *subject)
+static int __is_touching(Subject *me,Subject *subject)
 {
-	dbg_str(DBG_DETAIL,"subject_is_touching");
+	dbg_str(DBG_DETAIL,"__is_touching");
 }
 
-static int subject_set(Subject *subject, char *attrib, void *value)
+static int __set(Subject *subject, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		subject->set = value;
@@ -83,7 +83,7 @@ static int subject_set(Subject *subject, char *attrib, void *value)
 	return 0;
 }
 
-void * subject_get(Subject *obj, char *attrib)
+static void * __get(Subject *obj, char *attrib)
 {
     if(strcmp(attrib, "x") == 0) 
         return &obj->x;
@@ -106,15 +106,15 @@ void * subject_get(Subject *obj, char *attrib)
 
 static class_info_entry_t subject_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",subject_set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",subject_get,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",subject_construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",subject_deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",subject_move,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","show",subject_show,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_x_speed",subject_add_x_speed,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_y_speed",subject_add_y_speed,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","is_touching",subject_is_touching,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",__move,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","show",__show,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_x_speed",__add_x_speed,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","add_y_speed",__add_y_speed,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","is_touching",__is_touching,sizeof(void *)},
 	[10] = {ENTRY_TYPE_INT32_T,"int","x",NULL,sizeof(int)},
 	[11] = {ENTRY_TYPE_INT32_T,"int","y",NULL,sizeof(int)},
 	[12] = {ENTRY_TYPE_INT32_T,"int","width",NULL,sizeof(int)},

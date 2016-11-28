@@ -1,7 +1,7 @@
 #ifndef __SUBJECT_H__
 #define __SUBJECT_H__
 
-#include <libobject/object.h>
+#include <libobject/obj.h>
 
 typedef struct subject_s Subject;
 struct subject_s{
