@@ -71,13 +71,10 @@ static class_info_entry_t button_class_info[] = {
 };
 REGISTER_CLASS("Button",button_class_info);
 
-void test_ui_button()
+char *gen_button_setting_str()
 {
-    Subject *subject;
-	allocator_t *allocator = allocator_get_default_alloc();
-    char *set_str;
     cjson_t *root,*b, *c, *e, *s;
-    char buf[2048];
+    char *set_str;
 
     root = cjson_create_object();{
         cjson_add_item_to_object(root, "Button", b = cjson_create_object());{
@@ -97,8 +94,19 @@ void test_ui_button()
         }
         cjson_add_string_to_object(b, "name", "button");
     }
-
     set_str = cjson_print(root);
+
+    return set_str;
+}
+
+void test_ui_button()
+{
+    Subject *subject;
+	allocator_t *allocator = allocator_get_default_alloc();
+    char *set_str;
+    char buf[2048];
+
+    set_str = gen_button_setting_str();
 
     subject = OBJECT_NEW(allocator, Button,set_str);
 
