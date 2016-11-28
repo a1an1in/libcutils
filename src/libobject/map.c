@@ -9,21 +9,21 @@
 #include <libdbg/debug.h>
 #include <libobject/map.h>
 
-static int __map_construct(Map *map,char *init_str)
+static int __construct(Map *map,char *init_str)
 {
 	dbg_str(DBG_SUC,"map construct, map addr:%p",map);
 
 	return 0;
 }
 
-static int __map_deconstrcut(Map *map)
+static int __deconstrcut(Map *map)
 {
 	dbg_str(DBG_SUC,"map deconstruct,map addr:%p",map);
 
 	return 0;
 }
 
-static int __map_set(Map *map, char *attrib, void *value)
+static int __set(Map *map, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		map->set = value;
@@ -42,7 +42,7 @@ static int __map_set(Map *map, char *attrib, void *value)
 	return 0;
 }
 
-void *__map_get(Map *obj, char *attrib)
+static void *__get(Map *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
@@ -55,10 +55,10 @@ void *__map_get(Map *obj, char *attrib)
 
 static class_info_entry_t map_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__map_set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__map_get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__map_construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__map_deconstrcut,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_END},
 
 };

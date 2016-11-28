@@ -9,9 +9,9 @@
 #include <libdbg/debug.h>
 #include <libobject/subject.h>
 
-typedef struct __s Enemy;
+typedef struct enemy_s Enemy;
 
-struct __s{
+struct enemy_s{
 	Subject subject;
 
 	int (*construct)(Enemy *enemy,char *init_str);
