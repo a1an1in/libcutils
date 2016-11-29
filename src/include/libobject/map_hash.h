@@ -1,15 +1,16 @@
-#ifndef __STRING_H__
-#define __STRING_H__
+#ifndef __HASH_MAP_H__
+#define __HASH_MAP_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libobject/obj.h>
-#include <libobject/iterator.h>
+#include <libobject/map.h>
+#include <libdata_structure/hash_list.h>
+#include <libobject/iterator_hmap.h>
 
-typedef struct _map_s Map;
+typedef struct Hash_Map_s Hash_Map;
 
-struct _map_s{
-	Obj obj;
+struct Hash_Map_s{
+	Map map;
 
 	int (*construct)(Map *map,char *init_str);
 	int (*deconstruct)(Map *map);
@@ -29,7 +30,7 @@ struct _map_s{
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
-
+    hash_map_t *hmap;
 };
 
 #endif

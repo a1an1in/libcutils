@@ -1,14 +1,15 @@
-#ifndef __ITERATOR_H__
-#define __ITERATOR_H__
+#ifndef __ITERATOR_HMAP_H__
+#define __ITERATOR_HMAP_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libobject/obj.h>
+#include <libobject/iterator.h>
+#include <libdata_structure/hash_list.h>
 
-typedef struct iterator_s Iterator;
+typedef struct hmap_iterator_s Hmap_Iterator;
 
-struct iterator_s{
-	Obj obj;
+struct hmap_iterator_s{
+	Iterator iter;
 
 	int (*construct)(Iterator *iter,char *init_str);
 	int (*deconstruct)(Iterator *iter);
@@ -25,6 +26,7 @@ struct iterator_s{
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
+    hash_map_pos_t hash_map_pos;
 
 };
 

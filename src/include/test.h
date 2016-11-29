@@ -45,4 +45,5 @@ int test_json(void);
 void test_ui_container();
 void test_ui_button();
 void test_obj_iter();
+void test_obj_hiter();
 #endif

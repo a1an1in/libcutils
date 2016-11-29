@@ -329,8 +329,20 @@ static int args_process_test_Iterator(void *base,int argc,char **argv)
     test_obj_iter();
 	return 0;
 }
+static int args_process_test_Hmap_Iterator(void *base,int argc,char **argv)
+{
+    test_obj_hiter();
+	return 0;
+}
+static int args_process_test_Hmap(void *base,int argc,char **argv)
+{
+    test_obj_hash_map();
+	return 0;
+}
 
 static cmd_config_t cmds[]={
+	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},
+	{"HIter", args_process_test_Hmap_Iterator,0, "test", "N/A","test"},
 	{"Iter", args_process_test_Iterator,0, "test", "N/A","test"},
 	{"Map", args_process_test_Map,0, "test", "N/A","test"},
 	{"String", args_process_test_string,0, "test", "N/A","test"},
