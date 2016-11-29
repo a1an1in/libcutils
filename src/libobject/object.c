@@ -55,9 +55,11 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
         if(     entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
                 entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER)
         {
-            dbg_str(DBG_DETAIL,"value_name %s, value %p",
-                    entry[i].value_name,
-                    entry[i].value);
+            /*
+             *dbg_str(DBG_DETAIL,"value_name %s, value %p",
+             *        entry[i].value_name,
+             *        entry[i].value);
+             */
 
             set(obj, (char *)entry[i].value_name, entry[i].value);
         }
@@ -214,6 +216,9 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
             item = cjson_create_object();
             cjson_add_item_to_object(object, entry[i].type_name, item);
             __object_dump(obj, entry[i].type_name, item);
+        } else if(entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
+                  entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER) 
+        {
 		} else {
             value = get(obj,entry[i].value_name);
             if(value == NULL) continue;
@@ -281,7 +286,9 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 
 	dbg_str(DBG_DETAIL,"obj_class addr:%p",class_info_addr);
  	if(subclass_info_addr != NULL) {
-		dbg_str(DBG_DETAIL,"init subclass");
+        /*
+		 *dbg_str(DBG_DETAIL,"init subclass");
+         */
 		__object_init(obj, subclass_info_addr->type_name, type_name);
  	} else {
 		dbg_str(DBG_DETAIL,"obj has not subclass");

@@ -11,17 +11,21 @@
 
 static int __construct(Map *map,char *init_str)
 {
-	dbg_str(DBG_SUC,"hash map construct, map addr:%p",map);
-    uint32_t key_size = 10;
-    uint32_t value_size = 50;
-    uint16_t bucket_size = 10;
     Hash_Map *h = (Hash_Map *)map;
 
+	dbg_str(DBG_SUC,"hash map construct, key_size=%d,value_size=%d,bucket_size=%d",
+            h->key_size,h->value_size,h->bucket_size);
+
+    if(h->key_size == 0)    { h->key_size = 10;    }
+    if(h->value_size == 0)  { h->value_size = 100; }
+    if(h->bucket_size == 0) { h->bucket_size = 20; }
+
     h->hmap = hash_map_alloc(map->obj.allocator);
+
 	hash_map_init(h->hmap,
-			      key_size,//uint32_t key_size,
-			      value_size,
-			      bucket_size);
+			      h->key_size,//uint32_t key_size,
+			      h->value_size,
+			      h->bucket_size);
 
 	return 0;
 }
@@ -29,12 +33,15 @@ static int __construct(Map *map,char *init_str)
 static int __deconstrcut(Map *map)
 {
 	dbg_str(DBG_SUC,"hash map deconstruct,map addr:%p",map);
+    allocator_mem_free(map->obj.allocator,map);
 
 	return 0;
 }
 
-static int __set(Map *map, char *attrib, void *value)
+static int __set(Map *m, char *attrib, void *value)
 {
+    Hash_Map *map = (Hash_Map *)m;
+
 	if(strcmp(attrib, "set") == 0) {
 		map->set = value;
     } else if(strcmp(attrib, "get") == 0) {
@@ -61,8 +68,14 @@ static int __set(Map *map, char *attrib, void *value)
 		map->end = value;
 	} else if(strcmp(attrib, "destroy") == 0) {
 		map->destroy = value;
+	} else if(strcmp(attrib, "key_size") == 0) {
+        map->key_size = *((uint16_t *)value);
+	} else if(strcmp(attrib, "value_size") == 0) {
+        map->value_size = *((uint16_t *)value);
+	} else if(strcmp(attrib, "bucket_size") == 0) {
+        map->bucket_size = *((uint16_t *)value);
 	} else {
-		dbg_str(DBG_DETAIL,"map set, not support %s setting",attrib);
+		dbg_str(DBG_WARNNING,"map set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -106,21 +119,20 @@ static int __del(Map *map,Iterator *iter)
                             &((Hmap_Iterator *)iter)->hash_map_pos);
 }
 
-static void __for_each(Map *map,void (*func)(Iterator *iter))
+static void __for_each(Map *map,void (*func)(Map *map, char *key, void *value))
 {
-/*
- *    hash_map_pos_t pos,next;
- *    struct hash_map_node *mnode;
- *
- *    dbg_str(DBG_SUC,"Hash Map for_each");
- *
- *    for(	hash_map_begin(hmap,&pos),hash_map_pos_next(&pos,&next); 
- *            !hash_map_pos_equal(&pos,&hmap->end);
- *            pos = next,hash_map_pos_next(&pos,&next)){
- *        mnode = container_of(pos.hlist_node_p,struct hash_map_node,hlist_node);
- *        func(mnode);
- *    }
- */
+    Hash_Map *h = (Hash_Map *)map;
+    hash_map_pos_t pos,next;
+    struct hash_map_node *mnode;
+
+    dbg_str(DBG_SUC,"Hash Map for_each");
+
+    for(	hash_map_begin(h->hmap,&pos),hash_map_pos_next(&pos,&next); 
+            !hash_map_pos_equal(&pos,&(h->hmap->end));
+            pos = next,hash_map_pos_next(&pos,&next)){
+        mnode = container_of(pos.hlist_node_p,struct hash_map_node,hlist_node);
+        func(map,mnode->key, mnode->key + h->hmap->key_size);
+    }
 }
 
 static int __begin(Map *map,Iterator *begin)
@@ -139,8 +151,12 @@ static int __end(Map *map,Iterator *end)
 
 static int __destroy(Map *map)
 {
+    int ret = 0;
 	dbg_str(DBG_SUC,"Hash Map destroy");
-    return hash_map_destroy(((Hash_Map *)map)->hmap);
+    ret = hash_map_destroy(((Hash_Map *)map)->hmap);
+    ret = ((Hash_Map *)map)->deconstruct(map);
+
+    return ret;
 }
 
 static class_info_entry_t hash_map_class_info[] = {
@@ -157,12 +173,17 @@ static class_info_entry_t hash_map_class_info[] = {
 	[10] = {ENTRY_TYPE_FUNC_POINTER,"","begin",__begin,sizeof(void *)},
 	[11] = {ENTRY_TYPE_FUNC_POINTER,"","end",__end,sizeof(void *)},
 	[12] = {ENTRY_TYPE_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[13] = {ENTRY_TYPE_END},
-
+	[13] = {ENTRY_TYPE_UINT16_T,"","key_size",NULL,sizeof(short)},
+	[14] = {ENTRY_TYPE_UINT16_T,"","value_size",NULL,sizeof(short)},
+	[15] = {ENTRY_TYPE_UINT16_T,"","bucket_size",NULL,sizeof(short)},
+	[16] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Hash_Map",hash_map_class_info);
 
-
+void test_print_map(Map *map, char *key, void *value)
+{
+    dbg_str(DBG_DETAIL,"key:%s value:%s",key,value);
+}
 void test_obj_hash_map()
 {
     Map *map;
@@ -173,8 +194,10 @@ void test_obj_hash_map()
     char buf[2048];
 
     root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Map", e = cjson_create_object());{
-            cjson_add_string_to_object(e, "name", "alan");
+        cjson_add_item_to_object(root, "Hash_Map", e = cjson_create_object());{
+            cjson_add_number_to_object(e, "key_size", 10);
+            cjson_add_number_to_object(e, "value_size", 25);
+            cjson_add_number_to_object(e, "bucket_size", 15);
         }
     }
 
@@ -189,9 +212,19 @@ void test_obj_hash_map()
     free(set_str);
 
     map->insert(map,"abc","hello world");
-    map->search(map,"abc",iter);
-    dbg_str(DBG_DETAIL,"searc data:%s",iter->get_dpointer(iter));
+    map->insert(map,"test","sdfsafsdaf");
+    /*
+     *map->search(map,"abc",iter);
+     *dbg_str(DBG_DETAIL,"searc data:%s",iter->get_dpointer(iter));
+     *map->del(map,iter);
+     */
+    map->for_each(map,test_print_map);
+    map->destroy(map);
 
+    /*
+     *((Hash_Map *)map)->for_each(map,test_print_map);
+     *((Hash_Map *)map)->destroy(map);
+     */
 }
 
 

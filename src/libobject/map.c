@@ -89,7 +89,7 @@ static int __del(Map *map,Iterator *iter)
 	dbg_str(DBG_SUC,"Map del");
 }
 
-static void __for_each(Map *map,void (*func)(Iterator *iter))
+static void __for_each(Map *map,void (*func)(Map *map, char *key, void *value))
 {
 	dbg_str(DBG_SUC,"Mapfor_each");
 
