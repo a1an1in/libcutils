@@ -324,7 +324,14 @@ static int args_process_test_Map(void *base,int argc,char **argv)
     test_obj_map();
 	return 0;
 }
+static int args_process_test_Iterator(void *base,int argc,char **argv)
+{
+    test_obj_iter();
+	return 0;
+}
+
 static cmd_config_t cmds[]={
+	{"Iter", args_process_test_Iterator,0, "test", "N/A","test"},
 	{"Map", args_process_test_Map,0, "test", "N/A","test"},
 	{"String", args_process_test_string,0, "test", "N/A","test"},
 	{"Button", args_process_test_ui_button,0, "test", "N/A","test"},
