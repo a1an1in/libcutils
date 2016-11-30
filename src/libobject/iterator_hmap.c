@@ -12,7 +12,7 @@
 static int __construct(Iterator *iter,char *init_str)
 {
     Hmap_Iterator *hiter;
-	dbg_str(DBG_SUC,"Hmap_Iterator construct, iter addr:%p",iter);
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator construct, iter addr:%p",iter);
 
 	return 0;
 }
@@ -20,7 +20,7 @@ static int __construct(Iterator *iter,char *init_str)
 static int __deconstrcut(Iterator *iter)
 {
     Hmap_Iterator *hiter;
-	dbg_str(DBG_SUC,"Hmap_Iterator deconstruct,iter addr:%p",iter);
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator deconstruct,iter addr:%p",iter);
 
 	return 0;
 }
@@ -47,7 +47,7 @@ static int __set(Iterator *iter, char *attrib, void *value)
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(hiter->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"hiter set, not support %s setting",attrib);
+		dbg_str(OBJ_DETAIL,"hiter set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -60,7 +60,7 @@ static void *__get(Iterator *iter, char *attrib)
     if(strcmp(attrib, "name") == 0) {
         return hiter->name;
     } else {
-        dbg_str(DBG_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -69,7 +69,7 @@ static void *__get(Iterator *iter, char *attrib)
 static Iterator *__next(Iterator *it)
 {
     Iterator *next = it;
-	dbg_str(DBG_SUC,"Hmap_Iterator next");
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator next");
 
     hash_map_pos_next(&((Hmap_Iterator *)it)->hash_map_pos,
                       &((Hmap_Iterator *)next)->hash_map_pos);
@@ -78,15 +78,15 @@ static Iterator *__next(Iterator *it)
 
 }
 
-static int __prev(Iterator *it, Iterator *prev)
+static Iterator *__prev(Iterator *it)
 {
     Hmap_Iterator *hiter = (Hmap_Iterator *)it;
-	dbg_str(DBG_SUC,"Hmap_Iterator prev,this func is not implemented");
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator prev,this func is not implemented");
 }
 
 static int __equal(Iterator *it1,Iterator *it2)
 {
-	dbg_str(DBG_SUC,"Hmap_Iterator equal");
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator equal");
 
     return hash_map_pos_equal(&((Hmap_Iterator *)it1)->hash_map_pos,
                               &((Hmap_Iterator *)it2)->hash_map_pos);
@@ -94,7 +94,7 @@ static int __equal(Iterator *it1,Iterator *it2)
 
 static void *__get_dpointer(Iterator *it)
 {
-	dbg_str(DBG_SUC,"Hmap_Iterator get_dpointer");
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator get_dpointer");
     return hash_map_pos_get_pointer(&((Hmap_Iterator *)it)->hash_map_pos);
 }
 

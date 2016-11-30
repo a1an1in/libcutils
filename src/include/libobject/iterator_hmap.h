@@ -18,7 +18,7 @@ struct hmap_iterator_s{
 
     /*virtual funcs*/
     Iterator *(*next)(Iterator *it);
-    int (*prev)(Iterator *it, Iterator *prev);
+    Iterator *(*prev)(Iterator *it);
     int (*equal)(Iterator *it1,Iterator *it2);
     void *(*get_dpointer)(Iterator *it);
 

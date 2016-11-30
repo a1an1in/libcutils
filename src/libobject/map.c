@@ -11,14 +11,14 @@
 
 static int __construct(Map *map,char *init_str)
 {
-	dbg_str(DBG_SUC,"map construct, map addr:%p",map);
+	dbg_str(OBJ_DETAIL,"map construct, map addr:%p",map);
 
 	return 0;
 }
 
 static int __deconstrcut(Map *map)
 {
-	dbg_str(DBG_SUC,"map deconstruct,map addr:%p",map);
+	dbg_str(OBJ_DETAIL,"map deconstruct,map addr:%p",map);
 
 	return 0;
 }
@@ -52,7 +52,7 @@ static int __set(Map *map, char *attrib, void *value)
 	} else if(strcmp(attrib, "destroy") == 0) {
 		map->destroy = value;
 	} else {
-		dbg_str(DBG_DETAIL,"map set, not support %s setting",attrib);
+		dbg_str(OBJ_DETAIL,"map set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -63,7 +63,7 @@ static void *__get(Map *obj, char *attrib)
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"map get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"map get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -71,29 +71,29 @@ static void *__get(Map *obj, char *attrib)
 
 static int __insert(Map *map,void *key,void *value)
 {
-	dbg_str(DBG_SUC,"Map insert");
+	dbg_str(OBJ_DETAIL,"Map insert");
 }
 
 static int __insert_wb(Map *map,void *key,void *value,Iterator *iter)
 {
-	dbg_str(DBG_SUC,"Map insert wb");
+	dbg_str(OBJ_DETAIL,"Map insert wb");
 }
 
 static int __search(Map *map,void *key,Iterator *iter)
 {
-	dbg_str(DBG_SUC,"Map search");
+	dbg_str(OBJ_DETAIL,"Map search");
 }
 
 static int __del(Map *map,Iterator *iter)
 {
-	dbg_str(DBG_SUC,"Map del");
+	dbg_str(OBJ_DETAIL,"Map del");
 }
 
 static void __for_each(Map *map,void (*func)(Iterator *iter))
 {
     Iterator *cur, *end;
 
-	dbg_str(DBG_SUC,"Map for_each");
+	dbg_str(OBJ_DETAIL,"Map for_each");
     cur = map->begin(map);
     end = map->end(map);
 
@@ -108,17 +108,17 @@ static void __for_each(Map *map,void (*func)(Iterator *iter))
 
 static Iterator *__begin(Map *map)
 {
-	dbg_str(DBG_SUC,"Map begin");
+	dbg_str(OBJ_DETAIL,"Map begin");
 }
 
 static Iterator *__end(Map *map)
 {
-	dbg_str(DBG_SUC,"Map end");
+	dbg_str(OBJ_DETAIL,"Map end");
 }
 
 static int __destroy(Map *map)
 {
-	dbg_str(DBG_SUC,"Map destroy");
+	dbg_str(OBJ_DETAIL,"Map destroy");
 }
 
 static class_info_entry_t map_class_info[] = {
@@ -160,7 +160,7 @@ void test_obj_map()
 
 
     object_dump(map, "Map", buf, 2048);
-    dbg_str(DBG_DETAIL,"Map dump: %s",buf);
+    dbg_str(OBJ_DETAIL,"Map dump: %s",buf);
 
     free(set_str);
 

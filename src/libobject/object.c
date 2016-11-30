@@ -47,7 +47,7 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
 
  	set = object_get_func_pointer(class_info_addr,"set");
 	if(set == NULL) {
-		dbg_str(DBG_WARNNING,"obj_init_func_pointer,set func is NULL");
+		dbg_str(OBJ_WARNNING,"obj_init_func_pointer,set func is NULL");
 		return -1;
 	}
 
@@ -56,7 +56,7 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
                 entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER)
         {
             /*
-             *dbg_str(DBG_DETAIL,"value_name %s, value %p",
+             *dbg_str(OBJ_DETAIL,"value_name %s, value %p",
              *        entry[i].value_name,
              *        entry[i].value);
              */
@@ -80,7 +80,7 @@ object_find_reimplement_func_pointer(char *method_name,
 
 	if(strcmp(start_type_name,end_type_name) == 0) return NULL;
 	if(start_type_name == NULL) {
-		dbg_str(DBG_WARNNING,"object_find_reimplement_func_pointer, start addr is NULL");
+		dbg_str(OBJ_WARNNING,"object_find_reimplement_func_pointer, start addr is NULL");
 		return NULL;
 	}
 
@@ -122,7 +122,7 @@ int object_cover_vitual_func_pointer(void *obj,
 
  	set    = object_get_func_pointer(entry,"set");
 	if(set == NULL) {
-		dbg_str(DBG_WARNNING,"obj_init_func_pointer,set func is NULL");
+		dbg_str(OBJ_WARNNING,"obj_init_func_pointer,set func is NULL");
 		return -1;
 	}
 
@@ -153,7 +153,7 @@ static int __object_set(void *obj,
         if(c->type & CJSON_OBJECT) {
             object = c;
             if(object->string) {
-                dbg_str(DBG_DETAIL,"object name:%s",object->string);
+                dbg_str(OBJ_DETAIL,"object name:%s",object->string);
                 deamon          = object_deamon_get_global_object_deamon();
                 class_info_addr = object_deamon_search_class(deamon,object->string);
                 sub_set         = object_get_func_pointer(class_info_addr,"set");
@@ -165,7 +165,7 @@ static int __object_set(void *obj,
         } else {
             if(set) {
                 /*
-                 *dbg_str(DBG_DETAIL,"object name %s,set %s",object->string, c->string);
+                 *dbg_str(OBJ_DETAIL,"object name %s,set %s",object->string, c->string);
                  */
                 if(c->type & CJSON_NUMBER) {
                     set(obj,c->string,&(c->valueint));
@@ -183,7 +183,7 @@ int object_set(void *obj, char *type_name, char *set_str)
 {
     cjson_t *root;
 
-    dbg_str(DBG_DETAIL,"%s",set_str);
+    dbg_str(OBJ_DETAIL,"%s",set_str);
 
     root = cjson_parse(set_str);
     __object_set(obj, root,NULL);
@@ -203,12 +203,11 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
     void *value;
     char *name;
 
-    printf("dump object %s start\n",type_name);
 	deamon = object_deamon_get_global_object_deamon();
 	entry  = (class_info_entry_t *)object_deamon_search_class(deamon,(char *)type_name);
     get    = object_get_func_pointer(entry,(char *)"get");
     if(get == NULL) {
-        dbg_str(DBG_WARNNING,"get func pointer is NULL");
+        dbg_str(OBJ_WARNNING,"get func pointer is NULL");
         return -1;
     }
 
@@ -241,11 +240,10 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
                 unsigned long long d = (unsigned long long) value;
                 cjson_add_number_to_object(object, name,d);
             } else {
-                dbg_str(DBG_WARNNING,"type error,please check");
+                dbg_str(OBJ_WARNNING,"type error,please check");
             }
         }
 	}	
-    printf("dump object %s end\n",type_name);
 }
 
 int object_dump(void *obj, char *type_name, char *buf, int max_len) 
@@ -278,27 +276,27 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
  	class_info_entry_t * subclass_info_addr;
 	int (*construct)(void *obj,char *init_str);
 
-	dbg_str(DBG_DETAIL,"current obj type name =%s",cur_type_name);
+	dbg_str(OBJ_DETAIL,"current obj type name =%s",cur_type_name);
 
 	deamon             = object_deamon_get_global_object_deamon();
 	class_info_addr    = object_deamon_search_class(deamon,(char *)cur_type_name);
 	construct          = object_get_func_pointer(class_info_addr,"construct");
  	subclass_info_addr = object_get_subclass_info(class_info_addr);
 
-	dbg_str(DBG_DETAIL,"obj_class addr:%p",class_info_addr);
+	dbg_str(OBJ_DETAIL,"obj_class addr:%p",class_info_addr);
  	if(subclass_info_addr != NULL) {
         /*
-		 *dbg_str(DBG_DETAIL,"init subclass");
+		 *dbg_str(OBJ_DETAIL,"init subclass");
          */
 		__object_init(obj, subclass_info_addr->type_name, type_name);
  	} else {
-		dbg_str(DBG_DETAIL,"obj has not subclass");
+		dbg_str(OBJ_DETAIL,"obj has not subclass");
 	}
 
 	object_init_func_pointer(obj,class_info_addr);
 	object_cover_vitual_func_pointer(obj, cur_type_name, type_name);
 
-	dbg_str(DBG_DETAIL,"obj addr:%p",obj);
+	dbg_str(OBJ_DETAIL,"obj addr:%p",obj);
 	construct(obj,NULL);
 
 	return 0;

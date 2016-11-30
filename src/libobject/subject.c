@@ -11,41 +11,41 @@
 
 static int __construct(Subject *subject,char *init_str)
 {
-	dbg_str(DBG_SUC,"subject construct, subject addr:%p",subject);
+	dbg_str(OBJ_DETAIL,"subject construct, subject addr:%p",subject);
 
 	return 0;
 }
 
 static int __deconstrcut(Subject *subject)
 {
-	dbg_str(DBG_SUC,"subject deconstruct,subject addr:%p",subject);
+	dbg_str(OBJ_DETAIL,"subject deconstruct,subject addr:%p",subject);
 
 	return 0;
 }
 
 static int __move(Subject *subject)
 {
-	dbg_str(DBG_DETAIL,"subject move");
+	dbg_str(OBJ_DETAIL,"subject move");
 }
 
 static int __show(Subject *subject)
 {
-	dbg_str(DBG_DETAIL,"subject show");
+	dbg_str(OBJ_DETAIL,"subject show");
 }
 
 static int __add_x_speed(Subject *subject, float v) 
 {
-	dbg_str(DBG_DETAIL,"__add_x_speed");
+	dbg_str(OBJ_DETAIL,"__add_x_speed");
 }
 
 static int __add_y_speed(Subject *subject, float v) 
 {
-	dbg_str(DBG_DETAIL,"__add_x_speed");
+	dbg_str(OBJ_DETAIL,"__add_x_speed");
 }
 
 static int __is_touching(Subject *me,Subject *subject)
 {
-	dbg_str(DBG_DETAIL,"__is_touching");
+	dbg_str(OBJ_DETAIL,"__is_touching");
 }
 
 static int __set(Subject *subject, char *attrib, void *value)
@@ -77,7 +77,7 @@ static int __set(Subject *subject, char *attrib, void *value)
 	} else if(strcmp(attrib, "height") == 0) {
         subject->height = *((uint32_t *)value);
 	} else {
-		dbg_str(DBG_WARNNING,"subject set,  \"%s\" setting is not support",attrib);
+		dbg_str(OBJ_WARNNING,"subject set,  \"%s\" setting is not support",attrib);
 	}
 
 	return 0;
@@ -98,7 +98,7 @@ static void * __get(Subject *obj, char *attrib)
     else if(strcmp(attrib, "y_speed") == 0) {
         return &obj->y_speed;
     } else {
-        dbg_str(DBG_WARNNING,"subject get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"subject get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;

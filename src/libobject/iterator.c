@@ -11,14 +11,14 @@
 
 static int __construct(Iterator *iter,char *init_str)
 {
-	dbg_str(DBG_SUC,"iter construct, iter addr:%p",iter);
+	dbg_str(OBJ_DETAIL,"iter construct, iter addr:%p",iter);
 
 	return 0;
 }
 
 static int __deconstrcut(Iterator *iter)
 {
-	dbg_str(DBG_SUC,"iter deconstruct,iter addr:%p",iter);
+	dbg_str(OBJ_DETAIL,"iter deconstruct,iter addr:%p",iter);
 
 	return 0;
 }
@@ -46,7 +46,7 @@ static int __set(Iterator *iter, char *attrib, void *value)
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(iter->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"iter set, not support %s setting",attrib);
+		dbg_str(OBJ_DETAIL,"iter set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -57,7 +57,7 @@ static void *__get(Iterator *obj, char *attrib)
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -65,27 +65,27 @@ static void *__get(Iterator *obj, char *attrib)
 
 static Iterator *__next(Iterator *it)
 {
-	dbg_str(DBG_SUC,"Iterator next");
+	dbg_str(OBJ_DETAIL,"Iterator next");
 }
 
-static int __prev(Iterator *it, Iterator *prev)
+static Iterator *__prev(Iterator *it)
 {
-	dbg_str(DBG_SUC,"Iterator prev");
+	dbg_str(OBJ_DETAIL,"Iterator prev");
 }
 
 static int __equal(Iterator *it1,Iterator *it2)
 {
-	dbg_str(DBG_SUC,"Iterator equal");
+	dbg_str(OBJ_DETAIL,"Iterator equal");
 }
 
 static void *__get_dpointer(Iterator *it)
 {
-	dbg_str(DBG_SUC,"Iterator get_dpointer");
+	dbg_str(OBJ_DETAIL,"Iterator get_dpointer");
 }
 
 static int __destroy(Iterator *it)
 {
-	dbg_str(DBG_SUC,"Iterator destroy");
+	dbg_str(OBJ_DETAIL,"Iterator destroy");
     allocator_mem_free(it->obj.allocator,it);
 }
 
@@ -119,7 +119,7 @@ void test_obj_iter()
      */
 
     iter->next(iter);
-    iter->prev(iter,prev);
+    iter->prev(iter);
 }
 
 

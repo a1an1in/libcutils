@@ -29,21 +29,21 @@ struct enemy_s{
 
 static int __construct(Enemy *enemy,char *init_str)
 {
-	dbg_str(DBG_SUC,"enemy construct, enemy addr:%p",enemy);
+	dbg_str(OBJ_SUC,"enemy construct, enemy addr:%p",enemy);
 
 	return 0;
 }
 
 static int __deconstrcut(Enemy *enemy)
 {
-	dbg_str(DBG_SUC,"enemy deconstruct,enemy addr:%p",enemy);
+	dbg_str(OBJ_SUC,"enemy deconstruct,enemy addr:%p",enemy);
 
 	return 0;
 }
 
 static int __move(Enemy *enemy)
 {
-	dbg_str(DBG_SUC,"enemy move");
+	dbg_str(OBJ_SUC,"enemy move");
 }
 
 static int __set(Enemy *enemy, char *attrib, void *value)
@@ -61,7 +61,7 @@ static int __set(Enemy *enemy, char *attrib, void *value)
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(enemy->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"enemy set, not support %s setting",attrib);
+		dbg_str(OBJ_DETAIL,"enemy set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -72,7 +72,7 @@ static void *__get(Enemy *obj, char *attrib)
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"enemy get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"enemy get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -116,19 +116,19 @@ void test_obj_enemy()
     /*
      *subject = OBJECT_ALLOC(allocator,Enemy);
      *object_set(subject, "Enemy", set_str);
-     *dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
+     *dbg_str(OBJ_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
      */
 
     subject = OBJECT_NEW(allocator, Enemy,set_str);
 
     /*
-     *dbg_str(DBG_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
-     *dbg_str(DBG_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
+     *dbg_str(OBJ_DETAIL,"x=%d y=%d width=%d height=%d",subject->x,subject->y,subject->width,subject->height);
+     *dbg_str(OBJ_DETAIL,"enemy nane=%s",((Enemy *)subject)->name);
      *subject->move(subject);
      */
 
     object_dump(subject, "Enemy", buf, 2048);
-    dbg_str(DBG_DETAIL,"Enemy dump: %s",buf);
+    dbg_str(OBJ_DETAIL,"Enemy dump: %s",buf);
 
     free(set_str);
 

@@ -16,5 +16,6 @@ debug_business_names[MAX_DEBUG_BUSINESS_NUM] = {
     "state_machine",
     "libevent",
     "libbus"
+    "libobject"
 };
 

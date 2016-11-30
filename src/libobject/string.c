@@ -11,13 +11,13 @@
 
 static int __construct(String *string,char *init_str)
 {
-	dbg_str(DBG_SUC,"string construct, string addr:%p",string);
+	dbg_str(OBJ_DETAIL,"string construct, string addr:%p",string);
 	return 0;
 }
 
 static int __deconstrcut(String *string)
 {
-	dbg_str(DBG_SUC,"string deconstruct,string addr:%p",string);
+	dbg_str(OBJ_DETAIL,"string deconstruct,string addr:%p",string);
     if(string->value)
         allocator_mem_free(string->obj.allocator,string->value);
 
@@ -39,7 +39,7 @@ static int __set(String *string, char *attrib, void *value)
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(string->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"string set, not support %s setting",attrib);
+		dbg_str(OBJ_DETAIL,"string set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -53,7 +53,7 @@ static void *__get(String *obj, char *attrib)
     if(strcmp(attrib, "value") == 0) {
         return obj->value;
     } else {
-        dbg_str(DBG_WARNNING,"string get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"string get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -67,7 +67,7 @@ static String *__assign(String *string,char *s)
         string->value_max_len = 3 * len;
         string->value = (char *)allocator_mem_alloc(string->obj.allocator,string->value_max_len);
         if(string->value == NULL) {
-            dbg_str(DBG_WARNNING,"string assign alloc error");
+            dbg_str(OBJ_WARNNING,"string assign alloc error");
             return string;
         }
     } else if( string->value_max_len < len) {
@@ -76,7 +76,7 @@ static String *__assign(String *string,char *s)
         string->value_max_len = 3 * len;
         string->value = (char *)allocator_mem_alloc(string->obj.allocator,string->value_max_len);
         if(string->value == NULL) {
-            dbg_str(DBG_WARNNING,"string assign alloc error");
+            dbg_str(OBJ_WARNNING,"string assign alloc error");
             return string;
         }
     }
@@ -123,7 +123,7 @@ void test_obj_string()
     string->assign(string,"hello world!");
 
     object_dump(string, "String", buf, 2048);
-    dbg_str(DBG_DETAIL,"String dump: %s",buf);
+    dbg_str(OBJ_DETAIL,"String dump: %s",buf);
 
     free(set_str);
 

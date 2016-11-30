@@ -11,14 +11,14 @@
 
 static int __construct(Obj *obj,char *init_str)
 {
-	dbg_str(DBG_SUC,"obj construct, obj addr:%p",obj);
+	dbg_str(OBJ_DETAIL,"obj construct, obj addr:%p",obj);
 
 	return 0;
 }
 
 static int __deconstrcut(Obj *obj)
 {
-	dbg_str(DBG_SUC,"obj deconstruct,obj addr:%p",obj);
+	dbg_str(OBJ_DETAIL,"obj deconstruct,obj addr:%p",obj);
 
 	return 0;
 }
@@ -35,9 +35,9 @@ static int __set(Obj *obj, char *attrib, void *value)
 		obj->deconstruct = value;
     } else if(strcmp(attrib, "allocator") == 0) {
         obj->allocator = value;
-        dbg_str(DBG_DETAIL,"****************allocator addr:%p",obj->allocator);
+        dbg_str(OBJ_DETAIL,"****************allocator addr:%p",obj->allocator);
 	} else {
-		dbg_str(DBG_WARNNING,"obj set, \"%s\" setting is not supported",attrib);
+		dbg_str(OBJ_WARNNING,"obj set, \"%s\" setting is not supported",attrib);
 	}
 
 	return 0;
@@ -48,7 +48,7 @@ static void *__get(Obj *obj, char *attrib)
     if(strcmp(attrib, "allocator") == 0) {
         return obj->allocator;
     } else {
-        dbg_str(DBG_WARNNING,"obj get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"obj get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;

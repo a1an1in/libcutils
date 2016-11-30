@@ -13,7 +13,7 @@ static int __construct(Map *map,char *init_str)
 {
     Hash_Map *h = (Hash_Map *)map;
 
-	dbg_str(DBG_SUC,"hash map construct, key_size=%d,value_size=%d,bucket_size=%d",
+	dbg_str(OBJ_DETAIL,"hash map construct, key_size=%d,value_size=%d,bucket_size=%d",
             h->key_size,h->value_size,h->bucket_size);
 
     if(h->key_size == 0)    { h->key_size = 10;    }
@@ -32,7 +32,7 @@ static int __construct(Map *map,char *init_str)
 
 static int __deconstrcut(Map *map)
 {
-	dbg_str(DBG_SUC,"hash map deconstruct,map addr:%p",map);
+	dbg_str(OBJ_DETAIL,"hash map deconstruct,map addr:%p",map);
     allocator_mem_free(map->obj.allocator,map);
 
 	return 0;
@@ -75,7 +75,7 @@ static int __set(Map *m, char *attrib, void *value)
 	} else if(strcmp(attrib, "bucket_size") == 0) {
         map->bucket_size = *((uint16_t *)value);
 	} else {
-		dbg_str(DBG_WARNNING,"map set, not support %s setting",attrib);
+		dbg_str(OBJ_WARNNING,"map set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -86,7 +86,7 @@ static void *__get(Map *obj, char *attrib)
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"map get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"map get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -94,27 +94,27 @@ static void *__get(Map *obj, char *attrib)
 
 static int __insert(Map *map,void *key,void *value)
 {
-	dbg_str(DBG_SUC,"Hash Map insert");
+	dbg_str(OBJ_DETAIL,"Hash Map insert");
     return hash_map_insert(((Hash_Map *)map)->hmap,key,value);
 }
 
 static int __insert_wb(Map *map,void *key,void *value,Iterator *iter)
 {
-	dbg_str(DBG_SUC,"Hash Map insert wb");
+	dbg_str(OBJ_DETAIL,"Hash Map insert wb");
     return hash_map_insert_wb(((Hash_Map *)map)->hmap,key,value,
                               &((Hmap_Iterator *)iter)->hash_map_pos);
 }
 
 static int __search(Map *map,void *key,Iterator *iter)
 {
-	dbg_str(DBG_SUC,"Hash Map search");
+	dbg_str(OBJ_DETAIL,"Hash Map search");
     return hash_map_search(((Hash_Map *)map)->hmap, key,
                            &((Hmap_Iterator *)iter)->hash_map_pos);
 }
 
 static int __del(Map *map,Iterator *iter)
 {
-	dbg_str(DBG_SUC,"Hash Map del");
+	dbg_str(OBJ_DETAIL,"Hash Map del");
     return hash_map_delete(((Hash_Map *)map)->hmap,
                             &((Hmap_Iterator *)iter)->hash_map_pos);
 }
@@ -124,7 +124,7 @@ static Iterator *__begin(Map *map)
     Iterator *iter;
     allocator_t *allocator = map->obj.allocator;
 
-	dbg_str(DBG_SUC,"Hash Map begin");
+	dbg_str(OBJ_DETAIL,"Hash Map begin");
 
     iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
 
@@ -139,7 +139,7 @@ static Iterator *__end(Map *map)
     Iterator *iter;
     allocator_t *allocator = map->obj.allocator;
 
-	dbg_str(DBG_SUC,"Hash Map end");
+	dbg_str(OBJ_DETAIL,"Hash Map end");
     iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
 
     hash_map_end(((Hash_Map *)map)->hmap,
@@ -151,7 +151,7 @@ static Iterator *__end(Map *map)
 static int __destroy(Map *map)
 {
     int ret = 0;
-	dbg_str(DBG_SUC,"Hash Map destroy");
+	dbg_str(OBJ_DETAIL,"Hash Map destroy");
     ret = hash_map_destroy(((Hash_Map *)map)->hmap);
     ret = ((Hash_Map *)map)->deconstruct(map);
 
@@ -181,7 +181,7 @@ REGISTER_CLASS("Hash_Map",hash_map_class_info);
 void test_print_map(Iterator *iter)
 {
     Hmap_Iterator *i = (Hmap_Iterator *)iter;
-    dbg_str(DBG_DETAIL,"******************search data:%s",i->get_dpointer(iter));
+    dbg_str(DBG_DETAIL,"value:%s",i->get_dpointer(iter));
 }
 void test_obj_hash_map()
 {
@@ -206,7 +206,7 @@ void test_obj_hash_map()
     iter = OBJECT_NEW(allocator, Hmap_Iterator,set_str);
 
     object_dump(map, "Hash_Map", buf, 2048);
-    dbg_str(DBG_DETAIL,"Map dump: %s",buf);
+    dbg_str(OBJ_DETAIL,"Map dump: %s",buf);
 
     map->insert(map,"abc","hello world");
     map->insert(map,"test","sdfsafsdaf");
