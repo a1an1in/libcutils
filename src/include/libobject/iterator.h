@@ -19,7 +19,8 @@ struct iterator_s{
     Iterator *(*next)(Iterator *it);
     Iterator *(*prev)(Iterator *it);
     int (*equal)(Iterator *it1,Iterator *it2);
-    void *(*get_dpointer)(Iterator *it);
+    void *(*get_vpointer)(Iterator *it);
+    void *(*get_kpointer)(Iterator *it);
     int (*destroy)(Iterator *it);
 
 	/*virtual methods reimplement*/

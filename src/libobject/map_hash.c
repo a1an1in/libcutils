@@ -178,11 +178,12 @@ static class_info_entry_t hash_map_class_info[] = {
 };
 REGISTER_CLASS("Hash_Map",hash_map_class_info);
 
-void test_print_map(Iterator *iter)
+static void hash_map_print(Iterator *iter)
 {
     Hmap_Iterator *i = (Hmap_Iterator *)iter;
-    dbg_str(DBG_DETAIL,"value:%s",i->get_dpointer(iter));
+    dbg_str(DBG_DETAIL,"key:%s value:%s",i->get_kpointer(iter), i->get_vpointer(iter));
 }
+
 void test_obj_hash_map()
 {
     Map *map;
@@ -210,13 +211,13 @@ void test_obj_hash_map()
 
     map->insert(map,"abc","hello world");
     map->insert(map,"test","sdfsafsdaf");
-    map->for_each(map,test_print_map);
+    map->for_each(map,hash_map_print);
 
     map->search(map,"abc",iter);
-    dbg_str(DBG_DETAIL,"search data:%s",iter->get_dpointer(iter));
+    dbg_str(DBG_DETAIL,"search data:%s",iter->get_vpointer(iter));
     map->del(map,iter);
 
-    map->for_each(map,test_print_map);
+    map->for_each(map,hash_map_print);
 
     map->destroy(map);
 

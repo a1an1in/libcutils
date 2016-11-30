@@ -39,8 +39,10 @@ static int __set(Iterator *iter, char *attrib, void *value)
 		iter->prev = value;
 	} else if(strcmp(attrib, "equal") == 0) {
 		iter->equal = value;
-	} else if(strcmp(attrib, "get_dpointer") == 0) {
-		iter->get_dpointer = value;
+	} else if(strcmp(attrib, "get_vpointer") == 0) {
+		iter->get_vpointer = value;
+	} else if(strcmp(attrib, "get_kpointer") == 0) {
+		iter->get_kpointer = value;
 	} else if(strcmp(attrib, "destroy") == 0) {
 		iter->destroy = value;
 	} else if(strcmp(attrib, "name") == 0) {
@@ -78,9 +80,14 @@ static int __equal(Iterator *it1,Iterator *it2)
 	dbg_str(OBJ_DETAIL,"Iterator equal");
 }
 
-static void *__get_dpointer(Iterator *it)
+static void *__get_vpointer(Iterator *it)
 {
-	dbg_str(OBJ_DETAIL,"Iterator get_dpointer");
+	dbg_str(OBJ_DETAIL,"Iterator get_vpointer");
+}
+
+static void *__get_kpointer(Iterator *it)
+{
+	dbg_str(OBJ_DETAIL,"Iterator get_kpointer");
 }
 
 static int __destroy(Iterator *it)
@@ -98,9 +105,10 @@ static class_info_entry_t iter_class_info[] = {
 	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","next",__next,sizeof(void *)},
 	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","prev",__prev,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_dpointer",__get_dpointer,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[10] = {ENTRY_TYPE_END},
+	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_kpointer",__get_vpointer,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
+	[11] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Iterator",iter_class_info);
 

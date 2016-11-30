@@ -42,8 +42,10 @@ static int __set(Iterator *iter, char *attrib, void *value)
 		hiter->prev = value;
 	} else if(strcmp(attrib, "equal") == 0) {
 		hiter->equal = value;
-	} else if(strcmp(attrib, "get_dpointer") == 0) {
-		hiter->get_dpointer = value;
+	} else if(strcmp(attrib, "get_vpointer") == 0) {
+		hiter->get_vpointer = value;
+	} else if(strcmp(attrib, "get_kpointer") == 0) {
+		hiter->get_kpointer = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(hiter->name,value,strlen(value));
 	} else {
@@ -92,23 +94,30 @@ static int __equal(Iterator *it1,Iterator *it2)
                               &((Hmap_Iterator *)it2)->hash_map_pos);
 }
 
-static void *__get_dpointer(Iterator *it)
+static void *__get_vpointer(Iterator *it)
 {
-	dbg_str(OBJ_DETAIL,"Hmap_Iterator get_dpointer");
+	dbg_str(OBJ_DETAIL,"Hmap_Iterator get_vpointer");
     return hash_map_pos_get_pointer(&((Hmap_Iterator *)it)->hash_map_pos);
 }
 
+static void *__get_kpointer(Iterator *it)
+{
+    dbg_str(OBJ_DETAIL,"Iterator get_kpointer");
+    return hash_map_pos_get_kpointer(&((Hmap_Iterator *)it)->hash_map_pos);
+}
+
 static class_info_entry_t hmap_iter_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Iterator","iter",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","next",__next,sizeof(void *)},
-	[6] = {ENTRY_TYPE_FUNC_POINTER,"","prev",__prev,sizeof(void *)},
-	[7] = {ENTRY_TYPE_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
-	[8] = {ENTRY_TYPE_FUNC_POINTER,"","get_dpointer",__get_dpointer,sizeof(void *)},
-	[9] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Iterator","iter",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","next",__next,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","prev",__prev,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_kpointer",__get_kpointer,sizeof(void *)},
+	[10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Hmap_Iterator",hmap_iter_class_info);
 

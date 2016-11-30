@@ -20,7 +20,8 @@ struct hmap_iterator_s{
     Iterator *(*next)(Iterator *it);
     Iterator *(*prev)(Iterator *it);
     int (*equal)(Iterator *it1,Iterator *it2);
-    void *(*get_dpointer)(Iterator *it);
+    void *(*get_vpointer)(Iterator *it);
+    void *(*get_kpointer)(Iterator *it);
 
 	/*virtual methods reimplement*/
 #define MAX_NAME_LEN 50

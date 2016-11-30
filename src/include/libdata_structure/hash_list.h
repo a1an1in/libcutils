@@ -83,6 +83,20 @@ static inline void *hash_map_pos_get_pointer(hash_map_pos_t *pos)
 
 	return &mnode->key[mnode->value_pos];
 }
+
+static inline void *hash_map_pos_get_kpointer(hash_map_pos_t *pos)
+{
+	struct hash_map_node *mnode;
+
+	mnode = container_of(pos->hlist_node_p,
+			struct hash_map_node,
+			hlist_node);
+	/*
+	 *dbg_buf(DBG_DETAIL,"key:",mnode->key,mnode->data_size);
+	 */
+
+	return mnode->key;
+}
 static inline void 
 hash_map_for_each(struct hash_map_s *hmap,void (*func)(struct hash_map_node *mnode))
 {

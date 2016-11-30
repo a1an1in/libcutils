@@ -35,7 +35,7 @@ static int __set(Obj *obj, char *attrib, void *value)
 		obj->deconstruct = value;
     } else if(strcmp(attrib, "allocator") == 0) {
         obj->allocator = value;
-        dbg_str(OBJ_DETAIL,"****************allocator addr:%p",obj->allocator);
+        dbg_str(OBJ_DETAIL,"allocator addr:%p",obj->allocator);
 	} else {
 		dbg_str(OBJ_WARNNING,"obj set, \"%s\" setting is not supported",attrib);
 	}
