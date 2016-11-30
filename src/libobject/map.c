@@ -44,6 +44,7 @@ static int __set(Map *map, char *attrib, void *value)
 	} else if(strcmp(attrib, "del") == 0) {
 		map->del = value;
 	} else if(strcmp(attrib, "for_each") == 0) {
+        dbg_str(DBG_DETAIL,"map set for each:%p",value);
 		map->for_each = value;
 	} else if(strcmp(attrib, "begin") == 0) {
 		map->begin = value;
@@ -62,6 +63,8 @@ static void *__get(Map *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
+	} else if(strcmp(attrib, "for_each") == 0) {
+		return obj->for_each;
     } else {
         dbg_str(OBJ_WARNNING,"map get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

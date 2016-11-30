@@ -24,7 +24,7 @@ void * object_get_func_pointer(void *class_info_addr, char *func_pointer_name)
 	return 0;
 }
 
-class_info_entry_t * object_get_subclass_info(void *class_info_addr)
+class_info_entry_t * object_get_entry_of_parent_class(void *class_info_addr)
 {
 	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
 	int i;
@@ -42,7 +42,6 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
 {
 	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
 	int i;
-
 	int (*set)(void *obj, char *attrib, void *value);
 
  	set = object_get_func_pointer(class_info_addr,"set");
@@ -61,11 +60,43 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
              *        entry[i].value);
              */
 
-            set(obj, (char *)entry[i].value_name, entry[i].value);
+            if(entry[i].value != NULL)
+                set(obj, (char *)entry[i].value_name, entry[i].value);
         }
 	}	
 
 	return 0;
+}
+
+int object_inherit_parent_methods(void *obj,void *class_info,void *parent_class_info)
+{
+	class_info_entry_t *entry = (class_info_entry_t *)class_info;
+	class_info_entry_t *entry_parent = (class_info_entry_t *)parent_class_info;
+    void *(*get)(void *obj, char *attrib);
+	int (*set)(void *obj, char *attrib, void *value);
+	int i;
+    void *method;
+
+    if(parent_class_info == NULL) return;
+
+    /*
+     *dbg_str(DBG_DETAIL,"current obj type name =%s, parent_class name:%s",entry->type_name,entry_parent->type_name);
+     */
+ 	set = object_get_func_pointer(class_info,"set");
+ 	get = object_get_func_pointer(parent_class_info,"get");
+	if(set == NULL || get == NULL) {
+		dbg_str(OBJ_WARNNING,"obj_init_func_pointer,set func is NULL");
+		return -1;
+	}
+
+	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
+        if(entry[i].type == ENTRY_TYPE_FUNC_POINTER)
+        {
+            method = get(obj, (char *)entry[i].value_name);
+            if(method != NULL)
+                set(obj, (char *)entry[i].value_name, method);
+        }
+	}	
 }
 
 void *
@@ -272,28 +303,45 @@ int object_dump(void *obj, char *type_name, char *buf, int max_len)
 int __object_init(void *obj, char *cur_type_name, char *type_name) 
 {
 	object_deamon_t *deamon;
-	void *class_info_addr;
- 	class_info_entry_t * subclass_info_addr;
+	void *class_info, *parent_class_info;
+ 	class_info_entry_t * entry_of_parent_class;
 	int (*construct)(void *obj,char *init_str);
 
 	dbg_str(OBJ_DETAIL,"current obj type name =%s",cur_type_name);
 
-	deamon             = object_deamon_get_global_object_deamon();
-	class_info_addr    = object_deamon_search_class(deamon,(char *)cur_type_name);
-	construct          = object_get_func_pointer(class_info_addr,"construct");
- 	subclass_info_addr = object_get_subclass_info(class_info_addr);
+	deamon                = object_deamon_get_global_object_deamon();
+	class_info            = object_deamon_search_class(deamon,(char *)cur_type_name);
+	construct             = object_get_func_pointer(class_info,"construct");
+ 	entry_of_parent_class = object_get_entry_of_parent_class(class_info);
 
-	dbg_str(OBJ_DETAIL,"obj_class addr:%p",class_info_addr);
- 	if(subclass_info_addr != NULL) {
+	dbg_str(OBJ_DETAIL,"obj_class addr:%p",class_info);
+ 	if(entry_of_parent_class != NULL) {
         /*
 		 *dbg_str(OBJ_DETAIL,"init subclass");
          */
-		__object_init(obj, subclass_info_addr->type_name, type_name);
+		__object_init(obj, entry_of_parent_class->type_name, type_name);
  	} else {
 		dbg_str(OBJ_DETAIL,"obj has not subclass");
 	}
 
-	object_init_func_pointer(obj,class_info_addr);
+    /*
+	 *dbg_str(DBG_DETAIL,"current obj type name =%s",cur_type_name);
+     */
+    /*
+     *if(entry_of_parent_class != NULL){
+     *    dbg_str(DBG_DETAIL,"current obj type name =%s, parent_class name:%s",cur_type_name,entry_of_parent_class->type_name);
+     *} else {
+     *    dbg_str(DBG_DETAIL,"current obj type name =%s, parent_class name:%p",cur_type_name,entry_of_parent_class);
+     *}
+     */
+
+    /*
+     *if(entry_of_parent_class != NULL) {
+     *    parent_class_info = object_deamon_search_class(deamon,entry_of_parent_class->type_name);
+     *    object_inherit_parent_methods(obj,class_info,parent_class_info);
+     *}
+     */
+	object_init_func_pointer(obj,class_info);
 	object_cover_vitual_func_pointer(obj, cur_type_name, type_name);
 
 	dbg_str(OBJ_DETAIL,"obj addr:%p",obj);
