@@ -66,12 +66,15 @@ static void *__get(Iterator *iter, char *attrib)
     return NULL;
 }
 
-static int __next(Iterator *it, Iterator *next)
+static Iterator *__next(Iterator *it)
 {
+    Iterator *next = it;
 	dbg_str(DBG_SUC,"Hmap_Iterator next");
 
     hash_map_pos_next(&((Hmap_Iterator *)it)->hash_map_pos,
                       &((Hmap_Iterator *)next)->hash_map_pos);
+
+    return next;
 
 }
 
@@ -120,7 +123,7 @@ void test_obj_hiter()
     iter = OBJECT_NEW(allocator, Hmap_Iterator,set_str);
     next = OBJECT_NEW(allocator, Hmap_Iterator,set_str);
 
-    iter->next(iter,next);
+    iter->next(iter);
 }
 
 

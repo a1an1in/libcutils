@@ -131,7 +131,8 @@ int object_cover_vitual_func_pointer(void *obj,
 			reimplement_func = object_find_reimplement_func_pointer(entry[i].value_name,
 																	type_name,
 																	cur_type_name);
-			set(obj, (char *)entry[i].value_name, reimplement_func);
+            if(reimplement_func != NULL)
+                set(obj, (char *)entry[i].value_name, reimplement_func);
 		}
 	}	
 

@@ -41,6 +41,8 @@ static int __set(Iterator *iter, char *attrib, void *value)
 		iter->equal = value;
 	} else if(strcmp(attrib, "get_dpointer") == 0) {
 		iter->get_dpointer = value;
+	} else if(strcmp(attrib, "destroy") == 0) {
+		iter->destroy = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(iter->name,value,strlen(value));
 	} else {
@@ -61,7 +63,7 @@ static void *__get(Iterator *obj, char *attrib)
     return NULL;
 }
 
-static int __next(Iterator *it, Iterator *next)
+static Iterator *__next(Iterator *it)
 {
 	dbg_str(DBG_SUC,"Iterator next");
 }
@@ -81,17 +83,24 @@ static void *__get_dpointer(Iterator *it)
 	dbg_str(DBG_SUC,"Iterator get_dpointer");
 }
 
+static int __destroy(Iterator *it)
+{
+	dbg_str(DBG_SUC,"Iterator destroy");
+    allocator_mem_free(it->obj.allocator,it);
+}
+
 static class_info_entry_t iter_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","next",__next,sizeof(void *)},
-	[6] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","prev",__prev,sizeof(void *)},
-	[7] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
-	[8] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_dpointer",__get_dpointer,sizeof(void *)},
-	[9] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","next",__next,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","prev",__prev,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_dpointer",__get_dpointer,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
+	[10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Iterator",iter_class_info);
 
@@ -109,7 +118,7 @@ void test_obj_iter()
      *prev = OBJECT_NEW(allocator, Iterator,set_str);
      */
 
-    iter->next(iter,next);
+    iter->next(iter);
     iter->prev(iter,prev);
 }
 

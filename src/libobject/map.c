@@ -89,18 +89,29 @@ static int __del(Map *map,Iterator *iter)
 	dbg_str(DBG_SUC,"Map del");
 }
 
-static void __for_each(Map *map,void (*func)(Map *map, char *key, void *value))
+static void __for_each(Map *map,void (*func)(Iterator *iter))
 {
-	dbg_str(DBG_SUC,"Mapfor_each");
+    Iterator *cur, *end;
+
+	dbg_str(DBG_SUC,"Map for_each");
+    cur = map->begin(map);
+    end = map->end(map);
+
+    for(; !end->equal(end,cur); cur->next(cur)) {
+        func(cur);
+    }
+
+    cur->destroy(cur);
+    end->destroy(end);
 
 }
 
-static int __begin(Map *map,Iterator *begin)
+static Iterator *__begin(Map *map)
 {
 	dbg_str(DBG_SUC,"Map begin");
 }
 
-static int __end(Map *map,Iterator *end)
+static Iterator *__end(Map *map)
 {
 	dbg_str(DBG_SUC,"Map end");
 }

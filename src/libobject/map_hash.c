@@ -119,34 +119,33 @@ static int __del(Map *map,Iterator *iter)
                             &((Hmap_Iterator *)iter)->hash_map_pos);
 }
 
-static void __for_each(Map *map,void (*func)(Map *map, char *key, void *value))
+static Iterator *__begin(Map *map)
 {
-    Hash_Map *h = (Hash_Map *)map;
-    hash_map_pos_t pos,next;
-    struct hash_map_node *mnode;
+    Iterator *iter;
+    allocator_t *allocator = map->obj.allocator;
 
-    dbg_str(DBG_SUC,"Hash Map for_each");
-
-    for(	hash_map_begin(h->hmap,&pos),hash_map_pos_next(&pos,&next); 
-            !hash_map_pos_equal(&pos,&(h->hmap->end));
-            pos = next,hash_map_pos_next(&pos,&next)){
-        mnode = container_of(pos.hlist_node_p,struct hash_map_node,hlist_node);
-        func(map,mnode->key, mnode->key + h->hmap->key_size);
-    }
-}
-
-static int __begin(Map *map,Iterator *begin)
-{
 	dbg_str(DBG_SUC,"Hash Map begin");
-    return hash_map_begin(((Hash_Map *)map)->hmap,
-                          &((Hmap_Iterator *)begin)->hash_map_pos);
+
+    iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
+
+    hash_map_begin(((Hash_Map *)map)->hmap,
+                    &((Hmap_Iterator *)iter)->hash_map_pos);
+
+    return iter;
 }
 
-static int __end(Map *map,Iterator *end)
+static Iterator *__end(Map *map)
 {
+    Iterator *iter;
+    allocator_t *allocator = map->obj.allocator;
+
 	dbg_str(DBG_SUC,"Hash Map end");
-    return hash_map_end(((Hash_Map *)map)->hmap,
-                         &((Hmap_Iterator *)end)->hash_map_pos);
+    iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
+
+    hash_map_end(((Hash_Map *)map)->hmap,
+                 &((Hmap_Iterator *)iter)->hash_map_pos);
+
+    return iter;
 }
 
 static int __destroy(Map *map)
@@ -169,20 +168,20 @@ static class_info_entry_t hash_map_class_info[] = {
 	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","insert_wb",__insert_wb,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","search",__search,sizeof(void *)},
 	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","del",__del,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","for_each",__for_each,sizeof(void *)},
-	[10] = {ENTRY_TYPE_FUNC_POINTER,"","begin",__begin,sizeof(void *)},
-	[11] = {ENTRY_TYPE_FUNC_POINTER,"","end",__end,sizeof(void *)},
-	[12] = {ENTRY_TYPE_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[13] = {ENTRY_TYPE_UINT16_T,"","key_size",NULL,sizeof(short)},
-	[14] = {ENTRY_TYPE_UINT16_T,"","value_size",NULL,sizeof(short)},
-	[15] = {ENTRY_TYPE_UINT16_T,"","bucket_size",NULL,sizeof(short)},
-	[16] = {ENTRY_TYPE_END},
+	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","begin",__begin,sizeof(void *)},
+	[10] = {ENTRY_TYPE_FUNC_POINTER,"","end",__end,sizeof(void *)},
+	[11] = {ENTRY_TYPE_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
+	[12] = {ENTRY_TYPE_UINT16_T,"","key_size",NULL,sizeof(short)},
+	[13] = {ENTRY_TYPE_UINT16_T,"","value_size",NULL,sizeof(short)},
+	[14] = {ENTRY_TYPE_UINT16_T,"","bucket_size",NULL,sizeof(short)},
+	[15] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Hash_Map",hash_map_class_info);
 
-void test_print_map(Map *map, char *key, void *value)
+void test_print_map(Iterator *iter)
 {
-    dbg_str(DBG_DETAIL,"key:%s value:%s",key,value);
+    Hmap_Iterator *i = (Hmap_Iterator *)iter;
+    dbg_str(DBG_DETAIL,"******************search data:%s",i->get_dpointer(iter));
 }
 void test_obj_hash_map()
 {
@@ -209,22 +208,24 @@ void test_obj_hash_map()
     object_dump(map, "Hash_Map", buf, 2048);
     dbg_str(DBG_DETAIL,"Map dump: %s",buf);
 
-    free(set_str);
-
     map->insert(map,"abc","hello world");
     map->insert(map,"test","sdfsafsdaf");
-    /*
-     *map->search(map,"abc",iter);
-     *dbg_str(DBG_DETAIL,"searc data:%s",iter->get_dpointer(iter));
-     *map->del(map,iter);
-     */
     map->for_each(map,test_print_map);
+
+    map->search(map,"abc",iter);
+    dbg_str(DBG_DETAIL,"search data:%s",iter->get_dpointer(iter));
+    map->del(map,iter);
+
+    map->for_each(map,test_print_map);
+
     map->destroy(map);
 
     /*
      *((Hash_Map *)map)->for_each(map,test_print_map);
      *((Hash_Map *)map)->destroy(map);
      */
+
+    free(set_str);
 }
 
 

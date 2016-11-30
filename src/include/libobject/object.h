@@ -11,17 +11,17 @@ class_info_entry_t * object_get_subclass_info(void *class_info_addr);
 int object_init(void *obj, char *type_name);
 int object_set(void *obj, char *type_name, char *set_str);
 
-#define OBJECT_ALLOC(allocator, type) \
+#define OBJECT_ALLOC(alloc, type) \
 ({\
 	type * obj; \
 	\
-	obj = (type *)allocator_mem_alloc(allocator,sizeof(type));\
+	obj = (type *)allocator_mem_alloc(alloc,sizeof(type));\
 	if(obj == NULL) {\
 		dbg_str(DBG_DETAIL,"allocator_mem_alloc");\
 		obj = NULL;\
 	} else { \
 		memset(obj,0, sizeof(type));\
-		((Obj *)obj)->allocator = allocator;\
+		((Obj *)obj)->allocator = alloc;\
 	}\
 	\
 	obj;\
