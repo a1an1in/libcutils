@@ -17,7 +17,10 @@ static int __construct(String *string,char *init_str)
 
 static int __deconstrcut(String *string)
 {
-	dbg_str(OBJ_DETAIL,"string deconstruct,string addr:%p",string);
+    /*
+	 *dbg_str(OBJ_DETAIL,"string deconstruct,string addr:%p",string);
+     */
+	dbg_str(DBG_DETAIL,"string deconstruct,string addr:%p",string);
     if(string->value)
         allocator_mem_free(string->obj.allocator,string->value);
 
@@ -110,6 +113,7 @@ void test_obj_string()
     cjson_t *root, *e, *s;
     char buf[2048];
 
+    dbg_str(DBG_DETAIL,"test_obj_string");
     root = cjson_create_object();{
         cjson_add_item_to_object(root, "String", e = cjson_create_object());{
             cjson_add_string_to_object(e, "name", "alan");
@@ -126,6 +130,8 @@ void test_obj_string()
     dbg_str(OBJ_DETAIL,"String dump: %s",buf);
 
     free(set_str);
+
+    object_destroy(string);
 
 }
 

@@ -1,5 +1,5 @@
-#ifndef __STRING_H__
-#define __STRING_H__
+#ifndef __OBJ_MAP_H__
+#define __OBJ_MAP_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>

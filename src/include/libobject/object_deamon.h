@@ -1,6 +1,7 @@
 #ifndef __OBJ_DEAMON_H__
 #define __OBJ_DEAMON_H__
 
+#include <liballoc/allocator.h>
 #include <libdata_structure/map.h>
 #include <constructor_priority.h>
 #include <libobject/class_info.h>

@@ -33,7 +33,7 @@ static int __construct(Map *map,char *init_str)
 static int __deconstrcut(Map *map)
 {
 	dbg_str(OBJ_DETAIL,"hash map deconstruct,map addr:%p",map);
-    allocator_mem_free(map->obj.allocator,map);
+    hash_map_destroy(((Hash_Map *)map)->hmap);
 
 	return 0;
 }
@@ -149,16 +149,6 @@ static Iterator *__end(Map *map)
     return iter;
 }
 
-static int __destroy(Map *map)
-{
-    int ret = 0;
-	dbg_str(OBJ_DETAIL,"Hash Map destroy");
-    ret = hash_map_destroy(((Hash_Map *)map)->hmap);
-    ret = ((Hash_Map *)map)->deconstruct(map);
-
-    return ret;
-}
-
 static class_info_entry_t hash_map_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Map","map",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -171,12 +161,11 @@ static class_info_entry_t hash_map_class_info[] = {
 	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","del",__del,sizeof(void *)},
 	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","begin",__begin,sizeof(void *)},
 	[10] = {ENTRY_TYPE_FUNC_POINTER,"","end",__end,sizeof(void *)},
-	[11] = {ENTRY_TYPE_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[12] = {ENTRY_TYPE_UINT16_T,"","key_size",NULL,sizeof(short)},
-	[13] = {ENTRY_TYPE_UINT16_T,"","value_size",NULL,sizeof(short)},
-	[14] = {ENTRY_TYPE_UINT16_T,"","bucket_size",NULL,sizeof(short)},
-	[15] = {ENTRY_TYPE_FUNC_POINTER,"","for_each",NULL,sizeof(void *)},
-	[16] = {ENTRY_TYPE_END},
+	[11] = {ENTRY_TYPE_UINT16_T,"","key_size",NULL,sizeof(short)},
+	[12] = {ENTRY_TYPE_UINT16_T,"","value_size",NULL,sizeof(short)},
+	[13] = {ENTRY_TYPE_UINT16_T,"","bucket_size",NULL,sizeof(short)},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","for_each",NULL,sizeof(void *)},
+	[15] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Hash_Map",hash_map_class_info);
 
@@ -222,13 +211,6 @@ void test_obj_hash_map()
 
     map->for_each(map,hash_map_print);
 
-    map->destroy(map);
-
-    /*
-     *((Hash_Map *)map)->for_each(map,test_print_map);
-     *((Hash_Map *)map)->destroy(map);
-     */
-
 #else
     Hash_Map *map;
     map  = OBJECT_NEW(allocator, Hash_Map,set_str);
@@ -243,6 +225,7 @@ void test_obj_hash_map()
 
 #endif
     free(set_str);
+    object_destroy(map);
 }
 
 

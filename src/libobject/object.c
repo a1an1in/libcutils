@@ -325,17 +325,6 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 	}
 
     /*
-	 *dbg_str(DBG_DETAIL,"current obj type name =%s",cur_type_name);
-     */
-    /*
-     *if(entry_of_parent_class != NULL){
-     *    dbg_str(DBG_DETAIL,"current obj type name =%s, parent_class name:%s",cur_type_name,entry_of_parent_class->type_name);
-     *} else {
-     *    dbg_str(DBG_DETAIL,"current obj type name =%s, parent_class name:%p",cur_type_name,entry_of_parent_class);
-     *}
-     */
-
-    /*
      *if(entry_of_parent_class != NULL) {
      *    parent_class_info = object_deamon_search_class(deamon,entry_of_parent_class->type_name);
      *    object_inherit_parent_methods(obj,class_info,parent_class_info);
@@ -353,5 +342,36 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 int object_init(void *obj, char *type_name) 
 {
 	__object_init(obj, type_name, type_name);
+}
+
+int __object_destroy(void *obj, char *type_name) 
+{
+	object_deamon_t *deamon;
+	void *class_info, *parent_class_info;
+ 	class_info_entry_t * entry_of_parent_class;
+	int (*deconstruct)(void *obj);
+
+	dbg_str(OBJ_DETAIL,"destroy obj type name =%s",type_name);
+
+	deamon                = object_deamon_get_global_object_deamon();
+	class_info            = object_deamon_search_class(deamon,(char *)type_name);
+	deconstruct             = object_get_func_pointer(class_info,"deconstruct");
+ 	entry_of_parent_class = object_get_entry_of_parent_class(class_info);
+
+	deconstruct(obj);
+ 	if(entry_of_parent_class == NULL) {
+        return 0;
+ 	} else {
+        __object_destroy(obj, entry_of_parent_class->type_name);
+	}
+
+
+	return 0;
+}
+
+int object_destroy(void *obj) 
+{
+    __object_destroy(obj, ((Obj *)obj)->name);
+	return 0;
 }
 

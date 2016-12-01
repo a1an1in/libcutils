@@ -161,7 +161,6 @@ void test_obj_map()
 
     map = OBJECT_NEW(allocator, Map,set_str);
 
-
     object_dump(map, "Map", buf, 2048);
     dbg_str(OBJ_DETAIL,"Map dump: %s",buf);
 
