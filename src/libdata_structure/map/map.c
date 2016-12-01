@@ -26,8 +26,8 @@ map_t * map_alloc(allocator_t *allocator,uint8_t type)
 __attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES))) void
 register_map_modules()
 {
-    printf("CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES=%d,register map_modules\n",
-			CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES=%d,register map_modules\n",
+			          CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES);
     hash_map_pk_register();
 
 }

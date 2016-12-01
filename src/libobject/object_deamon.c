@@ -100,7 +100,7 @@ object_deamon()
 	object_deamon_t *object_deamon;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-	printf("CONSTRUCTOR_PRIORITY_OBJ_DEAMON =%d, run object_deamon\n",CONSTRUCTOR_PRIORITY_OBJ_DEAMON);
+	CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_OBJ_DEAMON =%d, run object_deamon\n",CONSTRUCTOR_PRIORITY_OBJ_DEAMON);
 
 	object_deamon = object_deamon_alloc(allocator);
 	object_deamon_init(object_deamon);

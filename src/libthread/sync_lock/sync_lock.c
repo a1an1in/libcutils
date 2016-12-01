@@ -64,8 +64,8 @@ sync_lock_register_modules()
 	/*
 	 *memset(&sync_lock_modules[PTHREAD_RWLOCK],0,sizeof(sync_lock_module_t));
 	 */
-    printf("CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES=%d,register sync lock modules\n",
-			CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES=%d,register sync lock modules\n",
+			          CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES);
 #ifdef UNIX_LIKE_USER_MODE
 	linux_user_mode_pthread_mutex_register();
 	linux_user_mode_pthread_rwlock_register();

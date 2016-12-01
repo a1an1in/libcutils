@@ -81,8 +81,8 @@ default_allocator_constructor()
 {
 	allocator_t *allocator;
 
-    printf("CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR=%d,construct default allocator\n",
-			CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR=%d,construct default allocator\n",
+			          CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
 
 	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");

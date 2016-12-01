@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <constructor_priority.h>
+#include <libdbg/debug.h>
 
 extern void console_print_regester();
 extern void log_print_regester();
@@ -25,8 +26,8 @@ extern void log_print_regester();
 __attribute__((constructor(CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES))) 
 void libdbg_register_modules()
 {
-    printf("CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES=%d,register libdbg modules\n",
-			CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES=%d,register libdbg modules\n",
+			          CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES);
 	console_print_regester();
 	//network_print_regester();
 	log_print_regester();

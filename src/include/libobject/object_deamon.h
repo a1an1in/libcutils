@@ -12,8 +12,8 @@
     {\
         object_deamon_t *deamon = object_deamon_get_global_object_deamon();\
         \
-        printf("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",\
-                CONSTRUCTOR_PRIORITY_REGISTER_CLASS, class_name);\
+        CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",\
+                          CONSTRUCTOR_PRIORITY_REGISTER_CLASS, class_name);\
         \
         object_deamon_register_class(deamon,class_name, class_info);\
     }

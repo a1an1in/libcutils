@@ -27,6 +27,7 @@
  */
 #include <stdio.h>
 #include <constructor_priority.h>
+#include <libdbg/debug.h>
 
 extern int allocator_sys_alloc_register();
 extern int allocator_ctr_alloc_register();
@@ -34,8 +35,8 @@ extern int allocator_ctr_alloc_register();
 __attribute__((constructor(CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES))) 
 void liballoc_register_modules()
 {
-    printf("CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES=%d,register alloc modules\n",
-			CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES=%d,register alloc modules\n",
+			          CONSTRUCTOR_PRIORITY_LIBALLOC_REGISTER_MODULES);
 	allocator_sys_alloc_register();
 	allocator_ctr_alloc_register();
 }

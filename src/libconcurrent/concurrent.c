@@ -659,8 +659,8 @@ concurrent_constructor()
 	uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
 
-    printf("CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR=%d,construct concurrent\n",
-			CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR=%d,construct concurrent\n",
+			          CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR);
 
 	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
 		dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
