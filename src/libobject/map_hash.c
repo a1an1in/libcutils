@@ -226,6 +226,7 @@ void test_obj_hash_map()
 #endif
     free(set_str);
     object_destroy(map);
+    object_destroy(iter);
 }
 
 

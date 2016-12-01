@@ -90,12 +90,6 @@ static void *__get_kpointer(Iterator *it)
 	dbg_str(OBJ_DETAIL,"Iterator get_kpointer");
 }
 
-static int __destroy(Iterator *it)
-{
-	dbg_str(OBJ_DETAIL,"Iterator destroy");
-    allocator_mem_free(it->obj.allocator,it);
-}
-
 static class_info_entry_t iter_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -107,8 +101,7 @@ static class_info_entry_t iter_class_info[] = {
 	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
 	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
 	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_kpointer",__get_vpointer,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[11] = {ENTRY_TYPE_END},
+	[10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Iterator",iter_class_info);
 

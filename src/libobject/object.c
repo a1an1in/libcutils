@@ -351,11 +351,9 @@ int __object_destroy(void *obj, char *type_name)
  	class_info_entry_t * entry_of_parent_class;
 	int (*deconstruct)(void *obj);
 
-	dbg_str(OBJ_DETAIL,"destroy obj type name =%s",type_name);
-
 	deamon                = object_deamon_get_global_object_deamon();
 	class_info            = object_deamon_search_class(deamon,(char *)type_name);
-	deconstruct             = object_get_func_pointer(class_info,"deconstruct");
+	deconstruct           = object_get_func_pointer(class_info,"deconstruct");
  	entry_of_parent_class = object_get_entry_of_parent_class(class_info);
 
 	deconstruct(obj);

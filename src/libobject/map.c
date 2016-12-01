@@ -104,9 +104,8 @@ static void __for_each(Map *map,void (*func)(Iterator *iter))
         func(cur);
     }
 
-    cur->destroy(cur);
-    end->destroy(end);
-
+    object_destroy(cur);
+    object_destroy(end);
 }
 
 static Iterator *__begin(Map *map)

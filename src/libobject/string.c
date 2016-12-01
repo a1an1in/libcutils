@@ -17,10 +17,7 @@ static int __construct(String *string,char *init_str)
 
 static int __deconstrcut(String *string)
 {
-    /*
-	 *dbg_str(OBJ_DETAIL,"string deconstruct,string addr:%p",string);
-     */
-	dbg_str(DBG_DETAIL,"string deconstruct,string addr:%p",string);
+    dbg_str(OBJ_DETAIL,"string deconstruct,string addr:%p",string);
     if(string->value)
         allocator_mem_free(string->obj.allocator,string->value);
 
