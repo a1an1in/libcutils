@@ -83,20 +83,20 @@ static int __set(Subject *subject, char *attrib, void *value)
 	return 0;
 }
 
-static void * __get(Subject *obj, char *attrib)
+static void * __get(Subject *subject, char *attrib)
 {
     if(strcmp(attrib, "x") == 0) 
-        return &obj->x;
+        return &subject->x;
     else if(strcmp(attrib, "y") == 0) 
-        return &obj->y;
+        return &subject->y;
     else if(strcmp(attrib, "width") == 0) 
-        return &obj->width;
+        return &subject->width;
     else if(strcmp(attrib, "height") == 0) 
-        return &obj->height;
+        return &subject->height;
     else if(strcmp(attrib, "x_speed") == 0) 
-        return &obj->x_speed;
+        return &subject->x_speed;
     else if(strcmp(attrib, "y_speed") == 0) {
-        return &obj->y_speed;
+        return &subject->y_speed;
     } else {
         dbg_str(OBJ_WARNNING,"subject get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

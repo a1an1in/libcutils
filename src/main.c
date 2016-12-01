@@ -340,7 +340,14 @@ static int args_process_test_Hmap(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_sdl(void *base,int argc,char **argv)
+{
+    test_sdl(argc, argv);
+	return 0;
+}
+
 static cmd_config_t cmds[]={
+	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},
 	{"HIter", args_process_test_Hmap_Iterator,0, "test", "N/A","test"},
 	{"Iter", args_process_test_Iterator,0, "test", "N/A","test"},

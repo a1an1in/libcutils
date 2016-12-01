@@ -96,7 +96,7 @@ static void __for_each(Map *map,void (*func)(Iterator *iter))
 {
     Iterator *cur, *end;
 
-	dbg_str(OBJ_DETAIL,"Map for_each");
+	dbg_str(OBJ_IMPORTANT,"Map for_each");
     cur = map->begin(map);
     end = map->end(map);
 

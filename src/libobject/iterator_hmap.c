@@ -28,6 +28,7 @@ static int __deconstrcut(Iterator *iter)
 static int __set(Iterator *iter, char *attrib, void *value)
 {
     Hmap_Iterator *hiter = (Hmap_Iterator *)iter;
+
 	if(strcmp(attrib, "set") == 0) {
 		hiter->set = value;
     } else if(strcmp(attrib, "get") == 0) {

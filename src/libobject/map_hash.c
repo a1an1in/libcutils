@@ -61,7 +61,9 @@ static int __set(Map *m, char *attrib, void *value)
 	} else if(strcmp(attrib, "del") == 0) {
 		map->del = value;
 	} else if(strcmp(attrib, "for_each") == 0) {
-        dbg_str(DBG_DETAIL,"hash map set for each addr:%p",value);
+        /*
+         *dbg_str(DBG_DETAIL,"hash map set for each addr:%p",value);
+         */
 		map->for_each = value;
 	} else if(strcmp(attrib, "begin") == 0) {
 		map->begin = value;
@@ -108,7 +110,7 @@ static int __insert_wb(Map *map,void *key,void *value,Iterator *iter)
 
 static int __search(Map *map,void *key,Iterator *iter)
 {
-	dbg_str(OBJ_DETAIL,"Hash Map search");
+	dbg_str(OBJ_IMPORTANT,"Hash Map search");
     return hash_map_search(((Hash_Map *)map)->hmap, key,
                            &((Hmap_Iterator *)iter)->hash_map_pos);
 }
@@ -224,9 +226,9 @@ void test_obj_hash_map()
     map->for_each((Map *)map,hash_map_print);
 
 #endif
-    free(set_str);
     object_destroy(map);
     object_destroy(iter);
+    free(set_str);
 }
 
 

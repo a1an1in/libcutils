@@ -26,6 +26,7 @@ static int __deconstrcut(String *string)
 
 static int __set(String *string, char *attrib, void *value)
 {
+
 	if(strcmp(attrib, "set") == 0) {
 		string->set = value;
     } else if(strcmp(attrib, "get") == 0) {
@@ -49,8 +50,7 @@ static void *__get(String *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
-    }
-    if(strcmp(attrib, "value") == 0) {
+    } else if(strcmp(attrib, "value") == 0) {
         return obj->value;
     } else {
         dbg_str(OBJ_WARNNING,"string get, \"%s\" getting attrib is not supported",attrib);
