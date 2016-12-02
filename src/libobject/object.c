@@ -78,7 +78,7 @@ int object_inherit_parent_methods(void *obj,void *class_info,void *parent_class_
 	int i;
     void *method;
 
-    if(parent_class_info == NULL) return;
+    if(parent_class_info == NULL) return 0; 
 
     /*
      *dbg_str(DBG_DETAIL,"current obj type name =%s, parent_class name:%s",entry->type_name,entry_parent->type_name);
@@ -91,8 +91,7 @@ int object_inherit_parent_methods(void *obj,void *class_info,void *parent_class_
 	}
 
 	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-        if(entry[i].type == ENTRY_TYPE_FUNC_POINTER)
-        {
+        if(entry[i].type == ENTRY_TYPE_FUNC_POINTER) {
             method = get(obj, (char *)entry[i].value_name);
             if(method != NULL)
                 set(obj, (char *)entry[i].value_name, method);

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libobject/subject.h>
+#include <libobject/obj.h>
 
 typedef struct string_s String;
 
