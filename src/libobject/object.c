@@ -24,7 +24,8 @@ void * object_get_func_pointer(void *class_info_addr, char *func_pointer_name)
 	return 0;
 }
 
-class_info_entry_t * object_get_entry_of_parent_class(void *class_info_addr)
+class_info_entry_t *
+object_get_entry_of_parent_class(void *class_info_addr)
 {
 	class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
 	int i;

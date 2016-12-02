@@ -48,6 +48,8 @@ static void *__get(Obj *obj, char *attrib)
 {
     if(strcmp(attrib, "allocator") == 0) {
         return obj->allocator;
+    } else if(strcmp(attrib, "name") == 0) {
+        return obj->name;
     } else {
         dbg_str(OBJ_WARNNING,"obj get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -61,7 +63,8 @@ static class_info_entry_t obj_class_info[] = {
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_END},
+	[5] = {ENTRY_TYPE_STRING,"","name",NULL,0},
+	[6] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Obj",obj_class_info);
 

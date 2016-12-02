@@ -86,8 +86,17 @@ static int __set(Map *m, char *attrib, void *value)
 
 static void *__get(Map *obj, char *attrib)
 {
+
+    Hash_Map *map = (Hash_Map *)obj;
+
     if(strcmp(attrib, "name") == 0) {
-        return obj->name;
+        return map->name;
+	} else if(strcmp(attrib, "key_size") == 0) {
+        return &map->key_size;
+	} else if(strcmp(attrib, "value_size") == 0) {
+        return &map->value_size;
+	} else if(strcmp(attrib, "bucket_size") == 0) {
+        return &map->bucket_size;
     } else {
         dbg_str(OBJ_WARNNING,"hash map get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -192,7 +201,6 @@ void test_obj_hash_map()
             cjson_add_number_to_object(e, "bucket_size", 15);
         }
     }
-
     set_str = cjson_print(root);
 
 #if 1
@@ -201,7 +209,7 @@ void test_obj_hash_map()
     iter = OBJECT_NEW(allocator, Hmap_Iterator,set_str);
 
     object_dump(map, "Hash_Map", buf, 2048);
-    dbg_str(OBJ_DETAIL,"Map dump: %s",buf);
+    dbg_str(DBG_DETAIL,"Map dump: %s",buf);
 
     map->insert(map,"abc","hello world");
     map->insert(map,"test","sdfsafsdaf");
