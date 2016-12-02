@@ -342,7 +342,9 @@ static int args_process_test_Hmap(void *base,int argc,char **argv)
 
 static int args_process_test_sdl(void *base,int argc,char **argv)
 {
-    test_sdl(argc, argv);
+	/*
+     *test_sdl(argc, argv);
+	 */
 	return 0;
 }
 
