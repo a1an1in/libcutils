@@ -346,7 +346,14 @@ static int args_process_test_sdl(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_Painter(void *base,int argc,char **argv)
+{
+    test_ui_painter();
+	return 0;
+}
+
 static cmd_config_t cmds[]={
+	{"Painter", args_process_test_Painter,0, "test", "N/A","test"},
 	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},
 	{"HIter", args_process_test_Hmap_Iterator,0, "test", "N/A","test"},

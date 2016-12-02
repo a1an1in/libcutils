@@ -47,4 +47,5 @@ void test_ui_button();
 void test_obj_iter();
 void test_obj_hiter();
 int test_sdl( int argc, char* args[]);
+void test_ui_painter();
 #endif
