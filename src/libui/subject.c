@@ -76,6 +76,16 @@ static int __set(Subject *subject, char *attrib, void *value)
         subject->width = *((uint32_t *)value);
 	} else if(strcmp(attrib, "height") == 0) {
         subject->height = *((uint32_t *)value);
+	} else if(strcmp(attrib, "x_speed") == 0) {
+        subject->x_speed = *((int *)value);
+		dbg_str(DBG_DETAIL,"set x_speed =%f",subject->x_speed);
+	} else if(strcmp(attrib, "y_speed") == 0) {
+        subject->y_speed = *((int *)value);
+		dbg_str(DBG_DETAIL,"set y_speed =%f",subject->y_speed);
+	/*
+	 *} else if(strcmp(attrib, "graph") == 0) {
+     *    subject->graph = value;
+	 */
 	} else {
 		dbg_str(OBJ_WARNNING,"subject set,  \"%s\" setting is not support",attrib);
 	}
@@ -97,6 +107,10 @@ static void * __get(Subject *subject, char *attrib)
         return &subject->x_speed;
     else if(strcmp(attrib, "y_speed") == 0) {
         return &subject->y_speed;
+	/*
+	 *} else if(strcmp(attrib, "graph") == 0) {
+     *    return subject->graph;
+	 */
     } else {
         dbg_str(OBJ_WARNNING,"subject get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -121,6 +135,9 @@ static class_info_entry_t subject_class_info[] = {
 	[13] = {ENTRY_TYPE_INT32_T,"int","height",NULL,sizeof(int)},
 	[14] = {ENTRY_TYPE_FLOAT_T,"float","x_speed",NULL,sizeof(float)},
 	[15] = {ENTRY_TYPE_FLOAT_T,"float","y_speed",NULL,sizeof(float)},
+	/*
+	 *[16] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
+	 */
 	[16] = {ENTRY_TYPE_END},
 
 };

@@ -33,6 +33,10 @@ static int __set(Graph *graph, char *attrib, void *value)
 		graph->deconstruct = value;
 	} else if(strcmp(attrib, "move") == 0) {
 		graph->move = value;
+	} else if(strcmp(attrib, "init_window") == 0) {
+		graph->init_window = value;
+	} else if(strcmp(attrib, "close_window") == 0) {
+		graph->close_window = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(graph->name,value,strlen(value));
 	} else {
@@ -53,14 +57,26 @@ static void *__get(Graph *obj, char *attrib)
     return NULL;
 }
 
+static int __init_window(Graph *graph, void *window)
+{
+	dbg_str(DBG_SUC,"graph init window");
+}
+
+static int __close_window(Graph *graph, void *window)
+{
+	dbg_str(DBG_SUC,"graph close_window");
+}
+
 static class_info_entry_t graph_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[6] = {ENTRY_TYPE_END},
+	[5] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","init_window",__init_window,sizeof(void *)},
+	[6] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
+	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[8] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Graph",graph_class_info);

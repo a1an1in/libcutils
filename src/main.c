@@ -356,7 +356,15 @@ static int args_process_test_Graph(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_Window(void *base,int argc,char **argv)
+{
+	test_ui_window();
+	return 0;
+}
+
+
 static cmd_config_t cmds[]={
+	{"Window", args_process_test_Window,0, "test", "N/A","test"},
 	{"Graph", args_process_test_Graph,0, "test", "N/A","test"},
 	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},

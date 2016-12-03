@@ -54,4 +54,5 @@ void test_obj_string();
 void test_obj_map();
 void test_obj_hash_map();
 void test_ui_graph();
+void test_ui_window();
 #endif

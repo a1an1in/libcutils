@@ -124,7 +124,7 @@ void test_obj_string()
     string->assign(string,"hello world!");
 
     object_dump(string, "String", buf, 2048);
-    dbg_str(OBJ_DETAIL,"String dump: %s",buf);
+    dbg_str(DBG_DETAIL,"String dump: %s",buf);
 
     free(set_str);
 

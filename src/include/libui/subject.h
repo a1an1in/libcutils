@@ -2,6 +2,7 @@
 #define __SUBJECT_H__
 
 #include <libobject/obj.h>
+#include <libui/graph.h>
 
 typedef struct subject_s Subject;
 struct subject_s{
@@ -22,6 +23,9 @@ struct subject_s{
 
 	int x, y, height, width;
 	float x_speed, y_speed;
+	/*
+	 *Graph *graph;
+	 */
 };
 
 #endif

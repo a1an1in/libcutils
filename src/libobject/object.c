@@ -199,7 +199,10 @@ static int __object_set(void *obj,
                  *dbg_str(OBJ_DETAIL,"object name %s,set %s",object->string, c->string);
                  */
                 if(c->type & CJSON_NUMBER) {
-                    set(obj,c->string,&(c->valueint));
+					set(obj,c->string,&(c->valueint));
+					/*
+                     *set(obj,c->string,&(c->valuedouble));
+					 */
                 } else if(c->type & CJSON_STRING) {
                     set(obj,c->string,c->valuestring);
                 }
@@ -252,7 +255,9 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
         {
 		} else {
             value = get(obj,entry[i].value_name);
-            if(value == NULL) continue;
+			/*
+             *if(value == NULL) continue;
+			 */
             name = entry[i].value_name;
             if(entry[i].type == ENTRY_TYPE_INT8_T || entry[i].type == ENTRY_TYPE_UINT8_T){
                 cjson_add_number_to_object(object, name, *((char *)value));
@@ -261,17 +266,20 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
             } else if(entry[i].type == ENTRY_TYPE_INT32_T || entry[i].type == ENTRY_TYPE_UINT32_T) {
                 cjson_add_number_to_object(object, name, *((int *)value));
             } else if(entry[i].type == ENTRY_TYPE_INT64_T || entry[i].type == ENTRY_TYPE_UINT64_T) {
+			} else if(entry[i].type == ENTRY_TYPE_FLOAT_T) {
+                cjson_add_number_to_object(object, name, *((float *)value));
             } else if(entry[i].type == ENTRY_TYPE_STRING) {
                 cjson_add_string_to_object(object, name, (char *)value);
             } else if(entry[i].type == ENTRY_TYPE_NORMAL_POINTER ||
-                    entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
-                    entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER ||
-                    entry[i].type == ENTRY_TYPE_OBJ_POINTER) 
+                      entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
+                      entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER ||
+                      entry[i].type == ENTRY_TYPE_OBJ_POINTER) 
             {
                 unsigned long long d = (unsigned long long) value;
                 cjson_add_number_to_object(object, name,d);
             } else {
-                dbg_str(OBJ_WARNNING,"type error,please check");
+                dbg_str(OBJ_WARNNING,"type error,please check,type name :%s,entry name :%s,type =%d",
+						type_name, entry[i].type_name, entry[i].type);
             }
         }
 	}	
