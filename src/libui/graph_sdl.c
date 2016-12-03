@@ -5,8 +5,9 @@
  * @version 1
  * @date 2016-11-21
  */
-#include <libui/graph_sdl.h>
 #include <libui/window.h>
+#include <libui/graph_sdl.h>
+#include <libui/image_sdl.h>
 
 static int __construct(SDL_Graph *sdl_grath,char *init_str)
 {
@@ -100,6 +101,7 @@ static int __close_window(SDL_Graph *graph, void *window)
 	//Quit SDL subsystems
 	SDL_Quit();
 }
+
 static class_info_entry_t sdl_grath_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Graph","graph",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},

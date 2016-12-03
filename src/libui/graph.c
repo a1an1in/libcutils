@@ -67,6 +67,11 @@ static int __close_window(Graph *graph, void *window)
 	dbg_str(DBG_SUC,"graph close_window");
 }
 
+static int __load_image(Graph *graph, void *image)
+{
+	dbg_str(DBG_SUC,"graph load image");
+}
+
 static class_info_entry_t graph_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -75,8 +80,9 @@ static class_info_entry_t graph_class_info[] = {
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","init_window",__init_window,sizeof(void *)},
 	[6] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
-	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[8] = {ENTRY_TYPE_END},
+	[7] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","load_image",__load_image,sizeof(void *)},
+	[8] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[9] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Graph",graph_class_info);

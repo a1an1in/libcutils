@@ -362,8 +362,21 @@ static int args_process_test_Window(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_Image(void *base,int argc,char **argv)
+{
+	test_obj_image();
+	return 0;
+}
+
+static int args_process_test_SDL_Image(void *base,int argc,char **argv)
+{
+	test_obj_sdl_image();
+	return 0;
+}
 
 static cmd_config_t cmds[]={
+	{"SDL_Image", args_process_test_SDL_Image,0, "test", "N/A","test"},
+	{"Image", args_process_test_Image,0, "test", "N/A","test"},
 	{"Window", args_process_test_Window,0, "test", "N/A","test"},
 	{"Graph", args_process_test_Graph,0, "test", "N/A","test"},
 	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},

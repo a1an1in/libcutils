@@ -55,4 +55,6 @@ void test_obj_map();
 void test_obj_hash_map();
 void test_ui_graph();
 void test_ui_window();
+void test_obj_image();
+void test_obj_sdl_image();
 #endif

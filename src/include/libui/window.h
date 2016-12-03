@@ -5,6 +5,7 @@
 #include <libdbg/debug.h>
 #include <libui/component.h>
 #include <libui/graph.h>
+#include <libui/image.h>
 
 typedef struct window_s Window;
 
@@ -23,6 +24,7 @@ struct window_s{
 #undef MAX_NAME_LEN
 	uint8_t graph_type;
 	Graph *graph;
+	Image *background;
 	int screen_width;
 	int screen_height;
 };

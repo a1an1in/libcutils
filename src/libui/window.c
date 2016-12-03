@@ -7,20 +7,30 @@
  */
 #include <libui/window.h>
 #include <libui/graph_sdl.h>
+#include <libui/image_sdl.h>
 
 static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_SUC,"window construct, window addr:%p",window);
+	allocator_t *allocator = ((Obj *)window)->allocator;
 	if(window->graph_type == 1) {
-		window->graph = (Graph *)OBJECT_NEW(((Obj *)window)->allocator, SDL_Graph,NULL);
+		window->graph      = (Graph *)OBJECT_NEW(allocator, SDL_Graph,NULL);
+		window->background = (Image *)OBJECT_NEW(allocator, SDL_Image,NULL);
+		window->background->path->assign(window->background->path,"./bin/hello_world.bmp");
 	}
 
 	if(window->graph != NULL) {
 		window->graph->init_window(window->graph,window);
+		window->background->load_image(window->background);
 	} else {
 		dbg_str(DBG_ERROR,"window graph is NULL, please check");
 		return -1;
 	}
+
+	SDL_Image *i = (SDL_Image *)window->background;
+	SDL_Graph *g = (SDL_Graph *)window->graph;
+	SDL_BlitSurface(i->surface, NULL, g->screen_surface, NULL );
+	SDL_UpdateWindowSurface(g->window);
 
 	return 0;
 }
@@ -139,21 +149,21 @@ char *gen_window_setting_str()
 
 void test_ui_window()
 {
-    Subject *subject;
+    Window *window;
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
     char buf[2048];
 
     set_str = gen_window_setting_str();
 
-    subject = OBJECT_NEW(allocator, Window,set_str);
+    window = OBJECT_NEW(allocator, Window,set_str);
 
-    object_dump(subject, "Window", buf, 2048);
+    object_dump(window, "Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
 	sleep(5);
 
-    object_destroy(subject);
+    object_destroy(window);
 
     free(set_str);
 
