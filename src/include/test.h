@@ -48,4 +48,10 @@ void test_obj_iter();
 void test_obj_hiter();
 int test_sdl( int argc, char* args[]);
 void test_ui_painter();
+void test_obj_subject();
+void test_obj_enemy();
+void test_obj_string();
+void test_obj_map();
+void test_obj_hash_map();
+void test_ui_graph();
 #endif

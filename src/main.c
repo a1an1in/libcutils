@@ -231,7 +231,9 @@ static int args_process_lab(void *base,int argc,char **argv)
     /*
      *lab();
      */
-    lab2();
+	/*
+     *lab2();
+	 */
     /*
      *lab3();
      */
@@ -355,7 +357,7 @@ static int args_process_test_Graph(void *base,int argc,char **argv)
 }
 
 static cmd_config_t cmds[]={
-	{"graph", args_process_test_Graph,0, "test", "N/A","test"},
+	{"Graph", args_process_test_Graph,0, "test", "N/A","test"},
 	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},
 	{"HIter", args_process_test_Hmap_Iterator,0, "test", "N/A","test"},

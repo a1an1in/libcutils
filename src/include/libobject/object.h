@@ -10,6 +10,8 @@ int object_init_func_pointer(void *obj,void *class_info_addr);
 class_info_entry_t * object_get_subclass_info(void *class_info_addr);
 int object_init(void *obj, char *type_name);
 int object_set(void *obj, char *type_name, char *set_str);
+int object_dump(void *obj, char *type_name, char *buf, int max_len);
+int object_destroy(void *obj);
 
 #define OBJECT_ALLOC(alloc, type) \
 ({\
