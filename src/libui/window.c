@@ -6,8 +6,6 @@
  * @date 2016-12-03
  */
 #include <libui/window.h>
-#include <libui/graph_sdl.h>
-#include <libui/image_sdl.h>
 
 #if 0
 static int __construct(Window *window,char *init_str)

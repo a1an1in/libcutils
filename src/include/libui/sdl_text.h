@@ -4,7 +4,7 @@
 #include <libobject/obj.h>
 #include <libobject/string.h>
 #include <libui/text.h>
-#include <libui/font_sdl.h>
+#include <libui/sdl_font.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 

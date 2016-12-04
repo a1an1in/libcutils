@@ -1,37 +1,34 @@
 /**
- * @file text.c
+ * @file event_sdl.c
  * @synopsis 
  * @author a1an1in@sina.com
  * @version 
- * @date 2016-12-03
+ * @date 2016-12-04
  */
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libui/text_sdl.h>
-#include <libui/window_sdl.h>
+#include <libui/sdl_ui_event.h>
+#include <libui/sdl_window.h>
 
-static int __construct(Text *text,char *init_str)
+static int __construct(UI_Event *event,char *init_str)
 {
-	dbg_str(OBJ_DETAIL,"text construct, text addr:%p",text);
+	dbg_str(OBJ_DETAIL,"event construct, event addr:%p",event);
 
 	return 0;
 }
 
-static int __deconstrcut(Text *text)
+static int __deconstrcut(UI_Event *event)
 {
-	SDL_Text *i = (SDL_Text *)text;
-	dbg_str(OBJ_DETAIL,"text deconstruct,text addr:%p",text);
+	UI_Event *i = (UI_Event *)event;
+	dbg_str(OBJ_DETAIL,"event deconstruct,event addr:%p",event);
 
-	if(i->surface != NULL){
-		SDL_FreeSurface(i->surface);
-	}
 
 	return 0;
 }
 
-static int __set(Text *text, char *attrib, void *value)
+static int __set(UI_Event *event, char *attrib, void *value)
 {
-	SDL_Text *i = (SDL_Text *)text;
+	UI_Event *i = (UI_Event *)event;
 
 	if(strcmp(attrib, "set") == 0) {
 		i->set = value;
@@ -41,46 +38,34 @@ static int __set(Text *text, char *attrib, void *value)
 		i->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		i->deconstruct = value;
-	} else if(strcmp(attrib, "load_text") == 0) {
-		i->load_text = value;
 	} else {
-		dbg_str(OBJ_WARNNING,"text set,  \"%s\" setting is not support",attrib);
+		dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
 	}
 
 	return 0;
 }
 
-static void * __get(Text *text, char *attrib)
+static void * __get(UI_Event *event, char *attrib)
 {
     if(strcmp(attrib, "x") == 0){ 
     } else {
-        dbg_str(OBJ_WARNNING,"text get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(OBJ_WARNNING,"event get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
 }
 
-static int __load_text(Text *text,void *font)
-{
-	SDL_Text *t = (SDL_Text *)text;
-	SDL_Font *f = (SDL_Font *)font;
-	SDL_Color textColor = { 0, 0, 0, 0xFF };
 
-	dbg_str(DBG_SUC,"SDL_Text load text");
-	t->surface = TTF_RenderText_Solid(f->ttf_font, text->content->value, textColor ); 
-}
-
-static class_info_entry_t text_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"Text","text",NULL,sizeof(void *)},
+static class_info_entry_t sdl_ui_event_class_info[] = {
+	[0 ] = {ENTRY_TYPE_OBJ,"UI_Event","event",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_text",__load_text,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_END},
+	[5 ] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("SDL_Text",text_class_info);
+REGISTER_CLASS("SDL_UI_Event",sdl_ui_event_class_info);
 
 static char *gen_window_setting_str()
 {
@@ -114,11 +99,11 @@ static char *gen_window_setting_str()
     return set_str;
 }
 
-void test_obj_sdl_text()
+void test_obj_sdl_event()
 {
     Window *window;
 	Graph *g;
-	Text *text;
+	UI_Event *event;
 	Font *font;
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
@@ -137,13 +122,6 @@ void test_obj_sdl_text()
 	 *font->load_font(font);
 	 */
 
-    text = OBJECT_NEW(allocator, SDL_Text,"");
-	text->content->assign(text->content,"hello world");
-
-	g->render_load_text(g,text,window->font, 0,0,0,0xff);
-	g->render_write_text(g,0,0,text);
-
-	g->render_present(g);
 
 	pause();
 

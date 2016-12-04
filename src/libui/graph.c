@@ -43,6 +43,8 @@ static int __set(Graph *graph, char *attrib, void *value)
 		graph->draw_image = value;
 	} else if(strcmp(attrib, "render_create") == 0) {
 		graph->render_create = value;
+	} else if(strcmp(attrib, "render_destroy") == 0) {
+		graph->render_destroy = value;
 	} else if(strcmp(attrib, "render_set_color") == 0) {
 		graph->render_set_color = value;
 	} else if(strcmp(attrib, "render_clear") == 0) {
@@ -112,6 +114,11 @@ static int __render_create(Graph *graph)
 	dbg_str(DBG_SUC,"Graph render_create");
 }
 
+static int __render_destroy(Graph *graph)
+{
+	dbg_str(DBG_SUC,"Graph render_destroy");
+}
+
 static int __render_set_color(Graph *graph, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
 	dbg_str(DBG_SUC,"Graph render_set_color");
@@ -168,17 +175,18 @@ static class_info_entry_t graph_class_info[] = {
 	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","update_window",__update_window,sizeof(void *)},
 	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","draw_image",__draw_image,sizeof(void *)},
 	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_create",__render_create,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
-	[11] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
-	[12] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
-	[13] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
-	[14] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
-	[15] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
-	[16] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
-	[17] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
-	[18] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[19] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[20] = {ENTRY_TYPE_END},
+	[10] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_destroy",__render_destroy,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
+	[13] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
+	[14] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
+	[15] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
+	[16] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
+	[17] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
+	[18] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
+	[19] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[20] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[21] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Graph",graph_class_info);

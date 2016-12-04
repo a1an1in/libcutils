@@ -7,7 +7,7 @@
  */
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libui/image_sdl.h>
+#include <libui/sdl_image.h>
 
 static int __construct(Image *image,char *init_str)
 {

@@ -23,6 +23,7 @@ struct sdl_graph_s{
 	int (*update_window)(Graph *graph);
 	int (*draw_image)(Graph *graph, void *image);
 	int (*render_create)(Graph *graph);
+	int (*render_destroy)(Graph *graph);
 	int (*render_set_color)(Graph *graph, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 	int (*render_clear)(Graph *graph);
 	int (*render_draw_line)(Graph *graph,int x1, int y1, int x2, int y2);

@@ -1,14 +1,14 @@
 /**
- * @file window.c
+ * @file window_sdl.c
  * @synopsis 
  * @author a1an1in@sina.com
  * @version 
- * @date 2016-12-03
+ * @date 2016-12-04
  */
-#include <libui/window_sdl.h>
-#include <libui/graph_sdl.h>
-#include <libui/image_sdl.h>
-#include <libui/font_sdl.h>
+#include <libui/sdl_window.h>
+#include <libui/sdl_graph.h>
+#include <libui/sdl_image.h>
+#include <libui/sdl_font.h>
 
 static int __construct(Window *window,char *init_str)
 {
@@ -51,9 +51,14 @@ static int __construct(Window *window,char *init_str)
 
 static int __deconstrcut(Window *window)
 {
-	dbg_str(DBG_SUC,"sdl window deconstruct,window addr:%p",window);
-	window->graph->close_window(window->graph,window);
+	Graph *g = window->graph;
 
+	dbg_str(DBG_SUC,"sdl window deconstruct,window addr:%p",window);
+
+	g->render_destroy(g);
+	window->graph->close_window(window->graph,window);
+    object_destroy(window->background);
+    object_destroy(window->font);
     object_destroy(window->graph);
 
 	return 0;
