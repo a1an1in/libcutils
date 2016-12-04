@@ -356,9 +356,9 @@ static int args_process_test_Graph(void *base,int argc,char **argv)
 	return 0;
 }
 
-static int args_process_test_Window(void *base,int argc,char **argv)
+static int args_process_test_SDL_Window(void *base,int argc,char **argv)
 {
-	test_ui_window();
+	test_ui_sdl_window();
 	return 0;
 }
 
@@ -374,10 +374,23 @@ static int args_process_test_SDL_Image(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_SDL_Font(void *base,int argc,char **argv)
+{
+	test_obj_sdl_font();
+	return 0;
+}
+
+static int args_process_test_SDL_Text(void *base,int argc,char **argv)
+{
+	test_obj_sdl_text();
+	return 0;
+}
 static cmd_config_t cmds[]={
+	{"SDL_Text", args_process_test_SDL_Text,0, "test", "N/A","test"},
+	{"SDL_Font", args_process_test_SDL_Font,0, "test", "N/A","test"},
 	{"SDL_Image", args_process_test_SDL_Image,0, "test", "N/A","test"},
 	{"Image", args_process_test_Image,0, "test", "N/A","test"},
-	{"Window", args_process_test_Window,0, "test", "N/A","test"},
+	{"SDL_Window", args_process_test_SDL_Window,0, "test", "N/A","test"},
 	{"Graph", args_process_test_Graph,0, "test", "N/A","test"},
 	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},

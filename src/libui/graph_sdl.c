@@ -8,6 +8,7 @@
 #include <libui/window.h>
 #include <libui/graph_sdl.h>
 #include <libui/image_sdl.h>
+#include <libui/text_sdl.h>
 
 static int __construct(SDL_Graph *sdl_grath,char *init_str)
 {
@@ -39,7 +40,31 @@ static int __set(SDL_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->init_window = value;
 	} else if(strcmp(attrib, "close_window") == 0) {
 		sdl_grath->close_window = value;
-	} else if(strcmp(attrib, "name") == 0) {
+	} else if(strcmp(attrib, "update_window") == 0) {
+		sdl_grath->update_window = value;
+	} else if(strcmp(attrib, "draw_image") == 0) {
+		sdl_grath->draw_image = value;
+	} else if(strcmp(attrib, "render_create") == 0) {
+		sdl_grath->render_create = value;
+	} else if(strcmp(attrib, "render_set_color") == 0) {
+		sdl_grath->render_set_color = value;
+	} else if(strcmp(attrib, "render_clear") == 0) {
+		sdl_grath->render_clear = value;
+	} else if(strcmp(attrib, "render_draw_line") == 0) {
+		sdl_grath->render_draw_line = value;
+	} else if(strcmp(attrib, "render_fill_rect") == 0) {
+		sdl_grath->render_fill_rect = value;
+	} else if(strcmp(attrib, "render_draw_image") == 0) {
+		sdl_grath->render_draw_image = value;
+	} else if(strcmp(attrib, "render_load_image") == 0) {
+		sdl_grath->render_load_image = value;
+	} else if(strcmp(attrib, "render_load_text") == 0) {
+		sdl_grath->render_load_text = value;
+	} else if(strcmp(attrib, "render_write_text") == 0) {
+		sdl_grath->render_write_text = value;
+	} else if(strcmp(attrib, "render_present") == 0) {
+		sdl_grath->render_present = value;
+	} else if(strcmp(attrib, "name") == 0) { /**attribs*/
         strncpy(sdl_grath->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"sdl_graph set, not support %s setting",attrib);
@@ -102,16 +127,136 @@ static int __close_window(SDL_Graph *graph, void *window)
 	SDL_Quit();
 }
 
+static int __update_window(SDL_Graph *graph)
+{
+	dbg_str(DBG_SUC,"SDL_Graph update_window");
+	SDL_UpdateWindowSurface(graph->window);
+}
+
+static int __draw_image(SDL_Graph *graph, void *image)
+{
+	SDL_Image *i = (SDL_Image *)image;
+	dbg_str(DBG_SUC,"SDL_Graph draw_image");
+
+	SDL_BlitSurface(i->surface, NULL, graph->screen_surface, NULL );
+}
+
+static int __render_create(SDL_Graph *graph)
+{
+	dbg_str(DBG_SUC,"SDL_Graph render_create");
+	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
+	graph->render = SDL_CreateRenderer( graph->window, -1, 0 );
+}
+
+static int __render_set_color(SDL_Graph *graph,
+							  uint8_t r, uint8_t g,
+							  uint8_t b, uint8_t a)
+{
+	dbg_str(DBG_SUC,"SDL_Graph set_color");
+	SDL_SetRenderDrawColor(graph->render, r, g, b, a);
+}
+
+static int __render_clear(SDL_Graph *graph)
+{
+	dbg_str(DBG_SUC,"SDL_Graph render_clear");
+	SDL_RenderClear(graph->render);
+}
+
+static int __render_draw_line(SDL_Graph *graph,int x1, int y1, int x2, int y2)
+{
+	dbg_str(DBG_SUC,"Graph render_draw_line");
+	SDL_RenderDrawLine(graph->render,x1, y1, x2, y2);
+}
+
+static int __render_fill_rect(SDL_Graph *graph,int x1, int y1, int x2, int y2)
+{
+	dbg_str(DBG_SUC,"Graph render_fill_rect");
+	SDL_Rect fillRect = {x1,y1,x2,y2};
+	SDL_RenderFillRect(graph->render, &fillRect );
+}
+
+static int __render_load_image(SDL_Graph *graph,void *image)
+{
+	SDL_Image *i = (SDL_Image *)image;
+	dbg_str(DBG_SUC,"SDL Graph __render_load_image");
+	if(i->surface == NULL) {
+		dbg_str(DBG_SUC,"**********CreateTextureFromSurface");
+		i->load_image(image);
+	}
+
+	if(i->surface != NULL) {
+		dbg_str(DBG_SUC,"**********CreateTextureFromSurface");
+		i->texture = SDL_CreateTextureFromSurface(graph->render, i->surface);
+		i->width = i->surface->w;
+		i->height = i->surface->h;
+		SDL_FreeSurface(i->surface);
+	}
+}
+
+static int __render_draw_image(SDL_Graph *graph,int x, int y, void *image)
+{
+	dbg_str(DBG_SUC,"SDL_Graph render_draw_image");
+	SDL_Image *i = (SDL_Image *)image;
+	SDL_Rect render_quad = { x, y, i->width, i->height};
+	SDL_RenderCopy(graph->render, i->texture, NULL, &render_quad );
+}
+
+static int __render_load_text(SDL_Graph *graph,void *text,void *font,int r, int g, int b, int a)
+{
+
+	SDL_Text *t = (SDL_Text *)text;
+	SDL_Font *f = (SDL_Font *)font;
+	SDL_Surface* surface = NULL;
+	SDL_Color textColor = {r, g, b, a };
+
+	dbg_str(DBG_SUC,"SDL_Text load text");
+	surface = TTF_RenderText_Solid(f->ttf_font, ((Text *)text)->content->value, textColor ); 
+
+
+	if(surface != NULL) {
+		dbg_str(DBG_SUC,"**********CreateTextureFromSurface");
+		t->texture = SDL_CreateTextureFromSurface(graph->render, surface);
+		t->width = surface->w;
+		t->height = surface->h;
+		SDL_FreeSurface(surface);
+	}
+
+}
+static int __render_write_text(SDL_Graph *graph,int x, int y, void *text)
+{
+	dbg_str(DBG_SUC,"SDL_Graph render_write_text");
+	SDL_Text *t = (SDL_Text *)text;
+	SDL_Rect render_quad = { x, y, t->width, t->height};
+	SDL_RenderCopy(graph->render, t->texture, NULL, &render_quad );
+}
+static int __render_present(SDL_Graph *graph)
+{
+	dbg_str(DBG_SUC,"SDL_Graph render_present");
+	SDL_RenderPresent(graph->render);
+}
+
 static class_info_entry_t sdl_grath_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Graph","graph",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","init_window",__init_window,sizeof(void *)},
-	[6] = {ENTRY_TYPE_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
-	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[8] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Graph","graph",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","init_window",__init_window,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","update_window",__update_window,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw_image",__draw_image,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","render_create",__render_create,sizeof(void *)},
+	[10] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
+	[11] = {ENTRY_TYPE_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
+	[12] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
+	[13] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
+	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
+	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
+	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[19] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[20] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("SDL_Graph",sdl_grath_class_info);

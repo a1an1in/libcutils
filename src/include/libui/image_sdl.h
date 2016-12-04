@@ -22,6 +22,9 @@ struct sdl_image_s{
 
 	/*attribs*/
 	SDL_Surface* surface;
+	SDL_Texture* texture;
+	int width;
+	int height;
 };
 
 #endif
