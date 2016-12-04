@@ -7,44 +7,6 @@
  */
 #include <libui/window.h>
 
-#if 0
-static int __construct(Window *window,char *init_str)
-{
-	dbg_str(DBG_SUC,"window construct, window addr:%p",window);
-	allocator_t *allocator = ((Obj *)window)->allocator;
-	Graph *g;
-	Image *background;
-
-	if(window->graph_type == 1) {
-		window->graph      = (Graph *)OBJECT_NEW(allocator, SDL_Graph,NULL);
-		window->background = (Image *)OBJECT_NEW(allocator, SDL_Image,NULL);
-		window->background->path->assign(window->background->path,"./bin/hello_world.bmp");
-	}
-
-	g = window->graph;
-	background = window->background;
-	if(g != NULL) {
-		g->init_window(g,window);
-		/*
-		 *background->load_image(background);
-		 *g->draw_image(g,background);
-		 */
-	} else {
-		dbg_str(DBG_ERROR,"window graph is NULL, please check");
-		return -1;
-	}
-
-	g->render_create(g);
-	g->render_set_color(g,0xff,0xff,0xff,0xff);
-	g->render_clear(g);
-	g->render_present(g);
-	/*
-	 *g->update_window(g);
-	 */
-
-	return 0;
-}
-#endif
 static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_SUC,"window construct, window addr:%p",window);

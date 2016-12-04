@@ -3,24 +3,26 @@
 
 #include <libobject/obj.h>
 #include <libobject/string.h>
-#include <libui/ui_event.h>
+#include <libui/event.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_events.h>
 
-typedef struct sdl_ui_event_s SDL_UI_Event;
+typedef struct sdl_ui_event_s _SDL_Event;
 
 struct sdl_event_s{
-	UI_Event event;
+	Event event;
 
 	/*normal methods*/
-	int (*construct)(UI_Event *event,char *init_str);
-	int (*deconstruct)(UI_Event *event);
-	int (*set)(UI_Event *event, char *attrib, void *value);
+	int (*construct)(Event *event,char *init_str);
+	int (*deconstruct)(Event *event);
+	int (*set)(Event *event, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods*/
 
 	/*attribs*/
+	SDL_Event ev;
 };
 
 #endif

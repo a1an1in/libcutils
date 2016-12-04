@@ -5,14 +5,14 @@
 #include <libobject/string.h>
 #include <libui/graph.h>
 
-typedef struct ui_event_s UI_Event;
+typedef struct ui_event_s Event;
 struct ui_event_s{
 	Obj obj;
 
 	/*normal methods*/
-	int (*construct)(UI_Event *event,char *init_str);
-	int (*deconstruct)(UI_Event *event);
-	int (*set)(UI_Event *event, char *attrib, void *value);
+	int (*construct)(Event *event,char *init_str);
+	int (*deconstruct)(Event *event);
+	int (*set)(Event *event, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods*/
