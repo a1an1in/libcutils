@@ -342,7 +342,11 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 	object_cover_vitual_func_pointer(obj, cur_type_name, type_name);
 
 	dbg_str(OBJ_DETAIL,"obj addr:%p",obj);
-	construct(obj,NULL);
+    if(construct != NULL)
+        construct(obj,NULL);
+    else{
+        dbg_str(DBG_SUC,"%s construct is NULL",construct);
+    }
 
 	return 0;
 }
@@ -364,7 +368,9 @@ int __object_destroy(void *obj, char *type_name)
 	deconstruct           = object_get_func_pointer(class_info,"deconstruct");
  	entry_of_parent_class = object_get_entry_of_parent_class(class_info);
 
-	deconstruct(obj);
+    if(deconstruct != NULL) 
+        deconstruct(obj);
+
  	if(entry_of_parent_class == NULL) {
         return 0;
  	} else {

@@ -110,7 +110,7 @@ static class_info_entry_t sdl_window_class_info[] = {
 };
 REGISTER_CLASS("SDL_Win",sdl_window_class_info);
 
-static char *gen_window_setting_str()
+char *gen_window_setting_str()
 {
     cjson_t *root,*w, *c, *e, *s;
     char *set_str;

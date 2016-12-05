@@ -82,38 +82,6 @@ static class_info_entry_t text_class_info[] = {
 };
 REGISTER_CLASS("SDL_Text",text_class_info);
 
-static char *gen_window_setting_str()
-{
-    cjson_t *root,*w, *c, *e, *s;
-    char *set_str;
-
-    root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Window", w = cjson_create_object());{
-            cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
-                cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
-                    cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 1);
-                        cjson_add_number_to_object(s, "y", 25);
-                        cjson_add_number_to_object(s, "width", 5);
-                        cjson_add_number_to_object(s, "height", 125);
-                        cjson_add_number_to_object(s, "x_speed", 1.2);
-                        cjson_add_number_to_object(s, "y_speed", 2.3);
-                    }
-                    cjson_add_string_to_object(e, "name", "Container");
-                }
-                cjson_add_string_to_object(c, "name", "Component");
-            }
-            cjson_add_string_to_object(w, "name", "Window");
-			cjson_add_number_to_object(w, "graph_type", 1);
-			cjson_add_number_to_object(w, "screen_width", 640);
-			cjson_add_number_to_object(w, "screen_height", 480);
-        }
-    }
-    set_str = cjson_print(root);
-
-    return set_str;
-}
-
 void test_obj_sdl_text()
 {
     Window *window;
