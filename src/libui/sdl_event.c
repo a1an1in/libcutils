@@ -47,7 +47,7 @@ static int __set(Event *event, char *attrib, void *value)
 
 static void * __get(Event *event, char *attrib)
 {
-    if(strcmp(attrib, "x") == 0){ 
+    if(strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"event get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

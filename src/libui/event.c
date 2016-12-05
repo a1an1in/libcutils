@@ -42,7 +42,7 @@ static int __set(Event *event, char *attrib, void *value)
 
 static void * __get(Event *event, char *attrib)
 {
-    if(strcmp(attrib, "x") == 0){ 
+    if(strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"event get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -51,12 +51,12 @@ static void * __get(Event *event, char *attrib)
 }
 
 static class_info_entry_t event_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_END},
+	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Event",event_class_info);

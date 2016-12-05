@@ -21,9 +21,12 @@ static int __deconstrcut(Image *image)
 	SDL_Image *i = (SDL_Image *)image;
 	dbg_str(OBJ_DETAIL,"image deconstruct,image addr:%p",image);
 
-	if(i->surface != NULL){
+	if(i->surface != NULL) {
 		SDL_FreeSurface(i->surface);
 	}
+    if(i->texture != NULL) {
+        SDL_DestroyTexture(i->texture);
+    }
 
 	return 0;
 }
@@ -51,7 +54,7 @@ static int __set(Image *image, char *attrib, void *value)
 
 static void * __get(Image *image, char *attrib)
 {
-    if(strcmp(attrib, "x") == 0){ 
+    if(strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"image get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

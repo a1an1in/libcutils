@@ -100,7 +100,12 @@ static int __init_window(SDL_Graph *graph, void *window)
 		ret = -1;
 	} else {
 		//Create window
-		graph->window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w->screen_width, w->screen_height, SDL_WINDOW_SHOWN );
+		graph->window = SDL_CreateWindow("SDL Tutorial", 
+                                         SDL_WINDOWPOS_UNDEFINED, 
+                                         SDL_WINDOWPOS_UNDEFINED,
+                                         w->screen_width, 
+                                         w->screen_height,
+                                         SDL_WINDOW_SHOWN );
 		if( graph->window == NULL ) {
 			dbg_str(DBG_ERROR,"Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 			ret = -1;
@@ -216,7 +221,9 @@ static int __render_load_text(SDL_Graph *graph,void *text,void *font,int r, int 
 	SDL_Color textColor = {r, g, b, a };
 
 	dbg_str(DBG_SUC,"SDL_Text load text");
-	surface = TTF_RenderText_Solid(f->ttf_font, ((Text *)text)->content->value, textColor ); 
+	surface = TTF_RenderText_Solid(f->ttf_font,
+                                   ((Text *)text)->content->value,
+                                   textColor ); 
 
 	if(surface != NULL) {
 		t->texture = SDL_CreateTextureFromSurface(graph->render, surface);
