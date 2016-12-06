@@ -28,16 +28,18 @@ static int __deconstrcut(Event *event)
 
 static int __set(Event *event, char *attrib, void *value)
 {
-	Event *i = (Event *)event;
+    _SDL_Event *e = (_SDL_Event *)event;
 
 	if(strcmp(attrib, "set") == 0) {
-		i->set = value;
+		e->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		i->get = value;
+		e->get = value;
 	} else if(strcmp(attrib, "construct") == 0) {
-		i->construct = value;
+		e->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
-		i->deconstruct = value;
+		e->deconstruct = value;
+	} else if(strcmp(attrib, "poll_event") == 0) {
+		e->poll_event = value;
 	} else {
 		dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
 	}
@@ -56,13 +58,31 @@ static void * __get(Event *event, char *attrib)
 }
 
 
+static int __poll_event(Event *event)
+{
+    dbg_str(DBG_DETAIL,"sdl event poll");
+    int quit = 0;
+	SDL_Event *e = &((_SDL_Event *)event)->ev;
+     
+    while(!quit) {
+         while(SDL_PollEvent(e) != 0) {
+             if(e->type == SDL_QUIT) {
+                 quit = 1;
+             } else {
+             }
+         }
+    }
+
+}
+
 static class_info_entry_t sdl_event_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Event","event",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_END},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","poll_event",__poll_event,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("_SDL_Event",sdl_event_class_info);
@@ -85,14 +105,10 @@ void test_obj_sdl_event()
     object_dump(window, "SDL_Win", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-	/*
-     *font = OBJECT_NEW(allocator, SDL_Font,"");
-	 *font->load_font(font);
-	 */
+    event = OBJECT_NEW(allocator, _SDL_Event,"");
+    event->poll_event(event);
 
-
-	pause();
-
+    object_destroy(event);
     object_destroy(window);
 
     free(set_str);

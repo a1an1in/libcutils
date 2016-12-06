@@ -1,5 +1,5 @@
-#ifndef __TEXT_H__
-#define __TEXT_H__
+#ifndef __UI_EVENT_H__
+#define __UI_EVENT_H__
 
 #include <libobject/obj.h>
 #include <libobject/string.h>
@@ -16,6 +16,7 @@ struct ui_event_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods*/
+    int (*poll_event)(Event *event);
 
 	/*attribs*/
 };

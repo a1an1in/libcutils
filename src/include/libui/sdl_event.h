@@ -1,5 +1,5 @@
-#ifndef __TEXT_SDL_H__
-#define __TEXT_SDL_H__
+#ifndef __SDL_UI_EVENT_H__
+#define __SDL_UI_EVENT_H__
 
 #include <libobject/obj.h>
 #include <libobject/string.h>
@@ -10,7 +10,7 @@
 
 typedef struct sdl_ui_event_s _SDL_Event;
 
-struct sdl_event_s{
+struct sdl_ui_event_s{
 	Event event;
 
 	/*normal methods*/
@@ -20,6 +20,7 @@ struct sdl_event_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods*/
+    int (*poll_event)(Event *event);
 
 	/*attribs*/
 	SDL_Event ev;

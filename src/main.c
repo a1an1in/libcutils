@@ -385,7 +385,15 @@ static int args_process_test_SDL_Text(void *base,int argc,char **argv)
 	test_obj_sdl_text();
 	return 0;
 }
+
+static int args_process_test_SDL_Event(void *base,int argc,char **argv)
+{
+	test_obj_sdl_event();
+	return 0;
+}
+
 static cmd_config_t cmds[]={
+	{"SDL_Event", args_process_test_SDL_Event,0, "test", "N/A","test"},
 	{"SDL_Text", args_process_test_SDL_Text,0, "test", "N/A","test"},
 	{"SDL_Font", args_process_test_SDL_Font,0, "test", "N/A","test"},
 	{"SDL_Image", args_process_test_SDL_Image,0, "test", "N/A","test"},
