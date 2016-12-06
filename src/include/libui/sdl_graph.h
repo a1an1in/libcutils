@@ -6,18 +6,18 @@
 #include <libui/graph.h>
 #include <SDL2/SDL.h>
 
-typedef struct sdl_graph_s SDL_Graph;
+typedef struct sdl_graph_s Sdl_Graph;
 
 struct sdl_graph_s{
 	Graph graph;
 
-	int (*construct)(SDL_Graph *sdl_graph,char *init_str);
-	int (*deconstruct)(SDL_Graph *sdl_graph);
-	int (*set)(SDL_Graph *sdl_graph, char *attrib, void *value);
+	int (*construct)(Sdl_Graph *sdl_graph,char *init_str);
+	int (*deconstruct)(Sdl_Graph *sdl_graph);
+	int (*set)(Sdl_Graph *sdl_graph, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
-	int (*move)(SDL_Graph *sdl_graph);
+	int (*move)(Sdl_Graph *sdl_graph);
 	int (*init_window)(Graph *graph, void *window);
 	int (*close_window)(Graph *graph, void *window);
 	int (*update_window)(Graph *graph);

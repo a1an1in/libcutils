@@ -66,7 +66,7 @@ static int __load_image(Image *image)
 {
 	Sdl_Image *i = (Sdl_Image *)image;
 
-	dbg_str(DBG_SUC,"SDL_Graph load image");
+	dbg_str(DBG_SUC,"Sdl_Graph load image");
 	i->surface = SDL_LoadBMP(((Image *)image)->path->value);
 }
 

@@ -18,7 +18,7 @@ static int __construct(Window *window,char *init_str)
 	Graph *g;
 	Image *background;
 
-	window->graph      = (Graph *)OBJECT_NEW(allocator, SDL_Graph,NULL);
+	window->graph      = (Graph *)OBJECT_NEW(allocator, Sdl_Graph,NULL);
 	g = window->graph;
 
     window->font = OBJECT_NEW(allocator, Sdl_Font,"");

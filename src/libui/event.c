@@ -54,7 +54,7 @@ static void * __get(Event *event, char *attrib)
 
 static int __poll_event(Event *event)
 {
-    dbg_str(DBG_DETAIL,"sdl event poll");
+    dbg_str(DBG_DETAIL,"event poll");
 }
 
 static class_info_entry_t event_class_info[] = {
