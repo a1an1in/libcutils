@@ -7,7 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-typedef struct sdl_font_s SDL_Font;
+typedef struct sdl_font_s Sdl_Font;
 
 struct sdl_font_s{
 	Font font;

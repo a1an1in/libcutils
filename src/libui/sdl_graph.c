@@ -142,7 +142,7 @@ static int __update_window(SDL_Graph *graph)
 
 static int __draw_image(SDL_Graph *graph, void *image)
 {
-	SDL_Image *i = (SDL_Image *)image;
+	Sdl_Image *i = (Sdl_Image *)image;
 	dbg_str(DBG_SUC,"SDL_Graph draw_image");
 
 	SDL_BlitSurface(i->surface, NULL, graph->screen_surface, NULL );
@@ -190,7 +190,7 @@ static int __render_fill_rect(SDL_Graph *graph,int x1, int y1, int x2, int y2)
 
 static int __render_load_image(SDL_Graph *graph,void *image)
 {
-	SDL_Image *i = (SDL_Image *)image;
+	Sdl_Image *i = (Sdl_Image *)image;
 	dbg_str(DBG_SUC,"SDL Graph render_load_image");
 	if(i->surface == NULL) {
 		i->load_image(image);
@@ -207,7 +207,7 @@ static int __render_load_image(SDL_Graph *graph,void *image)
 static int __render_draw_image(SDL_Graph *graph,int x, int y, void *image)
 {
 	dbg_str(DBG_SUC,"SDL_Graph render_draw_image");
-	SDL_Image *i = (SDL_Image *)image;
+	Sdl_Image *i = (Sdl_Image *)image;
 	SDL_Rect render_quad = { x, y, i->width, i->height};
 	SDL_RenderCopy(graph->render, i->texture, NULL, &render_quad );
 }
@@ -215,12 +215,12 @@ static int __render_draw_image(SDL_Graph *graph,int x, int y, void *image)
 static int __render_load_text(SDL_Graph *graph,void *text,void *font,int r, int g, int b, int a)
 {
 
-	SDL_Text *t = (SDL_Text *)text;
-	SDL_Font *f = (SDL_Font *)font;
+	Sdl_Text *t = (Sdl_Text *)text;
+	Sdl_Font *f = (Sdl_Font *)font;
 	SDL_Surface* surface = NULL;
 	SDL_Color textColor = {r, g, b, a };
 
-	dbg_str(DBG_SUC,"SDL_Text load text");
+	dbg_str(DBG_SUC,"Sdl_Text load text");
 	surface = TTF_RenderText_Solid(f->ttf_font,
                                    ((Text *)text)->content->value,
                                    textColor ); 
@@ -237,7 +237,7 @@ static int __render_load_text(SDL_Graph *graph,void *text,void *font,int r, int 
 static int __render_write_text(SDL_Graph *graph,int x, int y, void *text)
 {
 	dbg_str(DBG_SUC,"SDL_Graph render_write_text");
-	SDL_Text *t = (SDL_Text *)text;
+	Sdl_Text *t = (Sdl_Text *)text;
 	SDL_Rect render_quad = { x, y, t->width, t->height};
 	SDL_RenderCopy(graph->render, t->texture, NULL, &render_quad );
 }

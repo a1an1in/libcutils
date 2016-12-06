@@ -8,7 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-typedef struct sdl_text_s SDL_Text;
+typedef struct sdl_text_s Sdl_Text;
 
 struct sdl_text_s{
 	Text text;

@@ -11,7 +11,7 @@
 
 static int __construct(Font *font,char *init_str)
 {
-	SDL_Font *f = (SDL_Font *)font;
+	Sdl_Font *f = (Sdl_Font *)font;
 
 	dbg_str(OBJ_DETAIL,"font construct, font addr:%p",font);
 
@@ -25,7 +25,7 @@ static int __construct(Font *font,char *init_str)
 
 static int __deconstrcut(Font *font)
 {
-	SDL_Font *f = (SDL_Font *)font;
+	Sdl_Font *f = (Sdl_Font *)font;
 	dbg_str(OBJ_DETAIL,"font deconstruct,font addr:%p",font);
 
 	if(f->ttf_font != NULL) {
@@ -38,7 +38,7 @@ static int __deconstrcut(Font *font)
 
 static int __set(Font *font, char *attrib, void *value)
 {
-	SDL_Font *i = (SDL_Font *)font;
+	Sdl_Font *i = (Sdl_Font *)font;
 
 	if(strcmp(attrib, "set") == 0) {
 		i->set = value;
@@ -69,7 +69,7 @@ static void * __get(Font *font, char *attrib)
 
 static int __load_font(Font *font)
 {
-	SDL_Font *f = (SDL_Font *)font;
+	Sdl_Font *f = (Sdl_Font *)font;
 
 	f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 28 );
 	if(f->ttf_font == NULL) {
@@ -88,14 +88,14 @@ static class_info_entry_t font_class_info[] = {
 	[6 ] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("SDL_Font",font_class_info);
+REGISTER_CLASS("Sdl_Font",font_class_info);
 
 void test_obj_sdl_font()
 {
-	SDL_Font *font;
+	Sdl_Font *font;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-    font = OBJECT_NEW(allocator, SDL_Font,"");
+    font = OBJECT_NEW(allocator, Sdl_Font,"");
 }
 
 

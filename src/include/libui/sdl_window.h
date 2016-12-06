@@ -8,7 +8,7 @@
 #include <libui/image.h>
 #include <libui/window.h>
 
-typedef struct sdl_window_s SDL_Win;
+typedef struct sdl_window_s Sdl_Window;
 
 struct sdl_window_s{
 	Window window;
@@ -19,4 +19,5 @@ struct sdl_window_s{
     void *(*get)(void *obj, char *attrib);
 };
 
+char *gen_window_setting_str();
 #endif

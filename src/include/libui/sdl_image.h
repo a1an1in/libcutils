@@ -6,7 +6,7 @@
 #include <libui/image.h>
 #include <SDL2/SDL.h>
 
-typedef struct sdl_image_s SDL_Image;
+typedef struct sdl_image_s Sdl_Image;
 
 struct sdl_image_s{
 	Image image;

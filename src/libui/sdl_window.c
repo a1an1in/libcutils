@@ -9,6 +9,7 @@
 #include <libui/sdl_graph.h>
 #include <libui/sdl_image.h>
 #include <libui/sdl_font.h>
+#include <libui/sdl_event.h>
 
 static int __construct(Window *window,char *init_str)
 {
@@ -20,10 +21,12 @@ static int __construct(Window *window,char *init_str)
 	window->graph      = (Graph *)OBJECT_NEW(allocator, SDL_Graph,NULL);
 	g = window->graph;
 
-    window->font = OBJECT_NEW(allocator, SDL_Font,"");
+    window->font = OBJECT_NEW(allocator, Sdl_Font,"");
 	window->font->load_font(window->font);
 
-	window->background = (Image *)OBJECT_NEW(allocator, SDL_Image,NULL);
+    window->event = OBJECT_NEW(allocator, Sdl_Event,"");
+
+	window->background = (Image *)OBJECT_NEW(allocator, Sdl_Image,NULL);
 	background = window->background;
 	background->path->assign(background->path,"./bin/hello_world.bmp");
 
@@ -58,6 +61,7 @@ static int __deconstrcut(Window *window)
 	g->render_destroy(g);
 	window->graph->close_window(window->graph,window);
     object_destroy(window->background);
+    object_destroy(window->event);
     object_destroy(window->font);
     object_destroy(window->graph);
 
@@ -71,7 +75,7 @@ static int __move(Window *window)
 
 static int __set(Window *window, char *attrib, void *value)
 {
-	SDL_Win *w = (SDL_Win *)window;
+	Sdl_Window *w = (Sdl_Window *)window;
 	if(strcmp(attrib, "set") == 0) {
 		w->set = value;
     } else if(strcmp(attrib, "get") == 0) {
@@ -108,7 +112,7 @@ static class_info_entry_t sdl_window_class_info[] = {
 	[5 ] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("SDL_Win",sdl_window_class_info);
+REGISTER_CLASS("Sdl_Window",sdl_window_class_info);
 
 char *gen_window_setting_str()
 {
@@ -151,10 +155,10 @@ void test_ui_sdl_window()
 
     set_str = gen_window_setting_str();
 
-    window  = OBJECT_NEW(allocator, SDL_Win,set_str);
+    window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 	g       = window->graph;
 
-    object_dump(window, "SDL_Win", buf, 2048);
+    object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
 	dbg_str(DBG_DETAIL,"render draw test");

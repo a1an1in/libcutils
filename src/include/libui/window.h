@@ -7,6 +7,7 @@
 #include <libui/graph.h>
 #include <libui/image.h>
 #include <libui/font.h>
+#include <libui/event.h>
 
 typedef struct window_s Window;
 
@@ -20,13 +21,17 @@ struct window_s{
 
 	/*virtual methods reimplement*/
 	int (*move)(Window *window);
+
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
 	uint8_t graph_type;
+
 	Graph *graph;
 	Font *font;
 	Image *background;
+    Event *event;
+
 	int screen_width;
 	int screen_height;
 };

@@ -18,7 +18,7 @@ static int __construct(Image *image,char *init_str)
 
 static int __deconstrcut(Image *image)
 {
-	SDL_Image *i = (SDL_Image *)image;
+	Sdl_Image *i = (Sdl_Image *)image;
 	dbg_str(OBJ_DETAIL,"image deconstruct,image addr:%p",image);
 
 	if(i->surface != NULL) {
@@ -33,7 +33,7 @@ static int __deconstrcut(Image *image)
 
 static int __set(Image *image, char *attrib, void *value)
 {
-	SDL_Image *i = (SDL_Image *)image;
+	Sdl_Image *i = (Sdl_Image *)image;
 
 	if(strcmp(attrib, "set") == 0) {
 		i->set = value;
@@ -64,7 +64,7 @@ static void * __get(Image *image, char *attrib)
 
 static int __load_image(Image *image)
 {
-	SDL_Image *i = (SDL_Image *)image;
+	Sdl_Image *i = (Sdl_Image *)image;
 
 	dbg_str(DBG_SUC,"SDL_Graph load image");
 	i->surface = SDL_LoadBMP(((Image *)image)->path->value);
@@ -80,14 +80,14 @@ static class_info_entry_t image_class_info[] = {
 	[6 ] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("SDL_Image",image_class_info);
+REGISTER_CLASS("Sdl_Image",image_class_info);
 
 void test_obj_sdl_image()
 {
-	SDL_Image *image;
+	Sdl_Image *image;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-    image = OBJECT_NEW(allocator, SDL_Image,"");
+    image = OBJECT_NEW(allocator, Sdl_Image,"");
 }
 
 

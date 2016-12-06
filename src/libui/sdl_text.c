@@ -19,7 +19,7 @@ static int __construct(Text *text,char *init_str)
 
 static int __deconstrcut(Text *text)
 {
-	SDL_Text *i = (SDL_Text *)text;
+	Sdl_Text *i = (Sdl_Text *)text;
 	dbg_str(OBJ_DETAIL,"text deconstruct,text addr:%p",text);
 
 	if(i->surface != NULL){
@@ -31,7 +31,7 @@ static int __deconstrcut(Text *text)
 
 static int __set(Text *text, char *attrib, void *value)
 {
-	SDL_Text *i = (SDL_Text *)text;
+	Sdl_Text *i = (Sdl_Text *)text;
 
 	if(strcmp(attrib, "set") == 0) {
 		i->set = value;
@@ -62,11 +62,11 @@ static void * __get(Text *text, char *attrib)
 
 static int __load_text(Text *text,void *font)
 {
-	SDL_Text *t = (SDL_Text *)text;
-	SDL_Font *f = (SDL_Font *)font;
+	Sdl_Text *t = (Sdl_Text *)text;
+	Sdl_Font *f = (Sdl_Font *)font;
 	SDL_Color textColor = { 0, 0, 0, 0xFF };
 
-	dbg_str(DBG_SUC,"SDL_Text load text");
+	dbg_str(DBG_SUC,"Sdl_Text load text");
 	t->surface = TTF_RenderText_Solid(f->ttf_font, text->content->value, textColor ); 
 }
 
@@ -80,39 +80,7 @@ static class_info_entry_t text_class_info[] = {
 	[6 ] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("SDL_Text",text_class_info);
-
-static char *gen_window_setting_str()
-{
-    cjson_t *root,*w, *c, *e, *s;
-    char *set_str;
-
-    root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Window", w = cjson_create_object());{
-            cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
-                cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
-                    cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 1);
-                        cjson_add_number_to_object(s, "y", 25);
-                        cjson_add_number_to_object(s, "width", 5);
-                        cjson_add_number_to_object(s, "height", 125);
-                        cjson_add_number_to_object(s, "x_speed", 1.2);
-                        cjson_add_number_to_object(s, "y_speed", 2.3);
-                    }
-                    cjson_add_string_to_object(e, "name", "Container");
-                }
-                cjson_add_string_to_object(c, "name", "Component");
-            }
-            cjson_add_string_to_object(w, "name", "Window");
-			cjson_add_number_to_object(w, "graph_type", 1);
-			cjson_add_number_to_object(w, "screen_width", 640);
-			cjson_add_number_to_object(w, "screen_height", 480);
-        }
-    }
-    set_str = cjson_print(root);
-
-    return set_str;
-}
+REGISTER_CLASS("Sdl_Text",text_class_info);
 
 void test_obj_sdl_text()
 {
@@ -126,18 +94,18 @@ void test_obj_sdl_text()
 
     set_str = gen_window_setting_str();
 
-    window  = OBJECT_NEW(allocator, SDL_Win,set_str);
+    window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 	g       = window->graph;
 
-    object_dump(window, "SDL_Win", buf, 2048);
+    object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
 	/*
-     *font = OBJECT_NEW(allocator, SDL_Font,"");
+     *font = OBJECT_NEW(allocator, Sdl_Font,"");
 	 *font->load_font(font);
 	 */
 
-    text = OBJECT_NEW(allocator, SDL_Text,"");
+    text = OBJECT_NEW(allocator, Sdl_Text,"");
 	text->content->assign(text->content,"hello world");
 	g->render_load_text(g,text,window->font, 0,0,0,0xff);
 	g->render_write_text(g,0,0,text);

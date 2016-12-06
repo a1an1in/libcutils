@@ -8,9 +8,9 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_events.h>
 
-typedef struct sdl_ui_event_s _SDL_Event;
+typedef struct ui_sdl_event_s Sdl_Event;
 
-struct sdl_ui_event_s{
+struct ui_sdl_event_s{
 	Event event;
 
 	/*normal methods*/
