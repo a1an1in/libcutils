@@ -6,10 +6,22 @@
  * @date 2016-11-21
  */
 #include <libui/container.h>
+#include <libui/component.h>
+#include <libobject/map_hash.h>
 
 static int __construct(Container *container,char *init_str)
 {
+    allocator_t *allocator = ((Obj *)container)->allocator;
+    Map *map;
+
 	dbg_str(DBG_SUC,"container construct, container addr:%p",container);
+
+    if(container->map_type == 1) {
+        container->map  = (Map *)OBJECT_NEW(allocator, Hash_Map,container->map_construct_str);
+    } else {
+        dbg_str(DBG_WARNNING,"not supported map type, type =%d", container->map_type);
+        return -1;
+    }
 
 	return 0;
 }
@@ -17,13 +29,9 @@ static int __construct(Container *container,char *init_str)
 static int __deconstrcut(Container *container)
 {
 	dbg_str(DBG_SUC,"container deconstruct,container addr:%p",container);
+    object_destroy(container->map);
 
 	return 0;
-}
-
-static int __move(Container *container)
-{
-	dbg_str(DBG_SUC,"container move");
 }
 
 static int __set(Container *container, char *attrib, void *value)
@@ -38,8 +46,14 @@ static int __set(Container *container, char *attrib, void *value)
 		container->deconstruct = value;
 	} else if(strcmp(attrib, "move") == 0) {
 		container->move = value;
+	} else if(strcmp(attrib, "add_component") == 0) {
+		container->add_component = value;
+	} else if(strcmp(attrib, "search_component") == 0) {
+		container->search_component = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(container->name,value,strlen(value));
+	} else if(strcmp(attrib, "map_type") == 0) {
+		container->map_type = *(uint8_t *)value;
 	} else {
 		dbg_str(DBG_DETAIL,"container set, not support %s setting",attrib);
 	}
@@ -51,6 +65,8 @@ static void *__get(Container *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
+    } else if(strcmp(attrib, "map_type") == 0) {
+        return &obj->map_type;
     } else {
         dbg_str(DBG_WARNNING,"container get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -58,16 +74,55 @@ static void *__get(Container *obj, char *attrib)
     return NULL;
 }
 
-static class_info_entry_t container_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[7] = {ENTRY_TYPE_END},
+static int __move(Container *container)
+{
+	dbg_str(DBG_SUC,"container move");
+}
 
+static int __add_component(Container *obj, Component *component)
+{
+
+    dbg_str(DBG_IMPORTANT, "add component name %s", component->name);
+    if(strcmp(component->name,"") == 0) {
+        dbg_str(DBG_WARNNING,"component name is NULL, this is vip, add component failed, please check");
+        return -1;
+    }
+
+    obj->map->insert(obj->map, component->name, component);
+
+    return 0;
+}
+
+static int __search_component(Container *obj, char *key)
+{
+    allocator_t *allocator = ((Obj *)obj)->allocator;
+    Iterator *iter;
+    Map *map = obj->map;
+    int ret;
+
+    iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
+    ret = map->search(map,"label",iter);
+    if(ret == 1) {
+        dbg_str(DBG_SUC,"find component %s",key);
+    } else {
+        dbg_str(DBG_SUC,"not find component %s",key);
+    }
+
+    return ret;
+}
+
+static class_info_entry_t container_class_info[] = {
+	[0 ] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","search_component",__search_component,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[9 ] = {ENTRY_TYPE_UINT8_T,"uint8_t","map_type",NULL,sizeof(int)},
+	[10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Container",container_class_info);
 

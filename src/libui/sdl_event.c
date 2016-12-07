@@ -90,17 +90,17 @@ print_key(SDL_Keysym * sym, SDL_bool pressed, SDL_bool repeat)
     /* Print the keycode, name and state */
     if (sym->sym) {
         print_string(&spot, &left,
-                "Key %s:  scancode %d = %s, keycode 0x%08X = %s ",
-                pressed ? "pressed " : "released",
-                sym->scancode,
-                SDL_GetScancodeName(sym->scancode),
-                sym->sym, SDL_GetKeyName(sym->sym));
+                     "Key %s:  scancode %d = %s, keycode 0x%08X = %s ",
+                     pressed ? "pressed " : "released",
+                     sym->scancode,
+                     SDL_GetScancodeName(sym->scancode),
+                     sym->sym, SDL_GetKeyName(sym->sym));
     } else {
         print_string(&spot, &left,
-                "Unknown Key (scancode %d = %s) %s ",
-                sym->scancode,
-                SDL_GetScancodeName(sym->scancode),
-                pressed ? "pressed " : "released");
+                     "Unknown Key (scancode %d = %s) %s ",
+                     sym->scancode,
+                     SDL_GetScancodeName(sym->scancode),
+                     pressed ? "pressed " : "released");
     }
     print_modifiers(&spot, &left);
     if (repeat) {
@@ -176,6 +176,11 @@ static int __poll_event(Event *event)
     int quit = 0;
 	SDL_Event *e = &((Sdl_Event *)event)->ev;
      
+    String *string;
+    char buf[2048];
+    allocator_t *allocator = ((Obj *)event)->allocator;
+    string = OBJECT_NEW(allocator, String,NULL);
+
     SDL_StartTextInput();
 
     while(!quit) {
@@ -185,10 +190,33 @@ static int __poll_event(Event *event)
                      quit = 1; 
                      break;
                  case SDL_KEYDOWN:
-                     print_key(&e->key.keysym, (e->key.state == SDL_PRESSED) ? SDL_TRUE : SDL_FALSE, (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
+                     /*
+                      *print_key(&e->key.keysym, (e->key.state == SDL_PRESSED) ? SDL_TRUE : SDL_FALSE, (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
+                      */
+                     if((e->key.repeat) ? SDL_TRUE : SDL_FALSE) {
+                         break;
+                     }
+                     switch(e->key.keysym.sym) {
+                         case SDLK_UP:
+                             dbg_str(DBG_DETAIL,"SDLK_UP");
+                             break;
+                         case SDLK_DOWN:
+                             dbg_str(DBG_DETAIL,"SDLK_DOWN");
+                             break;
+                         case SDLK_LEFT:
+                             dbg_str(DBG_DETAIL,"SDLK_LEFT");
+                             break;
+                         case SDLK_RIGHT:
+                             dbg_str(DBG_DETAIL,"SDLK_RIGHT");
+                             break;
+                         default:
+                             break;
+                     } 
                      break;
                  case SDL_KEYUP:
-                     dbg_str(DBG_DETAIL,"SDL_KEYUP");
+                     /*
+                      *dbg_str(DBG_DETAIL,"SDL_KEYUP");
+                      */
                      break;
                  case SDL_MOUSEBUTTONDOWN:
                      dbg_str(DBG_DETAIL,"SDL_MOUSEBUTTONDOWN");
@@ -197,8 +225,11 @@ static int __poll_event(Event *event)
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-                     print_text("TEXTINPUT", e->text.text);
+                     /*
+                      *print_text("TEXTINPUT", e->text.text);
+                      */
                      dbg_str(DBG_DETAIL,"text:%s",e->text.text);
+                     string->append_char(string,e->text.text[0]);
                      break;
                  default:
                      break;
@@ -206,6 +237,8 @@ static int __poll_event(Event *event)
          }
     }
 
+    object_dump(string, "String", buf, 2048);
+    dbg_str(DBG_DETAIL,"String dump: %s",buf);
     SDL_StopTextInput();
 
     return 0;

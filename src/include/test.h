@@ -57,4 +57,6 @@ void test_ui_graph();
 void test_ui_window();
 void test_obj_image();
 void test_obj_sdl_image();
+void test_ui_label();
+
 #endif
