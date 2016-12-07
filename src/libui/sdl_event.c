@@ -237,8 +237,8 @@ static int __poll_event(Event *event)
          }
     }
 
-    object_dump(string, "String", buf, 2048);
-    dbg_str(DBG_DETAIL,"String dump: %s",buf);
+	object_dump(string, "String", buf, 2048);
+	dbg_str(DBG_DETAIL,"String dump: %s",buf);
     SDL_StopTextInput();
 
     return 0;

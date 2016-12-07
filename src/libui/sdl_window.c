@@ -52,15 +52,7 @@ static int __construct(Window *window,char *init_str)
 
 	return 0;
 }
-#endif 
-static int __construct(Window *window,char *init_str)
-{
-	dbg_str(DBG_SUC,"sdl window construct");
 
-	return 0;
-}
-
-#if 0
 static int __deconstrcut(Window *window)
 {
 	Graph *g = window->graph;
@@ -76,7 +68,15 @@ static int __deconstrcut(Window *window)
 
 	return 0;
 }
-#endif
+#endif 
+
+static int __construct(Window *window,char *init_str)
+{
+	dbg_str(DBG_SUC,"sdl window construct");
+
+	return 0;
+}
+
 static int __deconstrcut(Window *window)
 {
 
