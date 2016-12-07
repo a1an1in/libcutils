@@ -17,6 +17,18 @@ struct sdl_window_s{
 	int (*deconstruct)(Window *window);
 	int (*set)(Window *window, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
+
+    /*virtual methods*/
+    void *(*create_font)(Window *window, char *font_name);
+    int (*destroy_font)(Window *window);
+    void *(*create_graph)(Window *window, char *graph_type);
+    int (*destroy_graph)(Window *window);
+    void *(*create_event)(Window *window);
+    int (*destroy_event)(Window *window);
+    void *(*create_background)(Window *window, char *pic_path);
+    int (*destroy_background)(Window *window);
+    int (*open_window)(Window *window);
+    int (*close_window)(Window *window);
 };
 
 char *gen_window_setting_str();

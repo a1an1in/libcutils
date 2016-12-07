@@ -28,6 +28,21 @@ void *buffer_to_addr(uint8_t *buffer)
 	return ret;
 }
 
+void *buffer_to_addr_wb(uint8_t *buffer, void **ret)
+{
+	unsigned long d = 0, t = 0;
+	int i;
+
+	for ( i = 0; i < (int)sizeof(int *); i++){
+		t = buffer[i];
+		d |= t << 8 * (sizeof(int *) - 1 - i); 
+	}
+
+	*ret = (void *)d;
+
+	return (void *)d;
+}
+
 void printf_buffer(unsigned char *buf, int len)
 {
 #define MAX_PRINT_BUFFER_LEN 1024 *40                   

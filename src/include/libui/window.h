@@ -21,6 +21,16 @@ struct window_s{
 
 	/*virtual methods reimplement*/
 	int (*move)(Window *window);
+    void *(*create_font)(Window *window, char *font_name);
+    int (*destroy_font)(Window *window);
+    void *(*create_graph)(Window *window, char *graph_type);
+    int (*destroy_graph)(Window *window);
+    void *(*create_event)(Window *window);
+    int (*destroy_event)(Window *window);
+    void *(*create_background)(Window *window, char *pic_path);
+    int (*destroy_background)(Window *window);
+    int (*open_window)(Window *window);
+    int (*close_window)(Window *window);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

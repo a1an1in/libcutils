@@ -13,12 +13,12 @@ static int __construct(Map *map,char *init_str)
 {
     Hash_Map *h = (Hash_Map *)map;
 
-	dbg_str(OBJ_DETAIL,"hash map construct, key_size=%d,value_size=%d,bucket_size=%d",
-            h->key_size,h->value_size,h->bucket_size);
-
     if(h->key_size == 0)    { h->key_size = 10;    }
     if(h->value_size == 0)  { h->value_size = 100; }
     if(h->bucket_size == 0) { h->bucket_size = 20; }
+
+	dbg_str(DBG_DETAIL,"hash map construct, key_size=%d,value_size=%d,bucket_size=%d",
+            h->key_size,h->value_size,h->bucket_size);
 
     h->hmap = hash_map_alloc(map->obj.allocator);
 
@@ -107,6 +107,7 @@ static void *__get(Map *obj, char *attrib)
 static int __insert(Map *map,void *key,void *value)
 {
 	dbg_str(OBJ_DETAIL,"Hash Map insert");
+
     return hash_map_insert(((Hash_Map *)map)->hmap,key,value);
 }
 

@@ -323,6 +323,7 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
  	entry_of_parent_class = object_get_entry_of_parent_class(class_info);
 
 	dbg_str(OBJ_DETAIL,"obj_class addr:%p",class_info);
+	object_init_func_pointer(obj,class_info);
  	if(entry_of_parent_class != NULL) {
         /*
 		 *dbg_str(OBJ_DETAIL,"init subclass");
@@ -338,7 +339,9 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
      *    object_inherit_parent_methods(obj,class_info,parent_class_info);
      *}
      */
-	object_init_func_pointer(obj,class_info);
+    /*
+	 *object_init_func_pointer(obj,class_info);
+     */
 	object_cover_vitual_func_pointer(obj, cur_type_name, type_name);
 
 	dbg_str(OBJ_DETAIL,"obj addr:%p",obj);

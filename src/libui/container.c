@@ -8,6 +8,7 @@
 #include <libui/container.h>
 #include <libui/component.h>
 #include <libobject/map_hash.h>
+#include <miscellany/buffer.h>
 
 static int __construct(Container *container,char *init_str)
 {
@@ -82,33 +83,46 @@ static int __move(Container *container)
 static int __add_component(Container *obj, Component *component)
 {
 
-    dbg_str(DBG_IMPORTANT, "add component name %s", component->name);
+    if(obj->map_type == 0) {
+        dbg_str(DBG_WARNNING,"%s is support container add op",((Obj *)obj)->name);
+        return -1;
+    }
+    dbg_str(DBG_IMPORTANT, "add component name %s, component addr %p", component->name,component);
     if(strcmp(component->name,"") == 0) {
         dbg_str(DBG_WARNNING,"component name is NULL, this is vip, add component failed, please check");
         return -1;
     }
 
-    obj->map->insert(obj->map, component->name, component);
+    char buffer[8] = {0};
+    addr_to_buffer(component,buffer);
+
+    obj->map->insert(obj->map, component->name, buffer);
 
     return 0;
 }
 
-static int __search_component(Container *obj, char *key)
+static Component *__search_component(Container *obj, char *key)
 {
     allocator_t *allocator = ((Obj *)obj)->allocator;
     Iterator *iter;
     Map *map = obj->map;
     int ret;
+    void *buf_addr, *addr;
 
+    if(obj->map_type == 0) {
+        dbg_str(DBG_WARNNING,"%s is support container search op",((Obj *)obj)->name);
+        return NULL;
+    }
     iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
-    ret = map->search(map,"label",iter);
+    ret = map->search(map,key,iter);
     if(ret == 1) {
-        dbg_str(DBG_SUC,"find component %s",key);
+        addr = buffer_to_addr(iter->get_vpointer(iter));
+        dbg_str(DBG_IMPORTANT,"search component %s addr %p",iter->get_kpointer(iter), addr);
     } else {
         dbg_str(DBG_SUC,"not find component %s",key);
     }
 
-    return ret;
+    return addr;
 }
 
 static class_info_entry_t container_class_info[] = {

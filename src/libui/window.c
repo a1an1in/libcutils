@@ -10,6 +10,12 @@
 static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_SUC,"window construct, window addr:%p",window);
+    window->create_graph(window, NULL);
+    window->create_font(window,NULL);
+    window->create_event(window);
+    window->create_background(window, NULL);
+
+    window->open_window(window);
 
 	return 0;
 }
@@ -17,6 +23,11 @@ static int __construct(Window *window,char *init_str)
 static int __deconstrcut(Window *window)
 {
 	dbg_str(DBG_SUC,"window deconstruct,window addr:%p",window);
+    window->close_window(window);
+    window->destroy_background(window);
+    window->destroy_event(window);
+    window->destroy_font(window);
+    window->destroy_graph(window);
 
 	return 0;
 }
@@ -38,6 +49,26 @@ static int __set(Window *window, char *attrib, void *value)
 		window->deconstruct = value;
 	} else if(strcmp(attrib, "move") == 0) {
 		window->move = value;
+	} else if(strcmp(attrib, "create_font") == 0) {
+		window->create_font = value;
+	} else if(strcmp(attrib, "destroy_font") == 0) {
+		window->destroy_font = value;
+	} else if(strcmp(attrib, "create_graph") == 0) {
+		window->create_graph = value;
+	} else if(strcmp(attrib, "destroy_graph") == 0) {
+		window->destroy_graph = value;
+	} else if(strcmp(attrib, "create_event") == 0) {
+		window->create_event = value;
+	} else if(strcmp(attrib, "destroy_event") == 0) {
+		window->destroy_event = value;
+	} else if(strcmp(attrib, "create_background") == 0) {
+		window->create_background = value;
+	} else if(strcmp(attrib, "destroy_background") == 0) {
+		window->destroy_background = value;
+	} else if(strcmp(attrib, "open_window") == 0) {
+		window->open_window = value;
+	} else if(strcmp(attrib, "close_window") == 0) {
+		window->close_window = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(window->name,value,strlen(value));
 	} else if(strcmp(attrib, "graph_type") == 0) {
@@ -74,20 +105,79 @@ static void *__get(Window *obj, char *attrib)
     return NULL;
 }
 
+static void *__create_font(Window *obj,char *font_name)
+{
+    dbg_str(DBG_DETAIL,"window create_font");
+}
+
+static int __destroy_font(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window destroy_font");
+}
+
+static void *__create_graph(Window *obj, char *graph_type)
+{
+    dbg_str(DBG_DETAIL,"window create_graph");
+}
+
+static int __destroy_graph(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window destroy_font");
+}
+
+static void *__create_event(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window create_event");
+}
+
+static int __destroy_event(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window destroy_event");
+}
+
+static void *__create_background(Window *obj, char *pic_path)
+{
+    dbg_str(DBG_DETAIL,"window draw_background");
+}
+
+static int __destroy_background(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window destroy_background");
+}
+
+static int __open_window(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window open_window");
+}
+
+static int __close_window(Window *obj)
+{
+    dbg_str(DBG_DETAIL,"window close_window");
+}
+
 static class_info_entry_t window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[7 ] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
-	[8 ] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
-	[9 ] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
-	[10] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
-	[11] = {ENTRY_TYPE_END},
-
+	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","move",__move,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","create_font",__create_font,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy_font",__destroy_font,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","create_graph",__create_graph,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy_graph",__destroy_graph,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","create_event",__create_event,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy_event",__destroy_event,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","create_background",__create_background,sizeof(void *)},
+	[13] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","destroy_background",__destroy_background,sizeof(void *)},
+	[14] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","open_window",__open_window,sizeof(void *)},
+	[15] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
+	[16] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[17] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
+	[18] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
+	[19] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
+	[20] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
+	[21] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Window",window_class_info);
 
