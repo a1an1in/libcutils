@@ -63,7 +63,7 @@ static class_info_entry_t event_class_info[] = {
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","poll_event",__poll_event,sizeof(void *)},
+	[5] = {ENTRY_TYPE_VFUNC_POINTER,"","poll_event",__poll_event,sizeof(void *)},
 	[6] = {ENTRY_TYPE_END},
 
 };

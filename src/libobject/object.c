@@ -53,7 +53,7 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
 
 	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
         if(     entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
-                entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER)
+                entry[i].type == ENTRY_TYPE_VFUNC_POINTER)
         {
             /*
              *dbg_str(OBJ_DETAIL,"value_name %s, value %p",
@@ -158,7 +158,7 @@ int object_cover_vitual_func_pointer(void *obj,
 	}
 
 	for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-		if(entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER){
+		if(entry[i].type == ENTRY_TYPE_VFUNC_POINTER){
 			reimplement_func = object_find_reimplement_func_pointer(entry[i].value_name,
 																	type_name,
 																	cur_type_name);
@@ -251,7 +251,7 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
             cjson_add_item_to_object(object, entry[i].type_name, item);
             __object_dump(obj, entry[i].type_name, item);
         } else if(entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
-                  entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER) 
+                  entry[i].type == ENTRY_TYPE_VFUNC_POINTER) 
         {
 		} else {
             value = get(obj,entry[i].value_name);
@@ -272,7 +272,7 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
                 cjson_add_string_to_object(object, name, (char *)value);
             } else if(entry[i].type == ENTRY_TYPE_NORMAL_POINTER ||
                       entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
-                      entry[i].type == ENTRY_TYPE_VIRTUAL_FUNC_POINTER ||
+                      entry[i].type == ENTRY_TYPE_VFUNC_POINTER ||
                       entry[i].type == ENTRY_TYPE_OBJ_POINTER) 
             {
                 unsigned long long d = (unsigned long long) value;

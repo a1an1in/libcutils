@@ -69,7 +69,7 @@ static class_info_entry_t text_class_info[] = {
     [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-    [5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","load_text",__load_text,sizeof(void *)},
+    [5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_text",__load_text,sizeof(void *)},
     [6 ] = {ENTRY_TYPE_NORMAL_POINTER,"","String",NULL,sizeof(void *)},
     [7 ] = {ENTRY_TYPE_END},
 

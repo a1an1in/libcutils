@@ -96,11 +96,11 @@ static class_info_entry_t iter_class_info[] = {
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","next",__next,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","prev",__prev,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","equal",__equal,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VIRTUAL_FUNC_POINTER,"","get_kpointer",__get_vpointer,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","next",__next,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","prev",__prev,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","equal",__equal,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_kpointer",__get_vpointer,sizeof(void *)},
 	[10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Iterator",iter_class_info);
