@@ -9,11 +9,14 @@
 
 static int __construct(Window *window,char *init_str)
 {
-	dbg_str(DBG_SUC,"window construct, window addr:%p",window);
+	dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);
     window->create_graph(window, NULL);
     window->create_font(window,NULL);
     window->create_event(window);
-    window->create_background(window, NULL);
+    /*
+     *window->create_background(window, "./bin/hello_world.bmp");
+     */
+    window->create_background(window, "");
 
     window->open_window(window);
 
@@ -22,7 +25,7 @@ static int __construct(Window *window,char *init_str)
 
 static int __deconstrcut(Window *window)
 {
-	dbg_str(DBG_SUC,"window deconstruct,window addr:%p",window);
+	dbg_str(DBG_DETAIL,"window deconstruct,window addr:%p",window);
     window->close_window(window);
     window->destroy_background(window);
     window->destroy_event(window);

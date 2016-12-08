@@ -346,7 +346,7 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
     if(construct != NULL)
         construct(obj,NULL);
     else{
-        dbg_str(DBG_SUC,"%s construct is NULL",cur_type_name);
+        dbg_str(OBJ_WARNNING,"%s construct is NULL",cur_type_name);
     }
 
 	return 0;

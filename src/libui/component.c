@@ -9,21 +9,21 @@
 
 static int __construct(Component *component,char *init_str)
 {
-	dbg_str(DBG_SUC,"component construct, component addr:%p",component);
+	dbg_str(DBG_DETAIL,"component construct, component addr:%p",component);
 
 	return 0;
 }
 
 static int __deconstrcut(Component *component)
 {
-	dbg_str(DBG_SUC,"component deconstruct,component addr:%p",component);
+	dbg_str(DBG_DETAIL,"component deconstruct,component addr:%p",component);
 
 	return 0;
 }
 
 static int __move(Component *component)
 {
-	dbg_str(DBG_SUC,"component move");
+	dbg_str(DBG_DETAIL,"component move");
 }
 
 static int __set(Component *component, char *attrib, void *value)

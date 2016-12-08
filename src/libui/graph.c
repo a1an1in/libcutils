@@ -9,14 +9,14 @@
 
 static int __construct(Graph *graph,char *init_str)
 {
-	dbg_str(DBG_SUC,"graph construct, graph addr:%p",graph);
+	dbg_str(DBG_DETAIL,"graph construct, graph addr:%p",graph);
 
 	return 0;
 }
 
 static int __deconstrcut(Graph *graph)
 {
-	dbg_str(DBG_SUC,"graph deconstruct,graph addr:%p",graph);
+	dbg_str(DBG_DETAIL,"graph deconstruct,graph addr:%p",graph);
 
 	return 0;
 }
@@ -86,82 +86,82 @@ static void *__get(Graph *obj, char *attrib)
 
 static int __init_window(Graph *graph, void *window)
 {
-	dbg_str(DBG_SUC,"graph init window");
+	dbg_str(DBG_DETAIL,"graph init window");
 }
 
 static int __close_window(Graph *graph, void *window)
 {
-	dbg_str(DBG_SUC,"graph close_window");
+	dbg_str(DBG_DETAIL,"graph close_window");
 }
 
 static int __load_image(Graph *graph, void *image)
 {
-	dbg_str(DBG_SUC,"graph load image");
+	dbg_str(DBG_DETAIL,"graph load image");
 }
 
 static int __update_window(Graph *graph)
 {
-	dbg_str(DBG_SUC,"graph update_window");
+	dbg_str(DBG_DETAIL,"graph update_window");
 }
 
 static int __draw_image(Graph *graph, void *image)
 {
-	dbg_str(DBG_SUC,"graph draw_image");
+	dbg_str(DBG_DETAIL,"graph draw_image");
 }
 
 static int __render_create(Graph *graph)
 {
-	dbg_str(DBG_SUC,"Graph render_create");
+	dbg_str(DBG_DETAIL,"Graph render_create");
 }
 
 static int __render_destroy(Graph *graph)
 {
-	dbg_str(DBG_SUC,"Graph render_destroy");
+	dbg_str(DBG_DETAIL,"Graph render_destroy");
 }
 
 static int __render_set_color(Graph *graph, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-	dbg_str(DBG_SUC,"Graph render_set_color");
+	dbg_str(DBG_DETAIL,"Graph render_set_color");
 }
 
 static int __render_clear(Graph *graph)
 {
-	dbg_str(DBG_SUC,"Graph render_clear");
+	dbg_str(DBG_DETAIL,"Graph render_clear");
 }
 
 static int __render_draw_line(Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_SUC,"Graph render_draw_line");
+	dbg_str(DBG_DETAIL,"Graph render_draw_line");
 }
 
 static int __render_fill_rect(Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_SUC,"Graph render_fill_rect");
+	dbg_str(DBG_DETAIL,"Graph render_fill_rect");
 }
 
 static int __render_load_image(Graph *graph,void *image)
 {
-	dbg_str(DBG_SUC,"Graph render_draw_image");
+	dbg_str(DBG_DETAIL,"Graph render_draw_image");
 }
 
 static int __render_draw_image(Graph *graph, int x, int y,void *image)
 {
-	dbg_str(DBG_SUC,"Graph render_load_image");
+	dbg_str(DBG_DETAIL,"Graph render_load_image");
 }
 
 static int __render_present(Graph *graph)
 {
-	dbg_str(DBG_SUC,"Graph render_present");
+	dbg_str(DBG_DETAIL,"Graph render_present");
 }
 
 static int __render_load_text(Graph *graph,void *text,void *font,int r, int g, int b, int a)
 {
-	dbg_str(DBG_SUC,"Graph render_load_text");
+	dbg_str(DBG_DETAIL,"Graph render_load_text");
 
 }
 static int __render_write_text(Graph *graph,int x, int y, void *text)
 {
-	dbg_str(DBG_SUC,"Graph render_write_text");
+	dbg_str(DBG_DETAIL,"Graph render_write_text");
 }
 
 static class_info_entry_t graph_class_info[] = {

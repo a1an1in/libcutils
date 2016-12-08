@@ -178,7 +178,7 @@ static void *__create_background(Window *window, char *pic_path)
     /*
 	 *background->path->assign(background->path,"./bin/hello_world.bmp");
      */
-	background->path->assign(background->path,"");
+	background->path->assign(background->path,pic_path);
 }
 
 static int __destroy_background(Window *window)

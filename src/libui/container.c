@@ -15,7 +15,7 @@ static int __construct(Container *container,char *init_str)
     allocator_t *allocator = ((Obj *)container)->allocator;
     Map *map;
 
-	dbg_str(DBG_SUC,"container construct, container addr:%p",container);
+	dbg_str(DBG_DETAIL,"container construct, container addr:%p",container);
 
     if(container->map_type == 1) {
         container->map  = (Map *)OBJECT_NEW(allocator, Hash_Map,container->map_construct_str);
@@ -29,7 +29,7 @@ static int __construct(Container *container,char *init_str)
 
 static int __deconstrcut(Container *container)
 {
-	dbg_str(DBG_SUC,"container deconstruct,container addr:%p",container);
+	dbg_str(DBG_DETAIL,"container deconstruct,container addr:%p",container);
     object_destroy(container->map);
 
 	return 0;
@@ -77,7 +77,7 @@ static void *__get(Container *obj, char *attrib)
 
 static int __move(Container *container)
 {
-	dbg_str(DBG_SUC,"container move");
+	dbg_str(DBG_DETAIL,"container move");
 }
 
 static int __add_component(Container *obj, Component *component)
@@ -119,7 +119,7 @@ static Component *__search_component(Container *obj, char *key)
         addr = buffer_to_addr(iter->get_vpointer(iter));
         dbg_str(DBG_IMPORTANT,"search component %s addr %p",iter->get_kpointer(iter), addr);
     } else {
-        dbg_str(DBG_SUC,"not find component %s",key);
+        dbg_str(DBG_DETAIL,"not find component %s",key);
     }
 
     return addr;
