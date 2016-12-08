@@ -175,9 +175,6 @@ static void *__create_background(Window *window, char *pic_path)
 
 	window->background = (Image *)OBJECT_NEW(allocator, Sdl_Image,NULL);
 	background = window->background;
-    /*
-	 *background->path->assign(background->path,"./bin/hello_world.bmp");
-     */
 	background->path->assign(background->path,pic_path);
 }
 
@@ -191,7 +188,7 @@ static int __open_window(Window *window)
 {
 	Graph *g = window->graph;
 
-    dbg_str(DBG_DETAIL,"sdl window open_window");
+    dbg_str(DBG_DETAIL,"sdl window open_window start");
 	if(g != NULL) {
 		g->init_window(g,window);
 		/*
@@ -207,7 +204,8 @@ static int __open_window(Window *window)
 	g->render_set_color(g,0xff,0xff,0xff,0xff);
 	g->render_clear(g);
 	g->render_present(g);
-    dbg_str(DBG_DETAIL,"sdl window open_window");
+
+    dbg_str(DBG_DETAIL,"sdl window open_window end");
 	/*
 	 *g->update_window(g);
 	 */
@@ -292,10 +290,12 @@ void test_ui_sdl_window()
 
 	dbg_str(DBG_DETAIL,"render draw test");
 	g->render_load_image(g,window->background);
-	g->render_draw_image(g,0,0,window->background);
+    /*
+	 *g->render_draw_image(g,0,0,window->background);
+     */
 	g->render_present(g);
 
-	sleep(2);
+    sleep(2);
     /*
 	 *g->render_clear(g);
 	 *g->render_set_color(g,0xff,0x0,0xff,0xff);

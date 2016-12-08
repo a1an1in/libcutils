@@ -201,6 +201,7 @@ static int __render_load_image(Sdl_Graph *graph,void *image)
 		i->width = i->surface->w;
 		i->height = i->surface->h;
 		SDL_FreeSurface(i->surface);
+        i->surface = NULL;
 	}
 }
 
