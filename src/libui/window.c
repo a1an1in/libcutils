@@ -14,9 +14,6 @@ static int __construct(Window *window,char *init_str)
     window->create_font(window,NULL);
     window->create_event(window);
     window->create_background(window, "./bin/hello_world.bmp");
-    /*
-     *window->create_background(window, "");
-     */
 
     window->open_window(window);
 

@@ -34,7 +34,7 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		sdl_grath->deconstruct = value;
-	} else if(strcmp(attrib, "move") == 0) {
+	} else if(strcmp(attrib, "move") == 0) {/**virtual methods setting start*/
 		sdl_grath->move = value;
 	} else if(strcmp(attrib, "init_window") == 0) {
 		sdl_grath->init_window = value;
@@ -66,7 +66,7 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->render_write_text = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
 		sdl_grath->render_present = value;
-	} else if(strcmp(attrib, "name") == 0) { /**attribs*/
+	} else if(strcmp(attrib, "name") == 0) { /**attribs setting start*/
         strncpy(sdl_grath->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"sdl_graph set, not support %s setting",attrib);

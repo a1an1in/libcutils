@@ -115,7 +115,10 @@ static String *__append_char(String *string,char c)
     int ret;
 
     ret = string_buf_auto_modulate(string, 1);
-    if(ret < 0) return string;
+    if(ret < 0) {
+        dbg_str(DBG_WARNNING,"string buf_auto_modulate have problem,please check");
+        return string;
+    }
 
     string->value[string->value_len] = c;
     string->value_len++;

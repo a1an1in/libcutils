@@ -58,18 +58,13 @@ static void * __get(Font *font, char *attrib)
     return NULL;
 }
 
-static int __load_font(Font *font)
-{
-	dbg_str(DBG_SUC,"SDL_Graph load font");
-}
-
 static class_info_entry_t font_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_font",__load_font,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_font",NULL,sizeof(void *)},
 	[6 ] = {ENTRY_TYPE_NORMAL_POINTER,"","String",NULL,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_END},
 

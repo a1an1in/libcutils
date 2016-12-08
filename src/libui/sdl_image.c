@@ -22,11 +22,9 @@ static int __deconstrcut(Image *image)
 	dbg_str(DBG_DETAIL,"sdl image deconstruct start");
 
 	if(i->surface != NULL) {
-        dbg_str(DBG_DETAIL,"run at here");
 		SDL_FreeSurface(i->surface);
 	}
     if(i->texture != NULL) {
-        dbg_str(DBG_DETAIL,"run at here");
         SDL_DestroyTexture(i->texture);
     }
 	dbg_str(DBG_DETAIL,"sdl image deconstruct end");
