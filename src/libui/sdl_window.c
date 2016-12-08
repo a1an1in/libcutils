@@ -70,24 +70,6 @@ static int __deconstrcut(Window *window)
 }
 #endif 
 
-static int __construct(Window *window,char *init_str)
-{
-	dbg_str(DBG_SUC,"sdl window construct");
-
-	return 0;
-}
-
-static int __deconstrcut(Window *window)
-{
-
-	return 0;
-}
-
-static int __move(Window *window)
-{
-	dbg_str(DBG_SUC,"window move");
-}
-
 static int __set(Window *window, char *attrib, void *value)
 {
 	Sdl_Window *w = (Sdl_Window *)window;
@@ -149,7 +131,7 @@ static void *__create_graph(Window *window, char *graph_type)
 
 static int __destroy_graph(Window *window)
 {
-    dbg_str(DBG_DETAIL,"sdl window destroy_font");
+    dbg_str(DBG_DETAIL,"sdl window destroy_graph");
     object_destroy(window->graph);
 }
 
@@ -193,7 +175,10 @@ static void *__create_background(Window *window, char *pic_path)
 
 	window->background = (Image *)OBJECT_NEW(allocator, Sdl_Image,NULL);
 	background = window->background;
-	background->path->assign(background->path,"./bin/hello_world.bmp");
+    /*
+	 *background->path->assign(background->path,"./bin/hello_world.bmp");
+     */
+	background->path->assign(background->path,"");
 }
 
 static int __destroy_background(Window *window)
@@ -311,13 +296,15 @@ void test_ui_sdl_window()
 	g->render_present(g);
 
 	sleep(2);
-	g->render_clear(g);
-	g->render_set_color(g,0xff,0x0,0xff,0xff);
-	g->render_draw_line(g,20,0,50,50);
-	g->render_set_color(g,0xff,0x0,0x0,0xff);
-	g->render_fill_rect(g,20,20,100,100);
-	g->render_present(g);
-	sleep(5);
+    /*
+	 *g->render_clear(g);
+	 *g->render_set_color(g,0xff,0x0,0xff,0xff);
+	 *g->render_draw_line(g,20,0,50,50);
+	 *g->render_set_color(g,0xff,0x0,0x0,0xff);
+	 *g->render_fill_rect(g,20,20,100,100);
+	 *g->render_present(g);
+	 *sleep(5);
+     */
 
     object_destroy(window);
 
