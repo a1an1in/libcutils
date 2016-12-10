@@ -40,6 +40,8 @@ static int __set(Component *component, char *attrib, void *value)
 		component->move = value;
 	} else if(strcmp(attrib, "draw") == 0) {
 		component->draw = value;
+	} else if(strcmp(attrib, "load_resources") == 0) {
+		component->load_resources = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
 	} else {
@@ -68,8 +70,9 @@ static class_info_entry_t component_class_info[] = {
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
 	[6] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",NULL,sizeof(void *)},
-	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[8] = {ENTRY_TYPE_END},
+	[7] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",NULL,sizeof(void *)},
+	[8] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[9] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

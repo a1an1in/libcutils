@@ -163,14 +163,6 @@ static int __close_window(Window *window)
 	g->close_window(g,window);
 }
 
-static int __update_window(Window *window)
-{
-	Graph *g = window->graph;
-    Container *container = (Container *)window;
-
-    dbg_str(DBG_DETAIL,"sdl window update_window");
-}
-
 static class_info_entry_t sdl_window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Window","window",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},

@@ -1,56 +1,56 @@
 /**
- * @file label.c
+ * @file box.c
  * @synopsis 
  * @author alan(a1an1in@sina.com)
  * @version 1
  * @date 2016-11-21
  */
-#include <libui/label.h>
+#include <libui/box.h>
 #include <libui/sdl_window.h>
 
-static int __construct(Label *label,char *init_str)
+static int __construct(Box *box,char *init_str)
 {
-	dbg_str(DBG_SUC,"label construct, label addr:%p",label);
+	dbg_str(DBG_SUC,"box construct, box addr:%p",box);
 
 	return 0;
 }
 
-static int __deconstrcut(Label *label)
+static int __deconstrcut(Box *box)
 {
-	dbg_str(DBG_SUC,"label deconstruct,label addr:%p",label);
+	dbg_str(DBG_SUC,"box deconstruct,box addr:%p",box);
 
 	return 0;
 }
 
-static int __set(Label *label, char *attrib, void *value)
+static int __set(Box *box, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
-		label->set = value;
+		box->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		label->get = value;
+		box->get = value;
 	} else if(strcmp(attrib, "construct") == 0) {
-		label->construct = value;
+		box->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
-		label->deconstruct = value;
+		box->deconstruct = value;
 	} else if(strcmp(attrib, "draw") == 0) {
-		label->draw = value;
+		box->draw = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
-		label->load_resources = value;
+		box->load_resources = value;
 	} else if(strcmp(attrib, "name") == 0) {
-        strncpy(label->name,value,strlen(value));
+        strncpy(box->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"label set, not support %s setting",attrib);
+		dbg_str(DBG_DETAIL,"box set, not support %s setting",attrib);
 	}
 
 	return 0;
 }
 
-static void *__get(Label *obj, char *attrib)
+static void *__get(Box *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"label get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(DBG_WARNNING,"box get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -60,7 +60,7 @@ static int __draw(Component *component, void *graph)
 {
 	Graph *g = (Graph *)graph;
 	Subject *s = (Subject *)component;
-	Label *l = (Label *)component;
+	Box *l = (Box *)component;
 
 	dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
 
@@ -72,13 +72,9 @@ static int __draw(Component *component, void *graph)
 
 static int __load_resources(Component *component,void *graph)
 {
-	Graph *g = (Graph *)graph;
-	Label *l = (Label *)component;
-
-	l->text = g->render_load_text(g,component->name,g->font, 0,0,0,0xff);
 }
 
-static class_info_entry_t label_class_info[] = {
+static class_info_entry_t box_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
@@ -90,15 +86,15 @@ static class_info_entry_t label_class_info[] = {
 	[8] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("Label",label_class_info);
+REGISTER_CLASS("Box",box_class_info);
 
-char *gen_label_setting_str()
+char *gen_box_setting_str()
 {
     cjson_t *root,*b, *c, *e, *s;
     char *set_str;
 
     root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Label", b = cjson_create_object());{
+        cjson_add_item_to_object(root, "Box", b = cjson_create_object());{
             cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
                 cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
@@ -108,7 +104,7 @@ char *gen_label_setting_str()
                         cjson_add_number_to_object(s, "height", 30);
                     }
                 }
-				cjson_add_string_to_object(c, "name", "label");
+				cjson_add_string_to_object(c, "name", "box");
             }
         }
     }
@@ -117,7 +113,7 @@ char *gen_label_setting_str()
     return set_str;
 }
 
-void test_ui_label()
+void test_ui_box()
 {
     Window *window;
     Container *container;
@@ -134,14 +130,14 @@ void test_ui_label()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    set_str = gen_label_setting_str();
-    subject = OBJECT_NEW(allocator, Label,set_str);
-    object_dump(subject, "Label", buf, 2048);
-    dbg_str(DBG_DETAIL,"Label dump: %s",buf);
+    set_str = gen_box_setting_str();
+    subject = OBJECT_NEW(allocator, Box,set_str);
+    object_dump(subject, "Box", buf, 2048);
+    dbg_str(DBG_DETAIL,"Box dump: %s",buf);
 
     container->add_component(container,subject);
 	/*
-     *container->search_component(container,"label");
+     *container->search_component(container,"box");
 	 */
 	dbg_str(DBG_DETAIL,"window container :%p",container);
 

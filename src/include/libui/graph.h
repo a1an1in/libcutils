@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libobject/obj.h>
+#include <libui/font.h>
 /*
  *#include <libui/window.h>
  */
@@ -27,6 +28,7 @@ struct graph_s{
 	int (*render_create)(Graph *graph);
 	int (*render_destroy)(Graph *graph);
 	int (*render_set_color)(Graph *graph, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+	int (*render_set_font)(Graph *graph, void *font);
 	int (*render_clear)(Graph *graph);
 	int (*render_draw_line)(Graph *graph,int x1, int y1, int x2, int y2);
 	int (*render_draw_rect)(Graph *graph,int x1, int y1, int x2, int y2);
@@ -42,6 +44,7 @@ struct graph_s{
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
+	Font *font;
 
 };
 

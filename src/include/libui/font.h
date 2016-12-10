@@ -3,7 +3,9 @@
 
 #include <libobject/obj.h>
 #include <libobject/string.h>
-#include <libui/graph.h>
+/*
+ *#include <libui/graph.h>
+ */
 
 typedef struct font_s Font;
 struct font_s{

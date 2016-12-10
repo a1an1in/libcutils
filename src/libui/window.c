@@ -17,10 +17,11 @@ static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);
     window->create_graph(window, NULL);
-    window->open_window(window);
     window->create_font(window,NULL);
     window->create_event(window);
+    window->open_window(window);
 
+	window->graph->render_set_font(window->graph, window->font);
     window->create_background(window, "./bin/hello_world.bmp");//must create after openning window
 
 	return 0;

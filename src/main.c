@@ -398,7 +398,13 @@ static int args_process_test_Label(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_Box(void *base,int argc,char **argv)
+{
+	test_ui_box();
+	return 0;
+}
 static cmd_config_t cmds[]={
+	{"Box", args_process_test_Box,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
 	{"SDL_Event", args_process_test_SDL_Event,0, "test", "N/A","test"},
 	{"SDL_Text", args_process_test_SDL_Text,0, "test", "N/A","test"},

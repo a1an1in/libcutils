@@ -25,6 +25,7 @@ struct sdl_graph_s{
 	int (*render_create)(Graph *graph);
 	int (*render_destroy)(Graph *graph);
 	int (*render_set_color)(Graph *graph, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+	int (*render_set_font)(Graph *graph, void *font);
 	int (*render_clear)(Graph *graph);
 	int (*render_draw_line)(Graph *graph,int x1, int y1, int x2, int y2);
 	int (*render_draw_rect)(Graph *graph,int x1, int y1, int x2, int y2);
@@ -44,7 +45,6 @@ struct sdl_graph_s{
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 	SDL_Renderer* render;
-
 };
 
 #endif

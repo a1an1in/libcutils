@@ -18,6 +18,7 @@ struct component_s{
 	/*virtual methods reimplement*/
 	int (*move)(Component *component);
 	int (*draw)(Component *component, void *graph);
+	int (*load_resources)(Component *component, void *graph);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

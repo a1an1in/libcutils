@@ -56,7 +56,12 @@ void test_obj_hash_map();
 void test_ui_graph();
 void test_ui_window();
 void test_obj_image();
+void test_obj_sdl_text();
 void test_obj_sdl_image();
+void test_obj_sdl_event();
+void test_obj_sdl_font();
+void test_ui_sdl_window();
 void test_ui_label();
+void test_ui_box();
 
 #endif

@@ -50,6 +50,8 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->render_destroy = value;
 	} else if(strcmp(attrib, "render_set_color") == 0) {
 		sdl_grath->render_set_color = value;
+	} else if(strcmp(attrib, "render_set_font") == 0) {
+		sdl_grath->render_set_font = value;
 	} else if(strcmp(attrib, "render_clear") == 0) {
 		sdl_grath->render_clear = value;
 	} else if(strcmp(attrib, "render_draw_line") == 0) {
@@ -173,6 +175,13 @@ static int __render_set_color(Sdl_Graph *graph,
 	SDL_SetRenderDrawColor(graph->render, r, g, b, a);
 }
 
+static int __render_set_font(Sdl_Graph *graph, void *font)
+{
+	dbg_str(DBG_DETAIL,"Sdl_Graph set_font");
+	((Graph *)graph)->font = font;
+
+	return 0;
+}
 static int __render_clear(Sdl_Graph *graph)
 {
 	dbg_str(DBG_DETAIL,"Sdl_Graph render_clear");
@@ -299,18 +308,19 @@ static class_info_entry_t sdl_grath_class_info[] = {
 	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","render_create",__render_create,sizeof(void *)},
 	[10] = {ENTRY_TYPE_FUNC_POINTER,"","render_destroy",__render_destroy,sizeof(void *)},
 	[11] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
-	[12] = {ENTRY_TYPE_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
-	[13] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
-	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_rect",__render_draw_rect,sizeof(void *)},
-	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
-	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
-	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
-	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
-	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_text",__render_unload_text,sizeof(void *)},
-	[20] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
-	[21] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[22] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[23] = {ENTRY_TYPE_END},
+	[12] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_font",__render_set_font,sizeof(void *)},
+	[13] = {ENTRY_TYPE_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_rect",__render_draw_rect,sizeof(void *)},
+	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
+	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
+	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
+	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
+	[20] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_text",__render_unload_text,sizeof(void *)},
+	[21] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
+	[22] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[23] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[24] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Graph",sdl_grath_class_info);
