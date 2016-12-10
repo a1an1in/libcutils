@@ -31,6 +31,7 @@ struct window_s{
     int (*destroy_background)(Window *window);
     int (*open_window)(Window *window);
     int (*close_window)(Window *window);
+    int (*update_window)(Window *window);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

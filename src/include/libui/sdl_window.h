@@ -29,6 +29,7 @@ struct sdl_window_s{
     int (*destroy_background)(Window *window);
     int (*open_window)(Window *window);
     int (*close_window)(Window *window);
+    int (*update_window)(Window *window);
 };
 
 char *gen_window_setting_str();

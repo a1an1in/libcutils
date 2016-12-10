@@ -35,6 +35,7 @@ struct graph_s{
 	int (*render_load_text)(Graph *graph,void *text,void *font,int r, int g, int b, int a);
 	int (*render_write_text)(Graph *graph,int x, int y, void *text);
 	int (*render_present)(Graph *graph);
+	int (*render_draw_component)(Graph *graph, void *component);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

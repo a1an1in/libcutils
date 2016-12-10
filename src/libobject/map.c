@@ -46,6 +46,9 @@ static int __set(Map *map, char *attrib, void *value)
 	} else if(strcmp(attrib, "for_each") == 0) {
         dbg_str(DBG_DETAIL,"map set for each:%p",value);
 		map->for_each = value;
+	} else if(strcmp(attrib, "for_each_arg2") == 0) {
+        dbg_str(DBG_DETAIL,"map set for each:%p",value);
+		map->for_each_arg2 = value;
 	} else if(strcmp(attrib, "begin") == 0) {
 		map->begin = value;
 	} else if(strcmp(attrib, "end") == 0) {
@@ -108,6 +111,22 @@ static void __for_each(Map *map,void (*func)(Iterator *iter))
     object_destroy(end);
 }
 
+static void __for_each_arg2(Map *map,void (*func)(Iterator *iter,void *arg),void *arg)
+{
+    Iterator *cur, *end;
+
+	dbg_str(DBG_IMPORTANT,"Map for_each arg2");
+    cur = map->begin(map);
+    end = map->end(map);
+
+    for(; !end->equal(end,cur); cur->next(cur)) {
+        func(cur, arg);
+    }
+
+    object_destroy(cur);
+    object_destroy(end);
+}
+
 static Iterator *__begin(Map *map)
 {
 	dbg_str(OBJ_DETAIL,"Map begin");
@@ -134,11 +153,11 @@ static class_info_entry_t map_class_info[] = {
 	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","search",__search,sizeof(void *)},
 	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","del",__del,sizeof(void *)},
 	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each",__for_each,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","begin",__begin,sizeof(void *)},
-	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","end",__end,sizeof(void *)},
-	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[13] = {ENTRY_TYPE_END},
-
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each_arg2",__for_each_arg2,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","begin",__begin,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","end",__end,sizeof(void *)},
+	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
+	[14] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Map",map_class_info);
 

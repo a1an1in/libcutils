@@ -38,6 +38,8 @@ static int __set(Component *component, char *attrib, void *value)
 		component->deconstruct = value;
 	} else if(strcmp(attrib, "move") == 0) {
 		component->move = value;
+	} else if(strcmp(attrib, "draw") == 0) {
+		component->draw = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
 	} else {
@@ -58,6 +60,11 @@ static void *__get(Component *obj, char *attrib)
     return NULL;
 }
 
+static int __draw(Component *component, void *graph)
+{
+	dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+}
+
 static class_info_entry_t component_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -65,8 +72,9 @@ static class_info_entry_t component_class_info[] = {
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[7] = {ENTRY_TYPE_END},
+	[6] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
+	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[8] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

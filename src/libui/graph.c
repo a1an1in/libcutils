@@ -6,6 +6,7 @@
  * @date 2016-11-21
  */
 #include <libui/graph.h>
+#include <libui/component.h>
 
 static int __construct(Graph *graph,char *init_str)
 {
@@ -63,6 +64,8 @@ static int __set(Graph *graph, char *attrib, void *value)
 		graph->render_write_text = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
 		graph->render_present = value;
+	} else if(strcmp(attrib, "render_draw_component") == 0) {
+		graph->render_draw_component = value;
 
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(graph->name,value,strlen(value));
@@ -164,6 +167,13 @@ static int __render_write_text(Graph *graph,int x, int y, void *text)
 	dbg_str(DBG_DETAIL,"Graph render_write_text");
 }
 
+static int __render_draw_component(Graph *graph, void *component)
+{
+	Component *c = (Component *)component;
+	dbg_str(DBG_DETAIL,"Graph render_draw_component");
+	c->draw(c, graph);
+}
+
 static class_info_entry_t graph_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -185,8 +195,9 @@ static class_info_entry_t graph_class_info[] = {
 	[17] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
 	[18] = {ENTRY_TYPE_VFUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
 	[19] = {ENTRY_TYPE_VFUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[20] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[21] = {ENTRY_TYPE_END},
+	[20] = {ENTRY_TYPE_VFUNC_POINTER,"","render_draw_component",__render_draw_component,sizeof(void *)},
+	[21] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[22] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Graph",graph_class_info);

@@ -25,6 +25,7 @@ struct _map_s{
      *void (*for_each)(Map *map,void (*func)(Map *map, char *key, void *value));
      */
     void (*for_each)(Map *map,void (*func)(Iterator *iter));
+    void (*for_each_arg2)(Map *map,void (*func)(Iterator *iter, void *arg),void *arg);
     Iterator *(*begin)(Map *map);
     Iterator *(*end)(Map *map);
     int (*destroy)(Map *map);

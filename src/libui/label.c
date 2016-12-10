@@ -120,7 +120,12 @@ void test_ui_label()
     dbg_str(DBG_DETAIL,"Label dump: %s",buf);
 
     container->add_component(container,subject);
-    container->search_component(container,"label");
+	/*
+     *container->search_component(container,"label");
+	 */
+	dbg_str(DBG_DETAIL,"window container :%p",container);
+
+	window->update_window(window);
 
     free(set_str);
 

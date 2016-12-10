@@ -6,6 +6,12 @@
  * @date 2016-12-03
  */
 #include <libui/window.h>
+#include <miscellany/buffer.h>
+
+typedef struct position_s{
+	int x;
+	int y;
+}position_t;
 
 static int __construct(Window *window,char *init_str)
 {
@@ -64,6 +70,8 @@ static int __set(Window *window, char *attrib, void *value)
 		window->open_window = value;
 	} else if(strcmp(attrib, "close_window") == 0) {
 		window->close_window = value;
+	} else if(strcmp(attrib, "update_window") == 0) {
+		window->update_window = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(window->name,value,strlen(value));
 	} else if(strcmp(attrib, "graph_type") == 0) {
@@ -100,6 +108,27 @@ static void *__get(Window *obj, char *attrib)
     return NULL;
 }
 
+static void window_draw_component(Iterator *iter, void *arg) 
+{
+	Component *component;
+	uint8_t *addr;
+	Graph *g = (Graph *)arg;
+
+	dbg_str(DBG_DETAIL,"window_draw_component");
+	addr = (uint8_t *)iter->get_vpointer(iter);
+	component = (Component *)buffer_to_addr(addr);
+	g->render_draw_component(g, component);
+}
+
+static int __update_window(Window *window)
+{
+	Graph *g = window->graph;
+    Container *container = (Container *)window;
+
+    dbg_str(DBG_DETAIL,"window update_window");
+	container->for_each_component(container, window_draw_component, g);
+
+}
 
 static class_info_entry_t window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
@@ -107,23 +136,24 @@ static class_info_entry_t window_class_info[] = {
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","move",NULL,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_font",NULL,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_font",NULL,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_graph",NULL,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_graph",NULL,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","create_event",NULL,sizeof(void *)},
-	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_event",NULL,sizeof(void *)},
-	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","create_background",NULL,sizeof(void *)},
-	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_background",NULL,sizeof(void *)},
-	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","open_window",NULL,sizeof(void *)},
-	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","close_window",NULL,sizeof(void *)},
-	[16] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[17] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
-	[18] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
-	[19] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
-	[20] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
-	[21] = {ENTRY_TYPE_END},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","update_window",__update_window,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","move",NULL,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_font",NULL,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_font",NULL,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_graph",NULL,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_graph",NULL,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","create_event",NULL,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_event",NULL,sizeof(void *)},
+	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","create_background",NULL,sizeof(void *)},
+	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_background",NULL,sizeof(void *)},
+	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","open_window",NULL,sizeof(void *)},
+	[16] = {ENTRY_TYPE_VFUNC_POINTER,"","close_window",NULL,sizeof(void *)},
+	[17] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[18] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
+	[19] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
+	[20] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
+	[21] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
+	[22] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Window",window_class_info);
 

@@ -43,6 +43,8 @@ static int __set(Window *window, char *attrib, void *value)
 		w->open_window = value;
 	} else if(strcmp(attrib, "close_window") == 0) {
 		w->close_window = value;
+	} else if(strcmp(attrib, "update_window") == 0) {
+		w->update_window = value;
 	} else {
 		dbg_str(DBG_DETAIL,"sdl window set, not support %s setting",attrib);
 	}
@@ -162,6 +164,14 @@ static int __close_window(Window *window)
 	g->close_window(g,window);
 }
 
+static int __update_window(Window *window)
+{
+	Graph *g = window->graph;
+    Container *container = (Container *)window;
+
+    dbg_str(DBG_DETAIL,"sdl window update_window");
+}
+
 static class_info_entry_t sdl_window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Window","window",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -192,7 +202,7 @@ char *gen_window_setting_str()
                 cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
                         cjson_add_number_to_object(s, "x", 1);
-                        cjson_add_number_to_object(s, "y", 25);
+                        cjson_add_number_to_object(s, "y", 0);
                         cjson_add_number_to_object(s, "width", 5);
                         cjson_add_number_to_object(s, "height", 125);
                         cjson_add_number_to_object(s, "x_speed", 1.2);
