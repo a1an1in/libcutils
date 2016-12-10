@@ -6,6 +6,7 @@
  * @date 2016-12-04
  */
 #include <stdio.h>
+#include <unistd.h>
 #include <libdbg/debug.h>
 #include <libui/sdl_text.h>
 #include <libui/sdl_window.h>
@@ -105,11 +106,10 @@ void test_obj_sdl_text()
 	 *font->load_font(font);
 	 */
 
-    text = OBJECT_NEW(allocator, Sdl_Text,"");
-	text->content->assign(text->content,"hello world");
-	g->render_load_text(g,text,window->font, 0,0,0,0xff);
+	text = g->render_load_text(g,"hello world",window->font, 0,0,0,0xff);
 	g->render_write_text(g,0,0,text);
 
+#if 0
 	text->content->assign(text->content,"a");
 	g->render_load_text(g,text,window->font, 0,0,0,0xff);
 	g->render_write_text(g,0,33,text);
@@ -121,8 +121,10 @@ void test_obj_sdl_text()
 	text->content->assign(text->content,"i");
 	g->render_load_text(g,text,window->font, 0,0,0,0xff);
 	g->render_write_text(g,0,99,text);
+#endif
 
 	g->render_present(g);
+	g->render_unload_text(g, text);
 
 	pause();
 

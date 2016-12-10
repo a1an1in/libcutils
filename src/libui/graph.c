@@ -52,6 +52,8 @@ static int __set(Graph *graph, char *attrib, void *value)
 		graph->render_clear = value;
 	} else if(strcmp(attrib, "render_draw_line") == 0) {
 		graph->render_draw_line = value;
+	} else if(strcmp(attrib, "render_draw_rect") == 0) {
+		graph->render_draw_rect = value;
 	} else if(strcmp(attrib, "render_fill_rect") == 0) {
 		graph->render_fill_rect = value;
 	} else if(strcmp(attrib, "render_draw_image") == 0) {
@@ -60,12 +62,12 @@ static int __set(Graph *graph, char *attrib, void *value)
 		graph->render_load_image = value;
 	} else if(strcmp(attrib, "render_load_text") == 0) {
 		graph->render_load_text = value;
+	} else if(strcmp(attrib, "render_unload_text") == 0) {
+		graph->render_unload_text = value;
 	} else if(strcmp(attrib, "render_write_text") == 0) {
 		graph->render_write_text = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
 		graph->render_present = value;
-	} else if(strcmp(attrib, "render_draw_component") == 0) {
-		graph->render_draw_component = value;
 
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(graph->name,value,strlen(value));
@@ -142,11 +144,6 @@ static int __render_fill_rect(Graph *graph,int x1, int y1, int x2, int y2)
 	dbg_str(DBG_DETAIL,"Graph render_fill_rect");
 }
 
-static int __render_load_image(Graph *graph,void *image)
-{
-	dbg_str(DBG_DETAIL,"Graph render_draw_image");
-}
-
 static int __render_draw_image(Graph *graph, int x, int y,void *image)
 {
 	dbg_str(DBG_DETAIL,"Graph render_load_image");
@@ -167,13 +164,6 @@ static int __render_write_text(Graph *graph,int x, int y, void *text)
 	dbg_str(DBG_DETAIL,"Graph render_write_text");
 }
 
-static int __render_draw_component(Graph *graph, void *component)
-{
-	Component *c = (Component *)component;
-	dbg_str(DBG_DETAIL,"Graph render_draw_component");
-	c->draw(c, graph);
-}
-
 static class_info_entry_t graph_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -189,16 +179,16 @@ static class_info_entry_t graph_class_info[] = {
 	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
 	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
 	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
-	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
-	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
-	[16] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
-	[17] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
-	[18] = {ENTRY_TYPE_VFUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
-	[19] = {ENTRY_TYPE_VFUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[20] = {ENTRY_TYPE_VFUNC_POINTER,"","render_draw_component",__render_draw_component,sizeof(void *)},
-	[21] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[22] = {ENTRY_TYPE_END},
-
+	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","render_draw_rect",NULL,sizeof(void *)},
+	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
+	[16] = {ENTRY_TYPE_VFUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
+	[17] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_image",NULL,sizeof(void *)},
+	[18] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
+	[19] = {ENTRY_TYPE_VFUNC_POINTER,"","render_unload_text",NULL,sizeof(void *)},
+	[20] = {ENTRY_TYPE_VFUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
+	[21] = {ENTRY_TYPE_VFUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[22] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[23] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Graph",graph_class_info);
 

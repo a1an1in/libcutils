@@ -17,11 +17,11 @@ static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);
     window->create_graph(window, NULL);
+    window->open_window(window);
     window->create_font(window,NULL);
     window->create_event(window);
-    window->create_background(window, "./bin/hello_world.bmp");
 
-    window->open_window(window);
+    window->create_background(window, "./bin/hello_world.bmp");//must create after openning window
 
 	return 0;
 }
@@ -29,8 +29,8 @@ static int __construct(Window *window,char *init_str)
 static int __deconstrcut(Window *window)
 {
 	dbg_str(DBG_DETAIL,"window deconstruct,window addr:%p",window);
-    window->close_window(window);
     window->destroy_background(window);
+    window->close_window(window);
     window->destroy_event(window);
     window->destroy_font(window);
     window->destroy_graph(window);
@@ -117,7 +117,7 @@ static void window_draw_component(Iterator *iter, void *arg)
 	dbg_str(DBG_DETAIL,"window_draw_component");
 	addr = (uint8_t *)iter->get_vpointer(iter);
 	component = (Component *)buffer_to_addr(addr);
-	g->render_draw_component(g, component);
+	component->draw(component, g);
 }
 
 static int __update_window(Window *window)
@@ -127,6 +127,7 @@ static int __update_window(Window *window)
 
     dbg_str(DBG_DETAIL,"window update_window");
 	container->for_each_component(container, window_draw_component, g);
+	g->render_present(g);
 
 }
 

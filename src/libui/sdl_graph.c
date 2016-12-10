@@ -56,12 +56,16 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->render_draw_line = value;
 	} else if(strcmp(attrib, "render_fill_rect") == 0) {
 		sdl_grath->render_fill_rect = value;
+	} else if(strcmp(attrib, "render_draw_rect") == 0) {
+		sdl_grath->render_draw_rect = value;
 	} else if(strcmp(attrib, "render_draw_image") == 0) {
 		sdl_grath->render_draw_image = value;
 	} else if(strcmp(attrib, "render_load_image") == 0) {
 		sdl_grath->render_load_image = value;
 	} else if(strcmp(attrib, "render_load_text") == 0) {
 		sdl_grath->render_load_text = value;
+	} else if(strcmp(attrib, "render_unload_text") == 0) {
+		sdl_grath->render_unload_text = value;
 	} else if(strcmp(attrib, "render_write_text") == 0) {
 		sdl_grath->render_write_text = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
@@ -177,32 +181,53 @@ static int __render_clear(Sdl_Graph *graph)
 
 static int __render_draw_line(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_DETAIL,"Graph render_draw_line");
+	dbg_str(DBG_DETAIL,"SDL Graph render_draw_line");
 	SDL_RenderDrawLine(graph->render,x1, y1, x2, y2);
+}
+
+static int __render_draw_rect(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
+{
+	dbg_str(DBG_DETAIL,"SDL Graph render_draw_rect");
+	SDL_Rect rect = {x1,y1,x2,y2};
+	SDL_RenderDrawRect(graph->render, &rect);
 }
 
 static int __render_fill_rect(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_DETAIL,"Graph render_fill_rect");
+	dbg_str(DBG_DETAIL,"SDL Graph render_fill_rect");
 	SDL_Rect fillRect = {x1,y1,x2,y2};
 	SDL_RenderFillRect(graph->render, &fillRect );
 }
 
-static int __render_load_image(Sdl_Graph *graph,void *image)
+static void *__render_load_image(Sdl_Graph *graph,void *path)
 {
-	Sdl_Image *i = (Sdl_Image *)image;
+
+	Sdl_Image *image;
+	allocator_t *allocator = ((Obj *)graph)->allocator;
+
 	dbg_str(DBG_DETAIL,"SDL Graph render_load_image");
-	if(i->surface == NULL) {
-		i->load_image(image);
+
+    image = OBJECT_NEW(allocator, Sdl_Image,"");
+	((Image *)image)->path->assign(((Image *)image)->path,path);
+	if(image->surface == NULL) {
+		image->load_image((Image *)image);
 	}
 
-	if(i->surface != NULL) {
-		i->texture = SDL_CreateTextureFromSurface(graph->render, i->surface);
-		i->width = i->surface->w;
-		i->height = i->surface->h;
-		SDL_FreeSurface(i->surface);
-        i->surface = NULL;
+	if(image->surface != NULL) {
+		image->texture = SDL_CreateTextureFromSurface(graph->render, image->surface);
+		image->width   = image->surface->w;
+		image->height  = image->surface->h;
+		SDL_FreeSurface(image->surface);
+        image->surface = NULL;
 	}
+
+	return image;
+}
+
+static int __render_unload_image(Sdl_Graph *graph,void *image)
+{
+	dbg_str(DBG_DETAIL,"Sdl_Text unload image");
+    object_destroy(image);
 }
 
 static int __render_draw_image(Sdl_Graph *graph,int x, int y, void *image)
@@ -213,28 +238,41 @@ static int __render_draw_image(Sdl_Graph *graph,int x, int y, void *image)
 	SDL_RenderCopy(graph->render, i->texture, NULL, &render_quad );
 }
 
-static int __render_load_text(Sdl_Graph *graph,void *text,void *font,int r, int g, int b, int a)
+static void * __render_load_text(Sdl_Graph *graph,void *string,void *font,int r, int g, int b, int a)
 {
-
-	Sdl_Text *t = (Sdl_Text *)text;
+	allocator_t *allocator = ((Obj *)graph)->allocator;
+	Sdl_Text *text;
 	Sdl_Font *f = (Sdl_Font *)font;
 	SDL_Surface* surface = NULL;
 	SDL_Color textColor = {r, g, b, a };
+	String *content;
 
 	dbg_str(DBG_DETAIL,"Sdl_Text load text");
+    text = OBJECT_NEW(allocator, Sdl_Text,"");
+	content = ((Text *)text)->content;
+	content->assign(content,string);
+
 	surface = TTF_RenderText_Solid(f->ttf_font,
                                    ((Text *)text)->content->value,
                                    textColor ); 
 
 	if(surface != NULL) {
-		t->texture = SDL_CreateTextureFromSurface(graph->render, surface);
-		t->width = surface->w;
-		t->height = surface->h;
-		dbg_str(DBG_DETAIL,"width =%d height=%d",t->width, t->height);
+		text->texture = SDL_CreateTextureFromSurface(graph->render, surface);
+		text->width = surface->w;
+		text->height = surface->h;
+		dbg_str(DBG_DETAIL,"width =%d height=%d",text->width, text->height);
 		SDL_FreeSurface(surface);
 	}
 
+	return text;
 }
+
+static int __render_unload_text(Sdl_Graph *graph, void *text)
+{
+	dbg_str(DBG_DETAIL,"Sdl_Text unload text");
+    object_destroy(text);
+}
+
 static int __render_write_text(Sdl_Graph *graph,int x, int y, void *text)
 {
 	dbg_str(DBG_DETAIL,"Sdl_Graph render_write_text");
@@ -263,14 +301,16 @@ static class_info_entry_t sdl_grath_class_info[] = {
 	[11] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
 	[12] = {ENTRY_TYPE_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
 	[13] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
-	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
-	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
-	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
-	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
-	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
-	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[20] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[21] = {ENTRY_TYPE_END},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_rect",__render_draw_rect,sizeof(void *)},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
+	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
+	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
+	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
+	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_text",__render_unload_text,sizeof(void *)},
+	[20] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
+	[21] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[22] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[23] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Graph",sdl_grath_class_info);

@@ -22,11 +22,6 @@ static int __deconstrcut(Label *label)
 	return 0;
 }
 
-static int __move(Label *label)
-{
-	dbg_str(DBG_SUC,"label move");
-}
-
 static int __set(Label *label, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
@@ -39,6 +34,8 @@ static int __set(Label *label, char *attrib, void *value)
 		label->deconstruct = value;
 	} else if(strcmp(attrib, "move") == 0) {
 		label->move = value;
+	} else if(strcmp(attrib, "draw") == 0) {
+		label->draw = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(label->name,value,strlen(value));
 	} else {
@@ -59,6 +56,22 @@ static void *__get(Label *obj, char *attrib)
     return NULL;
 }
 
+static int __move(Label *label)
+{
+	dbg_str(DBG_SUC,"label move");
+}
+
+static int __draw(Component *component, void *graph)
+{
+	Graph *g = (Graph *)graph;
+	Subject *s = (Subject *)component;
+	dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+
+	g->render_set_color(g,0x0,0x0,0x0,0xff);
+	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
+}
+
+
 static class_info_entry_t label_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -66,8 +79,9 @@ static class_info_entry_t label_class_info[] = {
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[7] = {ENTRY_TYPE_END},
+	[6] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
+	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[8] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Label",label_class_info);
@@ -88,8 +102,8 @@ char *gen_label_setting_str()
                         cjson_add_number_to_object(s, "height", 30);
                     }
                 }
+				cjson_add_string_to_object(c, "name", "label");
             }
-            cjson_add_string_to_object(c, "name", "label");
         }
     }
     set_str = cjson_print(root);

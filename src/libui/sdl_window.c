@@ -5,6 +5,7 @@
  * @version 
  * @date 2016-12-04
  */
+#include <unistd.h>
 #include <libui/sdl_window.h>
 #include <libui/sdl_graph.h>
 #include <libui/sdl_image.h>
@@ -112,13 +113,11 @@ static int __destroy_event(Window *window)
 static void *__create_background(Window *window, char *pic_path)
 {
 	allocator_t *allocator = ((Obj *)window)->allocator;
-	Image *background;
+	Graph *g = window->graph;
 
     dbg_str(DBG_DETAIL,"sdl window draw_background");
 
-	window->background = (Image *)OBJECT_NEW(allocator, Sdl_Image,NULL);
-	background = window->background;
-	background->path->assign(background->path,pic_path);
+	window->background = g->render_load_image(g, pic_path);
 }
 
 static int __destroy_background(Window *window)
@@ -240,22 +239,20 @@ void test_ui_sdl_window()
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
 	dbg_str(DBG_DETAIL,"render draw test");
-	g->render_load_image(g,window->background);
-    /*
-	 *g->render_draw_image(g,0,0,window->background);
-     */
+	g->render_draw_image(g,0,0,window->background);
 	g->render_present(g);
 
     sleep(2);
-    /*
-	 *g->render_clear(g);
-	 *g->render_set_color(g,0xff,0x0,0xff,0xff);
-	 *g->render_draw_line(g,20,0,50,50);
-	 *g->render_set_color(g,0xff,0x0,0x0,0xff);
+	g->render_clear(g);
+	g->render_set_color(g,0xff,0x0,0xff,0xff);
+	g->render_draw_line(g,20,0,50,50);
+	g->render_set_color(g,0xff,0x0,0x0,0xff);
+	g->render_draw_rect(g,20,20,100,100);
+	/*
 	 *g->render_fill_rect(g,20,20,100,100);
-	 *g->render_present(g);
-	 *sleep(5);
-     */
+	 */
+	g->render_present(g);
+	sleep(5);
 
     object_destroy(window);
 

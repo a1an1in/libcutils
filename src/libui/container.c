@@ -15,44 +15,6 @@ typedef struct position_s{
 	int y;
 }position_t;
 
-static void __update_component_position(Iterator *iter, void *arg) 
-{
-	Component *component;
-	Subject *s;
-	Container *c;
-	uint8_t *addr;
-	position_t *add = (position_t *)arg;
-
-	addr = (uint8_t *)iter->get_vpointer(iter);
-	component = (Component *)buffer_to_addr(addr);
-	s = (Subject *)component;
-	c = (Container *)component;
-
-	s->x += add->x;
-	s->y += add->y;
-
-	dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
-
-	dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
-	c->for_each_component(c,__update_component_position,add);
-}
-
-static void update_component_position(Component *component,void *arg) 
-{
-	Subject *s = (Subject *)component;
-	Container *c = (Container *)component;
-	position_t *add = (position_t *)arg;
-
-	s->x += add->x;
-	s->y += add->y;
-
-	dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
-	dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
-
-	c->for_each_component(c,__update_component_position,arg);
-
-}
-
 static int __construct(Container *container,char *init_str)
 {
     allocator_t *allocator = ((Obj *)container)->allocator;
@@ -124,6 +86,44 @@ static void *__get(Container *obj, char *attrib)
 static int __move(Container *container)
 {
 	dbg_str(DBG_DETAIL,"container move");
+}
+
+static void __update_component_position(Iterator *iter, void *arg) 
+{
+	Component *component;
+	Subject *s;
+	Container *c;
+	uint8_t *addr;
+	position_t *add = (position_t *)arg;
+
+	addr = (uint8_t *)iter->get_vpointer(iter);
+	component = (Component *)buffer_to_addr(addr);
+	s = (Subject *)component;
+	c = (Container *)component;
+
+	s->x += add->x;
+	s->y += add->y;
+
+	dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
+
+	dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
+	c->for_each_component(c,__update_component_position,add);
+}
+
+static void update_component_position(Component *component,void *arg) 
+{
+	Subject *s = (Subject *)component;
+	Container *c = (Container *)component;
+	position_t *add = (position_t *)arg;
+
+	s->x += add->x;
+	s->y += add->y;
+
+	dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
+	dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
+
+	c->for_each_component(c,__update_component_position,arg);
+
 }
 
 static int __add_component(Container *obj, Component *component)

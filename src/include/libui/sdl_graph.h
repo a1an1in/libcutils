@@ -27,10 +27,12 @@ struct sdl_graph_s{
 	int (*render_set_color)(Graph *graph, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 	int (*render_clear)(Graph *graph);
 	int (*render_draw_line)(Graph *graph,int x1, int y1, int x2, int y2);
+	int (*render_draw_rect)(Graph *graph,int x1, int y1, int x2, int y2);
 	int (*render_fill_rect)(Graph *graph,int x1, int y1, int x2, int y2);
-	int (*render_load_image)(Graph *graph,void *image);
+	void *(*render_load_image)(Graph *graph,void *path);
 	int (*render_draw_image)(Graph *graph,int x, int y, void *image);
-	int (*render_load_text)(Graph *graph,void *text,void *font,int r, int g, int b, int a);
+	void *(*render_load_text)(Graph *graph,void *string,void *font,int r, int g, int b, int a);
+	int (*render_unload_text)(Graph *graph,void *text);
 	int (*render_write_text)(Graph *graph,int x, int y, void *text);
 	int (*render_present)(Graph *graph);
 
