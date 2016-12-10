@@ -11,65 +11,6 @@
 #include <libui/sdl_font.h>
 #include <libui/sdl_event.h>
 
-#if 0
-static int __construct(Window *window,char *init_str)
-{
-	dbg_str(DBG_SUC,"sdl window construct");
-	allocator_t *allocator = ((Obj *)window)->allocator;
-	Graph *g;
-	Image *background;
-
-	window->graph      = (Graph *)OBJECT_NEW(allocator, Sdl_Graph,NULL);
-	g = window->graph;
-
-    window->font = OBJECT_NEW(allocator, Sdl_Font,"");
-	window->font->load_font(window->font);
-
-    window->event = OBJECT_NEW(allocator, Sdl_Event,"");
-
-	window->background = (Image *)OBJECT_NEW(allocator, Sdl_Image,NULL);
-	background = window->background;
-	background->path->assign(background->path,"./bin/hello_world.bmp");
-
-	if(g != NULL) {
-		g->init_window(g,window);
-		/*
-		 *background->load_image(background);
-		 *g->draw_image(g,background);
-		 */
-	} else {
-		dbg_str(DBG_ERROR,"window graph is NULL, please check");
-		return -1;
-	}
-
-	g->render_create(g);
-	g->render_set_color(g,0xff,0xff,0xff,0xff);
-	g->render_clear(g);
-	g->render_present(g);
-	/*
-	 *g->update_window(g);
-	 */
-
-	return 0;
-}
-
-static int __deconstrcut(Window *window)
-{
-	Graph *g = window->graph;
-
-	dbg_str(DBG_SUC,"sdl window deconstruct,window addr:%p",window);
-
-	g->render_destroy(g);
-	window->graph->close_window(window->graph,window);
-    object_destroy(window->background);
-    object_destroy(window->event);
-    object_destroy(window->font);
-    object_destroy(window->graph);
-
-	return 0;
-}
-#endif 
-
 static int __set(Window *window, char *attrib, void *value)
 {
 	Sdl_Window *w = (Sdl_Window *)window;
