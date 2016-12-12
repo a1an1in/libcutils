@@ -11,14 +11,19 @@
 
 static int __construct(Box *box,char *init_str)
 {
-	dbg_str(DBG_SUC,"box construct, box addr:%p",box);
+    allocator_t *allocator = ((Obj *)box)->allocator;
+	dbg_str(DBG_SUC,"box construct");
+    box->string = OBJECT_NEW(allocator, String, NULL);
+
+    box->string->assign(box->string,"hello world!");
 
 	return 0;
 }
 
 static int __deconstrcut(Box *box)
 {
-	dbg_str(DBG_SUC,"box deconstruct,box addr:%p",box);
+	dbg_str(DBG_SUC,"box deconstruct");
+    object_destroy(box->string);
 
 	return 0;
 }
@@ -59,22 +64,6 @@ static void *__get(Box *obj, char *attrib)
     return NULL;
 }
 
-static int __draw(Component *component, void *graph)
-{
-	Graph *g = (Graph *)graph;
-	Subject *s = (Subject *)component;
-	Box *l = (Box *)component;
-
-	dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
-
-	g->render_set_color(g,0x0,0x0,0x0,0xff);
-	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
-	/*
-	 *l->text = g->render_load_text(g,component->name,g->font, 0,0,0,0xff);
-	 *g->render_write_text(g,s->x + 1,s->y + 1,l->text);
-	 */
-}
-
 static int __text_input(Component *component,char c, void *graph)
 {
 	Graph *g = (Graph *)graph;
@@ -86,10 +75,58 @@ static int __text_input(Component *component,char c, void *graph)
 	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
     if(b->x + character->width > ((Subject *)component)->width) {
         b->x = 0;
+        b->max_height = 0;
         b->y += character->height;
     }
-	g->render_write_character(g,b->x,b->y,character);
+    if(b->max_height < b->y) {
+        b->max_height = b->y;
+    }
+	g->render_write_character(g,b->x,b->max_height,character);
 	b->x += character->width;
+	g->render_present(g);
+
+}
+
+static int write_text(Component *component,char c, void *graph)
+{
+	Graph *g = (Graph *)graph;
+	Character *character;
+    Box *b = (Box *)component;
+
+	dbg_str(DBG_DETAIL,"text input");
+
+	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
+    if(b->x + character->width > ((Subject *)component)->width) {
+        b->x = 0;
+        b->max_height = 0;
+        b->y += character->height;
+    }
+    if(b->max_height < b->y) {
+        b->max_height = b->y;
+    }
+	g->render_write_character(g,b->x,b->max_height,character);
+	b->x += character->width;
+
+}
+
+static int __draw(Component *component, void *graph)
+{
+	Graph *g = (Graph *)graph;
+	Subject *s = (Subject *)component;
+	Box *b = (Box *)component;
+    int i;
+    char c;
+
+	dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
+
+	g->render_set_color(g,0x0,0x0,0x0,0xff);
+	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
+
+    for(i = 0; i < strlen(b->string->value); i++) {
+        c = b->string->value[i];
+        write_text(component,c, graph);
+    }
+
 	g->render_present(g);
 
 }
@@ -125,8 +162,8 @@ char *gen_box_setting_str()
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
                         cjson_add_number_to_object(s, "x", 0);
                         cjson_add_number_to_object(s, "y", 0);
-                        cjson_add_number_to_object(s, "width", 500);
-                        cjson_add_number_to_object(s, "height", 500);
+                        cjson_add_number_to_object(s, "width", 600);
+                        cjson_add_number_to_object(s, "height", 600);
                     }
                 }
 				cjson_add_string_to_object(c, "name", "box");

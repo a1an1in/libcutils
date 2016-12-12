@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libui/component.h>
-#include <libui/text.h>
+#include <libobject/string.h>
 
 typedef struct box_s Box;
 
@@ -24,8 +24,9 @@ struct box_s{
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
-	Text *text;
-    int x, y;
+
+    String *string;
+    int x, y, max_height;
 
 };
 
