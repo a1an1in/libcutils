@@ -35,6 +35,9 @@ struct sdl_graph_s{
 	void *(*render_load_text)(Graph *graph,void *string,void *font,int r, int g, int b, int a);
 	int (*render_unload_text)(Graph *graph,void *text);
 	int (*render_write_text)(Graph *graph,int x, int y, void *text);
+	void *(*render_load_character)(Graph *graph,void *string,void *font,int r, int g, int b, int a);
+	int (*render_unload_character)(Graph *graph,void *character);
+	int (*render_write_character)(Graph *graph,int x, int y, void *character);
 	int (*render_present)(Graph *graph);
 
 #define MAX_NAME_LEN 50

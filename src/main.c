@@ -240,6 +240,7 @@ static int args_process_lab(void *base,int argc,char **argv)
     /*
      *lab4();
      */
+     lab5();
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
@@ -386,6 +387,13 @@ static int args_process_test_SDL_Text(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_SDL_Character(void *base,int argc,char **argv)
+{
+	
+	test_obj_sdl_character();
+	return 0;
+}
+
 static int args_process_test_SDL_Event(void *base,int argc,char **argv)
 {
 	test_obj_sdl_event();
@@ -407,6 +415,7 @@ static cmd_config_t cmds[]={
 	{"Box", args_process_test_Box,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
 	{"SDL_Event", args_process_test_SDL_Event,0, "test", "N/A","test"},
+	{"Char", args_process_test_SDL_Character,0, "test", "N/A","test"},
 	{"SDL_Text", args_process_test_SDL_Text,0, "test", "N/A","test"},
 	{"SDL_Font", args_process_test_SDL_Font,0, "test", "N/A","test"},
 	{"SDL_Image", args_process_test_SDL_Image,0, "test", "N/A","test"},

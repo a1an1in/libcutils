@@ -205,8 +205,8 @@ char *gen_window_setting_str()
                 cjson_add_string_to_object(c, "name", "Component");
             }
             cjson_add_string_to_object(w, "name", "Window");
-			cjson_add_number_to_object(w, "screen_width", 640);
-			cjson_add_number_to_object(w, "screen_height", 480);
+			cjson_add_number_to_object(w, "screen_width", 600);
+			cjson_add_number_to_object(w, "screen_height", 600);
         }
     }
     set_str = cjson_print(root);

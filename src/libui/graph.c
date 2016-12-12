@@ -68,6 +68,12 @@ static int __set(Graph *graph, char *attrib, void *value)
 		graph->render_unload_text = value;
 	} else if(strcmp(attrib, "render_write_text") == 0) {
 		graph->render_write_text = value;
+	} else if(strcmp(attrib, "render_load_character") == 0) {
+		graph->render_load_character = value;
+	} else if(strcmp(attrib, "render_unload_character") == 0) {
+		graph->render_unload_character = value;
+	} else if(strcmp(attrib, "render_write_character") == 0) {
+		graph->render_write_character = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
 		graph->render_present = value;
 
@@ -114,9 +120,12 @@ static class_info_entry_t graph_class_info[] = {
 	[19] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_text",NULL,sizeof(void *)},
 	[20] = {ENTRY_TYPE_VFUNC_POINTER,"","render_unload_text",NULL,sizeof(void *)},
 	[21] = {ENTRY_TYPE_VFUNC_POINTER,"","render_write_text",NULL,sizeof(void *)},
-	[22] = {ENTRY_TYPE_VFUNC_POINTER,"","render_present",NULL,sizeof(void *)},
-	[23] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[24] = {ENTRY_TYPE_END},
+	[22] = {ENTRY_TYPE_VFUNC_POINTER,"","render_load_character",NULL,sizeof(void *)},
+	[23] = {ENTRY_TYPE_VFUNC_POINTER,"","render_unload_character",NULL,sizeof(void *)},
+	[24] = {ENTRY_TYPE_VFUNC_POINTER,"","render_write_character",NULL,sizeof(void *)},
+	[25] = {ENTRY_TYPE_VFUNC_POINTER,"","render_present",NULL,sizeof(void *)},
+	[26] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[27] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Graph",graph_class_info);
 

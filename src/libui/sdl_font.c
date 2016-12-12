@@ -71,7 +71,7 @@ static int __load_font(Font *font)
 {
 	Sdl_Font *f = (Sdl_Font *)font;
 
-	f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 28 );
+	f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 20 );
 	if(f->ttf_font == NULL) {
 	} else {
 		dbg_str(DBG_DETAIL,"Sdl_Graph load font");

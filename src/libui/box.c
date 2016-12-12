@@ -66,8 +66,10 @@ static int __draw(Component *component, void *graph)
 
 	g->render_set_color(g,0x0,0x0,0x0,0xff);
 	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
-	l->text = g->render_load_text(g,component->name,g->font, 0,0,0,0xff);
-	g->render_write_text(g,s->x + 1,s->y + 1,l->text);
+	/*
+	 *l->text = g->render_load_text(g,component->name,g->font, 0,0,0,0xff);
+	 *g->render_write_text(g,s->x + 1,s->y + 1,l->text);
+	 */
 }
 
 static int __load_resources(Component *component,void *graph)
@@ -98,10 +100,10 @@ char *gen_box_setting_str()
             cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
                 cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 1);
-                        cjson_add_number_to_object(s, "y", 25);
-                        cjson_add_number_to_object(s, "width", 80);
-                        cjson_add_number_to_object(s, "height", 30);
+                        cjson_add_number_to_object(s, "x", 0);
+                        cjson_add_number_to_object(s, "y", 0);
+                        cjson_add_number_to_object(s, "width", 500);
+                        cjson_add_number_to_object(s, "height", 500);
                     }
                 }
 				cjson_add_string_to_object(c, "name", "box");

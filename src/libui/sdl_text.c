@@ -20,11 +20,14 @@ static int __construct(Text *text,char *init_str)
 
 static int __deconstrcut(Text *text)
 {
-	Sdl_Text *i = (Sdl_Text *)text;
+	Sdl_Text *t = (Sdl_Text *)text;
 	dbg_str(OBJ_DETAIL,"text deconstruct,text addr:%p",text);
 
-	if(i->surface != NULL){
-		SDL_FreeSurface(i->surface);
+	if(t->surface != NULL){
+		SDL_FreeSurface(t->surface);
+	}
+	if(t->texture != NULL) {
+        SDL_DestroyTexture(t->texture);
 	}
 
 	return 0;
@@ -109,18 +112,33 @@ void test_obj_sdl_text()
 	text = g->render_load_text(g,"hello world",window->font, 0,0,0,0xff);
 	g->render_write_text(g,0,0,text);
 
-#if 0
-	text->content->assign(text->content,"a");
-	g->render_load_text(g,text,window->font, 0,0,0,0xff);
+#if 1
+	text = g->render_load_text(g,"a",window->font, 0,0,0,0xff);
 	g->render_write_text(g,0,33,text);
 
-	text->content->assign(text->content,"b");
-	g->render_load_text(g,text,window->font, 0,0,0,0xff);
-	g->render_write_text(g,0,66,text);
+	text = g->render_load_text(g,"b",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17,33,text);
 
-	text->content->assign(text->content,"i");
-	g->render_load_text(g,text,window->font, 0,0,0,0xff);
-	g->render_write_text(g,0,99,text);
+	text = g->render_load_text(g,"i",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*2,33,text);
+
+	text = g->render_load_text(g,"w",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*3,33,text);
+	text = g->render_load_text(g,"W",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*4,33,text);
+	text = g->render_load_text(g,".",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*5,33,text);
+	text = g->render_load_text(g,",",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*6,33,text);
+	text = g->render_load_text(g,";",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*7,33,text);
+	text = g->render_load_text(g,"-",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*8,33,text);
+	text = g->render_load_text(g,"&",window->font, 0,0,0,0xff);
+	g->render_write_text(g,17*9,33,text);
+	/*
+	 *g->render_write_text(g,0,99,text);
+	 */
 #endif
 
 	g->render_present(g);

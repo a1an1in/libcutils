@@ -9,6 +9,7 @@
 #include <libui/sdl_graph.h>
 #include <libui/sdl_image.h>
 #include <libui/sdl_text.h>
+#include <libui/sdl_character.h>
 
 static int __construct(Sdl_Graph *sdl_grath,char *init_str)
 {
@@ -70,6 +71,12 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->render_unload_text = value;
 	} else if(strcmp(attrib, "render_write_text") == 0) {
 		sdl_grath->render_write_text = value;
+	} else if(strcmp(attrib, "render_load_character") == 0) {
+		sdl_grath->render_load_character = value;
+	} else if(strcmp(attrib, "render_unload_character") == 0) {
+		sdl_grath->render_unload_character = value;
+	} else if(strcmp(attrib, "render_write_character") == 0) {
+		sdl_grath->render_write_character = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
 		sdl_grath->render_present = value;
 	} else if(strcmp(attrib, "name") == 0) { /**attribs setting start*/
@@ -289,6 +296,51 @@ static int __render_write_text(Sdl_Graph *graph,int x, int y, void *text)
 	SDL_Rect render_quad = { x, y, t->width, t->height};
 	SDL_RenderCopy(graph->render, t->texture, NULL, &render_quad );
 }
+
+static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,int r, int g, int b, int a)
+{
+	allocator_t *allocator = ((Obj *)graph)->allocator;
+	Sdl_Character *character;
+	Sdl_Font *f = (Sdl_Font *)font;
+	SDL_Surface* surface = NULL;
+	SDL_Color character_color = {r, g, b, a };
+	char buf[10] = {0};
+
+	dbg_str(DBG_DETAIL,"Sdl_Character load character");
+    character = OBJECT_NEW(allocator, Sdl_Character,"");
+	((Character *)character)->assign((Character *)character,code);
+
+	sprintf(buf,"%c",'a');
+
+	surface = TTF_RenderText_Solid(f->ttf_font,
+                                   buf,
+                                   character_color); 
+
+	if(surface != NULL) {
+		character->texture = SDL_CreateTextureFromSurface(graph->render, surface);
+		character->width   = surface->w;
+		character->height  = surface->h;
+		dbg_str(DBG_DETAIL,"width =%d height=%d",character->width, character->height);
+		SDL_FreeSurface(surface);
+	}
+
+	return character;
+}
+
+static int __render_unload_character(Sdl_Graph *graph, void *character)
+{
+	dbg_str(DBG_DETAIL,"Sdl_Text unload character");
+    object_destroy(character);
+}
+
+static int __render_write_character(Sdl_Graph *graph,int x, int y, void *character)
+{
+	dbg_str(DBG_DETAIL,"Sdl_Graph render_write_character");
+	Sdl_Character *c     = (Sdl_Character *)character;
+	SDL_Rect render_quad = { x, y, c->width, c->height};
+	SDL_RenderCopy(graph->render, c->texture, NULL, &render_quad );
+}
+
 static int __render_present(Sdl_Graph *graph)
 {
 	dbg_str(DBG_DETAIL,"Sdl_Graph render_present");
@@ -318,9 +370,12 @@ static class_info_entry_t sdl_grath_class_info[] = {
 	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},
 	[20] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_text",__render_unload_text,sizeof(void *)},
 	[21] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_text",__render_write_text,sizeof(void *)},
-	[22] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[23] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[24] = {ENTRY_TYPE_END},
+	[22] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_character",__render_load_character,sizeof(void *)},
+	[23] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_character",__render_unload_character,sizeof(void *)},
+	[24] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_character",__render_write_character,sizeof(void *)},
+	[25] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[26] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[27] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Graph",sdl_grath_class_info);
