@@ -415,7 +415,7 @@ static cmd_config_t cmds[]={
 	{"Box", args_process_test_Box,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
 	{"SDL_Event", args_process_test_SDL_Event,0, "test", "N/A","test"},
-	{"Char", args_process_test_SDL_Character,0, "test", "N/A","test"},
+	{"SDL_Char", args_process_test_SDL_Character,0, "test", "N/A","test"},
 	{"SDL_Text", args_process_test_SDL_Text,0, "test", "N/A","test"},
 	{"SDL_Font", args_process_test_SDL_Font,0, "test", "N/A","test"},
 	{"SDL_Image", args_process_test_SDL_Image,0, "test", "N/A","test"},
