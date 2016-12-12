@@ -210,18 +210,19 @@ static int __poll_event(Event *event,void *window)
                      }
                      switch(e->key.keysym.sym) {
                          case SDLK_UP:
-                             dbg_str(DBG_DETAIL,"SDLK_UP");
+                             dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
                              break;
                          case SDLK_DOWN:
-                             dbg_str(DBG_DETAIL,"SDLK_DOWN");
+                             dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
                              break;
                          case SDLK_LEFT:
-                             dbg_str(DBG_DETAIL,"SDLK_LEFT");
+                             dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
                              break;
                          case SDLK_RIGHT:
-                             dbg_str(DBG_DETAIL,"SDLK_RIGHT");
+                             dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
+                             break;
                          case SDLK_BACKSPACE:
-                             dbg_str(DBG_DETAIL,"BACKSPACE");
+                             dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                              break;
                          default:
                              break;
