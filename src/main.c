@@ -68,119 +68,145 @@ static int args_process_help(void *base,int argc,char **argv)
     exit(1);
 	return 0;
 }
+
 static int args_process_ipaddr(void *base,int argc,char **argv)
 {
 	dbg_str(DBG_DETAIL,"args_process_ipaddr:%s",argv[0]);
 	return 1;
-}static int args_process_port(void *base,int argc,char **argv)
+}
+
+static int args_process_port(void *base,int argc,char **argv)
 {
 	dbg_str(DBG_DETAIL,"args_process_port:%s",argv[0]);
 	return 1;
 }
+
 static int args_process_test_share_mem_write(void *base,int argc,char **argv)
 {
     test_share_mem_write();
 	return 0;
-}static int args_process_test_share_mem_read(void *base,int argc,char **argv)
+}
+
+static int args_process_test_share_mem_read(void *base,int argc,char **argv)
 {
     test_share_mem_read();
 	return 0;
 }
+
 static int args_process_test_tcp_userver(void *base,int argc,char **argv)
 {
     test_tcp_userver();
 	return 0;
 }
+
 static int args_process_test_tcp_uclient_send(void *base,int argc,char **argv)
 {
     test_tcp_uclient_send();
 	return 0;
 }
+
 static int args_process_test_udp_uclient_send(void *base,int argc,char **argv)
 {
     test_udp_uclient_send();
 	return 0;
 }
+
 static int args_process_test_udp_uclient_recieve(void *base,int argc,char **argv)
 {
     test_udp_uclient_recieve();
 	return 0;
 }
+
 static int args_process_test_state_machine(void *base,int argc,char **argv)
 {
     test_state_machine();
 	return 0;
 }
+
 static int args_process_test_map(void *base,int argc,char **argv)
 {
     test_map();
 	return 0;
 }
+
 static int args_process_test_hashlist(void *base,int argc,char **argv)
 {
     test_datastructure_hashlist();
 	return 0;
 }
+
 static int args_process_test_llist(void *base,int argc,char **argv)
 {
     test_datastructure_link_list();
 	return 0;
 }
+
 static int args_process_test_rbtree_map(void *base,int argc,char **argv)
 {
     test_datastructure_rbtree_map();
 	return 0;
 }
+
 static int args_process_test_vector(void *base,int argc,char **argv)
 {
     test_datastructure_vector();
 	return 0;
 }
+
 static int args_process_test_ring_buffer(void *base,int argc,char **argv)
 {
     test_datastructure_ring_buffer();
 	return 0;
 }
+
 static int args_process_test_tcp_iserver(void *base,int argc,char **argv)
 {
     test_iserver();
     return 0;
 }
+
 static int args_process_test_tcp_iclient_send(void *base,int argc,char **argv)
 {
     test_tcp_iclient_send();
     return 0;
 }
+
 static int args_process_test_udp_iclient_recieve(void *base,int argc,char **argv)
 {
     test_udp_iclient_recieve();
     return 0;
 }
+
 static int args_process_test_udp_iclient_send(void *base,int argc,char **argv)
 {
     test_udp_iclient_send();
     return 0;
 }
+
 static int args_process_test_allocator(void *base,int argc,char **argv)
 {
     test_ctr_alloc();
     return 0;
 }
+
 static int args_process_test_tmr_user(void *base,int argc,char **argv)
 {
     test_tmr_user();
     return 0;
 }
+
 static int args_process_test_io_user(void *base,int argc,char **argv)
 {
     test_io_user();
     return 0;
 }
+
 static int args_process_test_evio(void *base,int argc,char **argv)
 {
      test_io();
     return 0;
 }
+
 static int args_process_test_evsignal(void *base,int argc,char **argv)
 {
     test_signal();
@@ -189,6 +215,7 @@ static int args_process_test_evsignal(void *base,int argc,char **argv)
      */
     return 0;
 }
+
 static int args_process_test_evtime(void *base,int argc,char **argv)
 {
     test_time();
@@ -197,6 +224,7 @@ static int args_process_test_evtime(void *base,int argc,char **argv)
 	 */
     return 0;
 }
+
 static int args_process_test_analyzer(void *base,int argc,char **argv)
 {
     test_pdt_proto_analyzer();
@@ -205,26 +233,31 @@ static int args_process_test_analyzer(void *base,int argc,char **argv)
 	 */
     return 0;
 }
+
 static int args_process_test_gclient_recv_of_inet_udp(void *base,int argc,char **argv)
 {
     test_client_recv_of_inet_udp();
     return 0;
 }
+
 static int args_process_test_gclient_recv_of_unix_udp(void *base,int argc,char **argv)
 {
     test_client_recv_of_unix_udp();
     return 0;
 }
+
 static int args_process_test_gserver_of_unix(void *base,int argc,char **argv)
 {
     test_server_of_unix();
     return 0;
 }
+
 static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
 {
     test_server_of_inet();
     return 0;
 }
+
 static int args_process_lab(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
@@ -244,48 +277,57 @@ static int args_process_lab(void *base,int argc,char **argv)
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
+
 static int args_process_help_test(void *base,int argc,char **argv)
 {
 	args_print_help_test_info(args_get_processor_globle_addr());
     exit(1);
 	return 0;
 }
+
 static int args_process_test_pa_admin(void *base,int argc,char **argv)
 {
     test_pa_admin();
 	return 0;
 }
+
 static int args_process_test_blob(void *base,int argc,char **argv)
 {
     test_blob();
 	return 0;
 }
+
 static int args_process_busd(void *base,int argc,char **argv)
 {
     test_bus_daemon();
 	return 0;
 }
+
 static int args_process_busc(void *base,int argc,char **argv)
 {
     test_bus_client();
 	return 0;
 }
+
 static int args_process_buss(void *base,int argc,char **argv)
 {
     test_bus_server();
 	return 0;
 }
+
 static int args_process_test_as(void *base,int argc,char **argv)
 {
     test_array_stack();
 	return 0;
 }
+
 static int args_process_test_miscellany_net(void *base,int argc,char **argv)
 {
     test_miscellany_net();
 
 	return 0;
 }
+
 static int args_process_test_obj(void *base,int argc,char **argv)
 {
 	test_obj();
@@ -297,49 +339,16 @@ static int args_process_test_obj_subject(void *base,int argc,char **argv)
 	test_obj_subject();
 	return 0;
 }
+
 static int args_process_test_obj_enemy(void *base,int argc,char **argv)
 {
 	test_obj_enemy();
 	return 0;
 }
+
 static int args_process_test_json(void *base,int argc,char **argv)
 {
     test_json();
-	return 0;
-}
-static int args_process_test_ui_container(void *base,int argc,char **argv)
-{
-    test_ui_container();
-	return 0;
-}
-static int args_process_test_ui_button(void *base,int argc,char **argv)
-{
-    test_ui_button();
-	return 0;
-}
-static int args_process_test_string(void *base,int argc,char **argv)
-{
-    test_obj_string();
-	return 0;
-}
-static int args_process_test_Map(void *base,int argc,char **argv)
-{
-    test_obj_map();
-	return 0;
-}
-static int args_process_test_Iterator(void *base,int argc,char **argv)
-{
-    test_obj_iter();
-	return 0;
-}
-static int args_process_test_Hmap_Iterator(void *base,int argc,char **argv)
-{
-    test_obj_hiter();
-	return 0;
-}
-static int args_process_test_Hmap(void *base,int argc,char **argv)
-{
-    test_obj_hash_map();
 	return 0;
 }
 
@@ -351,12 +360,53 @@ static int args_process_test_sdl(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_ui_container(void *base,int argc,char **argv)
+{
+    test_ui_container();
+	return 0;
+}
+
+static int args_process_test_ui_button(void *base,int argc,char **argv)
+{
+    test_ui_button();
+	return 0;
+}
+
+static int args_process_test_string(void *base,int argc,char **argv)
+{
+    test_obj_string();
+	return 0;
+}
+
+static int args_process_test_Map(void *base,int argc,char **argv)
+{
+    test_obj_map();
+	return 0;
+}
+
+static int args_process_test_Iterator(void *base,int argc,char **argv)
+{
+    test_obj_iter();
+	return 0;
+}
+
+static int args_process_test_Hmap_Iterator(void *base,int argc,char **argv)
+{
+    test_obj_hiter();
+	return 0;
+}
+
+static int args_process_test_Hmap(void *base,int argc,char **argv)
+{
+    test_obj_hash_map();
+	return 0;
+}
+
 static int args_process_test_Graph(void *base,int argc,char **argv)
 {
     test_ui_graph();
 	return 0;
 }
-
 static int args_process_test_SDL_Window(void *base,int argc,char **argv)
 {
 	test_ui_sdl_window();
@@ -411,6 +461,7 @@ static int args_process_test_Box(void *base,int argc,char **argv)
 	test_ui_box();
 	return 0;
 }
+
 static cmd_config_t cmds[]={
 	{"Box", args_process_test_Box,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
@@ -422,7 +473,6 @@ static cmd_config_t cmds[]={
 	{"Image", args_process_test_Image,0, "test", "N/A","test"},
 	{"SDL_Window", args_process_test_SDL_Window,0, "test", "N/A","test"},
 	{"Graph", args_process_test_Graph,0, "test", "N/A","test"},
-	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"HMap", args_process_test_Hmap,0, "test", "N/A","test"},
 	{"HIter", args_process_test_Hmap_Iterator,0, "test", "N/A","test"},
 	{"Iter", args_process_test_Iterator,0, "test", "N/A","test"},
@@ -430,6 +480,7 @@ static cmd_config_t cmds[]={
 	{"String", args_process_test_string,0, "test", "N/A","test"},
 	{"Button", args_process_test_ui_button,0, "test", "N/A","test"},
 	{"Container", args_process_test_ui_container,0, "test", "N/A","test"},
+	{"sdl", args_process_test_sdl,0, "test", "N/A","test"},
 	{"json", args_process_test_json,0, "test", "N/A","test"},
 	{"Enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
 	{"Subject", args_process_test_obj_subject,0, "test", "N/A","obj"},

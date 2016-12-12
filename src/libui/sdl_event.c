@@ -220,6 +220,8 @@ static int __poll_event(Event *event,void *window)
                              break;
                          case SDLK_RIGHT:
                              dbg_str(DBG_DETAIL,"SDLK_RIGHT");
+                         case SDLK_BACKSPACE:
+                             dbg_str(DBG_DETAIL,"BACKSPACE");
                              break;
                          default:
                              break;
