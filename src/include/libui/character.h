@@ -21,6 +21,8 @@ struct character_s{
 
 	/*attribs*/
 	uint32_t code;;
+	int width;
+	int height;
 };
 
 #endif

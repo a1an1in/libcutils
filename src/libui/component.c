@@ -42,6 +42,8 @@ static int __set(Component *component, char *attrib, void *value)
 		component->draw = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
 		component->load_resources = value;
+	} else if(strcmp(attrib, "text_input") == 0) {
+		component->text_input = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
 	} else {
@@ -63,16 +65,17 @@ static void *__get(Component *obj, char *attrib)
 }
 
 static class_info_entry_t component_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-	[6] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",NULL,sizeof(void *)},
-	[7] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",NULL,sizeof(void *)},
-	[8] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[9] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",NULL,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",NULL,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_input",NULL,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[10] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

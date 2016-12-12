@@ -19,6 +19,7 @@ struct box_s{
 	/*virtual methods reimplement*/
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *graph);
+	int (*text_input)(Component *component,char c, void *graph);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

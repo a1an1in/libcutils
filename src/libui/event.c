@@ -52,18 +52,13 @@ static void * __get(Event *event, char *attrib)
     return NULL;
 }
 
-static int __poll_event(Event *event)
-{
-    dbg_str(DBG_DETAIL,"event poll");
-}
-
 static class_info_entry_t event_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_VFUNC_POINTER,"","poll_event",__poll_event,sizeof(void *)},
+	[5] = {ENTRY_TYPE_VFUNC_POINTER,"","poll_event",NULL,sizeof(void *)},
 	[6] = {ENTRY_TYPE_END},
 
 };

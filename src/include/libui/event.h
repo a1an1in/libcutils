@@ -16,7 +16,7 @@ struct ui_event_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods*/
-    int (*poll_event)(Event *event);
+    int (*poll_event)(Event *event,void *window);
 
 	/*attribs*/
 };

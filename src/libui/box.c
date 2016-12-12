@@ -7,6 +7,7 @@
  */
 #include <libui/box.h>
 #include <libui/sdl_window.h>
+#include <libui/character.h>
 
 static int __construct(Box *box,char *init_str)
 {
@@ -36,6 +37,8 @@ static int __set(Box *box, char *attrib, void *value)
 		box->draw = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
 		box->load_resources = value;
+	} else if(strcmp(attrib, "text_input") == 0) {
+		box->text_input = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(box->name,value,strlen(value));
 	} else {
@@ -72,6 +75,20 @@ static int __draw(Component *component, void *graph)
 	 */
 }
 
+static int __text_input(Component *component,char c, void *graph)
+{
+	Graph *g = (Graph *)graph;
+	Character *character;
+	dbg_str(DBG_SUC,"text input");
+	static int pos_x, pos_y;
+
+	character = g->render_load_character(g,c,g->font, 0,0,0,0xff);
+	g->render_write_character(g,pos_x,33,character);
+	pos_x += character->width;
+	g->render_present(g);
+
+}
+
 static int __load_resources(Component *component,void *graph)
 {
 }
@@ -84,8 +101,9 @@ static class_info_entry_t box_class_info[] = {
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
 	[6] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-	[7] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[8] = {ENTRY_TYPE_END},
+	[7] = {ENTRY_TYPE_FUNC_POINTER,"","text_input",__text_input,sizeof(void *)},
+	[8] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[9] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Box",box_class_info);
@@ -121,13 +139,15 @@ void test_ui_box()
     Container *container;
 	Graph *g;
     Subject *subject;
+	Event *event;
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
     char buf[2048];
 
-    set_str   = gen_window_setting_str();
-    window    = OBJECT_NEW(allocator, Sdl_Window,set_str);
-	g         = window->graph;
+    set_str = gen_window_setting_str();
+    window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
+	g       = window->graph;
+    event   = window->event;
     container = (Container *)window;
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
@@ -144,6 +164,10 @@ void test_ui_box()
 	dbg_str(DBG_DETAIL,"window container :%p",container);
 
 	window->update_window(window);
+
+    event->poll_event(event, window);
+
+    object_destroy(window);
 
     free(set_str);
 

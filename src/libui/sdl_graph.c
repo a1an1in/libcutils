@@ -300,7 +300,7 @@ static int __render_write_text(Sdl_Graph *graph,int x, int y, void *text)
 static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,int r, int g, int b, int a)
 {
 	allocator_t *allocator = ((Obj *)graph)->allocator;
-	Sdl_Character *character;
+	Character *character;
 	Sdl_Font *f = (Sdl_Font *)font;
 	SDL_Surface* surface = NULL;
 	SDL_Color character_color = {r, g, b, a };
@@ -308,16 +308,16 @@ static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,
 
 	dbg_str(DBG_DETAIL,"Sdl_Character load character");
     character = OBJECT_NEW(allocator, Sdl_Character,"");
-	((Character *)character)->assign((Character *)character,code);
+	character->assign(character,code);
 
-	sprintf(buf,"%c",'a');
+	sprintf(buf,"%c",code);
 
 	surface = TTF_RenderText_Solid(f->ttf_font,
                                    buf,
                                    character_color); 
 
 	if(surface != NULL) {
-		character->texture = SDL_CreateTextureFromSurface(graph->render, surface);
+		((Sdl_Character *)character)->texture = SDL_CreateTextureFromSurface(graph->render, surface);
 		character->width   = surface->w;
 		character->height  = surface->h;
 		dbg_str(DBG_DETAIL,"width =%d height=%d",character->width, character->height);
@@ -336,9 +336,9 @@ static int __render_unload_character(Sdl_Graph *graph, void *character)
 static int __render_write_character(Sdl_Graph *graph,int x, int y, void *character)
 {
 	dbg_str(DBG_DETAIL,"Sdl_Graph render_write_character");
-	Sdl_Character *c     = (Sdl_Character *)character;
+	Character *c     = (Character *)character;
 	SDL_Rect render_quad = { x, y, c->width, c->height};
-	SDL_RenderCopy(graph->render, c->texture, NULL, &render_quad );
+	SDL_RenderCopy(graph->render, ((Sdl_Character *)character)->texture, NULL, &render_quad );
 }
 
 static int __render_present(Sdl_Graph *graph)

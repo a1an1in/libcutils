@@ -170,16 +170,28 @@ static void * __get(Event *event, char *attrib)
     return NULL;
 }
 
-static int __poll_event(Event *event)
+static int __poll_event(Event *event,void *window)
 {
     dbg_str(DBG_DETAIL,"sdl event poll");
     int quit = 0;
 	SDL_Event *e = &((Sdl_Event *)event)->ev;
+	Component *cur;
+	Window *w = (Window *)window;
+	Graph *g = w->graph;
      
-    String *string;
-    char buf[2048];
-    allocator_t *allocator = ((Obj *)event)->allocator;
-    string = OBJECT_NEW(allocator, String,NULL);
+	//add for test>>
+    Container *container;
+    container = (Container *)window;
+	cur = container->search_component(container,"box");
+	dbg_str(DBG_WARNNING,"found cur component :%p",cur);
+	//<<
+	
+	/*
+     *String *string;
+     *char buf[2048];
+     *allocator_t *allocator = ((Obj *)event)->allocator;
+     *string = OBJECT_NEW(allocator, String,NULL);
+	 */
 
     SDL_StartTextInput();
 
@@ -225,11 +237,11 @@ static int __poll_event(Event *event)
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-                     /*
-                      *print_text("TEXTINPUT", e->text.text);
-                      */
-                     dbg_str(DBG_DETAIL,"text:%s",e->text.text);
-                     string->append_char(string,e->text.text[0]);
+					 cur->text_input(cur,e->text.text[0], g);
+					 /*
+                      *dbg_str(DBG_DETAIL,"text:%s",e->text.text);
+                      *string->append_char(string,e->text.text[0]);
+					  */
                      break;
                  default:
                      break;
@@ -237,8 +249,10 @@ static int __poll_event(Event *event)
          }
     }
 
-	object_dump(string, "String", buf, 2048);
-	dbg_str(DBG_DETAIL,"String dump: %s",buf);
+	/*
+	 *object_dump(string, "String", buf, 2048);
+	 *dbg_str(DBG_DETAIL,"String dump: %s",buf);
+	 */
     SDL_StopTextInput();
 
     return 0;
@@ -277,7 +291,7 @@ void test_obj_sdl_event()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    event->poll_event(event);
+    event->poll_event(event,window);
 
     object_destroy(window);
 
