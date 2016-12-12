@@ -65,7 +65,7 @@ static int __draw(Component *component, void *graph)
 	Subject *s = (Subject *)component;
 	Box *l = (Box *)component;
 
-	dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+	dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
 
 	g->render_set_color(g,0x0,0x0,0x0,0xff);
 	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
@@ -79,12 +79,17 @@ static int __text_input(Component *component,char c, void *graph)
 {
 	Graph *g = (Graph *)graph;
 	Character *character;
-	dbg_str(DBG_SUC,"text input");
-	static int pos_x, pos_y;
+    Box *b = (Box *)component;
 
-	character = g->render_load_character(g,c,g->font, 0,0,0,0xff);
-	g->render_write_character(g,pos_x,33,character);
-	pos_x += character->width;
+	dbg_str(DBG_DETAIL,"text input");
+
+	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
+    if(b->x + character->width > ((Subject *)component)->width) {
+        b->x = 0;
+        b->y += character->height;
+    }
+	g->render_write_character(g,b->x,b->y,character);
+	b->x += character->width;
 	g->render_present(g);
 
 }
@@ -144,16 +149,18 @@ void test_ui_box()
     char *set_str;
     char buf[2048];
 
-    set_str = gen_window_setting_str();
-    window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
-	g       = window->graph;
-    event   = window->event;
+    set_str   = gen_window_setting_str();
+    window    = OBJECT_NEW(allocator, Sdl_Window,set_str);
+	g         = window->graph;
+    event     = window->event;
     container = (Container *)window;
+
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
     set_str = gen_box_setting_str();
     subject = OBJECT_NEW(allocator, Box,set_str);
+
     object_dump(subject, "Box", buf, 2048);
     dbg_str(DBG_DETAIL,"Box dump: %s",buf);
 

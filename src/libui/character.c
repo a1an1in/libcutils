@@ -9,6 +9,20 @@
 #include <libdbg/debug.h>
 #include <libui/character.h>
 
+static int __construct(Character *character,char *init_str)
+{
+	dbg_str(OBJ_DETAIL,"character construct");
+
+	return 0;
+}
+
+static int __deconstrcut(Character *character)
+{
+	dbg_str(OBJ_DETAIL,"character deconstruct");
+
+	return 0;
+}
+
 static int __set(Character *character, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
@@ -51,8 +65,8 @@ static class_info_entry_t character_class_info[] = {
     [0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
     [1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
     [2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-    [3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",NULL,sizeof(void *)},
-    [4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",NULL,sizeof(void *)},
+    [3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5] = {ENTRY_TYPE_FUNC_POINTER,"","assign",__assign,sizeof(void *)},
     [6] = {ENTRY_TYPE_VFUNC_POINTER,"","load_character",NULL,sizeof(void *)},
     [7] = {ENTRY_TYPE_UINT32_T,"","code",NULL,sizeof(void *)},

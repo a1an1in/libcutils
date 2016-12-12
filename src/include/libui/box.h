@@ -25,6 +25,7 @@ struct box_s{
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
 	Text *text;
+    int x, y;
 
 };
 
