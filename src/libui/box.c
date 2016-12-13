@@ -87,6 +87,8 @@ static int __text_key_input(Component *component,char c, void *graph)
 	b->x += character->width;
 	g->render_present(g);
 
+    object_destroy(character);
+
 }
 
 static int __backspace_key_input(Component *component,void *graph)
@@ -113,6 +115,8 @@ static int write_text(Component *component,char c, void *graph)
     }
 	g->render_write_character(g,b->x,b->max_height,character);
 	b->x += character->width;
+
+    object_destroy(character);
 
 }
 

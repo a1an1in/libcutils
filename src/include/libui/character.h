@@ -20,7 +20,7 @@ struct character_s{
 	int (*load_character)(Character *character,void *graph);
 
 	/*attribs*/
-	uint32_t code;;
+	uint32_t code;
 	int width;
 	int height;
 };
