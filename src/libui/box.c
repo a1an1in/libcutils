@@ -42,8 +42,10 @@ static int __set(Box *box, char *attrib, void *value)
 		box->draw = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
 		box->load_resources = value;
-	} else if(strcmp(attrib, "text_input") == 0) {
-		box->text_input = value;
+	} else if(strcmp(attrib, "text_key_input") == 0) {
+		box->text_key_input = value;
+	} else if(strcmp(attrib, "backspace_key_input") == 0) {
+		box->backspace_key_input = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(box->name,value,strlen(value));
 	} else {
@@ -64,7 +66,7 @@ static void *__get(Box *obj, char *attrib)
     return NULL;
 }
 
-static int __text_input(Component *component,char c, void *graph)
+static int __text_key_input(Component *component,char c, void *graph)
 {
 	Graph *g = (Graph *)graph;
 	Character *character;
@@ -85,6 +87,11 @@ static int __text_input(Component *component,char c, void *graph)
 	b->x += character->width;
 	g->render_present(g);
 
+}
+
+static int __backspace_key_input(Component *component,void *graph)
+{
+	dbg_str(DBG_DETAIL,"backspace_key_input");
 }
 
 static int write_text(Component *component,char c, void *graph)
@@ -136,16 +143,17 @@ static int __load_resources(Component *component,void *graph)
 }
 
 static class_info_entry_t box_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
-	[6] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-	[7] = {ENTRY_TYPE_FUNC_POINTER,"","text_input",__text_input,sizeof(void *)},
-	[8] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[9] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","text_key_input",__text_key_input,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","backspace_key_input",__backspace_key_input,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[10] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Box",box_class_info);

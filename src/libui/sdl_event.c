@@ -201,10 +201,24 @@ static int __poll_event(Event *event,void *window)
                  case SDL_QUIT:
                      quit = 1; 
                      break;
+				 case SDL_WINDOWEVENT:
+					 switch (e->window.event) {
+						 case SDL_WINDOWEVENT_MOVED:
+							 break;
+						 case SDL_WINDOWEVENT_RESIZED:
+							 dbg_str(DBG_DETAIL,"SDL EVENT: Window %d resized to %dx%d",
+									 e->window.windowID, e->window.data1,
+									 e->window.data2);
+							 break;
+					 }
+					 break;
                  case SDL_KEYDOWN:
-                     /*
-                      *print_key(&e->key.keysym, (e->key.state == SDL_PRESSED) ? SDL_TRUE : SDL_FALSE, (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
-                      */
+					 /*
+					  *print_key(&e->key.keysym, 
+					  *          (e->key.state == SDL_PRESSED) ? SDL_TRUE : SDL_FALSE,
+					  *          (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
+					  */
+
                      if((e->key.repeat) ? SDL_TRUE : SDL_FALSE) {
                          break;
                      }
@@ -222,6 +236,8 @@ static int __poll_event(Event *event,void *window)
                              dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
                              break;
                          case SDLK_BACKSPACE:
+							 if(cur->backspace_key_input)
+								 cur->backspace_key_input(cur, g); 
                              dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                              break;
                          default:
@@ -233,19 +249,50 @@ static int __poll_event(Event *event,void *window)
                       *dbg_str(DBG_DETAIL,"SDL_KEYUP");
                       */
                      break;
+				 case SDL_CONTROLLERBUTTONDOWN:
+					 dbg_str(DBG_DETAIL,"SDL EVENT: Controller %d button %d down",
+							 e->cbutton.which, e->cbutton.button);
+					 break;
                  case SDL_MOUSEBUTTONDOWN:
-                     dbg_str(DBG_DETAIL,"SDL_MOUSEBUTTONDOWN");
+					 dbg_str(DBG_DETAIL,"SDL EVENT: Mouse: button %d pressed at %d,%d with click count %d in window %d",
+							 e->button.button, e->button.x, e->button.y, e->button.clicks,                         
+							 e->button.windowID); 
                      break;
-                 case SDL_TEXTEDITING:
+				 case SDL_MOUSEMOTION:
+					 /*
+					  *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
+					  *        e->motion.x, e->motion.y,
+					  *        e->motion.xrel, e->motion.yrel,
+					  *        e->motion.windowID);
+					  */
+					 break;
+				 case SDL_MOUSEWHEEL: 
+					 /*
+					  *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: wheel scrolled %d in x and %d in y (reversed: %d) in window %d", 
+					  *        e->wheel.x, e->wheel.y, e->wheel.direction, e->wheel.windowID);
+					  */
+					 break;
+				 case SDL_TEXTEDITING:
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-					 cur->text_input(cur,e->text.text[0], g);
+					 if(cur->text_key_input)
+						 cur->text_key_input(cur,e->text.text[0], g);
 					 /*
                       *dbg_str(DBG_DETAIL,"text:%s",e->text.text);
                       *string->append_char(string,e->text.text[0]);
 					  */
                      break;
+				 case SDL_FINGERDOWN:
+				 case SDL_FINGERUP:
+					 dbg_str(DBG_DETAIL,
+							 "SDL EVENT: Finger: %s touch=%ld, finger=%ld, x=%f, y=%f, dx=%f, dy=%f, pressure=%f",
+							 (e->type == SDL_FINGERDOWN) ? "down" : "up",
+							 (long) e->tfinger.touchId,
+							 (long) e->tfinger.fingerId,
+							 e->tfinger.x, e->tfinger.y,
+							 e->tfinger.dx, e->tfinger.dy, e->tfinger.pressure);
+					 break;
                  default:
                      break;
              }

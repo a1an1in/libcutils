@@ -42,8 +42,10 @@ static int __set(Component *component, char *attrib, void *value)
 		component->draw = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
 		component->load_resources = value;
-	} else if(strcmp(attrib, "text_input") == 0) {
-		component->text_input = value;
+	} else if(strcmp(attrib, "text_key_input") == 0) {
+		component->text_key_input = value;
+	} else if(strcmp(attrib, "backspace_key_input") == 0) {
+		component->backspace_key_input = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
 	} else {
@@ -73,9 +75,10 @@ static class_info_entry_t component_class_info[] = {
 	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
 	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",NULL,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",NULL,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_input",NULL,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[10] = {ENTRY_TYPE_END},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_key_input",NULL,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","backspace_key_input",NULL,sizeof(void *)},
+	[10] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[11] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);
