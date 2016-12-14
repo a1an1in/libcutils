@@ -224,21 +224,34 @@ static int __poll_event(Event *event,void *window)
                      }
                      switch(e->key.keysym.sym) {
                          case SDLK_UP:
-                             dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
+                             /*
+                              *dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
+                              */
+							 if(cur->up_key_down) cur->up_key_down(cur, g); 
                              break;
                          case SDLK_DOWN:
-                             dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
+                             /*
+                              *dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
+                              */
+							 if(cur->down_key_down) cur->down_key_down(cur, g); 
                              break;
                          case SDLK_LEFT:
-                             dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
+                             /*
+                              *dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
+                              */
+							 if(cur->left_key_down) cur->left_key_down(cur, g); 
                              break;
                          case SDLK_RIGHT:
-                             dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
+                             /*
+                              *dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
+                              */
+							 if(cur->right_key_down) cur->right_key_down(cur, g); 
                              break;
                          case SDLK_BACKSPACE:
-							 if(cur->backspace_key_input)
-								 cur->backspace_key_input(cur, g); 
-                             dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
+                             /*
+                              *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
+                              */
+							 if(cur->backspace_key_input) cur->backspace_key_input(cur, g); 
                              break;
                          default:
                              break;
@@ -276,8 +289,7 @@ static int __poll_event(Event *event,void *window)
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-					 if(cur->text_key_input)
-						 cur->text_key_input(cur,e->text.text[0], g);
+					 if(cur->text_key_input) cur->text_key_input(cur,e->text.text[0], g);
 					 /*
                       *dbg_str(DBG_DETAIL,"text:%s",e->text.text);
                       *string->append_char(string,e->text.text[0]);

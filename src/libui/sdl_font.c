@@ -71,7 +71,30 @@ static int __load_font(Font *font)
 {
 	Sdl_Font *f = (Sdl_Font *)font;
 
-	f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 20 );
+    f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 18 );
+    /*
+	 *f->ttf_font = TTF_OpenFont( "./bin/TakaoPGothic.ttf", 18 );
+     */
+    /*
+	 *f->ttf_font = TTF_OpenFont( "./bin/Ubuntu-L.ttf", 18 );
+     */
+    /*
+	 *f->ttf_font = TTF_OpenFont( "./bin/Ubuntu-C.ttf", 18 );
+     */
+    /*
+	 *f->ttf_font = TTF_OpenFont( "./bin/UbuntuMono-R.ttf", 18 );
+     */
+
+     /*
+      *f->ttf_font = TTF_OpenFont( "./bin/VLADIMIR.TTF", 40 );
+      */
+     /*
+	  *f->ttf_font = TTF_OpenFont( "./bin/TIMES.TTF", 20 );
+      */
+     /*
+      *f->ttf_font = TTF_OpenFont( "./bin/ARIAL.TTF", 18 );
+      */
+
 	if(f->ttf_font == NULL) {
 	} else {
 		dbg_str(DBG_DETAIL,"Sdl_Graph load font");

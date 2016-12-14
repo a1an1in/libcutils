@@ -46,6 +46,18 @@ static int __set(Component *component, char *attrib, void *value)
 		component->text_key_input = value;
 	} else if(strcmp(attrib, "backspace_key_input") == 0) {
 		component->backspace_key_input = value;
+	} else if(strcmp(attrib, "up_key_down") == 0) {
+		component->up_key_down = value;
+	} else if(strcmp(attrib, "down_key_down") == 0) {
+		component->down_key_down = value;
+	} else if(strcmp(attrib, "left_key_down") == 0) {
+		component->left_key_down = value;
+	} else if(strcmp(attrib, "right_key_down") == 0) {
+		component->right_key_down = value;
+	} else if(strcmp(attrib, "pageup_key_down") == 0) {
+		component->pageup_key_down = value;
+	} else if(strcmp(attrib, "pagedown_key_down") == 0) {
+		component->pagedown_key_down = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
 	} else {
@@ -77,8 +89,14 @@ static class_info_entry_t component_class_info[] = {
 	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",NULL,sizeof(void *)},
 	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_key_input",NULL,sizeof(void *)},
 	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","backspace_key_input",NULL,sizeof(void *)},
-	[10] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[11] = {ENTRY_TYPE_END},
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","up_key_down",NULL,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","down_key_down",NULL,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","left_key_down",NULL,sizeof(void *)},
+	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","right_key_down",NULL,sizeof(void *)},
+	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","pageup_key_down",NULL,sizeof(void *)},
+	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","pagedown_key_down",NULL,sizeof(void *)},
+	[16] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[17] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);
