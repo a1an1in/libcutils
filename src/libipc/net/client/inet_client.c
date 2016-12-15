@@ -304,7 +304,7 @@ int udp_iclient_send(client_t *client,
 
     return ret;
 }
-int udp_iclient_broadcast(client_t *cli,char *dest_port,void *buf,uint32_t len)
+int udp_iclient_broadcast(client_t *cli,char *broadcast_addr, char *dest_port,void *buf,uint32_t len)
 {
 	struct sockaddr_in raddr;
 

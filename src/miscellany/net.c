@@ -140,6 +140,7 @@ int set_local_ip(char *ifname,const char *ipaddr)
     close( sk );  
     return 0;  
 } 
+
 int get_local_netmask(char *ifname,char *netmask_addr)  
 {  
     int sk;  
@@ -181,6 +182,7 @@ int set_local_netmask(char *ifname,char *netmask_addr)
       
     memset(&ifreq, 0, sizeof(ifreq));     
     strncpy(ifreq.ifr_name, ifname, sizeof(ifreq.ifr_name )-1);     
+
     sin = (struct sockaddr_in *)&ifreq.ifr_addr;  
     sin->sin_family = AF_INET;  
     inet_pton(AF_INET, netmask_addr, &sin->sin_addr);  
@@ -192,6 +194,64 @@ int set_local_netmask(char *ifname,char *netmask_addr)
 
     return 1;
 }  
+
+int get_broadcast_addr(char *ifname, char *ipaddr)
+{
+    int sk;
+    struct sockaddr_in  sin;
+    struct ifreq ifr;
+
+    sk = socket(AF_INET, SOCK_DGRAM, 0);  
+    if (sk == -1)
+    {  
+        dbg_str(DBG_ERROR,"get_broadcast_addr");  
+        return  -1; 
+    } 
+
+    memset(&ifr, 0, sizeof(ifr));     
+    strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name) - 1);
+
+    if (!(ioctl(sk, SIOCGIFBRDADDR, &ifr)))
+    {
+        memcpy(&sin, &ifr.ifr_addr, sizeof(ifr.ifr_addr));
+        strcpy(ipaddr,inet_ntoa(sin.sin_addr));         
+    }   
+
+    close(sk);
+
+    return 1;
+}
+
+/*
+ *int set_broadcast_addr(char *ifname,char *ipaddr)  
+ *{  
+ *    int sk;  
+ *    struct ifreq ifreq;  
+ *    struct sockaddr_in *sin;  
+ *          
+ *    sk = socket( AF_INET, SOCK_STREAM, 0 );  
+ *    if( sk == -1) {  
+ *        perror("Not create network socket connect\n");  
+ *        return -1;  
+ *    }  
+ *      
+ *    memset(&ifreq, 0, sizeof(ifreq));     
+ *    strncpy(ifreq.ifr_name, ifname, sizeof(ifreq.ifr_name )-1);     
+ *
+ *    sin = (struct sockaddr_in *)&ifreq.ifr_addr;  
+ *    sin->sin_family = AF_INET;  
+ *    inet_pton(AF_INET, ipaddr, &sin->sin_addr);  
+ *  
+ *    if(ioctl(sk, SIOCSIFBRDADDR, &ifreq ) < 0) {  
+ *        printf("sk ioctl error\n");  
+ *        return -1;  
+ *    }  
+ *
+ *    return 1;
+ *}  
+ */
+
+
 int inet_str2num(int af,char *ip)
 {
     struct in_addr in;
@@ -250,10 +310,10 @@ int inet_is_in_same_subnet(char *ip_str,char *net_if_name)
 
 int test_miscellany_net()
 {
-#if 0
     unsigned char  mac_addr[6];
     char ip_addr[100];
 
+#if 0
     get_mac((char *)"eth0",mac_addr, sizeof(mac_addr));
     print_mac(mac_addr);
 
@@ -278,6 +338,7 @@ int test_miscellany_net()
     inet_num2str(AF_INET,34908352,ip_addr);
 #endif
 
+#if 0
     if(inet_is_in_same_subnet("192.168.2.32","eth0")) {
         /*
          *dbg_str(DBG_DETAIL,"this ip addr add local addr is in the same net");
@@ -285,6 +346,17 @@ int test_miscellany_net()
     } else {
         dbg_str(DBG_DETAIL,"this ip addr add local addr is not in the same net");
     }
+#endif
+
+    get_broadcast_addr("eth0", ip_addr);
+    print_ipaddr(ip_addr);
+
+    /*
+     *char ip_addr2[100];
+     *set_broadcast_addr("eth0", "192.168.20.255");
+     *print_ipaddr(ip_addr2);
+     */
+
     return 0;
 }
 
