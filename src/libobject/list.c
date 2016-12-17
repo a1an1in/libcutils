@@ -33,21 +33,14 @@ static int __set(List *list, char *attrib, void *value)
 		list->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		list->deconstruct = value;
-	} else if(strcmp(attrib, "name") == 0) {
-        strncpy(list->name,value,strlen(value));
-	} else if(strcmp(attrib, "insert") == 0) {
-		list->insert = value;
-	} else if(strcmp(attrib, "insert_wb") == 0) {
-		list->insert_wb = value;
-	} else if(strcmp(attrib, "search") == 0) {
-		list->search = value;
+
+	} else if(strcmp(attrib, "push_back") == 0) {
+		list->push_back = value;
 	} else if(strcmp(attrib, "del") == 0) {
 		list->del = value;
 	} else if(strcmp(attrib, "for_each") == 0) {
-        dbg_str(DBG_DETAIL,"list set for each:%p",value);
 		list->for_each = value;
 	} else if(strcmp(attrib, "for_each_arg2") == 0) {
-        dbg_str(DBG_DETAIL,"list set for each:%p",value);
 		list->for_each_arg2 = value;
 	} else if(strcmp(attrib, "begin") == 0) {
 		list->begin = value;
@@ -55,6 +48,12 @@ static int __set(List *list, char *attrib, void *value)
 		list->end = value;
 	} else if(strcmp(attrib, "destroy") == 0) {
 		list->destroy = value;
+
+	} else if(strcmp(attrib, "name") == 0) {
+        strncpy(list->name,value,strlen(value));
+	} else if(strcmp(attrib, "value_size") == 0) {
+		list->value_size = *(int *)value;
+
 	} else {
 		dbg_str(OBJ_DETAIL,"list set, not support %s setting",attrib);
 	}
@@ -66,6 +65,8 @@ static void *__get(List *obj, char *attrib)
 {
     if(strcmp(attrib, "name") == 0) {
         return obj->name;
+	} else if(strcmp(attrib, "value_size") == 0) {
+        return &obj->value_size;
 	} else if(strcmp(attrib, "for_each") == 0) {
 		return obj->for_each;
     } else {
@@ -75,19 +76,9 @@ static void *__get(List *obj, char *attrib)
     return NULL;
 }
 
-static int __insert(List *list,void *key,void *value)
+static int __push_back(List *list,void *value)
 {
 	dbg_str(OBJ_DETAIL,"List insert");
-}
-
-static int __insert_wb(List *list,void *key,void *value,Iterator *iter)
-{
-	dbg_str(OBJ_DETAIL,"List insert wb");
-}
-
-static int __search(List *list,void *key,Iterator *iter)
-{
-	dbg_str(OBJ_DETAIL,"List search");
 }
 
 static int __del(List *list,Iterator *iter)
@@ -137,27 +128,21 @@ static Iterator *__end(List *list)
 	dbg_str(OBJ_DETAIL,"List end");
 }
 
-static int __destroy(List *list)
-{
-	dbg_str(OBJ_DETAIL,"List destroy");
-}
-
 static class_info_entry_t list_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","insert",__insert,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","insert_wb",__insert_wb,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","search",__search,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","del",__del,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each",__for_each,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each_arg2",__for_each_arg2,sizeof(void *)},
-	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","begin",__begin,sizeof(void *)},
-	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","end",__end,sizeof(void *)},
-	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy",__destroy,sizeof(void *)},
-	[14] = {ENTRY_TYPE_END},
+	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","push_back",__push_back,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","del",__del,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each",__for_each,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each_arg2",__for_each_arg2,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","begin",__begin,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","end",__end,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy",NULL,sizeof(void *)},
+	[12] = {ENTRY_TYPE_UINT32_T,"","value_size",NULL,sizeof(short)},
+	[13] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("List",list_class_info);
 

@@ -17,9 +17,7 @@ struct _list_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
-    int (*insert)(List *list,void *key,void *value);
-    int (*insert_wb)(List *list,void *key,void *value,Iterator *iter);
-    int (*search)(List *list,void *key,Iterator *iter);
+    int (*push_back)(List *list,void *value);
     int (*del)(List *list,Iterator *iter);
     void (*for_each)(List *list,void (*func)(Iterator *iter));
     void (*for_each_arg2)(List *list,void (*func)(Iterator *iter, void *arg),void *arg);
@@ -30,6 +28,7 @@ struct _list_s{
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
+	int value_size;
 
 };
 
