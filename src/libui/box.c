@@ -9,7 +9,7 @@
 #include <libui/sdl_window.h>
 #include <libui/character.h>
 
-char *global_text = "A newly published book on the documents of a late United States diplomat, who was also a scholar on Tibet, has provided conclusive evidence that the envoy in the early 20th century considered Tibet to be an inseparable part of China. Selected Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and the author of several books on Tibetan studies.  Rockhill several times pointed out to the US public that Tibet is an inseparable part of China, and he introduced his position to president Theodore Roosevelt, Cheng said.  Cheng said he began to pay attention to Rockhill while he was teaching at the University of South Carolina in 2008, after US students kept asking questions about Tibet.  So I came up with an idea - to tell the history and culture of Tibet by using Western historical documents, which are more convincing to them, he said.  From 2008 to early this year, Cheng searched for documents at such places as Harvard and Yale universities, the Library of Congress and the US National Archives, and he collected abundant materials from Rockhill related to Tibet.  According to the US State Department website, Rockhill, who was born in Philadelphia, was appointed as the third assistant secretary of state in April 1894. He was appointed US ambassador to China in 1905 and held the position until 1909.  Rockhill was also a famous scholar of Tibet and visited the region twice. In 1908, he met several times with the 13th Dalai Lama, with whom he kept in touch through letters.  Rockhill was appointed to an unpaid post at the US legation in Beijing in 1883 on his first trip to China. He intended to perfect his spoken Tibetan and Chinese and to travel to Lhasa, according to William Woodville Rockhill Scholar-Diplomat of the Tibetan Highlands, a book by the late Kenneth Wimmel, who was a US foreign affairs officer. Cheng said that Rockhill had the habit of keeping copies of important files and that these materials are well preserved.   A newly published book on the documents of a late United States diplomat, who was also a scholar on Tibet, has provided conclusive evidence that the envoy in the early 20th century considered Tibet to be an inseparable part of China. Selected Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and the author of several books on Tibetan studies. A newly published book on the documents of a late United States diplomat, who was also a scholar on Tibet, has provided conclusive evidence that the envoy in the early 20th century considered Tibet to be an inseparable part of China. Selected Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and the author of several books on Tibetan studies.";
+char *global_text = "A newly published book on the documents of a late United States diplomat, who was also a scholar on Tibet, has provided conclusive evidence that the envoy in the early 20th century considered Tibet to be an inseparable part of China. Selected Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and the author of several books on Tibetan studies.  Rockhill several times pointed out to the US public that Tibet is an inseparable part of China, and he introduced his position to president Theodore Roosevelt, Cheng said.  Cheng said he began to pay attention to Rockhill while he was teaching at the University of South Carolina in 2008, after US students kept asking questions about Tibet.  So I came up with an idea - to tell the history and culture of Tibet by using Western historical documents, which are more convincing to them, he said.  From 2008 to early this year, Cheng searched for documents at such places as Harvard and Yale universities, the Library of Congress and the US National Archives, and he collected abundant materials from Rockhill related to Tibet.  According to the US State Department website, Rockhill, who was born in Philadelphia, was appointed as the third assistant secretary of state in April 1894. He was appointed US ambassador to China in 1905 and held the position until 1909.  Rockhill was also a famous scholar of Tibet and visited the region twice. In 1908, he met several times with the 13th Dalai Lama, with whom he kept in touch through letters.  Rockhill was appointed to an unpaid post at the US legation in Beijing in 1883 on his first trip to China. He intended to perfect his spoken Tibetan and Chinese and to travel to Lhasa, according to William Woodville Rockhill Scholar-Diplomat of the Tibetan Highlands, a book by the late Kenneth Wimmel, who was a US foreign affairs officer. Cheng said that Rockhill had the habit of keeping copies of important files and that these materials are well preserved.";
 
 static int __construct(Box *box,char *init_str)
 {
@@ -84,7 +84,7 @@ static int __load_resources(Component *component,void *graph)
 {
 }
 
-static int write_text(Component *component,char c, void *graph)
+static int write_character(Component *component,char c, void *graph)
 {
 	Graph *g = (Graph *)graph;
 	Character *character;
@@ -123,7 +123,7 @@ static int __draw(Component *component, void *graph)
 
     for(i = 0; i < strlen(b->string->value); i++) {
         c = b->string->value[i];
-        write_text(component,c, graph);
+        write_character(component,c, graph);
         if(b->y > ((Subject *)component)->height ){
             dbg_str(DBG_DETAIL,"box y =%d , subject height =%d", b->y, ((Subject *)component)->height);
             break;
@@ -228,8 +228,8 @@ char *gen_box_setting_str()
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
                         cjson_add_number_to_object(s, "x", 0);
                         cjson_add_number_to_object(s, "y", 0);
-                        cjson_add_number_to_object(s, "width", 800);
-                        cjson_add_number_to_object(s, "height", 800);
+                        cjson_add_number_to_object(s, "width", 600);
+                        cjson_add_number_to_object(s, "height", 600);
                     }
                 }
 				cjson_add_string_to_object(c, "name", "box");

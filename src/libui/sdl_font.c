@@ -71,7 +71,7 @@ static int __load_font(Font *font)
 {
 	Sdl_Font *f = (Sdl_Font *)font;
 
-    f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 18 );
+	f->ttf_font = TTF_OpenFont( "./bin/Vera.ttf", 15 );
     /*
 	 *f->ttf_font = TTF_OpenFont( "./bin/TakaoPGothic.ttf", 18 );
      */
@@ -91,9 +91,9 @@ static int __load_font(Font *font)
      /*
 	  *f->ttf_font = TTF_OpenFont( "./bin/TIMES.TTF", 20 );
       */
-     /*
-      *f->ttf_font = TTF_OpenFont( "./bin/ARIAL.TTF", 18 );
-      */
+	 /*
+	  *f->ttf_font = TTF_OpenFont( "./bin/ARIAL.TTF", 15 );
+	  */
 
 	if(f->ttf_font == NULL) {
 	} else {
