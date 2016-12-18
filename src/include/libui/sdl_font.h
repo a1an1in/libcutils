@@ -20,7 +20,7 @@ struct sdl_font_s{
 
 	/*virtual methods*/
 	int (*load_font)(Font *font);
-	int (*load_ascii_info)(Font *font, void *graph);
+	int (*load_ascii_character)(Font *font, void *graph);
 	int (*get_character_width)(Font *font, char c);
 	int (*get_character_height)(Font *font, char c);
 

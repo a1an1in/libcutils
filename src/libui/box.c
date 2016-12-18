@@ -95,6 +95,26 @@ static int __load_resources(Component *component,void *graph)
 {
 }
 
+#if 1
+static int write_character(Component *component,char c, void *graph)
+{
+	Graph *g = (Graph *)graph;
+	Character *character;
+    Box *b = (Box *)component;
+
+	character = (Character *)g->font->ascii[c].character;
+    if(b->x + character->width > ((Subject *)component)->width) {
+        b->x = 0;
+        b->max_height = 0;
+        b->y += character->height;
+    }
+    if(b->max_height < b->y) {
+        b->max_height = b->y;
+    }
+	g->render_write_character(g,b->x,b->y,character);
+	b->x += character->width;
+}
+#else
 static int write_character(Component *component,char c, void *graph)
 {
 	Graph *g = (Graph *)graph;
@@ -116,6 +136,7 @@ static int write_character(Component *component,char c, void *graph)
     object_destroy(character);
 
 }
+#endif
 
 static int __draw(Component *component, void *graph)
 {
@@ -133,7 +154,7 @@ static int __draw(Component *component, void *graph)
 
 	count++;
 	if(count == 1) {
-		g->font->load_ascii_info(g->font,g);
+		g->font->load_ascii_character(g->font,g);
 		b->text->parse_text(b->text, 0, g->font);
 		b->text->line_info->for_each(b->text->line_info, print_line_info);
 	}

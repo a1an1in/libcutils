@@ -53,8 +53,8 @@ static int __set(Font *font, char *attrib, void *value)
 
 	} else if(strcmp(attrib, "load_font") == 0) {
 		f->load_font = value;
-	} else if(strcmp(attrib, "load_ascii_info") == 0) {
-		f->load_ascii_info = value;
+	} else if(strcmp(attrib, "load_ascii_character") == 0) {
+		f->load_ascii_character = value;
 	} else if(strcmp(attrib, "get_character_width") == 0) {
 		f->get_character_width = value;
 	} else if(strcmp(attrib, "get_character_height") == 0) {
@@ -111,19 +111,22 @@ static int __load_font(Font *font)
 	}
 }
 
-static int __load_ascii_info(Font *font,void *graph)
+static int __load_ascii_character(Font *font,void *graph)
 {
 	int i;                                                                                                               
 	Graph *g = (Graph *)graph;
 	Character *character;   
-	ascii_code_info_t *ascii = font->ascii;  
+	ascii_character_t *ascii = font->ascii;  
 
 	dbg_str(DBG_DETAIL,"load asscii info"); 
 	for( i = 0; i < 128; i++) {  
 		character = g->render_load_character(g,i,g->font,0,0,0,0xff); 
 		ascii[i].height = character->height;
 		ascii[i].width  = character->width;
-		object_destroy(character);   
+		ascii[i].character = character;
+		/*
+		 *object_destroy(character);   
+		 */
 	}      
 }
 
@@ -150,7 +153,7 @@ static class_info_entry_t font_class_info[] = {
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","load_font",__load_font,sizeof(void *)},
-	[6] = {ENTRY_TYPE_FUNC_POINTER,"","load_ascii_info",__load_ascii_info,sizeof(void *)},
+	[6] = {ENTRY_TYPE_FUNC_POINTER,"","load_ascii_character",__load_ascii_character,sizeof(void *)},
 	[7] = {ENTRY_TYPE_FUNC_POINTER,"","get_character_width",__get_character_width,sizeof(void *)},
 	[8] = {ENTRY_TYPE_FUNC_POINTER,"","get_character_height",__get_character_height,sizeof(void *)},
 	[9] = {ENTRY_TYPE_END},
