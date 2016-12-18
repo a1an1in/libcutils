@@ -433,7 +433,9 @@ static int args_process_test_SDL_Font(void *base,int argc,char **argv)
 
 static int args_process_test_SDL_Text(void *base,int argc,char **argv)
 {
-	test_obj_sdl_text();
+	/*
+	 *test_obj_sdl_text();
+	 */
 	return 0;
 }
 
@@ -452,7 +454,9 @@ static int args_process_test_SDL_Event(void *base,int argc,char **argv)
 
 static int args_process_test_Label(void *base,int argc,char **argv)
 {
-    test_ui_label();
+	/*
+     *test_ui_label();
+	 */
 	return 0;
 }
 
@@ -468,7 +472,14 @@ static int args_process_test_LList(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_Text(void *base,int argc,char **argv)
+{
+	test_obj_text();
+	return 0;
+}
+
 static cmd_config_t cmds[]={
+	{"Text", args_process_test_Text,0, "test", "N/A","test"},
 	{"LList", args_process_test_LList,0, "test", "N/A","test"},
 	{"Box", args_process_test_Box,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},

@@ -8,23 +8,42 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libui/text.h>
+#include <libobject/list_linked.h>
+
+extern char *global_text;
 
 static int __construct(Text *text,char *init_str)
 {
+    allocator_t *allocator = ((Obj *)text)->allocator;
+	char *set_str =	"{\"Linked_List\":{\"List\":{ \"value_size\":%d}}}";
+#define MAX_BUF_LEN 1024
+	char buf[MAX_BUF_LEN];
+
 	dbg_str(OBJ_DETAIL,"text construct, text addr:%p",text);
-    text->content = (String *)OBJECT_NEW(((Obj *)text)->allocator, String,NULL);
-	if(text->content == NULL) {
-		dbg_str(DBG_ERROR,"construct text error");
+	snprintf(buf, MAX_BUF_LEN, set_str, sizeof(text_line_t));
+
+	text->line_info  = OBJECT_NEW(allocator, Linked_List,buf);
+	if(!text->line_info) {
+		dbg_str(DBG_WARNNING, "create line_info err");
 		return -1;
 	}
 
+	/*
+	 *text->content = global_text;
+	 */
+	text->width   = 600;
+    object_dump(text->line_info, "Linked_List", buf, MAX_BUF_LEN);
+    dbg_str(DBG_DETAIL,"line info dump: %s",buf);
+
+#undef MAX_BUF_LEN
 	return 0;
 }
 
 static int __deconstrcut(Text *text)
 {
 	dbg_str(OBJ_DETAIL,"text deconstruct,text addr:%p",text);
-    object_destroy(text->content);
+	if(text->line_info)
+		object_destroy(text->line_info);
 
 	return 0;
 }
@@ -39,8 +58,12 @@ static int __set(Text *text, char *attrib, void *value)
 		text->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		text->deconstruct = value;
-	} else if(strcmp(attrib, "load_text") == 0) {
-		text->load_text = value;
+
+	} else if(strcmp(attrib, "parse_text") == 0) {
+		text->parse_text = value;
+	} else if(strcmp(attrib, "get_head_offset_of_line") == 0) {
+		text->get_head_offset_of_line = value;
+
 	} else {
 		dbg_str(OBJ_WARNNING,"text set,  \"%s\" setting is not support",attrib);
 	}
@@ -50,7 +73,7 @@ static int __set(Text *text, char *attrib, void *value)
 
 static void * __get(Text *text, char *attrib)
 {
-    if(strcmp(attrib, "x") == 0){ 
+    if(strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"text get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -58,31 +81,135 @@ static void * __get(Text *text, char *attrib)
     return NULL;
 }
 
-static int __load_text(Text *text,void *font)
+int __parse_text(Text *text, int offset, void *font)
 {
-	dbg_str(DBG_SUC,"SDL_Graph load text");
+	int len, i;
+	char c;
+	int line_width = text->width;
+	int x = 0, y = 0;
+	int c_witdh, c_height;
+	int head_offset = 0;
+	int tail_offset = 0;
+	int paragraph_num = 1;
+	int line_num_in_paragraph = 1;
+	int paragraph_line_num_in_text = 0;
+	int line_num = 0;
+	int line_lenth = 0;
+	Font *f = (Font *)font;
+	text_line_t line_info;
+
+	memset(&line_info, 0, sizeof(line_info));
+	len = strlen(text->content + offset);
+
+	for(i = 0; i < len; i++) {
+		c = text->content[offset + i];
+		c_witdh  = f->get_character_width(f,c);
+
+		if(c == '\n') {
+			line_info.paragraph_num = paragraph_num++;
+			line_info.tail_offset = offset + i;
+			line_info.line_lenth = x;
+			line_info.line_num_in_paragraph  = line_num_in_paragraph++;
+			line_info.line_num = line_num;
+			line_info.paragraph_line_num_in_text = paragraph_line_num_in_text;
+			line_num_in_paragraph = 1;
+			text->line_info->push_back(text->line_info, &line_info);
+
+			x = 0;
+			line_info.head_offset = offset + i;
+			paragraph_line_num_in_text = line_num++; 
+			x += c_witdh;
+			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",line_num,  c,text->content[offset + i + 1], text->content[offset + i + 2], offset + i);
+		} else if(x + c_witdh > line_width) {//line end
+			line_info.paragraph_num = paragraph_num;
+			line_info.tail_offset = offset + i - 1;
+			line_info.line_lenth = x;
+			line_info.line_num_in_paragraph = line_num_in_paragraph++;
+			line_info.line_num = line_num;
+			line_info.paragraph_line_num_in_text = paragraph_line_num_in_text;
+			text->line_info->push_back(text->line_info, &line_info);
+
+			x = 0;
+			line_info.head_offset = offset + i;
+			paragraph_line_num_in_text = line_num++; 
+			x += c_witdh;
+			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",line_num,  c,text->content[offset + i + 1], text->content[offset + i + 2], offset + i);
+		} else {
+			x += c_witdh;
+		}
+
+		if(i == len) {
+			text->line_info->push_back(text->line_info, &line_info);
+		}
+	}
+
+}
+
+int __get_head_offset_of_line(Text *text, int line_num)
+{
+    Iterator *cur, *end;
+	int i = 0;
+	int ret = -1;
+	text_line_t *line_info;
+
+    cur = text->line_info->begin(text->line_info);
+    end = text->line_info->end(text->line_info);
+
+    for(i = 0; !end->equal(end,cur); cur->next(cur), i++) {
+		if(i == line_num - 1) {
+			line_info = cur->get_vpointer(cur);
+			ret       = line_info->head_offset;
+			break;
+		}
+    }
+
+    object_destroy(cur);
+    object_destroy(end);
+
+	return ret;
 }
 
 static class_info_entry_t text_class_info[] = {
-    [0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-    [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-    [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-    [5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_text",__load_text,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_NORMAL_POINTER,"","String",NULL,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_END},
+    [0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+    [1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+    [2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+    [3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+    [5] = {ENTRY_TYPE_FUNC_POINTER,"","parse_text",__parse_text,sizeof(void *)},
+    [6] = {ENTRY_TYPE_FUNC_POINTER,"","get_head_offset_of_line",__get_head_offset_of_line,sizeof(void *)},
+    [7] = {ENTRY_TYPE_NORMAL_POINTER,"","List",NULL,sizeof(void *)},
+    [8] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Text",text_class_info);
+
+void print_line_info(Iterator *iter)
+{
+    LList_Iterator *i = (LList_Iterator *)iter;
+	text_line_t *line_info = i->get_vpointer(iter);
+
+	/*
+	 *dbg_str(DBG_DETAIL,"head_os=%d,tail_os =%d, para_num=%d, "
+	 *        "line_num_in_para =%d, pl_num_in_text =%d,"
+	 *        "line_num =%d, line_lenth =%d", 
+	 *        line_info->head_offset,
+	 *        line_info->tail_offset,
+	 *        line_info->paragraph_num,
+	 *        line_info->line_num_in_paragraph,
+	 *        line_info->paragraph_line_num_in_text,
+	 *        line_info->line_num,
+	 *        line_info->line_lenth);
+	 */
+}
 
 void test_obj_text()
 {
 	Text *text;
 	allocator_t *allocator = allocator_get_default_alloc();
 
+	dbg_str(DBG_DETAIL,"test_obj_text");
     text = OBJECT_NEW(allocator, Text,"");
-	text->content->assign(text->content,"hello world");
+
 }
 
 

@@ -9,7 +9,13 @@
 #include <libui/sdl_window.h>
 #include <libui/character.h>
 
-char *global_text = "A newly published book on the documents of a late United States diplomat, who was also a scholar on Tibet, has provided conclusive evidence that the envoy in the early 20th century considered Tibet to be an inseparable part of China. Selected Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and the author of several books on Tibetan studies.  Rockhill several times pointed out to the US public that Tibet is an inseparable part of China, and he introduced his position to president Theodore Roosevelt, Cheng said.  Cheng said he began to pay attention to Rockhill while he was teaching at the University of South Carolina in 2008, after US students kept asking questions about Tibet.  So I came up with an idea - to tell the history and culture of Tibet by using Western historical documents, which are more convincing to them, he said.  From 2008 to early this year, Cheng searched for documents at such places as Harvard and Yale universities, the Library of Congress and the US National Archives, and he collected abundant materials from Rockhill related to Tibet.  According to the US State Department website, Rockhill, who was born in Philadelphia, was appointed as the third assistant secretary of state in April 1894. He was appointed US ambassador to China in 1905 and held the position until 1909.  Rockhill was also a famous scholar of Tibet and visited the region twice. In 1908, he met several times with the 13th Dalai Lama, with whom he kept in touch through letters.  Rockhill was appointed to an unpaid post at the US legation in Beijing in 1883 on his first trip to China. He intended to perfect his spoken Tibetan and Chinese and to travel to Lhasa, according to William Woodville Rockhill Scholar-Diplomat of the Tibetan Highlands, a book by the late Kenneth Wimmel, who was a US foreign affairs officer. Cheng said that Rockhill had the habit of keeping copies of important files and that these materials are well preserved.";
+extern void print_line_info(Iterator *iter);
+
+char *global_text =
+"A newly published book on the documents of a late United States diplomat, who "
+"was also a scholar on Tibet, has provided conclusive evidence that the envoy in t"
+"he early 20th century considered Tibet to be an inseparable part of China. Select"
+"ed Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and the author of several books on Tibetan studies.  Rockhill several times pointed out to the US public that Tibet is an inseparable part of China, and he introduced his position to president Theodore Roosevelt, Cheng said.\n Cheng said he began to pay attention to Rockhill while he was teaching at the University of South Carolina in 2008, after US students kept asking questions about Tibet.  So I came up with an idea - to tell the history and culture of Tibet by using Western historical documents, which are more convincing to them, he said.  From 2008 to early this year, Cheng searched for documents at such places as Harvard and Yale universities, the Library of Congress and the US National Archives, and he collected abundant materials from Rockhill related to Tibet.  According to the US State Department website, Rockhill, who was born in Philadelphia, was appointed as the third assistant secretary of state in April 1894. He was appointed US ambassador to China in 1905 and held the position until 1909.  Rockhill was also a famous scholar of Tibet and visited the region twice. In 1908, he met several times with the 13th Dalai Lama, with whom he kept in touch through letters.  Rockhill was appointed to an unpaid post at the US legation in Beijing in 1883 on his first trip to China.\nHe intended to perfect his spoken Tibetan and Chinese and to travel to Lhasa, according to William Woodville Rockhill Scholar-Diplomat of the Tibetan Highlands, a book by the late Kenneth Wimmel, who was a US foreign affairs officer. Cheng said that Rockhill had the habit of keeping copies of important files and that these materials are well preserved.";
 
 static int __construct(Box *box,char *init_str)
 {
@@ -18,6 +24,10 @@ static int __construct(Box *box,char *init_str)
     box->string = OBJECT_NEW(allocator, String, NULL);
 
     box->string->assign(box->string,global_text);
+    box->text = OBJECT_NEW(allocator, Text,"");
+	box->text->content = box->string->value;
+	box->start_line = 1;
+
 
 	return 0;
 }
@@ -26,6 +36,7 @@ static int __deconstrcut(Box *box)
 {
 	dbg_str(DBG_SUC,"box deconstruct");
     object_destroy(box->string);
+    object_destroy(box->text);
 
 	return 0;
 }
@@ -90,8 +101,6 @@ static int write_character(Component *component,char c, void *graph)
 	Character *character;
     Box *b = (Box *)component;
 
-	dbg_str(DBG_DETAIL,"text input");
-
 	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
     if(b->x + character->width > ((Subject *)component)->width) {
         b->x = 0;
@@ -101,7 +110,7 @@ static int write_character(Component *component,char c, void *graph)
     if(b->max_height < b->y) {
         b->max_height = b->y;
     }
-	g->render_write_character(g,b->x,b->max_height,character);
+	g->render_write_character(g,b->x,b->y,character);
 	b->x += character->width;
 
     object_destroy(character);
@@ -115,14 +124,39 @@ static int __draw(Component *component, void *graph)
 	Box *b = (Box *)component;
     int i;
     char c;
+	int start;
+	static int count = 0;
 
 	dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
+	g->render_set_color(g,0xff,0xff,0xff,0xff);
+	g->render_clear(g);
 
-	g->render_set_color(g,0x0,0x0,0x0,0xff);
+	count++;
+	if(count == 1) {
+		g->font->load_ascii_info(g->font,g);
+		b->text->parse_text(b->text, 0, g->font);
+		b->text->line_info->for_each(b->text->line_info, print_line_info);
+	}
+	start = b->text->get_head_offset_of_line(b->text, b->start_line);
+	dbg_str(DBG_IMPORTANT,"start line =%d start offset =%d",b->start_line, start);
+	if(start < 0) {
+		dbg_str(DBG_WARNNING,"get head offset of one line err");
+		return -1;
+	}
+
+#if 1
+	/*
+	 *g->render_set_color(g,0x0,0x0,0x0,0xff);
+	 */
 	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
 
-    for(i = 0; i < strlen(b->string->value); i++) {
-        c = b->string->value[i];
+	dbg_str(DBG_DETAIL,"draw x=%d, y=%d", b->x, b->y);
+	char buf[10] = {0};
+	memcpy(buf, b->string->value + start, 10);
+	dbg_str(DBG_DETAIL,"%s", buf);
+
+    for(i = 0; i < strlen(b->string->value + start); i++) {
+        c = b->string->value[i + start];
         write_character(component,c, graph);
         if(b->y > ((Subject *)component)->height ){
             dbg_str(DBG_DETAIL,"box y =%d , subject height =%d", b->y, ((Subject *)component)->height);
@@ -131,6 +165,9 @@ static int __draw(Component *component, void *graph)
     }
 
 	g->render_present(g);
+#else
+	b->text->line_info->for_each(b->text->line_info, print_line_info);
+#endif
 
 }
 
@@ -161,17 +198,37 @@ static int __text_key_input(Component *component,char c, void *graph)
 
 static int __backspace_key_input(Component *component,void *graph)
 {
+    Box *b = (Box *)component;
 	dbg_str(DBG_DETAIL,"backspace_key_input");
 }
 
 static int __up_key_down(Component *component,void *graph)
 {
+	Graph *g = (Graph *)graph;
+    Box *b = (Box *)component;
 	dbg_str(DBG_DETAIL,"up_key_down");
+
+	b->y = 0;
+	b->x = 0;
+	b->start_line++;
+	b->draw(component,graph); 
+	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
 }
 
 static int __down_key_down(Component *component,void *graph)
 {
+    Box *b = (Box *)component;
+	Graph *g = (Graph *)graph;
 	dbg_str(DBG_DETAIL,"down_key_down");
+	b->y = 0;
+	b->x = 0;
+	if(b->start_line - 1) {
+		b->start_line--;
+		b->draw(component,graph); 
+	} else if(b->start_line == 1) {
+		b->draw(component,graph); 
+	}
+	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
 }
 
 static int __left_key_down(Component *component,void *graph)

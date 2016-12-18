@@ -175,6 +175,7 @@ void test_obj_llist_list()
         }
     }
     set_str = cjson_print(root);
+	dbg_str(DBG_DETAIL,"set str:%s",set_str);
 
     List *list;
     list  = OBJECT_NEW(allocator, Linked_List,set_str);

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libui/sdl_font.h>
+#include <libui/graph.h>
+#include <libui/character.h>
 
 static int __construct(Font *font,char *init_str)
 {
@@ -38,18 +40,26 @@ static int __deconstrcut(Font *font)
 
 static int __set(Font *font, char *attrib, void *value)
 {
-	Sdl_Font *i = (Sdl_Font *)font;
+	Sdl_Font *f = (Sdl_Font *)font;
 
 	if(strcmp(attrib, "set") == 0) {
-		i->set = value;
+		f->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		i->get = value;
+		f->get = value;
 	} else if(strcmp(attrib, "construct") == 0) {
-		i->construct = value;
+		f->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
-		i->deconstruct = value;
+		f->deconstruct = value;
+
 	} else if(strcmp(attrib, "load_font") == 0) {
-		i->load_font = value;
+		f->load_font = value;
+	} else if(strcmp(attrib, "load_ascii_info") == 0) {
+		f->load_ascii_info = value;
+	} else if(strcmp(attrib, "get_character_width") == 0) {
+		f->get_character_width = value;
+	} else if(strcmp(attrib, "get_character_height") == 0) {
+		f->get_character_height = value;
+
 	} else {
 		dbg_str(OBJ_WARNNING,"font set,  \"%s\" setting is not support",attrib);
 	}
@@ -101,24 +111,65 @@ static int __load_font(Font *font)
 	}
 }
 
+static int __load_ascii_info(Font *font,void *graph)
+{
+	int i;                                                                                                               
+	Graph *g = (Graph *)graph;
+	Character *character;   
+	ascii_code_info_t *ascii = font->ascii;  
+
+	dbg_str(DBG_DETAIL,"load asscii info"); 
+	for( i = 0; i < 128; i++) {  
+		character = g->render_load_character(g,i,g->font,0,0,0,0xff); 
+		ascii[i].height = character->height;
+		ascii[i].width  = character->width;
+		object_destroy(character);   
+	}      
+}
+
+static int __get_character_width(Font *font, char c)
+{
+	/*
+	 *return 24;
+	 */
+	return font->ascii[c].width;
+}
+
+static int __get_character_height(Font *font, char c)
+{
+	/*
+	 *return 24;
+	 */
+	return font->ascii[c].height;
+}
+
 static class_info_entry_t font_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"Font","font",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_font",__load_font,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_END},
+	[0] = {ENTRY_TYPE_OBJ,"Font","font",NULL,sizeof(void *)},
+	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5] = {ENTRY_TYPE_FUNC_POINTER,"","load_font",__load_font,sizeof(void *)},
+	[6] = {ENTRY_TYPE_FUNC_POINTER,"","load_ascii_info",__load_ascii_info,sizeof(void *)},
+	[7] = {ENTRY_TYPE_FUNC_POINTER,"","get_character_width",__get_character_width,sizeof(void *)},
+	[8] = {ENTRY_TYPE_FUNC_POINTER,"","get_character_height",__get_character_height,sizeof(void *)},
+	[9] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Font",font_class_info);
 
 void test_obj_sdl_font()
 {
-	Sdl_Font *font;
+	Font *font;
 	allocator_t *allocator = allocator_get_default_alloc();
+	int w, h;
 
     font = OBJECT_NEW(allocator, Sdl_Font,"");
+	w = font->get_character_width(font,'a');
+	h = font->get_character_height(font,'a');
+
+	dbg_str(DBG_DETAIL,"a's w=%d h=%d", w, h);
+
 }
 
 

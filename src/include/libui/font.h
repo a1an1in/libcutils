@@ -8,6 +8,12 @@
  */
 
 typedef struct font_s Font;
+
+typedef struct ascii_code_info{
+	int width;
+	int height;
+} ascii_code_info_t;
+
 struct font_s{
 	Obj obj;
 
@@ -19,9 +25,13 @@ struct font_s{
 
 	/*virtual methods*/
 	int (*load_font)(Font *font);
+	int (*load_ascii_info)(Font *font, void *graph);
+	int (*get_character_width)(Font *font, char c);
+	int (*get_character_height)(Font *font, char c);
 
 	/*attribs*/
 	String *path;
+	ascii_code_info_t ascii[128];
 };
 
 #endif

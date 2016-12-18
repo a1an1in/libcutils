@@ -192,7 +192,7 @@ char *gen_window_setting_str()
             cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
                 cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 1);
+                        cjson_add_number_to_object(s, "x", 0);
                         cjson_add_number_to_object(s, "y", 0);
                         cjson_add_number_to_object(s, "width", 5);
                         cjson_add_number_to_object(s, "height", 125);
