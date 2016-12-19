@@ -21,9 +21,8 @@ struct graph_s{
 
 	/*virtual methods reimplement*/
 	int (*move)(Graph *graph);
-	int (*init_window)(Graph *graph, void *window);
-	int (*close_window)(Graph *graph, void *window);
 	int (*update_window)(Graph *graph);
+	int (*set_window)(Graph *graph, void *window);
 	int (*draw_image)(Graph *graph, void *image);
 	int (*render_create)(Graph *graph);
 	int (*render_destroy)(Graph *graph);

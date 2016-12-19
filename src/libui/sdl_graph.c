@@ -10,6 +10,7 @@
 #include <libui/sdl_image.h>
 #include <libui/sdl_text.h>
 #include <libui/sdl_character.h>
+#include <libui/sdl_window.h>
 
 static int __construct(Sdl_Graph *sdl_grath,char *init_str)
 {
@@ -35,14 +36,13 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		sdl_grath->deconstruct = value;
-	} else if(strcmp(attrib, "move") == 0) {/**virtual methods setting start*/
+	}
+    else if(strcmp(attrib, "move") == 0) {/**virtual methods setting start*/
 		sdl_grath->move = value;
-	} else if(strcmp(attrib, "init_window") == 0) {
-		sdl_grath->init_window = value;
-	} else if(strcmp(attrib, "close_window") == 0) {
-		sdl_grath->close_window = value;
 	} else if(strcmp(attrib, "update_window") == 0) {
 		sdl_grath->update_window = value;
+	} else if(strcmp(attrib, "set_window") == 0) {
+		sdl_grath->set_window = value;
 	} else if(strcmp(attrib, "draw_image") == 0) {
 		sdl_grath->draw_image = value;
 	} else if(strcmp(attrib, "render_create") == 0) {
@@ -79,7 +79,8 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 		sdl_grath->render_write_character = value;
 	} else if(strcmp(attrib, "render_present") == 0) {
 		sdl_grath->render_present = value;
-	} else if(strcmp(attrib, "name") == 0) { /**attribs setting start*/
+	} 
+    else if(strcmp(attrib, "name") == 0) { /**attribs setting start*/
         strncpy(sdl_grath->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"sdl_graph set, not support %s setting",attrib);
@@ -99,58 +100,12 @@ static void *__get(Sdl_Graph *obj, char *attrib)
     return NULL;
 }
 
-static int __init_window(Sdl_Graph *graph, void *window)
+static int __set_window(Sdl_Graph *graph, void *window)
 {
-	int ret;
-	Window *w = (Window *)window;
+	Sdl_Window *w = (Sdl_Window *)window;
+	dbg_str(DBG_DETAIL,"Sdl_Graph set_window");
 
-	dbg_str(DBG_DETAIL,"Sdl_Graph create window");
-
-	dbg_str(DBG_DETAIL,"srceen width=%d, height=%d",w->screen_width,w->screen_height);
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
-		dbg_str(DBG_ERROR,"SDL could not initialize! SDL_Error: %s", SDL_GetError() );
-		ret = -1;
-	} else {
-		//Create window
-		graph->window = SDL_CreateWindow("SDL Tutorial", 
-                                         SDL_WINDOWPOS_UNDEFINED, 
-                                         SDL_WINDOWPOS_UNDEFINED,
-                                         w->screen_width, 
-                                         w->screen_height,
-                                         SDL_WINDOW_SHOWN );
-		if( graph->window == NULL ) {
-			dbg_str(DBG_ERROR,"Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-			ret = -1;
-		} else {
-			graph->screen_surface = SDL_GetWindowSurface(graph->window);
-			ret = 1;
-		}
-	}
-
-	return ret;
-}
-
-static int __close_window(Sdl_Graph *graph, void *window)
-{
-	Window *w = (Window *)window;
-	dbg_str(DBG_DETAIL,"Sdl_Graph close_window");
-
-	//release screen surface
-	SDL_FreeSurface( graph->screen_surface );
-
-	//Destroy window
-	SDL_DestroyWindow(graph->window);
-	graph->window = NULL;
-	
-	//Quit SDL subsystems
-	SDL_Quit();
-}
-
-static int __update_window(Sdl_Graph *graph)
-{
-	dbg_str(DBG_DETAIL,"Sdl_Graph update_window");
-	SDL_UpdateWindowSurface(graph->window);
+	graph->window = w->SDL_window;
 }
 
 static int __draw_image(Sdl_Graph *graph, void *image)
@@ -159,6 +114,12 @@ static int __draw_image(Sdl_Graph *graph, void *image)
 	dbg_str(DBG_DETAIL,"Sdl_Graph draw_image");
 
 	SDL_BlitSurface(i->surface, NULL, graph->screen_surface, NULL );
+}
+
+static int __update_window(Sdl_Graph *graph)
+{
+	dbg_str(DBG_DETAIL,"Sdl_Graph update_window");
+	SDL_UpdateWindowSurface(graph->window);
 }
 
 static int __render_create(Sdl_Graph *graph)
@@ -361,26 +322,25 @@ static class_info_entry_t sdl_grath_class_info[] = {
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","init_window",__init_window,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","set_window",__set_window,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw_image",__draw_image,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","update_window",__update_window,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw_image",__draw_image,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","render_create",__render_create,sizeof(void *)},
-	[10] = {ENTRY_TYPE_FUNC_POINTER,"","render_destroy",__render_destroy,sizeof(void *)},
-	[11] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
-	[12] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_font",__render_set_font,sizeof(void *)},
-	[13] = {ENTRY_TYPE_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
-	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
-	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_rect",__render_draw_rect,sizeof(void *)},
-	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
-	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
-	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
-	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_character",__render_load_character,sizeof(void *)},
-	[20] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_character",__render_unload_character,sizeof(void *)},
-	[21] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_character",__render_write_character,sizeof(void *)},
-	[22] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
-	[23] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[24] = {ENTRY_TYPE_END},
+	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","render_create",__render_create,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","render_destroy",__render_destroy,sizeof(void *)},
+	[10] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_color",__render_set_color,sizeof(void *)},
+	[11] = {ENTRY_TYPE_FUNC_POINTER,"","render_set_font",__render_set_font,sizeof(void *)},
+	[12] = {ENTRY_TYPE_FUNC_POINTER,"","render_clear",__render_clear,sizeof(void *)},
+	[13] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_line",__render_draw_line,sizeof(void *)},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_rect",__render_draw_rect,sizeof(void *)},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","render_fill_rect",__render_fill_rect,sizeof(void *)},
+	[16] = {ENTRY_TYPE_FUNC_POINTER,"","render_draw_image",__render_draw_image,sizeof(void *)},
+	[17] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_image",__render_load_image,sizeof(void *)},
+	[18] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_character",__render_load_character,sizeof(void *)},
+	[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_unload_character",__render_unload_character,sizeof(void *)},
+	[20] = {ENTRY_TYPE_FUNC_POINTER,"","render_write_character",__render_write_character,sizeof(void *)},
+	[21] = {ENTRY_TYPE_FUNC_POINTER,"","render_present",__render_present,sizeof(void *)},
+	[22] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[23] = {ENTRY_TYPE_END},
 
 	/*
 	 *[19] = {ENTRY_TYPE_FUNC_POINTER,"","render_load_text",__render_load_text,sizeof(void *)},

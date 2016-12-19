@@ -24,7 +24,8 @@ static int __set(Window *window, char *attrib, void *value)
 		w->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		w->deconstruct = value;
-	} else if(strcmp(attrib, "move") == 0) {
+	} 
+    else if(strcmp(attrib, "move") == 0) {
 	} else if(strcmp(attrib, "create_font") == 0) {
 		w->create_font = value;
 	} else if(strcmp(attrib, "destroy_font") == 0) {
@@ -41,6 +42,8 @@ static int __set(Window *window, char *attrib, void *value)
 		w->create_background = value;
 	} else if(strcmp(attrib, "destroy_background") == 0) {
 		w->destroy_background = value;
+	} else if(strcmp(attrib, "init_window") == 0) {
+		w->init_window = value;
 	} else if(strcmp(attrib, "open_window") == 0) {
 		w->open_window = value;
 	} else if(strcmp(attrib, "close_window") == 0) {
@@ -51,7 +54,8 @@ static int __set(Window *window, char *attrib, void *value)
 		w->remove_timer = value;
 	} else if(strcmp(attrib, "destroy_timer") == 0) {
 		w->destroy_timer = value;
-	} else {
+	}
+    else {
 		dbg_str(DBG_DETAIL,"sdl window set, not support %s setting",attrib);
 	}
 
@@ -131,21 +135,59 @@ static int __destroy_background(Window *window)
     object_destroy(window->background);
 }
 
+static int __init_window(Window *window)
+{
+	int ret;
+	Sdl_Window *w = (Sdl_Window *)window;
+
+	dbg_str(DBG_DETAIL,"Sdl_Graph init window");
+
+	dbg_str(DBG_DETAIL,"srceen width=%d, height=%d",window->screen_width,window->screen_height);
+	//Initialize SDL
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
+		dbg_str(DBG_ERROR,"SDL could not initialize! SDL_Error: %s", SDL_GetError() );
+		ret = -1;
+	} else {
+		//Create window
+		w->SDL_window = SDL_CreateWindow("libcutils demo", 
+                                         SDL_WINDOWPOS_UNDEFINED, 
+                                         SDL_WINDOWPOS_UNDEFINED,
+                                         window->screen_width, 
+                                         window->screen_height,
+                                         SDL_WINDOW_SHOWN );
+		if( w->SDL_window == NULL ) {
+			dbg_str(DBG_ERROR,"Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+			ret = -1;
+		} else {
+            Sdl_Graph *g = (Sdl_Graph *)window->graph;
+            g->screen_surface = SDL_GetWindowSurface(g->window);
+			ret = 1;
+		}
+	}
+
+	return ret;
+}
+
 static int __open_window(Window *window)
 {
 	Graph *g = window->graph;
 
     dbg_str(DBG_DETAIL,"sdl window open_window start");
-	if(g != NULL) {
-		g->init_window(g,window);
+
+	if(g == NULL) {
+		dbg_str(DBG_ERROR,"window graph is NULL, please check");
+		return -1;
+	} else {
 		/*
 		 *background->load_image(background);
 		 *g->draw_image(g,background);
 		 */
-	} else {
-		dbg_str(DBG_ERROR,"window graph is NULL, please check");
-		return -1;
 	}
+
+    window->init_window(window);
+
+    g->set_window(g, window);
+	g->render_set_font(window->graph, window->font);
 
 	g->render_create(g);
 	g->render_set_color(g,0xff,0xff,0xff,0xff);
@@ -158,14 +200,24 @@ static int __open_window(Window *window)
 	 */
 }
 
+
 static int __close_window(Window *window)
 {
-	Graph *g = window->graph;
+    Sdl_Graph *g = (Sdl_Graph *)window->graph;
 
     dbg_str(DBG_DETAIL,"sdl window close_window");
 
-	g->render_destroy(g);
-	g->close_window(g,window);
+	//release screen surface
+    SDL_FreeSurface( g->screen_surface );
+
+    //destroy render
+    g->render_destroy((Graph *)g);
+	
+	//Destroy window
+	SDL_DestroyWindow(((Sdl_Window *)window)->SDL_window);
+
+	//Quit SDL subsystems
+	SDL_Quit();
 }
 
 void *__create_timer(Window *window)
@@ -200,12 +252,13 @@ static class_info_entry_t sdl_window_class_info[] = {
 	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","destroy_event",__destroy_event,sizeof(void *)},
 	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","create_background",__create_background,sizeof(void *)},
 	[10] = {ENTRY_TYPE_FUNC_POINTER,"","destroy_background",__destroy_background,sizeof(void *)},
-	[11] = {ENTRY_TYPE_FUNC_POINTER,"","open_window",__open_window,sizeof(void *)},
-	[12] = {ENTRY_TYPE_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
-	[13] = {ENTRY_TYPE_FUNC_POINTER,"","create_timer",__create_timer,sizeof(void *)},
-	[14] = {ENTRY_TYPE_FUNC_POINTER,"","remove_timer",__remove_timer,sizeof(void *)},
-	[15] = {ENTRY_TYPE_FUNC_POINTER,"","destroy_timer",__destroy_timer,sizeof(void *)},
-	[16] = {ENTRY_TYPE_END},
+	[11] = {ENTRY_TYPE_FUNC_POINTER,"","init_window",__init_window,sizeof(void *)},
+	[12] = {ENTRY_TYPE_FUNC_POINTER,"","open_window",__open_window,sizeof(void *)},
+	[13] = {ENTRY_TYPE_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","create_timer",__create_timer,sizeof(void *)},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","remove_timer",__remove_timer,sizeof(void *)},
+	[16] = {ENTRY_TYPE_FUNC_POINTER,"","destroy_timer",__destroy_timer,sizeof(void *)},
+	[17] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Window",sdl_window_class_info);

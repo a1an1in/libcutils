@@ -7,6 +7,7 @@
 #include <libui/graph.h>
 #include <libui/image.h>
 #include <libui/window.h>
+#include <SDL2/SDL.h>
 
 typedef struct sdl_window_s Sdl_Window;
 
@@ -27,11 +28,14 @@ struct sdl_window_s{
     int (*destroy_event)(Window *window);
     void *(*create_background)(Window *window, char *pic_path);
     int (*destroy_background)(Window *window);
+    int (*init_window)(Window *window);
     int (*open_window)(Window *window);
     int (*close_window)(Window *window);
     void *(*create_timer)(Window *window);
     int (*remove_timer)(Window *window, void *timer);
     int (*destroy_timer)(Window *window, void *timer);
+
+	SDL_Window* SDL_window;
 };
 
 char *gen_window_setting_str();

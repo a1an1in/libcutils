@@ -196,7 +196,7 @@ static int __draw(Component *component, void *graph)
 
 	dbg_str(DBG_DETAIL,"draw x=%d, y=%d", b->x, b->y);
 	char buf[10] = {0};
-	memcpy(buf, b->string->value + start, 10);
+	memcpy(buf, b->string->value + start, 9);
 	dbg_str(DBG_DETAIL,"%s", buf);
 
     for(i = 0; i < strlen(b->string->value + start); i++) {
