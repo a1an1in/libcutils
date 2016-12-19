@@ -41,6 +41,7 @@ static int __deconstrcut(Window *window)
 
 static int __set(Window *window, char *attrib, void *value)
 {
+	/*normal methods*/
 	if(strcmp(attrib, "set") == 0) {
 		window->set = value;
     } else if(strcmp(attrib, "get") == 0) {
@@ -53,8 +54,9 @@ static int __set(Window *window, char *attrib, void *value)
 		window->update_window = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
 		window->load_resources = value;
-
-	} else if(strcmp(attrib, "move") == 0) {
+	}
+	/*vitual methods*/
+	else if(strcmp(attrib, "move") == 0) { 
 		window->move = value;
 	} else if(strcmp(attrib, "create_font") == 0) {
 		window->create_font = value;
@@ -82,8 +84,9 @@ static int __set(Window *window, char *attrib, void *value)
 		window->remove_timer = value;
 	} else if(strcmp(attrib, "destroy_timer") == 0) {
 		window->destroy_timer = value;
-
-	} else if(strcmp(attrib, "name") == 0) {
+	}
+	/*attribs*/
+	else if(strcmp(attrib, "name") == 0) { 
         strncpy(window->name,value,strlen(value));
 	} else if(strcmp(attrib, "graph_type") == 0) {
         window->graph_type = *((uint8_t *)value);

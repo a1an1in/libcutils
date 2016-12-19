@@ -255,7 +255,7 @@ static int __poll_event(Event *event,void *window)
                              break;
 						 case SDLK_j:
 							  if(SDL_GetModState() & KMOD_CTRL) {
-								  if(cur->one_line_down) cur->one_line_down(cur, g); 
+								  if(cur->one_line_up) cur->one_line_up(cur, g); 
 							  } else{
 								  dbg_str(DBG_IMPORTANT,"key j down");
 							  }
@@ -265,7 +265,7 @@ static int __poll_event(Event *event,void *window)
 								  /*
 								   *dbg_str(DBG_IMPORTANT,"ctrl + k");
 								   */
-								  if(cur->one_line_up) cur->one_line_up(cur, g); 
+								  if(cur->one_line_down) cur->one_line_down(cur, g); 
 							  }
 							 break;
                          default:

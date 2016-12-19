@@ -51,7 +51,9 @@ static int __set(Box *box, char *attrib, void *value)
 		box->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		box->deconstruct = value;
-	} else if(strcmp(attrib, "draw") == 0) {
+	}
+	/*vitual methods*/
+	else if(strcmp(attrib, "draw") == 0) {
 		box->draw = value;
 	} else if(strcmp(attrib, "load_resources") == 0) {
 		box->load_resources = value;
@@ -75,7 +77,9 @@ static int __set(Box *box, char *attrib, void *value)
 		box->one_line_up = value;
 	} else if(strcmp(attrib, "one_line_down") == 0) {
 		box->one_line_down = value;
-	} else if(strcmp(attrib, "name") == 0) {
+	}
+	/*attribs*/
+	else if(strcmp(attrib, "name") == 0) {
         strncpy(box->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"box set, not support %s setting",attrib);
@@ -100,10 +104,11 @@ static uint32_t test_box_timer_callback(uint32_t interval, void* param )
 	__Timer *timer = (__Timer *)param;
 	Window *window = (Window *)timer->opaque;
 
-	dbg_str(DBG_SUC,"test_box_timer_callback");
+	dbg_str(DBG_DETAIL,"test_box_timer_callback");
 	window->remove_timer(window, timer);
 	timer->reuse(timer);
 }
+
 static int __load_resources(Component *component,void *window)
 {
 	Graph *g = ((Window *)window)->graph;
@@ -181,7 +186,7 @@ static int __draw(Component *component, void *graph)
 	g->render_clear(g);
 
 	start = b->text->get_head_offset_of_line(b->text, b->start_line);
-	dbg_str(DBG_IMPORTANT,"start line =%d start offset =%d",b->start_line, start);
+	dbg_str(DBG_DETAIL,"start line =%d start offset =%d",b->start_line, start);
 	if(start < 0) {
 		dbg_str(DBG_WARNNING,"get head offset of one line err");
 		return -1;
