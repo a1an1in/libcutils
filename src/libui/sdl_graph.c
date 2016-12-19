@@ -105,7 +105,7 @@ static int __set_window(Sdl_Graph *graph, void *window)
 	Sdl_Window *w = (Sdl_Window *)window;
 	dbg_str(DBG_DETAIL,"Sdl_Graph set_window");
 
-	graph->window = w->SDL_window;
+	graph->window = w->sdl_window;
 }
 
 static int __draw_image(Sdl_Graph *graph, void *image)
@@ -125,7 +125,7 @@ static int __update_window(Sdl_Graph *graph)
 static int __render_create(Sdl_Graph *graph)
 {
 	dbg_str(DBG_DETAIL,"Sdl_Graph render_create");
-	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1" );
 	graph->render = SDL_CreateRenderer( graph->window, -1, 0 );
 }
 
@@ -262,12 +262,12 @@ static int __render_write_text(Sdl_Graph *graph,int x, int y, void *text)
 
 static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,int r, int g, int b, int a)
 {
-	allocator_t *allocator = ((Obj *)graph)->allocator;
 	Character *character;
-	Sdl_Font *f = (Sdl_Font *)font;
-	SDL_Surface* surface = NULL;
+	allocator_t *allocator    = ((Obj *)graph)->allocator;
+	Sdl_Font *f               = (Sdl_Font *)font;
+	SDL_Surface* surface      = NULL;
 	SDL_Color character_color = {r, g, b, a };
-	char buf[10] = {0};
+	char buf[10]              = {0};
 
 	/*
 	 *dbg_str(DBG_DETAIL,"Sdl_Character load character");
@@ -305,8 +305,9 @@ static int __render_write_character(Sdl_Graph *graph,int x, int y, void *charact
 	/*
 	 *dbg_str(DBG_DETAIL,"Sdl_Graph render_write_character");
 	 */
-	Character *c     = (Character *)character;
+	Character *c         = (Character *)character;
 	SDL_Rect render_quad = { x, y, c->width, c->height};
+
 	SDL_RenderCopy(graph->render, ((Sdl_Character *)character)->texture, NULL, &render_quad );
 }
 

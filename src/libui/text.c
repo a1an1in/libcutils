@@ -15,7 +15,7 @@ extern char *global_text;
 static int __construct(Text *text,char *init_str)
 {
     allocator_t *allocator = ((Obj *)text)->allocator;
-	char *set_str =	"{\"Linked_List\":{\"List\":{ \"value_size\":%d}}}";
+	char *set_str          = "{\"Linked_List\":{\"List\":{ \"value_size\":%d}}}";
 #define MAX_BUF_LEN 1024
 	char buf[MAX_BUF_LEN];
 
@@ -85,16 +85,16 @@ int __parse_text(Text *text, int offset, void *font)
 {
 	int len, i;
 	char c;
-	int line_width = text->width;
 	int x = 0, y = 0;
 	int c_witdh, c_height;
-	int head_offset = 0;
-	int tail_offset = 0;
-	int paragraph_num = 1;
-	int line_num_in_paragraph = 1;
+	int line_width                 = text->width;
+	int head_offset                = 0;
+	int tail_offset                = 0;
+	int paragraph_num              = 1;
+	int line_num_in_paragraph      = 1;
+	int line_num                   = 0;
+	int line_lenth                 = 0;
 	int paragraph_line_num_in_text = 0;
-	int line_num = 0;
-	int line_lenth = 0;
 	Font *f = (Font *)font;
 	text_line_t line_info;
 
@@ -106,34 +106,38 @@ int __parse_text(Text *text, int offset, void *font)
 		c_witdh  = f->get_character_width(f,c);
 
 		if(c == '\n') {
-			line_info.paragraph_num = paragraph_num++;
-			line_info.tail_offset = offset + i;
-			line_info.line_lenth = x;
-			line_info.line_num_in_paragraph  = line_num_in_paragraph++;
-			line_info.line_num = line_num;
+			line_info.paragraph_num              = paragraph_num++;
+			line_info.tail_offset                = offset + i;
+			line_info.line_lenth                 = x;
+			line_info.line_num_in_paragraph      = line_num_in_paragraph++;
+			line_info.line_num                   = line_num;
 			line_info.paragraph_line_num_in_text = paragraph_line_num_in_text;
-			line_num_in_paragraph = 1;
+			line_num_in_paragraph                = 1;
 			text->line_info->push_back(text->line_info, &line_info);
 
-			x = 0;
-			line_info.head_offset = offset + i;
-			paragraph_line_num_in_text = line_num++; 
+			line_info.head_offset      = offset + i;
+			paragraph_line_num_in_text = line_num++;
+			x  = 0;
 			x += c_witdh;
-			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",line_num,  c,text->content[offset + i + 1], text->content[offset + i + 2], offset + i);
+			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
+					line_num,  c,text->content[offset + i + 1],
+					text->content[offset + i + 2], offset + i);
 		} else if(x + c_witdh > line_width) {//line end
-			line_info.paragraph_num = paragraph_num;
-			line_info.tail_offset = offset + i - 1;
-			line_info.line_lenth = x;
-			line_info.line_num_in_paragraph = line_num_in_paragraph++;
-			line_info.line_num = line_num;
+			line_info.paragraph_num              = paragraph_num;
+			line_info.tail_offset                = offset + i - 1;
+			line_info.line_lenth                 = x;
+			line_info.line_num_in_paragraph      = line_num_in_paragraph++;
+			line_info.line_num                   = line_num;
 			line_info.paragraph_line_num_in_text = paragraph_line_num_in_text;
 			text->line_info->push_back(text->line_info, &line_info);
 
-			x = 0;
-			line_info.head_offset = offset + i;
-			paragraph_line_num_in_text = line_num++; 
+			line_info.head_offset       = offset + i;
+			paragraph_line_num_in_text  = line_num++;
+			x  = 0;
 			x += c_witdh;
-			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",line_num,  c,text->content[offset + i + 1], text->content[offset + i + 2], offset + i);
+			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
+					line_num,  c,text->content[offset + i + 1],
+					text->content[offset + i + 2], offset + i);
 		} else {
 			x += c_witdh;
 		}
@@ -149,9 +153,9 @@ int __parse_text(Text *text, int offset, void *font)
 int __get_head_offset_of_line(Text *text, int line_num)
 {
     Iterator *cur, *end;
-	int i = 0;
-	int ret = -1;
 	text_line_t *line_info;
+	int i   = 0;
+	int ret = -1;
 
     cur = text->line_info->begin(text->line_info);
     end = text->line_info->end(text->line_info);
@@ -186,7 +190,7 @@ REGISTER_CLASS("Text",text_class_info);
 
 void print_line_info(Iterator *iter)
 {
-    LList_Iterator *i = (LList_Iterator *)iter;
+    LList_Iterator *i      = (LList_Iterator *)iter;
 	text_line_t *line_info = i->get_vpointer(iter);
 
 	/*

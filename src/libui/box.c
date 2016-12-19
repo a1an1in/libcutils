@@ -113,37 +113,42 @@ static int __load_resources(Component *component,void *window)
 {
 	Graph *g = ((Window *)window)->graph;
 	Box *b   = (Box *)component;
+
 	dbg_str(DBG_SUC,"%s load load_resources",component->name);
 
 	g->font->load_ascii_character(g->font,g);
 	b->text->parse_text(b->text, 0, g->font);
 	b->text->line_info->for_each(b->text->line_info, print_line_info);
 
-	b->timer = ((Window *)window)->create_timer(window);
+	b->timer         = ((Window *)window)->create_timer(window);
 	b->timer->opaque = window;
 	b->timer->set_timer(b->timer, 1 * 1000, test_box_timer_callback);
+}
+
+char get_character_at_cursor(Component *component) 
+{
 }
 
 #if 1
 static int write_character(Component *component,char c, void *graph)
 {
+    Box *b   = (Box *)component;
 	Graph *g = (Graph *)graph;
 	Character *character;
-    Box *b = (Box *)component;
 
 	character = (Character *)g->font->ascii[c].character;
     if(b->x + character->width > ((Subject *)component)->width) {
-        b->x = 0;
-        b->max_height = 0;
-        b->y += character->height;
+        b->x           = 0;
+        b->max_height  = 0;
+        b->y          += character->height;
     }
     if(b->max_height < b->y) {
         b->max_height = b->y;
     }
 	if(character->code == '\n') {
-		b->x = 0;
-		b->y += character->height;
-		b->max_height = 0;
+		b->x           = 0;
+		b->y          += character->height;
+		b->max_height  = 0;
 	} else {
 		g->render_write_character(g,b->x,b->y,character);
 		b->x += character->width;
@@ -175,9 +180,9 @@ static int write_character(Component *component,char c, void *graph)
 
 static int __draw(Component *component, void *graph)
 {
-	Graph *g = (Graph *)graph;
+	Box *b     = (Box *)component;
+	Graph *g   = (Graph *)graph;
 	Subject *s = (Subject *)component;
-	Box *b = (Box *)component;
     int i, start;
     char c;
 
@@ -204,7 +209,8 @@ static int __draw(Component *component, void *graph)
         write_character(component,c, graph);
         if(b->y > ((Subject *)component)->height ){
             dbg_str(DBG_DETAIL,"box y =%d , subject height =%d",
-					b->y, ((Subject *)component)->height);
+					b->y,
+					((Subject *)component)->height);
             break;
         }
     }
@@ -222,9 +228,9 @@ static int __text_key_input(Component *component,char c, void *graph)
 
 	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
     if(b->x + character->width > ((Subject *)component)->width) {
-        b->x = 0;
-        b->max_height = 0;
-        b->y += character->height;
+        b->x           = 0;
+        b->max_height  = 0;
+        b->y          += character->height;
     }
     if(b->max_height < b->y) {
         b->max_height = b->y;
@@ -293,15 +299,19 @@ static int __one_line_down(Component *component,void *graph)
 {
     Box *b = (Box *)component;
 	Graph *g = (Graph *)graph;
+
 	dbg_str(DBG_DETAIL,"down_key_down");
+
 	b->y = 0;
 	b->x = 0;
+
 	if(b->start_line - 1) {
 		b->start_line--;
 		b->draw(component,graph); 
 	} else if(b->start_line == 1) {
 		b->draw(component,graph); 
 	}
+
 	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
 }
 

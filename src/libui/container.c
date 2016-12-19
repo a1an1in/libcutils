@@ -96,10 +96,10 @@ static void __update_component_position(Iterator *iter, void *arg)
 	uint8_t *addr;
 	position_t *add = (position_t *)arg;
 
-	addr = (uint8_t *)iter->get_vpointer(iter);
+	addr      = (uint8_t *)iter->get_vpointer(iter);
 	component = (Component *)buffer_to_addr(addr);
-	s = (Subject *)component;
-	c = (Container *)component;
+	s         = (Subject *)component;
+	c         = (Container *)component;
 
 	s->x += add->x;
 	s->y += add->y;
@@ -112,8 +112,8 @@ static void __update_component_position(Iterator *iter, void *arg)
 
 static void update_component_position(Component *component,void *arg) 
 {
-	Subject *s = (Subject *)component;
-	Container *c = (Container *)component;
+	Subject *s      = (Subject *)component;
+	Container *c    = (Container *)component;
 	position_t *add = (position_t *)arg;
 
 	s->x += add->x;
@@ -166,7 +166,7 @@ static Component *__search_component(Container *obj, char *key)
         return NULL;
     }
     iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
-    ret = map->search(map,key,iter);
+    ret  = map->search(map,key,iter);
     if(ret == 1) {
         addr = buffer_to_addr(iter->get_vpointer(iter));
         dbg_str(DBG_IMPORTANT,"search component %s addr %p",iter->get_kpointer(iter), addr);

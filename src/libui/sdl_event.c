@@ -172,17 +172,18 @@ static void * __get(Event *event, char *attrib)
 
 static int __poll_event(Event *event,void *window)
 {
-    dbg_str(DBG_DETAIL,"sdl event poll");
-    int quit = 0;
+    int quit     = 0;
 	SDL_Event *e = &((Sdl_Event *)event)->ev;
+	Window *w    = (Window *)window;
+	Graph *g     = w->graph;
 	Component *cur;
-	Window *w = (Window *)window;
-	Graph *g = w->graph;
      
+    dbg_str(DBG_DETAIL,"sdl event poll");
+
 	//add for test>>
     Container *container;
     container = (Container *)window;
-	cur = container->search_component(container,"box");
+	cur       = container->search_component(container,"box");
 	dbg_str(DBG_WARNNING,"found cur component :%p",cur);
 	//<<
 	
