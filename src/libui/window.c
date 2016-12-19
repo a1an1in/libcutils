@@ -168,39 +168,6 @@ static int __load_resources(Window *window)
 	return 0;
 }
 
-#if 0
-static int __open_window(Window *window)
-{
-	Graph *g = window->graph;
-
-    dbg_str(DBG_DETAIL,"sdl window open_window start");
-
-	if(g == NULL) {
-		dbg_str(DBG_ERROR,"window graph is NULL, please check");
-		return -1;
-	} else {
-		/*
-		 *background->load_image(background);
-		 *g->draw_image(g,background);
-		 */
-	}
-
-    window->init_window(window);
-
-    g->set_window(g, window);
-	g->render_create(g);
-	g->render_set_color(g,0xff,0xff,0xff,0xff);
-	g->render_clear(g);
-	g->render_present(g);
-
-    dbg_str(DBG_DETAIL,"sdl window open_window end");
-	/*
-	 *g->update_window(g);
-	 */
-}
-#endif
-
-
 static class_info_entry_t window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},

@@ -35,7 +35,7 @@ struct sdl_window_s{
     int (*remove_timer)(Window *window, void *timer);
     int (*destroy_timer)(Window *window, void *timer);
 
-	SDL_Window* SDL_window;
+	SDL_Window* sdl_window;
 };
 
 char *gen_window_setting_str();

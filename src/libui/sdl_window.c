@@ -141,21 +141,21 @@ static int __init_window(Window *window)
 	Sdl_Window *w = (Sdl_Window *)window;
 
 	dbg_str(DBG_DETAIL,"Sdl_Graph init window");
-
 	dbg_str(DBG_DETAIL,"srceen width=%d, height=%d",window->screen_width,window->screen_height);
+
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
 		dbg_str(DBG_ERROR,"SDL could not initialize! SDL_Error: %s", SDL_GetError() );
 		ret = -1;
 	} else {
 		//Create window
-		w->SDL_window = SDL_CreateWindow("libcutils demo", 
+		w->sdl_window = SDL_CreateWindow("libcutils demo", 
                                          SDL_WINDOWPOS_UNDEFINED, 
                                          SDL_WINDOWPOS_UNDEFINED,
                                          window->screen_width, 
                                          window->screen_height,
                                          SDL_WINDOW_SHOWN );
-		if( w->SDL_window == NULL ) {
+		if( w->sdl_window == NULL ) {
 			dbg_str(DBG_ERROR,"Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 			ret = -1;
 		} else {
@@ -200,27 +200,28 @@ static int __open_window(Window *window)
 	 */
 }
 
-
 static int __close_window(Window *window)
 {
     Sdl_Graph *g = (Sdl_Graph *)window->graph;
+	Sdl_Window *w = (Sdl_Window *)window;
 
     dbg_str(DBG_DETAIL,"sdl window close_window");
 
 	//release screen surface
-    SDL_FreeSurface( g->screen_surface );
+    if(g->screen_surface)
+        SDL_FreeSurface( g->screen_surface );
 
     //destroy render
     g->render_destroy((Graph *)g);
 	
 	//Destroy window
-	SDL_DestroyWindow(((Sdl_Window *)window)->SDL_window);
+	SDL_DestroyWindow(w->sdl_window);
 
 	//Quit SDL subsystems
 	SDL_Quit();
 }
 
-void *__create_timer(Window *window)
+static void *__create_timer(Window *window)
 {
 	allocator_t *allocator = ((Obj *)window)->allocator;
 	Sdl_Timer *timer;
@@ -230,12 +231,12 @@ void *__create_timer(Window *window)
 	return timer;
 }
 
-int __remove_timer(Window *window, Sdl_Timer *timer)
+static int __remove_timer(Window *window, Sdl_Timer *timer)
 {
 	SDL_RemoveTimer(timer->timer_id);
 }
 
-int __destroy_timer(Window *window, void *timer)
+static int __destroy_timer(Window *window, void *timer)
 {
     object_destroy(timer);
 }
