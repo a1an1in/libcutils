@@ -478,7 +478,13 @@ static int args_process_test_Text(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_sdl_timer(void *base,int argc,char **argv)
+{
+	test_obj_sdl_timer();
+	return 0;
+}
 static cmd_config_t cmds[]={
+	{"Sdl_Timer", args_process_test_sdl_timer,0, "test", "N/A","test"},
 	{"Text", args_process_test_Text,0, "test", "N/A","test"},
 	{"LList", args_process_test_LList,0, "test", "N/A","test"},
 	{"Box", args_process_test_Box,0, "test", "N/A","test"},

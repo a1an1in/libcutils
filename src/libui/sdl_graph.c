@@ -108,7 +108,7 @@ static int __init_window(Sdl_Graph *graph, void *window)
 
 	dbg_str(DBG_DETAIL,"srceen width=%d, height=%d",w->screen_width,w->screen_height);
 	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
 		dbg_str(DBG_ERROR,"SDL could not initialize! SDL_Error: %s", SDL_GetError() );
 		ret = -1;
 	} else {

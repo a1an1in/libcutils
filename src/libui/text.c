@@ -140,6 +140,7 @@ int __parse_text(Text *text, int offset, void *font)
 
 		if(i == len) {
 			text->line_info->push_back(text->line_info, &line_info);
+			text->total_line_num = line_num;
 		}
 	}
 

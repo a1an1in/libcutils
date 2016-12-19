@@ -253,6 +253,21 @@ static int __poll_event(Event *event,void *window)
                               */
 							 if(cur->backspace_key_input) cur->backspace_key_input(cur, g); 
                              break;
+						 case SDLK_j:
+							  if(SDL_GetModState() & KMOD_CTRL) {
+								  if(cur->one_line_down) cur->one_line_down(cur, g); 
+							  } else{
+								  dbg_str(DBG_IMPORTANT,"key j down");
+							  }
+							 break;
+						 case SDLK_k:
+							  if(SDL_GetModState() & KMOD_CTRL) {
+								  /*
+								   *dbg_str(DBG_IMPORTANT,"ctrl + k");
+								   */
+								  if(cur->one_line_up) cur->one_line_up(cur, g); 
+							  }
+							 break;
                          default:
                              break;
                      } 

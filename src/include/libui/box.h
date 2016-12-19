@@ -6,6 +6,7 @@
 #include <libobject/string.h>
 #include <libui/component.h>
 #include <libui/text.h>
+#include <libui/timer.h>
 
 typedef struct box_s Box;
 
@@ -34,6 +35,8 @@ struct box_s{
 	int (*right_key_down)(Component *component,void *graph);
 	int (*pageup_key_down)(Component *component,void *graph);
 	int (*pagedown_key_down)(Component *component,void *graph);
+	int (*one_line_up)(Component *component,void *graph);
+	int (*one_line_down)(Component *component,void *graph);
 	int (*load_ascii_info)(Component *component,void *graph);
 
 #define MAX_NAME_LEN 50
@@ -45,7 +48,7 @@ struct box_s{
     int x, y, max_height;//current cursor pos;
     int to_x, to_y, to_max_height;
 	int start_line;
-    
+	__Timer *timer;
 };
 
 #endif

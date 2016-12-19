@@ -58,6 +58,10 @@ static int __set(Component *component, char *attrib, void *value)
 		component->pageup_key_down = value;
 	} else if(strcmp(attrib, "pagedown_key_down") == 0) {
 		component->pagedown_key_down = value;
+	} else if(strcmp(attrib, "one_line_up") == 0) {
+		component->one_line_up = value;
+	} else if(strcmp(attrib, "one_line_down") == 0) {
+		component->one_line_down = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
 	} else {
@@ -95,8 +99,10 @@ static class_info_entry_t component_class_info[] = {
 	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","right_key_down",NULL,sizeof(void *)},
 	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","pageup_key_down",NULL,sizeof(void *)},
 	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","pagedown_key_down",NULL,sizeof(void *)},
-	[16] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[17] = {ENTRY_TYPE_END},
+	[16] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_up",NULL,sizeof(void *)},
+	[17] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_down",NULL,sizeof(void *)},
+	[18] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[19] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

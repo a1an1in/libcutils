@@ -11,6 +11,7 @@
 #include <libui/sdl_image.h>
 #include <libui/sdl_font.h>
 #include <libui/sdl_event.h>
+#include <libui/sdl_timer.h>
 
 static int __set(Window *window, char *attrib, void *value)
 {
@@ -44,8 +45,12 @@ static int __set(Window *window, char *attrib, void *value)
 		w->open_window = value;
 	} else if(strcmp(attrib, "close_window") == 0) {
 		w->close_window = value;
-	} else if(strcmp(attrib, "update_window") == 0) {
-		w->update_window = value;
+	} else if(strcmp(attrib, "create_timer") == 0) {
+		w->create_timer = value;
+	} else if(strcmp(attrib, "remove_timer") == 0) {
+		w->remove_timer = value;
+	} else if(strcmp(attrib, "destroy_timer") == 0) {
+		w->destroy_timer = value;
 	} else {
 		dbg_str(DBG_DETAIL,"sdl window set, not support %s setting",attrib);
 	}
@@ -163,6 +168,26 @@ static int __close_window(Window *window)
 	g->close_window(g,window);
 }
 
+void *__create_timer(Window *window)
+{
+	allocator_t *allocator = ((Obj *)window)->allocator;
+	Sdl_Timer *timer;
+
+    timer = OBJECT_NEW(allocator, Sdl_Timer,"");
+
+	return timer;
+}
+
+int __remove_timer(Window *window, Sdl_Timer *timer)
+{
+	SDL_RemoveTimer(timer->timer_id);
+}
+
+int __destroy_timer(Window *window, void *timer)
+{
+    object_destroy(timer);
+}
+
 static class_info_entry_t sdl_window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Window","window",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -177,7 +202,10 @@ static class_info_entry_t sdl_window_class_info[] = {
 	[10] = {ENTRY_TYPE_FUNC_POINTER,"","destroy_background",__destroy_background,sizeof(void *)},
 	[11] = {ENTRY_TYPE_FUNC_POINTER,"","open_window",__open_window,sizeof(void *)},
 	[12] = {ENTRY_TYPE_FUNC_POINTER,"","close_window",__close_window,sizeof(void *)},
-	[13] = {ENTRY_TYPE_END},
+	[13] = {ENTRY_TYPE_FUNC_POINTER,"","create_timer",__create_timer,sizeof(void *)},
+	[14] = {ENTRY_TYPE_FUNC_POINTER,"","remove_timer",__remove_timer,sizeof(void *)},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","destroy_timer",__destroy_timer,sizeof(void *)},
+	[16] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Window",sdl_window_class_info);

@@ -49,6 +49,11 @@ static int __set(Window *window, char *attrib, void *value)
 		window->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		window->deconstruct = value;
+	} else if(strcmp(attrib, "update_window") == 0) {
+		window->update_window = value;
+	} else if(strcmp(attrib, "load_resources") == 0) {
+		window->load_resources = value;
+
 	} else if(strcmp(attrib, "move") == 0) {
 		window->move = value;
 	} else if(strcmp(attrib, "create_font") == 0) {
@@ -71,8 +76,13 @@ static int __set(Window *window, char *attrib, void *value)
 		window->open_window = value;
 	} else if(strcmp(attrib, "close_window") == 0) {
 		window->close_window = value;
-	} else if(strcmp(attrib, "update_window") == 0) {
-		window->update_window = value;
+	} else if(strcmp(attrib, "create_timer") == 0) {
+		window->create_timer = value;
+	} else if(strcmp(attrib, "remove_timer") == 0) {
+		window->remove_timer = value;
+	} else if(strcmp(attrib, "destroy_timer") == 0) {
+		window->destroy_timer = value;
+
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(window->name,value,strlen(value));
 	} else if(strcmp(attrib, "graph_type") == 0) {
@@ -132,30 +142,56 @@ static int __update_window(Window *window)
 
 }
 
+static void window_load_component_resources(Iterator *iter, void *arg) 
+{
+	Component *component;
+	Window *window = (Window *)arg;
+	uint8_t *addr;
+
+	dbg_str(DBG_DETAIL,"window_load_component_resources");
+	addr = (uint8_t *)iter->get_vpointer(iter);
+	component = (Component *)buffer_to_addr(addr);
+	component->load_resources(component, window);
+}
+
+static int __load_resources(Window *window)
+{
+	Container *container = (Container *)window;
+
+	dbg_str(DBG_DETAIL,"window load_resources");
+	container->for_each_component(container, window_load_component_resources, window);
+
+	return 0;
+}
+
 static class_info_entry_t window_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","update_window",__update_window,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","move",NULL,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_font",NULL,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_font",NULL,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_graph",NULL,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_graph",NULL,sizeof(void *)},
-	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","create_event",NULL,sizeof(void *)},
-	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_event",NULL,sizeof(void *)},
-	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","create_background",NULL,sizeof(void *)},
-	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_background",NULL,sizeof(void *)},
-	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","open_window",NULL,sizeof(void *)},
-	[16] = {ENTRY_TYPE_VFUNC_POINTER,"","close_window",NULL,sizeof(void *)},
-	[17] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[18] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
-	[19] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
-	[20] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
-	[21] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
-	[22] = {ENTRY_TYPE_END},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","update_window",__update_window,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","move",NULL,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","create_font",NULL,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_font",NULL,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","create_graph",NULL,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_graph",NULL,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","create_event",NULL,sizeof(void *)},
+	[13] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_event",NULL,sizeof(void *)},
+	[14] = {ENTRY_TYPE_VFUNC_POINTER,"","create_background",NULL,sizeof(void *)},
+	[15] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_background",NULL,sizeof(void *)},
+	[16] = {ENTRY_TYPE_VFUNC_POINTER,"","open_window",NULL,sizeof(void *)},
+	[17] = {ENTRY_TYPE_VFUNC_POINTER,"","close_window",NULL,sizeof(void *)},
+	[18] = {ENTRY_TYPE_VFUNC_POINTER,"","create_timer",NULL,sizeof(void *)},
+	[19] = {ENTRY_TYPE_VFUNC_POINTER,"","remove_timer",NULL,sizeof(void *)},
+	[20] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_timer",NULL,sizeof(void *)},
+	[21] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[22] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
+	[23] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
+	[24] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
+	[25] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
+	[26] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Window",window_class_info);
 

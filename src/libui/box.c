@@ -8,6 +8,7 @@
 #include <libui/box.h>
 #include <libui/sdl_window.h>
 #include <libui/character.h>
+#include <libui/timer.h>
 
 extern void print_line_info(Iterator *iter);
 extern char *global_text;
@@ -15,10 +16,12 @@ extern char *global_text;
 static int __construct(Box *box,char *init_str)
 {
     allocator_t *allocator = ((Obj *)box)->allocator;
-	dbg_str(DBG_SUC,"box construct");
-    box->string = OBJECT_NEW(allocator, String, NULL);
 
+	dbg_str(DBG_SUC,"box construct");
+
+    box->string = OBJECT_NEW(allocator, String, NULL);
     box->string->assign(box->string,global_text);
+
     box->text = OBJECT_NEW(allocator, Text,"");
 	box->text->content = box->string->value;
 	box->start_line = 1;
@@ -31,6 +34,9 @@ static int __deconstrcut(Box *box)
 	dbg_str(DBG_SUC,"box deconstruct");
     object_destroy(box->string);
     object_destroy(box->text);
+	if(box->timer) {
+		object_destroy(box->timer);
+	}
 
 	return 0;
 }
@@ -65,6 +71,10 @@ static int __set(Box *box, char *attrib, void *value)
 		box->pageup_key_down = value;
 	} else if(strcmp(attrib, "pagedown_key_down") == 0) {
 		box->pagedown_key_down = value;
+	} else if(strcmp(attrib, "one_line_up") == 0) {
+		box->one_line_up = value;
+	} else if(strcmp(attrib, "one_line_down") == 0) {
+		box->one_line_down = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(box->name,value,strlen(value));
 	} else {
@@ -85,8 +95,28 @@ static void *__get(Box *obj, char *attrib)
     return NULL;
 }
 
-static int __load_resources(Component *component,void *graph)
+static uint32_t test_box_timer_callback(uint32_t interval, void* param )
 {
+	__Timer *timer = (__Timer *)param;
+	Window *window = (Window *)timer->opaque;
+
+	dbg_str(DBG_SUC,"test_box_timer_callback");
+	window->remove_timer(window, timer);
+	timer->reuse(timer);
+}
+static int __load_resources(Component *component,void *window)
+{
+	Graph *g = ((Window *)window)->graph;
+	Box *b   = (Box *)component;
+	dbg_str(DBG_SUC,"%s load load_resources",component->name);
+
+	g->font->load_ascii_character(g->font,g);
+	b->text->parse_text(b->text, 0, g->font);
+	b->text->line_info->for_each(b->text->line_info, print_line_info);
+
+	b->timer = ((Window *)window)->create_timer(window);
+	b->timer->opaque = window;
+	b->timer->set_timer(b->timer, 1 * 1000, test_box_timer_callback);
 }
 
 #if 1
@@ -105,8 +135,14 @@ static int write_character(Component *component,char c, void *graph)
     if(b->max_height < b->y) {
         b->max_height = b->y;
     }
-	g->render_write_character(g,b->x,b->y,character);
-	b->x += character->width;
+	if(character->code == '\n') {
+		b->x = 0;
+		b->y += character->height;
+		b->max_height = 0;
+	} else {
+		g->render_write_character(g,b->x,b->y,character);
+		b->x += character->width;
+	}
 }
 #else
 static int write_character(Component *component,char c, void *graph)
@@ -137,21 +173,13 @@ static int __draw(Component *component, void *graph)
 	Graph *g = (Graph *)graph;
 	Subject *s = (Subject *)component;
 	Box *b = (Box *)component;
-    int i;
+    int i, start;
     char c;
-	int start;
-	static int count = 0;
 
 	dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
 	g->render_set_color(g,0xff,0xff,0xff,0xff);
 	g->render_clear(g);
 
-	count++;
-	if(count == 1) {
-		g->font->load_ascii_character(g->font,g);
-		b->text->parse_text(b->text, 0, g->font);
-		b->text->line_info->for_each(b->text->line_info, print_line_info);
-	}
 	start = b->text->get_head_offset_of_line(b->text, b->start_line);
 	dbg_str(DBG_IMPORTANT,"start line =%d start offset =%d",b->start_line, start);
 	if(start < 0) {
@@ -159,10 +187,6 @@ static int __draw(Component *component, void *graph)
 		return -1;
 	}
 
-#if 1
-	/*
-	 *g->render_set_color(g,0x0,0x0,0x0,0xff);
-	 */
 	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
 
 	dbg_str(DBG_DETAIL,"draw x=%d, y=%d", b->x, b->y);
@@ -174,16 +198,13 @@ static int __draw(Component *component, void *graph)
         c = b->string->value[i + start];
         write_character(component,c, graph);
         if(b->y > ((Subject *)component)->height ){
-            dbg_str(DBG_DETAIL,"box y =%d , subject height =%d", b->y, ((Subject *)component)->height);
+            dbg_str(DBG_DETAIL,"box y =%d , subject height =%d",
+					b->y, ((Subject *)component)->height);
             break;
         }
     }
 
 	g->render_present(g);
-#else
-	b->text->line_info->for_each(b->text->line_info, print_line_info);
-#endif
-
 }
 
 static int __text_key_input(Component *component,char c, void *graph)
@@ -219,31 +240,10 @@ static int __backspace_key_input(Component *component,void *graph)
 
 static int __up_key_down(Component *component,void *graph)
 {
-	Graph *g = (Graph *)graph;
-    Box *b = (Box *)component;
-	dbg_str(DBG_DETAIL,"up_key_down");
-
-	b->y = 0;
-	b->x = 0;
-	b->start_line++;
-	b->draw(component,graph); 
-	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
 }
 
 static int __down_key_down(Component *component,void *graph)
 {
-    Box *b = (Box *)component;
-	Graph *g = (Graph *)graph;
-	dbg_str(DBG_DETAIL,"down_key_down");
-	b->y = 0;
-	b->x = 0;
-	if(b->start_line - 1) {
-		b->start_line--;
-		b->draw(component,graph); 
-	} else if(b->start_line == 1) {
-		b->draw(component,graph); 
-	}
-	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
 }
 
 static int __left_key_down(Component *component,void *graph)
@@ -266,6 +266,40 @@ static int __pgdown_key_down(Component *component,void *graph)
 	dbg_str(DBG_DETAIL,"pgdown_key_down");
 }
 
+static int __one_line_up(Component *component,void *graph)
+{
+	Graph *g = (Graph *)graph;
+    Box *b = (Box *)component;
+	dbg_str(DBG_DETAIL,"up_key_down");
+
+	b->y = 0;
+	b->x = 0;
+	b->start_line++;
+	/*
+	 *if(b->start_line > b->text->total_line_num) {
+	 *    b->start_line = b->text->total_line_num;
+	 *}
+	 */
+	b->draw(component,graph); 
+	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
+}
+
+static int __one_line_down(Component *component,void *graph)
+{
+    Box *b = (Box *)component;
+	Graph *g = (Graph *)graph;
+	dbg_str(DBG_DETAIL,"down_key_down");
+	b->y = 0;
+	b->x = 0;
+	if(b->start_line - 1) {
+		b->start_line--;
+		b->draw(component,graph); 
+	} else if(b->start_line == 1) {
+		b->draw(component,graph); 
+	}
+	dbg_str(DBG_DETAIL,"start line=%d",b->start_line);
+}
+
 static class_info_entry_t box_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -282,8 +316,10 @@ static class_info_entry_t box_class_info[] = {
 	[12] = {ENTRY_TYPE_FUNC_POINTER,"","right_key_down",__right_key_down,sizeof(void *)},
 	[13] = {ENTRY_TYPE_FUNC_POINTER,"","pageup_key_down",__pgup_key_down,sizeof(void *)},
 	[14] = {ENTRY_TYPE_FUNC_POINTER,"","pagedown_key_down",__pgdown_key_down,sizeof(void *)},
-	[15] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[16] = {ENTRY_TYPE_END},
+	[15] = {ENTRY_TYPE_FUNC_POINTER,"","one_line_up",__one_line_up,sizeof(void *)},
+	[16] = {ENTRY_TYPE_FUNC_POINTER,"","one_line_down",__one_line_down,sizeof(void *)},
+	[17] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[18] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Box",box_class_info);
@@ -312,7 +348,6 @@ char *gen_box_setting_str()
 
     return set_str;
 }
-
 void test_ui_box()
 {
     Window *window;
@@ -345,6 +380,7 @@ void test_ui_box()
 	 */
 	dbg_str(DBG_DETAIL,"window container :%p",container);
 
+	window->load_resources(window);
 	window->update_window(window);
 
     event->poll_event(event, window);
