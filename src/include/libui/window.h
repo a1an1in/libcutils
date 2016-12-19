@@ -20,7 +20,6 @@ struct window_s{
     void *(*get)(void *obj, char *attrib);
     int (*update_window)(Window *window);
 	int (*load_resources)(Window *window);
-    int (*open_window)(Window *window);
 
 	/*virtual methods reimplement*/
 	int (*move)(Window *window);
@@ -33,11 +32,13 @@ struct window_s{
     void *(*create_background)(Window *window, char *pic_path);
     int (*destroy_background)(Window *window);
     int (*init_window)(Window *window);
+    int (*open_window)(Window *window);
     int (*close_window)(Window *window);
     void *(*create_timer)(Window *window);
     int (*remove_timer)(Window *window, void *timer);
     int (*destroy_timer)(Window *window, void *timer);
 
+    /*attribs*/
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN

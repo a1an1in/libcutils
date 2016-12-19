@@ -29,6 +29,7 @@ static int __construct(Window *window,char *init_str)
 static int __deconstrcut(Window *window)
 {
 	dbg_str(DBG_DETAIL,"window deconstruct,window addr:%p",window);
+
     window->destroy_background(window);
     window->close_window(window);
     window->destroy_event(window);
