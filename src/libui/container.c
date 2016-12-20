@@ -24,7 +24,7 @@ static int __construct(Container *container,char *init_str)
 
     if(container->map_type == 1) {
         container->map  = (Map *)OBJECT_NEW(allocator, Hash_Map,container->map_construct_str);
-        dbg_str(DBG_DETAIL,"**********map addr %p", container->map);
+        dbg_str(DBG_DETAIL,"map addr %p", container->map);
     } else {
         dbg_str(DBG_WARNNING,"not supported map type, type =%d", container->map_type);
         return -1;

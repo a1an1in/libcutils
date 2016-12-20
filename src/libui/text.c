@@ -58,13 +58,13 @@ static int __set(Text *text, char *attrib, void *value)
 		text->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		text->deconstruct = value;
-
-	} else if(strcmp(attrib, "parse_text") == 0) {
+	} 
+    else if(strcmp(attrib, "parse_text") == 0) {
 		text->parse_text = value;
 	} else if(strcmp(attrib, "get_head_offset_of_line") == 0) {
 		text->get_head_offset_of_line = value;
-
-	} else {
+	}
+    else {
 		dbg_str(OBJ_WARNNING,"text set,  \"%s\" setting is not support",attrib);
 	}
 
@@ -85,13 +85,17 @@ int __parse_text(Text *text, int offset, void *font)
 {
 	int len, i;
 	char c;
-	int x = 0, y = 0;
 	int c_witdh, c_height;
-	int line_width                 = text->width;
+	int x = 0, y = 0;
+	int line_width = text->width;
 	int head_offset                = 0;
 	int tail_offset                = 0;
-	int paragraph_num              = 1;
-	int line_num_in_paragraph      = 1;
+    /*
+	 *int paragraph_num              = 1;
+	 *int line_num_in_paragraph      = 1;
+     */
+	int paragraph_num              = 0;
+	int line_num_in_paragraph      = 0;
 	int line_num                   = 0;
 	int line_lenth                 = 0;
 	int paragraph_line_num_in_text = 0;
@@ -106,38 +110,41 @@ int __parse_text(Text *text, int offset, void *font)
 		c_witdh  = f->get_character_width(f,c);
 
 		if(c == '\n') {
-			line_info.paragraph_num              = paragraph_num++;
+			line_info.paragraph_num              = paragraph_num;
 			line_info.tail_offset                = offset + i;
 			line_info.line_lenth                 = x;
 			line_info.line_num_in_paragraph      = line_num_in_paragraph++;
-			line_info.line_num                   = line_num;
-			line_info.paragraph_line_num_in_text = paragraph_line_num_in_text;
-			line_num_in_paragraph                = 1;
+			line_info.line_num                   = line_num++;
+			line_num_in_paragraph                = 0;
+
 			text->line_info->push_back(text->line_info, &line_info);
 
-			line_info.head_offset      = offset + i;
-			paragraph_line_num_in_text = line_num++;
+			line_info.paragraph_num              = paragraph_num++;
+			line_info.head_offset      = offset + i + 1;
 			x  = 0;
 			x += c_witdh;
+
 			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
 					line_num,  c,text->content[offset + i + 1],
 					text->content[offset + i + 2], offset + i);
+
 		} else if(x + c_witdh > line_width) {//line end
 			line_info.paragraph_num              = paragraph_num;
 			line_info.tail_offset                = offset + i - 1;
 			line_info.line_lenth                 = x;
 			line_info.line_num_in_paragraph      = line_num_in_paragraph++;
-			line_info.line_num                   = line_num;
-			line_info.paragraph_line_num_in_text = paragraph_line_num_in_text;
+			line_info.line_num                   = line_num++;
+
 			text->line_info->push_back(text->line_info, &line_info);
 
 			line_info.head_offset       = offset + i;
-			paragraph_line_num_in_text  = line_num++;
 			x  = 0;
 			x += c_witdh;
+
 			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
 					line_num,  c,text->content[offset + i + 1],
 					text->content[offset + i + 2], offset + i);
+
 		} else {
 			x += c_witdh;
 		}
@@ -161,7 +168,7 @@ int __get_head_offset_of_line(Text *text, int line_num)
     end = text->line_info->end(text->line_info);
 
     for(i = 0; !end->equal(end,cur); cur->next(cur), i++) {
-		if(i == line_num - 1) {
+		if(i == line_num) {
 			line_info = cur->get_vpointer(cur);
 			ret       = line_info->head_offset;
 			break;
@@ -193,18 +200,14 @@ void print_line_info(Iterator *iter)
     LList_Iterator *i      = (LList_Iterator *)iter;
 	text_line_t *line_info = i->get_vpointer(iter);
 
-	/*
-	 *dbg_str(DBG_DETAIL,"head_os=%d,tail_os =%d, para_num=%d, "
-	 *        "line_num_in_para =%d, pl_num_in_text =%d,"
-	 *        "line_num =%d, line_lenth =%d", 
-	 *        line_info->head_offset,
-	 *        line_info->tail_offset,
-	 *        line_info->paragraph_num,
-	 *        line_info->line_num_in_paragraph,
-	 *        line_info->paragraph_line_num_in_text,
-	 *        line_info->line_num,
-	 *        line_info->line_lenth);
-	 */
+    dbg_str(DBG_DETAIL,"head_os=%d,tail_os =%d, para_num=%d, "
+            "line_num_in_para =%d,line_num =%d, line_lenth =%d", 
+            line_info->head_offset,
+            line_info->tail_offset,
+            line_info->paragraph_num,
+            line_info->line_num_in_paragraph,
+            line_info->line_num,
+            line_info->line_lenth);
 }
 
 void test_obj_text()

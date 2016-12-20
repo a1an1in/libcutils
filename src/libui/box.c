@@ -24,7 +24,7 @@ static int __construct(Box *box,char *init_str)
 
     box->text = OBJECT_NEW(allocator, Text,"");
 	box->text->content = box->string->value;
-	box->start_line = 1;
+	box->start_line = 0;
 
 	return 0;
 }
@@ -127,6 +127,12 @@ static int __load_resources(Component *component,void *window)
 
 char get_character_at_cursor(Component *component) 
 {
+	Box *b   = (Box *)component;
+    uint16_t line_num;
+
+    /*
+     *line_num = 
+     */
 }
 
 #if 1
@@ -305,10 +311,10 @@ static int __one_line_down(Component *component,void *graph)
 	b->y = 0;
 	b->x = 0;
 
-	if(b->start_line - 1) {
+	if(b->start_line) {
 		b->start_line--;
 		b->draw(component,graph); 
-	} else if(b->start_line == 1) {
+	} else if(b->start_line == 0) {
 		b->draw(component,graph); 
 	}
 
