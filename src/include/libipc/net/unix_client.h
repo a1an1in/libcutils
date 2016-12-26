@@ -7,12 +7,12 @@ client_t *unix_udp_client(allocator_t *allocator,
 					      void *opaque);
 int unix_udp_client_send(client_t *client,const void *buf,size_t nbytes,int flags,
 		                 const char *dest_unpath);
-client_t *tcp_uclient(allocator_t *allocator,
-				 	  char *server_unix_path,
-				 	  int (*process_task_cb)(client_task_t *task),
-				 	  void *opaque);
-int tcp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags);
-int uclient_destroy(client_t *client);
+client_t *unix_tcp_client(allocator_t *allocator,
+				 	      char *server_unix_path,
+				 	      int (*process_task_cb)(client_task_t *task),
+				 	      void *opaque);
+int unix_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags);
+int unix_client_destroy(client_t *client);
 #endif
 
 
