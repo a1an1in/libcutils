@@ -227,11 +227,11 @@ int iserver_create_socket(struct addrinfo *addr)
 
     return listen_fd;
 }
-server_t * tcp_iserver(allocator_t *allocator,
-                       char *host_ip, 
-                       char *server_port,
-                       int (*process_task_cb)(void *task),
-                       void *opaque)
+server_t * inet_tcp_server(allocator_t *allocator,
+                           char *host_ip, 
+                           char *server_port,
+                           int (*process_task_cb)(void *task),
+                           void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -269,7 +269,7 @@ server_t * tcp_iserver(allocator_t *allocator,
 	freeaddrinfo(addr);
 	return srv;
 }
-int tcp_iserver_destroy(server_t *server)
+int inet_tcp_server_destroy(server_t *server)
 {
     close(server->user_fd);
     io_user_destroy(server);
@@ -283,11 +283,11 @@ static int test_process_task_callback(void *task)
 
     write(t->fd, t->buffer,t->buffer_len);//响应客户端  
 }
-int test_iserver()
+int test_inet_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();
 
-	tcp_iserver(allocator,"127.0.0.1","6888",test_process_task_callback,NULL);
+	inet_tcp_server(allocator,"127.0.0.1","6888",test_process_task_callback,NULL);
 
 	return 0;
 }

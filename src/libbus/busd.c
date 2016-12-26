@@ -114,7 +114,7 @@ int busd_init(busd_t *busd,
     int ret; 
 
     if(busd->server_sk_type == NULL){
-        busd->server_sk_type = (char *)(&(SERVER_TYPE_TCP_UNIX));
+        busd->server_sk_type = (char *)(&(SERVER_TYPE_UNIX_TCP));
     }
     busd->server_host = server_host;
     busd->server_srv  = server_srv;

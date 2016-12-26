@@ -57,6 +57,6 @@ void test_bus_daemon()
     busd = busd_create(allocator,
                        server_host,
                        server_srv, 
-                       SERVER_TYPE_TCP_INET);
+                       SERVER_TYPE_INET_TCP);
 }
 

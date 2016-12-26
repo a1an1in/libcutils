@@ -74,7 +74,7 @@ void test_bus_server()
     bus = bus_client_create(allocator,
                             server_host,
                             server_srv, 
-                            CLIENT_TYPE_TCP_INET);
+                            CLIENT_TYPE_INET_TCP);
 
     dbg_str(BUS_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);

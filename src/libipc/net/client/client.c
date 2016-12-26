@@ -57,16 +57,16 @@ client_t *client(allocator_t *allocator,
 
     //there may add id_str check....
 
-    if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
-        c = tcp_iclient(allocator, id_str, serve_no,
-                		process_task_cb, opaque);
-    } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
-        c = udp_iclient(allocator, id_str, serve_no,
-                		process_task_cb, opaque);
-    } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
-        c = udp_uclient(allocator, id_str, process_task_cb, opaque);
-    } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
-        c = tcp_uclient(allocator, id_str, process_task_cb, opaque);
+    if(!strcmp(type,CLIENT_TYPE_INET_TCP)){
+        c = inet_tcp_client(allocator, id_str, serve_no,
+                		    process_task_cb, opaque);
+    } else if (!strcmp(type,CLIENT_TYPE_INET_UDP)){
+        c = inet_udp_client(allocator, id_str, serve_no,
+                		    process_task_cb, opaque);
+    } else if (!strcmp(type,CLIENT_TYPE_UNIX_UDP)){
+        c = unix_udp_client(allocator, id_str, process_task_cb, opaque);
+    } else if (!strcmp(type,CLIENT_TYPE_UNIX_TCP)){
+        c = unix_tcp_client(allocator, id_str, process_task_cb, opaque);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
         return NULL;
@@ -86,14 +86,14 @@ int client_send(client_t *client,
     int ret;
     char *type = client->type_str;
 
-    if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
-        ret = tcp_iclient_send(client,buf,nbytes,flags);
-    } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
-        udp_iclient_send(client,(char *)buf, nbytes, flags, dest_id_str, dest_srv_str);
-    } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
-        ret = udp_uclient_send(client,buf,nbytes,flags, dest_id_str);
-    } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
-        ret = tcp_uclient_send(client,buf,nbytes,flags);
+    if(!strcmp(type,CLIENT_TYPE_INET_TCP)){
+        ret = inet_tcp_client_send(client,buf,nbytes,flags);
+    } else if (!strcmp(type,CLIENT_TYPE_INET_UDP)){
+        inet_udp_client_send(client,(char *)buf, nbytes, flags, dest_id_str, dest_srv_str);
+    } else if (!strcmp(type,CLIENT_TYPE_UNIX_UDP)){
+        ret = unix_udp_client_send(client,buf,nbytes,flags, dest_id_str);
+    } else if (!strcmp(type,CLIENT_TYPE_UNIX_TCP)){
+        ret = unix_tcp_client_send(client,buf,nbytes,flags);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
         return -1;
@@ -105,14 +105,14 @@ int client_destroy(client_t *client)
 {
     char *type = client->type_str;
 
-    if(!strcmp(type,CLIENT_TYPE_TCP_INET)){
-        iclient_destroy(client);
-    } else if (!strcmp(type,CLIENT_TYPE_UDP_INET)){
-        iclient_destroy(client);
-    } else if (!strcmp(type,CLIENT_TYPE_UDP_UNIX)){
-        uclient_destroy(client);
-    } else if (!strcmp(type,CLIENT_TYPE_TCP_UNIX)){
-        uclient_destroy(client);
+    if(!strcmp(type,CLIENT_TYPE_INET_TCP)){
+        inet_client_destroy(client);
+    } else if (!strcmp(type,CLIENT_TYPE_INET_UDP)){
+        inet_client_destroy(client);
+    } else if (!strcmp(type,CLIENT_TYPE_UNIX_UDP)){
+        unix_client_destroy(client);
+    } else if (!strcmp(type,CLIENT_TYPE_UNIX_TCP)){
+        unix_client_destroy(client);
     } else {
         dbg_str(DBG_WARNNING,"client error type");
         return -1;
@@ -139,7 +139,7 @@ void test_client_recv_of_inet_udp()
     dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
 
     client(allocator,
-           CLIENT_TYPE_UDP_INET,
+           CLIENT_TYPE_INET_UDP,
            "127.0.0.1",//char *host,
            "1989",//char *client_port,
            process_task_callback,
@@ -152,7 +152,7 @@ void test_client_recv_of_unix_udp()
     dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
 
     client(allocator,
-           CLIENT_TYPE_UDP_UNIX,
+           CLIENT_TYPE_UNIX_UDP,
            "test_client_unix_path",//char *host,
            NULL,//char *client_port,
            process_task_callback,

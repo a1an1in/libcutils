@@ -55,18 +55,18 @@ server_t * server(allocator_t *allocator,
 {
     server_t *s;
 
-    if(!strcmp(type,SERVER_TYPE_TCP_INET)){
-        s = tcp_iserver(allocator,
-                        host_ip, 
-                        server_port, 
-                        process_task_cb, 
-                        opaque);
+    if(!strcmp(type,SERVER_TYPE_INET_TCP)){
+        s = inet_tcp_server(allocator,
+                            host_ip, 
+                            server_port, 
+                            process_task_cb, 
+                            opaque);
 
-    } else if (!strcmp(type,SERVER_TYPE_TCP_UNIX)){
-        s = tcp_userver(allocator, 
-                        host_ip, 
-                        process_task_cb, 
-                        opaque);
+    } else if (!strcmp(type,SERVER_TYPE_UNIX_TCP)){
+        s = unix_tcp_server(allocator, 
+                            host_ip, 
+                            process_task_cb, 
+                            opaque);
     } else {
         dbg_str(DBG_WARNNING,"server type error");
         return NULL;
@@ -81,10 +81,10 @@ int server_destroy(server_t *server)
 {
     char *type = server->type_str;
 
-    if(!strcmp(type,SERVER_TYPE_TCP_INET)){
-        tcp_iserver_destroy(server);
-    } else if (!strcmp(type,SERVER_TYPE_TCP_UNIX)){
-        tcp_userver_destroy(server);
+    if(!strcmp(type,SERVER_TYPE_INET_TCP)){
+        inet_tcp_server_destroy(server);
+    } else if (!strcmp(type,SERVER_TYPE_UNIX_TCP)){
+        unix_tcp_server_destroy(server);
     } else {
         dbg_str(DBG_WARNNING,"server type error");
         return -1;
@@ -118,7 +118,7 @@ int test_server_of_unix()
     dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
 
     server(allocator,
-           SERVER_TYPE_TCP_UNIX,
+           SERVER_TYPE_UNIX_TCP,
            "test_server_un_path", 
            NULL,
            test_process_task_callback,
@@ -134,7 +134,7 @@ int test_server_of_inet()
     dbg_str(DBG_DETAIL,"test_server_of_unix_udp");
 
     server(allocator,
-           SERVER_TYPE_TCP_INET,
+           SERVER_TYPE_INET_TCP,
            "127.0.0.1", 
            "6888",
            test_process_task_callback,

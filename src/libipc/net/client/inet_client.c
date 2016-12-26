@@ -172,7 +172,7 @@ void client_event_handler(int fd, short event, void *arg)
 
     return ;
 }
-int udp_iclient_create_socket(struct addrinfo *addr)
+int inet_udp_client_create_socket(struct addrinfo *addr)
 {
     int listenq = 1024;
     struct rlimit rt;
@@ -222,11 +222,11 @@ client_t *__iclient(allocator_t *allocator,
 			       opaque);//void *opaque)
 
 }
-client_t *udp_iclient(allocator_t *allocator,
-					  char *client_ip,
-					  char *client_port,
-					  int (*process_task_cb)(client_task_t *task),
-					  void *opaque)
+client_t *inet_udp_client(allocator_t *allocator,
+					      char *client_ip,
+					      char *client_port,
+					      int (*process_task_cb)(client_task_t *task),
+					      void *opaque)
 {
 	struct addrinfo  *addr, hint;
 	int err;
@@ -247,7 +247,7 @@ client_t *udp_iclient(allocator_t *allocator,
 		dbg_str(DBG_ERROR,"getaddrinfo err");
 		return NULL;
 	}
-	user_fd = udp_iclient_create_socket(addr);
+	user_fd = inet_udp_client_create_socket(addr);
 
 	client = __iclient(allocator,//allocator_t *allocator,
 					   user_fd,//int user_fd,
@@ -262,12 +262,12 @@ client_t *udp_iclient(allocator_t *allocator,
 
 	return client;
 }
-int __udp_iclient_send(client_t *client,
-                       const void *buf,
-                       size_t nbytes,
-                       int flags,
-		               const struct sockaddr *destaddr,
-                       socklen_t destlen)
+int __inet_udp_client_send(client_t *client,
+                           const void *buf,
+                           size_t nbytes,
+                           int flags,
+		                   const struct sockaddr *destaddr,
+                           socklen_t destlen)
 {
 	int ret = 0;
 
@@ -278,18 +278,18 @@ int __udp_iclient_send(client_t *client,
 		perror("sendto()");  
 	}  
     /*
-     *dbg_buf(DBG_DETAIL,"__udp_iclient_send:",(uint8_t *)buf,nbytes);
+     *dbg_buf(DBG_DETAIL,"__inet_udp_client_send:",(uint8_t *)buf,nbytes);
      */
 
 	return ret;
 }
 
-int udp_iclient_send(client_t *client,
-                     void *buf,
-                     size_t nbytes,
-                     int flags,
-                     char *dest_id_str, 
-                     char *dest_srv_str)
+int inet_udp_client_send(client_t *client,
+                         void *buf,
+                         size_t nbytes,
+                         int flags,
+                         char *dest_id_str, 
+                         char *dest_srv_str)
 {
     int ret;
     char *type = client->type_str;
@@ -299,15 +299,15 @@ int udp_iclient_send(client_t *client,
     raddr.sin_port = htons(atoi(dest_srv_str));  
     inet_pton(AF_INET,dest_id_str,&raddr.sin_addr);
 
-    ret = __udp_iclient_send(client,buf,nbytes,flags,
-                             (struct sockaddr *)&raddr,sizeof(raddr));
+    ret = __inet_udp_client_send(client,buf,nbytes,flags,
+                                 (struct sockaddr *)&raddr,sizeof(raddr));
 
     return ret;
 }
 /*
- *int udp_iclient_broadcast(client_t *cli,char *broadcast_addr, char *dest_port,void *buf,uint32_t len)
+ *int inet_udp_client_broadcast(client_t *cli,char *broadcast_addr, char *dest_port,void *buf,uint32_t len)
  */
-int udp_iclient_broadcast(client_t *cli, char *dest_port,void *buf,uint32_t len)
+int inet_udp_client_broadcast(client_t *cli, char *dest_port,void *buf,uint32_t len)
 {
 	struct sockaddr_in raddr;
 
@@ -321,19 +321,19 @@ int udp_iclient_broadcast(client_t *cli, char *dest_port,void *buf,uint32_t len)
         exit(1);
     }
 
-    __udp_iclient_send(cli,//client_t *client,
-                       buf,//const void *buf,
-                       len,
-			           0,//int flags,
-			           (void *)&raddr,//const struct sockaddr *destaddr,
-			           sizeof(raddr));//socklen_t destlen);
+    __inet_udp_client_send(cli,//client_t *client,
+                           buf,//const void *buf,
+                           len,
+			               0,//int flags,
+			               (void *)&raddr,//const struct sockaddr *destaddr,
+			               sizeof(raddr));//socklen_t destlen);
 }
 
-client_t *tcp_iclient(allocator_t *allocator,
-				 	  char *server_ip,
-				 	  char *server_port,
-				 	  int (*process_task_cb)(client_task_t *task),
-				 	  void *opaque)
+client_t *inet_tcp_client(allocator_t *allocator,
+				 	      char *server_ip,
+				 	      char *server_port,
+				 	      int (*process_task_cb)(client_task_t *task),
+				 	      void *opaque)
 {
 	int user_fd;
 	struct sockaddr_in sa_addr;
@@ -349,8 +349,7 @@ client_t *tcp_iclient(allocator_t *allocator,
         perror("can't create socket file");
         return NULL;
     }
-	ret = connect(user_fd,(struct sockaddr *)&sa_addr,
-			                   sizeof(sa_addr));
+    ret = connect(user_fd,(struct sockaddr *)&sa_addr, sizeof(sa_addr));
 	if(ret < 0){
 		dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
         perror("connect:");
@@ -373,7 +372,7 @@ client_t *tcp_iclient(allocator_t *allocator,
 
 	return client;
 }
-int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
+int inet_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
 {
 	int ret = 0;
 
@@ -383,7 +382,7 @@ int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
 
 	return ret;
 }
-int iclient_destroy(client_t *client)
+int inet_client_destroy(client_t *client)
 {
     close(client->user_fd);
     io_user_destroy(client);

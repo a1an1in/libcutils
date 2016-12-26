@@ -172,17 +172,17 @@ client_t *__client(allocator_t *allocator,
 			       opaque);//void *opaque)
 
 }
-client_t *udp_uclient(allocator_t *allocator,
-                      char *client_unpath,
-					  int (*process_task_cb)(client_task_t *task),
-					  void *opaque)
+client_t *unix_udp_client(allocator_t *allocator,
+                          char *client_unpath,
+					      int (*process_task_cb)(client_task_t *task),
+					      void *opaque)
 {
     struct sockaddr_un client_un_addr;
 	int err;
 	int user_fd;
 	client_t *client = NULL;
 
-    dbg_str(NET_DETAIL,"udp_uclient");
+    dbg_str(NET_DETAIL,"unix_udp_client");
     if((user_fd = socket(PF_UNIX,SOCK_DGRAM,0)) < 0)  
     {  
         perror("fail to socket");  
@@ -215,15 +215,15 @@ client_t *udp_uclient(allocator_t *allocator,
 
     strcpy(client->unix_path,client_unpath);
 
-    dbg_str(NET_DETAIL,"udp_uclient,user_fd=%d",client->user_fd);
+    dbg_str(NET_DETAIL,"unix_udp_client,user_fd=%d",client->user_fd);
 
 	return client;
 }
-int udp_uclient_send(client_t *client,
-                     const void *buf,
-                     size_t nbytes,
-                     int flags,
-		             const char *dest_unpath)
+int unix_udp_client_send(client_t *client,
+                         const void *buf,
+                         size_t nbytes,
+                         int flags,
+		                 const char *dest_unpath)
 {
 	int ret = 0;
     struct sockaddr_un dest_un_addr;
@@ -231,7 +231,7 @@ int udp_uclient_send(client_t *client,
     dest_un_addr.sun_family = PF_UNIX;  
     strcpy(dest_un_addr.sun_path,dest_unpath);  
 
-    dbg_str(NET_DETAIL,"udp_uclient_send,dest_unpath:%s",dest_unpath);
+    dbg_str(NET_DETAIL,"unix_udp_client_send,dest_unpath:%s",dest_unpath);
 
 	if( ret = sendto(client->user_fd,
                      buf,
@@ -246,10 +246,10 @@ int udp_uclient_send(client_t *client,
 	return ret;
 }
 
-client_t *tcp_uclient(allocator_t *allocator,
-				 	  char *server_unix_path,
-				 	  int (*process_task_cb)(client_task_t *task),
-				 	  void *opaque)
+client_t *unix_tcp_client(allocator_t *allocator,
+				 	      char *server_unix_path,
+				 	      int (*process_task_cb)(client_task_t *task),
+				 	      void *opaque)
 {
 	int user_fd;
 	struct sockaddr_un sa_addr;
@@ -292,7 +292,7 @@ client_t *tcp_uclient(allocator_t *allocator,
 
 	return client;
 }
-int tcp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
+int unix_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
 {
 	int ret = 0;
 
@@ -302,7 +302,7 @@ int tcp_uclient_send(client_t *client,const void *buf,size_t nbytes,int flags)
 
 	return ret;
 }
-int uclient_destroy(client_t *client)
+int unix_client_destroy(client_t *client)
 {
     if(strlen(client->unix_path))
         unlink(client->unix_path);

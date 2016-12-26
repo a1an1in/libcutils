@@ -4,8 +4,8 @@
 #include <libipc/net/inet_server.h>
 #include <libipc/net/unix_server.h>
 
-#define SERVER_TYPE_TCP_INET "tcp_iserver_type"
-#define SERVER_TYPE_TCP_UNIX "tcp_userver_type"
+#define SERVER_TYPE_INET_TCP "inet_tcp_server_type"
+#define SERVER_TYPE_UNIX_TCP "tcp_userver_type"
 
 server_t * server(allocator_t *allocator,
                   char *type,

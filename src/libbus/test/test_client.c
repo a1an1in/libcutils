@@ -27,7 +27,7 @@ void test_bus_client()
     bus = bus_client_create(allocator,
                             server_host,
                             server_srv,
-                            CLIENT_TYPE_TCP_INET);
+                            CLIENT_TYPE_INET_TCP);
     /*
      *bus_lookup(bus, "test");
      */

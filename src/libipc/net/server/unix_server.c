@@ -145,7 +145,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 			                       task);//void *task);
 	return ;
 }
-static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
+static void unix_tcp_server_listen_event_handler(int fd, short event, void *arg)
 {
 	server_t *server            = (server_t *)arg;
 	concurrent_master_t *master = server->master;
@@ -167,7 +167,7 @@ static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
 
 	sprintf(key,"%d",connfd);
 
-	dbg_str(NET_DETAIL,"tcp_userver_listen_event_handler,listen_fd=%d,connfd=%d",fd,connfd);
+	dbg_str(NET_DETAIL,"unix_tcp_server_listen_event_handler,listen_fd=%d,connfd=%d",fd,connfd);
 
 	task = (server_task_t *)
            allocator_mem_alloc(master->allocator,sizeof(server_task_t));
@@ -188,7 +188,7 @@ static void tcp_userver_listen_event_handler(int fd, short event, void *arg)
     return ;
 }
 
-static int tcp_userver_create_socket(char *server_un_path)
+static int unix_tcp_server_create_socket(char *server_un_path)
 {
     int listenq = 1024;
     struct rlimit rt;
@@ -227,7 +227,7 @@ static int tcp_userver_create_socket(char *server_un_path)
 
     return listen_fd;
 }
-server_t * tcp_userver(allocator_t *allocator,
+server_t * unix_tcp_server(allocator_t *allocator,
                        char *server_un_path,
                        int (*process_task_cb)(void *task),
                        void *opaque)
@@ -236,12 +236,12 @@ server_t * tcp_userver(allocator_t *allocator,
     int listen_fd;
 
 
-    listen_fd = tcp_userver_create_socket(server_un_path);
+    listen_fd = unix_tcp_server_create_socket(server_un_path);
 
 	srv = io_user(allocator,//allocator_t *allocator,
 			      listen_fd,//int user_fd,
 			      SOCK_STREAM,//user_type
-			      tcp_userver_listen_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+			      unix_tcp_server_listen_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
 			      slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
 			      process_task_cb,//int (*process_task_cb)(user_task_t *task),
 			      opaque);//void *opaque)
@@ -253,7 +253,7 @@ server_t * tcp_userver(allocator_t *allocator,
 
 	return srv;
 }
-int tcp_userver_destroy(server_t *server)
+int unix_tcp_server_destroy(server_t *server)
 {
     unlink(server->unix_path);
     close(server->user_fd);
@@ -270,11 +270,11 @@ static int test_process_task_callback(void *task)
 
 	return 0;
 }
-int test_tcp_userver()
+int test_unix_tcp_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();
 
-	tcp_userver(allocator,"test_server_un_path",test_process_task_callback,NULL);
+	unix_tcp_server(allocator,"test_server_un_path",test_process_task_callback,NULL);
 
 	return 0;
 }

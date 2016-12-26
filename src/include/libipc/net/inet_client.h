@@ -31,28 +31,28 @@ typedef struct client_task_s{
 }client_task_t;
 
 
-client_t *udp_iclient(allocator_t *allocator,
-					 char *host,
-					 char *client_port,
-					 int (*process_task_cb)(client_task_t *task),
-					 void *opaque);
+client_t *inet_udp_client(allocator_t *allocator,
+					      char *host,
+					      char *client_port,
+					      int (*process_task_cb)(client_task_t *task),
+					      void *opaque);
 
-client_t *tcp_iclient(allocator_t *allocator,
-					 char *server_ip,
-					 char *server_port,
-					 int (*process_task_cb)(client_task_t *task),
-					 void *opaque);
+client_t *inet_tcp_client(allocator_t *allocator,
+					      char *server_ip,
+					      char *server_port,
+					      int (*process_task_cb)(client_task_t *task),
+					      void *opaque);
 
-int iclient_destroy(client_t *client);
+int inet_client_destroy(client_t *client);
 
-int udp_iclient_send(client_t *client,
-                     void *buf,
-                     size_t nbytes,
-                     int flags,
-                     char *dest_id_str, 
-                     char *dest_srv_str);
+int inet_udp_client_send(client_t *client,
+                         void *buf,
+                         size_t nbytes,
+                         int flags,
+                         char *dest_id_str, 
+                         char *dest_srv_str);
 
-int udp_iclient_broadcast(client_t *cli,char *dest_port,void *buf,uint32_t len);
+int inet_udp_client_broadcast(client_t *cli,char *dest_port,void *buf,uint32_t len);
 
-int tcp_iclient_send(client_t *client,const void *buf,size_t nbytes,int flags);
+int inet_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags);
 #endif

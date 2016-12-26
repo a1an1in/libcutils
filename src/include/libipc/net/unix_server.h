@@ -3,11 +3,11 @@
 #include <libconcurrent/concurrent.h>
 #include <libipc/net/server_struct.h>
 
-server_t * tcp_userver(allocator_t *allocator,
+server_t * unix_tcp_server(allocator_t *allocator,
                        char *server_un_path,
                        int (*process_task_cb)(void *task),
                        void *opaque);
-int tcp_userver_destroy(server_t *server);
-int test_tcp_userver();
+int unix_tcp_server_destroy(server_t *server);
+int test_unix_tcp_server();
 
 #endif

@@ -84,7 +84,7 @@ int bus_init(bus_t *bus,
              int (*process_client_task_cb)(client_task_t *task))
 {
     if(bus->client_sk_type == NULL){
-        bus->client_sk_type = (char *)(&(CLIENT_TYPE_TCP_UNIX));
+        bus->client_sk_type = (char *)(&(CLIENT_TYPE_UNIX_TCP));
     }
     bus->server_host = server_host;
     bus->server_srv  = server_srv;
