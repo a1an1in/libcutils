@@ -327,6 +327,8 @@ int inet_udp_client_broadcast(client_t *cli, char *dest_port,void *buf,uint32_t 
 			               0,//int flags,
 			               (void *)&raddr,//const struct sockaddr *destaddr,
 			               sizeof(raddr));//socklen_t destlen);
+
+    return 0;
 }
 
 client_t *inet_tcp_client(allocator_t *allocator,
