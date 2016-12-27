@@ -111,6 +111,7 @@ static void slave_process_conn_bussiness_event_handler(int fd, short event, void
 	//...............fd havn't release
 #undef MAX_TASK_BUFFER_LEN
 }
+
 static int userver_init_task(server_task_t *task,
 		                     int fd,
                              void *key, 
@@ -127,6 +128,7 @@ static int userver_init_task(server_task_t *task,
     task->server    = server;
 	return 0;
 }
+
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	server_task_t *task = (server_task_t *)arg;
@@ -145,6 +147,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 			                       task);//void *task);
 	return ;
 }
+
 static void unix_tcp_server_listen_event_handler(int fd, short event, void *arg)
 {
 	server_t *server            = (server_t *)arg;
@@ -227,10 +230,11 @@ static int unix_tcp_server_create_socket(char *server_un_path)
 
     return listen_fd;
 }
+
 server_t * unix_tcp_server(allocator_t *allocator,
-                       char *server_un_path,
-                       int (*process_task_cb)(void *task),
-                       void *opaque)
+                           char *server_un_path,
+                           int (*process_task_cb)(void *task),
+                           void *opaque)
 {
 	server_t *srv = NULL;
     int listen_fd;
@@ -253,6 +257,7 @@ server_t * unix_tcp_server(allocator_t *allocator,
 
 	return srv;
 }
+
 int unix_tcp_server_destroy(server_t *server)
 {
     unlink(server->unix_path);
@@ -270,6 +275,7 @@ static int test_process_task_callback(void *task)
 
 	return 0;
 }
+
 int test_unix_tcp_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();

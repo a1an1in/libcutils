@@ -64,6 +64,7 @@ static int setnonblocking(int sockfd)
 	return 0;
 
 }
+
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	client_task_t *task = (client_task_t *)arg;
@@ -77,6 +78,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	dbg_str(NET_DETAIL,"slave_work_function end");
 	return ;
 }
+
 int client_init_task(client_task_t *task,
 					 allocator_t *allocator,
 					 int fd,
@@ -103,11 +105,13 @@ int client_init_task(client_task_t *task,
      */
 	return 0;
 }
+
 static int iclient_release_task(client_task_t *task)
 {
 	allocator_mem_free(task->allocator,task);
 	return 0;
 }
+
 void client_event_handler(int fd, short event, void *arg)
 {
 	client_t *client = (client_t *)arg;
@@ -172,6 +176,7 @@ void client_event_handler(int fd, short event, void *arg)
 
     return ;
 }
+
 int inet_udp_client_create_socket(struct addrinfo *addr)
 {
     int listenq = 1024;
@@ -206,6 +211,7 @@ int inet_udp_client_create_socket(struct addrinfo *addr)
 
     return sockfd;
 }
+
 static inline 
 client_t *__iclient(allocator_t *allocator,
 				    int user_fd,
@@ -222,6 +228,7 @@ client_t *__iclient(allocator_t *allocator,
 			       opaque);//void *opaque)
 
 }
+
 client_t *inet_udp_client(allocator_t *allocator,
 					      char *client_ip,
 					      char *client_port,
@@ -262,6 +269,7 @@ client_t *inet_udp_client(allocator_t *allocator,
 
 	return client;
 }
+
 int __inet_udp_client_send(client_t *client,
                            const void *buf,
                            size_t nbytes,
@@ -374,6 +382,7 @@ client_t *inet_tcp_client(allocator_t *allocator,
 
 	return client;
 }
+
 int inet_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
 {
 	int ret = 0;
@@ -384,6 +393,7 @@ int inet_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flag
 
 	return ret;
 }
+
 int inet_client_destroy(client_t *client)
 {
     close(client->user_fd);

@@ -62,6 +62,7 @@ static int setnonblocking(int user_fd)
 	return 0;
 
 }
+
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
 	client_task_t *task = (client_task_t *)arg;
@@ -73,6 +74,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 	dbg_str(NET_DETAIL,"slave_work_function end");
 	return ;
 }
+
 #if 1
 //version 4, using pipe mode,without task admin
 int uclient_init_task(client_task_t *task,
@@ -98,11 +100,13 @@ int uclient_init_task(client_task_t *task,
 	task->client     = client;
 	return 0;
 }
+
 static int uclient_release_task(client_task_t *task)
 {
 	allocator_mem_free(task->allocator,task);
 	return 0;
 }
+
 void uclient_event_handler(int fd, short event, void *arg)
 {
 
@@ -155,6 +159,7 @@ void uclient_event_handler(int fd, short event, void *arg)
 
     return ;
 }
+
 #endif
 static inline 
 client_t *__client(allocator_t *allocator,
@@ -172,6 +177,7 @@ client_t *__client(allocator_t *allocator,
 			       opaque);//void *opaque)
 
 }
+
 client_t *unix_udp_client(allocator_t *allocator,
                           char *client_unpath,
 					      int (*process_task_cb)(client_task_t *task),
@@ -219,6 +225,7 @@ client_t *unix_udp_client(allocator_t *allocator,
 
 	return client;
 }
+
 int unix_udp_client_send(client_t *client,
                          const void *buf,
                          size_t nbytes,
@@ -292,6 +299,7 @@ client_t *unix_tcp_client(allocator_t *allocator,
 
 	return client;
 }
+
 int unix_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
 {
 	int ret = 0;
@@ -302,6 +310,7 @@ int unix_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flag
 
 	return ret;
 }
+
 int unix_client_destroy(client_t *client)
 {
     if(strlen(client->unix_path))

@@ -77,7 +77,6 @@ int bus_set(bus_t *bus,char *attrib_name, char *value, int value_len)
     return 0;
 }
 
-
 int bus_init(bus_t *bus,
              char *server_host,
              char *server_srv,

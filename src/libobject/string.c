@@ -106,6 +106,7 @@ static String *__assign(String *string,char *s)
     memset(string->value,0, string->value_max_len);
     strncpy(string->value, s, len);
     string->value_len = len;
+    string->value[len] = '\0';
 
     return string;
 }

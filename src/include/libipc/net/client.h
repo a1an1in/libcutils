@@ -6,8 +6,8 @@
 
 #define CLIENT_TYPE_INET_TCP "inet_tcp_client_type"
 #define CLIENT_TYPE_INET_UDP "inet_udp_client_type"
-#define CLIENT_TYPE_UNIX_TCP "tcp_uclient_type"
-#define CLIENT_TYPE_UNIX_UDP "udp_uclient_type"
+#define CLIENT_TYPE_UNIX_TCP "unix_tcp_client_type"
+#define CLIENT_TYPE_UNIX_UDP "unix_udp_client_type"
 
 client_t *client(allocator_t *allocator,
                  char *type,
@@ -21,8 +21,8 @@ int client_destroy(client_t *client);
 
 void test_client_recv_of_inet_udp();
 void test_client_recv_of_unix_udp();
-int test_tcp_uclient_send();
-int test_udp_uclient_send();
-int test_udp_uclient_recieve();
+int test_unix_tcp_client_send();
+int test_unix_udp_client_send();
+int test_unix_udp_client_recieve();
 
 #endif

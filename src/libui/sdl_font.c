@@ -130,6 +130,10 @@ static int __load_ascii_character(Font *font,void *graph)
 	}      
 }
 
+static int __unload_ascii_character(Font *font,void *graph)
+{
+    //...........
+}
 static int __get_character_width(Font *font, char c)
 {
 	/*

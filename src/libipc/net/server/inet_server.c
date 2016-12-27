@@ -58,6 +58,7 @@ static int setnonblocking(int sockfd)
 	return 0;
 
 }
+
 int server_task_init(server_task_t *task,
 		             int fd, 
                      void *key, 
@@ -74,6 +75,7 @@ int server_task_init(server_task_t *task,
     task->allocator = allocator;
 	return 0;
 }
+
 int server_task_release_without_task_admin(server_task_t *task)
 {
 	event_del(task->event);
@@ -82,6 +84,7 @@ int server_task_release_without_task_admin(server_task_t *task)
 
 	return 0;
 }
+
 static void 
 slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
 {
@@ -145,6 +148,7 @@ slave_work_function(concurrent_slave_t *slave,void *arg)
 			                       task);//void *task);
 	return ;
 }
+
 void master_iserver_listen_event_handler(int fd, short event, void *arg)
 {
 	server_t *server            = (server_t *)arg;
@@ -189,6 +193,7 @@ void master_iserver_listen_event_handler(int fd, short event, void *arg)
 
     return ;
 }
+
 int iserver_create_socket(struct addrinfo *addr)
 {
     int listenq = 1024;
@@ -227,6 +232,7 @@ int iserver_create_socket(struct addrinfo *addr)
 
     return listen_fd;
 }
+
 server_t * inet_tcp_server(allocator_t *allocator,
                            char *host_ip, 
                            char *server_port,
@@ -269,6 +275,7 @@ server_t * inet_tcp_server(allocator_t *allocator,
 	freeaddrinfo(addr);
 	return srv;
 }
+
 int inet_tcp_server_destroy(server_t *server)
 {
     close(server->user_fd);
@@ -283,6 +290,7 @@ static int test_process_task_callback(void *task)
 
     write(t->fd, t->buffer,t->buffer_len);//响应客户端  
 }
+
 int test_inet_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();

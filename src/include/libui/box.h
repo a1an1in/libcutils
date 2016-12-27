@@ -7,6 +7,8 @@
 #include <libui/component.h>
 #include <libui/text.h>
 #include <libui/timer.h>
+#include <libui/color.h>
+#include <libui/cursor.h>
 
 typedef struct box_s Box;
 
@@ -46,9 +48,13 @@ struct box_s{
     String *string;
 	Text *text;
     int x, y, max_height;//current cursor pos;
+    cursor_t cursor;
     int to_x, to_y, to_max_height;
 	int start_line;
 	__Timer *timer;
+    void *window;
+    color_t front_color;
+    color_t background_color;
 };
 
 #endif
