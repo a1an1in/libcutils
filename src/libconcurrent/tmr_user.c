@@ -186,12 +186,17 @@ int test_tmr_user()
                      NULL);
     tmr_user_stop(timer);
 
-    timer->tv.tv_sec = 1;
-    tmr_user_reuse(timer);
-    tmr_user_stop(timer);
+	int count = 0;
+	while(count ++ < 1000) {
+		timer->tv.tv_sec = 1;
+		tmr_user_reuse(timer);
+		tmr_user_stop(timer);
+	}
 
+	tmr_user_reuse(timer);
 
     pause();
+	tmr_user_stop(timer);
     tmr_user_destroy(timer);
 
     return 0;
