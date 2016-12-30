@@ -118,7 +118,8 @@ int min_heap_erase(min_heap_t* s, struct event* e)
         return 0;
     }
 
-    dbg_str(EV_WARNNING,"erase min heap error");
+    dbg_str(EV_ERROR,"erase min heap error, e->ev_timeout_pos.min_heap_idx = %d",e->ev_timeout_pos.min_heap_idx);
+    exit(1);
 
     return -1;
 }
