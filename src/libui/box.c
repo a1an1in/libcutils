@@ -27,16 +27,17 @@ static int __construct(Box *box,char *init_str)
 	box->text->content = box->string->value;
 	box->start_line = 0;
 
-    box->front_color.r = 0xff;
-    box->front_color.g = 0xff;
-    box->front_color.b = 0xff;
+    box->front_color.r = 0;
+    box->front_color.g = 0;
+    box->front_color.b = 0;
     box->front_color.a = 0xff;
 
-    box->background_color.r = 0;
-    box->background_color.g = 0;
-    box->background_color.b = 0;
+    box->background_color.r = 0xff;
+    box->background_color.g = 0xff;
+    box->background_color.b = 0xff;
     box->background_color.a = 0xff;
 
+    box->cursor_count = 0;
     cursor->x = 0;
     cursor->y = 0;
 
@@ -121,33 +122,6 @@ char get_character_at_cursor(Component *component)
     return 'c';
 }
 
-/*
- *static int write_character(Component *component,char c, void *graph)
- *{
- *    Box *b   = (Box *)component;
- *    Graph *g = (Graph *)graph;
- *    cursor_t *cursor = &b->cursor;
- *    Character *character;
- *
- *    character = (Character *)g->font->ascii[c].character;
- *    if(cursor->x + character->width > ((Subject *)component)->width) {
- *        cursor->x       = 0;
- *        cursor->height  = 0;
- *        cursor->y      += character->height;
- *    }
- *    if(cursor->height < cursor->y) {
- *        cursor->height = cursor->y;
- *    }
- *    if(character->code == '\n') {
- *        cursor->x       = 0;
- *        cursor->y      += character->height;
- *        cursor->height  = 0;
- *    } else {
- *        g->render_write_character(g,cursor->x,cursor->y,character);
- *        cursor->x += character->width;
- *    }
- *}
- */
 
 static int draw_cursor(Component *component,void *graph)
 {
@@ -156,16 +130,49 @@ static int draw_cursor(Component *component,void *graph)
 	Graph *g = ((Window *)window)->graph;
     cursor_t *cursor = &b->cursor;
 	Character *character;   
+    color_t *ft_color = &b->front_color;
+    color_t *bg_color = &b->background_color;
     char c;
     static count = 0;
 
-    c = get_character_at_cursor(b);
-    count++;
-    if(count % 2 == 0) {
-        character = g->render_load_character(g,c,g->font,0,0,0,0xff); 
-    } else {
-        character = g->render_load_character(g,c,g->font,0xff,0,0,0xff); 
-    }
+    c = get_character_at_cursor(component);
+
+    character = g->render_load_character(g,c,g->font,
+                                         bg_color->r,
+                                         bg_color->g, 
+                                         bg_color->b, 
+                                         bg_color->a); 
+
+    g->render_set_color(g,ft_color->r,ft_color->g,ft_color->b,ft_color->a);
+    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+    g->render_write_character(g,cursor->x,cursor->y,character);
+	g->render_present(g);
+
+    object_destroy(character);   
+}
+
+static int erase_cursor(Component *component,void *graph)
+{
+	Box *b   = (Box *)component;
+	Window *window = (Window *)b->window;
+	Graph *g = ((Window *)window)->graph;
+    cursor_t *cursor = &b->cursor;
+	Character *character;   
+    color_t *ft_color = &b->front_color;
+    color_t *bg_color = &b->background_color;
+    char c;
+
+    c = get_character_at_cursor(component);
+
+    character = g->render_load_character(g,c,g->font,
+                                         ft_color->r,
+                                         ft_color->g,
+                                         ft_color->b,
+                                         ft_color->a); 
+
+    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+
     g->render_write_character(g,cursor->x,cursor->y,character);
 	g->render_present(g);
 
@@ -181,7 +188,12 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 
 	dbg_str(DBG_DETAIL,"cursor_timer_callback");
 
-    draw_cursor(box,g);
+    if((box->cursor_count++ % 2) == 0) {
+        erase_cursor((Component *)box,g);
+    } else {
+        draw_cursor((Component *)box,g);
+    }
+
 	window->remove_timer(window, timer);
 	timer->reuse(timer);
 }
@@ -201,7 +213,7 @@ static int __load_resources(Component *component,void *window)
 
 	b->timer         = ((Window *)window)->create_timer(window);
 	b->timer->opaque = component;
-	b->timer->set_timer(b->timer, 1 * 1000, cursor_timer_callback);
+	b->timer->set_timer(b->timer, 1 * 500, cursor_timer_callback);
 }
 
 static int __unload_resources(Component *component,void *window)
@@ -334,10 +346,53 @@ static int __backspace_key_input(Component *component,void *graph)
 
 static int __up_key_down(Component *component,void *graph)
 {
+	Character *character;
+	Graph *g   = (Graph *)graph;
+	Box *b     = (Box *)component;
+    cursor_t *cursor = &b->cursor;
+    color_t *bg_color = &b->background_color;
+    char c;
+
+    c = get_character_at_cursor(component);
+
+	character = (Character *)g->font->ascii[c].character;
+
+    erase_cursor(component,g);
+
+    if(cursor->y >= character->height)
+        cursor->y -= character->height;
+
+    draw_cursor(component,g);
+
+    b->cursor_count = 0;
+
+    return 0;
 }
 
 static int __down_key_down(Component *component,void *graph)
 {
+	Character *character;
+	Graph *g   = (Graph *)graph;
+	Box *b     = (Box *)component;
+    cursor_t *cursor = &b->cursor;
+    color_t *bg_color = &b->background_color;
+    int height = ((Subject *)component)->height;
+    char c;
+
+    c = get_character_at_cursor(component);
+
+	character = (Character *)g->font->ascii[c].character;
+
+    erase_cursor(component,g);
+
+    if(cursor->y + character->height < height)
+        cursor->y += character->height;
+
+    draw_cursor(component,g);
+
+    b->cursor_count = 0;
+
+    return 0;
 }
 
 static int __left_key_down(Component *component,void *graph)

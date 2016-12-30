@@ -55,6 +55,7 @@ struct box_s{
     void *window;
     color_t front_color;
     color_t background_color;
+    int cursor_count;
 };
 
 #endif
