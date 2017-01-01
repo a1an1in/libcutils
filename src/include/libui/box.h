@@ -47,7 +47,6 @@ struct box_s{
 
     String *string;
 	Text *text;
-    int x, y, max_height;//current cursor pos;
     cursor_t cursor;
     int to_x, to_y, to_max_height;
 	int start_line;

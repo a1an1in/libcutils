@@ -56,7 +56,7 @@ static int __set(Window *window, char *attrib, void *value)
 		w->destroy_timer = value;
 	}
     else {
-		dbg_str(DBG_DETAIL,"sdl window set, not support %s setting",attrib);
+		dbg_str(SDL_INTERFACE_DETAIL,"sdl window set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -77,14 +77,14 @@ static void *__create_graph(Window *window, char *graph_type)
 {
 	allocator_t *allocator = ((Obj *)window)->allocator;
 
-    dbg_str(DBG_DETAIL,"sdl window create_graph");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window create_graph");
 
 	window->graph = (Graph *)OBJECT_NEW(allocator, Sdl_Graph,NULL);
 }
 
 static int __destroy_graph(Window *window)
 {
-    dbg_str(DBG_DETAIL,"sdl window destroy_graph");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window destroy_graph");
     object_destroy(window->graph);
 }
 
@@ -92,7 +92,7 @@ static void *__create_font(Window *window,char *font_name)
 {
 	allocator_t *allocator = ((Obj *)window)->allocator;
 
-    dbg_str(DBG_DETAIL,"sdl window create_font");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window create_font");
 
     window->font = OBJECT_NEW(allocator, Sdl_Font,"");
 	window->font->load_font(window->font);
@@ -100,7 +100,7 @@ static void *__create_font(Window *window,char *font_name)
 
 static int __destroy_font(Window *window)
 {
-    dbg_str(DBG_DETAIL,"sdl window destroy_font");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window destroy_font");
     object_destroy(window->font);
 }
 
@@ -108,14 +108,14 @@ static void *__create_event(Window *window)
 {
 	allocator_t *allocator = ((Obj *)window)->allocator;
 
-    dbg_str(DBG_DETAIL,"sdl window create_event");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window create_event");
 
     window->event = OBJECT_NEW(allocator, Sdl_Event,"");
 }
 
 static int __destroy_event(Window *window)
 {
-    dbg_str(DBG_DETAIL,"sdl window destroy_event");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window destroy_event");
     object_destroy(window->event);
 }
 
@@ -124,14 +124,14 @@ static void *__create_background(Window *window, char *pic_path)
 	allocator_t *allocator = ((Obj *)window)->allocator;
 	Graph *g = window->graph;
 
-    dbg_str(DBG_DETAIL,"sdl window draw_background");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window draw_background");
 
 	window->background = g->render_load_image(g, pic_path);
 }
 
 static int __destroy_background(Window *window)
 {
-    dbg_str(DBG_DETAIL,"sdl window destroy_background");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window destroy_background");
     object_destroy(window->background);
 }
 
@@ -140,8 +140,8 @@ static int __init_window(Window *window)
 	int ret;
 	Sdl_Window *w = (Sdl_Window *)window;
 
-	dbg_str(DBG_DETAIL,"Sdl_Graph init window");
-	dbg_str(DBG_DETAIL,"srceen width=%d, height=%d",window->screen_width,window->screen_height);
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph init window");
+	dbg_str(SDL_INTERFACE_DETAIL,"srceen width=%d, height=%d",window->screen_width,window->screen_height);
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
@@ -172,7 +172,7 @@ static int __open_window(Window *window)
 {
 	Graph *g = window->graph;
 
-    dbg_str(DBG_DETAIL,"sdl window open_window start");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window open_window start");
 
 	if(g == NULL) {
 		dbg_str(DBG_ERROR,"window graph is NULL, please check");
@@ -194,7 +194,7 @@ static int __open_window(Window *window)
 	g->render_clear(g);
 	g->render_present(g);
 
-    dbg_str(DBG_DETAIL,"sdl window open_window end");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window open_window end");
 	/*
 	 *g->update_window(g);
 	 */
@@ -205,7 +205,7 @@ static int __close_window(Window *window)
     Sdl_Graph *g = (Sdl_Graph *)window->graph;
 	Sdl_Window *w = (Sdl_Window *)window;
 
-    dbg_str(DBG_DETAIL,"sdl window close_window");
+    dbg_str(SDL_INTERFACE_DETAIL,"sdl window close_window");
 
 	//release screen surface
     if(g->screen_surface)
@@ -310,9 +310,9 @@ void test_ui_sdl_window()
 	g       = window->graph;
 
     object_dump(window, "Sdl_Window", buf, 2048);
-    dbg_str(DBG_DETAIL,"Window dump: %s",buf);
+    dbg_str(SDL_INTERFACE_DETAIL,"Window dump: %s",buf);
 
-	dbg_str(DBG_DETAIL,"render draw test");
+	dbg_str(SDL_INTERFACE_DETAIL,"render draw test");
 	g->render_draw_image(g,0,0,window->background);
 	g->render_present(g);
 

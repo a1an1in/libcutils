@@ -14,14 +14,14 @@
 
 static int __construct(Sdl_Graph *sdl_grath,char *init_str)
 {
-	dbg_str(DBG_DETAIL,"sdl_grath construct, sdl_grath addr:%p",sdl_grath);
+	dbg_str(SDL_INTERFACE_DETAIL,"sdl_grath construct, sdl_grath addr:%p",sdl_grath);
 
 	return 0;
 }
 
 static int __deconstrcut(Sdl_Graph *sdl_grath)
 {
-	dbg_str(DBG_DETAIL,"sdl_grath deconstruct,sdl_grath addr:%p",sdl_grath);
+	dbg_str(SDL_INTERFACE_DETAIL,"sdl_grath deconstruct,sdl_grath addr:%p",sdl_grath);
 
 	return 0;
 }
@@ -83,7 +83,7 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
     else if(strcmp(attrib, "name") == 0) { /**attribs setting start*/
         strncpy(sdl_grath->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"sdl_graph set, not support %s setting",attrib);
+		dbg_str(SDL_INTERFACE_DETAIL,"sdl_graph set, not support %s setting",attrib);
 	}
 
 	return 0;
@@ -103,7 +103,7 @@ static void *__get(Sdl_Graph *obj, char *attrib)
 static int __set_window(Sdl_Graph *graph, void *window)
 {
 	Sdl_Window *w = (Sdl_Window *)window;
-	dbg_str(DBG_DETAIL,"Sdl_Graph set_window");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph set_window");
 
 	graph->window = w->sdl_window;
 }
@@ -111,27 +111,27 @@ static int __set_window(Sdl_Graph *graph, void *window)
 static int __draw_image(Sdl_Graph *graph, void *image)
 {
 	Sdl_Image *i = (Sdl_Image *)image;
-	dbg_str(DBG_DETAIL,"Sdl_Graph draw_image");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph draw_image");
 
 	SDL_BlitSurface(i->surface, NULL, graph->screen_surface, NULL );
 }
 
 static int __update_window(Sdl_Graph *graph)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph update_window");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph update_window");
 	SDL_UpdateWindowSurface(graph->window);
 }
 
 static int __render_create(Sdl_Graph *graph)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph render_create");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_create");
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1" );
 	graph->render = SDL_CreateRenderer( graph->window, -1, 0 );
 }
 
 static int __render_destroy(Sdl_Graph *graph)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph render_destroy");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_destroy");
 	SDL_DestroyRenderer(graph->render);
 }
 
@@ -139,39 +139,39 @@ static int __render_set_color(Sdl_Graph *graph,
 							  uint8_t r, uint8_t g,
 							  uint8_t b, uint8_t a)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph set_color");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph set_color");
 	SDL_SetRenderDrawColor(graph->render, r, g, b, a);
 }
 
 static int __render_set_font(Sdl_Graph *graph, void *font)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph set_font");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph set_font");
 	((Graph *)graph)->font = font;
 
 	return 0;
 }
 static int __render_clear(Sdl_Graph *graph)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph render_clear");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_clear");
 	SDL_RenderClear(graph->render);
 }
 
 static int __render_draw_line(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_DETAIL,"SDL Graph render_draw_line");
+	dbg_str(SDL_INTERFACE_DETAIL,"SDL Graph render_draw_line");
 	SDL_RenderDrawLine(graph->render,x1, y1, x2, y2);
 }
 
 static int __render_draw_rect(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_DETAIL,"SDL Graph render_draw_rect");
+	dbg_str(SDL_INTERFACE_DETAIL,"SDL Graph render_draw_rect");
 	SDL_Rect rect = {x1,y1,x2,y2};
 	SDL_RenderDrawRect(graph->render, &rect);
 }
 
 static int __render_fill_rect(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
 {
-	dbg_str(DBG_DETAIL,"SDL Graph render_fill_rect");
+	dbg_str(SDL_INTERFACE_DETAIL,"SDL Graph render_fill_rect");
 	SDL_Rect fillRect = {x1,y1,x2,y2};
 	SDL_RenderFillRect(graph->render, &fillRect );
 }
@@ -182,7 +182,7 @@ static void *__render_load_image(Sdl_Graph *graph,void *path)
 	Sdl_Image *image;
 	allocator_t *allocator = ((Obj *)graph)->allocator;
 
-	dbg_str(DBG_DETAIL,"SDL Graph render_load_image");
+	dbg_str(SDL_INTERFACE_DETAIL,"SDL Graph render_load_image");
 
     image = OBJECT_NEW(allocator, Sdl_Image,"");
 	((Image *)image)->path->assign(((Image *)image)->path,path);
@@ -203,13 +203,13 @@ static void *__render_load_image(Sdl_Graph *graph,void *path)
 
 static int __render_unload_image(Sdl_Graph *graph,void *image)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Text unload image");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Text unload image");
     object_destroy(image);
 }
 
 static int __render_draw_image(Sdl_Graph *graph,int x, int y, void *image)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph render_draw_image");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_draw_image");
 	Sdl_Image *i = (Sdl_Image *)image;
 	SDL_Rect render_quad = { x, y, i->width, i->height};
 	SDL_RenderCopy(graph->render, i->texture, NULL, &render_quad );
@@ -225,7 +225,7 @@ static void * __render_load_text(Sdl_Graph *graph,void *string,void *font,int r,
 	SDL_Color textColor = {r, g, b, a };
 	String *content;
 
-	dbg_str(DBG_DETAIL,"Sdl_Text load text");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Text load text");
     text = OBJECT_NEW(allocator, Sdl_Text,"");
 	content = ((Text *)text)->content;
 	content->assign(content,string);
@@ -238,7 +238,7 @@ static void * __render_load_text(Sdl_Graph *graph,void *string,void *font,int r,
 		text->texture = SDL_CreateTextureFromSurface(graph->render, surface);
 		text->width = surface->w;
 		text->height = surface->h;
-		dbg_str(DBG_DETAIL,"width =%d height=%d",text->width, text->height);
+		dbg_str(SDL_INTERFACE_DETAIL,"width =%d height=%d",text->width, text->height);
 		SDL_FreeSurface(surface);
 	}
 
@@ -247,13 +247,13 @@ static void * __render_load_text(Sdl_Graph *graph,void *string,void *font,int r,
 
 static int __render_unload_text(Sdl_Graph *graph, void *text)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Text unload text");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Text unload text");
     object_destroy(text);
 }
 
 static int __render_write_text(Sdl_Graph *graph,int x, int y, void *text)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph render_write_text");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_write_text");
 	Sdl_Text *t = (Sdl_Text *)text;
 	SDL_Rect render_quad = { x, y, t->width, t->height};
 	SDL_RenderCopy(graph->render, t->texture, NULL, &render_quad );
@@ -270,7 +270,7 @@ static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,
 	char buf[10]              = {0};
 
 	/*
-	 *dbg_str(DBG_DETAIL,"Sdl_Character load character");
+	 *dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Character load character");
 	 */
     character = OBJECT_NEW(allocator, Sdl_Character,"");
 	character->assign(character,code);
@@ -286,7 +286,7 @@ static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,
 		character->width   = surface->w;
 		character->height  = surface->h;
 		/*
-		 *dbg_str(DBG_DETAIL,"width =%d height=%d",character->width, character->height);
+		 *dbg_str(SDL_INTERFACE_DETAIL,"width =%d height=%d",character->width, character->height);
 		 */
 		SDL_FreeSurface(surface);
 	}
@@ -296,14 +296,14 @@ static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,
 
 static int __render_unload_character(Sdl_Graph *graph, void *character)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Text unload character");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Text unload character");
     object_destroy(character);
 }
 
 static int __render_write_character(Sdl_Graph *graph,int x, int y, void *character)
 {
 	/*
-	 *dbg_str(DBG_DETAIL,"Sdl_Graph render_write_character");
+	 *dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_write_character");
 	 */
 	Character *c         = (Character *)character;
 	SDL_Rect render_quad = { x, y, c->width, c->height};
@@ -313,7 +313,7 @@ static int __render_write_character(Sdl_Graph *graph,int x, int y, void *charact
 
 static int __render_present(Sdl_Graph *graph)
 {
-	dbg_str(DBG_DETAIL,"Sdl_Graph render_present");
+	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_present");
 	SDL_RenderPresent(graph->render);
 }
 
@@ -370,7 +370,7 @@ void test_ui_sdl_grath()
     sdl_grath = OBJECT_NEW(allocator, Sdl_Graph,set_str);
 
     object_dump(sdl_grath, "Sdl_Graph", buf, 2048);
-    dbg_str(DBG_DETAIL,"Sdl_Graph dump: %s",buf);
+    dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph dump: %s",buf);
 
     object_destroy(sdl_grath);
 

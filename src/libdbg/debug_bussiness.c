@@ -17,5 +17,6 @@ debug_business_names[MAX_DEBUG_BUSINESS_NUM] = {
     "libevent",
     "libbus",
     "libobject",
+	"libui-sdl_interface",
 };
 

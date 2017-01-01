@@ -87,7 +87,7 @@ int __parse_text(Text *text, int offset, void *font)
 	char c;
 	int c_witdh, c_height;
 	int x = 0, y = 0;
-	int line_width = text->width;
+	int line_width                 = text->width;
 	int head_offset                = 0;
 	int tail_offset                = 0;
     /*
@@ -110,43 +110,43 @@ int __parse_text(Text *text, int offset, void *font)
 		c_witdh  = f->get_character_width(f,c);
 
 		if(c == '\n') {
-			line_info.paragraph_num              = paragraph_num;
-			line_info.tail_offset                = offset + i;
-			line_info.line_lenth                 = x;
-			line_info.line_num_in_paragraph      = line_num_in_paragraph++;
-			line_info.line_num                   = line_num++;
-			line_num_in_paragraph                = 0;
+			line_info.paragraph_num          = paragraph_num;
+			line_info.tail_offset            = offset + i;
+			line_info.line_lenth             = x;
+			line_info.line_num_in_paragraph  = line_num_in_paragraph++;
+			line_info.line_num               = line_num++;
+			line_num_in_paragraph            = 0;
 
 			text->line_info->push_back(text->line_info, &line_info);
 
-			line_info.paragraph_num              = paragraph_num++;
-			line_info.head_offset      = offset + i + 1;
-			x  = 0;
-			x += c_witdh;
+			line_info.paragraph_num          = paragraph_num++;
+			line_info.head_offset            = offset + i + 1;
+			x                                = 0;
+			x                               += c_witdh;
 
 			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
 					line_num,  c,text->content[offset + i + 1],
 					text->content[offset + i + 2], offset + i);
 
 		} else if(x + c_witdh > line_width) {//line end
-			line_info.paragraph_num              = paragraph_num;
-			line_info.tail_offset                = offset + i - 1;
-			line_info.line_lenth                 = x;
-			line_info.line_num_in_paragraph      = line_num_in_paragraph++;
-			line_info.line_num                   = line_num++;
+			line_info.paragraph_num          = paragraph_num;
+			line_info.tail_offset            = offset + i - 1;
+			line_info.line_lenth             = x;
+			line_info.line_num_in_paragraph  = line_num_in_paragraph++;
+			line_info.line_num               = line_num++;
 
 			text->line_info->push_back(text->line_info, &line_info);
 
-			line_info.head_offset       = offset + i;
-			x  = 0;
-			x += c_witdh;
+			line_info.head_offset            = offset + i;
+			x                                = 0;
+			x                               += c_witdh;
 
 			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
 					line_num,  c,text->content[offset + i + 1],
 					text->content[offset + i + 2], offset + i);
 
 		} else {
-			x += c_witdh;
+			x                               += c_witdh;
 		}
 
 		if(i == len) {

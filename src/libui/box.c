@@ -13,33 +13,303 @@
 extern void print_line_info(Iterator *iter);
 extern char *global_text;
 
+char get_row_at_cursor(Component *component) 
+{
+	Box *b   = (Box *)component;
+    cursor_t *cursor  = &b->cursor;
+    uint16_t row;
+
+	row = b->start_line +  cursor->y / cursor->height;
+
+    return row;
+}
+
+void move_cursor_up(Component *component) 
+{
+	Box *b             = (Box *)component;
+	Window *window     = (Window *)b->window;
+	Graph *g           = ((Window *)window)->graph;
+    cursor_t *cursor  = &b->cursor;
+	int head_offset, i = 0, width = 0;
+	Character *character;
+    uint16_t line_num;
+	char c = 0;
+
+    if(cursor->y >= cursor->height)
+        cursor->y -= cursor->height;
+	else {
+		return ;
+	}
+
+	line_num    = get_row_at_cursor(component);
+	head_offset = b->text->get_head_offset_of_line(b->text, line_num);
+
+	for( i = 0; c != '\n'; i++) {
+		c = b->string->value[head_offset + i];
+		character = (Character *)g->font->ascii[c].character;
+		if(cursor->x >= width && cursor->x < width + character->width) {
+			cursor->x      = width;
+			cursor->c      = c;
+			cursor->offset = head_offset + i;
+			cursor->width  = character->width;
+			cursor->height = character->height;
+			break;
+		} else {
+			width += character->width;
+		}
+	}
+
+    return ;
+}
+
+void move_cursor_down(Component *component) 
+{
+	Box *b             = (Box *)component;
+	Window *window     = (Window *)b->window;
+	Graph *g           = ((Window *)window)->graph;
+    cursor_t *cursor   = &b->cursor;
+    int height         = ((Subject *)component)->height;
+	int head_offset, i = 0, width = 0;
+	char c             = 0;
+	Character *character;
+    uint16_t line_num;
+
+    if(cursor->y + cursor->height < height)
+		cursor->y += cursor->height;
+	else {
+		return ;
+	}
+
+	line_num    = get_row_at_cursor(component);
+	head_offset = b->text->get_head_offset_of_line(b->text, line_num);
+
+	for( i = 0; c != '\n'; i++) {
+		c = b->string->value[head_offset + i];
+		character = (Character *)g->font->ascii[c].character;
+		if(cursor->x >= width && cursor->x < width + character->width) {
+			cursor->x      = width;
+			cursor->c      = c;
+			cursor->offset = head_offset + i;
+			cursor->width  = character->width;
+			cursor->height = character->height;
+			break;
+		} else {
+			width += character->width;
+		}
+	}
+
+    return ;
+}
+
+void move_cursor_left(Component *component) 
+{
+	Box *b             = (Box *)component;
+	Window *window     = (Window *)b->window;
+	Graph *g           = ((Window *)window)->graph;
+    cursor_t *cursor  = &b->cursor;
+	Character *character;
+	char c = 0;
+
+	c = b->string->value[cursor->offset - 1];
+	character = (Character *)g->font->ascii[c].character;
+
+	if(cursor->x == 0) {
+		dbg_str(DBG_SUC,"cursor x=%d width=%d",cursor->x, cursor->width);
+		return;
+	} else {
+		cursor->c      = c;
+		cursor->x     -= character->width;
+		cursor->width  = character->width;
+		cursor->offset--;
+	}
+
+    return ;
+}
+
+void move_cursor_right(Component *component) 
+{
+	Box *b             = (Box *)component;
+	Window *window     = (Window *)b->window;
+	Graph *g           = ((Window *)window)->graph;
+    cursor_t *cursor  = &b->cursor;
+	Character *character;
+	char c = 0;
+
+	c = b->string->value[cursor->offset + 1];
+	character = (Character *)g->font->ascii[c].character;
+
+	if(cursor->x + character->width > 600) {
+		return;
+	} else {
+		cursor->c      = c;
+		cursor->x     += cursor->width;
+		cursor->width  = character->width;
+		cursor->offset++;
+	}
+
+    return ;
+}
+
+static int draw_cursor(Component *component,void *graph)
+{
+	Box *b            = (Box *)component;
+	Window *window    = (Window *)b->window;
+	Graph *g          = ((Window *)window)->graph;
+    cursor_t *cursor  = &b->cursor;
+    color_t *ft_color = &b->front_color;
+    color_t *bg_color = &b->background_color;
+    static count      = 0;
+	Character *character;   
+    char c;
+
+	c = cursor->c;
+
+    character = g->render_load_character(g,c,g->font,
+                                         bg_color->r,
+                                         bg_color->g, 
+                                         bg_color->b, 
+                                         bg_color->a); 
+
+    g->render_set_color(g,ft_color->r,ft_color->g,ft_color->b,ft_color->a);
+    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+    g->render_write_character(g,cursor->x,cursor->y,character);
+	g->render_present(g);
+
+    object_destroy(character);   
+}
+
+static int erase_cursor(Component *component,void *graph)
+{
+	Box *b            = (Box *)component;
+	Window *window    = (Window *)b->window;
+	Graph *g          = ((Window *)window)->graph;
+    cursor_t *cursor  = &b->cursor;
+    color_t *ft_color = &b->front_color;
+    color_t *bg_color = &b->background_color;
+	Character *character;   
+    char c;
+
+	c = cursor->c;
+
+    character = g->render_load_character(g,c,g->font,
+                                         ft_color->r,
+                                         ft_color->g,
+                                         ft_color->b,
+                                         ft_color->a); 
+
+    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+
+    g->render_write_character(g,cursor->x,cursor->y,character);
+	g->render_present(g);
+
+    object_destroy(character);   
+}
+
+static uint32_t cursor_timer_callback(uint32_t interval, void* param )
+{
+	__Timer *timer = (__Timer *)param;
+	Box *box       = (Box *)timer->opaque;
+	Window *window = (Window *)box->window;
+	Graph *g       = ((Window *)window)->graph;
+
+	/*
+	 *dbg_str(DBG_DETAIL,"cursor_timer_callback");
+	 */
+
+    if((box->cursor_count++ % 2) == 0) {
+        erase_cursor((Component *)box,g);
+    } else {
+        draw_cursor((Component *)box,g);
+    }
+
+	window->remove_timer(window, timer);
+	timer->reuse(timer);
+}
+
+#if 1
+static int write_character(Component *component,char c, void *graph)
+{
+    Box *b              = (Box *)component;
+	Graph *g            = (Graph *)graph;
+    cursor_t *cursor    = &b->cursor;
+	Character *character;
+
+	character = (Character *)g->font->ascii[c].character;
+    if(cursor->x + character->width > ((Subject *)component)->width) {
+        cursor->x       = 0;
+		cursor->height  = character->height;
+		cursor->width   = character->width;
+		cursor->y      += character->height;
+    }
+
+	if(character->code == '\n') {
+		cursor->x       = 0;
+		cursor->y      += character->height;
+		cursor->width   = character->width;
+		cursor->height  = character->height;
+	} else {
+		g->render_write_character(g,cursor->x,cursor->y,character);
+		cursor->x      += character->width;
+	}
+
+	cursor->c = c;
+	cursor->offset++;
+
+	return 0;
+}
+#else
+static int write_character(Component *component,char c, void *graph)
+{
+	Graph *g = (Graph *)graph;
+	Character *character;
+    Box *b = (Box *)component;
+
+	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
+    if(cursor->x + character->width > ((Subject *)component)->width) {
+        cursor->x = 0;
+        cursor->height = 0;
+        cursor->y += character->height;
+    }
+    if(cursor->height < cursor->y) {
+        cursor->height = cursor->y;
+    }
+	g->render_write_character(g,cursor->x,cursor->y,character);
+	cursor->x += character->width;
+
+    object_destroy(character);
+
+}
+#endif
+
 static int __construct(Box *box,char *init_str)
 {
-    allocator_t *allocator = ((Obj *)box)->allocator;
-    cursor_t *cursor = &box->cursor;
+    allocator_t *allocator  = ((Obj *)box)->allocator;
+    cursor_t *cursor        = &box->cursor;
 
 	dbg_str(DBG_SUC,"box construct");
 
-    box->string = OBJECT_NEW(allocator, String, NULL);
+    box->string             = OBJECT_NEW(allocator, String, NULL);
     box->string->assign(box->string,global_text);
 
-    box->text = OBJECT_NEW(allocator, Text,"");
-	box->text->content = box->string->value;
-	box->start_line = 0;
+    box->text               = OBJECT_NEW(allocator, Text,"");
+	box->text->content      = box->string->value;
+	box->start_line         = 0;
 
-    box->front_color.r = 0;
-    box->front_color.g = 0;
-    box->front_color.b = 0;
-    box->front_color.a = 0xff;
+    box->front_color.r      = 0;
+    box->front_color.g      = 0;
+    box->front_color.b      = 0;
+    box->front_color.a      = 0xff;
 
     box->background_color.r = 0xff;
     box->background_color.g = 0xff;
     box->background_color.b = 0xff;
     box->background_color.a = 0xff;
 
-    box->cursor_count = 0;
-    cursor->x = 0;
-    cursor->y = 0;
+    box->cursor_count       = 0;
+    cursor->x               = 0;
+    cursor->y               = 0;
+
 
 	return 0;
 }
@@ -114,98 +384,15 @@ static void *__get(Box *obj, char *attrib)
     return NULL;
 }
 
-char get_character_at_cursor(Component *component) 
-{
-	Box *b   = (Box *)component;
-    uint16_t line_num;
-
-    return 'c';
-}
-
-
-static int draw_cursor(Component *component,void *graph)
-{
-	Box *b   = (Box *)component;
-	Window *window = (Window *)b->window;
-	Graph *g = ((Window *)window)->graph;
-    cursor_t *cursor = &b->cursor;
-	Character *character;   
-    color_t *ft_color = &b->front_color;
-    color_t *bg_color = &b->background_color;
-    char c;
-    static count = 0;
-
-    c = get_character_at_cursor(component);
-
-    character = g->render_load_character(g,c,g->font,
-                                         bg_color->r,
-                                         bg_color->g, 
-                                         bg_color->b, 
-                                         bg_color->a); 
-
-    g->render_set_color(g,ft_color->r,ft_color->g,ft_color->b,ft_color->a);
-    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
-    g->render_write_character(g,cursor->x,cursor->y,character);
-	g->render_present(g);
-
-    object_destroy(character);   
-}
-
-static int erase_cursor(Component *component,void *graph)
-{
-	Box *b   = (Box *)component;
-	Window *window = (Window *)b->window;
-	Graph *g = ((Window *)window)->graph;
-    cursor_t *cursor = &b->cursor;
-	Character *character;   
-    color_t *ft_color = &b->front_color;
-    color_t *bg_color = &b->background_color;
-    char c;
-
-    c = get_character_at_cursor(component);
-
-    character = g->render_load_character(g,c,g->font,
-                                         ft_color->r,
-                                         ft_color->g,
-                                         ft_color->b,
-                                         ft_color->a); 
-
-    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
-    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
-
-    g->render_write_character(g,cursor->x,cursor->y,character);
-	g->render_present(g);
-
-    object_destroy(character);   
-}
-
-static uint32_t cursor_timer_callback(uint32_t interval, void* param )
-{
-	__Timer *timer = (__Timer *)param;
-	Box *box   = (Box *)timer->opaque;
-	Window *window = (Window *)box->window;
-	Graph *g = ((Window *)window)->graph;
-
-	dbg_str(DBG_DETAIL,"cursor_timer_callback");
-
-    if((box->cursor_count++ % 2) == 0) {
-        erase_cursor((Component *)box,g);
-    } else {
-        draw_cursor((Component *)box,g);
-    }
-
-	window->remove_timer(window, timer);
-	timer->reuse(timer);
-}
-
 static int __load_resources(Component *component,void *window)
 {
-	Graph *g = ((Window *)window)->graph;
-	Box *b   = (Box *)component;
+	Graph *g         = ((Window *)window)->graph;
+	Box *b           = (Box *)component;
+	Character *character;
 
 	dbg_str(DBG_SUC,"%s load load_resources",component->name);
 
-    b->window = window;
+    b->window        = window;
 
 	g->font->load_ascii_character(g->font,g);
 	b->text->parse_text(b->text, 0, g->font);
@@ -214,6 +401,13 @@ static int __load_resources(Component *component,void *window)
 	b->timer         = ((Window *)window)->create_timer(window);
 	b->timer->opaque = component;
 	b->timer->set_timer(b->timer, 1 * 500, cursor_timer_callback);
+
+	character        = (Character *)g->font->ascii['a'].character;
+	b->cursor.height = character->height;
+
+	dbg_str(DBG_DETAIL,"cursor height =%d",b->cursor.height);
+
+	return 0;
 }
 
 static int __unload_resources(Component *component,void *window)
@@ -221,61 +415,11 @@ static int __unload_resources(Component *component,void *window)
     //...........
 }
 
-#if 1
-static int write_character(Component *component,char c, void *graph)
-{
-    Box *b   = (Box *)component;
-	Graph *g = (Graph *)graph;
-    cursor_t *cursor = &b->cursor;
-	Character *character;
-
-	character = (Character *)g->font->ascii[c].character;
-    if(cursor->x + character->width > ((Subject *)component)->width) {
-        cursor->x       = 0;
-        cursor->height  = 0;
-        cursor->y      += character->height;
-    }
-    if(cursor->height < cursor->y) {
-        cursor->height = cursor->y;
-    }
-	if(character->code == '\n') {
-		cursor->x       = 0;
-		cursor->y      += character->height;
-		cursor->height  = 0;
-	} else {
-		g->render_write_character(g,cursor->x,cursor->y,character);
-		cursor->x += character->width;
-	}
-}
-#else
-static int write_character(Component *component,char c, void *graph)
-{
-	Graph *g = (Graph *)graph;
-	Character *character;
-    Box *b = (Box *)component;
-
-	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
-    if(cursor->x + character->width > ((Subject *)component)->width) {
-        cursor->x = 0;
-        cursor->height = 0;
-        cursor->y += character->height;
-    }
-    if(cursor->height < cursor->y) {
-        cursor->height = cursor->y;
-    }
-	g->render_write_character(g,cursor->x,cursor->y,character);
-	cursor->x += character->width;
-
-    object_destroy(character);
-
-}
-#endif
-
 static int __draw(Component *component, void *graph)
 {
-	Box *b     = (Box *)component;
-	Graph *g   = (Graph *)graph;
-	Subject *s = (Subject *)component;
+	Box *b           = (Box *)component;
+	Graph *g         = (Graph *)graph;
+	Subject *s       = (Subject *)component;
     cursor_t *cursor = &b->cursor;
     int i, start;
     char c;
@@ -314,24 +458,27 @@ static int __draw(Component *component, void *graph)
 
 static int __text_key_input(Component *component,char c, void *graph)
 {
-	Graph *g = (Graph *)graph;
+	Graph *g            = (Graph *)graph;
+    Box *b              = (Box *)component;
+    cursor_t *cursor    = &b->cursor;
 	Character *character;
-    Box *b = (Box *)component;
-    cursor_t *cursor = &b->cursor;
 
 	dbg_str(DBG_DETAIL,"text input");
 
 	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
     if(cursor->x + character->width > ((Subject *)component)->width) {
         cursor->x       = 0;
-        cursor->height  = 0;
         cursor->y      += character->height;
     }
-    if(cursor->height < cursor->y) {
-        cursor->height = cursor->y;
-    }
+	/*
+     *if(cursor->height < cursor->y) {
+     *    cursor->height  = cursor->y;
+     *}
+	 */
 	g->render_write_character(g,cursor->x,cursor->height,character);
-	cursor->x += character->width;
+	cursor->x      += character->width;
+	cursor->width   = character->width;
+	cursor->height  = character->height;
 	g->render_present(g);
 
     object_destroy(character);
@@ -346,48 +493,28 @@ static int __backspace_key_input(Component *component,void *graph)
 
 static int __up_key_down(Component *component,void *graph)
 {
-	Character *character;
-	Graph *g   = (Graph *)graph;
-	Box *b     = (Box *)component;
-    cursor_t *cursor = &b->cursor;
-    color_t *bg_color = &b->background_color;
-    char c;
-
-    c = get_character_at_cursor(component);
-
-	character = (Character *)g->font->ascii[c].character;
+	Graph *g           = (Graph *)graph;
+	Box *b             = (Box *)component;
+    cursor_t *cursor   = &b->cursor;
+    color_t *bg_color  = &b->background_color;
 
     erase_cursor(component,g);
-
-    if(cursor->y >= character->height)
-        cursor->y -= character->height;
-
+	move_cursor_up(component);
     draw_cursor(component,g);
 
-    b->cursor_count = 0;
+    b->cursor_count    = 0;
 
     return 0;
 }
 
 static int __down_key_down(Component *component,void *graph)
 {
-	Character *character;
-	Graph *g   = (Graph *)graph;
-	Box *b     = (Box *)component;
-    cursor_t *cursor = &b->cursor;
-    color_t *bg_color = &b->background_color;
-    int height = ((Subject *)component)->height;
-    char c;
-
-    c = get_character_at_cursor(component);
-
-	character = (Character *)g->font->ascii[c].character;
+	Graph *g           = (Graph *)graph;
+	Box *b             = (Box *)component;
+    cursor_t *cursor   = &b->cursor;
 
     erase_cursor(component,g);
-
-    if(cursor->y + character->height < height)
-        cursor->y += character->height;
-
+	move_cursor_down(component);
     draw_cursor(component,g);
 
     b->cursor_count = 0;
@@ -397,12 +524,36 @@ static int __down_key_down(Component *component,void *graph)
 
 static int __left_key_down(Component *component,void *graph)
 {
-	dbg_str(DBG_DETAIL,"left_key_down");
+	Graph *g           = (Graph *)graph;
+	Box *b             = (Box *)component;
+    cursor_t *cursor   = &b->cursor;
+
+	/*
+	 *dbg_str(DBG_DETAIL,"left_key_down");
+	 */
+
+    erase_cursor(component,g);
+	move_cursor_left(component);
+    draw_cursor(component,g);
+
+    b->cursor_count = 0;
 }
 
 static int __right_key_down(Component *component,void *graph)
 {
-	dbg_str(DBG_DETAIL,"right_key_down");
+	Graph *g           = (Graph *)graph;
+	Box *b             = (Box *)component;
+    cursor_t *cursor   = &b->cursor;
+
+	/*
+	 *dbg_str(DBG_DETAIL,"right_key_down");
+	 */
+
+    erase_cursor(component,g);
+	move_cursor_right(component);
+    draw_cursor(component,g);
+
+    b->cursor_count = 0;
 }
 
 static int __pgup_key_down(Component *component,void *graph)
@@ -417,8 +568,8 @@ static int __pgdown_key_down(Component *component,void *graph)
 
 static int __one_line_up(Component *component,void *graph)
 {
-	Graph *g = (Graph *)graph;
-    Box *b = (Box *)component;
+	Graph *g         = (Graph *)graph;
+    Box *b           = (Box *)component;
     cursor_t *cursor = &b->cursor;
 	dbg_str(DBG_DETAIL,"up_key_down");
 
@@ -436,8 +587,8 @@ static int __one_line_up(Component *component,void *graph)
 
 static int __one_line_down(Component *component,void *graph)
 {
-    Box *b = (Box *)component;
-	Graph *g = (Graph *)graph;
+    Box *b           = (Box *)component;
+	Graph *g         = (Graph *)graph;
     cursor_t *cursor = &b->cursor;
 
 	dbg_str(DBG_DETAIL,"down_key_down");
