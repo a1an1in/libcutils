@@ -25,10 +25,10 @@ struct text_s{
 	int (*deconstruct)(Text *text);
 	int (*set)(Text *text, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
-
-	/*virtual methods*/
 	int (*parse_text)(Text *text, int offset, void *font);
 	int (*get_head_offset_of_line)(Text *text, int offset);
+	void *(*get_text_line_info)(Text *text, int line_num);
+	int (*get_line_count)(Text *text);
 
 	/*attribs*/
 	char *content;

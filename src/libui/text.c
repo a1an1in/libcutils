@@ -58,11 +58,14 @@ static int __set(Text *text, char *attrib, void *value)
 		text->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		text->deconstruct = value;
-	} 
-    else if(strcmp(attrib, "parse_text") == 0) {
+	} else if(strcmp(attrib, "parse_text") == 0) {
 		text->parse_text = value;
 	} else if(strcmp(attrib, "get_head_offset_of_line") == 0) {
 		text->get_head_offset_of_line = value;
+	} else if(strcmp(attrib, "get_line_count") == 0) {
+		text->get_line_count = value;
+	} else if(strcmp(attrib, "get_text_line_info") == 0) {
+		text->get_text_line_info = value;
 	}
     else {
 		dbg_str(OBJ_WARNNING,"text set,  \"%s\" setting is not support",attrib);
@@ -122,7 +125,6 @@ int __parse_text(Text *text, int offset, void *font)
 			line_info.paragraph_num          = paragraph_num++;
 			line_info.head_offset            = offset + i + 1;
 			x                                = 0;
-			x                               += c_witdh;
 
 			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
 					line_num,  c,text->content[offset + i + 1],
@@ -144,17 +146,27 @@ int __parse_text(Text *text, int offset, void *font)
 			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
 					line_num,  c,text->content[offset + i + 1],
 					text->content[offset + i + 2], offset + i);
+		} else if(i == len - 1) {
+			line_info.paragraph_num          = paragraph_num;
+			line_info.tail_offset            = offset + i;
+			x                               += c_witdh;
+			line_info.line_lenth             = x;
+			line_info.line_num_in_paragraph  = line_num_in_paragraph;
+			line_info.line_num               = line_num;
+
+			dbg_str(DBG_SUC,"laster c =%c", text->content[line_info.tail_offset]);
+			dbg_str(DBG_SUC,"laster - 1 c =%c", text->content[line_info.tail_offset - 1]);
+			dbg_str(DBG_SUC,"laster - 2 c =%c", text->content[line_info.tail_offset - 2]);
+			text->total_line_num = line_num;
+			text->line_info->push_back(text->line_info, &line_info);
 
 		} else {
 			x                               += c_witdh;
 		}
 
-		if(i == len) {
-			text->line_info->push_back(text->line_info, &line_info);
-			text->total_line_num = line_num;
-		}
 	}
 
+	return 0;
 }
 
 int __get_head_offset_of_line(Text *text, int line_num)
@@ -181,16 +193,44 @@ int __get_head_offset_of_line(Text *text, int line_num)
 	return ret;
 }
 
+void *__get_text_line_info(Text *text, int line_num)
+{
+    Iterator *cur, *end;
+	text_line_t *line_info = NULL;
+	int i   = 0;
+
+    cur = text->line_info->begin(text->line_info);
+    end = text->line_info->end(text->line_info);
+
+    for(i = 0; !end->equal(end,cur); cur->next(cur), i++) {
+		if(i == line_num) {
+			line_info = cur->get_vpointer(cur);
+			break;
+		}
+    }
+
+    object_destroy(cur);
+    object_destroy(end);
+
+	return line_info;
+}
+int __get_line_count(Text *text)
+{
+	return text->total_line_num;
+}
+
 static class_info_entry_t text_class_info[] = {
-    [0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-    [1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-    [2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-    [3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-    [4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-    [5] = {ENTRY_TYPE_FUNC_POINTER,"","parse_text",__parse_text,sizeof(void *)},
-    [6] = {ENTRY_TYPE_FUNC_POINTER,"","get_head_offset_of_line",__get_head_offset_of_line,sizeof(void *)},
-    [7] = {ENTRY_TYPE_NORMAL_POINTER,"","List",NULL,sizeof(void *)},
-    [8] = {ENTRY_TYPE_END},
+    [0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+    [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+    [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","parse_text",__parse_text,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_head_offset_of_line",__get_head_offset_of_line,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_line_count",__get_line_count,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_text_line_info",__get_text_line_info,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_NORMAL_POINTER,"","List",NULL,sizeof(void *)},
+    [10] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Text",text_class_info);
