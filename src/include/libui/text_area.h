@@ -1,5 +1,5 @@
-#ifndef __BOX_H__
-#define __BOX_H__
+#ifndef __TEXT_AREA_H__
+#define __TEXT_AREA_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>
@@ -10,20 +10,20 @@
 #include <libui/color.h>
 #include <libui/cursor.h>
 
-typedef struct box_s Box;
+typedef struct text_area_s Text_Area;
 
-typedef struct box_line_info_s{
+typedef struct text_area_line_info_s{
     int paragraph_num;
     int offset;
     int max_height;
-}box_line_info_t;
+}text_area_line_info_t;
 
-struct box_s{
+struct text_area_s{
 	Component component;
 
-	int (*construct)(Box *box,char *init_str);
-	int (*deconstruct)(Box *box);
-	int (*set)(Box *box, char *attrib, void *value);
+	int (*construct)(Text_Area *text_area,char *init_str);
+	int (*deconstruct)(Text_Area *text_area);
+	int (*set)(Text_Area *text_area, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
