@@ -86,73 +86,69 @@ static void * __get(Text *text, char *attrib)
 
 int __parse_text(Text *text, int offset, void *font)
 {
-	int len, i;
+	int line_width                = text->width;
+	int head_offset               = 0;
+	int tail_offset               = 0;
+	int line_num                  = 0;
+	int line_lenth                = 0;
+	int x                         = 0, y = 0;
+	Font *f                       = (Font *)font;
+	allocator_t *allocator        = ((Obj *)text)->allocator;
+	int len, i, line_count        = 0;
+	text_line_t line_info;
 	char c;
 	int c_witdh, c_height;
-	int x = 0, y = 0;
-	int line_width                 = text->width;
-	int head_offset                = 0;
-	int tail_offset                = 0;
-	int paragraph_num              = 0;
-	int line_num                   = 0;
-	int line_lenth                 = 0;
-	int paragraph_line_num_in_text = 0;
-	Font *f = (Font *)font;
-	text_line_t line_info;
 
 	memset(&line_info, 0, sizeof(line_info));
-	len = strlen(text->content + offset);
+	len  = strlen(text->content + offset);
 
 	for(i = 0; i < len; i++) {
-		c = text->content[offset + i];
-		c_witdh  = f->get_character_width(f,c);
+		c       = text->content[offset + i];
+		c_witdh = f->get_character_width(f,c);
+		if(x == 0) {
+			memset(&line_info, 0, sizeof(line_info));
+			line_count            = -1;
+			line_info.string      = OBJECT_NEW(allocator, String,NULL);
+		}
+
+		line_count++;
 
 		if(c == '\n') {
-			line_info.paragraph_num          = paragraph_num;
-			line_info.tail_offset            = offset + i;
-			line_info.line_lenth             = x;
-			line_info.line_num               = line_num++;
-
+			line_info.line_lenth  = x;
+			line_info.line_num    = line_num++;
+			line_info.string->append_char(line_info.string,c);
+			line_info.head        = line_info.string->value;
+			line_info.tail        = line_info.head + line_count;
 			text->line_info->push_back(text->line_info, &line_info);
-
-			line_info.paragraph_num          = paragraph_num++;
-			line_info.head_offset            = offset + i + 1;
-			x                                = 0;
-
-			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
-					line_num,  c,text->content[offset + i + 1],
-					text->content[offset + i + 2], offset + i);
+			x                     = 0;
 
 		} else if(x + c_witdh > line_width) {//line end
-			line_info.paragraph_num          = paragraph_num;
-			line_info.tail_offset            = offset + i - 1;
-			line_info.line_lenth             = x;
-			line_info.line_num               = line_num++;
-
+			line_info.line_lenth  = x;
+			line_info.line_num    = line_num++;
+			line_info.head        = line_info.string->value;
+			line_info.tail        = line_info.head + line_count;
 			text->line_info->push_back(text->line_info, &line_info);
 
-			line_info.head_offset            = offset + i;
-			x                                = 0;
-			x                               += c_witdh;
+			x                     = 0;
+			x                    += c_witdh;
+			memset(&line_info, 0, sizeof(line_info));
+			line_count            = 0;
+			line_info.string      = OBJECT_NEW(allocator, String,NULL);
+			line_info.string->append_char(line_info.string,c);
 
-			dbg_str(DBG_DETAIL,"line =%d first character of line :%c%c%c, offset =%d",
-					line_num,  c,text->content[offset + i + 1],
-					text->content[offset + i + 2], offset + i);
 		} else if(i == len - 1) {
-			line_info.paragraph_num          = paragraph_num;
-			line_info.tail_offset            = offset + i;
-			x                               += c_witdh;
-			line_info.line_lenth             = x;
-			line_info.line_num               = line_num;
-
-			dbg_str(DBG_SUC,"laster c =%c", text->content[line_info.tail_offset]);
-			dbg_str(DBG_SUC,"laster - 1 c =%c", text->content[line_info.tail_offset - 1]);
-			dbg_str(DBG_SUC,"laster - 2 c =%c", text->content[line_info.tail_offset - 2]);
-			text->total_line_num = line_num;
+			x                    += c_witdh;
+			line_info.line_lenth  = x;
+			line_info.line_num    = line_num;
+			text->total_line_num  = line_num;
+			line_info.string->append_char(line_info.string,c);
+			line_info.head        = line_info.string->value;
+			line_info.tail        = line_info.head + line_count;
 			text->line_info->push_back(text->line_info, &line_info);
 
 		} else {
-			x                               += c_witdh;
+			x                    += c_witdh;
+			line_info.string->append_char(line_info.string,c);
 		}
 
 	}
@@ -231,14 +227,8 @@ void print_line_info(Iterator *iter)
     LList_Iterator *i      = (LList_Iterator *)iter;
 	text_line_t *line_info = i->get_vpointer(iter);
 
-    dbg_str(DBG_DETAIL,"head_os=%d,tail_os =%d, para_num=%d, "
-            "line_num_in_para =%d,line_num =%d, line_lenth =%d", 
-            line_info->head_offset,
-            line_info->tail_offset,
-            line_info->paragraph_num,
-            line_info->line_num_in_paragraph,
-            line_info->line_num,
-            line_info->line_lenth);
+    dbg_str(DBG_DETAIL,"head=%p,tail =%p,line_num =%d,data =%s", 
+            line_info->head, line_info->tail, line_info->line_num, line_info->head);
 }
 
 void test_obj_text()

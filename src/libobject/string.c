@@ -46,6 +46,7 @@ static int string_buf_auto_modulate(String *string, int write_len)
 static int __construct(String *string,char *init_str)
 {
 	dbg_str(OBJ_DETAIL,"string construct, string addr:%p",string);
+	string->value = (char *)allocator_mem_alloc(string->obj.allocator, 256);
 	return 0;
 }
 

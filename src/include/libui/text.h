@@ -4,17 +4,21 @@
 #include <libobject/obj.h>
 #include <libobject/list.h>
 #include <libui/graph.h>
+#include <libobject/string.h>
 
 typedef struct text_s Text;
 
 typedef struct text_line_s{
 	int head_offset;
+	char *head;
 	int tail_offset;
+	char *tail;
 	int paragraph_num;
 	int line_num_in_paragraph;
 	int paragraph_line_num_in_text;
 	int line_num;
 	int line_lenth;
+	String *string;
 }text_line_t;
 
 struct text_s{
