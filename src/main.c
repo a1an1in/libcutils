@@ -564,6 +564,7 @@ int main(int argc, char *argv[])
 	dbg_str(DBG_DETAIL,"main func start");
 
 	args_process(NULL,cmds,argc, argv);
+	test_ui_text_area();
 
 	dbg_str(DBG_DETAIL,"main func end");
 	pause();
