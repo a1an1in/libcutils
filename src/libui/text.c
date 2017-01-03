@@ -93,12 +93,7 @@ int __parse_text(Text *text, int offset, void *font)
 	int line_width                 = text->width;
 	int head_offset                = 0;
 	int tail_offset                = 0;
-    /*
-	 *int paragraph_num              = 1;
-	 *int line_num_in_paragraph      = 1;
-     */
 	int paragraph_num              = 0;
-	int line_num_in_paragraph      = 0;
 	int line_num                   = 0;
 	int line_lenth                 = 0;
 	int paragraph_line_num_in_text = 0;
@@ -116,9 +111,7 @@ int __parse_text(Text *text, int offset, void *font)
 			line_info.paragraph_num          = paragraph_num;
 			line_info.tail_offset            = offset + i;
 			line_info.line_lenth             = x;
-			line_info.line_num_in_paragraph  = line_num_in_paragraph++;
 			line_info.line_num               = line_num++;
-			line_num_in_paragraph            = 0;
 
 			text->line_info->push_back(text->line_info, &line_info);
 
@@ -134,7 +127,6 @@ int __parse_text(Text *text, int offset, void *font)
 			line_info.paragraph_num          = paragraph_num;
 			line_info.tail_offset            = offset + i - 1;
 			line_info.line_lenth             = x;
-			line_info.line_num_in_paragraph  = line_num_in_paragraph++;
 			line_info.line_num               = line_num++;
 
 			text->line_info->push_back(text->line_info, &line_info);
@@ -151,7 +143,6 @@ int __parse_text(Text *text, int offset, void *font)
 			line_info.tail_offset            = offset + i;
 			x                               += c_witdh;
 			line_info.line_lenth             = x;
-			line_info.line_num_in_paragraph  = line_num_in_paragraph;
 			line_info.line_num               = line_num;
 
 			dbg_str(DBG_SUC,"laster c =%c", text->content[line_info.tail_offset]);

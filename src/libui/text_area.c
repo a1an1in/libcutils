@@ -15,7 +15,7 @@ extern char *global_text;
 
 char get_row_at_cursor(Component *component) 
 {
-	Text_Area *ta     = (Text_Area *)component;
+	Text_Area *ta    = (Text_Area *)component;
     cursor_t *cursor = &ta->cursor;
     uint16_t row;
 
@@ -252,7 +252,6 @@ static int draw_cursor(Component *component,void *graph)
                                          bg_color->g, 
                                          bg_color->b, 
                                          bg_color->a); 
-
 	/*
 	 *dbg_str(DBG_DETAIL,"draw character c :%c",c);
 	 */
@@ -264,7 +263,7 @@ static int draw_cursor(Component *component,void *graph)
     object_destroy(character);   
 }
 
-static int erase_cursor(Component *component,void *graph)
+static int reverse_cursor(Component *component,void *graph)
 {
 	Text_Area *ta     = (Text_Area *)component;
 	Window *window    = (Window *)ta->window;
@@ -304,7 +303,7 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 	 */
 
     if((ta->cursor_count++ % 2) == 0) {
-        erase_cursor((Component *)ta,g);
+        reverse_cursor((Component *)ta,g);
     } else {
         draw_cursor((Component *)ta,g);
     }
@@ -313,7 +312,6 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 	timer->reuse(timer);
 }
 
-#if 1
 static int write_character(Component *component,char c, void *graph)
 {
     Text_Area *ta    = (Text_Area *)component;
@@ -346,29 +344,6 @@ static int write_character(Component *component,char c, void *graph)
 
 	return 0;
 }
-#else
-static int write_character(Component *component,char c, void *graph)
-{
-	Graph *g = (Graph *)graph;
-	Character *character;
-    Text_Area *b = (Text_Area *)component;
-
-	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
-    if(cursor->x + character->width > ((Subject *)component)->width) {
-        cursor->x = 0;
-        cursor->height = 0;
-        cursor->y += character->height;
-    }
-    if(cursor->height < cursor->y) {
-        cursor->height = cursor->y;
-    }
-	g->render_write_character(g,cursor->x,cursor->y,character);
-	cursor->x += character->width;
-
-    object_destroy(character);
-
-}
-#endif
 
 static int __construct(Text_Area *ta,char *init_str)
 {
@@ -551,9 +526,11 @@ static int __draw(Component *component, void *graph)
 
 static int __text_key_input(Component *component,char c, void *graph)
 {
-	Graph *g         = (Graph *)graph;
-    Text_Area *ta    = (Text_Area *)component;
-    cursor_t *cursor = &ta->cursor;
+	Graph *g          = (Graph *)graph;
+    Text_Area *ta     = (Text_Area *)component;
+    cursor_t *cursor  = &ta->cursor;
+    color_t *ft_color = &ta->front_color;
+    color_t *bg_color = &ta->background_color;
 	Character *character;
 
 	dbg_str(DBG_DETAIL,"text input");
@@ -563,14 +540,15 @@ static int __text_key_input(Component *component,char c, void *graph)
         cursor->x       = 0;
         cursor->y      += character->height;
     }
-	/*
-     *if(cursor->height < cursor->y) {
-     *    cursor->height  = cursor->y;
-     *}
-	 */
-	g->render_write_character(g,cursor->x,cursor->height,character);
+
+    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+
+	g->render_write_character(g,cursor->x,cursor->y,character);
 	cursor->x      += character->width;
-	cursor->width   = character->width;
+	/*
+	 *cursor->width   = character->width;
+	 */
 	cursor->height  = character->height;
 	g->render_present(g);
 
@@ -591,7 +569,7 @@ static int __up_key_down(Component *component,void *graph)
     cursor_t *cursor  = &ta->cursor;
     color_t *bg_color = &ta->background_color;
 
-    erase_cursor(component,g);
+    reverse_cursor(component,g);
 	move_cursor_up(component);
     draw_cursor(component,g);
 
@@ -606,7 +584,7 @@ static int __down_key_down(Component *component,void *graph)
 	Text_Area *ta    = (Text_Area *)component;
     cursor_t *cursor = &ta->cursor;
 
-    erase_cursor(component,g);
+    reverse_cursor(component,g);
 	move_cursor_down(component);
     draw_cursor(component,g);
 
@@ -625,7 +603,7 @@ static int __left_key_down(Component *component,void *graph)
 	 *dbg_str(DBG_DETAIL,"left_key_down");
 	 */
 
-    erase_cursor(component,g);
+    reverse_cursor(component,g);
 	move_cursor_left(component);
     draw_cursor(component,g);
 
@@ -642,7 +620,7 @@ static int __right_key_down(Component *component,void *graph)
 	 *dbg_str(DBG_DETAIL,"right_key_down");
 	 */
 
-    erase_cursor(component,g);
+    reverse_cursor(component,g);
 	move_cursor_right(component);
     draw_cursor(component,g);
 
