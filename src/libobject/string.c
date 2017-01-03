@@ -70,6 +70,8 @@ static int __set(String *string, char *attrib, void *value)
 		string->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		string->deconstruct = value;
+	} else if(strcmp(attrib, "pre_alloc") == 0) {
+		string->pre_alloc = value;
 	} else if(strcmp(attrib, "assign") == 0) {
 		string->assign = value;
 	} else if(strcmp(attrib, "append_char") == 0) {
@@ -96,6 +98,14 @@ static void *__get(String *obj, char *attrib)
     return NULL;
 }
 
+static String *__pre_alloc(String *string,uint32_t size)
+{
+	dbg_str(OBJ_DETAIL,"pre_alloc, size=%d",size);
+	string->value         = (char *)allocator_mem_alloc(string->obj.allocator, size);
+    string->value_max_len = size;
+    return string;
+}
+
 static String *__assign(String *string,char *s)
 {
     int len = strlen(s);
@@ -106,7 +116,7 @@ static String *__assign(String *string,char *s)
 
     memset(string->value,0, string->value_max_len);
     strncpy(string->value, s, len);
-    string->value_len = len;
+    string->value_len  = len;
     string->value[len] = '\0';
 
     return string;
@@ -130,16 +140,17 @@ static String *__append_char(String *string,char c)
 }
 
 static class_info_entry_t string_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","assign",__assign,sizeof(void *)},
-	[6] = {ENTRY_TYPE_FUNC_POINTER,"","append_char",__append_char,sizeof(void *)},
-	[7] = {ENTRY_TYPE_STRING,"char *","name",NULL,0},
-	[8] = {ENTRY_TYPE_STRING,"char *","value",NULL,0},
-	[9] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","pre_alloc",__pre_alloc,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","assign",__assign,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","append_char",__append_char,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_STRING,"char *","name",NULL,0},
+	[9 ] = {ENTRY_TYPE_STRING,"char *","value",NULL,0},
+	[10] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("String",string_class_info);

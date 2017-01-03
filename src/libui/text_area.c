@@ -19,6 +19,7 @@ char get_row_at_cursor(Component *component)
     cursor_t *cursor = &ta->cursor;
     uint16_t row;
 
+    dbg_str(DBG_DETAIL,"y=%d height=%d", cursor->y,cursor->height);
 	row = ta->start_line +  cursor->y / cursor->height;
 
     return row;
@@ -35,27 +36,24 @@ void move_cursor_left(Component *component)
     uint16_t cursor_line;
 	char c = 0;
 
-	cursor_line = get_row_at_cursor(component);
-	line_info   = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line);
+	cursor_line    = get_row_at_cursor(component);
+	line_info      = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line);
 
 	if(cursor->x == 0) {
 		dbg_str(DBG_DETAIL,"cursor x=%d width=%d",cursor->x, cursor->width);
 		return;
-	} else {
-		if(cursor->offset - 1 >= 0) {
-			c              = line_info->head[cursor->offset - 1];
-			character      = (Character *)g->font->ascii[c].character;
+    } 
 
-			cursor->c      = c;
-			cursor->x     -= character->width;
-			cursor->width  = character->width;
-			cursor->offset--;
+    c              = line_info->head[cursor->offset - 1];
+    character      = (Character *)g->font->ascii[c].character;
 
-            dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
-                    cursor->offset, cursor->c,cursor->x, character->width);
-        }
+    cursor->c      = c;
+    cursor->x     -= character->width;
+    cursor->width  = character->width;
+    cursor->offset--;
 
-	}
+    dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
+            cursor->offset, cursor->c,cursor->x, character->width);
 
     return ;
 }
@@ -180,23 +178,23 @@ void move_cursor_down(Component *component)
 	char c                 = 0;
 	text_line_t *line_info = NULL;
 	Character *character;
-    uint16_t line_num,cursor_line,  total_line_num;
+    uint16_t cursor_line,  total_line_num;
 
 	cursor_line    = get_row_at_cursor(component);
 	total_line_num = ta->text->get_line_count(ta->text);
 
 	if(cursor_line == total_line_num) {
 		dbg_str(DBG_DETAIL, "move_cursor_down, already last line, "
-				"line_num =%d, total_line_num =%d", line_num, total_line_num);
+				"cursor_line =%d, total_line_num =%d", cursor_line, total_line_num);
 		return;
 	}
 
 	line_info = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line + 1);
 
-	if(cursor->y + cursor->height * 2 < component_height) {
-		if(line_info->line_lenth > cursor->x) {
+	if(cursor->y + cursor->height * 2 < component_height) { /*not last line*/
+		if(line_info->line_lenth > cursor->x) { /*next line line_lenth greater than cursor pos*/
 			cursor->y   += cursor->height;
-			for( i = 0; c != '\n'; i++) {
+			for( i = 0; ; i++) {
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 				if(cursor->x >= width_sum && cursor->x < width_sum + character->width) {
@@ -229,7 +227,7 @@ void move_cursor_down(Component *component)
 			cursor->width  = character->width;
 			cursor->height = character->height;
 		}
-	}  else {
+	}  else { /*last line*/
 		cursor_t bak  = *cursor;
 		bak.y        -= bak.height;
 		ta->one_line_up(component, g);
@@ -321,7 +319,7 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 	timer->reuse(timer);
 }
 
-static int write_character(Component *component,char c, void *graph)
+static int draw_character(Component *component,char c, void *graph)
 {
     Text_Area *ta    = (Text_Area *)component;
 	Graph *g         = (Graph *)graph;
@@ -329,10 +327,13 @@ static int write_character(Component *component,char c, void *graph)
 	Character *character;
 
 	character = (Character *)g->font->ascii[c].character;
+    if(character->height == 0) {
+        dbg_str(DBG_WARNNING,"text list may have problem");
+    }
     if(cursor->x + character->width > ((Subject *)component)->width) {
         cursor->x       = 0;
 		cursor->y      += character->height;
-		cursor->height  = character->height;
+        cursor->height  = character->height;
 		cursor->width   = character->width;
 		cursor->offset  = 0;
     }
@@ -341,19 +342,43 @@ static int write_character(Component *component,char c, void *graph)
 		cursor->x       = 0;
 		cursor->y      += character->height;
 		cursor->width   = 0;
-		cursor->height  = character->height;
+        cursor->height  = character->height;
 		cursor->offset  = 0;
 	} else {
-		g->render_write_character(g,cursor->x,cursor->y,character);
 		cursor->x      += character->width;
+		g->render_write_character(g,cursor->x - character->width,cursor->y,character);/**/
 		cursor->width   = character->width;
-		cursor->height  = character->height;
+        cursor->height  = character->height;
 		cursor->offset++;
 	}
 
-	cursor->c = c;
+	cursor->c = ' ';
 
 	return 0;
+}
+
+static int erase_character(Component *component,char c, void *graph)
+{
+	Text_Area *ta     = (Text_Area *)component;
+	Window *window    = (Window *)ta->window;
+	Graph *g          = ((Window *)window)->graph;
+    cursor_t *cursor  = &ta->cursor;
+    color_t *ft_color = &ta->front_color;
+    color_t *bg_color = &ta->background_color;
+	Character *character;   
+
+    character = g->render_load_character(g,c,g->font,
+                                         ft_color->r,
+                                         ft_color->g,
+                                         ft_color->b,
+                                         ft_color->a); 
+
+    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+
+	g->render_present(g);
+
+    object_destroy(character);   
 }
 
 static int __construct(Text_Area *ta,char *init_str)
@@ -513,12 +538,10 @@ static int __draw(Component *component, void *graph)
 		line_info = (text_line_t *)ta->text->get_text_line_info(ta->text,j);
         if(line_info == NULL) break;
 
-		for(i = 0; cursor->x != line_info->line_lenth; i++) {
+		for(i = 0; i < line_info->tail - line_info->head + 1; i++) {
 			c = line_info->head[i];
-			write_character(component,c, graph);
+			draw_character(component,c, graph);
 		}
-		cursor->y += cursor->height;
-		cursor->x  = 0;
 	}
 
 	g->render_present(g);
@@ -533,26 +556,20 @@ static int __text_key_input(Component *component,char c, void *graph)
     color_t *bg_color = &ta->background_color;
 	Character *character;
 
-	dbg_str(DBG_DETAIL,"text input");
+    /*
+	 *character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
+     *g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+     *g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+     */
 
-	character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
-    if(cursor->x + character->width > ((Subject *)component)->width) {
-        cursor->x       = 0;
-        cursor->y      += character->height;
-    }
+    erase_character(component,c, graph);
+    draw_character(component,c, graph);
 
-    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
-    g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
-
-	g->render_write_character(g,cursor->x,cursor->y,character);
-	cursor->x      += character->width;
-	/*
-	 *cursor->width   = character->width;
-	 */
-	cursor->height  = character->height;
 	g->render_present(g);
 
-    object_destroy(character);
+    /*
+     *object_destroy(character);
+     */
 
 }
 

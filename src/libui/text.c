@@ -86,6 +86,7 @@ static void * __get(Text *text, char *attrib)
 
 int __parse_text(Text *text, int offset, void *font)
 {
+#define MAX_TEXT_LINE_LENTH 256
 	int line_width                = text->width;
 	int head_offset               = 0;
 	int tail_offset               = 0;
@@ -109,13 +110,14 @@ int __parse_text(Text *text, int offset, void *font)
 			memset(&line_info, 0, sizeof(line_info));
 			line_count            = -1;
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
+            line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 		}
 
 		line_count++;
 
 		if(c == '\n') {
 			line_info.line_lenth  = x;
-			line_info.line_num    = line_num++;
+			line_num++;
 			line_info.string->append_char(line_info.string,c);
 			line_info.head        = line_info.string->value;
 			line_info.tail        = line_info.head + line_count;
@@ -124,9 +126,9 @@ int __parse_text(Text *text, int offset, void *font)
 
 		} else if(x + c_witdh > line_width) {//line end
 			line_info.line_lenth  = x;
-			line_info.line_num    = line_num++;
+			line_num++;
 			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_count;
+			line_info.tail        = line_info.head + line_count - 1;
 			text->line_info->push_back(text->line_info, &line_info);
 
 			x                     = 0;
@@ -134,12 +136,12 @@ int __parse_text(Text *text, int offset, void *font)
 			memset(&line_info, 0, sizeof(line_info));
 			line_count            = 0;
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
+            line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 			line_info.string->append_char(line_info.string,c);
 
 		} else if(i == len - 1) {
 			x                    += c_witdh;
 			line_info.line_lenth  = x;
-			line_info.line_num    = line_num;
 			text->total_line_num  = line_num;
 			line_info.string->append_char(line_info.string,c);
 			line_info.head        = line_info.string->value;
@@ -154,6 +156,7 @@ int __parse_text(Text *text, int offset, void *font)
 	}
 
 	return 0;
+#undef MAX_TEXT_LINE_LENTH
 }
 
 int __get_head_offset_of_line(Text *text, int line_num)
@@ -227,8 +230,8 @@ void print_line_info(Iterator *iter)
     LList_Iterator *i      = (LList_Iterator *)iter;
 	text_line_t *line_info = i->get_vpointer(iter);
 
-    dbg_str(DBG_DETAIL,"head=%p,tail =%p,line_num =%d,data =%s", 
-            line_info->head, line_info->tail, line_info->line_num, line_info->head);
+    dbg_str(DBG_DETAIL,"head=%p,tail =%p,data =%s", 
+            line_info->head, line_info->tail, line_info->head);
 }
 
 void test_obj_text()

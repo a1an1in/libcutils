@@ -14,6 +14,7 @@ struct string_s{
 	int (*deconstruct)(String *string);
 	int (*set)(String *string, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
+    String *(*pre_alloc)(String *string,uint32_t size);
     String *(*assign)(String *string,char *s);
     String *(*append_char)(String *string,char c);
 
