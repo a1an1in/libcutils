@@ -126,7 +126,11 @@ static int __render_create(Sdl_Graph *graph)
 {
 	dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_create");
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1" );
-	graph->render = SDL_CreateRenderer( graph->window, -1, 0 );
+	graph->render = SDL_CreateRenderer( graph->window, -1, 0);
+    if(graph->render == NULL) {
+        dbg_str(SDL_INTERFACE_ERROR,"Sdl_Graph render_create, %s", SDL_GetError());
+        exit(-1);
+    }
 }
 
 static int __render_destroy(Sdl_Graph *graph)
@@ -277,9 +281,15 @@ static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,
 
 	sprintf(buf,"%c",code);
 
-	surface = TTF_RenderText_Solid(f->ttf_font,
-                                   buf,
-                                   character_color); 
+    /*
+	 *surface = TTF_RenderText_Solid(f->ttf_font,
+     *                               buf,
+     *                               character_color); 
+     */
+    
+    surface = TTF_RenderText_Blended(f->ttf_font,
+                                     buf,
+                                     character_color); 
 
 	if(surface != NULL) {
 		((Sdl_Character *)character)->texture = SDL_CreateTextureFromSurface(graph->render, surface);

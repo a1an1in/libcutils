@@ -154,7 +154,7 @@ static int __init_window(Window *window)
                                          SDL_WINDOWPOS_UNDEFINED,
                                          window->screen_width, 
                                          window->screen_height,
-                                         SDL_WINDOW_SHOWN );
+                                         SDL_WINDOW_SHOWN);
 		if( w->sdl_window == NULL ) {
 			dbg_str(DBG_ERROR,"Window could not be created! SDL_Error: %s\n", SDL_GetError() );
 			ret = -1;

@@ -496,7 +496,7 @@ static int __load_resources(Component *component,void *window)
 
 	ta->timer         = ((Window *)window)->create_timer(window);
 	ta->timer->opaque = component;
-	ta->timer->set_timer(ta->timer, 1 * 500, cursor_timer_callback);
+	ta->timer->set_timer(ta->timer, 1 * 500, cursor_timer_callback); 
 
 	character         = (Character *)g->font->ascii['a'].character;
 	ta->cursor.height = character->height;
