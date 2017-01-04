@@ -19,7 +19,6 @@ char get_row_at_cursor(Component *component)
     cursor_t *cursor = &ta->cursor;
     uint16_t row;
 
-    dbg_str(DBG_DETAIL,"y=%d height=%d", cursor->y,cursor->height);
 	row = ta->start_line +  cursor->y / cursor->height;
 
     return row;
@@ -139,8 +138,7 @@ void move_cursor_up(Component *component)
 				}
 			}
 		} else {
-			c = *line_info->tail;
-			if(c == '\n') {
+			if((c = *line_info->tail) == '\n') {
 				c         = *(line_info->tail - 1);
 				character = (Character *)g->font->ascii[c].character;
 			} else {
@@ -213,8 +211,7 @@ void move_cursor_down(Component *component)
 			}
 		}  else {
 			cursor->y += cursor->height;
-			c         = *line_info->tail;
-			if(c == '\n') {
+			if((c = *line_info->tail) == '\n') {
 				c         = *(line_info->tail - 1);
 				character = (Character *)g->font->ascii[c].character;
 			} else {
@@ -298,27 +295,6 @@ static int reverse_cursor(Component *component,void *graph)
     object_destroy(character);   
 }
 
-static uint32_t cursor_timer_callback(uint32_t interval, void* param )
-{
-	__Timer *timer = (__Timer *)param;
-	Text_Area *ta  = (Text_Area *)timer->opaque;
-	Window *window = (Window *)ta->window;
-	Graph *g       = ((Window *)window)->graph;
-
-	/*
-	 *dbg_str(DBG_DETAIL,"cursor_timer_callback");
-	 */
-
-    if((ta->cursor_count++ % 2) == 0) {
-        reverse_cursor((Component *)ta,g);
-    } else {
-        draw_cursor((Component *)ta,g);
-    }
-
-	window->remove_timer(window, timer);
-	timer->reuse(timer);
-}
-
 static int draw_character(Component *component,char c, void *graph)
 {
     Text_Area *ta    = (Text_Area *)component;
@@ -379,6 +355,27 @@ static int erase_character(Component *component,char c, void *graph)
 	g->render_present(g);
 
     object_destroy(character);   
+}
+
+static uint32_t cursor_timer_callback(uint32_t interval, void* param )
+{
+	__Timer *timer = (__Timer *)param;
+	Text_Area *ta  = (Text_Area *)timer->opaque;
+	Window *window = (Window *)ta->window;
+	Graph *g       = ((Window *)window)->graph;
+
+	/*
+	 *dbg_str(DBG_DETAIL,"cursor_timer_callback");
+	 */
+
+    if((ta->cursor_count++ % 2) == 0) {
+        reverse_cursor((Component *)ta,g);
+    } else {
+        draw_cursor((Component *)ta,g);
+    }
+
+	window->remove_timer(window, timer);
+	timer->reuse(timer);
 }
 
 static int __construct(Text_Area *ta,char *init_str)
