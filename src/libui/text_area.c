@@ -357,6 +357,80 @@ static int erase_character(Component *component,char c, void *graph)
     object_destroy(character);   
 }
 
+int get_offset_at_dessignated_position_in_the_line(text_line_t *line, int pos, Graph *g) 
+{
+	Character *character;   
+    char c;
+    int i;
+    int w = 0;
+
+    if(pos == 0) return 0;
+
+    for( i = 0; i < line->tail - line->head + 1; i++) {
+        c         = line->head[i];
+        character = (Character *)g->font->ascii[c].character;
+        w += character->width;
+        if(w == pos){
+            return i;
+        }
+    }
+
+    dbg_str(DBG_WARNNING,"pos may has problem, not find correct offset");
+
+    return -1;
+}
+int extract_text_line_disturbed_by_inserting(Component *component, char *str, int len)
+{
+	text_line_t *line_info = NULL;
+    Iterator *cur          = NULL, *end;
+	Text_Area *ta          = (Text_Area *)component;
+	Window *window         = (Window *)ta->window;
+	Graph *g               = ((Window *)window)->graph;
+    Text *text             = ta->text;
+    cursor_t *cursor       = &ta->cursor;
+    int find_flag          = -1, line_count = 0;
+	int i                  = 0;
+    uint16_t cursor_line   = 0;
+    int os;
+
+    cur         = text->line_info->begin(text->line_info);
+    end         = text->line_info->end(text->line_info);
+
+	cursor_line = get_row_at_cursor(component);
+
+
+    for(i = 0; !end->equal(end,cur); cur->next(cur), i++) {
+		if(i == cursor_line) {
+            line_info = cur->get_vpointer(cur);
+            os = get_offset_at_dessignated_position_in_the_line(line_info, cursor->x,g);
+            if(os < 0) return -1;
+            strncpy(str, line_info->head + os, line_info->tail -line_info->head - os + 1);
+            line_count ++;
+            find_flag = 1;
+            dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + os);
+            continue;
+		}
+        if(find_flag == 1) { 
+            line_count ++;
+            line_info = cur->get_vpointer(cur);
+            if(strlen(str) + line_info->tail - line_info->head + 1 > len) {
+                dbg_str(DBG_WARNNING,"buffer too small, please check");
+                return -1;
+            }
+            dbg_str(DBG_DETAIL,"%s", line_info->head);
+            if(*line_info->tail != '\n') {
+                strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
+            }
+        }
+    }
+
+    object_destroy(cur);
+    object_destroy(end);
+
+	return line_count;
+
+}
+
 static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 {
 	__Timer *timer = (__Timer *)param;
@@ -546,28 +620,30 @@ static int __draw(Component *component, void *graph)
 
 static int __text_key_input(Component *component,char c, void *graph)
 {
-	Graph *g          = (Graph *)graph;
-    Text_Area *ta     = (Text_Area *)component;
-    cursor_t *cursor  = &ta->cursor;
-    color_t *ft_color = &ta->front_color;
-    color_t *bg_color = &ta->background_color;
+#define MAX_MODULATE_STR_LEN 1024
+	Graph *g                 = (Graph *)graph;
+    Text_Area *ta            = (Text_Area *)component;
+    cursor_t *cursor         = &ta->cursor;
+    color_t *ft_color        = &ta->front_color;
+    color_t *bg_color        = &ta->background_color;
+    int line_count_disturbed = 0;
 	Character *character;
+    char str[MAX_MODULATE_STR_LEN] = {0};
 
+
+    line_count_disturbed =  extract_text_line_disturbed_by_inserting(component, str, MAX_MODULATE_STR_LEN);
+    if(line_count_disturbed < 0) {
+        return -1;
+    }
+    dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting:%s",str);
     /*
-	 *character = (Character *)g->render_load_character(g,(uint32_t)c,g->font, 0,0,0,0xff);
-     *g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
-     *g->render_fill_rect(g,cursor->x, cursor->y, character->width, character->height);
+     *erase_character(component,c, graph);
+     *draw_character(component,c, graph);
+	 *g->render_present(g);
      */
 
-    erase_character(component,c, graph);
-    draw_character(component,c, graph);
-
-	g->render_present(g);
-
-    /*
-     *object_destroy(character);
-     */
-
+    return 0;
+#undef MAX_MODULATE_STR_LEN
 }
 
 static int __backspace_key_input(Component *component,void *graph)
