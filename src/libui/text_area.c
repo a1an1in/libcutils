@@ -371,7 +371,7 @@ int get_offset_at_dessignated_position_in_the_line(text_line_t *line, int pos, G
         character = (Character *)g->font->ascii[c].character;
         w += character->width;
         if(w == pos){
-            return i;
+            return i + 1;
         }
     }
 
@@ -408,6 +408,9 @@ int extract_text_line_disturbed_by_inserting(Component *component, char *str, in
             line_count ++;
             find_flag = 1;
             dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + os);
+            if((*line_info->tail) == '\n') {
+				break;
+			}
             continue;
 		}
         if(find_flag == 1) { 
@@ -417,10 +420,13 @@ int extract_text_line_disturbed_by_inserting(Component *component, char *str, in
                 dbg_str(DBG_WARNNING,"buffer too small, please check");
                 return -1;
             }
-            dbg_str(DBG_DETAIL,"%s", line_info->head);
-            if(*line_info->tail != '\n') {
-                strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
-            }
+			/*
+             *dbg_str(DBG_DETAIL,"%s", line_info->head);
+			 */
+			strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
+            if((*line_info->tail) == '\n') {
+				break;
+			}
         }
     }
 
@@ -566,7 +572,9 @@ static int __load_resources(Component *component,void *window)
 
 	g->font->load_ascii_character(g->font,g);
 	ta->text->parse_text(ta->text, 0, g->font);
-	ta->text->line_info->for_each(ta->text->line_info, print_line_info);
+	/*
+	 *ta->text->line_info->for_each(ta->text->line_info, print_line_info);
+	 */
 
 	ta->timer         = ((Window *)window)->create_timer(window);
 	ta->timer->opaque = component;
@@ -621,21 +629,31 @@ static int __draw(Component *component, void *graph)
 static int __text_key_input(Component *component,char c, void *graph)
 {
 #define MAX_MODULATE_STR_LEN 1024
-	Graph *g                 = (Graph *)graph;
-    Text_Area *ta            = (Text_Area *)component;
-    cursor_t *cursor         = &ta->cursor;
-    color_t *ft_color        = &ta->front_color;
-    color_t *bg_color        = &ta->background_color;
-    int line_count_disturbed = 0;
-	Character *character;
+	Graph *g                       = (Graph *)graph;
+    Text_Area *ta                  = (Text_Area *)component;
+    cursor_t *cursor               = &ta->cursor;
+    color_t *ft_color              = &ta->front_color;
+    color_t *bg_color              = &ta->background_color;
+    int disturbed_line_count       = 0;
+    int disturbed_str_len          = 0;
     char str[MAX_MODULATE_STR_LEN] = {0};
+	Character *character;
 
 
-    line_count_disturbed =  extract_text_line_disturbed_by_inserting(component, str, MAX_MODULATE_STR_LEN);
-    if(line_count_disturbed < 0) {
+    disturbed_line_count = extract_text_line_disturbed_by_inserting(component,
+																	str,
+																	MAX_MODULATE_STR_LEN);
+    if(disturbed_line_count < 0) {
         return -1;
     }
+	disturbed_str_len = strlen(str);
+	
     dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting:%s",str);
+
+	if(disturbed_str_len == 0) {
+	} else {
+	}
+
     /*
      *erase_character(component,c, graph);
      *draw_character(component,c, graph);
