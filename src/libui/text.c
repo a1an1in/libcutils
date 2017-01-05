@@ -95,7 +95,7 @@ int __parse_text(Text *text, int offset, void *font)
 	int x                         = 0, y = 0;
 	Font *f                       = (Font *)font;
 	allocator_t *allocator        = ((Obj *)text)->allocator;
-	int len, i, line_count        = 0;
+	int len, i, line_offset        = 0;
 	text_line_t line_info;
 	char c;
 	int c_witdh, c_height;
@@ -108,49 +108,61 @@ int __parse_text(Text *text, int offset, void *font)
 		c_witdh = f->get_character_width(f,c);
 		if(x == 0) {
 			memset(&line_info, 0, sizeof(line_info));
-			line_count            = -1;
+			line_offset            = -1;
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 		}
 
-		line_count++;
+		line_offset++;
 
-		if(c == '\n') {
-			line_info.line_lenth  = x;
-			line_num++;
-			line_info.string->append_char(line_info.string,c);
-			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_count;
-			text->line_info->push_back(text->line_info, &line_info);
-			x                     = 0;
-
-		} else if(x + c_witdh > line_width) {//line end
+		if(x + c_witdh > line_width) {//line end
 			line_info.line_lenth  = x;
 			line_num++;
 			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_count - 1;
+			line_info.tail        = line_info.head + line_offset - 1;
 			text->line_info->push_back(text->line_info, &line_info);
 
 			x                     = 0;
 			x                    += c_witdh;
 			memset(&line_info, 0, sizeof(line_info));
-			line_count            = 0;
+			line_offset            = 0;
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 			line_info.string->append_char(line_info.string,c);
 
-		} else if(i == len - 1) {
-			x                    += c_witdh;
-			line_info.line_lenth  = x;
-			text->total_line_num  = line_num;
-			line_info.string->append_char(line_info.string,c);
-			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_count;
-			text->line_info->push_back(text->line_info, &line_info);
-
+			if(c == '\n') {
+				line_info.line_lenth  = x;
+				line_num++;
+				line_info.string->append_char(line_info.string,c);
+				line_info.head        = line_info.string->value;
+				line_info.tail        = line_info.head + line_offset;
+				text->line_info->push_back(text->line_info, &line_info);
+				x                     = 0;
+			} else if( i == len - 1) {
+				line_info.line_lenth  = x;
+				text->total_line_num  = line_num;
+				line_info.head        = line_info.string->value;
+				line_info.tail        = line_info.head + line_offset;
+				text->line_info->push_back(text->line_info, &line_info);
+			}
 		} else {
 			x                    += c_witdh;
 			line_info.string->append_char(line_info.string,c);
+
+			if(c == '\n') {
+				line_info.line_lenth  = x;
+				line_num++;
+				line_info.head        = line_info.string->value;
+				line_info.tail        = line_info.head + line_offset;
+				text->line_info->push_back(text->line_info, &line_info);
+				x                     = 0;
+			} else if( i == len - 1) {
+				line_info.line_lenth  = x;
+				text->total_line_num  = line_num;
+				line_info.head        = line_info.string->value;
+				line_info.tail        = line_info.head + line_offset;
+				text->line_info->push_back(text->line_info, &line_info);
+			}
 		}
 
 	}

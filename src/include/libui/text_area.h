@@ -55,6 +55,7 @@ struct text_area_s{
     color_t front_color;
     color_t background_color;
     int cursor_count;
+	int char_min_width;
 };
 
 #endif
