@@ -228,7 +228,7 @@ void move_cursor_down(Component *component)
 		cursor_t bak  = *cursor;
 		bak.y        -= bak.height;
 		ta->one_line_up(component, g);
-		*cursor = bak;
+		*cursor       = bak;
 		move_cursor_down(component);
 		//line up
 	}
@@ -399,24 +399,24 @@ int extract_text_line_disturbed_by_inserting(Component *component, char *str, in
 	cursor_line = get_row_at_cursor(component);
 
 
-    for(i = 0; !end->equal(end,cur); cur->next(cur), i++) {
-		if(i == cursor_line) {
+    for (i = 0; !end->equal(end,cur); cur->next(cur), i++) {
+		if (i == cursor_line) {
             line_info = cur->get_vpointer(cur);
             os = get_offset_at_dessignated_position_in_the_line(line_info, cursor->x,g);
-            if(os < 0) return -1;
+            if (os < 0) return -1;
             strncpy(str, line_info->head + os, line_info->tail -line_info->head - os + 1);
             line_count ++;
             find_flag = 1;
             dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + os);
-            if((*line_info->tail) == '\n') {
+            if ((*line_info->tail) == '\n') {
 				break;
 			}
             continue;
 		}
-        if(find_flag == 1) { 
+        if (find_flag == 1) { 
             line_count ++;
             line_info = cur->get_vpointer(cur);
-            if(strlen(str) + line_info->tail - line_info->head + 1 > len) {
+            if (strlen(str) + line_info->tail - line_info->head + 1 > len) {
                 dbg_str(DBG_WARNNING,"buffer too small, please check");
                 return -1;
             }
@@ -424,7 +424,7 @@ int extract_text_line_disturbed_by_inserting(Component *component, char *str, in
              *dbg_str(DBG_DETAIL,"%s", line_info->head);
 			 */
 			strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
-            if((*line_info->tail) == '\n') {
+            if ((*line_info->tail) == '\n') {
 				break;
 			}
         }
