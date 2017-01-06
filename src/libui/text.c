@@ -88,7 +88,11 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num, int offset,  c
 
 }
 
-int write_n_line(Text *text, int offset, void *font)
+int rewrite_text(Text *text, int start_line,int offset,int count, char *str, int len, void *font)
+{
+}
+
+int write_new_lines(Text *text, int start_line,char *str, int len, void *font)
 {
 }
 
@@ -164,7 +168,7 @@ static void * __get(Text *text, char *attrib)
     return NULL;
 }
 
-int __write_text(Text *text, int offset, void *font)
+int __write_text(Text *text, char *content, void *font)
 {
 #define MAX_TEXT_LINE_LENTH 256
 	int line_width                = text->width;
@@ -181,10 +185,10 @@ int __write_text(Text *text, int offset, void *font)
 	int c_witdh, c_height;
 
 	memset(&line_info, 0, sizeof(line_info));
-	len  = strlen(text->content + offset);
+	len  = strlen(text->content);
 
 	for(i = 0; i < len; i++) {
-		c       = text->content[offset + i];
+        c       = content[i];
 		c_witdh = f->get_character_width(f,c);
 		if(x == 0) {
 			memset(&line_info, 0, sizeof(line_info));

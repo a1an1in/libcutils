@@ -29,7 +29,7 @@ struct text_s{
 	int (*deconstruct)(Text *text);
 	int (*set)(Text *text, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
-	int (*write_text)(Text *text, int offset, void *font);
+	int (*write_text)(Text *text, char *content, void *font);
     int (*write_char)(Text *text,int line_num,  int offset, char c,void *font);
 	void *(*get_text_line_info)(Text *text, int line_num);
 	int (*get_line_count)(Text *text);
