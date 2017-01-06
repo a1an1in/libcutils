@@ -132,8 +132,7 @@ void move_cursor_up(Component *component)
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 
-				if(cursor->x >= width_sum && cursor->x <  character->width  + width_sum)
-				{
+				if(cursor->x >= width_sum && cursor->x <  character->width  + width_sum) {
 					cursor->x      = width_sum;
 					if(c == '\n') {
 						cursor->c      = ' ';
@@ -384,88 +383,6 @@ static int erase_character(Component *component,char c, void *graph)
     object_destroy(character);   
 }
 
-int get_offset_at_dessignated_position_in_the_line(text_line_t *line, int pos, Graph *g)
-{
-	Character *character;
-    char c;
-    int i;
-    int w = 0;
-
-    if(pos == 0) return 0;
-
-    for( i = 0; i < line->tail - line->head + 1; i++) {
-        c         = line->head[i];
-        character = (Character *)g->font->ascii[c].character;
-        w += character->width;
-        if(w == pos){
-            return i + 1;
-        }
-    }
-
-    dbg_str(DBG_WARNNING,"pos may has problem, not find correct offset");
-
-    return -1;
-}
-int extract_text_line_disturbed_by_inserting(Component *component, char *str, int len)
-{
-	text_line_t *line_info = NULL;
-    Iterator *cur          = NULL, *end;
-	Text_Area *ta          = (Text_Area *)component;
-	Window *window         = (Window *)ta->window;
-	Graph *g               = ((Window *)window)->graph;
-    Text *text             = ta->text;
-    cursor_t *cursor       = &ta->cursor;
-    int find_flag          = -1, line_count = 0;
-	int i                  = 0;
-    uint16_t cursor_line   = 0;
-    int os;
-
-    cur         = text->line_info->begin(text->line_info);
-    end         = text->line_info->end(text->line_info);
-
-	cursor_line = get_row_at_cursor(component);
-
-
-    for (i = 0; !end->equal(end,cur); cur->next(cur), i++) {
-		if (i == cursor_line) {
-            line_info = cur->get_vpointer(cur);
-            os = get_offset_at_dessignated_position_in_the_line(line_info, cursor->x,g);
-            if (os < 0) return -1;
-            strncpy(str, line_info->head + os, line_info->tail -line_info->head - os + 1);
-            line_count ++;
-            find_flag = 1;
-            dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + os);
-            if ((*line_info->tail) == '\n') {
-				break;
-			} else if(line_info->tail == '\0') {
-				break;
-			}
-            continue;
-		}
-        if (find_flag == 1) { 
-            line_count ++;
-            line_info = cur->get_vpointer(cur);
-            if (strlen(str) + line_info->tail - line_info->head + 1 > len) {
-                dbg_str(DBG_WARNNING,"buffer too small, please check");
-                return -1;
-            }
-			/*
-             *dbg_str(DBG_DETAIL,"%s", line_info->head);
-			 */
-			strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
-            if ((*line_info->tail) == '\n') {
-				break;
-			}
-        }
-    }
-
-    object_destroy(cur);
-    object_destroy(end);
-
-	return line_count;
-
-}
-
 static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 {
 	__Timer *timer = (__Timer *)param;
@@ -600,7 +517,7 @@ static int __load_resources(Component *component,void *window)
     ta->window        = window;
 
 	g->font->load_ascii_character(g->font,g);
-	ta->text->parse_text(ta->text, 0, g->font);
+	ta->text->write_text(ta->text, 0, g->font);
 	/*
 	 *ta->text->line_info->for_each(ta->text->line_info, print_line_info);
 	 */
@@ -663,6 +580,7 @@ static int __text_key_input(Component *component,char c, void *graph)
 #define MAX_MODULATE_STR_LEN 1024
 	Graph *g                       = (Graph *)graph;
     Text_Area *ta                  = (Text_Area *)component;
+    Text *text                     = ta->text;
     cursor_t *cursor               = &ta->cursor;
     color_t *ft_color              = &ta->front_color;
     color_t *bg_color              = &ta->background_color;
@@ -670,9 +588,11 @@ static int __text_key_input(Component *component,char c, void *graph)
     int disturbed_str_len          = 0;
     char str[MAX_MODULATE_STR_LEN] = {0};
 	Character *character;
+    uint16_t cursor_line;
 
 
-    disturbed_line_count = extract_text_line_disturbed_by_inserting(component,
+#if 0
+    disturbed_line_count = extract_line_text_disturbed_by_inserting(component,
 																	str,
 																	MAX_MODULATE_STR_LEN);
     if(disturbed_line_count < 0) {
@@ -687,6 +607,10 @@ static int __text_key_input(Component *component,char c, void *graph)
 	} else {
 		dbg_str(DBG_DETAIL,"insert_char");
 	}
+
+#endif
+	cursor_line          = get_row_at_cursor(component);
+    disturbed_line_count = text->write_char(text,cursor_line , cursor->offset, c, g->font);
 
     /*
      *erase_character(component,c, graph);
