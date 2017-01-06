@@ -36,6 +36,8 @@ static int __set(List *list, char *attrib, void *value)
 
 	} else if(strcmp(attrib, "push_back") == 0) {
 		list->push_back = value;
+	} else if(strcmp(attrib, "insert_after") == 0) {
+		list->insert_after = value;
 	} else if(strcmp(attrib, "del") == 0) {
 		list->del = value;
 	} else if(strcmp(attrib, "for_each") == 0) {
@@ -80,6 +82,7 @@ static int __push_back(List *list,void *value)
 {
 	dbg_str(OBJ_DETAIL,"List insert");
 }
+
 
 static int __del(List *list,Iterator *iter)
 {
@@ -135,14 +138,15 @@ static class_info_entry_t list_class_info[] = {
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","push_back",__push_back,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","del",__del,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each",__for_each,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each_arg2",__for_each_arg2,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","begin",__begin,sizeof(void *)},
-	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","end",__end,sizeof(void *)},
-	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy",NULL,sizeof(void *)},
-	[12] = {ENTRY_TYPE_UINT32_T,"","value_size",NULL,sizeof(short)},
-	[13] = {ENTRY_TYPE_END},
+	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","insert_after",NULL,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","del",__del,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each",__for_each,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each_arg2",__for_each_arg2,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","begin",__begin,sizeof(void *)},
+	[11] = {ENTRY_TYPE_VFUNC_POINTER,"","end",__end,sizeof(void *)},
+	[12] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy",NULL,sizeof(void *)},
+	[13] = {ENTRY_TYPE_UINT32_T,"","value_size",NULL,sizeof(short)},
+	[14] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("List",list_class_info);
 

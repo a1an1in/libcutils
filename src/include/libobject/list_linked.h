@@ -19,6 +19,7 @@ struct Linked_List_s{
 
 	/*virtual methods reimplement*/
     int (*push_back)(List *list,void *value);
+    int (*insert_after)(List *list,Iterator *iter, void *value);
     int (*del)(List *list,Iterator *iter);
     void (*for_each)(List *list,void (*func)(Iterator *iter));
     Iterator *(*begin)(List *list);

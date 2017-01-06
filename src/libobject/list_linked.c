@@ -52,9 +52,11 @@ static int __set(List *m, char *attrib, void *value)
 		list->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		list->deconstruct = value;
-
-	} else if(strcmp(attrib, "push_back") == 0) {
+	}
+    else if(strcmp(attrib, "push_back") == 0) {
 		list->push_back = value;
+	} else if(strcmp(attrib, "insert_after") == 0) {
+		list->insert_after = value;
 	} else if(strcmp(attrib, "del") == 0) {
 		list->del = value;
 	} else if(strcmp(attrib, "for_each") == 0) {
@@ -65,8 +67,8 @@ static int __set(List *m, char *attrib, void *value)
 		list->end = value;
 	} else if(strcmp(attrib, "destroy") == 0) {
 		list->destroy = value;
-
-	} else if(strcmp(attrib, "name") == 0) {
+	}
+    else if(strcmp(attrib, "name") == 0) {
         strncpy(list->name,value,strlen(value));
 	} else {
 		dbg_str(OBJ_WARNNING,"list set, not support %s setting",attrib);
@@ -96,6 +98,16 @@ static int __push_back(List *list,void *value)
 	dbg_str(OBJ_DETAIL,"Link list push back");
 
 	return llist_push_back(l->llist,value);
+}
+
+static int __insert_after(List *list,Iterator *iter, void *value)
+{
+    Linked_List *l = (Linked_List *)list;
+	LList_Iterator *i = (LList_Iterator *)iter;
+
+    dbg_str(OBJ_DETAIL,"List insert");
+
+    return llist_insert(l->llist, &(i->list_pos), value);
 }
 
 static int __del(List *list,Iterator *iter)
@@ -144,10 +156,11 @@ static class_info_entry_t llist_list_class_info[] = {
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","push_back",__push_back,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","del",__del,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","begin",__begin,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","end",__end,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_END},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","insert_after",__insert_after,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","del",__del,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","begin",__begin,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","end",__end,sizeof(void *)},
+	[10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Linked_List",llist_list_class_info);
 
