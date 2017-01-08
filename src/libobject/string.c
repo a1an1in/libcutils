@@ -76,6 +76,8 @@ static int __set(String *string, char *attrib, void *value)
 		string->assign = value;
 	} else if(strcmp(attrib, "append_char") == 0) {
 		string->append_char = value;
+	} else if(strcmp(attrib, "replace_char") == 0) {
+		string->replace_char = value;
 	} else if(strcmp(attrib, "name") == 0) {
         strncpy(string->name,value,strlen(value));
 	} else {
@@ -139,6 +141,13 @@ static String *__append_char(String *string,char c)
     return string;
 }
 
+static String *__replace_char(String *string,int index, char c)
+{
+    string->value[index] = c;
+
+    return string;
+}
+
 static class_info_entry_t string_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -148,9 +157,10 @@ static class_info_entry_t string_class_info[] = {
 	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","pre_alloc",__pre_alloc,sizeof(void *)},
 	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","assign",__assign,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","append_char",__append_char,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_STRING,"char *","name",NULL,0},
-	[9 ] = {ENTRY_TYPE_STRING,"char *","value",NULL,0},
-	[10] = {ENTRY_TYPE_END},
+	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","replace_char",__replace_char,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_STRING,"char *","name",NULL,0},
+	[10] = {ENTRY_TYPE_STRING,"char *","value",NULL,0},
+	[11] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("String",string_class_info);

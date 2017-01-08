@@ -77,9 +77,9 @@ void move_cursor_right(Component *component)
 		character      = (Character *)g->font->ascii[c].character;
 
 		if(c == '\n') {
-			cursor->c      = ' ';
+			cursor->c  = ' ';
 		} else {
-			cursor->c      = c;
+			cursor->c  = c;
 		}
 		cursor->x     += cursor->width;
 		cursor->width  = character->width;
@@ -87,15 +87,26 @@ void move_cursor_right(Component *component)
 
 		dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
-	/*
-	 *} else if(cursor->x + cursor->width == line_info->line_lenth && 
-	 *        width - line_info->line_lenth >= ta->char_min_width) {
-	 *    cursor->c      = ' ';
-	 */
-	} else {
+	} else if (cursor->x + cursor->width == line_info->line_lenth &&
+			cursor_line < ta->text->total_line_num){
+		line_info      = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line + 1);
+		c              = line_info->head[0];
+		character      = (Character *)g->font->ascii[c].character;
+
+		dbg_str(DBG_SUC,"offset=%d, char =%c, x pos=%d, char_width =%d",
+				cursor->offset, cursor->c,cursor->x, character->width);
+		if(c == '\n') {
+			cursor->c      = ' ';
+		} else {
+			cursor->c      = c;
+		}
+
+		cursor->offset  = 0;
+		cursor->x       = 0;
+		cursor->y      += character->height;
+		cursor->width   = character->width;
 		return;
 	}
-
 
     return ;
 }
@@ -331,6 +342,7 @@ static int draw_character(Component *component,char c, void *graph)
 	character = (Character *)g->font->ascii[c].character;
     if(character->height == 0) {
         dbg_str(DBG_WARNNING,"text list may have problem");
+		return;
     }
     if(cursor->x + character->width > ((Subject *)component)->width) {
         cursor->x       = 0;
@@ -581,7 +593,7 @@ static int __text_key_input(Component *component,char c, void *graph)
 	Graph *g                       = (Graph *)graph;
     Text_Area *ta                  = (Text_Area *)component;
     Text *text                     = ta->text;
-    cursor_t *cursor               = &ta->cursor;
+    cursor_t *cursor               = &ta->cursor, cursor_bak; 
     color_t *ft_color              = &ta->front_color;
     color_t *bg_color              = &ta->background_color;
     int disturbed_line_count       = 0;
@@ -590,33 +602,23 @@ static int __text_key_input(Component *component,char c, void *graph)
 	Character *character;
     uint16_t cursor_line;
 
-
-#if 0
-    disturbed_line_count = extract_line_text_disturbed_by_inserting(component,
-																	str,
-																	MAX_MODULATE_STR_LEN);
-    if(disturbed_line_count < 0) {
-        return -1;
-    }
-	disturbed_str_len = strlen(str);
-	
-    dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting:%s",str);
-
-	if(disturbed_str_len == 0) {
-		dbg_str(DBG_DETAIL,"append_char");
-	} else {
-		dbg_str(DBG_DETAIL,"insert_char");
-	}
-
-#endif
 	cursor_line          = get_row_at_cursor(component);
-    disturbed_line_count = text->write_char(text,cursor_line , cursor->offset, c, g->font);
+    disturbed_line_count = text->write_char(text,cursor_line ,
+											cursor->offset,
+											cursor->x, 
+											c, g->font);
 
-    /*
-     *erase_character(component,c, graph);
-     *draw_character(component,c, graph);
-	 *g->render_present(g);
-     */
+	character      = (Character *)g->font->ascii[c].character;
+	cursor->c = c;
+	cursor->width = character->width;
+
+	move_cursor_right(component);
+
+	cursor_bak = *cursor;
+
+	ta->draw(component,g); 
+
+	*cursor = cursor_bak;
 
     return 0;
 #undef MAX_MODULATE_STR_LEN

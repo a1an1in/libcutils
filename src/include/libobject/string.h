@@ -17,6 +17,7 @@ struct string_s{
     String *(*pre_alloc)(String *string,uint32_t size);
     String *(*assign)(String *string,char *s);
     String *(*append_char)(String *string,char c);
+	String *(*replace_char)(String *string,int index, char c);
 
 	/*virtual methods reimplement*/
 #define MAX_NAME_LEN 50
