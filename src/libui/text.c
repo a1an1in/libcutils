@@ -146,7 +146,11 @@ int rewrite_text(Text *text, int start_line,int offset,
 			li->head       = li->string->value;
 			li->tail       = li->head + line_offset - 1;
 			dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
-			cur->next(cur);
+            if(line_num < count) {
+                cur->next(cur);
+            } else {
+                break;
+            }
 
 			x              = c_witdh;
 			li             = cur->get_vpointer(cur);
@@ -160,7 +164,11 @@ int rewrite_text(Text *text, int start_line,int offset,
 				li->head        = li->string->value;
 				li->tail        = li->head + line_offset;
 				dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
-				cur->next(cur);
+                if(line_num < count) {
+                    cur->next(cur);
+                } else {
+                    break;
+                }
 				x               = 0;
 			}
 		} else {
@@ -170,14 +178,13 @@ int rewrite_text(Text *text, int start_line,int offset,
 			 *}
 			 */
 			li->string->replace_char(li->string,line_offset, c);
-            if(x == li->line_lenth) {
-                dbg_str(DBG_SUC, "append c=%c, width =%d, line_offset=%d", c,width, line_offset);
-                /*
-                 *dbg_str(DBG_DETAIL,"new line:%s", li->head);
-                 */
-                li->line_lenth += c_witdh;
-                li->tail++;
-            }
+            /*
+             *if(x == li->line_lenth) {
+             *    dbg_str(DBG_SUC, "append c=%c, width =%d, line_offset=%d", c,width, line_offset);
+             *    li->line_lenth += c_witdh;
+             *    li->tail++;
+             *}
+             */
 			x  += c_witdh;
 
 			if(c == '\n') {
@@ -187,9 +194,20 @@ int rewrite_text(Text *text, int start_line,int offset,
 				li->tail        = li->head + line_offset;
 
 				dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
-				cur->next(cur);
+                if(line_num < count) {
+                    cur->next(cur);
+                } else {
+                    break;
+                }
 				x               = 0;
-			}
+			} else if(i == len -1) {
+				li->line_lenth  = x;
+				line_num++;
+				li->head        = li->string->value;
+				li->tail        = li->head + line_offset;
+
+				dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
+            }
 		}
 
 		line_offset++;
@@ -198,7 +216,7 @@ int rewrite_text(Text *text, int start_line,int offset,
     object_destroy(cur);
     object_destroy(end);
 
-	return line_num;
+	return i;
 #undef MAX_TEXT_LINE_LENTH
 }
 
@@ -333,7 +351,7 @@ int __write_text(Text *text, char *content, void *font)
 				x                     = 0;
 			} else if( i == len - 1) {
 				line_info.line_lenth  = x;
-				text->total_line_num  = line_num;
+				text->last_line_num  = line_num;
 				line_info.head        = line_info.string->value;
 				line_info.tail        = line_info.head + line_offset;
 				text->line_info->push_back(text->line_info, &line_info);
@@ -351,7 +369,7 @@ int __write_text(Text *text, char *content, void *font)
 				x                     = 0;
 			} else if( i == len - 1) {
 				line_info.line_lenth  = x;
-				text->total_line_num  = line_num;
+				text->last_line_num  = line_num;
 				line_info.head        = line_info.string->value;
 				line_info.tail        = line_info.head + line_offset;
 				text->line_info->push_back(text->line_info, &line_info);
@@ -427,7 +445,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 				x                     = 0;
 			} else if( i == len - 1) {
 				line_info.line_lenth  = x;
-				text->total_line_num  = line_num;
+				text->last_line_num  = line_num;
 				line_info.head        = line_info.string->value;
 				line_info.tail        = line_info.head + line_offset;
                 list->insert_after(list,cur, &line_info);
@@ -447,7 +465,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 				x                     = 0;
 			} else if( i == len - 1) {
 				line_info.line_lenth  = x;
-				text->total_line_num  = line_num;
+				text->last_line_num  = line_num;
 				line_info.head        = line_info.string->value;
 				line_info.tail        = line_info.head + line_offset;
                 list->insert_after(list,cur, &line_info);
@@ -490,13 +508,12 @@ int *__write_char(Text *text,int line_num,  int offset, int width, char c,void *
 							 line_count,
 							 str, font);
 
-#if 0
+#if 1
+    dbg_str(DBG_DETAIL,"rewrite len=%d, total_len=%d", write_len, total_len);
 	if(total_len - write_len > 0) {
 		dbg_str(DBG_WARNNING,"new a line");
-		/*
-		 *new_line_count = text->write_text(text, line_num + line_count ,str + write_len, font);
-		 *ret = line_count + new_line_count;
-		 */
+        new_line_count = text->write_text(text, line_num + line_count + 1 ,str + write_len, font);
+        ret = line_count + new_line_count;
 	} else {
 		ret = line_count;
 	}
@@ -530,7 +547,7 @@ void *__get_text_line_info(Text *text, int line_num)
 
 int __get_line_count(Text *text)
 {
-	return text->total_line_num;
+	return text->last_line_num;
 }
 
 static class_info_entry_t text_class_info[] = {

@@ -89,8 +89,9 @@ void move_cursor_right(Component *component)
 
 		dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
+
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
-			   cursor_line < text->total_line_num)
+			   cursor_line < text->last_line_num)
     {
 		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 		c               = line_info->head[0];
@@ -110,7 +111,7 @@ void move_cursor_right(Component *component)
 		cursor->width   = character->width;
 		return;
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
-			   cursor_line == text->total_line_num)
+			   cursor_line == text->last_line_num)
     {
         dbg_str(DBG_SUC,"move cursor to new field");
 		c              = ' ';
@@ -177,14 +178,14 @@ void move_cursor_up(Component *component)
 			}
 		} else {
 			if((c = *line_info->tail) == '\n') {
-				character = (Character *)g->font->ascii[c].character;
+				character      = (Character *)g->font->ascii[c].character;
 				cursor->x      = line_info->line_lenth - character->width;
 				cursor->c      = ' ';
 				cursor->offset = line_info->tail - line_info->head;
 				cursor->width  = character->width;
 				cursor->height = character->height;
 			} else {
-				character = (Character *)g->font->ascii[c].character;
+				character      = (Character *)g->font->ascii[c].character;
 				cursor->x      = line_info->line_lenth - character->width;
 				cursor->c      = c;
 				cursor->offset = line_info->tail - line_info->head - 1;
@@ -219,14 +220,14 @@ void move_cursor_down(Component *component)
 	char c                 = 0;
 	text_line_t *line_info = NULL;
 	Character *character;
-    uint16_t cursor_line,  total_line_num;
+    uint16_t cursor_line,  last_line_num;
 
 	cursor_line    = get_row_at_cursor(component);
-	total_line_num = text->get_line_count(text);
+	last_line_num = text->get_line_count(text);
 
-	if(cursor_line == total_line_num) {
+	if(cursor_line == last_line_num) {
 		dbg_str(DBG_DETAIL, "move_cursor_down, already last line, "
-				"cursor_line =%d, total_line_num =%d", cursor_line, total_line_num);
+				"cursor_line =%d, last_line_num =%d", cursor_line, last_line_num);
 		return;
 	}
 
@@ -239,16 +240,16 @@ void move_cursor_down(Component *component)
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 				if(cursor->x >= width_sum && cursor->x < width_sum + character->width) {
-					cursor->x      = width_sum;
-					cursor->c      = c;
+					cursor->x = width_sum;
+					cursor->c = c;
 					if(c == '\n') {
-						cursor->c      = ' ';
+						cursor->c = ' ';
 					} else {
-						cursor->c      = c;
+						cursor->c = c;
 					}
-					cursor->offset = i;
-					cursor->width  = character->width;
-					cursor->height = character->height;
+					cursor->offset  = i;
+					cursor->width   = character->width;
+					cursor->height  = character->height;
 
                     dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
                             cursor->offset, cursor->c,cursor->x, character->width);
@@ -356,7 +357,7 @@ static int draw_character(Component *component,char c, void *graph)
 
 	character = (Character *)g->font->ascii[c].character;
     if(character->height == 0) {
-        dbg_str(DBG_WARNNING,"text list may have problem");
+        dbg_str(DBG_WARNNING,"text list may have problem, draw c=%c", c);
 		return;
     }
     if(cursor->x + character->width > ((Subject *)component)->width) {

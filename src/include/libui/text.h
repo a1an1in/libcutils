@@ -41,7 +41,7 @@ struct text_s{
 	char *content;
     List *line_info;
 	int width;
-	int total_line_num;
+	int last_line_num;
 };
 
 #endif
