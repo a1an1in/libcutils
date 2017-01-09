@@ -460,12 +460,6 @@ static int args_process_test_Label(void *base,int argc,char **argv)
 	return 0;
 }
 
-static int args_process_test_Text_Area(void *base,int argc,char **argv)
-{
-	test_ui_text_area();
-	return 0;
-}
-
 static int args_process_test_LList(void *base,int argc,char **argv)
 {
 	test_obj_llist_list();
@@ -478,6 +472,12 @@ static int args_process_test_Text(void *base,int argc,char **argv)
 	return 0;
 }
 
+static int args_process_test_Text_Area(void *base,int argc,char **argv)
+{
+	test_ui_text_area();
+	return 0;
+}
+
 static int args_process_test_sdl_timer(void *base,int argc,char **argv)
 {
 	test_obj_sdl_timer();
@@ -485,9 +485,9 @@ static int args_process_test_sdl_timer(void *base,int argc,char **argv)
 }
 static cmd_config_t cmds[]={
 	{"Sdl_Timer", args_process_test_sdl_timer,0, "test", "N/A","test"},
+	{"Text_Area", args_process_test_Text_Area,0, "test", "N/A","test"},
 	{"Text", args_process_test_Text,0, "test", "N/A","test"},
 	{"LList", args_process_test_LList,0, "test", "N/A","test"},
-	{"Text_Area", args_process_test_Text_Area,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
 	{"SDL_Event", args_process_test_SDL_Event,0, "test", "N/A","test"},
 	{"SDL_Char", args_process_test_SDL_Character,0, "test", "N/A","test"},
@@ -564,6 +564,7 @@ int main(int argc, char *argv[])
 	dbg_str(DBG_DETAIL,"main func start");
 
 	args_process(NULL,cmds,argc, argv);
+
 	test_ui_text_area();
 
 	dbg_str(DBG_DETAIL,"main func end");

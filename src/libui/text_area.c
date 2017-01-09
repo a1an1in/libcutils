@@ -27,16 +27,17 @@ char get_row_at_cursor(Component *component)
 void move_cursor_left(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
     cursor_t *cursor       = &ta->cursor;
 	text_line_t *line_info = NULL;
+	char c                 = 0;
 	Character *character;
     uint16_t cursor_line;
-	char c = 0;
 
 	cursor_line    = get_row_at_cursor(component);
-	line_info      = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line);
+	line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
 
 	if(cursor->x == 0) {
 		dbg_str(DBG_DETAIL,"cursor x=%d width=%d",cursor->x, cursor->width);
@@ -60,6 +61,7 @@ void move_cursor_left(Component *component)
 void move_cursor_right(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
     cursor_t *cursor       = &ta->cursor;
@@ -70,7 +72,7 @@ void move_cursor_right(Component *component)
 	char c = 0;
 
 	cursor_line    = get_row_at_cursor(component);
-	line_info      = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line);
+	line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
 
 	if(cursor->x + cursor->width < line_info->line_lenth) {
 		c              = line_info->head[cursor->offset + 1];
@@ -88,8 +90,9 @@ void move_cursor_right(Component *component)
 		dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
-			cursor_line < ta->text->total_line_num){
-		line_info      = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line + 1);
+			   cursor_line < text->total_line_num)
+    {
+		line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 		c              = line_info->head[0];
 		character      = (Character *)g->font->ascii[c].character;
 
@@ -114,6 +117,7 @@ void move_cursor_right(Component *component)
 void move_cursor_up(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
     cursor_t *cursor       = &ta->cursor;
@@ -129,7 +133,7 @@ void move_cursor_up(Component *component)
 		return;
 	}
 
-	line_info = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line - 1);
+	line_info = (text_line_t *)text->get_text_line_info(text, cursor_line - 1);
 	/*
 	 *dbg_str(DBG_DETAIL,"cursor line=%d, data:%s", cursor_line, line_info->string->value);
 	 */
@@ -195,6 +199,7 @@ void move_cursor_up(Component *component)
 void move_cursor_down(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
 	cursor_t *cursor       = &ta->cursor;
@@ -207,7 +212,7 @@ void move_cursor_down(Component *component)
     uint16_t cursor_line,  total_line_num;
 
 	cursor_line    = get_row_at_cursor(component);
-	total_line_num = ta->text->get_line_count(ta->text);
+	total_line_num = text->get_line_count(text);
 
 	if(cursor_line == total_line_num) {
 		dbg_str(DBG_DETAIL, "move_cursor_down, already last line, "
@@ -215,7 +220,7 @@ void move_cursor_down(Component *component)
 		return;
 	}
 
-	line_info = (text_line_t *)ta->text->get_text_line_info(ta->text, cursor_line + 1);
+	line_info = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 
 	if(cursor->y + cursor->height * 2 < component_height) { /*not last line*/
 		if(line_info->line_lenth > cursor->x) { /*next line line_lenth greater than cursor pos*/
@@ -520,8 +525,9 @@ static void *__get(Text_Area *obj, char *attrib)
 
 static int __load_resources(Component *component,void *window)
 {
-	Graph *g          = ((Window *)window)->graph;
-	Text_Area *ta     = (Text_Area *)component;
+	Graph *g      = ((Window *)window)->graph;
+	Text_Area *ta = (Text_Area *)component;
+    Text *text    = ta->text;
 	Character *character;
 
 	dbg_str(DBG_SUC,"%s load load_resources",component->name);
@@ -529,7 +535,7 @@ static int __load_resources(Component *component,void *window)
     ta->window        = window;
 
 	g->font->load_ascii_character(g->font,g);
-	ta->text->write_text(ta->text,0, ta->text->content, g->font);
+	text->write_text(text,0, text->content, g->font);
 	/*
 	 *ta->text->line_info->for_each(ta->text->line_info, print_line_info);
 	 */
@@ -556,10 +562,11 @@ static int __unload_resources(Component *component,void *window)
 
 static int __draw(Component *component, void *graph)
 {
-	Text_Area *ta    = (Text_Area *)component;
-	Graph *g         = (Graph *)graph;
-	Subject *s       = (Subject *)component;
-    cursor_t *cursor = &ta->cursor;
+	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
+	Graph *g               = (Graph *)graph;
+	Subject *s             = (Subject *)component;
+    cursor_t *cursor       = &ta->cursor;
 	text_line_t *line_info = NULL;
     int i, j;
     char c;
@@ -575,7 +582,7 @@ static int __draw(Component *component, void *graph)
 	cursor->x = 0; cursor->y = 0; cursor->width = 0; 
 
 	for(j = ta->start_line; cursor->y < ((Subject *)component)->height; j++) {
-		line_info = (text_line_t *)ta->text->get_text_line_info(ta->text,j);
+		line_info = (text_line_t *)text->get_text_line_info(text,j);
         if(line_info == NULL) break;
 
 		for(i = 0; i < line_info->tail - line_info->head + 1; i++) {
