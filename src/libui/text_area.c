@@ -99,6 +99,7 @@ void move_cursor_right(Component *component)
 
 		dbg_str(DBG_SUC,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
+		dbg_str(DBG_DETAIL,"last_line_num=%d", text->last_line_num);
 		if(c == '\n') {
 			cursor->c   = ' ';
 		} else {
@@ -112,15 +113,14 @@ void move_cursor_right(Component *component)
 		return;
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
 			   cursor_line == text->last_line_num)
-    {
-        dbg_str(DBG_SUC,"move cursor to new field");
+	{
+		dbg_str(DBG_SUC,"move cursor to new field");
 		c              = ' ';
 		character      = (Character *)g->font->ascii[c].character;
-
-        cursor->c      = c;
+		cursor->c      = c;
 		cursor->x     += cursor->width;
 		cursor->offset++;
-    }
+	}
 
     return ;
 }
