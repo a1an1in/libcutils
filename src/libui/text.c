@@ -124,7 +124,7 @@ int rewrite_text(Text *text, int start_line,int offset,
     cur = get_iterator_of_nth_line(cur, end, start_line);
 	len = strlen(str);
 
-	dbg_str(DBG_DETAIL,"rewrite line_count:%d text:%s", count, str);
+	dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
 
 	for(i = 0; line_num < count && i < len; i++) {
 		c       = str[i];
@@ -170,6 +170,14 @@ int rewrite_text(Text *text, int start_line,int offset,
 			 *}
 			 */
 			li->string->replace_char(li->string,line_offset, c);
+            if(x == li->line_lenth) {
+                dbg_str(DBG_SUC, "append c=%c, width =%d, line_offset=%d", c,width, line_offset);
+                /*
+                 *dbg_str(DBG_DETAIL,"new line:%s", li->head);
+                 */
+                li->line_lenth += c_witdh;
+                li->tail++;
+            }
 			x  += c_witdh;
 
 			if(c == '\n') {
@@ -386,12 +394,11 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 		c_witdh = f->get_character_width(f,c);
 		if(x == 0) {
 			memset(&line_info, 0, sizeof(line_info));
-			line_offset           = -1;
+			line_offset           = 0;
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 		}
 
-		line_offset++;
 
 		if(x + c_witdh > line_width) {//line end
 			line_info.line_lenth  = x;
@@ -448,6 +455,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 			}
 		}
 
+		line_offset++;
 	}
 
     object_destroy(cur);

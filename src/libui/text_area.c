@@ -92,16 +92,16 @@ void move_cursor_right(Component *component)
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
 			   cursor_line < text->total_line_num)
     {
-		line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
-		c              = line_info->head[0];
-		character      = (Character *)g->font->ascii[c].character;
+		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
+		c               = line_info->head[0];
+		character       = (Character *)g->font->ascii[c].character;
 
 		dbg_str(DBG_SUC,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
 		if(c == '\n') {
-			cursor->c      = ' ';
+			cursor->c   = ' ';
 		} else {
-			cursor->c      = c;
+			cursor->c   = c;
 		}
 
 		cursor->offset  = 0;
@@ -109,7 +109,17 @@ void move_cursor_right(Component *component)
 		cursor->y      += character->height;
 		cursor->width   = character->width;
 		return;
-	}
+	} else if (cursor->x + cursor->width == line_info->line_lenth &&
+			   cursor_line == text->total_line_num)
+    {
+        dbg_str(DBG_SUC,"move cursor to new field");
+		c              = ' ';
+		character      = (Character *)g->font->ascii[c].character;
+
+        cursor->c      = c;
+		cursor->x     += cursor->width;
+		cursor->offset++;
+    }
 
     return ;
 }
@@ -148,15 +158,15 @@ void move_cursor_up(Component *component)
 				character = (Character *)g->font->ascii[c].character;
 
 				if(cursor->x >= width_sum && cursor->x <  character->width  + width_sum) {
-					cursor->x      = width_sum;
+					cursor->x       = width_sum;
 					if(c == '\n') {
-						cursor->c      = ' ';
+						cursor->c   = ' ';
 					} else {
-						cursor->c      = c;
+						cursor->c   = c;
 					}
-					cursor->offset = i;
-					cursor->width  = character->width;
-					cursor->height = character->height;
+					cursor->offset  = i;
+					cursor->width   = character->width;
+					cursor->height  = character->height;
 
                     dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
                             cursor->offset, cursor->c,cursor->x, character->width);
@@ -615,17 +625,17 @@ static int __text_key_input(Component *component,char c, void *graph)
 											cursor->x, 
 											c, g->font);
 
-	character      = (Character *)g->font->ascii[c].character;
-	cursor->c = c;
-	cursor->width = character->width;
+	character            = (Character *)g->font->ascii[c].character;
+	cursor->c            = c;
+	cursor->width        = character->width;
 
 	move_cursor_right(component);
 
-	cursor_bak = *cursor;
+	cursor_bak           = *cursor;
 
 	ta->draw(component,g); 
 
-	*cursor = cursor_bak;
+	*cursor              = cursor_bak;
 
     return 0;
 #undef MAX_MODULATE_STR_LEN
