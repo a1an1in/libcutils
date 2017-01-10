@@ -312,16 +312,17 @@ int inet_udp_client_send(client_t *client,
 
     return ret;
 }
-/*
- *int inet_udp_client_broadcast(client_t *cli,char *broadcast_addr, char *dest_port,void *buf,uint32_t len)
- */
-int inet_udp_client_broadcast(client_t *cli, char *dest_port,void *buf,uint32_t len)
+
+int inet_udp_client_broadcast(client_t *cli, char *broadcast_addr, char *dest_port,void *buf,uint32_t len)
 {
 	struct sockaddr_in raddr;
 
 	raddr.sin_family      = AF_INET;
 	raddr.sin_port        = htons(atoi(dest_port));
-    raddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+    /*
+     *raddr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+     */
+	inet_pton(AF_INET,broadcast_addr,&raddr.sin_addr);
 
     int broadcast = 1;
     if( setsockopt(cli->user_fd,SOL_SOCKET,SO_BROADCAST,&broadcast,sizeof(broadcast)) == -1) {

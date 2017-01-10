@@ -83,17 +83,20 @@ int test_inet_udp_client_broadcast()
 {
 	client_t *cli;
 	char buf[] = {1,2,3,4,5,6,7,8,9,10};
+    char ipaddr[50];
 	struct sockaddr_in raddr;
 	socklen_t destlen;
 	allocator_t *allocator = allocator_get_default_alloc();
 
 	cli = inet_udp_client(allocator,
-			              "192.168.20.97",//char *host,
+			              "192.168.20.87",//char *host,
 			              "1989",//char *client_port,
 			              process_task_callback,
 			              NULL);
 
-    inet_udp_client_broadcast(cli,(char *)"1989",buf,sizeof(buf));
+    get_broadcast_addr("eth0", ipaddr);
+    dbg_str(DBG_DETAIL,"boradcast addr:%s",ipaddr);
+    inet_udp_client_broadcast(cli,ipaddr, (char *)"1989",buf,sizeof(buf));
 }
 int test_inet_tcp_client_send()
 {

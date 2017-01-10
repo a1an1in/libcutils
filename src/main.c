@@ -179,7 +179,10 @@ static int args_process_test_inet_udp_client_recieve(void *base,int argc,char **
 
 static int args_process_test_inet_udp_client_send(void *base,int argc,char **argv)
 {
-    test_inet_udp_client_send();
+    /*
+     *test_inet_udp_client_send();
+     */
+    test_inet_udp_client_broadcast();
     return 0;
 }
 
@@ -565,7 +568,10 @@ int main(int argc, char *argv[])
 
 	args_process(NULL,cmds,argc, argv);
 
-	test_ui_text_area();
+    /*
+	 *test_ui_text_area();
+     */
+
 
 	dbg_str(DBG_DETAIL,"main func end");
 	pause();
