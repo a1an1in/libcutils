@@ -141,6 +141,9 @@ int rewrite_text(Text *text, int start_line,int offset,
 			x            = width;
 		} else if (x == 0) {
 			li           = cur->get_vpointer(cur);
+			/*
+			 *memset(li->string->value, 0 , li->string->value_len);
+			 */
 			line_offset  = 0;
 		} else{
 		}

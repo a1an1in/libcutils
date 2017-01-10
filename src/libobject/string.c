@@ -105,6 +105,7 @@ static String *__pre_alloc(String *string,uint32_t size)
 	dbg_str(OBJ_DETAIL,"pre_alloc, size=%d",size);
 	string->value         = (char *)allocator_mem_alloc(string->obj.allocator, size);
     string->value_max_len = size;
+	memset(string->value, 0, size);
     return string;
 }
 
