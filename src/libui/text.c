@@ -69,7 +69,9 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
             strncpy(str, line_info->head + offset, line_info->tail -line_info->head - offset + 1);
             line_count ++;
             find_flag = 1;
-            dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + offset);
+            /*
+             *dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + offset);
+             */
             if ((*line_info->tail) == '\n') {
 				break;
 			} else if(line_info->tail == '\0') {
@@ -118,14 +120,16 @@ int rewrite_text(Text *text, int start_line,int offset,
 	text_line_t *li;
 	char c;
 	int c_witdh;
-	int ret;
+	int ret = 0;
 
     cur = text->line_info->begin(text->line_info);
     end = text->line_info->end(text->line_info);
     cur = get_iterator_of_nth_line(cur, end, start_line);
 	len = strlen(str);
 
-	dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
+    /*
+	 *dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
+     */
 
 	for(i = 0; line_num < count && i < len; i++) {
 		c       = str[i];
@@ -162,7 +166,13 @@ int rewrite_text(Text *text, int start_line,int offset,
 				line_offset    = 0;
 				memset(li->string->value, 0 , li->string->value_len);
 				li->string->replace_char(li->string,line_offset, c);
-			}
+			} else if( line_num == count) {
+				li->line_lenth  = x;
+				li->head        = li->string->value;
+				li->tail        = li->head + line_offset;
+				ret = i;
+				break;
+            }
 
 		} else {
 			/*
@@ -200,6 +210,9 @@ int rewrite_text(Text *text, int start_line,int offset,
 		line_offset++;
 	}
 
+    if(ret == 0) {
+        dbg_str(DBG_WARNNING, "i=%d, line_num=%d", i, line_num);
+    }
     object_destroy(cur);
     object_destroy(end);
 
@@ -413,8 +426,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 			list->insert_after(list,cur, &line_info);
             cur->next(cur);
 
-			x                     = 0;
-			x                    += c_witdh;
+			x                     = c_witdh;
 			memset(&line_info, 0, sizeof(line_info));
 			line_offset           = 0;
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
@@ -452,7 +464,9 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 				x                     = 0;
 			} else if( i == len - 1) {
 				line_info.line_lenth  = x;
-				text->last_line_num  = line_num;
+                /*
+				 *text->last_line_num  = line_num;
+                 */
 				line_info.head        = line_info.string->value;
 				line_info.tail        = line_info.head + line_offset;
                 list->insert_after(list,cur, &line_info);
@@ -487,22 +501,25 @@ int *__write_char(Text *text,int line_num,  int offset, int width, char c,void *
     line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str + 1, MAX_MODULATE_STR_LEN, font);
 
 	total_len = strlen(str);
-	dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting, line_count=%d, value:%s",line_count, str);
-	write_len = rewrite_text(text, line_num,
-							 offset, width,
-							 line_count,
-							 str, font);
+    dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting, line_count=%d, value:%s",line_count, str);
+	write_len = rewrite_text(text, line_num, offset, width,
+							 line_count, str, font);
 
 #if 1
-    dbg_str(DBG_DETAIL,"rewrite len=%d, total_len=%d", write_len, total_len);
+    /*
+     *dbg_str(DBG_DETAIL,"rewrite len=%d, total_len=%d", write_len, total_len);
+     */
 	/*
      *dbg_str(DBG_DETAIL,"ini str:%s", str);
      *dbg_str(DBG_DETAIL,"left str:%s", str + write_len + 1);
 	 */
 	if(total_len - write_len > 0) {
-		dbg_str(DBG_WARNNING,"new a line, line_num=%d, line_count=%d,value:%s", line_num ,line_count, str + write_len);
-		new_line_count = text->write_text(text, line_num ,str + write_len, font);
+        /*
+		 *dbg_str(DBG_IMPORTANT,"new a line, line_num=%d, line_count=%d,write_len=%d, total_len=%d, value:%s", line_num ,line_count,write_len, total_len,  str + write_len);
+         */
+		new_line_count = text->write_text(text, line_num + line_count -1 ,str + write_len, font);
 		ret = line_count + new_line_count;
+        text->last_line_num += new_line_count;
 	} else {
 		ret = line_count;
 	}

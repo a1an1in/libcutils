@@ -546,7 +546,7 @@ static int __load_resources(Component *component,void *window)
     ta->window        = window;
 
 	g->font->load_ascii_character(g->font,g);
-	text->write_text(text,0, text->content, g->font);
+	text->last_line_num = text->write_text(text,0, text->content, g->font);
 	/*
 	 *ta->text->line_info->for_each(ta->text->line_info, print_line_info);
 	 */

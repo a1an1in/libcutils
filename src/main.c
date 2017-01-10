@@ -488,7 +488,7 @@ static int args_process_test_sdl_timer(void *base,int argc,char **argv)
 }
 static cmd_config_t cmds[]={
 	{"Sdl_Timer", args_process_test_sdl_timer,0, "test", "N/A","test"},
-	{"Text_Area", args_process_test_Text_Area,0, "test", "N/A","test"},
+	{"TA", args_process_test_Text_Area,0, "test", "N/A","test"},
 	{"Text", args_process_test_Text,0, "test", "N/A","test"},
 	{"LList", args_process_test_LList,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
@@ -569,9 +569,8 @@ int main(int argc, char *argv[])
 	args_process(NULL,cmds,argc, argv);
 
     /*
-	 *test_ui_text_area();
+     *test_ui_text_area();
      */
-
 
 	dbg_str(DBG_DETAIL,"main func end");
 	pause();

@@ -59,13 +59,13 @@ static void scanned_state_changing_workfunc_cb(state_machine_t *s,void *opaque)
 }
 
 static state_entry_config_t entry_config[]={
-	{"uninited", NULL,NULL, 1, 0},
-	{"init",     init_state_changing_workfunc_cb,init_state_timeoutworkfunc_cb, 1, 0},
-	{"applying", applying_state_changing_workfunc_cb,applying_state_timeoutworkfunc_cb, 2, 0},
-	{"waiting",  waiting_state_changing_workfunc_cb,waiting_state_timeoutworkfunc_cb, 15, 0},
-	{"scanning", scanning_state_changing_workfunc_cb,scanning_state_timeoutworkfunc_cb, 13, 0},
-	{"scaned",   scanned_state_changing_workfunc_cb,scanned_state_timeoutworkfunc_cb, 60, 0},
-	{"",NULL,NULL,0,0},
+    {"uninited", NULL,NULL, 1, 0},
+    {"init",     init_state_changing_workfunc_cb,init_state_timeoutworkfunc_cb, 1, 0},
+    {"applying", applying_state_changing_workfunc_cb,applying_state_timeoutworkfunc_cb, 2, 0},
+    {"waiting",  waiting_state_changing_workfunc_cb,waiting_state_timeoutworkfunc_cb, 15, 0},
+    {"scanning", scanning_state_changing_workfunc_cb,scanning_state_timeoutworkfunc_cb, 13, 0},
+    {"scaned",   scanned_state_changing_workfunc_cb,scanned_state_timeoutworkfunc_cb, 60, 0},
+    {"",NULL,NULL,0,0},
 };
 
 void test_state_machine()
