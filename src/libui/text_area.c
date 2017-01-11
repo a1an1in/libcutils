@@ -152,9 +152,9 @@ void move_cursor_up(Component *component)
 	if(cursor->y >= cursor->height) {
 		cursor->y -= cursor->height;
 
-		if(line_info->line_lenth > cursor->x) {
+		if(line_info->line_lenth > cursor->x) {/*case:upper line at cursor pos has character*/
 
-			for( i = 0; width_sum < line_info->line_lenth; i++) {
+			for( i = 0; width_sum < line_info->line_lenth; i++) { /*module proper cursor pos*/
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 
@@ -178,8 +178,8 @@ void move_cursor_up(Component *component)
 					width_sum += character->width;
 				}
 			}
-		} else {
-			if((c = *line_info->tail) == '\n') {
+		} else {/*case:upper line at cursor pos doesn' has character*/
+			if((c = *line_info->tail) == '\n') { /*last char is '\n'*/
 				character      = (Character *)g->font->ascii[c].character;
 				cursor->x      = line_info->line_lenth - character->width;
 				cursor->c      = ' ';
