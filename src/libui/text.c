@@ -24,29 +24,6 @@ static Iterator *get_iterator_of_nth_line(Iterator *cur,Iterator *end, int n)
     return cur;
 }
 
-int get_offset_at_dessignated_position_in_the_line(text_line_t *line, int pos, Font *font)
-{
-	Character *character;
-    char c;
-    int i;
-    int w = 0;
-
-    if(pos == 0) return 0;
-
-    for( i = 0; i < line->tail - line->head + 1; i++) {
-        c         = line->head[i];
-        character = (Character *)font->ascii[c].character;
-        w += character->width;
-        if(w == pos){
-            return i + 1;
-        }
-    }
-
-    dbg_str(DBG_WARNNING,"pos may has problem, not find correct offset");
-
-    return -1;
-}
-
 int extract_text_disturbed_by_inserting(Text *text, int line_num,
 										int offset,  char *str,
 										int len, Font *font)
@@ -62,9 +39,6 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
     for (i = 0; !end->equal(end,cur); cur->next(cur), i++) {
 		if (i == line_num) {
             line_info = cur->get_vpointer(cur);
-            /*
-             *os = get_offset_at_dessignated_position_in_the_line(line_info, pos,font);
-             */
             if (offset < 0) return -1;
             strncpy(str, line_info->head + offset, line_info->tail -line_info->head - offset + 1);
             line_count ++;
@@ -295,96 +269,6 @@ static void * __get(Text *text, char *attrib)
     return NULL;
 }
 
-#if 0
-int __write_text(Text *text, char *content, void *font)
-{
-
-    write_new_lines(text, 0,content,font);
-#define MAX_TEXT_LINE_LENTH 256
-	int line_width                = text->width;
-	int head_offset               = 0;
-	int tail_offset               = 0;
-	int line_num                  = 0;
-	int line_lenth                = 0;
-	int x                         = 0, y = 0;
-	Font *f                       = (Font *)font;
-	allocator_t *allocator        = ((Obj *)text)->allocator;
-	int len, i, line_offset        = 0;
-	text_line_t line_info;
-	char c;
-	int c_witdh, c_height;
-
-	memset(&line_info, 0, sizeof(line_info));
-	len  = strlen(text->content);
-
-	for(i = 0; i < len; i++) {
-        c       = content[i];
-		c_witdh = f->get_character_width(f,c);
-		if(x == 0) {
-			memset(&line_info, 0, sizeof(line_info));
-			line_offset            = -1;
-			line_info.string      = OBJECT_NEW(allocator, String,NULL);
-            line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
-		}
-
-		line_offset++;
-
-		if(x + c_witdh > line_width) {//line end
-			line_info.line_lenth  = x;
-			line_num++;
-			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_offset - 1;
-			text->line_info->push_back(text->line_info, &line_info);
-
-			x                     = 0;
-			x                    += c_witdh;
-			memset(&line_info, 0, sizeof(line_info));
-			line_offset            = 0;
-			line_info.string      = OBJECT_NEW(allocator, String,NULL);
-            line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
-			line_info.string->append_char(line_info.string,c);
-
-			if(c == '\n') {
-				line_info.line_lenth  = x;
-				line_num++;
-				line_info.string->append_char(line_info.string,c);
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-				text->line_info->push_back(text->line_info, &line_info);
-				x                     = 0;
-			} else if( i == len - 1) {
-				line_info.line_lenth  = x;
-				text->last_line_num  = line_num;
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-				text->line_info->push_back(text->line_info, &line_info);
-			}
-		} else {
-			x                    += c_witdh;
-			line_info.string->append_char(line_info.string,c);
-
-			if(c == '\n') {
-				line_info.line_lenth  = x;
-				line_num++;
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-				text->line_info->push_back(text->line_info, &line_info);
-				x                     = 0;
-			} else if( i == len - 1) {
-				line_info.line_lenth  = x;
-				text->last_line_num  = line_num;
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-				text->line_info->push_back(text->line_info, &line_info);
-			}
-		}
-
-	}
-
-	return 0;
-#undef MAX_TEXT_LINE_LENTH
-}
-#else
 int __write_text(Text *text, int start_line,char *str, void *font)
 {
 #define MAX_TEXT_LINE_LENTH 256
@@ -419,7 +303,6 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 			line_info.string      = OBJECT_NEW(allocator, String,NULL);
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 		}
-
 
 		if(x + c_witdh > line_width) {//line end
 			line_info.line_lenth  = x;
@@ -487,9 +370,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 #undef MAX_TEXT_LINE_LENTH
 }
 
-#endif
-
-int *__write_char(Text *text,int line_num,  int offset, int width, char c,void *font)
+int __write_char(Text *text,int line_num,  int offset, int width, char c,void *font)
 {
 #define MAX_MODULATE_STR_LEN 1024
     Iterator *cur, *end;

@@ -158,7 +158,9 @@ void move_cursor_up(Component *component)
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 
-				if(cursor->x >= width_sum && cursor->x <  character->width  + width_sum) {
+				if(		cursor->x >= width_sum &&
+						cursor->x <  character->width  + width_sum)
+				{
 					cursor->x       = width_sum;
 					if(c == '\n') {
 						cursor->c   = ' ';
@@ -194,8 +196,7 @@ void move_cursor_up(Component *component)
 			}
 
 		}
-	} else {
-		//line down
+	} else { //line down
 		cursor_t bak  = *cursor;
 		bak.y        += bak.height;
 		ta->one_line_down(component, g);
@@ -283,9 +284,7 @@ void move_cursor_down(Component *component)
 		ta->one_line_up(component, g);
 		*cursor       = bak;
 		move_cursor_down(component);
-		//line up
 	}
-
 
 	return ;
 }
@@ -543,7 +542,7 @@ static int __load_resources(Component *component,void *window)
 
 	dbg_str(DBG_SUC,"%s load load_resources",component->name);
 
-    ta->window        = window;
+    ta->window          = window;
 
 	g->font->load_ascii_character(g->font,g);
 	text->last_line_num = text->write_text(text,0, text->content, g->font);
@@ -551,15 +550,15 @@ static int __load_resources(Component *component,void *window)
 	 *ta->text->line_info->for_each(ta->text->line_info, print_line_info);
 	 */
 
-	ta->timer         = ((Window *)window)->create_timer(window);
-	ta->timer->opaque = component;
+	ta->timer           = ((Window *)window)->create_timer(window);
+	ta->timer->opaque   = component;
 	ta->timer->set_timer(ta->timer, 1 * 500, cursor_timer_callback); 
 
-	character         = (Character *)g->font->ascii['a'].character;
-	ta->cursor.height = character->height;
+	character           = (Character *)g->font->ascii['a'].character;
+	ta->cursor.height   = character->height;
 
-	character          = (Character *)g->font->ascii['i'].character;
-	ta->char_min_width = character->width;
+	character           = (Character *)g->font->ascii['i'].character;
+	ta->char_min_width  = character->width;
 
 	dbg_str(DBG_DETAIL,"cursor height =%d",ta->cursor.height);
 
@@ -845,7 +844,4 @@ void test_ui_text_area()
     object_destroy(window);
 
     free(set_str);
-
 }
-
-
