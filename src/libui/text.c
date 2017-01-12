@@ -50,8 +50,8 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
 				break;
 			} else if(line_info->tail == '\0') {
 				break;
-			}
-            continue;
+            } else 
+                continue;
 		}
         if (find_flag == 1) { 
             line_count ++;
@@ -65,6 +65,8 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
 			 */
 			strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
             if ((*line_info->tail) == '\n') {
+				break;
+			} else if(line_info->tail == '\0') {
 				break;
 			}
         }
@@ -172,14 +174,14 @@ int rewrite_text(Text *text, int start_line,int offset,
 				line_num++;
 				li->head        = li->string->value;
 				li->tail        = li->head + line_offset;
-				ret =  i + 1;
+				ret             = i + 1;
 				break;
 			} else if(i == len -1) {
 				li->line_lenth  = x;
 				line_num++;
 				li->head        = li->string->value;
 				li->tail        = li->head + line_offset;
-				ret =  i + 1;
+				ret             = i + 1;
 				break;
             }
 		}

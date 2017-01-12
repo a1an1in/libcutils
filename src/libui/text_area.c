@@ -114,7 +114,7 @@ void move_cursor_right(Component *component)
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
 			   cursor_line == text->last_line_num)
 	{
-		dbg_str(DBG_SUC,"move cursor to new field");
+		dbg_str(DBG_SUC,"move cursor to adding char field");
 		c              = ' ';
 		character      = (Character *)g->font->ascii[c].character;
 		cursor->c      = c;
@@ -154,7 +154,7 @@ void move_cursor_up(Component *component)
 
 		if(line_info->line_lenth > cursor->x) {/*case:upper line at cursor pos has character*/
 
-			for( i = 0; width_sum < line_info->line_lenth; i++) { /*module proper cursor pos*/
+			for( i = 0; width_sum < line_info->line_lenth; i++) { /*modulate proper cursor pos*/
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 
@@ -235,7 +235,7 @@ void move_cursor_down(Component *component)
 	line_info = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 
 	if(cursor->y + cursor->height * 2 < component_height) { /*not last line*/
-		if(line_info->line_lenth > cursor->x) { /*next line line_lenth greater than cursor pos*/
+		if(line_info->line_lenth > cursor->x) { /*next line has char at cursor pos*/
 			cursor->y   += cursor->height;
 			for( i = 0; ; i++) {
 				c         = line_info->head[i];
