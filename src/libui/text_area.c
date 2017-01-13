@@ -87,8 +87,10 @@ void move_cursor_right(Component *component)
 		cursor->width  = character->width;
 		cursor->offset++;
 
-		dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
-				cursor->offset, cursor->c,cursor->x, character->width);
+        /*
+		 *dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
+		 *        cursor->offset, cursor->c,cursor->x, character->width);
+         */
 
 	} else if (cursor->x + cursor->width == line_info->line_lenth &&
 			   cursor_line < text->last_line_num)
@@ -354,32 +356,20 @@ static int draw_character(Component *component,char c, void *graph)
     cursor_t *cursor = &ta->cursor;
 	Character *character;
 
+    if(c == '\n') { c = ' '; }
+
 	character = (Character *)g->font->ascii[c].character;
     if(character->height == 0) {
-        dbg_str(DBG_WARNNING,"text list may have problem, draw c=%c", c);
+        dbg_str(DBG_WARNNING,"text list may have problem, draw id=%d, c=%c", c,c);
+        dbg_str(DBG_WARNNING,"cursor x=%d, y=%d", cursor->x, cursor->y);
 		return;
     }
-    if(cursor->x + character->width > ((Subject *)component)->width) {
-        cursor->x       = 0;
-		cursor->y      += character->height;
-        cursor->height  = character->height;
-		cursor->width   = character->width;
-		cursor->offset  = 0;
-    }
 
-	if(character->code == '\n') {
-		cursor->x       = 0;
-		cursor->y      += character->height;
-		cursor->width   = 0;
-        cursor->height  = character->height;
-		cursor->offset  = 0;
-	} else {
-		cursor->x      += character->width;
-		g->render_write_character(g,cursor->x - character->width,cursor->y,character);/**/
-		cursor->width   = character->width;
-        cursor->height  = character->height;
-		cursor->offset++;
-	}
+    g->render_write_character(g,cursor->x, cursor->y,character);
+    cursor->x      += character->width;
+    cursor->width   = character->width;
+    cursor->height  = character->height;
+    cursor->offset++;
 
 	cursor->c = ' ';
 
@@ -595,10 +585,15 @@ static int __draw(Component *component, void *graph)
 		line_info = (text_line_t *)text->get_text_line_info(text,j);
         if(line_info == NULL) break;
 
+        /*
+         *dbg_str(DBG_DETAIL,"draw line=%d, len=%d, cursor->x =%d, cursor->y =%d,str=%s", j, line_info->tail - line_info->head, cursor->x,cursor->y,  line_info->head);
+         */
 		for(i = 0; i < line_info->tail - line_info->head + 1; i++) {
 			c = line_info->head[i];
 			draw_character(component,c, graph);
 		}
+        cursor->x       = 0;
+		cursor->y      += cursor->height;
 	}
 
 	g->render_present(g);

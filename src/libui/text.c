@@ -106,6 +106,9 @@ int rewrite_text(Text *text, int start_line,int offset,
     /*
 	 *dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
      */
+    /*
+     *dbg_str(DBG_DETAIL,"rewrite_text:offset=%d",offset);
+     */
 
 	for(i = 0; line_num < count && i < len; i++) {
 		c       = str[i];
@@ -387,7 +390,9 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
     line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str + 1, MAX_MODULATE_STR_LEN, font);
 
 	total_len = strlen(str);
-    dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting, line_count=%d, value:%s",line_count, str);
+    /*
+     *dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting, line_count=%d, value:%s",line_count, str);
+     */
 	write_len = rewrite_text(text, line_num, offset, width,
 							 line_count, str, font);
 
