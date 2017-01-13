@@ -34,6 +34,7 @@ struct text_s{
      */
     int (*write_text)(Text *text, int start_line,char *str, void *font);
     int (*write_char)(Text *text,int line_num,  int offset, int width, char c,void *font);
+    int (*delete_char)(Text *text,int line_num,  int offset, int width, void *font);
 	void *(*get_text_line_info)(Text *text, int line_num);
 	int (*get_line_count)(Text *text);
 

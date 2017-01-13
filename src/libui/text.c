@@ -252,6 +252,8 @@ static int __set(Text *text, char *attrib, void *value)
 		text->write_text = value;
 	} else if(strcmp(attrib, "write_char") == 0) {
 		text->write_char = value;
+	} else if(strcmp(attrib, "delete_char") == 0) {
+		text->delete_char = value;
 	} else if(strcmp(attrib, "get_line_count") == 0) {
 		text->get_line_count = value;
 	} else if(strcmp(attrib, "get_text_line_info") == 0) {
@@ -420,6 +422,37 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
 #undef MAX_MODULATE_STR_LEN
 }
 
+int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
+{
+#define MAX_MODULATE_STR_LEN 1024
+    Iterator *cur, *end;
+	text_line_t *line_info;
+	int i   = 0;
+	int ret = -1;
+    char str[MAX_MODULATE_STR_LEN] = {0};
+    int line_count, new_line_count;
+	int total_len, write_len;
+    char c;
+
+    line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
+
+	rewrite_text(text, line_num, offset, width, line_count, str + 1, font);
+
+    memset(str, 0, MAX_MODULATE_STR_LEN);
+    new_line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
+    if(line_count == new_line_count) {
+        dbg_str(DBG_DETAIL,"run at here");
+        return;
+    } else {
+        dbg_str(DBG_DETAIL,"run at here");
+        return;
+    }
+
+
+	return ret;
+#undef MAX_MODULATE_STR_LEN
+}
+
 void *__get_text_line_info(Text *text, int line_num)
 {
     Iterator *cur, *end;
@@ -455,10 +488,11 @@ static class_info_entry_t text_class_info[] = {
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","write_text",__write_text,sizeof(void *)},
     [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","write_char",__write_char,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_line_count",__get_line_count,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_text_line_info",__get_text_line_info,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_NORMAL_POINTER,"","List",NULL,sizeof(void *)},
-    [10] = {ENTRY_TYPE_END},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","delete_char",__delete_char,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_line_count",__get_line_count,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","get_text_line_info",__get_text_line_info,sizeof(void *)},
+    [10] = {ENTRY_TYPE_NORMAL_POINTER,"","List",NULL,sizeof(void *)},
+    [11] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Text",text_class_info);
