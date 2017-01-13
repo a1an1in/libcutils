@@ -40,21 +40,21 @@ void move_cursor_left(Component *component)
 	line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
 
     if (cursor->x > 0) {
-        c              = line_info->head[cursor->offset - 1];
-        character      = (Character *)g->font->ascii[c].character;
-        cursor->c      = c;
-        cursor->x     -= character->width;
-        cursor->width  = character->width;
+        c                 = line_info->head[cursor->offset - 1];
+        character         = (Character *)g->font->ascii[c].character;
+        cursor->c         = c;
+        cursor->x        -= character->width;
+        cursor->width     = character->width;
         cursor->offset--;
     } else if (cursor->x == 0 && cursor->y > 0) {
-		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line - 1);
-        c               = *line_info->tail;
-        character       = (Character *)g->font->ascii[c].character;
-        cursor->c       = c;
-        cursor->x       = line_info->line_lenth - character->width;
-        cursor->y      -= character->height;
-        cursor->width   = character->width;
-        cursor->offset  = line_info->tail - line_info->head;
+		line_info         = (text_line_t *)text->get_text_line_info(text, cursor_line - 1);
+        c                 = *line_info->tail;
+        character         = (Character *)g->font->ascii[c].character;
+        cursor->c         = c;
+        cursor->x         = line_info->line_lenth - character->width;
+        cursor->y        -= character->height;
+        cursor->width     = character->width;
+        cursor->offset    = line_info->tail - line_info->head;
     } else if (cursor->x == 0 && cursor->y == 0 && ta->start_line > 0) {
 		dbg_str(DBG_DETAIL,"run at here");
 		return;
@@ -313,7 +313,6 @@ static int draw_cursor(Component *component,void *graph)
     char c;
 
 	c         = cursor->c;
-
     character = g->render_load_character(g,c,g->font,
                                          bg_color->r,
                                          bg_color->g, 
@@ -342,7 +341,6 @@ static int reverse_cursor(Component *component,void *graph)
     char c;
 
 	c         = cursor->c;
-
     character = g->render_load_character(g,c,g->font,
                                          ft_color->r,
                                          ft_color->g,
@@ -404,6 +402,53 @@ static int erase_character(Component *component,char c, void *graph)
 	g->render_present(g);
 
     object_destroy(character);   
+}
+
+static int erase_a_line_of_text(Component *component,int line_num, void *graph)
+{
+	Text_Area *ta     = (Text_Area *)component;
+    Text *text        = ta->text;
+	Graph *g          = (Graph *)graph;
+	Subject *s        = (Subject *)component;
+    color_t *bg_color = &ta->background_color;
+    int height        = ta->char_height;
+
+    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+    g->render_fill_rect(g,0, line_num * height, s->width, height);
+}
+
+static int draw_a_line_of_text(Component *component,int line_num, void *graph)
+{
+	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
+	Graph *g               = (Graph *)graph;
+	Subject *s             = (Subject *)component;
+    cursor_t *cursor       = &ta->cursor;
+	text_line_t *line_info = NULL;
+    int i;
+    char c;
+
+    /*
+	 *dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
+     */
+
+    erase_a_line_of_text(component,line_num, graph);
+
+    cursor->x = 0; 
+    cursor->y = line_num * ta->char_height;
+    cursor->width = 0; 
+
+    line_info = (text_line_t *)text->get_text_line_info(text,line_num);
+    if(line_info == NULL) return;
+
+    for(i = 0; i < line_info->tail - line_info->head + 1; i++) {
+        c = line_info->head[i];
+        draw_character(component,c, graph);
+    }
+    cursor->x       = 0;
+    cursor->y      += cursor->height;
+    cursor->offset  = 0;
+	g->render_present(g);
 }
 
 static uint32_t cursor_timer_callback(uint32_t interval, void* param )
@@ -555,6 +600,7 @@ static int __load_resources(Component *component,void *window)
 
 	character           = (Character *)g->font->ascii['i'].character;
 	ta->char_min_width  = character->width;
+    ta->char_height     = character->height;
 
 	dbg_str(DBG_DETAIL,"cursor height =%d",ta->cursor.height);
 
