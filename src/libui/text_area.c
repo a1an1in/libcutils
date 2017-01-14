@@ -85,11 +85,11 @@ void move_cursor_right(Component *component)
 	cursor_line    = get_row_at_cursor(component);
 	line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
 
-	if(cursor->x + cursor->width < line_info->line_lenth) {
+	if (cursor->x + cursor->width < line_info->line_lenth) {
 		c              = line_info->head[cursor->offset + 1];
 		character      = (Character *)g->font->ascii[c].character;
 
-		if(c == '\n') {
+		if (c == '\n') {
 			cursor->c  = ' ';
 		} else {
 			cursor->c  = c;
@@ -151,7 +151,7 @@ void move_cursor_up(Component *component)
 	char c = 0;
 
 	cursor_line = get_row_at_cursor(component);
-	if(ta->start_line == cursor_line && cursor_line == 0) {
+	if (ta->start_line == cursor_line && cursor_line == 0) {
 		return;
 	}
 
@@ -160,16 +160,16 @@ void move_cursor_up(Component *component)
 	 *dbg_str(DBG_DETAIL,"cursor line=%d, data:%s", cursor_line, line_info->string->value);
 	 */
 
-	if(cursor->y >= cursor->height) {
+	if (cursor->y >= cursor->height) {
 		cursor->y -= cursor->height;
 
-		if(line_info->line_lenth > cursor->x) {/*case:upper line at cursor pos has character*/
+		if (line_info->line_lenth > cursor->x) {/*case:upper line at cursor pos has character*/
 
-			for( i = 0; width_sum < line_info->line_lenth; i++) { /*modulate proper cursor pos*/
+			for ( i = 0; width_sum < line_info->line_lenth; i++) { /*modulate proper cursor pos*/
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 
-				if(		cursor->x >= width_sum &&
+				if (	cursor->x >= width_sum &&
 						cursor->x <  character->width  + width_sum)
 				{
 					cursor->x       = width_sum;
@@ -237,7 +237,7 @@ void move_cursor_down(Component *component)
 	cursor_line    = get_row_at_cursor(component);
 	last_line_num = text->get_line_count(text);
 
-	if(cursor_line == last_line_num) {
+	if (cursor_line == last_line_num) {
 		dbg_str(DBG_DETAIL, "move_cursor_down, already last line, "
 				"cursor_line =%d, last_line_num =%d", cursor_line, last_line_num);
 		return;
@@ -245,16 +245,18 @@ void move_cursor_down(Component *component)
 
 	line_info = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 
-	if(cursor->y + cursor->height * 2 < component_height) { /*not last line*/
-		if(line_info->line_lenth > cursor->x) { /*next line has char at cursor pos*/
+	if (cursor->y + cursor->height * 2 < component_height) { /*not last line*/
+		if (line_info->line_lenth > cursor->x) { /*next line has char at cursor pos*/
 			cursor->y   += cursor->height;
-			for( i = 0; ; i++) {
+			for (i = 0; ; i++) {
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
-				if(cursor->x >= width_sum && cursor->x < width_sum + character->width) {
+				if (	cursor->x >= width_sum &&
+						cursor->x < width_sum + character->width)
+				{
 					cursor->x = width_sum;
 					cursor->c = c;
-					if(c == '\n') {
+					if (c == '\n') {
 						cursor->c = ' ';
 					} else {
 						cursor->c = c;
@@ -272,7 +274,7 @@ void move_cursor_down(Component *component)
 			}
 		}  else {
 			cursor->y += cursor->height;
-			if((c = *line_info->tail) == '\n') {
+			if ((c = *line_info->tail) == '\n') {
 				character = (Character *)g->font->ascii[c].character;
 				cursor->x      = line_info->line_lenth - character->width;
 				cursor->c      = ' ';
@@ -364,7 +366,7 @@ static int draw_character(Component *component,char c, void *graph)
 	Character *character;
 
 	character = (Character *)g->font->ascii[c].character;
-    if(character->height == 0) {
+    if (character->height == 0) {
         dbg_str(DBG_WARNNING,"text list may have problem, draw id=%d, c=%c", c,c);
 		return;
     }
@@ -434,14 +436,14 @@ static int draw_a_line_of_text(Component *component,int line_num, void *graph)
 
     erase_a_line_of_text(component,line_num, graph);
 
-    cursor->x = 0; 
-    cursor->y = line_num * ta->char_height;
-    cursor->width = 0; 
+    cursor->x     = 0;
+    cursor->y     = line_num * ta->char_height;
+    cursor->width = 0;
 
     line_info = (text_line_t *)text->get_text_line_info(text,line_num);
-    if(line_info == NULL) return;
+    if (line_info == NULL) return;
 
-    for(i = 0; i < line_info->tail - line_info->head + 1; i++) {
+    for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
         c = line_info->head[i];
         draw_character(component,c, graph);
     }
@@ -509,7 +511,7 @@ static int __deconstrcut(Text_Area *ta)
 
     object_destroy(ta->string);
     object_destroy(ta->text);
-	if(ta->timer) {
+	if (ta->timer) {
 		object_destroy(ta->timer);
 	}
 
@@ -518,7 +520,7 @@ static int __deconstrcut(Text_Area *ta)
 
 static int __set(Text_Area *ta, char *attrib, void *value)
 {
-	if(strcmp(attrib, "set") == 0) {
+	if (strcmp(attrib, "set") == 0) {
 		ta->set = value;
     } else if(strcmp(attrib, "get") == 0) {
 		ta->get = value;
@@ -528,33 +530,33 @@ static int __set(Text_Area *ta, char *attrib, void *value)
 		ta->deconstruct = value;
 	}
 	/*vitual methods*/
-	else if(strcmp(attrib, "draw") == 0) {
+	else if (strcmp(attrib, "draw") == 0) {
 		ta->draw = value;
-	} else if(strcmp(attrib, "load_resources") == 0) {
+	} else if (strcmp(attrib, "load_resources") == 0) {
 		ta->load_resources = value;
-	} else if(strcmp(attrib, "text_key_input") == 0) {
+	} else if (strcmp(attrib, "text_key_input") == 0) {
 		ta->text_key_input = value;
-	} else if(strcmp(attrib, "backspace_key_input") == 0) {
+	} else if (strcmp(attrib, "backspace_key_input") == 0) {
 		ta->backspace_key_input = value;
-	} else if(strcmp(attrib, "up_key_down") == 0) {
+	} else if (strcmp(attrib, "up_key_down") == 0) {
 		ta->up_key_down = value;
-	} else if(strcmp(attrib, "down_key_down") == 0) {
+	} else if (strcmp(attrib, "down_key_down") == 0) {
 		ta->down_key_down = value;
-	} else if(strcmp(attrib, "left_key_down") == 0) {
+	} else if (strcmp(attrib, "left_key_down") == 0) {
 		ta->left_key_down = value;
-	} else if(strcmp(attrib, "right_key_down") == 0) {
+	} else if (strcmp(attrib, "right_key_down") == 0) {
 		ta->right_key_down = value;
-	} else if(strcmp(attrib, "pageup_key_down") == 0) {
+	} else if (strcmp(attrib, "pageup_key_down") == 0) {
 		ta->pageup_key_down = value;
-	} else if(strcmp(attrib, "pagedown_key_down") == 0) {
+	} else if (strcmp(attrib, "pagedown_key_down") == 0) {
 		ta->pagedown_key_down = value;
-	} else if(strcmp(attrib, "one_line_up") == 0) {
+	} else if (strcmp(attrib, "one_line_up") == 0) {
 		ta->one_line_up = value;
-	} else if(strcmp(attrib, "one_line_down") == 0) {
+	} else if (strcmp(attrib, "one_line_down") == 0) {
 		ta->one_line_down = value;
 	}
 	/*attribs*/
-	else if(strcmp(attrib, "name") == 0) {
+	else if (strcmp(attrib, "name") == 0) {
         strncpy(ta->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"ta set, not support %s setting",attrib);
@@ -565,7 +567,7 @@ static int __set(Text_Area *ta, char *attrib, void *value)
 
 static void *__get(Text_Area *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(DBG_WARNNING,"text_area get, \"%s\" getting attrib is not supported",attrib);
@@ -633,14 +635,14 @@ static int __draw(Component *component, void *graph)
 
 	cursor->x = 0; cursor->y = 0; cursor->width = 0; 
 
-	for(j = ta->start_line; cursor->y < ((Subject *)component)->height; j++) {
+	for (j = ta->start_line; cursor->y < ((Subject *)component)->height; j++) {
 		line_info = (text_line_t *)text->get_text_line_info(text,j);
-        if(line_info == NULL) break;
+        if (line_info == NULL) break;
 
         /*
          *dbg_str(DBG_DETAIL,"draw line=%d, len=%d, cursor->x =%d, cursor->y =%d,str=%s", j, line_info->tail - line_info->head, cursor->x,cursor->y,  line_info->head);
          */
-		for(i = 0; i < line_info->tail - line_info->head + 1; i++) {
+		for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
 			c = line_info->head[i];
 			draw_character(component,c, graph);
 		}
@@ -648,19 +650,19 @@ static int __draw(Component *component, void *graph)
 		cursor->y      += cursor->height;
 	}
 
-    cursor->x = 0;
-    cursor->y = 0;
+    cursor->x      = 0;
+    cursor->y      = 0;
     cursor->offset = 0;
 	g->render_present(g);
 }
 
 static int __text_key_input(Component *component,char c, void *graph)
 {
-	Graph *g                       = (Graph *)graph;
-    Text_Area *ta                  = (Text_Area *)component;
-    Text *text                     = ta->text;
-    cursor_t *cursor               = &ta->cursor, cursor_bak; 
-    int disturbed_line_count       = 0;
+	Graph *g                 = (Graph *)graph;
+    Text_Area *ta            = (Text_Area *)component;
+    Text *text               = ta->text;
+    cursor_t *cursor         = &ta->cursor, cursor_bak;
+    int disturbed_line_count = 0;
 	Character *character;
     uint16_t cursor_line;
 
@@ -818,10 +820,10 @@ static int __one_line_down(Component *component,void *graph)
 	cursor->y        = 0;
 	cursor->x        = 0;
 
-	if(ta->start_line) {
+	if (ta->start_line) {
 		ta->start_line--;
 		ta->draw(component,graph); 
-	} else if(ta->start_line == 0) {
+	} else if (ta->start_line == 0) {
 		ta->draw(component,graph); 
 	}
 

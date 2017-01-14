@@ -24,6 +24,21 @@ static Iterator *get_iterator_of_nth_line(Iterator *cur,Iterator *end, int n)
     return cur;
 }
 
+int delete_nth_line(Text *text, int line_num)
+{
+    Iterator *cur = NULL, *end;
+    List *list  = text->line_info;
+
+    cur = text->line_info->begin(text->line_info);
+    end = text->line_info->end(text->line_info);
+    cur = get_iterator_of_nth_line(cur, end, line_num);
+
+	list->del(list,cur);
+
+    object_destroy(cur);
+    object_destroy(end);
+}
+
 int extract_text_disturbed_by_inserting(Text *text, int line_num,
 										int offset,  char *str,
 										int len, Font *font)
@@ -103,9 +118,9 @@ int rewrite_text(Text *text, int start_line,int offset,
     cur = get_iterator_of_nth_line(cur, end, start_line);
 	len = strlen(str);
 
-    /*
+	/*
 	 *dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
-     */
+	 */
     /*
      *dbg_str(DBG_DETAIL,"rewrite_text:offset=%d",offset);
      */
@@ -114,86 +129,62 @@ int rewrite_text(Text *text, int start_line,int offset,
 		c       = str[i];
 		c_witdh = f->get_character_width(f,c);
 
-		if(i == 0) {
+		if (i == 0) {
 			li           = cur->get_vpointer(cur);
 			line_offset  = offset;
 			x            = width;
-		} else if (x == 0) {
-			li           = cur->get_vpointer(cur);
-			/*
-			 *memset(li->string->value, 0 , li->string->value_len);
-			 */
-			line_offset  = 0;
-		} else{
 		}
 
-		if(x + c_witdh > line_width) {//line end
+		if (x + c_witdh <= line_width) {
+			li->string->replace_char(li->string,line_offset, c);
+			x  += c_witdh;
+
+			if (c == '\n') {
+				li->line_lenth  = x;
+				li->head        = li->string->value;
+				li->tail        = li->head + line_offset;
+				ret             = i + 1;
+				break;
+			} else if (i == len -1) {
+				li->line_lenth  = x;
+				li->head        = li->string->value;
+				li->tail        = li->head + line_offset;
+				ret             = i + 1;
+				break;
+            }
+		} else if (x + c_witdh > line_width) {//line end
 			li->line_lenth = x;
-			line_num++;
 			li->head       = li->string->value;
 			li->tail       = li->head + line_offset - 1;
+			line_num++;
 			/*
 			 *dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
 			 */
-			if(c == '\n') {
-				li->line_lenth  = x;
-				li->head        = li->string->value;
-				li->tail        = li->head + line_offset;
-				ret = i;
-				break;
-			} else if(line_num < count) {
+			if(line_num < count) {
 				cur->next(cur);
-				x              = c_witdh;
 				li             = cur->get_vpointer(cur);
-				line_offset    = 0;
 				memset(li->string->value, 0 , li->string->value_len);
+				line_offset    = 0;
 				li->string->replace_char(li->string,line_offset, c);
+				x              = c_witdh;
+
+				if (i == len -1) {
+					li->line_lenth  = x;
+					li->head        = li->string->value;
+					li->tail        = li->head + line_offset;
+					ret             = i + 1;
+					break;
+				}
 			} else if( line_num == count) {
-				li->line_lenth  = x;
-				li->head        = li->string->value;
-				li->tail        = li->head + line_offset;
 				ret = i;
-				break;
-            }
-
-		} else {
-			/*
-			 *if(i == 0) {
-			 *    dbg_str(DBG_SUC, "inset c=%c, width =%d, line_offset=%d", c,width, line_offset);
-			 *}
-			 */
-			li->string->replace_char(li->string,line_offset, c);
-            /*
-             *if(x == li->line_lenth) {
-             *    dbg_str(DBG_SUC, "append c=%c, width =%d, line_offset=%d", c,width, line_offset);
-             *    li->line_lenth += c_witdh;
-             *    li->tail++;
-             *}
-             */
-			x  += c_witdh;
-
-			if(c == '\n') {
-				li->line_lenth  = x;
-				line_num++;
-				li->head        = li->string->value;
-				li->tail        = li->head + line_offset;
-				ret             = i + 1;
-				break;
-			} else if(i == len -1) {
-				li->line_lenth  = x;
-				line_num++;
-				li->head        = li->string->value;
-				li->tail        = li->head + line_offset;
-				ret             = i + 1;
 				break;
             }
 		}
-
 		line_offset++;
 	}
 
     if(ret == 0) {
-        dbg_str(DBG_WARNNING, "i=%d, line_num=%d", i, line_num);
+        dbg_str(DBG_WARNNING, "rewrite_text warnning, i=%d, line_num=%d, count=%d, len=%d", i, line_num,count, len);
     }
     object_destroy(cur);
     object_destroy(end);
@@ -436,17 +427,19 @@ int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
 
     line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
 
+	dbg_str(DBG_DETAIL,"delete_char, text_disturbed:%s",str + 1);
 	rewrite_text(text, line_num, offset, width, line_count, str + 1, font);
 
     memset(str, 0, MAX_MODULATE_STR_LEN);
     new_line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
     if(line_count == new_line_count) {
-        dbg_str(DBG_DETAIL,"run at here");
+        return;
+    } else if (line_count - new_line_count == 1) {
+		delete_nth_line(text, line_num + line_count - 1);
         return;
     } else {
-        dbg_str(DBG_DETAIL,"run at here");
-        return;
-    }
+		dbg_str(DBG_DETAIL,"run at here");
+	}
 
 
 	return ret;
