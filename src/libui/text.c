@@ -174,13 +174,22 @@ int rewrite_text(Text *text, int start_line,int offset,
 				li->string->replace_char(li->string,line_offset, c);
 				x              = c_witdh;
 
-				if (i == len -1) {
+				if (c == '\n') {
 					li->line_lenth  = x;
 					li->head        = li->string->value;
 					li->tail        = li->head + line_offset;
 					ret             = i + 1;
+					line_num++;
+					break;
+				} else if (i == len -1) {
+					li->line_lenth  = x;
+					li->head        = li->string->value;
+					li->tail        = li->head + line_offset;
+					ret             = i + 1;
+					line_num++;
 					break;
 				}
+
 			} else if( line_num == count) {
 				ret = i;
 				break;

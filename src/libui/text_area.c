@@ -101,8 +101,17 @@ void move_cursor_right(Component *component)
         dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
                 cursor->offset, cursor->c,cursor->x, character->width);
 
-	} else if (cursor->x + cursor->width == line_info->line_lenth &&
-			   cursor_line < text->last_line_num)
+	} 
+	/*when insert char at end of line, may be the case:
+	 * 1.cursor->x == line_info->line_lenth
+	 * 2.cursor->x + cursor->width > line_info->line_lenth;
+	 *if just move cursor in text, olny has one case:
+	 * 1.cursor->x + cursor->width == line_info->line_lenth
+	 * */
+	else if ((cursor->x + cursor->width >= line_info->line_lenth &&
+			    cursor_line < text->last_line_num) ||
+			   (cursor->x == line_info->line_lenth &&
+				cursor_line == text->last_line_num))
     {
 		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 		c               = line_info->head[0];
@@ -131,6 +140,11 @@ void move_cursor_right(Component *component)
 		cursor->c      = c;
 		cursor->x     += cursor->width;
 		cursor->offset++;
+	} else {
+		dbg_str(DBG_WARNNING,
+				"curor x=%d width=%d line_num=%d line_lenth=%d last_line_num=%d",
+				cursor->x, cursor->width, cursor_line, line_info->line_lenth, 
+				text->last_line_num);
 	}
 
     return ;
@@ -163,9 +177,10 @@ void move_cursor_up(Component *component)
 	if (cursor->y >= cursor->height) {
 		cursor->y -= cursor->height;
 
-		if (line_info->line_lenth > cursor->x) {/*case:upper line at cursor pos has character*/
-
-			for ( i = 0; width_sum < line_info->line_lenth; i++) { /*modulate proper cursor pos*/
+		/*case:upper line at cursor pos has character*/
+		if (line_info->line_lenth > cursor->x) {
+			/*modulate proper cursor pos*/
+			for ( i = 0; width_sum < line_info->line_lenth; i++) { 
 				c         = line_info->head[i];
 				character = (Character *)g->font->ascii[c].character;
 
@@ -189,8 +204,11 @@ void move_cursor_up(Component *component)
 					width_sum += character->width;
 				}
 			}
-		} else {/*case:upper line at cursor pos doesn' has character*/
-			if ((c = *line_info->tail) == '\n') { /*last char is '\n'*/
+		}
+		/*case:upper line at cursor pos doesn' has character*/ 
+		else {
+			/*last char is '\n'*/
+			if ((c = *line_info->tail) == '\n') { 
 				character      = (Character *)g->font->ascii[c].character;
 				cursor->x      = line_info->line_lenth - character->width;
 				cursor->c      = ' ';
@@ -245,8 +263,10 @@ void move_cursor_down(Component *component)
 
 	line_info = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 
-	if (cursor->y + cursor->height * 2 < component_height) { /*not last line*/
-		if (line_info->line_lenth > cursor->x) { /*next line has char at cursor pos*/
+	/*not last line*/
+	if (cursor->y + cursor->height * 2 < component_height) {
+		/*next line has char at cursor pos*/
+		if (line_info->line_lenth > cursor->x) { 
 			cursor->y   += cursor->height;
 			for (i = 0; ; i++) {
 				c         = line_info->head[i];
@@ -683,6 +703,7 @@ static int __text_key_input(Component *component,char c, void *graph)
 	ta->draw(component,g); 
 
 	*cursor              = cursor_bak;
+    draw_cursor(component,g);
 
     return 0;
 }
@@ -716,6 +737,7 @@ static int __backspace_key_input(Component *component,void *graph)
 	cursor_bak           = *cursor;
 	ta->draw(component,g); 
 	*cursor              = cursor_bak;
+    draw_cursor(component,g);
 
     return 0;
 }
