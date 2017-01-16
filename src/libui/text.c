@@ -436,6 +436,7 @@ int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
         return;
     } else if (line_count - new_line_count == 1) {
 		delete_nth_line(text, line_num + line_count - 1);
+        text->last_line_num--;
         return;
     } else {
 		dbg_str(DBG_DETAIL,"run at here");
