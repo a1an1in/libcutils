@@ -19,7 +19,7 @@ char get_row_at_cursor(Component *component)
     cursor_t *cursor = &ta->cursor;
     uint16_t row;
 
-	row = ta->start_line +  cursor->y / cursor->height;
+	row = ta->start_line + cursor->y / cursor->height;
 
     return row;
 }
@@ -56,10 +56,10 @@ void move_cursor_left(Component *component)
         cursor->width     = character->width;
         cursor->offset    = line_info->tail - line_info->head;
     } else if (cursor->x == 0 && cursor->y == 0 && ta->start_line > 0) {
-		dbg_str(DBG_DETAIL,"run at here");
+		dbg_str(DBG_DETAIL,"at head of screan");
 		return;
     } else if (cursor->x == 0 && cursor->y == 0 && ta->start_line == 0) {
-		dbg_str(DBG_DETAIL,"run at here");
+		dbg_str(DBG_DETAIL,"already at head of text");
         return;
     }
 
@@ -111,7 +111,7 @@ void move_cursor_right(Component *component)
 		dbg_str(DBG_SUC,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
 		dbg_str(DBG_DETAIL,"last_line_num=%d", text->last_line_num);
-		if(c == '\n') {
+		if (c == '\n') {
 			cursor->c   = ' ';
 		} else {
 			cursor->c   = c;
@@ -173,7 +173,7 @@ void move_cursor_up(Component *component)
 						cursor->x <  character->width  + width_sum)
 				{
 					cursor->x       = width_sum;
-					if(c == '\n') {
+					if (c == '\n') {
 						cursor->c   = ' ';
 					} else {
 						cursor->c   = c;

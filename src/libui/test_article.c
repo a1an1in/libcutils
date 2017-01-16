@@ -21,4 +21,5 @@
  */
 
 char *global_text = "    A newly published book on the documents of a late United States diplomat, who was also a scholar on Tibet, has provided conclusive evidence that the envoy in the early 20th century considered Tibet to be an inseparable part of China. Selected Documents Relating to Tibet from William W. Rockhill Papers, compiled by Cheng Long, a former associate professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.  William Rockhill (1854-1914), a US diplomat, explorer and scholar on Tibet, was the author of the United States' Open Door Policy for China and professor at Beijing Language and Cultturthe aut oeveral books ourthe author of several books on Tibetan studies.\n"
+"    te professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.\n"
 "    te professor at Beijing Language and Culture University, was published recently by China Intercontinental Press.";

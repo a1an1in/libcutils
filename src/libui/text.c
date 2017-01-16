@@ -61,11 +61,13 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
             /*
              *dbg_str(DBG_DETAIL,"insert start from:%s", line_info->head + offset);
              */
+            if (line_info->head[offset] == '\n') {
+                continue;
+            };
+
             if ((*line_info->tail) == '\n') {
 				break;
-			} else if(line_info->tail == '\0') {
-				break;
-            } else 
+            } else  
                 continue;
 		}
         if (find_flag == 1) { 
@@ -81,9 +83,11 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
 			strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
             if ((*line_info->tail) == '\n') {
 				break;
-			} else if(line_info->tail == '\0') {
-				break;
-			}
+            }
+            /*
+			 *} else if (*(line_info->tail + 1) == '\0') {
+			 *    break;
+             */
         }
     }
 
@@ -96,7 +100,7 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
 
 int rewrite_text(Text *text, int start_line,int offset,
 				 int width, int count,
-				 char *str, void *font)
+				 char *str,int *out_len, int *out_line_cnt, void *font)
 {
 #define MAX_TEXT_LINE_LENTH 256
 	int line_width          = text->width;
@@ -144,15 +148,17 @@ int rewrite_text(Text *text, int start_line,int offset,
 				li->head        = li->string->value;
 				li->tail        = li->head + line_offset;
 				ret             = i + 1;
-				break;
-			} else if (i == len -1) {
-				li->line_lenth  = x;
-				li->head        = li->string->value;
-				li->tail        = li->head + line_offset;
-				ret             = i + 1;
-				break;
+                line_num++;
+                break;
+            } else if (i == len -1) {
+                li->line_lenth  = x;
+                li->head        = li->string->value;
+                li->tail        = li->head + line_offset;
+                ret             = i + 1;
+                line_num++;
+                break;
             }
-		} else if (x + c_witdh > line_width) {//line end
+        } else if (x + c_witdh > line_width) {//line end
 			li->line_lenth = x;
 			li->head       = li->string->value;
 			li->tail       = li->head + line_offset - 1;
@@ -186,6 +192,12 @@ int rewrite_text(Text *text, int start_line,int offset,
     if(ret == 0) {
         dbg_str(DBG_WARNNING, "rewrite_text warnning, i=%d, line_num=%d, count=%d, len=%d", i, line_num,count, len);
     }
+
+    if(out_line_cnt != NULL)
+        *out_line_cnt = line_num;
+    if(out_len != NULL)
+        *out_len = i;
+
     object_destroy(cur);
     object_destroy(end);
 
@@ -387,7 +399,7 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
      *dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting, line_count=%d, value:%s",line_count, str);
      */
 	write_len = rewrite_text(text, line_num, offset, width,
-							 line_count, str, font);
+							 line_count, str,NULL, NULL, font);
 
 #if 1
     /*
@@ -421,17 +433,16 @@ int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
 	int i   = 0;
 	int ret = -1;
     char str[MAX_MODULATE_STR_LEN] = {0};
-    int line_count, new_line_count;
+    int line_count, new_line_count = 0;
 	int total_len, write_len;
     char c;
 
     line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
 
 	dbg_str(DBG_DETAIL,"delete_char, text_disturbed:%s",str + 1);
-	rewrite_text(text, line_num, offset, width, line_count, str + 1, font);
+	rewrite_text(text, line_num, offset, width, line_count, str + 1, NULL, &new_line_count,  font);
 
-    memset(str, 0, MAX_MODULATE_STR_LEN);
-    new_line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
+    dbg_str(DBG_DETAIL,"line_count=%d, new_line_count=%d", line_count, new_line_count);
     if(line_count == new_line_count) {
         return;
     } else if (line_count - new_line_count == 1) {
