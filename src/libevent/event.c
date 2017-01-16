@@ -864,10 +864,12 @@ event_assign(struct event *ev,
 	 *min_heap_elem_init(ev);
      */
 
-	if (base != NULL) {
-		/* by default, we put new events into the middle priority */
-		ev->ev_pri = base->nactivequeues / 2;
-	}
+    /*
+	 *if (base != NULL) {
+	 *    [> by default, we put new events into the middle priority <]
+	 *    ev->ev_pri = base->nactivequeues / 2;
+	 *}
+     */
 
 	return 0;
 }
@@ -982,6 +984,12 @@ event_add(struct event *ev, const struct timeval *tv)
 	EVBASE_ACQUIRE_LOCK(ev->ev_base, th_base_lock);
 	ev->ev_flags    = EVLIST_INIT;
 	min_heap_elem_init(ev);
+
+	if (ev->ev_base != NULL) {
+		/* by default, we put new events into the middle priority */
+		ev->ev_pri = ev->ev_base->nactivequeues / 2;
+	}
+
 	res = event_add_internal(ev, tv, 0);
 	EVBASE_RELEASE_LOCK(ev->ev_base, th_base_lock);
 
