@@ -9,21 +9,21 @@
 #include <libdbg/debug.h>
 #include <libui/event.h>
 
-static int __construct(Event *event,char *init_str)
+static int __construct(__Event *event,char *init_str)
 {
 	dbg_str(OBJ_DETAIL,"event construct, event addr:%p",event);
 
 	return 0;
 }
 
-static int __deconstrcut(Event *event)
+static int __deconstrcut(__Event *event)
 {
 	dbg_str(OBJ_DETAIL,"event deconstruct,event addr:%p",event);
 
 	return 0;
 }
 
-static int __set(Event *event, char *attrib, void *value)
+static int __set(__Event *event, char *attrib, void *value)
 {
 	if(strcmp(attrib, "set") == 0) {
 		event->set = value;
@@ -42,7 +42,7 @@ static int __set(Event *event, char *attrib, void *value)
 	return 0;
 }
 
-static void * __get(Event *event, char *attrib)
+static void * __get(__Event *event, char *attrib)
 {
     if(strcmp(attrib, "") == 0){ 
     } else {
@@ -62,14 +62,14 @@ static class_info_entry_t event_class_info[] = {
 	[6] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("Event",event_class_info);
+REGISTER_CLASS("__Event",event_class_info);
 
 void test_obj_event()
 {
-	Event *event;
+	__Event *event;
 	allocator_t *allocator = allocator_get_default_alloc();
 
-    event = OBJECT_NEW(allocator, Event,"");
+    event = OBJECT_NEW(allocator, __Event,"");
 }
 
 

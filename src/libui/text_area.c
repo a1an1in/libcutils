@@ -903,7 +903,7 @@ void test_ui_text_area()
     Container *container;
 	Graph *g;
     Subject *subject;
-	Event *event;
+	__Event *event;
 	allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
     char buf[2048];

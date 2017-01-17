@@ -123,23 +123,23 @@ print_text(char *eventtype, char *text)
     dbg_str(DBG_DETAIL, "%s Text (%s): \"%s%s\"", eventtype, expanded, *text == '"' ? "\\" : "", text);
 }
 
-static int __construct(Event *event,char *init_str)
+static int __construct(__Event *event,char *init_str)
 {
 	dbg_str(OBJ_DETAIL,"event construct, event addr:%p",event);
 
 	return 0;
 }
 
-static int __deconstrcut(Event *event)
+static int __deconstrcut(__Event *event)
 {
-	Event *i = (Event *)event;
+	__Event *i = (__Event *)event;
 	dbg_str(OBJ_DETAIL,"event deconstruct,event addr:%p",event);
 
 
 	return 0;
 }
 
-static int __set(Event *event, char *attrib, void *value)
+static int __set(__Event *event, char *attrib, void *value)
 {
     Sdl_Event *e = (Sdl_Event *)event;
 
@@ -160,7 +160,7 @@ static int __set(Event *event, char *attrib, void *value)
 	return 0;
 }
 
-static void * __get(Event *event, char *attrib)
+static void * __get(__Event *event, char *attrib)
 {
     if(strcmp(attrib, "") == 0){ 
     } else {
@@ -170,7 +170,7 @@ static void * __get(Event *event, char *attrib)
     return NULL;
 }
 
-static int __poll_event(Event *event,void *window)
+static int __poll_event(__Event *event,void *window)
 {
     int quit     = 0;
 	SDL_Event *e = &((Sdl_Event *)event)->ev;
@@ -337,7 +337,7 @@ static int __poll_event(Event *event,void *window)
 }
 
 static class_info_entry_t sdl_event_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"Event","event",NULL,sizeof(void *)},
+	[0 ] = {ENTRY_TYPE_OBJ,"__Event","event",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
@@ -353,7 +353,7 @@ void test_obj_sdl_event()
 	allocator_t *allocator = allocator_get_default_alloc();
     Window *window;
 	Graph *g;
-	Event *event;
+	__Event *event;
     char *set_str;
     char buf[2048];
 

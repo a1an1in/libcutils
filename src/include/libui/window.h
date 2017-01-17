@@ -47,7 +47,7 @@ struct window_s{
 	Graph *graph;
 	Font *font;
 	Image *background;
-    Event *event;
+    __Event *event;
 
 	int screen_width;
 	int screen_height;
