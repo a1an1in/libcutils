@@ -839,38 +839,33 @@ event_assign(struct event *ev,
 	ev->ev_fd       = fd;
 	ev->ev_events   = events;
 	ev->ev_res      = 0;
-    /*
-	 *ev->ev_flags    = EVLIST_INIT;
-     */
-	ev->ev_ncalls   = 0;
-	ev->ev_pncalls  = NULL;
+#if 0
+    ev->ev_flags    = EVLIST_INIT;
+    ev->ev_ncalls   = 0;
+    ev->ev_pncalls  = NULL;
 
-	if (events & EV_SIGNAL) {
-		if ((events & (EV_READ|EV_WRITE)) != 0) {
-			event_warnx("%s: EV_SIGNAL is not compatible with EV_READ or EV_WRITE", __func__);
-			return -1;
-		}
-		ev->ev_closure = EV_CLOSURE_SIGNAL;
-	} else {
-		if (events & EV_PERSIST) {
-			evutil_timerclear(&ev->ev_io_timeout);
-			ev->ev_closure = EV_CLOSURE_PERSIST;
-		} else {
-			ev->ev_closure = EV_CLOSURE_NONE;
-		}
-	}
+    if (events & EV_SIGNAL) {
+        if ((events & (EV_READ|EV_WRITE)) != 0) {
+            event_warnx("%s: EV_SIGNAL is not compatible with EV_READ or EV_WRITE", __func__);
+            return -1;
+        }
+        ev->ev_closure = EV_CLOSURE_SIGNAL;
+    } else {
+        if (events & EV_PERSIST) {
+            evutil_timerclear(&ev->ev_io_timeout);
+            ev->ev_closure = EV_CLOSURE_PERSIST;
+        } else {
+            ev->ev_closure = EV_CLOSURE_NONE;
+        }
+    }
 
-    /*
-	 *min_heap_elem_init(ev);
-     */
+    min_heap_elem_init(ev);
 
-    /*
-	 *if (base != NULL) {
-	 *    [> by default, we put new events into the middle priority <]
-	 *    ev->ev_pri = base->nactivequeues / 2;
-	 *}
-     */
-
+    if (base != NULL) {
+        /* by default, we put new events into the middle priority */
+        ev->ev_pri = base->nactivequeues / 2;
+    }
+#endif
 	return 0;
 }
 	struct event *
@@ -983,6 +978,24 @@ event_add(struct event *ev, const struct timeval *tv)
 
 	EVBASE_ACQUIRE_LOCK(ev->ev_base, th_base_lock);
 	ev->ev_flags    = EVLIST_INIT;
+	ev->ev_ncalls   = 0;
+	ev->ev_pncalls  = NULL;
+
+	if (ev->ev_events & EV_SIGNAL) {
+		if ((ev->ev_events & (EV_READ|EV_WRITE)) != 0) {
+			event_warnx("%s: EV_SIGNAL is not compatible with EV_READ or EV_WRITE", __func__);
+			return -1;
+		}
+		ev->ev_closure = EV_CLOSURE_SIGNAL;
+	} else {
+		if (ev->ev_events & EV_PERSIST) {
+			evutil_timerclear(&ev->ev_io_timeout);
+			ev->ev_closure = EV_CLOSURE_PERSIST;
+		} else {
+			ev->ev_closure = EV_CLOSURE_NONE;
+		}
+	}
+
 	min_heap_elem_init(ev);
 
 	if (ev->ev_base != NULL) {

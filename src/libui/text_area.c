@@ -105,7 +105,7 @@ void move_cursor_right(Component *component)
 	/*when insert char at end of line, may be the case:
 	 * 1.cursor->x == line_info->line_lenth
 	 * 2.cursor->x + cursor->width > line_info->line_lenth;
-	 *if just move cursor in text, olny has one case:
+	 *if just move cursor in text, only has one case:
 	 * 1.cursor->x + cursor->width == line_info->line_lenth
 	 * */
 	else if ((cursor->x + cursor->width >= line_info->line_lenth &&
@@ -263,10 +263,8 @@ void move_cursor_down(Component *component)
 
 	line_info = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 
-	/*not last line*/
-	if (cursor->y + cursor->height * 2 < component_height) {
-		/*next line has char at cursor pos*/
-		if (line_info->line_lenth > cursor->x) { 
+	if (cursor->y + cursor->height * 2 < component_height) {/*not last line*/
+		if (line_info->line_lenth > cursor->x) {/*next line has char at cursor pos*/ 
 			cursor->y   += cursor->height;
 			for (i = 0; ; i++) {
 				c         = line_info->head[i];
