@@ -108,10 +108,9 @@ void move_cursor_right(Component *component)
 	 *if just move cursor in text, only has one case:
 	 * 1.cursor->x + cursor->width == line_info->line_lenth
 	 * */
-	else if ((cursor->x + cursor->width >= line_info->line_lenth &&
-			    cursor_line < text->last_line_num) ||
-			   (cursor->x == line_info->line_lenth &&
-				cursor_line == text->last_line_num))
+	else if ((  cursor->x + cursor->width >= line_info->line_lenth ||
+			    cursor->x == line_info->line_lenth) &&
+			 cursor_line < text->last_line_num)
     {
 		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 		c               = line_info->head[0];

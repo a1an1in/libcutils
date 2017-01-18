@@ -44,6 +44,11 @@ struct concurrent_message_s{
 #define MAX_TASK_KEY_LEN 10
 	void *task;
 	void *event;
+    struct event_base *ev_base;
+    int ev_fd;
+    short ev_events;
+    void *ev_callback;
+    void *ev_callback_arg;
     struct timeval *tv;
 	void (*work_func)(concurrent_slave_t *slave,void *arg);
 	uint32_t message_id;

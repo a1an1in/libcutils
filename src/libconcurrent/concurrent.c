@@ -340,6 +340,13 @@ master_event_handler_add_new_event(int fd,short event,void *arg)
 			l = llist_detach_front(master->new_ev_que);
 			message = (struct concurrent_message_s *)l->data;
 
+            event_assign(message->event,
+                         message->ev_base,
+                         message->ev_fd, 
+                         message->ev_events, 
+                         message->ev_callback, 
+                         message->ev_callback_arg);
+
 			if (event_add(message->event, message->tv) == -1) {
 				dbg_str(CONCURRENT_WARNNING,"event_add err");
 			}
@@ -600,15 +607,14 @@ concurrent_add_event_to_master(concurrent_t *c,
 
 	dbg_str(CONCURRENT_IMPORTANT,"concurrent_add_new_event to master");
 
-	event_assign(event,
-                 c->master->event_base,
-                 fd, 
-                 event_flag, 
-                 event_handler, 
-                 arg);
+	message.event           = event;
+    message.ev_base         = c->master->event_base;
+    message.ev_fd           = fd;
+    message.ev_events       = event_flag;
+    message.ev_callback     = event_handler;
+    message.ev_callback_arg = arg;
+    message.tv              = tv;
 
-	message.event = event;
-    message.tv = tv;
 	llist_push_back(c->new_ev_que,&message);
 
 	if (write(c->snd_add_new_event_fd, "r", 1) != 1) {

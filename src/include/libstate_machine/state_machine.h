@@ -4,6 +4,8 @@
 #include <libconcurrent/io_user.h>
 #include <libconcurrent/tmr_user.h>
 
+#define STATE_MACHINE_ENTRY_NAME_MAX_LEN 50
+
 typedef struct state_machine_s{
 	vector_t *vector;
     allocator_t *allocator;
@@ -22,9 +24,7 @@ typedef struct state_entry_s{
     struct timeval tv;
     tmr_user_t *timer;
     state_machine_t *state_machine;
-#define MAX_ENTRY_NAME_LEN 50
-    char entry_name[MAX_ENTRY_NAME_LEN];
-#undef MAX_ENTRY_NAME_LEN 
+    char entry_name[STATE_MACHINE_ENTRY_NAME_MAX_LEN];
 }state_entry_t;
 
 typedef struct state_entry_config_s{

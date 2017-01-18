@@ -475,81 +475,6 @@ common_timeout_callback(evutil_socket_t fd, short what, void *arg)
 	EVBASE_RELEASE_LOCK(base, th_base_lock);
 }
 
-#define MAX_COMMON_TIMEOUTS 256
-
-	const struct timeval *
-event_base_init_common_timeout(struct event_base *base,
-		const struct timeval *duration)
-{
-	int i;
-	struct timeval tv;
-	const struct timeval *result=NULL;
-	struct common_timeout_list *new_ctl;
-
-	EVBASE_ACQUIRE_LOCK(base, th_base_lock);
-	if (duration->tv_usec > 1000000) {
-		memcpy(&tv, duration, sizeof(struct timeval));
-		if (is_common_timeout(duration, base))
-			tv.tv_usec &= MICROSECONDS_MASK;
-		tv.tv_sec += tv.tv_usec / 1000000;
-		tv.tv_usec %= 1000000;
-		duration = &tv;
-	}
-	for (i = 0; i < base->n_common_timeouts; ++i) {
-		const struct common_timeout_list *ctl =
-			base->common_timeout_queues[i];
-		if (duration->tv_sec == ctl->duration.tv_sec &&
-				duration->tv_usec ==
-				(ctl->duration.tv_usec & MICROSECONDS_MASK)) {
-			EVUTIL_ASSERT(is_common_timeout(&ctl->duration, base));
-			result = &ctl->duration;
-			goto done;
-		}
-	}
-	if (base->n_common_timeouts == MAX_COMMON_TIMEOUTS) {
-		event_warnx("%s: Too many common timeouts already in use; "
-				"we only support %d per event_base", __func__,
-				MAX_COMMON_TIMEOUTS);
-		goto done;
-	}
-	if (base->n_common_timeouts_allocated == base->n_common_timeouts) {
-		int n = base->n_common_timeouts < 16 ? 16 :
-			base->n_common_timeouts*2;
-		struct common_timeout_list **newqueues =
-			mm_realloc(base->common_timeout_queues,
-					n*sizeof(struct common_timeout_queue *));
-		if (!newqueues) {
-			event_warn("%s: realloc",__func__);
-			goto done;
-		}
-		base->n_common_timeouts_allocated = n;
-		base->common_timeout_queues = newqueues;
-	}
-	new_ctl = mm_calloc(1, sizeof(struct common_timeout_list));
-	if (!new_ctl) {
-		event_warn("%s: calloc",__func__);
-		goto done;
-	}
-	TAILQ_INIT(&new_ctl->events);
-	new_ctl->duration.tv_sec = duration->tv_sec;
-	new_ctl->duration.tv_usec =
-		duration->tv_usec | COMMON_TIMEOUT_MAGIC |
-		(base->n_common_timeouts << COMMON_TIMEOUT_IDX_SHIFT);
-	evtimer_assign(&new_ctl->timeout_event, base,
-			common_timeout_callback, new_ctl);
-	new_ctl->timeout_event.ev_flags |= EVLIST_INTERNAL;
-	event_priority_set(&new_ctl->timeout_event, 0);
-	new_ctl->base = base;
-	base->common_timeout_queues[base->n_common_timeouts++] = new_ctl;
-	result = &new_ctl->duration;
-
-done:
-	if (result)
-		EVUTIL_ASSERT(is_common_timeout(result, base));
-
-	EVBASE_RELEASE_LOCK(base, th_base_lock);
-	return result;
-}
 /* Closure function invoked when we're activating a persistent event. */
 	static inline void
 event_persist_closure(struct event_base *base, struct event *ev)
@@ -839,7 +764,7 @@ event_assign(struct event *ev,
 	ev->ev_fd       = fd;
 	ev->ev_events   = events;
 	ev->ev_res      = 0;
-#if 0
+#if 1
     ev->ev_flags    = EVLIST_INIT;
     ev->ev_ncalls   = 0;
     ev->ev_pncalls  = NULL;
@@ -977,6 +902,8 @@ event_add(struct event *ev, const struct timeval *tv)
 	}
 
 	EVBASE_ACQUIRE_LOCK(ev->ev_base, th_base_lock);
+
+#if 0
 	ev->ev_flags    = EVLIST_INIT;
 	ev->ev_ncalls   = 0;
 	ev->ev_pncalls  = NULL;
@@ -1002,6 +929,7 @@ event_add(struct event *ev, const struct timeval *tv)
 		/* by default, we put new events into the middle priority */
 		ev->ev_pri = ev->ev_base->nactivequeues / 2;
 	}
+#endif
 
 	res = event_add_internal(ev, tv, 0);
 	EVBASE_RELEASE_LOCK(ev->ev_base, th_base_lock);

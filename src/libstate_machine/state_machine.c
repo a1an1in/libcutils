@@ -60,20 +60,10 @@ state_machine_t *state_machine_create(allocator_t *allocator)
         return NULL;
     }
 
-    if(pipe(fds)) {
-        dbg_str(SM_ERROR,"cannot create pipe");
-        allocator_mem_free(allocator,s);
-        return NULL;
-    }
-    s->read_notify_fd  = fds[0];
-    s->write_notify_fd = fds[1];
-
     return s;
 }
 
 int state_machine_init(state_machine_t *s,
-                       void (*state_change_event_handler)(int fd, short event, void *arg),
-                       void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
                        int entry_num,
                        void *base)
 {
@@ -82,15 +72,6 @@ int state_machine_init(state_machine_t *s,
 	vector_init(s->vector,sizeof(state_entry_t),entry_num);
     s->entry_num = entry_num;
     s->base      = base;
-
-    s->notifier  = io_user(s->allocator,//allocator_t *allocator,
-                           s->read_notify_fd,//int user_fd,
-                           0,//user_type
-                           state_change_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
-                           slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-                           NULL,//int (*process_task_cb)(user_task_t *task),
-                           s);//void *opaque)
-	dbg_str(SM_DETAIL,"notifier fd=%d", s->read_notify_fd);
 
     return 0;
 }
@@ -108,10 +89,13 @@ state_entry_t *init_state_entry(state_entry_t *e,
     e->tv.tv_sec             = tv_sec;
     e->tv.tv_usec            = tv_usec;
     e->state_machine         = s;
+
+    memset(e->entry_name, 0,STATE_MACHINE_ENTRY_NAME_MAX_LEN); 
     strncpy(e->entry_name,entry_name,strlen(entry_name));
 
     return e;
 }
+
 state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
         void (*changing_workfunc_cb)(state_machine_t *s,void *opaque),
         void (*process_timer_task_cb)(void *arg),
@@ -172,6 +156,7 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
 
     return 0;
 }
+
 int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
 {
     state_entry_t *e;
@@ -202,6 +187,9 @@ int state_machine_get_cur_state(state_machine_t *s)
 {
     return s->current_state;
 }
+
+#if 0
+
 void
 state_machine_change_state(state_machine_t *s, int state)
 {
@@ -223,6 +211,34 @@ state_machine_change_state(state_machine_t *s, int state)
 		dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
 	}
 }
+
+#else
+
+void
+state_machine_change_state(state_machine_t *s, int state)
+{
+    char command = 'c';//c --> change state
+    state_entry_t *e,*le;;
+
+    if(state == s->current_state) return;
+
+    s->last_state    = s->current_state;
+    s->current_state = state;
+
+    le = (state_entry_t *)vector_get(s->vector,s->last_state);
+    state_machine_stop_entry_timer(s,s->last_state);
+
+    e = (state_entry_t *)vector_get(s->vector,s->current_state);
+    state_machine_setup_entry_timer(s,s->current_state);
+
+    dbg_str(SM_SUC,"state_machine_change_state,from %s to %s",le->entry_name,e->entry_name);
+
+    e->action_callback(s,s->base);
+
+}
+
+#endif
+
 /**
  * @synopsis    state_machine_change_state_force 
  *              not considering whether last state equal current state
@@ -249,51 +265,6 @@ state_machine_change_state_force(state_machine_t *s, int state)
 	}
 }
 
-static void slave_work_function(concurrent_slave_t *slave,void *arg)
-{
-    io_user_t *notifier = (io_user_t *)arg;
-    state_machine_t *s  = (state_machine_t *)notifier->opaque;
-    state_entry_t *e,*le;
-
-    le = (state_entry_t *)vector_get(s->vector,s->last_state);
-    state_machine_stop_entry_timer(s,s->last_state);
-
-    e = (state_entry_t *)vector_get(s->vector,s->current_state);
-    state_machine_setup_entry_timer(s,s->current_state);
-    /*
-     *dbg_str(SM_IMPORTANT," last_state=%d, current_state=%d",s->last_state,s->current_state);
-     */
-    e->action_callback(s,s->base);
-}
-static void state_change_event_handler(int fd, short event, void *arg)
-{
-    io_user_t *notifier         = (io_user_t *)arg;
-    state_machine_t *s          = (state_machine_t *)notifier->opaque;
-	concurrent_master_t *master = notifier->master;
-	struct concurrent_message_s message;
-	char buf[1];          
-    void (*slave_work_func)(concurrent_slave_t *slave,void *arg);
-
-
-	if (read(s->read_notify_fd, buf, 1) != 1){
-		dbg_str(SM_WARNNING,"cannot read form pipe");
-		return;
-	}
-	switch (buf[0]) {
-		case 'c': //change state
-            slave_work_func = notifier->slave_work_function;
-			break;
-		case 'b'://destroy state machine
-			break;            
-	}
-
-    concurrent_master_init_message(&message, slave_work_function,notifier,0);
-    master->assignment_count++;//do for assigning slave
-    concurrent_master_add_message(master,&message);
-    
-    return ;
-}
-
 state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base)
 {
     state_machine_t *s;
@@ -302,11 +273,7 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
 
     s = state_machine_create(allocator);
 
-    state_machine_init(s,
-                       state_change_event_handler,//void (*state_change_event_handler)(int fd, short event, void *arg),
-                       slave_work_function,
-                       10,
-                       base);
+    state_machine_init(s, 10, base);
 
     for(i = 0; ; i++){
         if(strlen(config[i].entry_name) != 0){
