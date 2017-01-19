@@ -28,9 +28,7 @@ typedef struct state_entry_s{
 }state_entry_t;
 
 typedef struct state_entry_config_s{
- #define MAX_ENTRY_NAME_LEN 50
-     char entry_name[MAX_ENTRY_NAME_LEN];
- #undef MAX_ENTRY_NAME_LEN 
+     char entry_name[STATE_MACHINE_ENTRY_NAME_MAX_LEN];
      void (*action_callback)(state_machine_t *s,void *opaque);
      void (*process_timer_task_cb)(void *tmr);
      time_t tv_sec;

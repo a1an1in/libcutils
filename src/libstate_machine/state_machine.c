@@ -188,32 +188,6 @@ int state_machine_get_cur_state(state_machine_t *s)
     return s->current_state;
 }
 
-#if 0
-
-void
-state_machine_change_state(state_machine_t *s, int state)
-{
-    char command = 'c';//c --> change state
-    state_entry_t *e,*le;;
-
-    if(state == s->current_state) return;
-
-    s->last_state    = s->current_state;
-    s->current_state = state;
-
-
-    le = (state_entry_t *)vector_get(s->vector,s->last_state);
-    e  = (state_entry_t *)vector_get(s->vector,s->current_state);
-
-    dbg_str(SM_SUC,"state_machine_change_state,from %s to %s",le->entry_name,e->entry_name);
-
-	if (write(s->write_notify_fd, &command, 1) != 1) {
-		dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
-	}
-}
-
-#else
-
 void
 state_machine_change_state(state_machine_t *s, int state)
 {
@@ -236,8 +210,6 @@ state_machine_change_state(state_machine_t *s, int state)
     e->action_callback(s,s->base);
 
 }
-
-#endif
 
 /**
  * @synopsis    state_machine_change_state_force 
