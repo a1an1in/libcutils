@@ -51,12 +51,6 @@
 #include <libconcurrent/io_user.h>
 #include <libconcurrent/tmr_user.h>
 
-/*
- *warnning:the timer cann't be destroy and recreate it at once using the same
- *event struct.for when we create a new timer,we may change the event flag which
- *the previous timer is using.  so libevent cann't find out the event to del and
- *quit loop.
- */
 int event_is_persistent;
 
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
@@ -69,6 +63,7 @@ static void slave_work_function(concurrent_slave_t *slave,void *arg)
 
 	return ;
 }
+
 void timer_event_handler(int fd, short event, void *arg)
 {
 
@@ -87,6 +82,7 @@ void timer_event_handler(int fd, short event, void *arg)
 
     return ;
 }
+
 tmr_user_t *tmr_user(allocator_t *allocator,
                      struct timeval *tv,
                      uint16_t timer_flags,
@@ -123,6 +119,7 @@ tmr_user_t *tmr_user(allocator_t *allocator,
 
 	return tmr_user;
 }
+
 tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
@@ -138,6 +135,7 @@ tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user)
 
 	return tmr_user;
 }
+
 int tmr_user_destroy(tmr_user_t *tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
@@ -149,6 +147,7 @@ int tmr_user_destroy(tmr_user_t *tmr_user)
 
 	return 0;
 }
+
 int tmr_user_stop(tmr_user_t *tmr_user)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
