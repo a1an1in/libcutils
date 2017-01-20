@@ -89,11 +89,7 @@ void move_cursor_right(Component *component)
 		c              = line_info->head[cursor->offset + 1];
 		character      = (Character *)g->font->ascii[c].character;
 
-		if (c == '\n') {
-			cursor->c  = ' ';
-		} else {
-			cursor->c  = c;
-		}
+        cursor->c      = c;
 		cursor->x     += cursor->width;
 		cursor->width  = character->width;
 		cursor->offset++;
@@ -119,12 +115,8 @@ void move_cursor_right(Component *component)
 		dbg_str(DBG_SUC,"offset=%d, char =%c, x pos=%d, char_width =%d",
 				cursor->offset, cursor->c,cursor->x, character->width);
 		dbg_str(DBG_DETAIL,"last_line_num=%d", text->last_line_num);
-		if (c == '\n') {
-			cursor->c   = ' ';
-		} else {
-			cursor->c   = c;
-		}
 
+        cursor->c       = c;
 		cursor->offset  = 0;
 		cursor->x       = 0;
 		cursor->y      += character->height;
@@ -186,15 +178,11 @@ void move_cursor_up(Component *component)
 				if (	cursor->x >= width_sum &&
 						cursor->x <  character->width  + width_sum)
 				{
-					cursor->x       = width_sum;
-					if (c == '\n') {
-						cursor->c   = ' ';
-					} else {
-						cursor->c   = c;
-					}
-					cursor->offset  = i;
-					cursor->width   = character->width;
-					cursor->height  = character->height;
+					cursor->x      = width_sum;
+                    cursor->c      = c;
+                    cursor->offset = i;
+					cursor->width  = character->width;
+					cursor->height = character->height;
 
                     dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
                             cursor->offset, cursor->c,cursor->x, character->width);
@@ -208,27 +196,22 @@ void move_cursor_up(Component *component)
 		else {
 			/*last char is '\n'*/
 			if ((c = *line_info->tail) == '\n') { 
-				character      = (Character *)g->font->ascii[c].character;
-				cursor->x      = line_info->line_lenth - character->width;
-				cursor->c      = ' ';
 				cursor->offset = line_info->tail - line_info->head;
-				cursor->width  = character->width;
-				cursor->height = character->height;
 			} else {
-				character      = (Character *)g->font->ascii[c].character;
-				cursor->x      = line_info->line_lenth - character->width;
-				cursor->c      = c;
 				cursor->offset = line_info->tail - line_info->head - 1;
-				cursor->width  = character->width;
-				cursor->height = character->height;
 			}
+            character      = (Character *)g->font->ascii[c].character;
+            cursor->x      = line_info->line_lenth - character->width;
+            cursor->c      = c;
+            cursor->width  = character->width;
+            cursor->height = character->height;
 
 		}
 	} else { //line down
 		cursor_t bak  = *cursor;
 		bak.y        += bak.height;
 		ta->one_line_down(component, g);
-		*cursor = bak;
+		*cursor       = bak;
 		move_cursor_up(component);
 		return ;
 	}
@@ -251,7 +234,7 @@ void move_cursor_down(Component *component)
 	Character *character;
     uint16_t cursor_line,  last_line_num;
 
-	cursor_line    = get_row_at_cursor(component);
+	cursor_line   = get_row_at_cursor(component);
 	last_line_num = text->get_line_count(text);
 
 	if (cursor_line == last_line_num) {
@@ -271,16 +254,11 @@ void move_cursor_down(Component *component)
 				if (	cursor->x >= width_sum &&
 						cursor->x < width_sum + character->width)
 				{
-					cursor->x = width_sum;
-					cursor->c = c;
-					if (c == '\n') {
-						cursor->c = ' ';
-					} else {
-						cursor->c = c;
-					}
-					cursor->offset  = i;
-					cursor->width   = character->width;
-					cursor->height  = character->height;
+					cursor->x      = width_sum;
+					cursor->c      = c;
+					cursor->offset = i;
+					cursor->width  = character->width;
+					cursor->height = character->height;
 
                     dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
                             cursor->offset, cursor->c,cursor->x, character->width);
@@ -290,22 +268,17 @@ void move_cursor_down(Component *component)
 				}
 			}
 		}  else {
-			cursor->y += cursor->height;
 			if ((c = *line_info->tail) == '\n') {
-				character = (Character *)g->font->ascii[c].character;
-				cursor->x      = line_info->line_lenth - character->width;
-				cursor->c      = ' ';
 				cursor->offset = line_info->tail - line_info->head;
-				cursor->width  = character->width;
-				cursor->height = character->height;
 			} else {
-				character = (Character *)g->font->ascii[c].character;
-				cursor->x      = line_info->line_lenth - character->width;
-				cursor->c      = c;
 				cursor->offset = line_info->tail - line_info->head - 1;
-				cursor->width  = character->width;
-				cursor->height = character->height;
 			}
+			cursor->y      += cursor->height;
+            character       = (Character *)g->font->ascii[c].character;
+            cursor->x       = line_info->line_lenth - character->width;
+            cursor->c       = c;
+            cursor->width   = character->width;
+            cursor->height  = character->height;
 
 		}
 	}  else { /*last line*/
@@ -614,12 +587,10 @@ static int __load_resources(Component *component,void *window)
 	ta->timer->opaque   = component;
 	ta->timer->set_timer(ta->timer, 1 * 500, cursor_timer_callback); 
 
-	character           = (Character *)g->font->ascii['a'].character;
-	ta->cursor.height   = character->height;
-
 	character           = (Character *)g->font->ascii['i'].character;
 	ta->char_min_width  = character->width;
     ta->char_height     = character->height;
+	ta->cursor.height   = character->height;
 
 	dbg_str(DBG_DETAIL,"cursor height =%d",ta->cursor.height);
 
