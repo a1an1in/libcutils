@@ -423,8 +423,11 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
 		 *dbg_str(DBG_IMPORTANT,"new a line, line_num=%d, line_count=%d,write_len=%d, total_len=%d, value:%s", line_num ,line_count,write_len, total_len,  str + write_len);
          */
 		new_line_count = text->write_text(text, line_num + line_count -1 ,str + write_len, font);
-		ret = line_count + new_line_count;
         text->last_line_num += new_line_count;
+        /*
+		 *ret = line_count + new_line_count;
+         */
+        ret = text->last_line_num - line_num + 1;
 	} else {
 		ret = line_count;
 	}
@@ -453,15 +456,14 @@ int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
 
     dbg_str(DBG_DETAIL,"line_count=%d, new_line_count=%d", line_count, new_line_count);
     if(line_count == new_line_count) {
-        return;
+        ret = line_count;
     } else if (line_count - new_line_count == 1) {
 		delete_nth_line(text, line_num + line_count - 1);
+        ret = text->last_line_num - line_num +  1;
         text->last_line_num--;
-        return;
     } else {
 		dbg_str(DBG_DETAIL,"run at here");
 	}
-
 
 	return ret;
 #undef MAX_MODULATE_STR_LEN

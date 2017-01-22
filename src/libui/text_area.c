@@ -126,10 +126,10 @@ void move_cursor_right(Component *component)
 			   cursor_line == text->last_line_num)
 	{
 		dbg_str(DBG_SUC,"move cursor to adding char field");
-		c              = ' ';
-		character      = (Character *)g->font->ascii[c].character;
-		cursor->c      = c;
-		cursor->x     += cursor->width;
+		c               = ' ';
+		character       = (Character *)g->font->ascii[c].character;
+		cursor->c       = c;
+		cursor->x      += cursor->width;
 		cursor->offset++;
 	} else {
 		dbg_str(DBG_WARNNING,
@@ -396,7 +396,45 @@ static int erase_character(Component *component,char c, void *graph)
     object_destroy(character);   
 }
 
-static int erase_a_line_of_text(Component *component,int line_num, void *graph)
+static int draw_n_lines_of_text(Component *component,int from, int to, void *graph)
+{
+	Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
+	Graph *g               = (Graph *)graph;
+	Subject *s             = (Subject *)component;
+    cursor_t *cursor       = &ta->cursor;
+	text_line_t *line_info = NULL;
+    int i, j;
+    char c;
+
+    cursor->x     = 0;
+    cursor->y     = from * ta->char_height;
+    cursor->width = 0;
+
+	for (   j = ta->start_line + from;
+            cursor->y < ((Subject *)component)->height && j <= ta->start_line + to;
+            j++) 
+    {
+		line_info = (text_line_t *)text->get_text_line_info(text,j);
+        if (line_info == NULL) break;
+
+        /*
+         *dbg_str(DBG_DETAIL,"draw line=%d, len=%d, cursor->x =%d, cursor->y =%d,str=%s",
+         *        j, line_info->tail - line_info->head, cursor->x,cursor->y,  line_info->head);
+         */
+
+		for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
+			c = line_info->head[i];
+			draw_character(component,c, graph);
+		}
+        cursor->x       = 0;
+		cursor->y      += cursor->height;
+	}
+
+	g->render_present(g);
+}
+
+static int erase_n_lines_of_text(Component *component,int from, int to, void *graph)
 {
 	Text_Area *ta     = (Text_Area *)component;
     Text *text        = ta->text;
@@ -406,41 +444,12 @@ static int erase_a_line_of_text(Component *component,int line_num, void *graph)
     int height        = ta->char_height;
 
     g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
-    g->render_fill_rect(g,0, line_num * height, s->width, height);
-}
-
-static int draw_a_line_of_text(Component *component,int line_num, void *graph)
-{
-	Text_Area *ta          = (Text_Area *)component;
-    Text *text             = ta->text;
-	Graph *g               = (Graph *)graph;
-	Subject *s             = (Subject *)component;
-    cursor_t *cursor       = &ta->cursor;
-	text_line_t *line_info = NULL;
-    int i;
-    char c;
-
     /*
-	 *dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
+     *g->render_fill_rect(g, 0, from * height, s->width, (20) * height);
+	 *g->render_present(g);
+     *g->render_set_color(g, 50, bg_color->g, bg_color->b, bg_color->a);
      */
-
-    erase_a_line_of_text(component,line_num, graph);
-
-    cursor->x     = 0;
-    cursor->y     = line_num * ta->char_height;
-    cursor->width = 0;
-
-    line_info = (text_line_t *)text->get_text_line_info(text,line_num);
-    if (line_info == NULL) return;
-
-    for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
-        c = line_info->head[i];
-        draw_character(component,c, graph);
-    }
-    cursor->x       = 0;
-    cursor->y      += cursor->height;
-    cursor->offset  = 0;
-	g->render_present(g);
+    g->render_fill_rect(g, 0, from * height, s->width, (to - from + 1) * height);
 }
 
 static uint32_t cursor_timer_callback(uint32_t interval, void* param )
@@ -449,10 +458,6 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 	Text_Area *ta  = (Text_Area *)timer->opaque;
 	Window *window = (Window *)ta->window;
 	Graph *g       = ((Window *)window)->graph;
-
-	/*
-	 *dbg_str(DBG_DETAIL,"cursor_timer_callback");
-	 */
 
     if((ta->cursor_count++ % 2) == 0) {
         reverse_cursor((Component *)ta,g);
@@ -653,22 +658,39 @@ static int __text_key_input(Component *component,char c, void *graph)
     int disturbed_line_count = 0;
 	Character *character;
     uint16_t cursor_line;
+    int from, to;
+    int line_count_of_a_screen;
 
-	cursor_line          = get_row_at_cursor(component);
-    disturbed_line_count = text->write_char(text,cursor_line ,
-											cursor->offset,
-											cursor->x, 
-											c, g->font);
+    line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
+	cursor_line            = get_row_at_cursor(component);
+    disturbed_line_count   = text->write_char(text,cursor_line ,
+											  cursor->offset,
+											  cursor->x, 
+											  c, g->font);
 
-	character            = (Character *)g->font->ascii[c].character;
-	cursor->c            = c;
-	cursor->width        = character->width;
+	character              = (Character *)g->font->ascii[c].character;
+	cursor->c              = c;
+	cursor->width          = character->width;
+    from                   = cursor->y / cursor->height;
+    to                     = from + disturbed_line_count - 1;
+
+    if(to > line_count_of_a_screen - 1) {
+        to = line_count_of_a_screen - 1;
+    }
 
 	move_cursor_right(component);
 
 	cursor_bak           = *cursor;
 
-	ta->draw(component,g); 
+    /*
+	 *ta->draw(component,g); 
+     */
+
+    erase_n_lines_of_text(component,from, to, graph);
+    draw_n_lines_of_text(component,from, to, g);
+    /*
+     *dbg_str(DBG_DETAIL,"from =%d, to =%d",from, to);
+     */
 
 	*cursor              = cursor_bak;
     draw_cursor(component,g);
@@ -687,29 +709,39 @@ static int __backspace_key_input(Component *component,void *graph)
     uint16_t cursor_line;
     char c;
     int ret;
+    int from, to;
+    int line_count_of_a_screen;
 
 	dbg_str(DBG_DETAIL,"backspace_key_input");
 
-	ret = move_cursor_left(component);
+    line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
+    c                      = cursor->c;
 
-    if (ret < 1) {
-        return;
+	ret                    = move_cursor_left(component);
+    if (ret < 1) { return; }
+
+	cursor_line            = get_row_at_cursor(component);
+    disturbed_line_count   = text->delete_char(text,cursor_line ,
+											   cursor->offset,
+											   cursor->x, 
+											   g->font);
+
+	character              = (Character *)g->font->ascii[c].character;
+	cursor->c              = c;
+	cursor->width          = character->width;
+    from                   = cursor->y / cursor->height;
+    to                     = from + disturbed_line_count - 1;
+
+    if(to > line_count_of_a_screen - 1) {
+        to = line_count_of_a_screen - 1;
     }
-
-    c = cursor->c;
-
-	cursor_line          = get_row_at_cursor(component);
-    disturbed_line_count = text->delete_char(text,cursor_line ,
-											 cursor->offset,
-											 cursor->x, 
-											 g->font);
-
-	character            = (Character *)g->font->ascii[c].character;
-	cursor->c            = c;
-	cursor->width        = character->width;
-	cursor_bak           = *cursor;
-	ta->draw(component,g); 
-	*cursor              = cursor_bak;
+	cursor_bak             = *cursor;
+    /*
+	 *ta->draw(component,g); 
+     */
+    erase_n_lines_of_text(component,from,to, g);
+    draw_n_lines_of_text(component,from, to, g);
+	*cursor                = cursor_bak;
     draw_cursor(component,g);
 
     return 0;

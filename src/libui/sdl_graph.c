@@ -166,17 +166,17 @@ static int __render_draw_line(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
 	SDL_RenderDrawLine(graph->render,x1, y1, x2, y2);
 }
 
-static int __render_draw_rect(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
+static int __render_draw_rect(Sdl_Graph *graph,int x1, int y1,int wight, int height)
 {
 	dbg_str(SDL_INTERFACE_DETAIL,"SDL Graph render_draw_rect");
-	SDL_Rect rect = {x1,y1,x2,y2};
+	SDL_Rect rect = {x1,y1,wight,height};
 	SDL_RenderDrawRect(graph->render, &rect);
 }
 
-static int __render_fill_rect(Sdl_Graph *graph,int x1, int y1, int x2, int y2)
+static int __render_fill_rect(Sdl_Graph *graph,int x1, int y1, int wight, int height)
 {
 	dbg_str(SDL_INTERFACE_DETAIL,"SDL Graph render_fill_rect");
-	SDL_Rect fillRect = {x1,y1,x2,y2};
+	SDL_Rect fillRect = {x1,y1,wight,height};
 	SDL_RenderFillRect(graph->render, &fillRect );
 }
 
