@@ -680,19 +680,12 @@ static int __text_key_input(Component *component,char c, void *graph)
 
 	move_cursor_right(component);
 
-	cursor_bak           = *cursor;
-
-    /*
-	 *ta->draw(component,g); 
-     */
+	cursor_bak             = *cursor;
 
     erase_n_lines_of_text(component,from, to, graph);
     draw_n_lines_of_text(component,from, to, g);
-    /*
-     *dbg_str(DBG_DETAIL,"from =%d, to =%d",from, to);
-     */
 
-	*cursor              = cursor_bak;
+	*cursor                = cursor_bak;
     draw_cursor(component,g);
 
     return 0;
@@ -735,12 +728,12 @@ static int __backspace_key_input(Component *component,void *graph)
     if(to > line_count_of_a_screen - 1) {
         to = line_count_of_a_screen - 1;
     }
+
 	cursor_bak             = *cursor;
-    /*
-	 *ta->draw(component,g); 
-     */
+
     erase_n_lines_of_text(component,from,to, g);
     draw_n_lines_of_text(component,from, to, g);
+
 	*cursor                = cursor_bak;
     draw_cursor(component,g);
 
@@ -814,12 +807,80 @@ static int __right_key_down(Component *component,void *graph)
 
 static int __pgup_key_down(Component *component,void *graph)
 {
+	Graph *g               = (Graph *)graph;
+    Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
+	text_line_t *line_info = NULL;
+    cursor_t *cursor       = &ta->cursor, cursor_bak;
+    int line_count_of_a_screen;
+    uint16_t cursor_line;
+	Character *character;
+    char c;
+
 	dbg_str(DBG_DETAIL,"pgup_key_down");
+    line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
+
+    if(ta->start_line - line_count_of_a_screen > 0) {
+        ta->start_line -= line_count_of_a_screen;
+    } else if (ta->start_line > 0) {
+        ta->start_line = 0;
+    } else {
+        dbg_str(DBG_WARNNING,"pgup_key_down");
+        return ;
+    }
+
+	cursor->y      = 0;
+	cursor->x      = 0;
+    cursor->offset = 0;
+	cursor_bak     = *cursor;
+	ta->draw(component,graph); 
+	*cursor        = cursor_bak;
+
+    cursor_line    = get_row_at_cursor(component);
+    line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
+
+    c              = line_info->head[0];
+    character      = (Character *)g->font->ascii[c].character;
+    cursor->c      = c;
+    cursor->width  = character->width;
+
 }
 
 static int __pgdown_key_down(Component *component,void *graph)
 {
+	Graph *g               = (Graph *)graph;
+    Text_Area *ta          = (Text_Area *)component;
+    Text *text             = ta->text;
+	text_line_t *line_info = NULL;
+    cursor_t *cursor       = &ta->cursor, cursor_bak;
+    int line_count_of_a_screen;
+    uint16_t cursor_line;
+	Character *character;
+    char c;
+
 	dbg_str(DBG_DETAIL,"pgdown_key_down");
+    line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
+
+    if(ta->start_line + line_count_of_a_screen < text->last_line_num ) {
+        ta->start_line += line_count_of_a_screen;
+    } else {
+        return;
+    }
+
+	cursor->y      = 0;
+	cursor->x      = 0;
+    cursor->offset = 0;
+	cursor_bak     = *cursor;
+	ta->draw(component,graph); 
+	*cursor        = cursor_bak;
+
+    cursor_line    = get_row_at_cursor(component);
+    line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
+
+    c              = line_info->head[0];
+    character      = (Character *)g->font->ascii[c].character;
+    cursor->c      = c;
+    cursor->width  = character->width;
 }
 
 static int __one_line_up(Component *component,void *graph)

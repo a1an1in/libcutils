@@ -391,7 +391,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 
 int __write_char(Text *text,int line_num,  int offset, int width, char c,void *font)
 {
-#define MAX_MODULATE_STR_LEN 1024
+#define MAX_MODULATE_STR_LEN 1024 * 2
     Iterator *cur, *end;
 	text_line_t *line_info;
 	int i   = 0;
@@ -439,7 +439,7 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
 
 int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
 {
-#define MAX_MODULATE_STR_LEN 1024
+#define MAX_MODULATE_STR_LEN 1024 * 2
     Iterator *cur, *end;
 	text_line_t *line_info;
 	int i   = 0;

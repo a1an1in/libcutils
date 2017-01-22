@@ -248,6 +248,12 @@ static int __poll_event(__Event *event,void *window)
                               */
 							 if(cur->right_key_down) cur->right_key_down(cur, g); 
                              break;
+                         case SDLK_PAGEUP:
+							 if(cur->pageup_key_down) cur->pageup_key_down(cur, g); 
+                             break;
+                         case SDLK_PAGEDOWN:
+							 if(cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
+                             break;
                          case SDLK_BACKSPACE:
                              /*
                               *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
