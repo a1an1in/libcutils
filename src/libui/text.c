@@ -349,7 +349,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 				x                     = 0;
 			} else if( i == len - 1) {
 				line_info.line_lenth  = x;
-				text->last_line_num  = line_num;
+				text->last_line_num   = line_num;
 				line_info.head        = line_info.string->value;
 				line_info.tail        = line_info.head + line_offset;
                 list->insert_after(list,cur, &line_info);

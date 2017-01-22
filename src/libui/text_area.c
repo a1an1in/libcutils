@@ -616,7 +616,8 @@ static int __draw(Component *component, void *graph)
     cursor_t *cursor       = &ta->cursor;
 	text_line_t *line_info = NULL;
     int i, j;
-    char c;
+    char c, c_bak;
+    int width_bak;
 
     /*
 	 *dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
@@ -638,6 +639,11 @@ static int __draw(Component *component, void *graph)
 		for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
 			c = line_info->head[i];
 			draw_character(component,c, graph);
+
+            if(i == 0 && j == ta->start_line) { /*bak cursor info of first char of the screen*/
+                c_bak     = line_info->head[0];
+                width_bak = cursor->width;
+            }
 		}
         cursor->x       = 0;
 		cursor->y      += cursor->height;
@@ -646,6 +652,9 @@ static int __draw(Component *component, void *graph)
     cursor->x      = 0;
     cursor->y      = 0;
     cursor->offset = 0;
+    cursor->c      = c_bak;
+    cursor->width  = width_bak;
+
 	g->render_present(g);
 }
 
@@ -832,8 +841,12 @@ static int __pgup_key_down(Component *component,void *graph)
 	cursor->y      = 0;
 	cursor->x      = 0;
     cursor->offset = 0;
+#if 0
 	cursor_bak     = *cursor;
+#endif
+
 	ta->draw(component,graph); 
+#if 0
 	*cursor        = cursor_bak;
 
     cursor_line    = get_row_at_cursor(component);
@@ -843,6 +856,7 @@ static int __pgup_key_down(Component *component,void *graph)
     character      = (Character *)g->font->ascii[c].character;
     cursor->c      = c;
     cursor->width  = character->width;
+#endif
 
 }
 
@@ -870,8 +884,11 @@ static int __pgdown_key_down(Component *component,void *graph)
 	cursor->y      = 0;
 	cursor->x      = 0;
     cursor->offset = 0;
+#if 0
 	cursor_bak     = *cursor;
+#endif 
 	ta->draw(component,graph); 
+#if 0
 	*cursor        = cursor_bak;
 
     cursor_line    = get_row_at_cursor(component);
@@ -881,6 +898,7 @@ static int __pgdown_key_down(Component *component,void *graph)
     character      = (Character *)g->font->ascii[c].character;
     cursor->c      = c;
     cursor->width  = character->width;
+#endif
 }
 
 static int __one_line_up(Component *component,void *graph)
