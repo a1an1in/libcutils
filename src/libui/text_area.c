@@ -24,7 +24,7 @@ char get_row_at_cursor(Component *component)
     return row;
 }
 
-void move_cursor_left(Component *component) 
+int move_cursor_left(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
     Text *text             = ta->text;
@@ -57,16 +57,16 @@ void move_cursor_left(Component *component)
         cursor->offset    = line_info->tail - line_info->head;
     } else if (cursor->x == 0 && cursor->y == 0 && ta->start_line > 0) {
 		dbg_str(DBG_DETAIL,"at head of screan");
-		return;
+		return 0;
     } else if (cursor->x == 0 && cursor->y == 0 && ta->start_line == 0) {
 		dbg_str(DBG_DETAIL,"already at head of text");
-        return;
+        return 0;
     }
 
     dbg_str(DBG_DETAIL,"offset=%d, char =%c, x pos=%d, char_width =%d",
             cursor->offset, cursor->c,cursor->x, character->width);
 
-    return ;
+    return 1;
 }
 
 void move_cursor_right(Component *component) 
@@ -686,12 +686,17 @@ static int __backspace_key_input(Component *component,void *graph)
 	Character *character;
     uint16_t cursor_line;
     char c;
+    int ret;
 
 	dbg_str(DBG_DETAIL,"backspace_key_input");
 
-    c = cursor->c;
+	ret = move_cursor_left(component);
 
-	move_cursor_left(component);
+    if (ret < 1) {
+        return;
+    }
+
+    c = cursor->c;
 
 	cursor_line          = get_row_at_cursor(component);
     disturbed_line_count = text->delete_char(text,cursor_line ,
