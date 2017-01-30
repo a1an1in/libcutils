@@ -142,22 +142,6 @@ int rewrite_text(Text *text, int start_line,int offset,
 		if (x + c_witdh <= line_width) {
 			li->string->replace_char(li->string,line_offset, c);
 			x  += c_witdh;
-
-			if (c == '\n') {
-				li->line_lenth  = x;
-				li->head        = li->string->value;
-				li->tail        = li->head + line_offset;
-				ret             = i + 1;
-                line_num++;
-                break;
-            } else if (i == len -1) {
-                li->line_lenth  = x;
-                li->head        = li->string->value;
-                li->tail        = li->head + line_offset;
-                ret             = i + 1;
-                line_num++;
-                break;
-            }
         } else if (x + c_witdh > line_width) {//line end
 			li->line_lenth = x;
 			li->head       = li->string->value;
@@ -174,27 +158,28 @@ int rewrite_text(Text *text, int start_line,int offset,
 				li->string->replace_char(li->string,line_offset, c);
 				x              = c_witdh;
 
-				if (c == '\n') {
-					li->line_lenth  = x;
-					li->head        = li->string->value;
-					li->tail        = li->head + line_offset;
-					ret             = i + 1;
-					line_num++;
-					break;
-				} else if (i == len -1) {
-					li->line_lenth  = x;
-					li->head        = li->string->value;
-					li->tail        = li->head + line_offset;
-					ret             = i + 1;
-					line_num++;
-					break;
-				}
-
 			} else if( line_num == count) {
 				ret = i;
 				break;
             }
 		}
+
+		if (c == '\n') {
+			li->line_lenth  = x;
+			li->head        = li->string->value;
+			li->tail        = li->head + line_offset;
+			ret             = i + 1;
+			line_num++;
+			break;
+		} else if (i == len -1) {
+			li->line_lenth  = x;
+			li->head        = li->string->value;
+			li->tail        = li->head + line_offset;
+			ret             = i + 1;
+			line_num++;
+			break;
+		}
+
 		line_offset++;
 	}
 
@@ -294,7 +279,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 	int line_width          = text->width;
 	int head_offset         = 0;
 	int tail_offset         = 0;
-	int line_num            = 0;
+	int write_count         = 0;
 	int line_lenth          = 0;
 	int x                   = 0, y = 0;
 	Font *f                 = (Font *)font;
@@ -325,7 +310,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
 
 		if(x + c_witdh > line_width) {//line end
 			line_info.line_lenth  = x;
-			line_num++;
+			write_count++;
 			line_info.head        = line_info.string->value;
 			line_info.tail        = line_info.head + line_offset - 1;
 			list->insert_after(list,cur, &line_info);
@@ -338,45 +323,26 @@ int __write_text(Text *text, int start_line,char *str, void *font)
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
 			line_info.string->append_char(line_info.string,c);
 
-			if(c == '\n') {
-				line_info.line_lenth  = x;
-				line_num++;
-				line_info.string->append_char(line_info.string,c);
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-                list->insert_after(list,cur, &line_info);
-                cur->next(cur);
-				x                     = 0;
-			} else if( i == len - 1) {
-				line_info.line_lenth  = x;
-				text->last_line_num   = line_num;
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-                list->insert_after(list,cur, &line_info);
-                cur->next(cur);
-			}
 		} else {
 			x                        += c_witdh;
 			line_info.string->append_char(line_info.string,c);
+		}
 
-			if(c == '\n') {
-				line_info.line_lenth  = x;
-				line_num++;
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-                list->insert_after(list,cur, &line_info);
-                cur->next(cur);
-				x                     = 0;
-			} else if( i == len - 1) {
-				line_info.line_lenth  = x;
-                /*
-				 *text->last_line_num  = line_num;
-                 */
-				line_info.head        = line_info.string->value;
-				line_info.tail        = line_info.head + line_offset;
-                list->insert_after(list,cur, &line_info);
-                cur->next(cur);
-			}
+		if(c == '\n') {
+			line_info.line_lenth  = x;
+			write_count++;
+			line_info.head        = line_info.string->value;
+			line_info.tail        = line_info.head + line_offset;
+			list->insert_after(list,cur, &line_info);
+			cur->next(cur);
+			x                     = 0;
+		} else if( i == len - 1) {
+			line_info.line_lenth  = x;
+			write_count++;
+			line_info.head        = line_info.string->value;
+			line_info.tail        = line_info.head + line_offset;
+			list->insert_after(list,cur, &line_info);
+			cur->next(cur);
 		}
 
 		line_offset++;
@@ -385,7 +351,7 @@ int __write_text(Text *text, int start_line,char *str, void *font)
     object_destroy(cur);
     object_destroy(end);
 
-	return line_num;
+	return write_count;
 #undef MAX_TEXT_LINE_LENTH
 }
 
@@ -419,15 +385,13 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
      *dbg_str(DBG_DETAIL,"left str:%s", str + write_len + 1);
 	 */
 	if(total_len - write_len > 0) {
-        /*
-		 *dbg_str(DBG_IMPORTANT,"new a line, line_num=%d, line_count=%d,write_len=%d, total_len=%d, value:%s", line_num ,line_count,write_len, total_len,  str + write_len);
-         */
 		new_line_count = text->write_text(text, line_num + line_count -1 ,str + write_len, font);
         text->last_line_num += new_line_count;
         /*
 		 *ret = line_count + new_line_count;
          */
         ret = text->last_line_num - line_num + 1;
+		dbg_str(DBG_IMPORTANT,"new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s", line_num ,text->last_line_num, new_line_count, line_count,write_len, total_len,  str + write_len);
 	} else {
 		ret = line_count;
 	}
