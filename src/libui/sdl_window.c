@@ -101,6 +101,7 @@ static void *__create_font(Window *window,char *font_name)
 static int __destroy_font(Window *window)
 {
     dbg_str(SDL_INTERFACE_DETAIL,"sdl window destroy_font");
+	window->font->load_font(window->font);
     object_destroy(window->font);
 }
 

@@ -116,11 +116,11 @@ void move_cursor_right(Component *component)
 		cursor->y      += character->height;
 		cursor->width   = character->width;
 
-		c              = line_info->head[1];
-		character      = (Character *)g->font->ascii[c].character;
-        cursor->c      = c;
-		cursor->x     += cursor->width;
-		cursor->width  = character->width;
+		c               = line_info->head[1];
+		character       = (Character *)g->font->ascii[c].character;
+        cursor->c       = c;
+		cursor->x      += cursor->width;
+		cursor->width   = character->width;
 		cursor->offset++;
 		return;
     }
@@ -479,11 +479,6 @@ static int erase_n_lines_of_text(Component *component,int from, int to, void *gr
     int height        = tw->char_height;
 
     g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
-    /*
-     *g->render_fill_rect(g, 0, from * height, s->width, (20) * height);
-	 *g->render_present(g);
-     *g->render_set_color(g, 50, bg_color->g, bg_color->b, bg_color->a);
-     */
     g->render_fill_rect(g, 0, from * height, s->width, (to - from + 1) * height);
 }
 
@@ -617,7 +612,9 @@ static int __load_resources(Component *component,void *window)
 
     tw->window          = window;
 
-	g->font->load_ascii_character(g->font,g);
+    /*
+	 *g->font->load_ascii_character(g->font,g);
+     */
 	text->last_line_num = text->write_text(text,0, text->content, g->font) - 1;
 	/*
 	 *tw->text->line_info->for_each(tw->text->line_info, print_line_info);

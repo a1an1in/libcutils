@@ -16,8 +16,8 @@ typedef struct position_s{
 static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);
-    window->create_graph(window, NULL);
     window->create_font(window,NULL);
+    window->create_graph(window, NULL);
     window->create_event(window);
     window->open_window(window);
 
@@ -164,6 +164,8 @@ static int __load_resources(Window *window)
 	Container *container = (Container *)window;
 
 	dbg_str(DBG_DETAIL,"window load_resources");
+
+    window->font->load_ascii_character(window->font,window->graph);
 	container->for_each_component(container, window_load_component_resources, window);
 
 	return 0;

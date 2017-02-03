@@ -18,6 +18,7 @@ struct string_s{
     String *(*assign)(String *string,char *s);
     String *(*append_char)(String *string,char c);
 	String *(*replace_char)(String *string,int index, char c);
+    char (*at)(String *string,int index);
 
 	/*virtual methods reimplement*/
 #define MAX_NAME_LEN 50

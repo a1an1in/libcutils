@@ -39,17 +39,21 @@ static int __set(Font *font, char *attrib, void *value)
 		font->construct = value;
 	} else if(strcmp(attrib, "deconstruct") == 0) {
 		font->deconstruct = value;
-
-	} else if(strcmp(attrib, "load_font") == 0) {
+	}
+    else if(strcmp(attrib, "load_font") == 0) {
 		font->load_font = value;
+	} else if(strcmp(attrib, "unload_font") == 0) {
+		font->unload_font = value;
 	} else if(strcmp(attrib, "load_ascii_character") == 0) {
 		font->load_ascii_character = value;
+	} else if(strcmp(attrib, "unload_ascii_character") == 0) {
+		font->unload_ascii_character = value;
 	} else if(strcmp(attrib, "get_character_width") == 0) {
 		font->get_character_width = value;
 	} else if(strcmp(attrib, "get_character_height") == 0) {
 		font->get_character_height = value;
-
-	} else {
+	}
+    else {
 		dbg_str(OBJ_WARNNING,"font set,  \"%s\" setting is not support",attrib);
 	}
 
@@ -73,11 +77,13 @@ static class_info_entry_t font_class_info[] = {
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_font",NULL,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_ascii_character",NULL,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_character_width",NULL,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_character_height",NULL,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_NORMAL_POINTER,"","String",NULL,sizeof(void *)},
-	[10] = {ENTRY_TYPE_END},
+	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","unload_font",NULL,sizeof(void *)},
+	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_ascii_character",NULL,sizeof(void *)},
+	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","unload_ascii_character",NULL,sizeof(void *)},
+	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_character_width",NULL,sizeof(void *)},
+	[10] = {ENTRY_TYPE_VFUNC_POINTER,"","get_character_height",NULL,sizeof(void *)},
+	[11] = {ENTRY_TYPE_NORMAL_POINTER,"","String",NULL,sizeof(void *)},
+	[12] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Font",font_class_info);

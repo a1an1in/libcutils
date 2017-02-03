@@ -457,9 +457,7 @@ static int args_process_test_SDL_Event(void *base,int argc,char **argv)
 
 static int args_process_test_Label(void *base,int argc,char **argv)
 {
-	/*
-     *test_ui_label();
-	 */
+    test_ui_label();
 	return 0;
 }
 
@@ -488,7 +486,7 @@ static int args_process_test_sdl_timer(void *base,int argc,char **argv)
 }
 static cmd_config_t cmds[]={
 	{"Sdl_Timer", args_process_test_sdl_timer,0, "test", "N/A","test"},
-	{"TA", args_process_test_Text_Wicket,0, "test", "N/A","test"},
+	{"TW", args_process_test_Text_Wicket,0, "test", "N/A","test"},
 	{"Text", args_process_test_Text,0, "test", "N/A","test"},
 	{"LList", args_process_test_LList,0, "test", "N/A","test"},
 	{"Label", args_process_test_Label,0, "test", "N/A","test"},
@@ -568,7 +566,9 @@ int main(int argc, char *argv[])
 
 	args_process(NULL,cmds,argc, argv);
 
-    test_ui_text_wicket();
+    /*
+     *test_ui_text_wicket();
+     */
 
 	dbg_str(DBG_DETAIL,"main func end");
 	pause();
