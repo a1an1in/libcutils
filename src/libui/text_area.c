@@ -36,8 +36,8 @@ int move_cursor_left(Component *component)
 	Character *character;
     uint16_t cursor_line;
 
-	cursor_line    = get_row_at_cursor(component);
-	line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
+    cursor_line = get_row_at_cursor(component);
+    line_info   = (text_line_t *)text->get_text_line_info(text, cursor_line);
 
     if (cursor->x > 0) {
         c                 = line_info->head[cursor->offset - 1];
@@ -85,8 +85,8 @@ void move_cursor_right(Component *component)
     uint16_t cursor_line;
 	char c = 0;
 
-	cursor_line    = get_row_at_cursor(component);
-	line_info      = (text_line_t *)text->get_text_line_info(text, cursor_line);
+	cursor_line = get_row_at_cursor(component);
+	line_info   = (text_line_t *)text->get_text_line_info(text, cursor_line);
 
 	if (cursor->x + cursor->width < line_info->line_lenth) {
 		c              = line_info->head[cursor->offset + 1];
@@ -103,7 +103,27 @@ void move_cursor_right(Component *component)
 	 *if just move cursor in text, only has one case:
 	 * 1.cursor->x + cursor->width == line_info->line_lenth
 	 * */
-	else if ((  cursor->x + cursor->width >= line_info->line_lenth ||
+	else if (cursor->x + cursor->width > line_info->line_lenth)
+    {
+		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
+
+		c               = line_info->head[0];
+		character       = (Character *)g->font->ascii[c].character;
+        cursor->c       = c;
+		cursor->offset  = 0;
+		cursor->x       = 0;
+		cursor->y      += character->height;
+		cursor->width   = character->width;
+
+		c              = line_info->head[1];
+		character      = (Character *)g->font->ascii[c].character;
+        cursor->c      = c;
+		cursor->x     += cursor->width;
+		cursor->width  = character->width;
+		cursor->offset++;
+		return;
+    }
+    else if ((  cursor->x + cursor->width == line_info->line_lenth ||
 			    cursor->x == line_info->line_lenth) &&
 			 cursor_line < text->last_line_num)
     {
@@ -648,7 +668,8 @@ static int __draw(Component *component, void *graph)
         if (line_info == NULL) break;
 
         /*
-         *dbg_str(DBG_DETAIL,"draw line=%d, len=%d, cursor->x =%d, cursor->y =%d,str=%s", j, line_info->tail - line_info->head, cursor->x,cursor->y,  line_info->head);
+         *dbg_str(DBG_DETAIL,"draw line=%d, len=%d, cursor->x =%d, cursor->y =%d,str=%s",
+         *j, line_info->tail - line_info->head, cursor->x,cursor->y,  line_info->head);
          */
 		for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
 			c = line_info->head[i];
@@ -705,6 +726,7 @@ static int __text_key_input(Component *component,char c, void *graph)
 
 	cursor_bak             = *cursor;
 
+    /*draw lines disturbed by writing a char*/
     erase_n_lines_of_text(component,from, to, graph);
     draw_n_lines_of_text(component,from, to, g);
 

@@ -48,8 +48,8 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
     int find_flag          = -1, line_count = 0;
 	int i                  = 0;
 
-    cur         = text->line_info->begin(text->line_info);
-    end         = text->line_info->end(text->line_info);
+    cur = text->line_info->begin(text->line_info);
+    end = text->line_info->end(text->line_info);
 
     for (i = 0; !end->equal(end,cur); cur->next(cur), i++) {
 		if (i == line_num) {
@@ -98,6 +98,21 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
 
 }
 
+/**
+ * @synopsis            rewrite the text, we dont realloc the structure to store text. 
+ *
+ * @param text          
+ * @param start_line
+ * @param offset        write at the offset of the start line
+ * @param width         write a the width of the start line
+ * @param count         line count to write
+ * @param str           string to write
+ * @param out_len       write back the len writen
+ * @param out_line_cnt  write back the line count writen
+ * @param font
+ *
+ * @returns   
+ */
 int rewrite_text(Text *text, int start_line,int offset,
 				 int width, int count,
 				 char *str,int *out_len, int *out_line_cnt, void *font)
@@ -184,7 +199,8 @@ int rewrite_text(Text *text, int start_line,int offset,
 	}
 
     if(ret == 0) {
-        dbg_str(DBG_WARNNING, "rewrite_text warnning, i=%d, line_num=%d, count=%d, len=%d", i, line_num,count, len);
+        dbg_str(DBG_WARNNING, "rewrite_text warnning, i=%d, line_num=%d, count=%d, len=%d",
+                i, line_num,count, len);
     }
 
     if(out_line_cnt != NULL)
@@ -273,6 +289,16 @@ static void * __get(Text *text, char *attrib)
     return NULL;
 }
 
+/**
+ * @synopsis __write_text 
+ *
+ * @param text          
+ * @param start_line    write at the line of text
+ * @param str           the string to write
+ * @param font
+ *
+ * @returns   
+ */
 int __write_text(Text *text, int start_line,char *str, void *font)
 {
 #define MAX_TEXT_LINE_LENTH 256
@@ -391,7 +417,8 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
 		 *ret = line_count + new_line_count;
          */
         ret = text->last_line_num - line_num + 1;
-		dbg_str(DBG_IMPORTANT,"new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s", line_num ,text->last_line_num, new_line_count, line_count,write_len, total_len,  str + write_len);
+		dbg_str(DBG_IMPORTANT,"new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s",
+                line_num ,text->last_line_num, new_line_count, line_count,write_len, total_len,  str + write_len);
 	} else {
 		ret = line_count;
 	}
