@@ -1,11 +1,11 @@
 /**
- * @file text_area.c
+ * @file text_wicket.c
  * @synopsis 
  * @author alan(a1an1in@sina.com)
  * @version 1
  * @date 2016-11-21
  */
-#include <libui/text_area.h>
+#include <libui/text_wicket.h>
 #include <libui/sdl_window.h>
 #include <libui/character.h>
 #include <libui/timer.h>
@@ -15,7 +15,7 @@ extern char *global_text;
 
 char get_row_at_cursor(Component *component) 
 {
-	Text_Area *ta    = (Text_Area *)component;
+	Text_Wicket *ta    = (Text_Wicket *)component;
     cursor_t *cursor = &ta->cursor;
     uint16_t row;
 
@@ -26,7 +26,7 @@ char get_row_at_cursor(Component *component)
 
 int move_cursor_left(Component *component) 
 {
-	Text_Area *ta          = (Text_Area *)component;
+	Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
@@ -74,7 +74,7 @@ int move_cursor_left(Component *component)
 
 void move_cursor_right(Component *component) 
 {
-	Text_Area *ta          = (Text_Area *)component;
+	Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
@@ -103,7 +103,8 @@ void move_cursor_right(Component *component)
 	 *if just move cursor in text, only has one case:
 	 * 1.cursor->x + cursor->width == line_info->line_lenth
 	 * */
-	else if (cursor->x + cursor->width > line_info->line_lenth)
+	else if (cursor->x + cursor->width > line_info->line_lenth &&
+             cursor_line < text->last_line_num)
     {
 		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 
@@ -125,7 +126,7 @@ void move_cursor_right(Component *component)
     }
     else if ((  cursor->x + cursor->width == line_info->line_lenth ||
 			    cursor->x == line_info->line_lenth) &&
-			 cursor_line < text->last_line_num)
+			    cursor_line < text->last_line_num)
     {
 		line_info       = (text_line_t *)text->get_text_line_info(text, cursor_line + 1);
 		c               = line_info->head[0];
@@ -163,7 +164,7 @@ void move_cursor_right(Component *component)
 
 void move_cursor_up(Component *component) 
 {
-	Text_Area *ta          = (Text_Area *)component;
+	Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
@@ -246,7 +247,7 @@ void move_cursor_up(Component *component)
 
 void move_cursor_down(Component *component) 
 {
-	Text_Area *ta          = (Text_Area *)component;
+	Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	Window *window         = (Window *)ta->window;
 	Graph *g               = ((Window *)window)->graph;
@@ -324,7 +325,7 @@ void move_cursor_down(Component *component)
 
 static int draw_cursor(Component *component,void *graph)
 {
-	Text_Area *ta     = (Text_Area *)component;
+	Text_Wicket *ta     = (Text_Wicket *)component;
 	Window *window    = (Window *)ta->window;
 	Graph *g          = ((Window *)window)->graph;
     cursor_t *cursor  = &ta->cursor;
@@ -353,7 +354,7 @@ static int draw_cursor(Component *component,void *graph)
 
 static int reverse_cursor(Component *component,void *graph)
 {
-	Text_Area *ta     = (Text_Area *)component;
+	Text_Wicket *ta     = (Text_Wicket *)component;
 	Window *window    = (Window *)ta->window;
 	Graph *g          = ((Window *)window)->graph;
     cursor_t *cursor  = &ta->cursor;
@@ -380,7 +381,7 @@ static int reverse_cursor(Component *component,void *graph)
 
 static int draw_character(Component *component,char c, void *graph)
 {
-    Text_Area *ta    = (Text_Area *)component;
+    Text_Wicket *ta    = (Text_Wicket *)component;
 	Graph *g         = (Graph *)graph;
     cursor_t *cursor = &ta->cursor;
 	Character *character;
@@ -404,7 +405,7 @@ static int draw_character(Component *component,char c, void *graph)
 
 static int erase_character(Component *component,char c, void *graph)
 {
-	Text_Area *ta     = (Text_Area *)component;
+	Text_Wicket *ta     = (Text_Wicket *)component;
 	Window *window    = (Window *)ta->window;
 	Graph *g          = ((Window *)window)->graph;
     cursor_t *cursor  = &ta->cursor;
@@ -428,7 +429,7 @@ static int erase_character(Component *component,char c, void *graph)
 
 static int draw_n_lines_of_text(Component *component,int from, int to, void *graph)
 {
-	Text_Area *ta          = (Text_Area *)component;
+	Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	Graph *g               = (Graph *)graph;
 	Subject *s             = (Subject *)component;
@@ -470,7 +471,7 @@ static int draw_n_lines_of_text(Component *component,int from, int to, void *gra
 
 static int erase_n_lines_of_text(Component *component,int from, int to, void *graph)
 {
-	Text_Area *ta     = (Text_Area *)component;
+	Text_Wicket *ta     = (Text_Wicket *)component;
     Text *text        = ta->text;
 	Graph *g          = (Graph *)graph;
 	Subject *s        = (Subject *)component;
@@ -489,7 +490,7 @@ static int erase_n_lines_of_text(Component *component,int from, int to, void *gr
 static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 {
 	__Timer *timer = (__Timer *)param;
-	Text_Area *ta  = (Text_Area *)timer->opaque;
+	Text_Wicket *ta  = (Text_Wicket *)timer->opaque;
 	Window *window = (Window *)ta->window;
 	Graph *g       = ((Window *)window)->graph;
 
@@ -503,7 +504,7 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
 	timer->reuse(timer);
 }
 
-static int __construct(Text_Area *ta,char *init_str)
+static int __construct(Text_Wicket *ta,char *init_str)
 {
     allocator_t *allocator = ((Obj *)ta)->allocator;
     cursor_t *cursor       = &ta->cursor;
@@ -534,7 +535,7 @@ static int __construct(Text_Area *ta,char *init_str)
 	return 0;
 }
 
-static int __deconstrcut(Text_Area *ta)
+static int __deconstrcut(Text_Wicket *ta)
 {
 	dbg_str(DBG_SUC,"ta deconstruct");
 
@@ -547,7 +548,7 @@ static int __deconstrcut(Text_Area *ta)
 	return 0;
 }
 
-static int __set(Text_Area *ta, char *attrib, void *value)
+static int __set(Text_Wicket *ta, char *attrib, void *value)
 {
 	if (strcmp(attrib, "set") == 0) {
 		ta->set = value;
@@ -594,12 +595,12 @@ static int __set(Text_Area *ta, char *attrib, void *value)
 	return 0;
 }
 
-static void *__get(Text_Area *obj, char *attrib)
+static void *__get(Text_Wicket *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"text_area get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(DBG_WARNNING,"text_wicket get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -608,7 +609,7 @@ static void *__get(Text_Area *obj, char *attrib)
 static int __load_resources(Component *component,void *window)
 {
 	Graph *g      = ((Window *)window)->graph;
-	Text_Area *ta = (Text_Area *)component;
+	Text_Wicket *ta = (Text_Wicket *)component;
     Text *text    = ta->text;
 	Character *character;
 
@@ -643,7 +644,7 @@ static int __unload_resources(Component *component,void *window)
 
 static int __draw(Component *component, void *graph)
 {
-	Text_Area *ta          = (Text_Area *)component;
+	Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	Graph *g               = (Graph *)graph;
 	Subject *s             = (Subject *)component;
@@ -696,7 +697,7 @@ static int __draw(Component *component, void *graph)
 static int __text_key_input(Component *component,char c, void *graph)
 {
 	Graph *g                 = (Graph *)graph;
-    Text_Area *ta            = (Text_Area *)component;
+    Text_Wicket *ta            = (Text_Wicket *)component;
     Text *text               = ta->text;
     cursor_t *cursor         = &ta->cursor, cursor_bak;
     int disturbed_line_count = 0;
@@ -739,7 +740,7 @@ static int __text_key_input(Component *component,char c, void *graph)
 static int __backspace_key_input(Component *component,void *graph)
 {
 	Graph *g                       = (Graph *)graph;
-    Text_Area *ta                  = (Text_Area *)component;
+    Text_Wicket *ta                  = (Text_Wicket *)component;
     Text *text                     = ta->text;
     cursor_t *cursor               = &ta->cursor, cursor_bak; 
     int disturbed_line_count       = 0;
@@ -788,7 +789,7 @@ static int __backspace_key_input(Component *component,void *graph)
 static int __up_key_down(Component *component,void *graph)
 {
 	Graph *g          = (Graph *)graph;
-	Text_Area *ta     = (Text_Area *)component;
+	Text_Wicket *ta     = (Text_Wicket *)component;
     cursor_t *cursor  = &ta->cursor;
     color_t *bg_color = &ta->background_color;
 
@@ -804,7 +805,7 @@ static int __up_key_down(Component *component,void *graph)
 static int __down_key_down(Component *component,void *graph)
 {
 	Graph *g         = (Graph *)graph;
-	Text_Area *ta    = (Text_Area *)component;
+	Text_Wicket *ta    = (Text_Wicket *)component;
     cursor_t *cursor = &ta->cursor;
 
     reverse_cursor(component,g);
@@ -819,7 +820,7 @@ static int __down_key_down(Component *component,void *graph)
 static int __left_key_down(Component *component,void *graph)
 {
 	Graph *g         = (Graph *)graph;
-	Text_Area *ta    = (Text_Area *)component;
+	Text_Wicket *ta    = (Text_Wicket *)component;
     cursor_t *cursor = &ta->cursor;
 
 	/*
@@ -836,7 +837,7 @@ static int __left_key_down(Component *component,void *graph)
 static int __right_key_down(Component *component,void *graph)
 {
 	Graph *g         = (Graph *)graph;
-	Text_Area *ta    = (Text_Area *)component;
+	Text_Wicket *ta    = (Text_Wicket *)component;
     cursor_t *cursor = &ta->cursor;
 
 	/*
@@ -853,7 +854,7 @@ static int __right_key_down(Component *component,void *graph)
 static int __pgup_key_down(Component *component,void *graph)
 {
 	Graph *g               = (Graph *)graph;
-    Text_Area *ta          = (Text_Area *)component;
+    Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	text_line_t *line_info = NULL;
     cursor_t *cursor       = &ta->cursor, cursor_bak;
@@ -884,7 +885,7 @@ static int __pgup_key_down(Component *component,void *graph)
 static int __pgdown_key_down(Component *component,void *graph)
 {
 	Graph *g               = (Graph *)graph;
-    Text_Area *ta          = (Text_Area *)component;
+    Text_Wicket *ta          = (Text_Wicket *)component;
     Text *text             = ta->text;
 	text_line_t *line_info = NULL;
     cursor_t *cursor       = &ta->cursor, cursor_bak;
@@ -911,7 +912,7 @@ static int __pgdown_key_down(Component *component,void *graph)
 static int __one_line_up(Component *component,void *graph)
 {
 	Graph *g         = (Graph *)graph;
-    Text_Area *ta    = (Text_Area *)component;
+    Text_Wicket *ta    = (Text_Wicket *)component;
     cursor_t *cursor = &ta->cursor;
 
 	dbg_str(DBG_DETAIL,"one line up");
@@ -924,7 +925,7 @@ static int __one_line_up(Component *component,void *graph)
 
 static int __one_line_down(Component *component,void *graph)
 {
-    Text_Area *ta    = (Text_Area *)component;
+    Text_Wicket *ta    = (Text_Wicket *)component;
 	Graph *g         = (Graph *)graph;
     cursor_t *cursor = &ta->cursor;
 
@@ -942,7 +943,7 @@ static int __one_line_down(Component *component,void *graph)
 
 }
 
-static class_info_entry_t text_area_class_info[] = {
+static class_info_entry_t text_wicket_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
@@ -964,15 +965,15 @@ static class_info_entry_t text_area_class_info[] = {
 	[18] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("Text_Area",text_area_class_info);
+REGISTER_CLASS("Text_Wicket",text_wicket_class_info);
 
-char *gen_text_area_setting_str()
+char *gen_text_wicket_setting_str()
 {
     cjson_t *root,*b, *c, *e, *s;
     char *set_str;
 
     root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Text_Area", b = cjson_create_object());{
+        cjson_add_item_to_object(root, "Text_Wicket", b = cjson_create_object());{
             cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
                 cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
@@ -982,7 +983,7 @@ char *gen_text_area_setting_str()
                         cjson_add_number_to_object(s, "height", 600);
                     }
                 }
-				cjson_add_string_to_object(c, "name", "text_area");
+				cjson_add_string_to_object(c, "name", "text_wicket");
             }
         }
     }
@@ -990,7 +991,7 @@ char *gen_text_area_setting_str()
 
     return set_str;
 }
-void test_ui_text_area()
+void test_ui_text_wicket()
 {
     Window *window;
     Container *container;
@@ -1010,15 +1011,15 @@ void test_ui_text_area()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    set_str   = gen_text_area_setting_str();
-    subject   = OBJECT_NEW(allocator, Text_Area,set_str);
+    set_str   = gen_text_wicket_setting_str();
+    subject   = OBJECT_NEW(allocator, Text_Wicket,set_str);
 
-    object_dump(subject, "Text_Area", buf, 2048);
-    dbg_str(DBG_DETAIL,"Text_Area dump: %s",buf);
+    object_dump(subject, "Text_Wicket", buf, 2048);
+    dbg_str(DBG_DETAIL,"Text_Wicket dump: %s",buf);
 
     container->add_component(container,subject);
 	/*
-     *container->search_component(container,"text_area");
+     *container->search_component(container,"text_wicket");
 	 */
 	dbg_str(DBG_DETAIL,"window container :%p",container);
 

@@ -10,20 +10,20 @@
 #include <libui/color.h>
 #include <libui/cursor.h>
 
-typedef struct text_area_s Text_Area;
+typedef struct text_wicket_s Text_Wicket;
 
-typedef struct text_area_line_info_s{
+typedef struct text_wicket_line_info_s{
     int paragraph_num;
     int offset;
     int max_height;
-}text_area_line_info_t;
+}text_wicket_line_info_t;
 
-struct text_area_s{
+struct text_wicket_s{
 	Component component;
 
-	int (*construct)(Text_Area *text_area,char *init_str);
-	int (*deconstruct)(Text_Area *text_area);
-	int (*set)(Text_Area *text_area, char *attrib, void *value);
+	int (*construct)(Text_Wicket *text_wicket,char *init_str);
+	int (*deconstruct)(Text_Wicket *text_wicket);
+	int (*set)(Text_Wicket *text_wicket, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/

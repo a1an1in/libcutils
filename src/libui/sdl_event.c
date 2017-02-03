@@ -183,7 +183,7 @@ static int __poll_event(__Event *event,void *window)
 	//add for test>>
     Container *container;
     container = (Container *)window;
-	cur       = container->search_component(container,"text_area");
+	cur       = container->search_component(container,"text_wicket");
 	dbg_str(DBG_WARNNING,"found cur component :%p",cur);
 	//<<
 	
