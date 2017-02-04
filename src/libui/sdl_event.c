@@ -183,8 +183,11 @@ static int __poll_event(__Event *event,void *window)
 	//add for test>>
     Container *container;
     container = (Container *)window;
-	cur       = container->search_component(container,"text_area");
-	dbg_str(DBG_WARNNING,"found cur component :%p",cur);
+	cur       = container->search_component(container,"text_field");
+    if(cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return -1;
+    }
 	//<<
 	
 	/*

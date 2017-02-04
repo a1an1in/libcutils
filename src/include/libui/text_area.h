@@ -1,5 +1,5 @@
-#ifndef __TEXT_WICKET_H__
-#define __TEXT_WICKET_H__
+#ifndef __TEXT_AREA_H__
+#define __TEXT_AREA_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>

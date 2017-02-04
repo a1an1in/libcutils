@@ -13,7 +13,7 @@
 extern void print_line_info(Iterator *iter);
 extern char *global_text;
 
-char get_row_at_cursor(Component *component) 
+static char get_row_at_cursor(Component *component) 
 {
 	Text_Area *ta    = (Text_Area *)component;
     cursor_t *cursor = &ta->cursor;
@@ -24,7 +24,7 @@ char get_row_at_cursor(Component *component)
     return row;
 }
 
-int move_cursor_left(Component *component) 
+static int move_cursor_left(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
     Text *text             = ta->text;
@@ -72,7 +72,7 @@ int move_cursor_left(Component *component)
     return 1;
 }
 
-void move_cursor_right(Component *component) 
+static void move_cursor_right(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
     Text *text             = ta->text;
@@ -162,7 +162,7 @@ void move_cursor_right(Component *component)
     return ;
 }
 
-void move_cursor_up(Component *component) 
+static void move_cursor_up(Component *component) 
 {
 	Text_Area *ta        = (Text_Area *)component;
     Text *text             = ta->text;
@@ -245,7 +245,7 @@ void move_cursor_up(Component *component)
 	return ;
 }
 
-void move_cursor_down(Component *component) 
+static void move_cursor_down(Component *component) 
 {
 	Text_Area *ta          = (Text_Area *)component;
     Text *text             = ta->text;
