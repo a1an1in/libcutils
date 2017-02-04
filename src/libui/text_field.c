@@ -118,6 +118,7 @@ static int draw_cursor(Component *component,void *graph)
 	Character *character;   
     char c;
 
+#if 0
 	c         = cursor->c;
     character = g->render_load_character(g,c,g->font,
                                          bg_color->r,
@@ -131,6 +132,14 @@ static int draw_cursor(Component *component,void *graph)
 	g->render_present(g);
 
     object_destroy(character);   
+#else
+    g->render_set_color(g,ft_color->r,ft_color->g,ft_color->b,ft_color->a);
+    g->render_draw_line(g,
+                        s->x + cursor->x, s->y + cursor->y,
+                        s->x + cursor->x, s->y + cursor->y + cursor->height);
+	g->render_present(g);
+#endif
+
 }
 
 static int reverse_cursor(Component *component,void *graph)
@@ -145,6 +154,7 @@ static int reverse_cursor(Component *component,void *graph)
 	Character *character;   
     char c;
 
+#if 0
 	c         = cursor->c;
     character = g->render_load_character(g,c,g->font,
                                          ft_color->r,
@@ -159,6 +169,13 @@ static int reverse_cursor(Component *component,void *graph)
 	g->render_present(g);
 
     object_destroy(character);   
+#else
+    g->render_set_color(g,bg_color->r, bg_color->g, bg_color->b, bg_color->a);
+    g->render_draw_line(g,
+                        s->x + cursor->x, s->y + cursor->y,
+                        s->x + cursor->x, s->y + cursor->y + cursor->height);
+	g->render_present(g);
+#endif
 }
 
 static int draw_character(Component *component,char c, void *graph)
