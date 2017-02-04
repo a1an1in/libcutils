@@ -42,7 +42,7 @@ static int __construct(Label *label,char *init_str)
 	dbg_str(DBG_SUC,"label construct");
 
     label->string             = OBJECT_NEW(allocator, String, NULL);
-    label->string->assign(label->string,"hello world!abcdefghijklmnopqrstuvwxyz");
+    label->string->assign(label->string,"button1");
 
     label->front_color.r      = 0;
     label->front_color.g      = 0;
@@ -152,12 +152,12 @@ static int __draw(Component *component, void *graph)
 
 	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
 
-	cursor->x = 0; cursor->y = 0; cursor->width = 0; 
+	cursor->x = s->x; cursor->y = s->y; cursor->width = 0; 
 
     str_len = strlen(label->string->value);
 
-	for (j = 0; cursor->y + cursor->height < ((Subject *)component)->height; j++) {
-		for (i = 0; cursor->x + cursor->width < ((Subject *)component)->width; i++) {
+	for (j = 0; cursor->y + cursor->height < ((Subject *)component)->height + s->y; j++) {
+		for (i = 0; cursor->x + cursor->width < ((Subject *)component)->width + s->x; i++) {
 			c = label->string->at(label->string, count++);
 			draw_character(component,c, graph);
             if(count  == str_len){
@@ -165,7 +165,7 @@ static int __draw(Component *component, void *graph)
                 goto end;
             } 
         }
-        cursor->x  = 0;
+        cursor->x  = s->x;
 		cursor->y += cursor->height;
     }
 
@@ -195,11 +195,11 @@ char *gen_label_setting_str()
 
     root = cjson_create_object();{
         cjson_add_item_to_object(root, "Label", b = cjson_create_object());{
-            cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
-                cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
+            cjson_add_item_to_object(b, "Component", c = cjson_create_object());{
+                cjson_add_item_to_object(c, "Container", e = cjson_create_object());{
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 0);
-                        cjson_add_number_to_object(s, "y", 0);
+                        cjson_add_number_to_object(s, "x", 10);
+                        cjson_add_number_to_object(s, "y", 20);
                         cjson_add_number_to_object(s, "width", 100);
                         cjson_add_number_to_object(s, "height", 50);
                     }
