@@ -38,18 +38,9 @@ static int __set(Girdlayout *girdlayout, char *attrib, void *value)
 		girdlayout->deconstruct = value;
 	}
 	/*vitual methods*/
-	else if (strcmp(attrib, "draw") == 0) {
-		girdlayout->draw = value;
-	} else if (strcmp(attrib, "load_resources") == 0) {
-		girdlayout->load_resources = value;
-	} else if (strcmp(attrib, "unload_resources") == 0) {
-		girdlayout->unload_resources = value;
-	}
 	/*attribs*/
 	else if (strcmp(attrib, "name") == 0) {
         strncpy(girdlayout->name,value,strlen(value));
-    } else if (strcmp(attrib, "text_overflow_flag") == 0) {
-        girdlayout->text_overflow_flag = *((uint8_t *)value);
 	} else {
 		dbg_str(DBG_DETAIL,"girdlayout set, not support %s setting",attrib);
 	}
@@ -68,38 +59,14 @@ static void *__get(Girdlayout *obj, char *attrib)
     return NULL;
 }
 
-static int __load_resources(Component *component,void *window)
-{
-	Graph *g     = ((Window *)window)->graph;
-	Girdlayout *girdlayout = (Girdlayout *)component;
-	Character *character;
-
-	dbg_str(DBG_DETAIL,"%s load resources",component->name);
-
-
-	return 0;
-}
-
-static int __unload_resources(Component *component,void *window)
-{
-}
-
-static int __draw(Component *component, void *graph)
-{
-}
-
 static class_info_entry_t girdlayout_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","unload_resources",__unload_resources,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[9 ] = {ENTRY_TYPE_INT8_T,"char","text_overflow_flag",NULL,0},
-	[10] = {ENTRY_TYPE_END},
+	[5 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+	[6 ] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Girdlayout",girdlayout_class_info);

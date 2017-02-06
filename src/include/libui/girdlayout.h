@@ -19,23 +19,11 @@ struct girdlayout_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
-	int (*move)(Girdlayout *girdlayout);
-	int (*draw)(Component *component, void *graph);
-	int (*load_resources)(Component *component, void *graph);
-	int (*unload_resources)(Component *component, void *graph);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
-	Text *text;
-    String *string;
-    cursor_t cursor;
     void *window;
-    color_t front_color;
-    color_t background_color;
-	int char_min_width;
-    int char_height;
-    char text_overflow_flag;
 };
 
 #endif
