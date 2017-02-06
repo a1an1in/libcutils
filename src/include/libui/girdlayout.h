@@ -8,18 +8,18 @@
 #include <libui/color.h>
 #include <libui/cursor.h>
 
-typedef struct label_s Label;
+typedef struct girdlayout_s Girdlayout;
 
-struct label_s{
+struct girdlayout_s{
 	Component component;
 
-	int (*construct)(Label *label,char *init_str);
-	int (*deconstruct)(Label *label);
-	int (*set)(Label *label, char *attrib, void *value);
+	int (*construct)(Girdlayout *girdlayout,char *init_str);
+	int (*deconstruct)(Girdlayout *girdlayout);
+	int (*set)(Girdlayout *girdlayout, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
-	int (*move)(Label *label);
+	int (*move)(Girdlayout *girdlayout);
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *graph);
 	int (*unload_resources)(Component *component, void *graph);

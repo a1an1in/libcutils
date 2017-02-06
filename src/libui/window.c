@@ -42,61 +42,61 @@ static int __deconstrcut(Window *window)
 static int __set(Window *window, char *attrib, void *value)
 {
 	/*normal methods*/
-	if(strcmp(attrib, "set") == 0) {
+	if (strcmp(attrib, "set") == 0) {
 		window->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
 		window->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
+	} else if (strcmp(attrib, "construct") == 0) {
 		window->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
+	} else if (strcmp(attrib, "deconstruct") == 0) {
 		window->deconstruct = value;
-	} else if(strcmp(attrib, "update_window") == 0) {
+	} else if (strcmp(attrib, "update_window") == 0) {
 		window->update_window = value;
-	} else if(strcmp(attrib, "load_resources") == 0) {
+	} else if (strcmp(attrib, "load_resources") == 0) {
 		window->load_resources = value;
 	}
 	/*vitual methods*/
-	else if(strcmp(attrib, "move") == 0) { 
+	else if (strcmp(attrib, "move") == 0) { 
 		window->move = value;
-	} else if(strcmp(attrib, "create_font") == 0) {
+	} else if (strcmp(attrib, "create_font") == 0) {
 		window->create_font = value;
-	} else if(strcmp(attrib, "destroy_font") == 0) {
+	} else if (strcmp(attrib, "destroy_font") == 0) {
 		window->destroy_font = value;
-	} else if(strcmp(attrib, "create_graph") == 0) {
+	} else if (strcmp(attrib, "create_graph") == 0) {
 		window->create_graph = value;
-	} else if(strcmp(attrib, "destroy_graph") == 0) {
+	} else if (strcmp(attrib, "destroy_graph") == 0) {
 		window->destroy_graph = value;
-	} else if(strcmp(attrib, "create_event") == 0) {
+	} else if (strcmp(attrib, "create_event") == 0) {
 		window->create_event = value;
-	} else if(strcmp(attrib, "destroy_event") == 0) {
+	} else if (strcmp(attrib, "destroy_event") == 0) {
 		window->destroy_event = value;
-	} else if(strcmp(attrib, "create_background") == 0) {
+	} else if (strcmp(attrib, "create_background") == 0) {
 		window->create_background = value;
-	} else if(strcmp(attrib, "destroy_background") == 0) {
+	} else if (strcmp(attrib, "destroy_background") == 0) {
 		window->destroy_background = value;
-	} else if(strcmp(attrib, "init_window") == 0) {
+	} else if (strcmp(attrib, "init_window") == 0) {
 		window->init_window = value;
-	} else if(strcmp(attrib, "open_window") == 0) {
+	} else if (strcmp(attrib, "open_window") == 0) {
 		window->open_window = value;
-	} else if(strcmp(attrib, "close_window") == 0) {
+	} else if (strcmp(attrib, "close_window") == 0) {
 		window->close_window = value;
-	} else if(strcmp(attrib, "create_timer") == 0) {
+	} else if (strcmp(attrib, "create_timer") == 0) {
 		window->create_timer = value;
-	} else if(strcmp(attrib, "remove_timer") == 0) {
+	} else if (strcmp(attrib, "remove_timer") == 0) {
 		window->remove_timer = value;
-	} else if(strcmp(attrib, "destroy_timer") == 0) {
+	} else if (strcmp(attrib, "destroy_timer") == 0) {
 		window->destroy_timer = value;
 	}
 	/*attribs*/
-	else if(strcmp(attrib, "name") == 0) { 
+	else if (strcmp(attrib, "name") == 0) { 
         strncpy(window->name,value,strlen(value));
-	} else if(strcmp(attrib, "graph_type") == 0) {
+	} else if (strcmp(attrib, "graph_type") == 0) {
         window->graph_type = *((uint8_t *)value);
-	} else if(strcmp(attrib, "screen_width") == 0) {
+	} else if (strcmp(attrib, "screen_width") == 0) {
         window->screen_width = *((uint32_t *)value);
-	} else if(strcmp(attrib, "screen_height") == 0) {
+	} else if (strcmp(attrib, "screen_height") == 0) {
         window->screen_height = *((uint32_t *)value);
-	} else if(strcmp(attrib, "graph") == 0) {
+	} else if (strcmp(attrib, "graph") == 0) {
 		window->graph = value;
 	} else {
 		dbg_str(DBG_DETAIL,"window set, not support %s setting",attrib);
@@ -107,15 +107,15 @@ static int __set(Window *window, char *attrib, void *value)
 
 static void *__get(Window *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
-	} else if(strcmp(attrib, "graph_type") == 0) {
+	} else if (strcmp(attrib, "graph_type") == 0) {
         return &obj->graph_type;
-	} else if(strcmp(attrib, "graph") == 0) {
+	} else if (strcmp(attrib, "graph") == 0) {
 		return obj->graph;
-	} else if(strcmp(attrib, "screen_width") == 0) {
+	} else if (strcmp(attrib, "screen_width") == 0) {
 		return &obj->screen_width;
-	} else if(strcmp(attrib, "screen_height") == 0) {
+	} else if (strcmp(attrib, "screen_height") == 0) {
 		return &obj->screen_height;
     } else {
         dbg_str(DBG_WARNNING,"window get, \"%s\" getting attrib is not supported",attrib);

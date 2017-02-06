@@ -54,8 +54,8 @@ static int __construct(Label *label,char *init_str)
     label->background_color.b = 0xff;
     label->background_color.a = 0xff;
 
-    cursor->x              = 0;
-    cursor->y              = 0;
+    cursor->x                 = 0;
+    cursor->y                 = 0;
 
 	return 0;
 }
@@ -73,11 +73,11 @@ static int __set(Label *label, char *attrib, void *value)
 {
 	if (strcmp(attrib, "set") == 0) {
 		label->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
 		label->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
+	} else if (strcmp(attrib, "construct") == 0) {
 		label->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
+	} else if (strcmp(attrib, "deconstruct") == 0) {
 		label->deconstruct = value;
 	}
 	/*vitual methods*/
@@ -91,6 +91,8 @@ static int __set(Label *label, char *attrib, void *value)
 	/*attribs*/
 	else if (strcmp(attrib, "name") == 0) {
         strncpy(label->name,value,strlen(value));
+    } else if (strcmp(attrib, "text_overflow_flag") == 0) {
+        label->text_overflow_flag = *((uint8_t *)value);
 	} else {
 		dbg_str(DBG_DETAIL,"label set, not support %s setting",attrib);
 	}
@@ -102,6 +104,8 @@ static void *__get(Label *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
+    } else if (strcmp(attrib, "text_overflow_flag") == 0) {
+        return &obj->text_overflow_flag;
     } else {
         dbg_str(DBG_WARNNING,"label get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -150,9 +154,13 @@ static int __draw(Component *component, void *graph)
     int dot_width, draw_width;
     char c;
 
-    character = (Character *)g->font->ascii['.'].character;
-    dot_width = character->width;
-    draw_width = s->width - 3 * dot_width;
+    if (label->text_overflow_flag == 1) {
+        character = (Character *)g->font->ascii['.'].character;
+        dot_width = character->width;
+        draw_width = s->width - 3 * dot_width;
+    } else {
+        draw_width = s->width;
+    }
 
 	g->render_clear(g);
 	g->render_set_color(g,0,0,0,0xff);
@@ -165,13 +173,13 @@ static int __draw(Component *component, void *graph)
     for (i = 0; cursor->x + cursor->width < draw_width + s->x; i++) {
         c = label->string->at(label->string, count++);
         draw_character(component,c, graph);
-        if(count == str_len){
+        if (count == str_len){
             dbg_str(DBG_DETAIL,"count =%d",count);
             goto end;
         } 
     }
 
-    if(cursor->x + cursor->width >= draw_width + s->x) {
+    if (cursor->x + cursor->width >= draw_width + s->x && label->text_overflow_flag == 1) {
         c = '.';
         draw_character(component,c, graph);
         draw_character(component,c, graph);
@@ -195,32 +203,30 @@ static class_info_entry_t label_class_info[] = {
 	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","unload_resources",__unload_resources,sizeof(void *)},
 	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
 	[8 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[9 ] = {ENTRY_TYPE_END},
+	[9 ] = {ENTRY_TYPE_INT8_T,"char","text_overflow_flag",NULL,0},
+	[10] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Label",label_class_info);
 
 char *gen_label_setting_str()
 {
-    cjson_t *root,*b, *c, *e, *s;
     char *set_str;
 
-    root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Label", b = cjson_create_object());{
-            cjson_add_item_to_object(b, "Component", c = cjson_create_object());{
-                cjson_add_item_to_object(c, "Container", e = cjson_create_object());{
-                    cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 10);
-                        cjson_add_number_to_object(s, "y", 20);
-                        cjson_add_number_to_object(s, "width", 100);
-                        cjson_add_number_to_object(s, "height", 50);
-                    }
-                }
-				cjson_add_string_to_object(c, "name", "label");
-            }
-        }
-    }
-    set_str = cjson_print(root);
+    set_str = "{\
+                    \"Subject\": {\
+                        \"x\":10,\
+                        \"y\":20,\
+                        \"width\":100,\
+                        \"height\":50\
+                    },\
+                    \"Component\": {\
+                        \"name\": \"label\"\
+                    },\
+                    \"Label\": {\
+                        \"text_overflow_flag\": 0\
+                    }\
+                }";
 
     return set_str;
 }
@@ -261,6 +267,4 @@ void test_ui_label()
     event->poll_event(event, window);
 
     object_destroy(window);
-
-    free(set_str);
 }

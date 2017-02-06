@@ -22,7 +22,7 @@ static int __construct(Container *container,char *init_str)
 
 	dbg_str(DBG_DETAIL,"container construct, container addr:%p",container);
 
-    if(container->map_type == 1) {
+    if (container->map_type == 1) {
         container->map  = (Map *)OBJECT_NEW(allocator, Hash_Map,container->map_construct_str);
         dbg_str(DBG_DETAIL,"map addr %p", container->map);
     } else {
@@ -43,25 +43,26 @@ static int __deconstrcut(Container *container)
 
 static int __set(Container *container, char *attrib, void *value)
 {
-	if(strcmp(attrib, "set") == 0) {
+	if (strcmp(attrib, "set") == 0) {
 		container->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
 		container->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
+	} else if (strcmp(attrib, "construct") == 0) {
 		container->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
+	} else if (strcmp(attrib, "deconstruct") == 0) {
 		container->deconstruct = value;
-	} else if(strcmp(attrib, "move") == 0) {/*virtual methods*/
+	} else if (strcmp(attrib, "move") == 0) {/*virtual methods*/
 		container->move = value;
-	} else if(strcmp(attrib, "add_component") == 0) {
+	} else if (strcmp(attrib, "add_component") == 0) {
 		container->add_component = value;
-	} else if(strcmp(attrib, "search_component") == 0) {
+	} else if (strcmp(attrib, "search_component") == 0) {
 		container->search_component = value;
-	} else if(strcmp(attrib, "for_each_component") == 0) {
+	} else if (strcmp(attrib, "for_each_component") == 0) {
 		container->for_each_component = value;
-	} else if(strcmp(attrib, "name") == 0) {/*attribs*/
+	}
+    else if (strcmp(attrib, "name") == 0) {/*attribs*/
         strncpy(container->name,value,strlen(value));
-	} else if(strcmp(attrib, "map_type") == 0) {
+	} else if (strcmp(attrib, "map_type") == 0) {
 		container->map_type = *(uint8_t *)value;
 	} else {
 		dbg_str(DBG_DETAIL,"container set, not support %s setting",attrib);
@@ -72,9 +73,9 @@ static int __set(Container *container, char *attrib, void *value)
 
 static void *__get(Container *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    } else if(strcmp(attrib, "map_type") == 0) {
+    } else if (strcmp(attrib, "map_type") == 0) {
         return &obj->map_type;
     } else {
         dbg_str(DBG_WARNNING,"container get, \"%s\" getting attrib is not supported",attrib);
@@ -128,12 +129,12 @@ static void update_component_position(Component *component,void *arg)
 
 static int __add_component(Container *obj, Component *component)
 {
-    if(obj->map_type == 0) {
+    if (obj->map_type == 0) {
         dbg_str(DBG_WARNNING,"%s is support container add op",((Obj *)obj)->name);
         return -1;
     }
     dbg_str(DBG_IMPORTANT, "add component name %s, component addr %p", component->name,component);
-    if(strcmp(component->name,"") == 0) {
+    if (strcmp(component->name,"") == 0) {
         dbg_str(DBG_WARNNING,"component name is NULL, this is vip, add component failed, please check");
         return -1;
     }
@@ -161,13 +162,13 @@ static Component *__search_component(Container *obj, char *key)
     int ret;
     void *buf_addr, *addr;
 
-    if(obj->map_type == 0) {
+    if (obj->map_type == 0) {
         dbg_str(DBG_WARNNING,"%s is support container search op",((Obj *)obj)->name);
         return NULL;
     }
     iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
     ret  = map->search(map,key,iter);
-    if(ret == 1) {
+    if (ret == 1) {
         addr = buffer_to_addr(iter->get_vpointer(iter));
         dbg_str(DBG_IMPORTANT,"search component %s addr %p",iter->get_kpointer(iter), addr);
     } else {
@@ -180,7 +181,7 @@ static Component *__search_component(Container *obj, char *key)
 static int __for_each_component(Container *obj,
 								void (*func)(Iterator *iter, void *args), void *arg)
 {
-	if(obj->map == NULL) {
+	if (obj->map == NULL) {
 		dbg_str(DBG_WARNNING,"%s is not support container", ((Obj *)obj)->name);
 		return 0;
 	}
