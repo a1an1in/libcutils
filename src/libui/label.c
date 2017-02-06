@@ -39,10 +39,10 @@ static int __construct(Label *label,char *init_str)
     allocator_t *allocator = ((Obj *)label)->allocator;
     cursor_t *cursor       = &label->cursor;
 
-	dbg_str(DBG_SUC,"label construct");
+	dbg_str(DBG_DETAIL,"label construct");
 
     label->string             = OBJECT_NEW(allocator, String, NULL);
-    label->string->assign(label->string,"button1");
+    label->string->assign(label->string,"b1234567890");
 
     label->front_color.r      = 0;
     label->front_color.g      = 0;
@@ -115,7 +115,7 @@ static int __load_resources(Component *component,void *window)
 	Label *label = (Label *)component;
 	Character *character;
 
-	dbg_str(DBG_SUC,"%s load resources",component->name);
+	dbg_str(DBG_DETAIL,"%s load resources",component->name);
 
     label->window          = window;
 
@@ -140,34 +140,46 @@ static int __unload_resources(Component *component,void *window)
 
 static int __draw(Component *component, void *graph)
 {
-	Label *label             = (Label *)component;
-	Graph *g                 = (Graph *)graph;
-	Subject *s               = (Subject *)component;
-    cursor_t *cursor         = &label->cursor;
+	Label *label       = (Label *)component;
+	Graph *g           = (Graph *)graph;
+	Subject *s         = (Subject *)component;
+    cursor_t *cursor   = &label->cursor;
+    char text_overflow = 1;
     unsigned int i, j, str_len, count = 0;
+	Character *character;
+    int dot_width, draw_width;
     char c;
+
+    character = (Character *)g->font->ascii['.'].character;
+    dot_width = character->width;
+    draw_width = s->width - 3 * dot_width;
 
 	g->render_clear(g);
 	g->render_set_color(g,0,0,0,0xff);
-
-	g->render_draw_rect(g,s->x,s->y,s->width,s->height);
+	g->render_draw_rect(g,s->x,s->y,s->width,label->char_height);
 
 	cursor->x = s->x; cursor->y = s->y; cursor->width = 0; 
 
     str_len = strlen(label->string->value);
 
-	for (j = 0; cursor->y + cursor->height < ((Subject *)component)->height + s->y; j++) {
-		for (i = 0; cursor->x + cursor->width < ((Subject *)component)->width + s->x; i++) {
-			c = label->string->at(label->string, count++);
-			draw_character(component,c, graph);
-            if(count  == str_len){
-                dbg_str(DBG_DETAIL,"count =%d",count);
-                goto end;
-            } 
-        }
-        cursor->x  = s->x;
-		cursor->y += cursor->height;
+    for (i = 0; cursor->x + cursor->width < draw_width + s->x; i++) {
+        c = label->string->at(label->string, count++);
+        draw_character(component,c, graph);
+        if(count == str_len){
+            dbg_str(DBG_DETAIL,"count =%d",count);
+            goto end;
+        } 
     }
+
+    if(cursor->x + cursor->width >= draw_width + s->x) {
+        c = '.';
+        draw_character(component,c, graph);
+        draw_character(component,c, graph);
+        draw_character(component,c, graph);
+    }
+
+    cursor->x  = s->x;
+    cursor->y += cursor->height;
 
 end:
     g->render_present(g);
