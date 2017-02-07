@@ -35,100 +35,100 @@ int event_is_persistent;
 static void
 timeout_cb(evutil_socket_t fd, short event, void *arg)
 {
-	struct timeval newtime, difference;
-	struct event *timeout = arg;
-	double elapsed;
+    struct timeval newtime, difference;
+    struct event *timeout = arg;
+    double elapsed;
 
-	evutil_gettimeofday(&newtime, NULL);
-	evutil_timersub(&newtime, &lasttime, &difference);
-	elapsed = difference.tv_sec +
-	    (difference.tv_usec / 1.0e6);
+    evutil_gettimeofday(&newtime, NULL);
+    evutil_timersub(&newtime, &lasttime, &difference);
+    elapsed = difference.tv_sec +
+        (difference.tv_usec / 1.0e6);
 
-	printf("timeout_cb called at %d: %.3f seconds elapsed.\n",
-	    (int)newtime.tv_sec, elapsed);
-	lasttime = newtime;
+    printf("timeout_cb called at %d: %.3f seconds elapsed.\n",
+        (int)newtime.tv_sec, elapsed);
+    lasttime = newtime;
 
-	if (! event_is_persistent) {
-		struct timeval tv;
-		evutil_timerclear(&tv);
-		tv.tv_sec = 2;
-		event_add(timeout, &tv);
-	}
+    if (! event_is_persistent) {
+        struct timeval tv;
+        evutil_timerclear(&tv);
+        tv.tv_sec = 2;
+        event_add(timeout, &tv);
+    }
 }
 
 int test_time()
 {
-	struct event timeout;
-	struct timeval tv;
-	struct event_base *base;
-	int flags = 0;
+    struct event timeout;
+    struct timeval tv;
+    struct event_base *base;
+    int flags = 0;
 
-	/*
-	 *event_is_persistent = 1;
-	 */
-	/*
-	 *if (argc == 2 && !strcmp(argv[1], "-p")) {
-	 *    event_is_persistent = 1;
-	 *    flags = EV_PERSIST;
-	 *} else {
-	 *    event_is_persistent = 0;
-	 *    flags = 0;
-	 *}
-	 */
-	dbg_str(DBG_DETAIL,"size event=%d",sizeof(timeout));
+    /*
+     *event_is_persistent = 1;
+     */
+    /*
+     *if (argc == 2 && !strcmp(argv[1], "-p")) {
+     *    event_is_persistent = 1;
+     *    flags = EV_PERSIST;
+     *} else {
+     *    event_is_persistent = 0;
+     *    flags = 0;
+     *}
+     */
+    dbg_str(DBG_DETAIL,"size event=%d",sizeof(timeout));
 
-	/* Initalize the event library */
-	base = event_base_new();
+    /* Initalize the event library */
+    base = event_base_new();
 
-	/* Initalize one event */
-	event_assign(&timeout, base, -1, flags, timeout_cb, (void*) &timeout);
+    /* Initalize one event */
+    event_assign(&timeout, base, -1, flags, timeout_cb, (void*) &timeout);
 
-	evutil_timerclear(&tv);
-	tv.tv_sec = 2;
-	event_add(&timeout, &tv);
+    evutil_timerclear(&tv);
+    tv.tv_sec = 2;
+    event_add(&timeout, &tv);
 
-	evutil_gettimeofday(&lasttime, NULL);
+    evutil_gettimeofday(&lasttime, NULL);
 
-	event_base_dispatch(base);
+    event_base_dispatch(base);
 
-	return (0);
+    return (0);
 }
 
 
 
 void * timer_thread_callback_fn(void *arg)
 {
-	struct event timeout;
-	struct timeval tv;
-	struct event_base *base;
-	int flags = 0;
+    struct event timeout;
+    struct timeval tv;
+    struct event_base *base;
+    int flags = 0;
 
-	dbg_str(DBG_DETAIL,"size event=%d",sizeof(timeout));
+    dbg_str(DBG_DETAIL,"size event=%d",sizeof(timeout));
 
-	/* Initalize the event library */
-	base = event_base_new();
+    /* Initalize the event library */
+    base = event_base_new();
 
-	/* Initalize one event */
-	event_assign(&timeout, base, -1, flags, timeout_cb, (void*) &timeout);
+    /* Initalize one event */
+    event_assign(&timeout, base, -1, flags, timeout_cb, (void*) &timeout);
 
-	evutil_timerclear(&tv);
-	tv.tv_sec = 2;
-	event_add(&timeout, &tv);
+    evutil_timerclear(&tv);
+    tv.tv_sec = 2;
+    event_add(&timeout, &tv);
 
-	evutil_gettimeofday(&lasttime, NULL);
+    evutil_gettimeofday(&lasttime, NULL);
 
-	event_base_dispatch(base);
+    event_base_dispatch(base);
 
 }
 int test_time2()
 {
-	pthread_t tid;
+    pthread_t tid;
 
-	pthread_create(&tid,NULL,timer_thread_callback_fn,NULL);
+    pthread_create(&tid,NULL,timer_thread_callback_fn,NULL);
 
-	pause();//this pause will not be breaked by timer signal
-	dbg_str(DBG_WARNNING,"pause breaked");
+    pause();//this pause will not be breaked by timer signal
+    dbg_str(DBG_WARNNING,"pause breaked");
 
-	return (0);
+    return (0);
 }
 

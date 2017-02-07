@@ -34,64 +34,64 @@ int called = 0;
 static void
 signal_cb(evutil_socket_t fd, short event, void *arg)
 {
-	struct event *signal = arg;
+    struct event *signal = arg;
 
-	printf("%s: got signal %d\n", __func__, EVENT_SIGNAL(signal));
+    printf("%s: got signal %d\n", __func__, EVENT_SIGNAL(signal));
 
-	if (called >= 2)
-		event_del(signal);
+    if (called >= 2)
+        event_del(signal);
 
-	called++;
+    called++;
 }
 
 int test_signal()
 {
-	struct event signal_int;
-	struct event_base* base;
+    struct event signal_int;
+    struct event_base* base;
 
-	/* Initalize the event library */
-	base = event_base_new();
+    /* Initalize the event library */
+    base = event_base_new();
 
-	/* Initalize one event */
-	event_assign(&signal_int, base, SIGINT, EV_SIGNAL|EV_PERSIST, signal_cb,
-	    &signal_int);
+    /* Initalize one event */
+    event_assign(&signal_int, base, SIGINT, EV_SIGNAL|EV_PERSIST, signal_cb,
+        &signal_int);
 
-	event_add(&signal_int, NULL);
+    event_add(&signal_int, NULL);
 
-	event_base_dispatch(base);
-	event_base_free(base);
+    event_base_dispatch(base);
+    event_base_free(base);
 
-	return (0);
+    return (0);
 }
 
 void * signal_thread_callback_fn(void *arg)
 {
-	struct event signal_int;
-	struct event_base* base;
+    struct event signal_int;
+    struct event_base* base;
 
-	/* Initalize the event library */
-	base = event_base_new();
+    /* Initalize the event library */
+    base = event_base_new();
 
-	/* Initalize one event */
-	event_assign(&signal_int, base, SIGINT, EV_SIGNAL|EV_PERSIST, signal_cb,
-	    &signal_int);
+    /* Initalize one event */
+    event_assign(&signal_int, base, SIGINT, EV_SIGNAL|EV_PERSIST, signal_cb,
+        &signal_int);
 
-	event_add(&signal_int, NULL);
+    event_add(&signal_int, NULL);
 
-	event_base_dispatch(base);
-	event_base_free(base);
+    event_base_dispatch(base);
+    event_base_free(base);
 
-	return (0);
+    return (0);
 }
 //test if we create a thread,then the vsz will enlarge too much, and the test end is yes
 int test_signal2()
 {
-	pthread_t tid;
+    pthread_t tid;
 
-	pthread_create(&tid,NULL,signal_thread_callback_fn,NULL);
+    pthread_create(&tid,NULL,signal_thread_callback_fn,NULL);
 
-	pause();//this pause will be breaked by signal 
-	dbg_str(DBG_WARNNING,"pause breaked");
+    pause();//this pause will be breaked by signal 
+    dbg_str(DBG_WARNNING,"pause breaked");
 
-	return (0);
+    return (0);
 }
