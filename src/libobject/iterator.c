@@ -11,47 +11,47 @@
 
 static int __construct(Iterator *iter,char *init_str)
 {
-	dbg_str(OBJ_DETAIL,"iter construct, iter addr:%p",iter);
+    dbg_str(OBJ_DETAIL,"iter construct, iter addr:%p",iter);
 
-	return 0;
+    return 0;
 }
 
 static int __deconstrcut(Iterator *iter)
 {
-	dbg_str(OBJ_DETAIL,"iter deconstruct,iter addr:%p",iter);
+    dbg_str(OBJ_DETAIL,"iter deconstruct,iter addr:%p",iter);
 
-	return 0;
+    return 0;
 }
 
 static int __set(Iterator *iter, char *attrib, void *value)
 {
-	if(strcmp(attrib, "set") == 0) {
-		iter->set = value;
+    if(strcmp(attrib, "set") == 0) {
+        iter->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		iter->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
-		iter->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
-		iter->deconstruct = value;
-	} else if(strcmp(attrib, "next") == 0) {
-		iter->next = value;
-	} else if(strcmp(attrib, "prev") == 0) {
-		iter->prev = value;
-	} else if(strcmp(attrib, "equal") == 0) {
-		iter->equal = value;
-	} else if(strcmp(attrib, "get_vpointer") == 0) {
-		iter->get_vpointer = value;
-	} else if(strcmp(attrib, "get_kpointer") == 0) {
-		iter->get_kpointer = value;
-	} else if(strcmp(attrib, "destroy") == 0) {
-		iter->destroy = value;
-	} else if(strcmp(attrib, "name") == 0) {
+        iter->get = value;
+    } else if(strcmp(attrib, "construct") == 0) {
+        iter->construct = value;
+    } else if(strcmp(attrib, "deconstruct") == 0) {
+        iter->deconstruct = value;
+    } else if(strcmp(attrib, "next") == 0) {
+        iter->next = value;
+    } else if(strcmp(attrib, "prev") == 0) {
+        iter->prev = value;
+    } else if(strcmp(attrib, "equal") == 0) {
+        iter->equal = value;
+    } else if(strcmp(attrib, "get_vpointer") == 0) {
+        iter->get_vpointer = value;
+    } else if(strcmp(attrib, "get_kpointer") == 0) {
+        iter->get_kpointer = value;
+    } else if(strcmp(attrib, "destroy") == 0) {
+        iter->destroy = value;
+    } else if(strcmp(attrib, "name") == 0) {
         strncpy(iter->name,value,strlen(value));
-	} else {
-		dbg_str(OBJ_DETAIL,"iter set, not support %s setting",attrib);
-	}
+    } else {
+        dbg_str(OBJ_DETAIL,"iter set, not support %s setting",attrib);
+    }
 
-	return 0;
+    return 0;
 }
 
 static void *__get(Iterator *obj, char *attrib)
@@ -67,48 +67,48 @@ static void *__get(Iterator *obj, char *attrib)
 
 static Iterator *__next(Iterator *it)
 {
-	dbg_str(OBJ_DETAIL,"Iterator next");
+    dbg_str(OBJ_DETAIL,"Iterator next");
 }
 
 static Iterator *__prev(Iterator *it)
 {
-	dbg_str(OBJ_DETAIL,"Iterator prev");
+    dbg_str(OBJ_DETAIL,"Iterator prev");
 }
 
 static int __equal(Iterator *it1,Iterator *it2)
 {
-	dbg_str(OBJ_DETAIL,"Iterator equal");
+    dbg_str(OBJ_DETAIL,"Iterator equal");
 }
 
 static void *__get_vpointer(Iterator *it)
 {
-	dbg_str(OBJ_DETAIL,"Iterator get_vpointer");
+    dbg_str(OBJ_DETAIL,"Iterator get_vpointer");
 }
 
 static void *__get_kpointer(Iterator *it)
 {
-	dbg_str(OBJ_DETAIL,"Iterator get_kpointer");
+    dbg_str(OBJ_DETAIL,"Iterator get_kpointer");
 }
 
 static class_info_entry_t iter_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","next",__next,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","prev",__prev,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","equal",__equal,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_kpointer",__get_vpointer,sizeof(void *)},
-	[10] = {ENTRY_TYPE_END},
+    [0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+    [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+    [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+    [5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","next",__next,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","prev",__prev,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","equal",__equal,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_vpointer",__get_vpointer,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","get_kpointer",__get_vpointer,sizeof(void *)},
+    [10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Iterator",iter_class_info);
 
 void test_obj_iter()
 {
     Iterator *iter, *next,*prev;
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
     char *set_str = NULL;
     cjson_t *root, *e, *s;
     char buf[2048];

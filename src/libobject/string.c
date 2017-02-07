@@ -45,9 +45,9 @@ static int string_buf_auto_modulate(String *string, int write_len)
 
 static int __construct(String *string,char *init_str)
 {
-	dbg_str(OBJ_DETAIL,"string construct, string addr:%p",string);
-	string->value = (char *)allocator_mem_alloc(string->obj.allocator, 256);
-	return 0;
+    dbg_str(OBJ_DETAIL,"string construct, string addr:%p",string);
+    string->value = (char *)allocator_mem_alloc(string->obj.allocator, 256);
+    return 0;
 }
 
 static int __deconstrcut(String *string)
@@ -56,38 +56,38 @@ static int __deconstrcut(String *string)
     if(string->value)
         allocator_mem_free(string->obj.allocator,string->value);
 
-	return 0;
+    return 0;
 }
 
 static int __set(String *string, char *attrib, void *value)
 {
 
-	if(strcmp(attrib, "set") == 0) {
-		string->set = value;
+    if(strcmp(attrib, "set") == 0) {
+        string->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		string->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
-		string->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
-		string->deconstruct = value;
-	} else if(strcmp(attrib, "pre_alloc") == 0) {
-		string->pre_alloc = value;
-	} else if(strcmp(attrib, "assign") == 0) {
-		string->assign = value;
-	} else if(strcmp(attrib, "append_char") == 0) {
-		string->append_char = value;
-	} else if(strcmp(attrib, "replace_char") == 0) {
-		string->replace_char = value;
-	} else if(strcmp(attrib, "at") == 0) {
-		string->at = value;
-	}
+        string->get = value;
+    } else if(strcmp(attrib, "construct") == 0) {
+        string->construct = value;
+    } else if(strcmp(attrib, "deconstruct") == 0) {
+        string->deconstruct = value;
+    } else if(strcmp(attrib, "pre_alloc") == 0) {
+        string->pre_alloc = value;
+    } else if(strcmp(attrib, "assign") == 0) {
+        string->assign = value;
+    } else if(strcmp(attrib, "append_char") == 0) {
+        string->append_char = value;
+    } else if(strcmp(attrib, "replace_char") == 0) {
+        string->replace_char = value;
+    } else if(strcmp(attrib, "at") == 0) {
+        string->at = value;
+    }
     else if(strcmp(attrib, "name") == 0) {
         strncpy(string->name,value,strlen(value));
-	} else {
-		dbg_str(OBJ_DETAIL,"string set, not support %s setting",attrib);
-	}
+    } else {
+        dbg_str(OBJ_DETAIL,"string set, not support %s setting",attrib);
+    }
 
-	return 0;
+    return 0;
 }
 
 static void *__get(String *obj, char *attrib)
@@ -105,10 +105,10 @@ static void *__get(String *obj, char *attrib)
 
 static String *__pre_alloc(String *string,uint32_t size)
 {
-	dbg_str(OBJ_DETAIL,"pre_alloc, size=%d",size);
-	string->value         = (char *)allocator_mem_alloc(string->obj.allocator, size);
+    dbg_str(OBJ_DETAIL,"pre_alloc, size=%d",size);
+    string->value         = (char *)allocator_mem_alloc(string->obj.allocator, size);
     string->value_max_len = size;
-	memset(string->value, 0, size);
+    memset(string->value, 0, size);
     return string;
 }
 
@@ -158,19 +158,19 @@ static char __at(String *string,int index)
 }
 
 static class_info_entry_t string_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","pre_alloc",__pre_alloc,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","assign",__assign,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","append_char",__append_char,sizeof(void *)},
-	[8 ] = {ENTRY_TYPE_FUNC_POINTER,"","replace_char",__replace_char,sizeof(void *)},
-	[9 ] = {ENTRY_TYPE_FUNC_POINTER,"","at",__at,sizeof(void *)},
-	[10] = {ENTRY_TYPE_STRING,"char *","name",NULL,0},
-	[11] = {ENTRY_TYPE_STRING,"char *","value",NULL,0},
-	[12] = {ENTRY_TYPE_END},
+    [0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
+    [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+    [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","pre_alloc",__pre_alloc,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","assign",__assign,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","append_char",__append_char,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","replace_char",__replace_char,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","at",__at,sizeof(void *)},
+    [10] = {ENTRY_TYPE_STRING,"char *","name",NULL,0},
+    [11] = {ENTRY_TYPE_STRING,"char *","value",NULL,0},
+    [12] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("String",string_class_info);
@@ -178,7 +178,7 @@ REGISTER_CLASS("String",string_class_info);
 void test_obj_string()
 {
     String *string;
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
     cjson_t *root, *e, *s;
     char buf[2048];

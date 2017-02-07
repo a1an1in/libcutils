@@ -55,40 +55,40 @@
 
 int posix_thread_rwlock_init(struct sync_lock_s *slock)
 {
-	return pthread_rwlock_init(&slock->lock.rwlock,NULL);
+    return pthread_rwlock_init(&slock->lock.rwlock,NULL);
 }
 int posix_thread_rwlock_lock(struct sync_lock_s *slock,void *arg)
 {
-	printf("------------------------------------posix_thread_rwlock_lock\n");
-	return pthread_rwlock_wrlock(&slock->lock.rwlock);
+    printf("------------------------------------posix_thread_rwlock_lock\n");
+    return pthread_rwlock_wrlock(&slock->lock.rwlock);
 }
 int posix_thread_rwlock_trylock(struct sync_lock_s *slock,void *arg)
 {
-	return pthread_rwlock_trywrlock(&slock->lock.rwlock);
+    return pthread_rwlock_trywrlock(&slock->lock.rwlock);
 }
 int posix_thread_rwlock_unlock(struct sync_lock_s *slock)
 {
-	printf("------------------------------------posix_thread_rwlock_unlock\n");
-	return pthread_rwlock_unlock(&slock->lock.rwlock);
+    printf("------------------------------------posix_thread_rwlock_unlock\n");
+    return pthread_rwlock_unlock(&slock->lock.rwlock);
 }
 int posix_thread_rwlock_lock_destroy(struct sync_lock_s *slock)
 {
-	return pthread_rwlock_destroy(&slock->lock.rwlock);
+    return pthread_rwlock_destroy(&slock->lock.rwlock);
 }
 int  linux_user_mode_pthread_rwlock_register(){
-	sync_lock_module_t slm = {
-		.name = "pthread_rwlock",
-		.sync_lock_type = PTHREAD_RWLOCK,
-		.sl_ops                = {
-			.sync_lock_init    = posix_thread_rwlock_init,
-			.sync_lock         = posix_thread_rwlock_lock,
-			.sync_trylock      = posix_thread_rwlock_trylock,
-			.sync_unlock       = posix_thread_rwlock_unlock,
-			.sync_lock_destroy = posix_thread_rwlock_lock_destroy,
-		},
-	};
-	memcpy(&sync_lock_modules[PTHREAD_RWLOCK],&slm,sizeof(sync_lock_module_t));
-	return 0;
+    sync_lock_module_t slm = {
+        .name = "pthread_rwlock",
+        .sync_lock_type = PTHREAD_RWLOCK,
+        .sl_ops                = {
+            .sync_lock_init    = posix_thread_rwlock_init,
+            .sync_lock         = posix_thread_rwlock_lock,
+            .sync_trylock      = posix_thread_rwlock_trylock,
+            .sync_unlock       = posix_thread_rwlock_unlock,
+            .sync_lock_destroy = posix_thread_rwlock_lock_destroy,
+        },
+    };
+    memcpy(&sync_lock_modules[PTHREAD_RWLOCK],&slm,sizeof(sync_lock_module_t));
+    return 0;
 }
 #endif
 

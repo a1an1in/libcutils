@@ -79,7 +79,7 @@ static state_entry_config_t entry_config[]={
 
 void test_state_machine()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
     state_machine_t *s;
 
     printf("test state_machine\n");

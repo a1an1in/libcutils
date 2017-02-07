@@ -40,7 +40,7 @@
 state_machine_t *state_machine_create(allocator_t *allocator)
 {
     state_machine_t *s;
-	int fds[2];
+    int fds[2];
 
     dbg_str(SM_DETAIL,"state_machine_create");
 
@@ -54,7 +54,7 @@ state_machine_t *state_machine_create(allocator_t *allocator)
 
     s->allocator = allocator;
 
-	if((s->vector = vector_create(s->allocator,0)) == NULL){
+    if((s->vector = vector_create(s->allocator,0)) == NULL){
         dbg_str(SM_ERROR,"vector_create");
         allocator_mem_free(allocator,s);
         return NULL;
@@ -69,7 +69,7 @@ int state_machine_init(state_machine_t *s,
 {
     dbg_str(SM_DETAIL,"state_machine_init");
 
-	vector_init(s->vector,sizeof(state_entry_t),entry_num);
+    vector_init(s->vector,sizeof(state_entry_t),entry_num);
     s->entry_num = entry_num;
     s->base      = base;
 
@@ -131,7 +131,7 @@ state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
 void
 state_machine_register_state_entry(state_machine_t *s, state_entry_t *e)
 {
-	vector_push_back(s->vector,e);
+    vector_push_back(s->vector,e);
 
     return;
 }
@@ -232,9 +232,9 @@ state_machine_change_state_force(state_machine_t *s, int state)
 
     dbg_str(SM_SUC,"state_machine_change_state,from %s to %s",le->entry_name,e->entry_name);
 
-	if (write(s->write_notify_fd, &command, 1) != 1) {
-		dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
-	}
+    if (write(s->write_notify_fd, &command, 1) != 1) {
+        dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
+    }
 }
 
 state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base)
