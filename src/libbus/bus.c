@@ -37,16 +37,16 @@
 #include <miscellany/buffer.h>
 
 static const blob_policy_t bus_policy[] = {
-	[BUS_ID]            = { .name = "id",              .type = BLOB_TYPE_INT32 },
-	[BUS_OBJNAME]       = { .name = "object_name",     .type = BLOB_TYPE_STRING },
-	[BUS_METHORDS]      = { .name = "methods",         .type = BLOB_TYPE_TABLE },
-	[BUS_STATE]         = { .name = "state",           .type = BLOB_TYPE_INT32 },
-	[BUS_OPAQUE]        = { .name = "opaque",          .type = BLOB_TYPE_BUFFER },
-	[BUS_INVOKE_SRC_FD] = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
-	[BUS_INVOKE_DST_FD] = { .name = "destination_fd",  .type = BLOB_TYPE_INT32 },
-	[BUS_INVOKE_METHOD] = { .name = "invoke_method",   .type = BLOB_TYPE_STRING },
-	[BUS_INVOKE_ARGC]   = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
-	[BUS_INVOKE_ARGS]   = { .name = "invoke_args",     .type = BLOB_TYPE_TABLE },
+    [BUS_ID]            = { .name = "id",              .type = BLOB_TYPE_INT32 },
+    [BUS_OBJNAME]       = { .name = "object_name",     .type = BLOB_TYPE_STRING },
+    [BUS_METHORDS]      = { .name = "methods",         .type = BLOB_TYPE_TABLE },
+    [BUS_STATE]         = { .name = "state",           .type = BLOB_TYPE_INT32 },
+    [BUS_OPAQUE]        = { .name = "opaque",          .type = BLOB_TYPE_BUFFER },
+    [BUS_INVOKE_SRC_FD] = { .name = "source_fd",       .type = BLOB_TYPE_INT32 },
+    [BUS_INVOKE_DST_FD] = { .name = "destination_fd",  .type = BLOB_TYPE_INT32 },
+    [BUS_INVOKE_METHOD] = { .name = "invoke_method",   .type = BLOB_TYPE_STRING },
+    [BUS_INVOKE_ARGC]   = { .name = "invoke_argc",     .type = BLOB_TYPE_INT32 },
+    [BUS_INVOKE_ARGS]   = { .name = "invoke_args",     .type = BLOB_TYPE_TABLE },
 };
 
 bus_t * bus_alloc(allocator_t *allocator)
@@ -111,17 +111,17 @@ int bus_init(bus_t *bus,
         bus->bucket_size = 20;
     }
 
-	bus->obj_hmap = hash_map_alloc(bus->allocator);
+    bus->obj_hmap = hash_map_alloc(bus->allocator);
     if(bus->obj_hmap == NULL) {
         dbg_str(BUS_ERROR,"hash_map_create");
         //.........
         return -1;
     }
 
-	hash_map_init(bus->obj_hmap,
-			      bus->key_size,//uint32_t key_size,
-			      sizeof(bus_object_t),
-			      bus->bucket_size);
+    hash_map_init(bus->obj_hmap,
+                  bus->key_size,//uint32_t key_size,
+                  sizeof(bus_object_t),
+                  bus->bucket_size);
 
     /*create req hash map*/
     if(bus->req_key_size == 0) {
@@ -131,67 +131,67 @@ int bus_init(bus_t *bus,
         bus->req_bucket_size = 20;
     }
 
-	bus->req_hmap = hash_map_alloc(bus->allocator);
+    bus->req_hmap = hash_map_alloc(bus->allocator);
     if(bus->req_hmap == NULL) {
         dbg_str(BUS_ERROR,"hash_map_create");
         //.........
         return -1;
     }
 
-	hash_map_init(bus->req_hmap,
-			      bus->req_key_size,//uint32_t req_key_size,
-			      sizeof(bus_object_t),
-			      bus->req_bucket_size);
+    hash_map_init(bus->req_hmap,
+                  bus->req_key_size,//uint32_t req_key_size,
+                  sizeof(bus_object_t),
+                  bus->req_bucket_size);
 
     return 1;
 }
 
 int bus_send(bus_t *bus,
-			 void *buf,
-			 size_t buf_len)
+             void *buf,
+             size_t buf_len)
 {
-	int ret = 0;
-	ret = client_send(bus->client,
-				   	  buf,//const void *buf,
-					  buf_len,//size_t nbytes,
-					  0,//int flags,
-					  bus->server_host,//char *dest_id_str, 
-				      bus->server_srv);//char *dest_srv_str)
-	if(ret < 0){
-		dbg_str(BUS_WARNNING,"bus send err");
-	}
+    int ret = 0;
+    ret = client_send(bus->client,
+                      buf,//const void *buf,
+                      buf_len,//size_t nbytes,
+                      0,//int flags,
+                      bus->server_host,//char *dest_id_str, 
+                      bus->server_srv);//char *dest_srv_str)
+    if(ret < 0){
+        dbg_str(BUS_WARNNING,"bus send err");
+    }
 
-	return ret;
+    return ret;
 }
 
 int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)
 {
-	int i;
+    int i;
 
-	for(i = 0; i < method->n_policy; i++) {
-		blob_add_u32(blob, method->policy[i].name, method->policy[i].type);
-	}
+    for(i = 0; i < method->n_policy; i++) {
+        blob_add_u32(blob, method->policy[i].name, method->policy[i].type);
+    }
 
     return 0;
 }
 
 int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)
 {
-	int i;
+    int i;
 
     dbg_str(BUS_DETAIL,"bus_push_method_to_blob,n_methods=%d",obj->n_methods);
 
-	for (i = 0; i < obj->n_methods; i++){
+    for (i = 0; i < obj->n_methods; i++){
         dbg_str(BUS_DETAIL,"push method:%s",obj->methods[i].name);
         blob_add_table_start(blob, obj->methods[i].name);
         bus_push_args_to_blob(blob,&(obj->methods[i]));
         blob_add_table_end(blob);
         dbg_str(BUS_DETAIL,"push method end");
-	}
+    }
 
     dbg_str(BUS_DETAIL,"bus_push_methods_to_blob end");
 
-	return 0;
+    return 0;
 }
 
 int __bus_add_obj(bus_t *bus,struct bus_object *obj)
@@ -206,17 +206,17 @@ int __bus_add_obj(bus_t *bus,struct bus_object *obj)
 
 int bus_add_object(bus_t *bus,struct bus_object *obj)
 {
-	bus_reqhdr_t hdr;
+    bus_reqhdr_t hdr;
     blob_t *blob = bus->blob;
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
-	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+    uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
-	uint32_t buffer_len;
+    uint32_t buffer_len;
 
     dbg_str(BUS_DETAIL,"bus_add_object,obj addr:%p",obj);
-	memset(&hdr,0,sizeof(hdr));
+    memset(&hdr,0,sizeof(hdr));
 
-	hdr.type = BUS_REQ_ADD_OBJECT;
+    hdr.type = BUS_REQ_ADD_OBJECT;
 
     blob_add_table_start(blob,(char *)"object"); {
         blob_add_string(blob, (char *)"object_name", obj->name);
@@ -231,36 +231,36 @@ int bus_add_object(bus_t *bus,struct bus_object *obj)
     /*
      *dbg_str(BUS_DETAIL,"run at here");
      */
-	memcpy(buffer,&hdr, sizeof(hdr));
-	buffer_len = sizeof(hdr);
+    memcpy(buffer,&hdr, sizeof(hdr));
+    buffer_len = sizeof(hdr);
     /*
      *dbg_buf(BUS_DETAIL,"object:",blob->head,blob_get_len(blob->head));
      */
-	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
-	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+    memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+    buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
-	dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
-	bus_send(bus, buffer, buffer_len);
+    dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
+    bus_send(bus, buffer, buffer_len);
 
     __bus_add_obj(bus,obj);
 
-	return 0;
+    return 0;
 }
 
 int bus_handle_add_object_reply(bus_t *bus,  blob_attr_t **attr)
 {
     int state;
 
-	dbg_str(BUS_DETAIL,"bus_handle_add_object_reply");
+    dbg_str(BUS_DETAIL,"bus_handle_add_object_reply");
 
-	if (attr[BUS_STATE]){
+    if (attr[BUS_STATE]){
         state = blob_get_u32(attr[BUS_STATE]);
-		dbg_str(BUS_DETAIL,"state=%d",state);
-	}
+        dbg_str(BUS_DETAIL,"state=%d",state);
+    }
 
-	if (attr[BUS_OBJNAME]) {
-		dbg_str(BUS_DETAIL,"object name:%s",blob_get_string(attr[BUS_OBJNAME]));
-	}
+    if (attr[BUS_OBJNAME]) {
+        dbg_str(BUS_DETAIL,"object name:%s",blob_get_string(attr[BUS_OBJNAME]));
+    }
 
     if( state == 1) {
         dbg_str(BUS_SUC,"add obj success");
@@ -274,16 +274,16 @@ int bus_handle_add_object_reply(bus_t *bus,  blob_attr_t **attr)
 
 int bus_lookup(bus_t *bus, char *key)
 {
-	bus_reqhdr_t hdr;
+    bus_reqhdr_t hdr;
     blob_t *blob = bus->blob;
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
-	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+    uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
-	uint32_t buffer_len;
+    uint32_t buffer_len;
 
-	memset(&hdr,0,sizeof(hdr));
+    memset(&hdr,0,sizeof(hdr));
 
-	hdr.type = BUS_REQ_LOOKUP;
+    hdr.type = BUS_REQ_LOOKUP;
 
     blob_add_table_start(blob,(char *)"lookup"); {
         blob_add_string(blob, (char *)"object_name", key);
@@ -293,18 +293,18 @@ int bus_lookup(bus_t *bus, char *key)
     /*
      *dbg_str(BUS_DETAIL,"run at here");
      */
-	memcpy(buffer,&hdr, sizeof(hdr));
-	buffer_len = sizeof(hdr);
+    memcpy(buffer,&hdr, sizeof(hdr));
+    buffer_len = sizeof(hdr);
     /*
      *dbg_buf(BUS_DETAIL,"object:",blob->head,blob_get_len(blob->head));
      */
-	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
-	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+    memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+    buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
-	dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
-	bus_send(bus, buffer, buffer_len);
+    dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
+    bus_send(bus, buffer, buffer_len);
 
-	return 0;
+    return 0;
 }
 
 int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)
@@ -314,14 +314,14 @@ int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)
     uint32_t len;
     int ret;
 
-	dbg_str(BUS_DETAIL,"bus_handle_lookup_object_reply");
+    dbg_str(BUS_DETAIL,"bus_handle_lookup_object_reply");
 
-	if (attr[BUS_ID]){
-		dbg_str(BUS_DETAIL,"object id:%d",blob_get_u32(attr[BUS_ID]));
-	}
-	if (attr[BUS_OBJNAME]) {
-		dbg_str(BUS_DETAIL,"object name:%s",blob_get_string(attr[BUS_OBJNAME]));
-	}
+    if (attr[BUS_ID]){
+        dbg_str(BUS_DETAIL,"object id:%d",blob_get_u32(attr[BUS_ID]));
+    }
+    if (attr[BUS_OBJNAME]) {
+        dbg_str(BUS_DETAIL,"object name:%s",blob_get_string(attr[BUS_OBJNAME]));
+    }
     if (attr[BUS_METHORDS]) {
         dbg_str(BUS_DETAIL,"object methods");
 
@@ -354,18 +354,18 @@ int bus_blob_add_args(blob_t *blob,int argc, bus_method_args_t *args)
 
 int bus_invoke(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args)
 {
-	bus_reqhdr_t hdr;
+    bus_reqhdr_t hdr;
     blob_t *blob = bus->blob;
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 1024
-	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+    uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
-	uint32_t buffer_len;
+    uint32_t buffer_len;
 
     dbg_str(BUS_SUC,"bus_invoke");
     /*compose req proto*/
-	memset(&hdr,0,sizeof(hdr));
+    memset(&hdr,0,sizeof(hdr));
 
-	hdr.type = BUS_REQ_INVOKE;
+    hdr.type = BUS_REQ_INVOKE;
 
     blob_add_table_start(blob,(char *)"invoke"); {
         blob_add_string(blob, (char *)"invoke_key", key);
@@ -378,16 +378,16 @@ int bus_invoke(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *a
     }
     blob_add_table_end(blob);
 
-	memcpy(buffer,&hdr, sizeof(hdr));
-	buffer_len = sizeof(hdr);
-	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
-	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+    memcpy(buffer,&hdr, sizeof(hdr));
+    buffer_len = sizeof(hdr);
+    memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+    buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
     /*send req proto*/
-	dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
-	bus_send(bus, buffer, buffer_len);
+    dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
+    bus_send(bus, buffer, buffer_len);
 
-	return 0;
+    return 0;
 }
 
 int bus_invoke_async(bus_t *bus,char *key, char *method,int argc, char **args)
@@ -468,24 +468,24 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
     char *buffer = NULL;
     int buffer_len = 0;
 
-	dbg_str(BUS_SUC,"bus_handle_invoke_reply");
+    dbg_str(BUS_SUC,"bus_handle_invoke_reply");
 
-	if (attr[BUS_STATE]){
+    if (attr[BUS_STATE]){
         state = blob_get_u32(attr[BUS_STATE]);
-		dbg_str(BUS_DETAIL,"state:%d",state);
-	}
-	if (attr[BUS_OBJNAME]) {
-		obj_name = blob_get_string(attr[BUS_OBJNAME]);
-		dbg_str(BUS_DETAIL,"object name:%s",obj_name);
-	}
-    if (attr[BUS_INVOKE_METHOD]) {
-		method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
-		dbg_str(BUS_DETAIL,"method name:%s",method_name);
+        dbg_str(BUS_DETAIL,"state:%d",state);
     }
-	if (attr[BUS_OPAQUE]){
+    if (attr[BUS_OBJNAME]) {
+        obj_name = blob_get_string(attr[BUS_OBJNAME]);
+        dbg_str(BUS_DETAIL,"object name:%s",obj_name);
+    }
+    if (attr[BUS_INVOKE_METHOD]) {
+        method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
+        dbg_str(BUS_DETAIL,"method name:%s",method_name);
+    }
+    if (attr[BUS_OPAQUE]){
         buffer_len = blob_get_buffer(attr[BUS_OPAQUE],(uint8_t**)&buffer);
         dbg_buf(BUS_DETAIL,"bus_handle_invoke_reply,buffer:",buffer,buffer_len);
-	}
+    }
 
     if(method_name != NULL) {
         ret = hash_map_search(bus->req_hmap, method_name ,&pos);
@@ -549,16 +549,16 @@ bus_get_n_policy(bus_object_t *obj,char *method)
 int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int ret, char *buf, int buf_len,int src_fd)
 {
 #define BUS_ADD_OBJECT_MAX_BUFFER_LEN 2048
-	bus_reqhdr_t hdr;
+    bus_reqhdr_t hdr;
     blob_t *blob;
-	uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
-	uint32_t buffer_len,tmp_len;
-	allocator_t *allocator = bus->allocator;
+    uint8_t buffer[BUS_ADD_OBJECT_MAX_BUFFER_LEN];
+    uint32_t buffer_len,tmp_len;
+    allocator_t *allocator = bus->allocator;
 
-	dbg_str(BUS_SUC,"bus_reply_forward_invoke");
-	memset(&hdr,0,sizeof(hdr));
+    dbg_str(BUS_SUC,"bus_reply_forward_invoke");
+    memset(&hdr,0,sizeof(hdr));
 
-	hdr.type = BUS_REPLY_FORWARD_INVOKE;
+    hdr.type = BUS_REPLY_FORWARD_INVOKE;
 
     blob = blob_create(allocator);
     if(blob == NULL) {
@@ -575,8 +575,8 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
     }
     blob_add_table_end(blob);
 
-	memcpy(buffer,&hdr, sizeof(hdr));
-	buffer_len = sizeof(hdr);
+    memcpy(buffer,&hdr, sizeof(hdr));
+    buffer_len = sizeof(hdr);
 
     tmp_len = buffer_len + blob_get_len((blob_attr_t *)blob->head);
 
@@ -585,14 +585,14 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
         return -1;
     }
 
-	memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
-	buffer_len += blob_get_len((blob_attr_t *)blob->head);
+    memcpy(buffer + buffer_len,(uint8_t *)blob->head,blob_get_len((blob_attr_t *)blob->head));
+    buffer_len += blob_get_len((blob_attr_t *)blob->head);
 
-	dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
+    dbg_buf(BUS_DETAIL,"bus send:",buffer,buffer_len);
 
-	bus_send(bus, buffer, buffer_len);
+    bus_send(bus, buffer, buffer_len);
 
-	return 0;
+    return 0;
 #undef BUS_ADD_OBJECT_MAX_BUFFER_LEN 
 }
 
@@ -614,28 +614,28 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
     char buffer[MAX_BUFFER_LEN];
     int ret, buffer_len = 9;
 
-	dbg_str(BUS_SUC,"bus_handle_forward_invoke");
+    dbg_str(BUS_SUC,"bus_handle_forward_invoke");
 
-	if (attr[BUS_INVOKE_SRC_FD]) {
+    if (attr[BUS_INVOKE_SRC_FD]) {
         src_fd = blob_get_u32(attr[BUS_INVOKE_SRC_FD]);
-		dbg_str(BUS_DETAIL,"invoke src fd:%d",src_fd);
-	}
-	if (attr[BUS_INVOKE_METHOD]) {
+        dbg_str(BUS_DETAIL,"invoke src fd:%d",src_fd);
+    }
+    if (attr[BUS_INVOKE_METHOD]) {
         method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
-		dbg_str(BUS_DETAIL,"invoke method_name:%s",method_name);
-	}
-	if (attr[BUS_INVOKE_ARGC]) {
+        dbg_str(BUS_DETAIL,"invoke method_name:%s",method_name);
+    }
+    if (attr[BUS_INVOKE_ARGC]) {
         argc = blob_get_u8(attr[BUS_INVOKE_ARGC]);
         dbg_str(BUS_DETAIL,"invoke argc=%d",argc);
-	}
-	if (attr[BUS_INVOKE_ARGS]) {
+    }
+    if (attr[BUS_INVOKE_ARGS]) {
         dbg_str(BUS_DETAIL,"invoke args");
         args = attr[BUS_INVOKE_ARGS];
-	}
-	if (attr[BUS_OBJNAME]) {
+    }
+    if (attr[BUS_OBJNAME]) {
         obj_name = blob_get_string(attr[BUS_OBJNAME]);
-		dbg_str(BUS_DETAIL,"object name:%s",obj_name);
-	}
+        dbg_str(BUS_DETAIL,"object name:%s",obj_name);
+    }
 
     if (method_name != NULL) {
         ret = hash_map_search(bus->obj_hmap, obj_name ,&pos);
@@ -663,34 +663,34 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 }
 
 static bus_cmd_callback handlers[__BUS_REQ_LAST] = {
-	[BUSD_REPLY_ADD_OBJECT] = bus_handle_add_object_reply,
-	[BUSD_REPLY_LOOKUP]     = bus_handle_lookup_object_reply,
-	[BUSD_REPLY_INVOKE]     = bus_handle_invoke_reply,
-	[BUSD_FORWARD_INVOKE]   = bus_handle_forward_invoke,
+    [BUSD_REPLY_ADD_OBJECT] = bus_handle_add_object_reply,
+    [BUSD_REPLY_LOOKUP]     = bus_handle_lookup_object_reply,
+    [BUSD_REPLY_INVOKE]     = bus_handle_invoke_reply,
+    [BUSD_FORWARD_INVOKE]   = bus_handle_forward_invoke,
 };
 
 static int bus_process_receiving_data_callback(client_task_t *task)
 {
-	bus_reqhdr_t *hdr;
-	blob_attr_t *blob_attr;
-	blob_attr_t *tb[__BUS_MAX];
-	bus_cmd_callback cb = NULL;
-	client_t *client = task->client;
-	bus_t *bus = (bus_t *)client->opaque;
+    bus_reqhdr_t *hdr;
+    blob_attr_t *blob_attr;
+    blob_attr_t *tb[__BUS_MAX];
+    bus_cmd_callback cb = NULL;
+    client_t *client = task->client;
+    bus_t *bus = (bus_t *)client->opaque;
     int len;
 
-	dbg_str(BUS_DETAIL,"bus_process_receiving_data_callback");
-	dbg_buf(BUS_DETAIL,"task buffer:",task->buffer,task->buffer_len);
+    dbg_str(BUS_DETAIL,"bus_process_receiving_data_callback");
+    dbg_buf(BUS_DETAIL,"task buffer:",task->buffer,task->buffer_len);
 
-	hdr = (bus_reqhdr_t *)task->buffer;
-	blob_attr = (blob_attr_t *)(task->buffer + sizeof(bus_reqhdr_t));
+    hdr = (bus_reqhdr_t *)task->buffer;
+    blob_attr = (blob_attr_t *)(task->buffer + sizeof(bus_reqhdr_t));
 
-	if(hdr->type > __BUS_REQ_LAST) {
-		dbg_str(BUS_WARNNING,"bus receive err proto type");
-		return -1;
-	} 
+    if(hdr->type > __BUS_REQ_LAST) {
+        dbg_str(BUS_WARNNING,"bus receive err proto type");
+        return -1;
+    } 
 
-	cb = handlers[hdr->type];
+    cb = handlers[hdr->type];
 
     len = blob_get_data_len(blob_attr);
     blob_attr =(blob_attr_t*) blob_get_data(blob_attr);
@@ -703,7 +703,7 @@ static int bus_process_receiving_data_callback(client_task_t *task)
 
     cb(bus,tb);
 
-	dbg_str(BUS_DETAIL,"process_rcv end");
+    dbg_str(BUS_DETAIL,"process_rcv end");
     return 0;
 }
 
