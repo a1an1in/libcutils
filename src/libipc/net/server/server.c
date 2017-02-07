@@ -98,17 +98,17 @@ static int test_process_task_callback(void *task)
     int fd = ((server_task_t *)task)->fd;
     nread = read(fd, buf, MAXLINE);//读取客户端socket流
 
-	dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
+    dbg_str(DBG_VIP,"task start,conn_fd=%d",fd);
     if (nread < 0) {
         dbg_str(DBG_ERROR,"fd read err,client close the connection");
-		close(fd);//modify for test
+        close(fd);//modify for test
         return -1;
     } 
     write(fd, buf, nread);//响应客户端  
-	/*
-	 *close(fd);
-	 */
-	dbg_str(NET_DETAIL,"task done");
+    /*
+     *close(fd);
+     */
+    dbg_str(NET_DETAIL,"task done");
 #undef MAXLINE
 }
 int test_server_of_unix()
@@ -124,7 +124,7 @@ int test_server_of_unix()
            test_process_task_callback,
            NULL);
 
-	return 0;
+    return 0;
 }
 
 int test_server_of_inet()
@@ -140,6 +140,6 @@ int test_server_of_inet()
            test_process_task_callback,
            NULL);
 
-	return 0;
+    return 0;
 }
 

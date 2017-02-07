@@ -59,10 +59,10 @@ client_t *client(allocator_t *allocator,
 
     if(!strcmp(type,CLIENT_TYPE_INET_TCP)){
         c = inet_tcp_client(allocator, id_str, serve_no,
-                		    process_task_cb, opaque);
+                            process_task_cb, opaque);
     } else if (!strcmp(type,CLIENT_TYPE_INET_UDP)){
         c = inet_udp_client(allocator, id_str, serve_no,
-                		    process_task_cb, opaque);
+                            process_task_cb, opaque);
     } else if (!strcmp(type,CLIENT_TYPE_UNIX_UDP)){
         c = unix_udp_client(allocator, id_str, process_task_cb, opaque);
     } else if (!strcmp(type,CLIENT_TYPE_UNIX_TCP)){
@@ -118,23 +118,23 @@ int client_destroy(client_t *client)
         return -1;
     }
 
-	return 0;
+    return 0;
 }
 
 static int process_task_callback(client_task_t *task)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,client recv");
-	/*
-	 *user_t *user = task->client;
-	 *void *opaque = user->opaque;
-	 */
-	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"process_task end");
+    dbg_str(DBG_DETAIL,"process_task begin,client recv");
+    /*
+     *user_t *user = task->client;
+     *void *opaque = user->opaque;
+     */
+    dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
+    dbg_str(DBG_DETAIL,"process_task end");
 }
 
 void test_client_recv_of_inet_udp()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
 
     dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
 
@@ -147,7 +147,7 @@ void test_client_recv_of_inet_udp()
 }
 void test_client_recv_of_unix_udp()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
 
     dbg_str(DBG_DETAIL,"test_client_recv_of_inet_udp");
 

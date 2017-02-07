@@ -50,30 +50,30 @@
 
 static int process_task_callback(client_task_t *task)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,client recv");
-	/*
-	 *user_t *user = task->client;
-	 *void *opaque = user->opaque;
-	 */
-	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"process_task end");
+    dbg_str(DBG_DETAIL,"process_task begin,client recv");
+    /*
+     *user_t *user = task->client;
+     *void *opaque = user->opaque;
+     */
+    dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
+    dbg_str(DBG_DETAIL,"process_task end");
 }
 
 int test_inet_udp_client_recieve()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
 
     dbg_str(DBG_DETAIL,"test_inet_udp_client_recieve");
-	inet_udp_client(allocator,
-			        "0.0.0.0",//char *host,
-			        "1989",//char *client_port,
-			        process_task_callback,
-			        NULL);
+    inet_udp_client(allocator,
+                    "0.0.0.0",//char *host,
+                    "1989",//char *client_port,
+                    process_task_callback,
+                    NULL);
     /*
-	 *inet_udp_client(allocator,
-	 *           "192.168.20.26",//char *host,
-	 *           "19892",//char *client_port,
-	 *           process_task_callback,
-	 *           NULL);
+     *inet_udp_client(allocator,
+     *           "192.168.20.26",//char *host,
+     *           "19892",//char *client_port,
+     *           process_task_callback,
+     *           NULL);
      */
 }

@@ -56,106 +56,106 @@ static int uclient_release_task(client_task_t *task);
 
 static int setnonblocking(int user_fd)
 {
-	if (fcntl(user_fd, F_SETFL, fcntl(user_fd, F_GETFD, 0)|O_NONBLOCK) == -1) {
-		return -1;
-	}
-	return 0;
+    if (fcntl(user_fd, F_SETFL, fcntl(user_fd, F_GETFD, 0)|O_NONBLOCK) == -1) {
+        return -1;
+    }
+    return 0;
 
 }
 
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
-	client_task_t *task = (client_task_t *)arg;
-	client_t *client = task->client;
+    client_task_t *task = (client_task_t *)arg;
+    client_t *client = task->client;
 
-	dbg_str(NET_DETAIL,"slave_work_function begin");
-	client->process_task_cb(task);
-	uclient_release_task(task);
-	dbg_str(NET_DETAIL,"slave_work_function end");
-	return ;
+    dbg_str(NET_DETAIL,"slave_work_function begin");
+    client->process_task_cb(task);
+    uclient_release_task(task);
+    dbg_str(NET_DETAIL,"slave_work_function end");
+    return ;
 }
 
 #if 1
 //version 4, using pipe mode,without task admin
 int uclient_init_task(client_task_t *task,
-					  allocator_t *allocator,
-					  int fd,
-					  struct event *ev,
-					  void *key,
-					  uint8_t key_len,
-					  uint8_t *buf,
-					  int buf_len,
-					  concurrent_slave_t *slave,
-					  client_t *client)
+                      allocator_t *allocator,
+                      int fd,
+                      struct event *ev,
+                      void *key,
+                      uint8_t key_len,
+                      uint8_t *buf,
+                      int buf_len,
+                      concurrent_slave_t *slave,
+                      client_t *client)
 {
-	task->fd = fd;
-	if(key_len)
-		memcpy(task->key,key,key_len);
-	if(buf_len)
-		memcpy(task->buffer,buf,buf_len);
-	task->buffer_len = buf_len;
-	task->event      = ev;
-	task->allocator  = allocator;
-	task->slave      = slave;
-	task->client     = client;
-	return 0;
+    task->fd = fd;
+    if(key_len)
+        memcpy(task->key,key,key_len);
+    if(buf_len)
+        memcpy(task->buffer,buf,buf_len);
+    task->buffer_len = buf_len;
+    task->event      = ev;
+    task->allocator  = allocator;
+    task->slave      = slave;
+    task->client     = client;
+    return 0;
 }
 
 static int uclient_release_task(client_task_t *task)
 {
-	allocator_mem_free(task->allocator,task);
-	return 0;
+    allocator_mem_free(task->allocator,task);
+    return 0;
 }
 
 void uclient_event_handler(int fd, short event, void *arg)
 {
 
-	client_t *client = (client_t *)arg;
-	concurrent_master_t *master = client->master;
-	int connfd;
-	struct sockaddr_in cliaddr;
-	socklen_t socklen;
-	client_task_t *task;
-	char key[10];
-	struct concurrent_message_s message;
+    client_t *client = (client_t *)arg;
+    concurrent_master_t *master = client->master;
+    int connfd;
+    struct sockaddr_in cliaddr;
+    socklen_t socklen;
+    client_task_t *task;
+    char key[10];
+    struct concurrent_message_s message;
     int nread;
     char buf[MAXLINE];
-	struct sockaddr_in raddr;
-	socklen_t raddr_len;
+    struct sockaddr_in raddr;
+    socklen_t raddr_len;
 
-	/*
-	 *dbg_str(NET_DETAIL,"user_fd =%d",fd);
-	 */
-	nread = read(fd, buf, MAXLINE);//读取客户端socket流
-	if (nread < 0) {
-		dbg_str(DBG_ERROR,"client_event_handler,read fd error2");
-		return;
-	} else if(nread == 0){
-		dbg_str(DBG_ERROR,"client_event_handler,socket has broken,del client event");
-		event_del(&client->event);
-		return;
-	} else {
-		dbg_str(NET_DETAIL,"*************read buf len=%d",nread);
-	}
+    /*
+     *dbg_str(NET_DETAIL,"user_fd =%d",fd);
+     */
+    nread = read(fd, buf, MAXLINE);//读取客户端socket流
+    if (nread < 0) {
+        dbg_str(DBG_ERROR,"client_event_handler,read fd error2");
+        return;
+    } else if(nread == 0){
+        dbg_str(DBG_ERROR,"client_event_handler,socket has broken,del client event");
+        event_del(&client->event);
+        return;
+    } else {
+        dbg_str(NET_DETAIL,"*************read buf len=%d",nread);
+    }
 
-	dbg_str(NET_DETAIL,"client handler allocator=%p",master->allocator);
-	task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
+    dbg_str(NET_DETAIL,"client handler allocator=%p",master->allocator);
+    task = (client_task_t *)allocator_mem_alloc(master->allocator,sizeof(client_task_t));
 
-	uclient_init_task(task,//client_task_t *task,
-			    	  master->allocator,//allocator_t *allocator,
-			    	  0,//int fd,
-			    	  NULL,//struct event *ev,
-			    	  NULL,//void *key,
-			    	  0,//uint8_t key_len,
-			    	  buf,//uint8_t *buf,
-			    	  nread,//int buf_len,
-			    	  NULL,
-			    	  client);
+    uclient_init_task(task,//client_task_t *task,
+                      master->allocator,//allocator_t *allocator,
+                      0,//int fd,
+                      NULL,//struct event *ev,
+                      NULL,//void *key,
+                      0,//uint8_t key_len,
+                      buf,//uint8_t *buf,
+                      nread,//int buf_len,
+                      NULL,
+                      client);
 
-	master->assignment_count++;//do for assigning slave
-	concurrent_master_init_message(&message, client->slave_work_function,task,0);
-	concurrent_master_add_message(master,&message);
-	dbg_str(NET_DETAIL,"client event handler end");
+    master->assignment_count++;//do for assigning slave
+    concurrent_master_init_message(&message, client->slave_work_function,task,0);
+    concurrent_master_add_message(master,&message);
+    dbg_str(NET_DETAIL,"client event handler end");
 
     return ;
 }
@@ -163,30 +163,30 @@ void uclient_event_handler(int fd, short event, void *arg)
 #endif
 static inline 
 client_t *__client(allocator_t *allocator,
-				   int user_fd,
-				   uint8_t socktype,
-				   int (*process_task_cb)(client_task_t *task),
-				   void *opaque)
+                   int user_fd,
+                   uint8_t socktype,
+                   int (*process_task_cb)(client_task_t *task),
+                   void *opaque)
 {
-	return io_user(allocator,//allocator_t *allocator,
-			       user_fd,//int user_fd,
-			       socktype,//user_type
-			       uclient_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
-			       slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-			       (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
-			       opaque);//void *opaque)
+    return io_user(allocator,//allocator_t *allocator,
+                   user_fd,//int user_fd,
+                   socktype,//user_type
+                   uclient_event_handler,//void (*user_event_handler)(int fd, short event, void *arg),
+                   slave_work_function,//void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+                   (int (*)(void *))process_task_cb,//int (*process_task_cb)(user_task_t *task),
+                   opaque);//void *opaque)
 
 }
 
 client_t *unix_udp_client(allocator_t *allocator,
                           char *client_unpath,
-					      int (*process_task_cb)(client_task_t *task),
-					      void *opaque)
+                          int (*process_task_cb)(client_task_t *task),
+                          void *opaque)
 {
     struct sockaddr_un client_un_addr;
-	int err;
-	int user_fd;
-	client_t *client = NULL;
+    int err;
+    int user_fd;
+    client_t *client = NULL;
 
     dbg_str(NET_DETAIL,"unix_udp_client");
     if((user_fd = socket(PF_UNIX,SOCK_DGRAM,0)) < 0)  
@@ -208,31 +208,31 @@ client_t *unix_udp_client(allocator_t *allocator,
         exit(-1);  
     }  
 
-	client = __client(allocator,//allocator_t *allocator,
-					  user_fd,//int user_fd,
-					  SOCK_DGRAM,//uint8_t socktype,
-					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
-					  opaque);//void *opaque)
+    client = __client(allocator,//allocator_t *allocator,
+                      user_fd,//int user_fd,
+                      SOCK_DGRAM,//uint8_t socktype,
+                      process_task_cb,//int (*process_task_cb)(client_task_t *task),
+                      opaque);//void *opaque)
 
-	if(client == NULL){
-		close(user_fd);
-		return NULL;
-	}
+    if(client == NULL){
+        close(user_fd);
+        return NULL;
+    }
 
     strcpy(client->unix_path,client_unpath);
 
     dbg_str(NET_DETAIL,"unix_udp_client,user_fd=%d",client->user_fd);
 
-	return client;
+    return client;
 }
 
 int unix_udp_client_send(client_t *client,
                          const void *buf,
                          size_t nbytes,
                          int flags,
-		                 const char *dest_unpath)
+                         const char *dest_unpath)
 {
-	int ret = 0;
+    int ret = 0;
     struct sockaddr_un dest_un_addr;
     bzero(&dest_un_addr,sizeof(dest_un_addr));  
     dest_un_addr.sun_family = PF_UNIX;  
@@ -240,28 +240,28 @@ int unix_udp_client_send(client_t *client,
 
     dbg_str(NET_DETAIL,"unix_udp_client_send,dest_unpath:%s",dest_unpath);
 
-	if( ret = sendto(client->user_fd,
+    if( ret = sendto(client->user_fd,
                      buf,
                      nbytes,
                      flags,
-					 (struct sockaddr *)&dest_un_addr,
-					 sizeof(struct sockaddr_un)) < 0)
-	{
-		perror("sendto()");  
-	}  
+                     (struct sockaddr *)&dest_un_addr,
+                     sizeof(struct sockaddr_un)) < 0)
+    {
+        perror("sendto()");  
+    }  
 
-	return ret;
+    return ret;
 }
 
 client_t *unix_tcp_client(allocator_t *allocator,
-				 	      char *server_unix_path,
-				 	      int (*process_task_cb)(client_task_t *task),
-				 	      void *opaque)
+                          char *server_unix_path,
+                          int (*process_task_cb)(client_task_t *task),
+                          void *opaque)
 {
-	int user_fd;
-	struct sockaddr_un sa_addr;
-	client_t *client = NULL;
-	int ret;
+    int user_fd;
+    struct sockaddr_un sa_addr;
+    client_t *client = NULL;
+    int ret;
     int len;
 
     if ((user_fd = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
@@ -270,45 +270,45 @@ client_t *unix_tcp_client(allocator_t *allocator,
     }
     setnonblocking(user_fd);
 
-	bzero(&sa_addr, sizeof(sa_addr));
+    bzero(&sa_addr, sizeof(sa_addr));
     sa_addr.sun_family = PF_UNIX;  
     strcpy(sa_addr.sun_path,server_unix_path);  
     len = strlen(sa_addr.sun_path) + sizeof(sa_addr.sun_family);
 
-	ret = connect(user_fd,(struct sockaddr *)&sa_addr, len);
-	if(ret < 0){
-		dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
-		close(user_fd);
-		return NULL;
-	}else{
-		dbg_str(NET_DETAIL,"conect suc");
-	}
+    ret = connect(user_fd,(struct sockaddr *)&sa_addr, len);
+    if(ret < 0){
+        dbg_str(DBG_ERROR,"connect error,errno=%d",errno);
+        close(user_fd);
+        return NULL;
+    }else{
+        dbg_str(NET_DETAIL,"conect suc");
+    }
 
-	client = __client(allocator,//allocator_t *allocator,
-					  user_fd,//int user_fd,
-					  SOCK_STREAM,//uint8_t socktype,
-					  process_task_cb,//int (*process_task_cb)(client_task_t *task),
-					  opaque);//void *opaque)
+    client = __client(allocator,//allocator_t *allocator,
+                      user_fd,//int user_fd,
+                      SOCK_STREAM,//uint8_t socktype,
+                      process_task_cb,//int (*process_task_cb)(client_task_t *task),
+                      opaque);//void *opaque)
 
-	if(client == NULL){
-		close(user_fd);
-		return NULL;
-	}
+    if(client == NULL){
+        close(user_fd);
+        return NULL;
+    }
     memset(client->unix_path,0,sizeof(client->unix_path));
     dbg_str(NET_DETAIL,"unix_path len=%d",sizeof(client->unix_path));
 
-	return client;
+    return client;
 }
 
 int unix_tcp_client_send(client_t *client,const void *buf,size_t nbytes,int flags)
 {
-	int ret = 0;
+    int ret = 0;
 
-	if(ret = send(client->user_fd,buf,nbytes,flags) < 0) {
-		perror("send()");  
-	}  
+    if(ret = send(client->user_fd,buf,nbytes,flags) < 0) {
+        perror("send()");  
+    }  
 
-	return ret;
+    return ret;
 }
 
 int unix_client_destroy(client_t *client)
@@ -321,5 +321,5 @@ int unix_client_destroy(client_t *client)
     close(client->user_fd);
     io_user_destroy(client);
 
-	return 0;
+    return 0;
 }

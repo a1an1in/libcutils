@@ -50,21 +50,21 @@
 
 static int process_task_callback(client_task_t *task)
 {
-	dbg_str(DBG_DETAIL,"process_task begin,unix client recv");
-	/*
-	 *user_t *user = task->client;
-	 *void *opaque = user->opaque;
-	 */
-	dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
-	dbg_str(DBG_DETAIL,"process_task end");
+    dbg_str(DBG_DETAIL,"process_task begin,unix client recv");
+    /*
+     *user_t *user = task->client;
+     *void *opaque = user->opaque;
+     */
+    dbg_buf(DBG_VIP,"task buffer:",task->buffer,task->buffer_len);
+    dbg_str(DBG_DETAIL,"process_task end");
 }
 
 int test_unix_udp_client_recieve()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
 
-	unix_udp_client(allocator,
-			        "test_client_unix_path",//char *host,
-			        process_task_callback,
-			        NULL);
+    unix_udp_client(allocator,
+                    "test_client_unix_path",//char *host,
+                    process_task_callback,
+                    NULL);
 }
