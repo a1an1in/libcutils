@@ -9,19 +9,19 @@
 static void test_pipe_event_handler(int fd, short event, void *arg)
 {
     char buf;
-	dbg_str(SM_DETAIL,"test_pipe_event_handler");
+    dbg_str(SM_DETAIL,"test_pipe_event_handler");
     if (read(fd, &buf, 1) != 1) {
         dbg_str(SM_WARNNING,"read pipe err");
-	}
+    }
 }
 void test_io_user()
 {
-	allocator_t *allocator;
+    allocator_t *allocator;
 
-	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(SM_ERROR,"proxy_create allocator_create err");
-		return ;
-	}
+    if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+        dbg_str(SM_ERROR,"proxy_create allocator_create err");
+        return ;
+    }
     /*
      *s = state_machine(allocator, entry_config,NULL);
      *state_machine_change_state(s, 1);
@@ -42,6 +42,6 @@ void test_io_user()
     char command = 'c';//c --> change state
     if (write(fds[1], &command, 1) != 1) {
         dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
-	}
+    }
     pause();
 }

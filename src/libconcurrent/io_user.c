@@ -49,45 +49,45 @@
 
 
 io_user_t *io_user(allocator_t *allocator,
-			 int user_fd,
-			 uint8_t user_type,
-			 void (*io_event_handler)(int fd, short event, void *arg),
-			 void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
-			 int (*process_task_cb)(void *task),
-			 void *opaque)
+             int user_fd,
+             uint8_t user_type,
+             void (*io_event_handler)(int fd, short event, void *arg),
+             void (*slave_work_function)(concurrent_slave_t *slave,void *arg),
+             int (*process_task_cb)(void *task),
+             void *opaque)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
-	io_user_t *io_user = NULL;
+    io_user_t *io_user = NULL;
 
-	if ((io_user = (io_user_t *)allocator_mem_alloc(
-					allocator, sizeof(io_user_t))) == NULL)
-	{
-		dbg_str(DBG_ERROR,"io_user_create err");
-		return NULL;
-	}
+    if ((io_user = (io_user_t *)allocator_mem_alloc(
+                    allocator, sizeof(io_user_t))) == NULL)
+    {
+        dbg_str(DBG_ERROR,"io_user_create err");
+        return NULL;
+    }
 
-	io_user->allocator           = allocator;
-	io_user->user_fd             = user_fd;
-	io_user->user_type           = user_type;
-	io_user->opaque              = opaque;
-	io_user->slave_work_function = slave_work_function;
-	io_user->io_event_handler    = io_event_handler;
-	io_user->master              = c->master;
-	io_user->process_task_cb     = process_task_cb;
-	dbg_str(DBG_DETAIL,"io_user->master=%p,allocator=%p",io_user->master,allocator);
+    io_user->allocator           = allocator;
+    io_user->user_fd             = user_fd;
+    io_user->user_type           = user_type;
+    io_user->opaque              = opaque;
+    io_user->slave_work_function = slave_work_function;
+    io_user->io_event_handler    = io_event_handler;
+    io_user->master              = c->master;
+    io_user->process_task_cb     = process_task_cb;
+    dbg_str(DBG_DETAIL,"io_user->master=%p,allocator=%p",io_user->master,allocator);
 
-	concurrent_add_event_to_master(c,
-	                               io_user->user_fd,//int fd,
+    concurrent_add_event_to_master(c,
+                                   io_user->user_fd,//int fd,
                                    EV_READ | EV_PERSIST,//int event_flag,
                                    /*
-									*EV_READ,//int event_flag,
+                                    *EV_READ,//int event_flag,
                                     */
-	                               &io_user->event,//struct event *event, 
+                                   &io_user->event,//struct event *event, 
                                    NULL,
-	                               io_user->io_event_handler,//void (*event_handler)(int fd, short event, void *arg),
-	                               io_user);//void *arg);
+                                   io_user->io_event_handler,//void (*event_handler)(int fd, short event, void *arg),
+                                   io_user);//void *arg);
 
-	return io_user;
+    return io_user;
 }
 int io_user_destroy(io_user_t *io_user)
 {
@@ -96,7 +96,7 @@ int io_user_destroy(io_user_t *io_user)
     concurrent_del_event_of_master(c,
                                    &io_user->event);
 
-	allocator_mem_free(io_user->allocator,io_user);
+    allocator_mem_free(io_user->allocator,io_user);
 
-	return 0;
+    return 0;
 }

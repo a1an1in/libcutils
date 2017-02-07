@@ -55,30 +55,30 @@ int event_is_persistent;
 
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
-	tmr_user_t *timer = (tmr_user_t *)arg;
+    tmr_user_t *timer = (tmr_user_t *)arg;
 
-	dbg_str(NET_DETAIL,"slave_work_function begin");
-	timer->process_timer_task_cb(timer);
-	dbg_str(NET_DETAIL,"slave_work_function end");
+    dbg_str(NET_DETAIL,"slave_work_function begin");
+    timer->process_timer_task_cb(timer);
+    dbg_str(NET_DETAIL,"slave_work_function end");
 
-	return ;
+    return ;
 }
 
 void timer_event_handler(int fd, short event, void *arg)
 {
 
-	tmr_user_t *timer = (tmr_user_t *)arg;
-	concurrent_master_t *master = timer->master;
-	struct concurrent_message_s message;
+    tmr_user_t *timer = (tmr_user_t *)arg;
+    concurrent_master_t *master = timer->master;
+    struct concurrent_message_s message;
 
-	dbg_str(NET_DETAIL,"timer event handler begin");
-	master->assignment_count++;//do for assigning slave
-	concurrent_master_init_message(&message,
+    dbg_str(NET_DETAIL,"timer event handler begin");
+    master->assignment_count++;//do for assigning slave
+    concurrent_master_init_message(&message,
                                    timer->slave_work_function,
                                    timer,
                                    0);
-	concurrent_master_add_message(master,&message);
-	dbg_str(NET_DETAIL,"timer event handler end");
+    concurrent_master_add_message(master,&message);
+    dbg_str(NET_DETAIL,"timer event handler end");
 
     return ;
 }
@@ -90,22 +90,22 @@ tmr_user_t *tmr_user(allocator_t *allocator,
                      void *opaque)
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
-	tmr_user_t *tmr_user = NULL;
+    tmr_user_t *tmr_user = NULL;
 
-	if ((tmr_user = (tmr_user_t *)allocator_mem_alloc(
-					allocator, sizeof(tmr_user_t))) == NULL)
-	{
-		dbg_str(DBG_ERROR,"tmr_user_create err");
-		return NULL;
-	}
+    if ((tmr_user = (tmr_user_t *)allocator_mem_alloc(
+                    allocator, sizeof(tmr_user_t))) == NULL)
+    {
+        dbg_str(DBG_ERROR,"tmr_user_create err");
+        return NULL;
+    }
 
-	tmr_user->allocator             = allocator;
-	tmr_user->tmr_user_fd           = -1;
-	tmr_user->opaque                = opaque;
-	tmr_user->tmr_event_handler     = timer_event_handler;
+    tmr_user->allocator             = allocator;
+    tmr_user->tmr_user_fd           = -1;
+    tmr_user->opaque                = opaque;
+    tmr_user->tmr_event_handler     = timer_event_handler;
     tmr_user->slave_work_function   = slave_work_function;
     tmr_user->process_timer_task_cb = process_timer_task_cb;
-	tmr_user->master                = c->master;
+    tmr_user->master                = c->master;
     tmr_user->flags                 = timer_flags;
     tmr_user->tv                    = *tv;
 
@@ -117,7 +117,7 @@ tmr_user_t *tmr_user(allocator_t *allocator,
                                    tmr_user->tmr_event_handler,
                                    tmr_user);//void *arg);
 
-	return tmr_user;
+    return tmr_user;
 }
 
 tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user)
@@ -133,7 +133,7 @@ tmr_user_t *tmr_user_reuse(tmr_user_t * tmr_user)
                                    tmr_user->tmr_event_handler,
                                    tmr_user);//void *arg);
 
-	return tmr_user;
+    return tmr_user;
 }
 
 int tmr_user_destroy(tmr_user_t *tmr_user)
@@ -145,7 +145,7 @@ int tmr_user_destroy(tmr_user_t *tmr_user)
                                    &tmr_user->event);
     allocator_mem_free(tmr_user->allocator,tmr_user);
 
-	return 0;
+    return 0;
 }
 
 int tmr_user_stop(tmr_user_t *tmr_user)
@@ -156,25 +156,25 @@ int tmr_user_stop(tmr_user_t *tmr_user)
     concurrent_del_event_of_master(c,
                                    &tmr_user->event);
 
-	return 0;
+    return 0;
 }
 
 static void test_process_timer_task_callback(void *timer)
 {
-	dbg_str(DBG_DETAIL,"process_timer_task_callback begin");
-	dbg_str(DBG_DETAIL,"process_timer_task_callback end");
+    dbg_str(DBG_DETAIL,"process_timer_task_callback begin");
+    dbg_str(DBG_DETAIL,"process_timer_task_callback end");
 }
 
 int test_tmr_user()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
     tmr_user_t *timer;
     struct timeval tv;
 
     dbg_str(DBG_DETAIL,"test_tmr_user");
 
-	evutil_timerclear(&tv);
-	tv.tv_sec = 2;
+    evutil_timerclear(&tv);
+    tv.tv_sec = 2;
     timer = tmr_user(allocator,
                      &tv,
                      /*
@@ -186,18 +186,18 @@ int test_tmr_user()
     tmr_user_stop(timer);
 
     /*
-	 *int count = 0;
-	 *while(count ++ < 1000) {
-	 *    timer->tv.tv_sec = 1;
-	 *    tmr_user_reuse(timer);
-	 *    tmr_user_stop(timer);
-	 *}
+     *int count = 0;
+     *while(count ++ < 1000) {
+     *    timer->tv.tv_sec = 1;
+     *    tmr_user_reuse(timer);
+     *    tmr_user_stop(timer);
+     *}
      */
 
-	tmr_user_reuse(timer);
+    tmr_user_reuse(timer);
 
     pause();
-	tmr_user_stop(timer);
+    tmr_user_stop(timer);
     tmr_user_destroy(timer);
 
     return 0;
