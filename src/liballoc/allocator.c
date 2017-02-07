@@ -35,40 +35,40 @@ allocator_t *global_allocator_default;
 
 allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)
 {
-	allocator_t *p;
-	p = (allocator_t *)malloc(sizeof(allocator_t));
-	if(p == NULL){
-		dbg_str(DBG_ERROR,"allocator_create");
-		return p;
-	}
-	p->allocator_type = allocator_type;
-	p->lock_type = lock_type;
+    allocator_t *p;
+    p = (allocator_t *)malloc(sizeof(allocator_t));
+    if(p == NULL){
+        dbg_str(DBG_ERROR,"allocator_create");
+        return p;
+    }
+    p->allocator_type = allocator_type;
+    p->lock_type = lock_type;
 
-	return p;
+    return p;
 }
 //allocate mem_alloc of container i coded
 void allocator_ctr_init(allocator_t * alloc,
-		                uint32_t slab_array_max_num,
+                        uint32_t slab_array_max_num,
                         uint32_t data_min_size,
-		                uint32_t mempool_capacity)
+                        uint32_t mempool_capacity)
 {
-	ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
+    ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
 
-	alloc_p->slab_array_max_num = slab_array_max_num;
-	alloc_p->data_min_size = data_min_size;
-	alloc_p->mempool_capacity = mempool_capacity;
-	allocator_modules[alloc->allocator_type].alloc_ops.init(alloc);
+    alloc_p->slab_array_max_num = slab_array_max_num;
+    alloc_p->data_min_size = data_min_size;
+    alloc_p->mempool_capacity = mempool_capacity;
+    allocator_modules[alloc->allocator_type].alloc_ops.init(alloc);
 
 }
 void allocator_destroy(allocator_t * alloc)
 {
-	uint8_t allocator_type = alloc->allocator_type;
-	dbg_str(DBG_WARNNING,"allocator_destroy");
-	if(allocator_modules[allocator_type].alloc_ops.destroy){
-		allocator_modules[allocator_type].alloc_ops.destroy(alloc);
-	}
-	dbg_str(DBG_DETAIL,"run at here");
-	free(alloc);
+    uint8_t allocator_type = alloc->allocator_type;
+    dbg_str(DBG_WARNNING,"allocator_destroy");
+    if(allocator_modules[allocator_type].alloc_ops.destroy){
+        allocator_modules[allocator_type].alloc_ops.destroy(alloc);
+    }
+    dbg_str(DBG_DETAIL,"run at here");
+    free(alloc);
 }
 
 allocator_t * allocator_get_default_alloc()
@@ -79,15 +79,15 @@ allocator_t * allocator_get_default_alloc()
 void __attribute__((constructor(CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR)))
 default_allocator_constructor()
 {
-	allocator_t *allocator;
+    allocator_t *allocator;
 
     CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR=%d,construct default allocator\n",
-			          CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
+                      CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
 
-	if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-		dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
+    if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+        dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
         exit(1);
-	}
+    }
     global_allocator_default = allocator;
 
     return;
@@ -96,7 +96,7 @@ default_allocator_constructor()
 void __attribute__((destructor(CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR)))
 default_allocator_destructor()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
 
     allocator_destroy(allocator);
 

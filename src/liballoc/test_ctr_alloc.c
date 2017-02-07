@@ -50,54 +50,54 @@
 
 void test_ctr_alloc()
 {
-	allocator_t *allocator;
-	void *p ,*p2,*p3;
-	uint32_t size = 8;
+    allocator_t *allocator;
+    void *p ,*p2,*p3;
+    uint32_t size = 8;
 
-	/*
-	 *alloc_p->slab_max_num = SLAB_ARRAY_MAX_NUM;
-	 *alloc_p->data_min_size = 8;
-	 *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
-	 */
-	uint8_t lock_type;
+    /*
+     *alloc_p->slab_max_num = SLAB_ARRAY_MAX_NUM;
+     *alloc_p->data_min_size = 8;
+     *alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
+     */
+    uint8_t lock_type;
 #ifdef UNIX_LIKE_USER_MODE
-	lock_type = PTHREAD_MUTEX_LOCK;
+    lock_type = PTHREAD_MUTEX_LOCK;
 #endif
 #ifdef WINDOWS_USER_MODE
-	lock_type = WINDOWS_MUTEX_LOCK;
+    lock_type = WINDOWS_MUTEX_LOCK;
 #endif
-	allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
-	allocator_ctr_init(allocator, 0, 0, 1024);
+    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
+    allocator_ctr_init(allocator, 0, 0, 1024);
 
-	printf("\n");
-	dbg_str(ALLOC_IMPORTANT,"ctr alloc test begin");
-	/*
-	 *allocator_ctr_init(allocator,0,0,0);
-	 */
+    printf("\n");
+    dbg_str(ALLOC_IMPORTANT,"ctr alloc test begin");
+    /*
+     *allocator_ctr_init(allocator,0,0,0);
+     */
 
-	p = allocator_mem_alloc(allocator,7);
-	/*
-	 *allocator_mem_free(allocator,p);
-	 */
-	p2 = allocator_mem_alloc(allocator,8);
-	p3 = allocator_mem_alloc(allocator,200);
-	dbg_str(ALLOC_DETAIL,"alloc addr:%p",p3);
+    p = allocator_mem_alloc(allocator,7);
+    /*
+     *allocator_mem_free(allocator,p);
+     */
+    p2 = allocator_mem_alloc(allocator,8);
+    p3 = allocator_mem_alloc(allocator,200);
+    dbg_str(ALLOC_DETAIL,"alloc addr:%p",p3);
 
-	dbg_str(ALLOC_IMPORTANT,"inquire alloc info");
-	allocator_mem_info(allocator);
+    dbg_str(ALLOC_IMPORTANT,"inquire alloc info");
+    allocator_mem_info(allocator);
 
-	allocator_mem_free(allocator,p);
-	allocator_mem_free(allocator,p2);
-	allocator_mem_free(allocator,p3);
+    allocator_mem_free(allocator,p);
+    allocator_mem_free(allocator,p2);
+    allocator_mem_free(allocator,p3);
 
-	dbg_str(ALLOC_DETAIL,"batch alloc");
-	int i;
-	for(size = 8,i = 0; i< 20; i++,size += 8){
-		p = allocator_mem_alloc(allocator,size);
-	}
-	dbg_str(ALLOC_IMPORTANT,"inquire alloc info");
-	allocator_mem_info(allocator);
+    dbg_str(ALLOC_DETAIL,"batch alloc");
+    int i;
+    for(size = 8,i = 0; i< 20; i++,size += 8){
+        p = allocator_mem_alloc(allocator,size);
+    }
+    dbg_str(ALLOC_IMPORTANT,"inquire alloc info");
+    allocator_mem_info(allocator);
 
-	allocator_destroy(allocator);
-	dbg_str(ALLOC_DETAIL,"test ctr alloc end");
+    allocator_destroy(allocator);
+    dbg_str(ALLOC_DETAIL,"test ctr alloc end");
 }
