@@ -8,22 +8,26 @@
 #include <libui/color.h>
 #include <libui/cursor.h>
 
-typedef struct girdlayout_s Girdlayout;
+typedef struct gridlayout_s Gridlayout;
 
-struct girdlayout_s{
+struct gridlayout_s{
 	Component component;
 
-	int (*construct)(Girdlayout *girdlayout,char *init_str);
-	int (*deconstruct)(Girdlayout *girdlayout);
-	int (*set)(Girdlayout *girdlayout, char *attrib, void *value);
+	int (*construct)(Gridlayout *gridlayout,char *init_str);
+	int (*deconstruct)(Gridlayout *gridlayout);
+	int (*set)(Gridlayout *gridlayout, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
+    int (*add_component)(Container *obj, void *component);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
     void *window;
+    position_t **grid;
+    uint32_t row,col, cur_row, cur_col;
+    uint8_t unit_width, unit_height;
 };
 
 #endif

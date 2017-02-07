@@ -1,65 +1,65 @@
 /**
- * @file girdlayout.c
+ * @file gridlayout.c
  * @synopsis 
  * @author alan(a1an1in@sina.com)
  * @version 1
  * @date 2016-11-21
  */
-#include <libui/girdlayout.h>
+#include <libui/gridlayout.h>
 #include <libui/sdl_window.h>
 #include <libui/character.h>
 #include <libui/timer.h>
 
-static int __construct(Girdlayout *girdlayout,char *init_str)
+static int __construct(Gridlayout *gridlayout,char *init_str)
 {
-    allocator_t *allocator = ((Obj *)girdlayout)->allocator;
+    allocator_t *allocator = ((Obj *)gridlayout)->allocator;
 
-	dbg_str(DBG_DETAIL,"girdlayout construct");
+	dbg_str(DBG_DETAIL,"gridlayout construct");
 
 	return 0;
 }
 
-static int __deconstrcut(Girdlayout *girdlayout)
+static int __deconstrcut(Gridlayout *gridlayout)
 {
-	dbg_str(DBG_SUC,"girdlayout deconstruct");
+	dbg_str(DBG_SUC,"gridlayout deconstruct");
 
 	return 0;
 }
 
-static int __set(Girdlayout *girdlayout, char *attrib, void *value)
+static int __set(Gridlayout *gridlayout, char *attrib, void *value)
 {
 	if (strcmp(attrib, "set") == 0) {
-		girdlayout->set = value;
+		gridlayout->set = value;
     } else if (strcmp(attrib, "get") == 0) {
-		girdlayout->get = value;
+		gridlayout->get = value;
 	} else if (strcmp(attrib, "construct") == 0) {
-		girdlayout->construct = value;
+		gridlayout->construct = value;
 	} else if (strcmp(attrib, "deconstruct") == 0) {
-		girdlayout->deconstruct = value;
+		gridlayout->deconstruct = value;
 	}
 	/*vitual methods*/
 	/*attribs*/
 	else if (strcmp(attrib, "name") == 0) {
-        strncpy(girdlayout->name,value,strlen(value));
+        strncpy(gridlayout->name,value,strlen(value));
 	} else {
-		dbg_str(DBG_DETAIL,"girdlayout set, not support %s setting",attrib);
+		dbg_str(DBG_DETAIL,"gridlayout set, not support %s setting",attrib);
 	}
 
 	return 0;
 }
 
-static void *__get(Girdlayout *obj, char *attrib)
+static void *__get(Gridlayout *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
-        dbg_str(DBG_WARNNING,"girdlayout get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(DBG_WARNNING,"gridlayout get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
 }
 
-static class_info_entry_t girdlayout_class_info[] = {
+static class_info_entry_t gridlayout_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
@@ -69,16 +69,16 @@ static class_info_entry_t girdlayout_class_info[] = {
 	[6 ] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("Girdlayout",girdlayout_class_info);
+REGISTER_CLASS("Gridlayout",gridlayout_class_info);
 
-char *gen_girdlayout_setting_str()
+char *gen_gridlayout_setting_str()
 {
     char *set_str = NULL;
 
     return set_str;
 }
 
-void test_ui_girdlayout()
+void test_ui_gridlayout()
 {
     Window *window;
     Container *container;
@@ -98,11 +98,11 @@ void test_ui_girdlayout()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    set_str   = gen_girdlayout_setting_str();
-    subject   = OBJECT_NEW(allocator, Girdlayout,set_str);
+    set_str   = gen_gridlayout_setting_str();
+    subject   = OBJECT_NEW(allocator, Gridlayout,set_str);
 
-    object_dump(subject, "Girdlayout", buf, 2048);
-    dbg_str(DBG_DETAIL,"Girdlayout dump: %s",buf);
+    object_dump(subject, "Gridlayout", buf, 2048);
+    dbg_str(DBG_DETAIL,"Gridlayout dump: %s",buf);
 
     container->add_component(container,subject);
 

@@ -8,6 +8,11 @@
 
 typedef struct container_s Container;
 
+typedef struct position_s{
+	int x;
+	int y;
+}position_t;
+
 struct container_s{
 	Subject subject;
 

@@ -10,11 +10,6 @@
 #include <libobject/map_hash.h>
 #include <miscellany/buffer.h>
 
-typedef struct position_s{
-	int x;
-	int y;
-}position_t;
-
 static int __construct(Container *container,char *init_str)
 {
     allocator_t *allocator = ((Obj *)container)->allocator;

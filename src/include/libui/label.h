@@ -19,7 +19,6 @@ struct label_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
-	int (*move)(Label *label);
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *graph);
 	int (*unload_resources)(Component *component, void *graph);
@@ -27,7 +26,6 @@ struct label_s{
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
-	Text *text;
     String *string;
     cursor_t cursor;
     void *window;

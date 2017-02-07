@@ -489,13 +489,13 @@ static int args_process_test_sdl_timer(void *base,int argc,char **argv)
 	test_obj_sdl_timer();
 	return 0;
 }
-static int args_process_test_girdlayout(void *base,int argc,char **argv)
+static int args_process_test_gridlayout(void *base,int argc,char **argv)
 {
-    test_ui_girdlayout();
+    test_ui_gridlayout();
 	return 0;
 }
 static cmd_config_t cmds[]={
-	{"Gird", args_process_test_girdlayout,0, "test", "N/A","test"},
+	{"Grid", args_process_test_gridlayout,0, "test", "N/A","test"},
 	{"Sdl_Timer", args_process_test_sdl_timer,0, "test", "N/A","test"},
 	{"TF", args_process_test_Text_Field,0, "test", "N/A","test"},
 	{"TA", args_process_test_Text_Area,0, "test", "N/A","test"},
