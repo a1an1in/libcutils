@@ -27,8 +27,8 @@ __attribute__((constructor(CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES)))
 void libdbg_register_modules()
 {
     CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES=%d,register libdbg modules\n",
-			          CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES);
-	console_print_regester();
-	//network_print_regester();
-	log_print_regester();
+                      CONSTRUCTOR_PRIORITY_LIBDBG_REGISTER_MODULES);
+    console_print_regester();
+    //network_print_regester();
+    log_print_regester();
 }
