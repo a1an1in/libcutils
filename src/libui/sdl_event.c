@@ -125,39 +125,39 @@ print_text(char *eventtype, char *text)
 
 static int __construct(__Event *event,char *init_str)
 {
-	dbg_str(OBJ_DETAIL,"event construct, event addr:%p",event);
+    dbg_str(OBJ_DETAIL,"event construct, event addr:%p",event);
 
-	return 0;
+    return 0;
 }
 
 static int __deconstrcut(__Event *event)
 {
-	__Event *i = (__Event *)event;
-	dbg_str(OBJ_DETAIL,"event deconstruct,event addr:%p",event);
+    __Event *i = (__Event *)event;
+    dbg_str(OBJ_DETAIL,"event deconstruct,event addr:%p",event);
 
 
-	return 0;
+    return 0;
 }
 
 static int __set(__Event *event, char *attrib, void *value)
 {
     Sdl_Event *e = (Sdl_Event *)event;
 
-	if(strcmp(attrib, "set") == 0) {
-		e->set = value;
+    if(strcmp(attrib, "set") == 0) {
+        e->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		e->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
-		e->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
-		e->deconstruct = value;
-	} else if(strcmp(attrib, "poll_event") == 0) {
-		e->poll_event = value;
-	} else {
-		dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
-	}
+        e->get = value;
+    } else if(strcmp(attrib, "construct") == 0) {
+        e->construct = value;
+    } else if(strcmp(attrib, "deconstruct") == 0) {
+        e->deconstruct = value;
+    } else if(strcmp(attrib, "poll_event") == 0) {
+        e->poll_event = value;
+    } else {
+        dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
+    }
 
-	return 0;
+    return 0;
 }
 
 static void * __get(__Event *event, char *attrib)
@@ -173,32 +173,32 @@ static void * __get(__Event *event, char *attrib)
 static int __poll_event(__Event *event,void *window)
 {
     int quit     = 0;
-	SDL_Event *e = &((Sdl_Event *)event)->ev;
-	Window *w    = (Window *)window;
-	Graph *g     = w->graph;
-	Component *cur;
+    SDL_Event *e = &((Sdl_Event *)event)->ev;
+    Window *w    = (Window *)window;
+    Graph *g     = w->graph;
+    Component *cur;
      
     dbg_str(DBG_DETAIL,"sdl event poll");
 
-	//add for test>>
+    //add for test>>
     Container *container;
     container = (Container *)window;
-	/*
-	 *cur       = container->search_component(container,"text_field");
-	 */
-	cur       = container->search_component(container,"text_area");
+    /*
+     *cur       = container->search_component(container,"text_field");
+     */
+    cur       = container->search_component(container,"text_area");
     if(cur == NULL) {
         dbg_str(DBG_WARNNING,"not found component :%s","text_field");
         return -1;
     }
-	//<<
-	
-	/*
+    //<<
+    
+    /*
      *String *string;
      *char buf[2048];
      *allocator_t *allocator = ((Obj *)event)->allocator;
      *string = OBJECT_NEW(allocator, String,NULL);
-	 */
+     */
 
     SDL_StartTextInput();
 
@@ -208,23 +208,23 @@ static int __poll_event(__Event *event,void *window)
                  case SDL_QUIT:
                      quit = 1; 
                      break;
-				 case SDL_WINDOWEVENT:
-					 switch (e->window.event) {
-						 case SDL_WINDOWEVENT_MOVED:
-							 break;
-						 case SDL_WINDOWEVENT_RESIZED:
-							 dbg_str(DBG_DETAIL,"SDL EVENT: Window %d resized to %dx%d",
-									 e->window.windowID, e->window.data1,
-									 e->window.data2);
-							 break;
-					 }
-					 break;
+                 case SDL_WINDOWEVENT:
+                     switch (e->window.event) {
+                         case SDL_WINDOWEVENT_MOVED:
+                             break;
+                         case SDL_WINDOWEVENT_RESIZED:
+                             dbg_str(DBG_DETAIL,"SDL EVENT: Window %d resized to %dx%d",
+                                     e->window.windowID, e->window.data1,
+                                     e->window.data2);
+                             break;
+                     }
+                     break;
                  case SDL_KEYDOWN:
-					 /*
-					  *print_key(&e->key.keysym, 
-					  *          (e->key.state == SDL_PRESSED) ? SDL_TRUE : SDL_FALSE,
-					  *          (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
-					  */
+                     /*
+                      *print_key(&e->key.keysym, 
+                      *          (e->key.state == SDL_PRESSED) ? SDL_TRUE : SDL_FALSE,
+                      *          (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
+                      */
 
                      if((e->key.repeat) ? SDL_TRUE : SDL_FALSE) {
                          break;
@@ -234,53 +234,53 @@ static int __poll_event(__Event *event,void *window)
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
                               */
-							 if(cur->up_key_down) cur->up_key_down(cur, g); 
+                             if(cur->up_key_down) cur->up_key_down(cur, g); 
                              break;
                          case SDLK_DOWN:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
                               */
-							 if(cur->down_key_down) cur->down_key_down(cur, g); 
+                             if(cur->down_key_down) cur->down_key_down(cur, g); 
                              break;
                          case SDLK_LEFT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
                               */
-							 if(cur->left_key_down) cur->left_key_down(cur, g); 
+                             if(cur->left_key_down) cur->left_key_down(cur, g); 
                              break;
                          case SDLK_RIGHT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
                               */
-							 if(cur->right_key_down) cur->right_key_down(cur, g); 
+                             if(cur->right_key_down) cur->right_key_down(cur, g); 
                              break;
                          case SDLK_PAGEUP:
-							 if(cur->pageup_key_down) cur->pageup_key_down(cur, g); 
+                             if(cur->pageup_key_down) cur->pageup_key_down(cur, g); 
                              break;
                          case SDLK_PAGEDOWN:
-							 if(cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
+                             if(cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
                              break;
                          case SDLK_BACKSPACE:
                              /*
                               *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                               */
-							 if(cur->backspace_key_input) cur->backspace_key_input(cur, g); 
+                             if(cur->backspace_key_input) cur->backspace_key_input(cur, g); 
                              break;
-						 case SDLK_j:
-							  if(SDL_GetModState() & KMOD_CTRL) {
-								  if(cur->one_line_up) cur->one_line_up(cur, g); 
-							  } else{
-								  dbg_str(DBG_IMPORTANT,"key j down");
-							  }
-							 break;
-						 case SDLK_k:
-							  if(SDL_GetModState() & KMOD_CTRL) {
-								  /*
-								   *dbg_str(DBG_IMPORTANT,"ctrl + k");
-								   */
-								  if(cur->one_line_down) cur->one_line_down(cur, g); 
-							  }
-							 break;
+                         case SDLK_j:
+                              if(SDL_GetModState() & KMOD_CTRL) {
+                                  if(cur->one_line_up) cur->one_line_up(cur, g); 
+                              } else{
+                                  dbg_str(DBG_IMPORTANT,"key j down");
+                              }
+                             break;
+                         case SDLK_k:
+                              if(SDL_GetModState() & KMOD_CTRL) {
+                                  /*
+                                   *dbg_str(DBG_IMPORTANT,"ctrl + k");
+                                   */
+                                  if(cur->one_line_down) cur->one_line_down(cur, g); 
+                              }
+                             break;
                          default:
                              break;
                      } 
@@ -290,82 +290,82 @@ static int __poll_event(__Event *event,void *window)
                       *dbg_str(DBG_DETAIL,"SDL_KEYUP");
                       */
                      break;
-				 case SDL_CONTROLLERBUTTONDOWN:
-					 dbg_str(DBG_DETAIL,"SDL EVENT: Controller %d button %d down",
-							 e->cbutton.which, e->cbutton.button);
-					 break;
-                 case SDL_MOUSEBUTTONDOWN:
-					 dbg_str(DBG_DETAIL,"SDL EVENT: Mouse: button %d pressed at %d,%d with click count %d in window %d",
-							 e->button.button, e->button.x, e->button.y, e->button.clicks,                         
-							 e->button.windowID); 
+                 case SDL_CONTROLLERBUTTONDOWN:
+                     dbg_str(DBG_DETAIL,"SDL EVENT: Controller %d button %d down",
+                             e->cbutton.which, e->cbutton.button);
                      break;
-				 case SDL_MOUSEMOTION:
-					 /*
-					  *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
-					  *        e->motion.x, e->motion.y,
-					  *        e->motion.xrel, e->motion.yrel,
-					  *        e->motion.windowID);
-					  */
-					 break;
-				 case SDL_MOUSEWHEEL: 
-					 /*
-					  *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: wheel scrolled %d in x and %d in y (reversed: %d) in window %d", 
-					  *        e->wheel.x, e->wheel.y, e->wheel.direction, e->wheel.windowID);
-					  */
-					 break;
-				 case SDL_TEXTEDITING:
+                 case SDL_MOUSEBUTTONDOWN:
+                     dbg_str(DBG_DETAIL,"SDL EVENT: Mouse: button %d pressed at %d,%d with click count %d in window %d",
+                             e->button.button, e->button.x, e->button.y, e->button.clicks,                         
+                             e->button.windowID); 
+                     break;
+                 case SDL_MOUSEMOTION:
+                     /*
+                      *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
+                      *        e->motion.x, e->motion.y,
+                      *        e->motion.xrel, e->motion.yrel,
+                      *        e->motion.windowID);
+                      */
+                     break;
+                 case SDL_MOUSEWHEEL: 
+                     /*
+                      *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: wheel scrolled %d in x and %d in y (reversed: %d) in window %d", 
+                      *        e->wheel.x, e->wheel.y, e->wheel.direction, e->wheel.windowID);
+                      */
+                     break;
+                 case SDL_TEXTEDITING:
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-					 if(cur->text_key_input) cur->text_key_input(cur,e->text.text[0], g);
-					 /*
+                     if(cur->text_key_input) cur->text_key_input(cur,e->text.text[0], g);
+                     /*
                       *dbg_str(DBG_DETAIL,"text:%s",e->text.text);
                       *string->append_char(string,e->text.text[0]);
-					  */
+                      */
                      break;
-				 case SDL_FINGERDOWN:
-				 case SDL_FINGERUP:
-					 dbg_str(DBG_DETAIL,
-							 "SDL EVENT: Finger: %s touch=%ld, finger=%ld, x=%f, y=%f, dx=%f, dy=%f, pressure=%f",
-							 (e->type == SDL_FINGERDOWN) ? "down" : "up",
-							 (long) e->tfinger.touchId,
-							 (long) e->tfinger.fingerId,
-							 e->tfinger.x, e->tfinger.y,
-							 e->tfinger.dx, e->tfinger.dy, e->tfinger.pressure);
-					 break;
+                 case SDL_FINGERDOWN:
+                 case SDL_FINGERUP:
+                     dbg_str(DBG_DETAIL,
+                             "SDL EVENT: Finger: %s touch=%ld, finger=%ld, x=%f, y=%f, dx=%f, dy=%f, pressure=%f",
+                             (e->type == SDL_FINGERDOWN) ? "down" : "up",
+                             (long) e->tfinger.touchId,
+                             (long) e->tfinger.fingerId,
+                             e->tfinger.x, e->tfinger.y,
+                             e->tfinger.dx, e->tfinger.dy, e->tfinger.pressure);
+                     break;
                  default:
                      break;
              }
          }
     }
 
-	/*
-	 *object_dump(string, "String", buf, 2048);
-	 *dbg_str(DBG_DETAIL,"String dump: %s",buf);
-	 */
+    /*
+     *object_dump(string, "String", buf, 2048);
+     *dbg_str(DBG_DETAIL,"String dump: %s",buf);
+     */
     SDL_StopTextInput();
 
     return 0;
 }
 
 static class_info_entry_t sdl_event_class_info[] = {
-	[0 ] = {ENTRY_TYPE_OBJ,"__Event","event",NULL,sizeof(void *)},
-	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","poll_event",__poll_event,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_END},
+    [0 ] = {ENTRY_TYPE_OBJ,"__Event","event",NULL,sizeof(void *)},
+    [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+    [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","poll_event",__poll_event,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Sdl_Event",sdl_event_class_info);
 
 void test_obj_sdl_event()
 {
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
     Window *window;
-	Graph *g;
-	__Event *event;
+    Graph *g;
+    __Event *event;
     char *set_str;
     char buf[2048];
 
@@ -375,7 +375,7 @@ void test_obj_sdl_event()
      *window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
      */
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
-	g       = window->graph;
+    g       = window->graph;
     event   = window->event;
 
     object_dump(window, "Sdl_Window", buf, 2048);

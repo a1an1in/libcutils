@@ -33,26 +33,26 @@ int delete_nth_line(Text *text, int line_num)
     end = text->line_info->end(text->line_info);
     cur = get_iterator_of_nth_line(cur, end, line_num);
 
-	list->del(list,cur);
+    list->del(list,cur);
 
     object_destroy(cur);
     object_destroy(end);
 }
 
 int extract_text_disturbed_by_inserting(Text *text, int line_num,
-										int offset,  char *str,
-										int len, Font *font)
+                                        int offset,  char *str,
+                                        int len, Font *font)
 {
-	text_line_t *line_info = NULL;
+    text_line_t *line_info = NULL;
     Iterator *cur          = NULL, *end;
     int find_flag          = -1, line_count = 0;
-	int i                  = 0;
+    int i                  = 0;
 
     cur = text->line_info->begin(text->line_info);
     end = text->line_info->end(text->line_info);
 
     for (i = 0; !end->equal(end,cur); cur->next(cur), i++) {
-		if (i == line_num) {
+        if (i == line_num) {
             line_info = cur->get_vpointer(cur);
             if (offset < 0) return -1;
             strncpy(str, line_info->head + offset, line_info->tail -line_info->head - offset + 1);
@@ -66,10 +66,10 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
             };
 
             if ((*line_info->tail) == '\n') {
-				break;
+                break;
             } else  
                 continue;
-		}
+        }
         if (find_flag == 1) { 
             line_count ++;
             line_info = cur->get_vpointer(cur);
@@ -77,16 +77,16 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
                 dbg_str(DBG_WARNNING,"buffer too small, please check");
                 return -1;
             }
-			/*
+            /*
              *dbg_str(DBG_DETAIL,"%s", line_info->head);
-			 */
-			strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
+             */
+            strncpy(str + strlen(str), line_info->head, line_info->tail - line_info->head + 1);
             if ((*line_info->tail) == '\n') {
-				break;
+                break;
             }
             /*
-			 *} else if (*(line_info->tail + 1) == '\0') {
-			 *    break;
+             *} else if (*(line_info->tail + 1) == '\0') {
+             *    break;
              */
         }
     }
@@ -94,7 +94,7 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
     object_destroy(cur);
     object_destroy(end);
 
-	return line_count;
+    return line_count;
 
 }
 
@@ -114,89 +114,89 @@ int extract_text_disturbed_by_inserting(Text *text, int line_num,
  * @returns   
  */
 int rewrite_text(Text *text, int start_line,int offset,
-				 int width, int count,
-				 char *str,int *out_len, int *out_line_cnt, void *font)
+                 int width, int count,
+                 char *str,int *out_len, int *out_line_cnt, void *font)
 {
 #define MAX_TEXT_LINE_LENTH 256
-	int line_width          = text->width;
-	int line_num            = 0;
-	int line_lenth          = 0;
-	int x                   = 0, y = 0;
-	Font *f                 = (Font *)font;
-	allocator_t *allocator  = ((Obj *)text)->allocator;
+    int line_width          = text->width;
+    int line_num            = 0;
+    int line_lenth          = 0;
+    int x                   = 0, y = 0;
+    Font *f                 = (Font *)font;
+    allocator_t *allocator  = ((Obj *)text)->allocator;
     List *list              = text->line_info;
-	int len, i, line_offset = 0;
+    int len, i, line_offset = 0;
     Iterator *end, *cur;
-	text_line_t *li;
-	char c;
-	int c_witdh;
-	int ret = 0;
+    text_line_t *li;
+    char c;
+    int c_witdh;
+    int ret = 0;
 
     cur = text->line_info->begin(text->line_info);
     end = text->line_info->end(text->line_info);
     cur = get_iterator_of_nth_line(cur, end, start_line);
-	len = strlen(str);
+    len = strlen(str);
 
-	/*
-	 *dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
-	 */
+    /*
+     *dbg_str(DBG_DETAIL,"rewrite line_count:%d, text:%s", count, str);
+     */
     /*
      *dbg_str(DBG_DETAIL,"rewrite_text:offset=%d",offset);
      */
 
-	for (i = 0; line_num < count && i < len; i++) {
-		c       = str[i];
-		c_witdh = f->get_character_width(f,c);
+    for (i = 0; line_num < count && i < len; i++) {
+        c       = str[i];
+        c_witdh = f->get_character_width(f,c);
 
-		if (i == 0) {
-			li           = cur->get_vpointer(cur);
-			line_offset  = offset;
-			x            = width;
-		}
+        if (i == 0) {
+            li           = cur->get_vpointer(cur);
+            line_offset  = offset;
+            x            = width;
+        }
 
-		if (x + c_witdh <= line_width) {
-			li->string->replace_char(li->string,line_offset, c);
-			x  += c_witdh;
+        if (x + c_witdh <= line_width) {
+            li->string->replace_char(li->string,line_offset, c);
+            x  += c_witdh;
         } else if (x + c_witdh > line_width) {//line end
-			li->line_lenth = x;
-			li->head       = li->string->value;
-			li->tail       = li->head + line_offset - 1;
-			line_num++;
-			/*
-			 *dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
-			 */
-			if (line_num < count) {
-				cur->next(cur);
-				li             = cur->get_vpointer(cur);
-				memset(li->string->value, 0 , li->string->value_len);
-				line_offset    = 0;
-				li->string->replace_char(li->string,line_offset, c);
-				x              = c_witdh;
+            li->line_lenth = x;
+            li->head       = li->string->value;
+            li->tail       = li->head + line_offset - 1;
+            line_num++;
+            /*
+             *dbg_str(DBG_DETAIL,"rewrite line:%s", li->head);
+             */
+            if (line_num < count) {
+                cur->next(cur);
+                li             = cur->get_vpointer(cur);
+                memset(li->string->value, 0 , li->string->value_len);
+                line_offset    = 0;
+                li->string->replace_char(li->string,line_offset, c);
+                x              = c_witdh;
 
-			} else if ( line_num == count) {
-				ret = i;
-				break;
+            } else if ( line_num == count) {
+                ret = i;
+                break;
             }
-		}
+        }
 
-		if (c == '\n') {
-			li->line_lenth  = x;
-			li->head        = li->string->value;
-			li->tail        = li->head + line_offset;
-			ret             = i + 1;
-			line_num++;
-			break;
-		} else if (i == len -1) {
-			li->line_lenth  = x;
-			li->head        = li->string->value;
-			li->tail        = li->head + line_offset;
-			ret             = i + 1;
-			line_num++;
-			break;
-		}
+        if (c == '\n') {
+            li->line_lenth  = x;
+            li->head        = li->string->value;
+            li->tail        = li->head + line_offset;
+            ret             = i + 1;
+            line_num++;
+            break;
+        } else if (i == len -1) {
+            li->line_lenth  = x;
+            li->head        = li->string->value;
+            li->tail        = li->head + line_offset;
+            ret             = i + 1;
+            line_num++;
+            break;
+        }
 
-		line_offset++;
-	}
+        line_offset++;
+    }
 
     if (ret == 0) {
         dbg_str(DBG_WARNNING, "rewrite_text warnning, i=%d, line_num=%d, count=%d, len=%d",
@@ -211,72 +211,72 @@ int rewrite_text(Text *text, int start_line,int offset,
     object_destroy(cur);
     object_destroy(end);
 
-	return ret;
+    return ret;
 #undef MAX_TEXT_LINE_LENTH
 }
 
 static int __construct(Text *text,char *init_str)
 {
     allocator_t *allocator = ((Obj *)text)->allocator;
-	char *set_str          = "{\"Linked_List\":{\"List\":{ \"value_size\":%d}}}";
+    char *set_str          = "{\"Linked_List\":{\"List\":{ \"value_size\":%d}}}";
 #define MAX_BUF_LEN 1024
-	char buf[MAX_BUF_LEN];
+    char buf[MAX_BUF_LEN];
 
-	dbg_str(OBJ_DETAIL,"text construct, text addr:%p",text);
-	snprintf(buf, MAX_BUF_LEN, set_str, sizeof(text_line_t));
+    dbg_str(OBJ_DETAIL,"text construct, text addr:%p",text);
+    snprintf(buf, MAX_BUF_LEN, set_str, sizeof(text_line_t));
 
-	text->line_info  = OBJECT_NEW(allocator, Linked_List,buf);
-	if (!text->line_info) {
-		dbg_str(DBG_WARNNING, "create line_info err");
-		return -1;
-	}
+    text->line_info  = OBJECT_NEW(allocator, Linked_List,buf);
+    if (!text->line_info) {
+        dbg_str(DBG_WARNNING, "create line_info err");
+        return -1;
+    }
 
-	/*
-	 *text->content = global_text;
-	 */
-	text->width   = 600;
+    /*
+     *text->content = global_text;
+     */
+    text->width   = 600;
     object_dump(text->line_info, "Linked_List", buf, MAX_BUF_LEN);
     dbg_str(DBG_DETAIL,"line info dump: %s",buf);
 
 #undef MAX_BUF_LEN
-	return 0;
+    return 0;
 }
 
 static int __deconstrcut(Text *text)
 {
-	dbg_str(OBJ_DETAIL,"text deconstruct,text addr:%p",text);
-	if (text->line_info)
-		object_destroy(text->line_info);
+    dbg_str(OBJ_DETAIL,"text deconstruct,text addr:%p",text);
+    if (text->line_info)
+        object_destroy(text->line_info);
 
-	return 0;
+    return 0;
 }
 
 static int __set(Text *text, char *attrib, void *value)
 {
-	if (strcmp(attrib, "set") == 0) {
-		text->set = value;
+    if (strcmp(attrib, "set") == 0) {
+        text->set = value;
     } else if (strcmp(attrib, "get") == 0) {
-		text->get = value;
-	} else if (strcmp(attrib, "construct") == 0) {
-		text->construct = value;
-	} else if (strcmp(attrib, "deconstruct") == 0) {
-		text->deconstruct = value;
-	} else if (strcmp(attrib, "write_text") == 0) {
-		text->write_text = value;
-	} else if (strcmp(attrib, "write_char") == 0) {
-		text->write_char = value;
-	} else if (strcmp(attrib, "delete_char") == 0) {
-		text->delete_char = value;
-	} else if (strcmp(attrib, "get_line_count") == 0) {
-		text->get_line_count = value;
-	} else if (strcmp(attrib, "get_text_line_info") == 0) {
-		text->get_text_line_info = value;
-	}
+        text->get = value;
+    } else if (strcmp(attrib, "construct") == 0) {
+        text->construct = value;
+    } else if (strcmp(attrib, "deconstruct") == 0) {
+        text->deconstruct = value;
+    } else if (strcmp(attrib, "write_text") == 0) {
+        text->write_text = value;
+    } else if (strcmp(attrib, "write_char") == 0) {
+        text->write_char = value;
+    } else if (strcmp(attrib, "delete_char") == 0) {
+        text->delete_char = value;
+    } else if (strcmp(attrib, "get_line_count") == 0) {
+        text->get_line_count = value;
+    } else if (strcmp(attrib, "get_text_line_info") == 0) {
+        text->get_text_line_info = value;
+    }
     else {
-		dbg_str(OBJ_WARNNING,"text set,  \"%s\" setting is not support",attrib);
-	}
+        dbg_str(OBJ_WARNNING,"text set,  \"%s\" setting is not support",attrib);
+    }
 
-	return 0;
+    return 0;
 }
 
 static void * __get(Text *text, char *attrib)
@@ -302,82 +302,82 @@ static void * __get(Text *text, char *attrib)
 int __write_text(Text *text, int start_line,char *str, void *font)
 {
 #define MAX_TEXT_LINE_LENTH 256
-	int line_width          = text->width;
-	int head_offset         = 0;
-	int tail_offset         = 0;
-	int write_count         = 0;
-	int line_lenth          = 0;
-	int x                   = 0, y = 0;
-	Font *f                 = (Font *)font;
-	allocator_t *allocator  = ((Obj *)text)->allocator;
+    int line_width          = text->width;
+    int head_offset         = 0;
+    int tail_offset         = 0;
+    int write_count         = 0;
+    int line_lenth          = 0;
+    int x                   = 0, y = 0;
+    Font *f                 = (Font *)font;
+    allocator_t *allocator  = ((Obj *)text)->allocator;
     List *list              = text->line_info;
-	int len, i, line_offset = 0;
+    int len, i, line_offset = 0;
     Iterator *head ,*end, *cur;
-	text_line_t line_info;
-	char c;
-	int c_witdh, c_height;
+    text_line_t line_info;
+    char c;
+    int c_witdh, c_height;
 
     cur = text->line_info->begin(text->line_info);
     end = text->line_info->end(text->line_info);
     cur = get_iterator_of_nth_line(cur, end, start_line);
 
-	memset(&line_info, 0, sizeof(line_info));
-	len = strlen(str);
+    memset(&line_info, 0, sizeof(line_info));
+    len = strlen(str);
 
-	for (i = 0; i < len; i++) {
+    for (i = 0; i < len; i++) {
         c       = str[i];
-		c_witdh = f->get_character_width(f,c);
-		if (x == 0) {
-			memset(&line_info, 0, sizeof(line_info));
-			line_offset           = 0;
-			line_info.string      = OBJECT_NEW(allocator, String,NULL);
+        c_witdh = f->get_character_width(f,c);
+        if (x == 0) {
+            memset(&line_info, 0, sizeof(line_info));
+            line_offset           = 0;
+            line_info.string      = OBJECT_NEW(allocator, String,NULL);
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
-		}
+        }
 
-		if (x + c_witdh > line_width) {//line end
-			line_info.line_lenth  = x;
-			write_count++;
-			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_offset - 1;
-			list->insert_after(list,cur, &line_info);
+        if (x + c_witdh > line_width) {//line end
+            line_info.line_lenth  = x;
+            write_count++;
+            line_info.head        = line_info.string->value;
+            line_info.tail        = line_info.head + line_offset - 1;
+            list->insert_after(list,cur, &line_info);
             cur->next(cur);
 
-			x                     = c_witdh;
-			memset(&line_info, 0, sizeof(line_info));
-			line_offset           = 0;
-			line_info.string      = OBJECT_NEW(allocator, String,NULL);
+            x                     = c_witdh;
+            memset(&line_info, 0, sizeof(line_info));
+            line_offset           = 0;
+            line_info.string      = OBJECT_NEW(allocator, String,NULL);
             line_info.string->pre_alloc(line_info.string, MAX_TEXT_LINE_LENTH);
-			line_info.string->append_char(line_info.string,c);
+            line_info.string->append_char(line_info.string,c);
 
-		} else {
-			x                        += c_witdh;
-			line_info.string->append_char(line_info.string,c);
-		}
+        } else {
+            x                        += c_witdh;
+            line_info.string->append_char(line_info.string,c);
+        }
 
-		if (c == '\n') {
-			line_info.line_lenth  = x;
-			write_count++;
-			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_offset;
-			list->insert_after(list,cur, &line_info);
-			cur->next(cur);
-			x                     = 0;
-		} else if ( i == len - 1) {
-			line_info.line_lenth  = x;
-			write_count++;
-			line_info.head        = line_info.string->value;
-			line_info.tail        = line_info.head + line_offset;
-			list->insert_after(list,cur, &line_info);
-			cur->next(cur);
-		}
+        if (c == '\n') {
+            line_info.line_lenth  = x;
+            write_count++;
+            line_info.head        = line_info.string->value;
+            line_info.tail        = line_info.head + line_offset;
+            list->insert_after(list,cur, &line_info);
+            cur->next(cur);
+            x                     = 0;
+        } else if ( i == len - 1) {
+            line_info.line_lenth  = x;
+            write_count++;
+            line_info.head        = line_info.string->value;
+            line_info.tail        = line_info.head + line_offset;
+            list->insert_after(list,cur, &line_info);
+            cur->next(cur);
+        }
 
-		line_offset++;
-	}
+        line_offset++;
+    }
 
     object_destroy(cur);
     object_destroy(end);
 
-	return write_count;
+    return write_count;
 #undef MAX_TEXT_LINE_LENTH
 }
 
@@ -385,46 +385,46 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
 {
 #define MAX_MODULATE_STR_LEN 1024 * 2
     Iterator *cur, *end;
-	text_line_t *line_info;
-	int i   = 0;
-	int ret = -1;
+    text_line_t *line_info;
+    int i   = 0;
+    int ret = -1;
     char str[MAX_MODULATE_STR_LEN] = {0};
     int line_count, new_line_count;
-	int total_len, write_len;
+    int total_len, write_len;
 
-	str[0] = c;
+    str[0] = c;
     line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str + 1, MAX_MODULATE_STR_LEN, font);
 
-	total_len = strlen(str);
+    total_len = strlen(str);
     /*
      *dbg_str(DBG_DETAIL,"text_line_disturbed_by_inserting, line_count=%d, value:%s",line_count, str);
      */
-	write_len = rewrite_text(text, line_num, offset, width,
-							 line_count, str,NULL, NULL, font);
+    write_len = rewrite_text(text, line_num, offset, width,
+                             line_count, str,NULL, NULL, font);
 
 #if 1
     /*
      *dbg_str(DBG_DETAIL,"rewrite len=%d, total_len=%d", write_len, total_len);
      */
-	/*
+    /*
      *dbg_str(DBG_DETAIL,"ini str:%s", str);
      *dbg_str(DBG_DETAIL,"left str:%s", str + write_len + 1);
-	 */
-	if (total_len - write_len > 0) {
-		new_line_count = text->write_text(text, line_num + line_count -1 ,str + write_len, font);
+     */
+    if (total_len - write_len > 0) {
+        new_line_count = text->write_text(text, line_num + line_count -1 ,str + write_len, font);
         text->last_line_num += new_line_count;
         /*
-		 *ret = line_count + new_line_count;
+         *ret = line_count + new_line_count;
          */
         ret = text->last_line_num - line_num + 1;
-		dbg_str(DBG_IMPORTANT,"new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s",
+        dbg_str(DBG_IMPORTANT,"new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s",
                 line_num ,text->last_line_num, new_line_count, line_count,write_len, total_len,  str + write_len);
-	} else {
-		ret = line_count;
-	}
+    } else {
+        ret = line_count;
+    }
 #endif
 
-	return ret;
+    return ret;
 #undef MAX_MODULATE_STR_LEN
 }
 
@@ -432,59 +432,59 @@ int __delete_char(Text *text,int line_num,  int offset, int width, void *font)
 {
 #define MAX_MODULATE_STR_LEN 1024 * 2
     Iterator *cur, *end;
-	text_line_t *line_info;
-	int i   = 0;
-	int ret = -1;
+    text_line_t *line_info;
+    int i   = 0;
+    int ret = -1;
     char str[MAX_MODULATE_STR_LEN] = {0};
     int line_count, new_line_count = 0;
-	int total_len, write_len;
+    int total_len, write_len;
     char c;
 
     line_count = extract_text_disturbed_by_inserting(text, line_num, offset, str, MAX_MODULATE_STR_LEN, font);
 
-	dbg_str(DBG_DETAIL,"delete_char, text_disturbed:%s",str + 1);
-	rewrite_text(text, line_num, offset, width, line_count, str + 1, NULL, &new_line_count,  font);
+    dbg_str(DBG_DETAIL,"delete_char, text_disturbed:%s",str + 1);
+    rewrite_text(text, line_num, offset, width, line_count, str + 1, NULL, &new_line_count,  font);
 
     dbg_str(DBG_DETAIL,"line_count=%d, new_line_count=%d", line_count, new_line_count);
     if (line_count == new_line_count) {
         ret = line_count;
     } else if (line_count - new_line_count == 1) {
-		delete_nth_line(text, line_num + line_count - 1);
+        delete_nth_line(text, line_num + line_count - 1);
         ret = text->last_line_num - line_num +  1;
         text->last_line_num--;
     } else {
-		dbg_str(DBG_DETAIL,"run at here");
-	}
+        dbg_str(DBG_DETAIL,"run at here");
+    }
 
-	return ret;
+    return ret;
 #undef MAX_MODULATE_STR_LEN
 }
 
 void *__get_text_line_info(Text *text, int line_num)
 {
     Iterator *cur, *end;
-	text_line_t *line_info = NULL;
-	int i   = 0;
+    text_line_t *line_info = NULL;
+    int i   = 0;
 
     cur = text->line_info->begin(text->line_info);
     end = text->line_info->end(text->line_info);
 
     for (i = 0; !end->equal(end,cur); cur->next(cur), i++) {
-		if (i == line_num) {
-			line_info = cur->get_vpointer(cur);
-			break;
-		}
+        if (i == line_num) {
+            line_info = cur->get_vpointer(cur);
+            break;
+        }
     }
 
     object_destroy(cur);
     object_destroy(end);
 
-	return line_info;
+    return line_info;
 }
 
 int __get_line_count(Text *text)
 {
-	return text->last_line_num;
+    return text->last_line_num;
 }
 
 static class_info_entry_t text_class_info[] = {
@@ -507,7 +507,7 @@ REGISTER_CLASS("Text",text_class_info);
 void print_line_info(Iterator *iter)
 {
     LList_Iterator *i      = (LList_Iterator *)iter;
-	text_line_t *line_info = i->get_vpointer(iter);
+    text_line_t *line_info = i->get_vpointer(iter);
 
     dbg_str(DBG_DETAIL,"head=%p,tail =%p,data =%s", 
             line_info->head, line_info->tail, line_info->head);
@@ -515,10 +515,10 @@ void print_line_info(Iterator *iter)
 
 void test_obj_text()
 {
-	Text *text;
-	allocator_t *allocator = allocator_get_default_alloc();
+    Text *text;
+    allocator_t *allocator = allocator_get_default_alloc();
 
-	dbg_str(DBG_DETAIL,"test_obj_text");
+    dbg_str(DBG_DETAIL,"test_obj_text");
     text = OBJECT_NEW(allocator, Text,"");
 
 }

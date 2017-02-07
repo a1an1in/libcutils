@@ -11,39 +11,39 @@
 
 static int __construct(Character *character,char *init_str)
 {
-	dbg_str(OBJ_DETAIL,"character construct");
+    dbg_str(OBJ_DETAIL,"character construct");
 
-	return 0;
+    return 0;
 }
 
 static int __deconstrcut(Character *character)
 {
-	dbg_str(OBJ_DETAIL,"character deconstruct");
+    dbg_str(OBJ_DETAIL,"character deconstruct");
 
-	return 0;
+    return 0;
 }
 
 static int __set(Character *character, char *attrib, void *value)
 {
-	if(strcmp(attrib, "set") == 0) {
-		character->set = value;
+    if(strcmp(attrib, "set") == 0) {
+        character->set = value;
     } else if(strcmp(attrib, "get") == 0) {
-		character->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
-		character->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
-		character->deconstruct = value;
-	} else if(strcmp(attrib, "load_character") == 0) {
-		character->load_character = value;
-	} else if(strcmp(attrib, "assign") == 0) {
-		character->assign = value;
-	} else if(strcmp(attrib, "load_character") == 0) {
-		character->load_character = value;
-	} else {
-		dbg_str(OBJ_WARNNING,"character set,  \"%s\" setting is not support",attrib);
-	}
+        character->get = value;
+    } else if(strcmp(attrib, "construct") == 0) {
+        character->construct = value;
+    } else if(strcmp(attrib, "deconstruct") == 0) {
+        character->deconstruct = value;
+    } else if(strcmp(attrib, "load_character") == 0) {
+        character->load_character = value;
+    } else if(strcmp(attrib, "assign") == 0) {
+        character->assign = value;
+    } else if(strcmp(attrib, "load_character") == 0) {
+        character->load_character = value;
+    } else {
+        dbg_str(OBJ_WARNNING,"character set,  \"%s\" setting is not support",attrib);
+    }
 
-	return 0;
+    return 0;
 }
 
 static void * __get(Character *character, char *attrib)
@@ -58,7 +58,7 @@ static void * __get(Character *character, char *attrib)
 
 static int __assign(Character *character, uint32_t code)
 {
-	character->code = code;
+    character->code = code;
 }
 
 static class_info_entry_t character_class_info[] = {
@@ -77,8 +77,8 @@ REGISTER_CLASS("Character",character_class_info);
 
 void test_obj_character()
 {
-	Character *character;
-	allocator_t *allocator = allocator_get_default_alloc();
+    Character *character;
+    allocator_t *allocator = allocator_get_default_alloc();
 
     character = OBJECT_NEW(allocator, Character,"");
 }
