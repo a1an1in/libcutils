@@ -27,15 +27,15 @@ __attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES))) void
 register_map_modules()
 {
     CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES=%d,register map_modules\n",
-			          CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES);
+                      CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES);
     hash_map_pk_register();
 
 }
 
 //----------------------------test start---------------------------->>
 struct A{
-	int a;
-	int b;
+    int a;
+    int b;
 };
 
 void test_print_context(map_iterator_t *it)
@@ -45,14 +45,14 @@ void test_print_context(map_iterator_t *it)
 }
 void test_map()
 {
-	map_t *map;
-	map_iterator_t it;
-	allocator_t *allocator = allocator_get_default_alloc();
+    map_t *map;
+    map_iterator_t it;
+    allocator_t *allocator = allocator_get_default_alloc();
 
-	struct A t1 = {1,2};
-	struct A t2 = {2,2};
-	struct A t3 = {3,2};
-	struct A t4 = {4,2};
+    struct A t1 = {1,2};
+    struct A t2 = {2,2};
+    struct A t3 = {3,2};
+    struct A t4 = {4,2};
 
     map = map_alloc(allocator,MAP_TYPE_HASH_MAP);
     map_init(map, 2, sizeof(struct A));

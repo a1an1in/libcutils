@@ -22,48 +22,48 @@
 #include "libdata_structure/link_list.h"
 
 struct test{
-	int a;
-	int b;
+    int a;
+    int b;
 };
 void print_list_data(list_t *list)
 {
 
-	struct test *t = (struct test *)list->data;
+    struct test *t = (struct test *)list->data;
 
-	dbg_str(DBG_DETAIL,"a=%d,b=%d",t->a,t->b);
+    dbg_str(DBG_DETAIL,"a=%d,b=%d",t->a,t->b);
 }
 int test_datastructure_link_list()
 {
-	llist_t *llist;
-	allocator_t *allocator = allocator_get_default_alloc();
+    llist_t *llist;
+    allocator_t *allocator = allocator_get_default_alloc();
 
-	struct test t1={1,2};
-	struct test t2={2,2};
-	struct test t3={3,2};
-	struct test t4={4,2};
-	int ret = 0;
+    struct test t1={1,2};
+    struct test t2={2,2};
+    struct test t3={3,2};
+    struct test t4={4,2};
+    int ret = 0;
 
-	/*
-	 *allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
-	 *allocator_ctr_init(allocator, 0, 0, 1024);
-	 *dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
-	 */
+    /*
+     *allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
+     *allocator_ctr_init(allocator, 0, 0, 1024);
+     *dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
+     */
 
-	llist = llist_create(allocator,0);
-	llist_init(llist,sizeof(struct test));
+    llist = llist_create(allocator,0);
+    llist_init(llist,sizeof(struct test));
 
-	llist_push_front(llist,&t1);
-	llist_push_front(llist,&t2);
-	llist_push_front(llist,&t3);
-	llist_push_front(llist,&t4);
+    llist_push_front(llist,&t1);
+    llist_push_front(llist,&t2);
+    llist_push_front(llist,&t3);
+    llist_push_front(llist,&t4);
 
-	llist_push_back(llist,&t1);
-	llist_push_back(llist,&t2);
-	llist_push_back(llist,&t3);
-	llist_push_back(llist,&t4);
+    llist_push_back(llist,&t1);
+    llist_push_back(llist,&t2);
+    llist_push_back(llist,&t3);
+    llist_push_back(llist,&t4);
 
-	llist_for_each(llist,print_list_data);
+    llist_for_each(llist,print_list_data);
 
-	llist_destroy(llist);
-	return ret;
+    llist_destroy(llist);
+    return ret;
 }
