@@ -8,11 +8,6 @@
 #include <libui/window.h>
 #include <miscellany/buffer.h>
 
-typedef struct position_s{
-	int x;
-	int y;
-}position_t;
-
 static int __construct(Window *window,char *init_str)
 {
 	dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);

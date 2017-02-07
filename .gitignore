@@ -38,6 +38,7 @@
 *.c~
 *.cc
 cscope*
+*~
 tags
 dbg.ini
-./bin/test
+test
