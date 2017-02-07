@@ -785,7 +785,7 @@ static const char *parse_value(cjson_t *item, const char *value, const char **ep
         return parse_object(item, value, ep);
     }
 
-    *ep=value;return 0;	/* failure. */
+    *ep=value;return 0; /* failure. */
 }
 
 /* Render a value to text. */
