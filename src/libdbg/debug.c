@@ -293,13 +293,21 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
     return debugger;
 
 }
+
 int __attribute__((constructor(CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR))) 
 debugger_constructor()
 {
+    char *file_name;
     CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR=%d, construct debugger\n",
                       CONSTRUCTOR_PRIORITY_DEBUGGER_CONSTRUCTOR);
 
-    debugger_gp = debugger_creator("dbg.ini",0);
+#ifdef UNIX_LIKE_USER_MODE
+    file_name = "/tmp/dbg.ini";
+#else
+    file_name= "dbg.ini";
+#endif
+
+    debugger_gp = debugger_creator(file_name,0);
     debugger_init(debugger_gp);
 
     return 0;
