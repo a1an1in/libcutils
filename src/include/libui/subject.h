@@ -22,6 +22,7 @@ struct subject_s{
 	int (*is_touching)(Subject *me,Subject *subject);
 
 	int x, y, height, width;
+	int x_bak, y_bak, height_bak, width_bak;
 	float x_speed, y_speed;
 	/*
 	 *Graph *graph;

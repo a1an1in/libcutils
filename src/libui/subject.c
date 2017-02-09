@@ -37,6 +37,11 @@ static int __construct(Subject *subject,char *init_str)
 {
     dbg_str(OBJ_DETAIL,"subject construct, subject addr:%p",subject);
 
+    subject->x_bak      = subject->x;
+    subject->y_bak      = subject->y;
+    subject->width_bak  = subject->width;
+    subject->height_bak = subject->height;
+
     return 0;
 }
 

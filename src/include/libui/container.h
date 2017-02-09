@@ -24,6 +24,8 @@ struct container_s{
 	/*virtual methods reimplement*/
 	int (*move)(Container *container);
     int (*add_component)(Container *obj, void *component);
+    int (*update_component_position)(void *component, void *arg);
+    int (*reset_component_position)(void *component, void *arg);
     void *(*search_component)(Container *obj, char *key);
 	void (*for_each_component)(Container *obj, void (*func)(Iterator *iter, void *args), void *arg);
 

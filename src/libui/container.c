@@ -74,6 +74,10 @@ static int __set(Container *container, char *attrib, void *value)
         container->move = value;
     } else if (strcmp(attrib, "add_component") == 0) {
         container->add_component = value;
+    } else if (strcmp(attrib, "update_component_position") == 0) {
+        container->update_component_position = value;
+    } else if (strcmp(attrib, "reset_component_position") == 0) {
+        container->reset_component_position = value;
     } else if (strcmp(attrib, "search_component") == 0) {
         container->search_component = value;
     } else if (strcmp(attrib, "for_each_component") == 0) {
@@ -108,7 +112,7 @@ static int __move(Container *container)
     dbg_str(DBG_DETAIL,"container move");
 }
 
-static void __update_component_position(Iterator *iter, void *arg) 
+static void __update_component_position__(Iterator *iter, void *arg) 
 {
     Component *component;
     Subject *s;
@@ -127,10 +131,10 @@ static void __update_component_position(Iterator *iter, void *arg)
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
     dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
-    c->for_each_component(c,__update_component_position,add);
+    c->for_each_component(c,__update_component_position__,add);
 }
 
-static void update_component_position(Component *component,void *arg) 
+static int __update_component_position(void *component,void *arg) 
 {
     Subject *s      = (Subject *)component;
     Container *c    = (Container *)component;
@@ -142,7 +146,44 @@ static void update_component_position(Component *component,void *arg)
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
     dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
 
-    c->for_each_component(c,__update_component_position,arg);
+    c->for_each_component(c,__update_component_position__,arg);
+
+}
+
+
+static void __reset_component_position__(Iterator *iter, void *arg) 
+{
+    Component *component;
+    Subject *s;
+    Container *c;
+    uint8_t *addr;
+    position_t *add = (position_t *)arg;
+
+    addr      = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+    s         = (Subject *)component;
+    c         = (Container *)component;
+
+    s->x = s->x_bak;
+    s->y = s->y_bak;
+
+    dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
+
+    c->for_each_component(c,__reset_component_position__,add);
+}
+
+static void __reset_component_position(void *component,void *arg) 
+{
+    Subject *s      = (Subject *)component;
+    Container *c    = (Container *)component;
+    position_t *add = (position_t *)arg;
+
+    s->x = s->x_bak;
+    s->y = s->y_bak;
+
+    dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
+
+    c->for_each_component(c,__reset_component_position__,arg);
 
 }
 
@@ -166,7 +207,7 @@ static int __add_component(Container *obj, Component *component)
     position.x = ((Subject *)obj)->x;
     position.y = ((Subject *)obj)->y;
 
-    update_component_position(component, &position);
+    obj->update_component_position(component, &position);
 
     obj->map->insert(obj->map, component->name, buffer);
 
@@ -215,13 +256,15 @@ static class_info_entry_t container_class_info[] = {
     [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","search_component",__search_component,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","for_each_component",__for_each_component,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [10] = {ENTRY_TYPE_UINT8_T,"uint8_t","map_type",NULL,sizeof(int)},
-    [11] = {ENTRY_TYPE_END},
+    [5 ] = {ENTRY_TYPE_VFUNC_POINTER,"","move",__move,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","update_component_position",__update_component_position,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","reset_component_position",__reset_component_position,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","search_component",__search_component,sizeof(void *)},
+    [10] = {ENTRY_TYPE_VFUNC_POINTER,"","for_each_component",__for_each_component,sizeof(void *)},
+    [11] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [12] = {ENTRY_TYPE_UINT8_T,"uint8_t","map_type",NULL,sizeof(int)},
+    [13] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Container",container_class_info);
 

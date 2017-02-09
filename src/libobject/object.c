@@ -336,7 +336,7 @@ int __object_init(void *obj, char *cur_type_name, char *type_name)
 {
     object_deamon_t *deamon;
     void *class_info, *parent_class_info;
-    class_info_entry_t * entry_of_parent_class;
+    class_info_entry_t * entry_of_parent_class; //class info entry of parent class
     int (*construct)(void *obj,char *init_str);
 
     dbg_str(OBJ_DETAIL,"current obj type name =%s",cur_type_name);

@@ -33,19 +33,59 @@
 #include <libui/sdl_window.h>
 #include <libui/character.h>
 #include <libui/timer.h>
+#include <miscellany/buffer.h>
 
 static int __construct(Gridlayout *gridlayout,char *init_str)
 {
     allocator_t *allocator = ((Obj *)gridlayout)->allocator;
+    Gridlayout *l = gridlayout;
+    uint32_t i;
 
     dbg_str(DBG_DETAIL,"gridlayout construct");
+
+    l->default_unit_width  = 100;
+    l->default_unit_height = 20;
+    l->cur_col             = 0;
+    l->cur_row             = 0;
+
+    if (l->row_max == 0) { l->row_max = 1;}
+    if (l->col_max == 0) { l->col_max = 1;}
+
+    /*alloc grid height and width arrays*/
+    l->row_height = (uint32_t *) 
+                    allocator_mem_alloc(allocator,
+                                        l->row_max * sizeof(uint32_t *));
+    l->col_width  = (uint32_t *)
+                    allocator_mem_alloc(allocator,
+                                        l->col_max * sizeof(uint32_t *));
+    /*init grid row height*/
+    for (i = 0; i < l->row_max; i++) {
+       l->row_height[i] = l->default_unit_height; 
+    }
+
+    /*init grid col width*/
+    for ( i = 0; i < l->col_max; i++) {
+        l->col_width[i] = l->default_unit_width;
+    }
+
+    /*alloc space for grid componets*/
+    l->grid_components = (Component ***) 
+                         allocator_mem_alloc(allocator,
+                                             l->row_max * l->col_max * sizeof(Component *));
+    memset(l->grid_components, 0, l->row_max * l->col_max * sizeof(Component *));
+                                
 
     return 0;
 }
 
 static int __deconstrcut(Gridlayout *gridlayout)
 {
+    allocator_t *allocator = ((Obj *)gridlayout)->allocator;
+
     dbg_str(DBG_SUC,"gridlayout deconstruct");
+
+    allocator_mem_free(allocator, gridlayout->row_height);
+    allocator_mem_free(allocator, gridlayout->col_width);
 
     return 0;
 }
@@ -62,6 +102,9 @@ static int __set(Gridlayout *gridlayout, char *attrib, void *value)
         gridlayout->deconstruct = value;
     }
     /*vitual methods*/
+    else if (strcmp(attrib, "add_component") == 0) {
+        gridlayout->add_component = value;
+    }
     /*attribs*/
     else if (strcmp(attrib, "name") == 0) {
         strncpy(gridlayout->name,value,strlen(value));
@@ -83,14 +126,89 @@ static void *__get(Gridlayout *obj, char *attrib)
     return NULL;
 }
 
+static int get_x_axis_of_current_grid(Gridlayout *obj)
+{
+    Gridlayout *l = obj;
+    int i, x;
+
+    for ( i = 0; i < l->cur_col; i++) {
+        x += l->col_width[i];
+    }
+
+    return x;
+}
+
+static int get_y_axis_of_current_grid(Gridlayout *obj)
+{
+    Gridlayout *l = obj;
+    int i, y;
+
+    for ( i = 0; i < l->cur_row; i++) {
+        y += l->row_height[i];
+    }
+
+    return y;
+}
+
+static int __add_component(Gridlayout *obj, void *component)
+{
+    Gridlayout *l        = obj;
+    Container *container = (Container *)obj;
+    Map *map             = container->map;
+    char buffer[8]       = {0};
+    Component *c         = (Component *)component;
+    Subject *subject     = (Subject *)c;
+    position_t position;
+    uint8_t rearrange_comonents_flag = 0;
+
+    if (strcmp(c->name,"") == 0) {
+        dbg_str(DBG_WARNNING,"component name is NULL, this is vip, add component failed, please check");
+        return -1;
+    }
+
+    dbg_str(DBG_IMPORTANT, "add component name %s, component addr %p", c->name,c);
+
+    addr_to_buffer(c,(uint8_t *)buffer);
+
+    position.x = get_x_axis_of_current_grid(obj);
+    position.y = get_y_axis_of_current_grid(obj);
+
+    container->update_component_position(c, &position);
+
+    map->insert(map, c->name, buffer);
+
+    l->grid_components[l->cur_row][l->cur_col] = c; 
+
+    if (l->row_height[l->cur_row] < subject->height) {
+        l->row_height[l->cur_row] = subject->height;
+        rearrange_comonents_flag = 1;
+    } 
+
+    if (l->col_width[l->cur_col] < subject->width) {
+        l->col_width[l->cur_col] = subject->width;
+        rearrange_comonents_flag = 1;
+    }
+
+    if (rearrange_comonents_flag == 1) {
+        dbg_str(DBG_WARNNING,"not support rearrange component in grid now");
+        return -1;
+    }
+    
+    l->cur_col++;
+    l->cur_row++;
+
+    return 0;
+}
+
 static class_info_entry_t gridlayout_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
     [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-    [5 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [6 ] = {ENTRY_TYPE_END},
+    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [7 ] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Gridlayout",gridlayout_class_info);

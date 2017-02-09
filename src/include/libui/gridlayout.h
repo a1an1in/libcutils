@@ -1,5 +1,5 @@
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
+#ifndef __GRIDLAYOUT_H__
+#define __GRIDLAYOUT_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>
@@ -25,9 +25,11 @@ struct gridlayout_s{
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
     void *window;
-    position_t **grids;
-    uint32_t row,col, cur_row, cur_col;
-    uint8_t unit_width, unit_height;
+    uint32_t *col_width, *row_height; 
+    uint32_t row_max, col_max, cur_row, cur_col;
+    uint32_t default_unit_width, default_unit_height;
+
+    Component ***grid_components;
 };
 
 #endif

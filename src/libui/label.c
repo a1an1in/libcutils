@@ -242,7 +242,7 @@ char *gen_label_setting_str()
                         \"x\":10,\
                         \"y\":20,\
                         \"width\":100,\
-                        \"height\":50\
+                        \"height\":20\
                     },\
                     \"Component\": {\
                         \"name\": \"label\"\
