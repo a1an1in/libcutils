@@ -417,7 +417,8 @@ int __write_char(Text *text,int line_num,  int offset, int width, char c,void *f
          *ret = line_count + new_line_count;
          */
         ret = text->last_line_num - line_num + 1;
-        dbg_str(DBG_IMPORTANT,"new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s",
+        dbg_str(DBG_IMPORTANT,
+                "new a line, line_num=%d,last_line_num=%d new_line_count=%d, line_count=%d,write_len=%d, total_len=%d, value:%s",
                 line_num ,text->last_line_num, new_line_count, line_count,write_len, total_len,  str + write_len);
     } else {
         ret = line_count;

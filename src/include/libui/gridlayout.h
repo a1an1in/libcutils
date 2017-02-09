@@ -25,7 +25,7 @@ struct gridlayout_s{
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
     void *window;
-    position_t **grid;
+    position_t **grids;
     uint32_t row,col, cur_row, cur_col;
     uint8_t unit_width, unit_height;
 };
