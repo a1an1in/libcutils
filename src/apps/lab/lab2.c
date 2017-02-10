@@ -48,10 +48,27 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
-
-#define object_new(enemy_t,setting_str) \
-    printf("%s %s\n",#enemy_t,setting_str);
 int lab2()
 {
-    object_new(int,"hellow world");
+    /*
+     *char p[4][4];
+     */
+
+    /*
+     *p = malloc(sizeof(char *) * 4 * 4);
+     */
+
+    /*
+     *memset(p, 0, sizeof(char *) * 4 * 4);
+     */
+    /*
+     *p[0][0] = 0;
+     *p[0][1] = (void *)1;
+     */
+    int (*p)[2][4];
+
+
+    dbg_str(DBG_DETAIL, "p = %p", p);
+    dbg_str(DBG_DETAIL, "p + 1 = %p, *(p + 1) =%p", p + 1, *(p + 1));
+
 }

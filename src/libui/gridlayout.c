@@ -34,6 +34,7 @@
 #include <libui/character.h>
 #include <libui/timer.h>
 #include <miscellany/buffer.h>
+#include <libui/label.h>
 
 static int __construct(Gridlayout *gridlayout,char *init_str)
 {
@@ -72,8 +73,8 @@ static int __construct(Gridlayout *gridlayout,char *init_str)
     l->grid_components = (Component ***) 
                          allocator_mem_alloc(allocator,
                                              l->row_max * l->col_max * sizeof(Component *));
+
     memset(l->grid_components, 0, l->row_max * l->col_max * sizeof(Component *));
-                                
 
     return 0;
 }
@@ -104,9 +105,14 @@ static int __set(Gridlayout *gridlayout, char *attrib, void *value)
     /*vitual methods*/
     else if (strcmp(attrib, "add_component") == 0) {
         gridlayout->add_component = value;
+    } else if (strcmp(attrib, "draw") == 0) {
+        gridlayout->draw = value;
+    } else if (strcmp(attrib, "load_resources") == 0) {
+        gridlayout->load_resources = value;
     }
     /*attribs*/
     else if (strcmp(attrib, "name") == 0) {
+        dbg_str(DBG_SUC,"set gridlayout name");
         strncpy(gridlayout->name,value,strlen(value));
     } else {
         dbg_str(DBG_DETAIL,"gridlayout set, not support %s setting",attrib);
@@ -131,7 +137,7 @@ static int get_x_axis_of_current_grid(Gridlayout *obj)
     Gridlayout *l = obj;
     int i, x;
 
-    for ( i = 0; i < l->cur_col; i++) {
+    for ( i = 0, x = 0; i < l->cur_col; i++) {
         x += l->col_width[i];
     }
 
@@ -143,7 +149,7 @@ static int get_y_axis_of_current_grid(Gridlayout *obj)
     Gridlayout *l = obj;
     int i, y;
 
-    for ( i = 0; i < l->cur_row; i++) {
+    for ( i = 0, y = 0; i < l->cur_row; i++) {
         y += l->row_height[i];
     }
 
@@ -173,11 +179,13 @@ static int __add_component(Gridlayout *obj, void *component)
     position.x = get_x_axis_of_current_grid(obj);
     position.y = get_y_axis_of_current_grid(obj);
 
+    dbg_str(DBG_SUC,"position x=%d, y=%d", position.x, position.y);
     container->update_component_position(c, &position);
 
     map->insert(map, c->name, buffer);
+    dbg_str(DBG_DETAIL,"grid_components:%p, cur_row:%d, cur_col:%d, c:%p", l->grid_components, l->cur_row, l->cur_col,c);
 
-    l->grid_components[l->cur_row][l->cur_col] = c; 
+    *(l->grid_components + l->cur_row * l->col_max + l->cur_col) = c; 
 
     if (l->row_height[l->cur_row] < subject->height) {
         l->row_height[l->cur_row] = subject->height;
@@ -195,9 +203,62 @@ static int __add_component(Gridlayout *obj, void *component)
     }
     
     l->cur_col++;
-    l->cur_row++;
+    /*
+     *l->cur_row++;
+     */
 
     return 0;
+}
+
+static void load_component_resources(Iterator *iter, void *arg) 
+{
+    Component *component;
+    Window *window = (Window *)arg;
+    uint8_t *addr;
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+
+    component = (Component *)buffer_to_addr(addr);
+    if(component->load_resources)
+        component->load_resources(component, window);
+}
+
+
+static int __load_resources(Gridlayout *component,void *window)
+{
+    Container *container = (Container *)component;
+
+    dbg_str(DBG_SUC,"%s load resources",component->name);
+    container->for_each_component(container, load_component_resources, window);
+
+    return 0;
+}
+
+static int __unload_resources(Gridlayout *component,void *window)
+{
+    //...........
+}
+
+static void draw_component(Iterator *iter, void *arg) 
+{
+    Component *component;
+    uint8_t *addr;
+    Graph *g = (Graph *)arg;
+
+    dbg_str(DBG_DETAIL,"draw_component");
+    addr = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+    if(component->draw)
+        component->draw(component, g);
+}
+
+static int __draw(Gridlayout *component, void *graph)
+{
+    Container *container = (Container *)component;
+    Graph *g = (Graph *)graph;
+    dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+
+    container->for_each_component(container, draw_component, g);
 }
 
 static class_info_entry_t gridlayout_class_info[] = {
@@ -207,48 +268,128 @@ static class_info_entry_t gridlayout_class_info[] = {
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [7 ] = {ENTRY_TYPE_END},
+    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [9 ] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Gridlayout",gridlayout_class_info);
 
-char *gen_gridlayout_setting_str()
+#if 1
+static void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out)
+{
+    char *set_str;
+
+    set_str = "{\
+                    \"Subject\": {\
+                        \"x\":%d,\
+                        \"y\":%d,\
+                        \"width\":%d,\
+                        \"height\":%d\
+                    },\
+                    \"Component\": {\
+                        \"name\": \"%s\"\
+                    },\
+                    \"Label\": {\
+                        \"text_overflow_flag\": 0\
+                    }\
+                }";
+
+    sprintf(out, set_str, x, y, width, height, name);
+
+    return ;
+}
+
+void *new_label(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    Subject *subject;
+    char *set_str;
+    char buf[2048];
+
+    gen_label_setting_str(x, y, width, height, name, (void *)buf);
+    subject   = OBJECT_NEW(allocator, Label,buf);
+
+    object_dump(subject, "Label", buf, 2048);
+    dbg_str(DBG_DETAIL,"Label dump: %s",buf);
+
+    return subject;
+}
+#endif
+
+char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name, void *out)
 {
     char *set_str = NULL;
 
-    return set_str;
+    set_str = "{\
+                    \"Subject\": {\
+                        \"x\":%d,\
+                        \"y\":%d,\
+                        \"width\":%d,\
+                        \"height\":%d\
+                    },\
+                    \"Container\": {\
+                        \"map_type\":%d\
+                    },\
+                    \"Component\": {\
+                        \"name\":\"%s\"\
+                    } }";
+    sprintf(out, set_str, x, y, width, height,1, name);
+
+    /*
+     *printf("%s",out);
+     */
+
+    return out;
+}
+
+void *new_gridlayout(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    char *set_str;
+    char buf[2048];
+    Container *container;
+
+    gen_gridlayout_setting_str(x, y, width, height, name, buf);
+    container = OBJECT_NEW(allocator, Gridlayout,buf);
+
+    object_dump(container, "Gridlayout", buf, 2048);
+    dbg_str(DBG_DETAIL,"Gridlayout dump: %s",buf);
+
+    return container;
 }
 
 void test_ui_gridlayout()
 {
     Window *window;
-    Container *container;
+    Container *window_container, *grid_container;
     Graph *g;
     Subject *subject;
     __Event *event;
+    Label *label;
     allocator_t *allocator = allocator_get_default_alloc();
     char *set_str;
     char buf[2048];
 
-    set_str   = gen_window_setting_str();
-    window    = OBJECT_NEW(allocator, Sdl_Window,set_str);
-    g         = window->graph;
-    event     = window->event;
-    container = (Container *)window;
+    set_str          = gen_window_setting_str();
+    window           = OBJECT_NEW(allocator, Sdl_Window,set_str);
+    g                = window->graph;
+    event            = window->event;
+    window_container = (Container *)window;
 
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    set_str   = gen_gridlayout_setting_str();
-    subject   = OBJECT_NEW(allocator, Gridlayout,set_str);
+    grid_container   = new_gridlayout(allocator, 0, 0, 600, 600, "grid_container");
 
-    object_dump(subject, "Gridlayout", buf, 2048);
-    dbg_str(DBG_DETAIL,"Gridlayout dump: %s",buf);
+    label            = new_label(allocator,0, 0, 80, 20, "label00");
+    grid_container->add_component(grid_container, label);
 
-    container->add_component(container,subject);
+    label            = new_label(allocator,0, 0, 80, 20, "label10");
+    grid_container->add_component(grid_container, label);
 
-    dbg_str(DBG_DETAIL,"window container :%p",container);
+    window_container->add_component(window_container,grid_container);
+
+    dbg_str(DBG_DETAIL,"window container :%p",window_container);
 
     window->load_resources(window);
     window->update_window(window);

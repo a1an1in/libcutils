@@ -152,7 +152,8 @@ static void window_draw_component(Iterator *iter, void *arg)
     dbg_str(DBG_DETAIL,"window_draw_component");
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
-    component->draw(component, g);
+    if(component->draw)
+        component->draw(component, g);
 }
 
 static int __update_window(Window *window)
@@ -175,7 +176,8 @@ static void window_load_component_resources(Iterator *iter, void *arg)
     dbg_str(DBG_DETAIL,"window_load_component_resources");
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
-    component->load_resources(component, window);
+    if(component->load_resources)
+        component->load_resources(component, window);
 }
 
 static int __load_resources(Window *window)

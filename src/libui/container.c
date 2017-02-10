@@ -87,6 +87,7 @@ static int __set(Container *container, char *attrib, void *value)
         strncpy(container->name,value,strlen(value));
     } else if (strcmp(attrib, "map_type") == 0) {
         container->map_type = *(uint8_t *)value;
+        dbg_str(DBG_SUC,"set map_type =%d", container->map_type);
     } else {
         dbg_str(DBG_DETAIL,"container set, not support %s setting",attrib);
     }

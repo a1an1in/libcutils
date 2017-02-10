@@ -20,6 +20,8 @@ struct gridlayout_s{
 
 	/*virtual methods reimplement*/
     int (*add_component)(Container *obj, void *component);
+	int (*load_resources)(Component *component, void *window);
+	int (*draw)(Component *component, void *graph);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];
@@ -29,7 +31,7 @@ struct gridlayout_s{
     uint32_t row_max, col_max, cur_row, cur_col;
     uint32_t default_unit_width, default_unit_height;
 
-    Component ***grid_components;
+    Component **grid_components;
 };
 
 #endif
