@@ -38,6 +38,9 @@ struct window_s{
     int (*remove_timer)(Window *window, void *timer);
     int (*destroy_timer)(Window *window, void *timer);
 
+    /*inherit methods*/
+    int (*add_component)(Container *obj, void *component);
+
     /*attribs*/
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

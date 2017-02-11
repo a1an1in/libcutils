@@ -72,11 +72,11 @@ static int __set(Window *window, char *attrib, void *value)
         window->deconstruct = value;
     } else if (strcmp(attrib, "update_window") == 0) {
         window->update_window = value;
-    } else if (strcmp(attrib, "load_resources") == 0) {
-        window->load_resources = value;
-    }
+    } 
     /*vitual methods*/
-    else if (strcmp(attrib, "move") == 0) { 
+    else if (strcmp(attrib, "load_resources") == 0) {
+        window->load_resources = value;
+    } else if (strcmp(attrib, "move") == 0) { 
         window->move = value;
     } else if (strcmp(attrib, "create_font") == 0) {
         window->create_font = value;
@@ -106,6 +106,10 @@ static int __set(Window *window, char *attrib, void *value)
         window->remove_timer = value;
     } else if (strcmp(attrib, "destroy_timer") == 0) {
         window->destroy_timer = value;
+    }
+    /*inherit methods*/
+    else if (strcmp(attrib, "add_component") == 0) {
+        window->add_component = value;
     }
     /*attribs*/
     else if (strcmp(attrib, "name") == 0) { 
@@ -205,12 +209,13 @@ static class_info_entry_t window_class_info[] = {
     [19] = {ENTRY_TYPE_VFUNC_POINTER,"","create_timer",NULL,sizeof(void *)},
     [20] = {ENTRY_TYPE_VFUNC_POINTER,"","remove_timer",NULL,sizeof(void *)},
     [21] = {ENTRY_TYPE_VFUNC_POINTER,"","destroy_timer",NULL,sizeof(void *)},
-    [22] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [23] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
-    [24] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
-    [25] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
-    [26] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
-    [27] = {ENTRY_TYPE_END},
+    [22] = {ENTRY_TYPE_IFUNC_POINTER,"","add_component",NULL,sizeof(void *)},
+    [23] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [24] = {ENTRY_TYPE_UINT8_T,"uint8_t","graph_type",NULL,0},
+    [25] = {ENTRY_TYPE_UINT32_T,"","screen_width",NULL,sizeof(short)},
+    [26] = {ENTRY_TYPE_UINT32_T,"","screen_height",NULL,sizeof(short)},
+    [27] = {ENTRY_TYPE_NORMAL_POINTER,"Graph","graph",NULL,sizeof(float)},
+    [28] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Window",window_class_info);
 

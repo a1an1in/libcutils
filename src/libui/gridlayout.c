@@ -327,19 +327,15 @@ void *new_gridlayout(allocator_t *allocator, int x, int y, int width, int height
 
 void test_ui_gridlayout()
 {
-    Window *window;
-    Container *window_container, *grid_container;
-    Subject *subject;
-    __Event *event;
-    Label *label;
     allocator_t *allocator = allocator_get_default_alloc();
+    Window *window;
+    Container *grid_container;
+    Label *label;
     char *set_str;
     char buf[2048];
 
     set_str          = gen_window_setting_str();
     window           = OBJECT_NEW(allocator, Sdl_Window,set_str);
-    event            = window->event;
-    window_container = (Container *)window;
 
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
@@ -358,14 +354,12 @@ void test_ui_gridlayout()
     label            = new_label(allocator,0, 0, 80, 20, "label11");
     grid_container->add_component(grid_container, label);
 
-    window_container->add_component(window_container,grid_container);
-
-    dbg_str(DBG_DETAIL,"window container :%p",window_container);
+    window->add_component(window,grid_container);
 
     window->load_resources(window);
     window->update_window(window);
 
-    event->poll_event(event, window);
+    window->event->poll_event(window->event, window);
 
     object_destroy(window);
 }
