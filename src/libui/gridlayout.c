@@ -52,6 +52,8 @@ static int __construct(Gridlayout *gridlayout,char *init_str)
     if (l->row_max == 0) { l->row_max = 1;}
     if (l->col_max == 0) { l->col_max = 1;}
 
+    dbg_str(DBG_DETAIL,"row_max = %d, col_max=%d", l->row_max, l->col_max);
+
     /*alloc grid height and width arrays*/
     l->row_height = (uint32_t *) 
                     allocator_mem_alloc(allocator,
@@ -70,7 +72,7 @@ static int __construct(Gridlayout *gridlayout,char *init_str)
     }
 
     /*alloc space for grid componets*/
-    l->grid_components = (Component ***) 
+    l->grid_components = (Component **) 
                          allocator_mem_alloc(allocator,
                                              l->row_max * l->col_max * sizeof(Component *));
 
@@ -114,6 +116,10 @@ static int __set(Gridlayout *gridlayout, char *attrib, void *value)
     else if (strcmp(attrib, "name") == 0) {
         dbg_str(DBG_SUC,"set gridlayout name");
         strncpy(gridlayout->name,value,strlen(value));
+    } else if(strcmp(attrib, "row_max") == 0) {
+        gridlayout->row_max = *((uint32_t *)value);
+    } else if(strcmp(attrib, "col_max") == 0) {
+        gridlayout->col_max = *((uint32_t *)value);
     } else {
         dbg_str(DBG_DETAIL,"gridlayout set, not support %s setting",attrib);
     }
@@ -125,6 +131,10 @@ static void *__get(Gridlayout *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
+    } else if(strcmp(attrib, "row_max") == 0) {
+        return &obj->row_max;
+    } else if(strcmp(attrib, "col_max") == 0) {
+        return &obj->col_max;
     } else {
         dbg_str(DBG_WARNNING,"gridlayout get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -183,7 +193,8 @@ static int __add_component(Gridlayout *obj, void *component)
     container->update_component_position(c, &position);
 
     map->insert(map, c->name, buffer);
-    dbg_str(DBG_DETAIL,"grid_components:%p, cur_row:%d, cur_col:%d, c:%p", l->grid_components, l->cur_row, l->cur_col,c);
+    dbg_str(DBG_DETAIL,"grid_components:%p, cur_row:%d, cur_col:%d, c:%p",
+            l->grid_components, l->cur_row, l->cur_col,c);
 
     *(l->grid_components + l->cur_row * l->col_max + l->cur_col) = c; 
 
@@ -203,9 +214,10 @@ static int __add_component(Gridlayout *obj, void *component)
     }
     
     l->cur_col++;
-    /*
-     *l->cur_row++;
-     */
+    if(l->cur_col > l->col_max - 1) {
+        l->cur_col = 0;
+        l->cur_row++;
+    }
 
     return 0;
 }
@@ -246,10 +258,11 @@ static void draw_component(Iterator *iter, void *arg)
     Graph *g = (Graph *)arg;
 
     dbg_str(DBG_DETAIL,"draw_component");
+
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
-    if(component->draw)
-        component->draw(component, g);
+
+    if(component->draw) component->draw(component, g);
 }
 
 static int __draw(Gridlayout *component, void *graph)
@@ -271,7 +284,9 @@ static class_info_entry_t gridlayout_class_info[] = {
     [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
     [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
     [8 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [9 ] = {ENTRY_TYPE_END},
+    [9 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
+    [10] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
+    [11] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Gridlayout",gridlayout_class_info);
@@ -333,8 +348,14 @@ char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name
                     },\
                     \"Component\": {\
                         \"name\":\"%s\"\
-                    } }";
-    sprintf(out, set_str, x, y, width, height,1, name);
+                    },\
+                    \"Gridlayout\":{\
+                        \"row_max\":%d,\
+                        \"col_max\":%d\
+                    }\
+                }";
+
+    sprintf(out, set_str, x, y, width, height,1, name, 2,2);
 
     /*
      *printf("%s",out);
@@ -384,7 +405,13 @@ void test_ui_gridlayout()
     label            = new_label(allocator,0, 0, 80, 20, "label00");
     grid_container->add_component(grid_container, label);
 
+    label            = new_label(allocator,0, 0, 80, 20, "label01");
+    grid_container->add_component(grid_container, label);
+
     label            = new_label(allocator,0, 0, 80, 20, "label10");
+    grid_container->add_component(grid_container, label);
+
+    label            = new_label(allocator,0, 0, 80, 20, "label11");
     grid_container->add_component(grid_container, label);
 
     window_container->add_component(window_container,grid_container);
