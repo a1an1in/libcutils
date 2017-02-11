@@ -106,6 +106,57 @@ static void *__get(Component *obj, char *attrib)
     return NULL;
 }
 
+static void load_subcomponent_resources(Iterator *iter, void *arg) 
+{
+    Component *component;
+    void *window = (void *)arg;
+    uint8_t *addr;
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+
+    component = (Component *)buffer_to_addr(addr);
+    if(component->load_resources)
+        component->load_resources(component, window);
+}
+
+static int __load_resources(Component *component,void *window)
+{
+    Container *container = (Container *)component;
+
+    dbg_str(DBG_SUC,"%s load resources",component->name);
+    container->for_each_component(container, load_subcomponent_resources, window);
+
+    return 0;
+}
+
+static int __unload_resources(Component *component,void *window)
+{
+    //...........
+}
+
+static void draw_subcomponent(Iterator *iter, void *arg) 
+{
+    Component *component;
+    uint8_t *addr;
+    Graph *g = (Graph *)arg;
+
+    dbg_str(DBG_DETAIL,"draw_subcomponent");
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    if(component->draw) component->draw(component, g);
+}
+
+static int __draw(Component *component, void *graph)
+{
+    Container *container = (Container *)component;
+    Graph *g = (Graph *)graph;
+    dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+
+    container->for_each_component(container, draw_subcomponent, g);
+}
+
 static class_info_entry_t component_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -113,8 +164,8 @@ static class_info_entry_t component_class_info[] = {
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",NULL,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",NULL,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",__draw,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
     [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_key_input",NULL,sizeof(void *)},
     [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","backspace_key_input",NULL,sizeof(void *)},
     [10] = {ENTRY_TYPE_VFUNC_POINTER,"","up_key_down",NULL,sizeof(void *)},

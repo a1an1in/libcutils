@@ -19,9 +19,9 @@ struct window_s{
 	int (*set)(Window *window, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
     int (*update_window)(Window *window);
-	int (*load_resources)(Window *window);
 
 	/*virtual methods reimplement*/
+	int (*load_resources)(Window *window);
 	int (*move)(Window *window);
     void *(*create_font)(Window *window, char *font_name);
     int (*destroy_font)(Window *window);

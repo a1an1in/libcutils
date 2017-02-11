@@ -222,58 +222,6 @@ static int __add_component(Gridlayout *obj, void *component)
     return 0;
 }
 
-static void load_component_resources(Iterator *iter, void *arg) 
-{
-    Component *component;
-    Window *window = (Window *)arg;
-    uint8_t *addr;
-
-    addr = (uint8_t *)iter->get_vpointer(iter);
-
-    component = (Component *)buffer_to_addr(addr);
-    if(component->load_resources)
-        component->load_resources(component, window);
-}
-
-
-static int __load_resources(Gridlayout *component,void *window)
-{
-    Container *container = (Container *)component;
-
-    dbg_str(DBG_SUC,"%s load resources",component->name);
-    container->for_each_component(container, load_component_resources, window);
-
-    return 0;
-}
-
-static int __unload_resources(Gridlayout *component,void *window)
-{
-    //...........
-}
-
-static void draw_component(Iterator *iter, void *arg) 
-{
-    Component *component;
-    uint8_t *addr;
-    Graph *g = (Graph *)arg;
-
-    dbg_str(DBG_DETAIL,"draw_component");
-
-    addr = (uint8_t *)iter->get_vpointer(iter);
-    component = (Component *)buffer_to_addr(addr);
-
-    if(component->draw) component->draw(component, g);
-}
-
-static int __draw(Gridlayout *component, void *graph)
-{
-    Container *container = (Container *)component;
-    Graph *g = (Graph *)graph;
-    dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
-
-    container->for_each_component(container, draw_component, g);
-}
-
 static class_info_entry_t gridlayout_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -281,12 +229,10 @@ static class_info_entry_t gridlayout_class_info[] = {
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [9 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
-    [10] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
-    [11] = {ENTRY_TYPE_END},
+    [6 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [7 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
+    [8 ] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
+    [9 ] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Gridlayout",gridlayout_class_info);
@@ -383,7 +329,6 @@ void test_ui_gridlayout()
 {
     Window *window;
     Container *window_container, *grid_container;
-    Graph *g;
     Subject *subject;
     __Event *event;
     Label *label;
@@ -393,7 +338,6 @@ void test_ui_gridlayout()
 
     set_str          = gen_window_setting_str();
     window           = OBJECT_NEW(allocator, Sdl_Window,set_str);
-    g                = window->graph;
     event            = window->event;
     window_container = (Container *)window;
 

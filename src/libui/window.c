@@ -35,6 +35,7 @@
 static int __construct(Window *window,char *init_str)
 {
     dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);
+
     window->create_font(window,NULL);
     window->create_graph(window, NULL);
     window->create_event(window);
@@ -143,26 +144,14 @@ static void *__get(Window *obj, char *attrib)
     return NULL;
 }
 
-static void window_draw_component(Iterator *iter, void *arg) 
-{
-    Component *component;
-    uint8_t *addr;
-    Graph *g = (Graph *)arg;
-
-    dbg_str(DBG_DETAIL,"window_draw_component");
-    addr = (uint8_t *)iter->get_vpointer(iter);
-    component = (Component *)buffer_to_addr(addr);
-    if(component->draw)
-        component->draw(component, g);
-}
-
 static int __update_window(Window *window)
 {
     Graph *g = window->graph;
-    Container *container = (Container *)window;
+    Component *component = (Component *)window;
 
     dbg_str(DBG_DETAIL,"window update_window");
-    container->for_each_component(container, window_draw_component, g);
+
+    component->draw(component, g);
     g->render_present(g);
 
 }
@@ -174,6 +163,7 @@ static void window_load_component_resources(Iterator *iter, void *arg)
     uint8_t *addr;
 
     dbg_str(DBG_DETAIL,"window_load_component_resources");
+
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
     if(component->load_resources)
