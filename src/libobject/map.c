@@ -139,7 +139,7 @@ static void __for_each_arg2(Map *map,void (*func)(Iterator *iter,void *arg),void
 {
     Iterator *cur, *end;
 
-    dbg_str(DBG_IMPORTANT,"Map for_each arg2");
+    dbg_str(OBJ_DETAIL,"Map for_each arg2");
     cur = map->begin(map);
     end = map->end(map);
 

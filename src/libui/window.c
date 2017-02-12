@@ -107,7 +107,7 @@ static int __set(Window *window, char *attrib, void *value)
     } else if (strcmp(attrib, "destroy_timer") == 0) {
         window->destroy_timer = value;
     }
-    /*inherit methods*/
+    /*inherited methods*/
     else if (strcmp(attrib, "add_component") == 0) {
         window->add_component = value;
     }

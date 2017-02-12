@@ -166,16 +166,16 @@ static int get_y_axis_of_current_grid(Gridlayout *obj)
     return y;
 }
 
-static int __add_component(Gridlayout *obj, void *component)
+static int __add_component(Container *obj, void *component)
 {
-    Gridlayout *l        = obj;
+    Gridlayout *l        = (Gridlayout *)obj;
     Container *container = (Container *)obj;
     Map *map             = container->map;
     char buffer[8]       = {0};
     Component *c         = (Component *)component;
     Subject *subject     = (Subject *)c;
-    position_t position;
     uint8_t rearrange_comonents_flag = 0;
+    position_t position;
 
     if (strcmp(c->name,"") == 0) {
         dbg_str(DBG_WARNNING,"component name is NULL, this is vip, add component failed, please check");
@@ -186,8 +186,8 @@ static int __add_component(Gridlayout *obj, void *component)
 
     addr_to_buffer(c,(uint8_t *)buffer);
 
-    position.x = get_x_axis_of_current_grid(obj);
-    position.y = get_y_axis_of_current_grid(obj);
+    position.x = get_x_axis_of_current_grid(l);
+    position.y = get_y_axis_of_current_grid(l);
 
     dbg_str(DBG_SUC,"position x=%d, y=%d", position.x, position.y);
     container->update_component_position(c, &position);
@@ -272,7 +272,9 @@ void *new_label(allocator_t *allocator, int x, int y, int width, int height, cha
     subject   = OBJECT_NEW(allocator, Label,buf);
 
     object_dump(subject, "Label", buf, 2048);
-    dbg_str(DBG_DETAIL,"Label dump: %s",buf);
+    /*
+     *dbg_str(DBG_DETAIL,"Label dump: %s",buf);
+     */
 
     return subject;
 }
@@ -301,11 +303,7 @@ char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name
                     }\
                 }";
 
-    sprintf(out, set_str, x, y, width, height,1, name, 2,2);
-
-    /*
-     *printf("%s",out);
-     */
+    sprintf(out, set_str, x, y, width, height,1, name, 4,4);
 
     return out;
 }
@@ -329,32 +327,38 @@ void test_ui_gridlayout()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     Window *window;
-    Container *grid_container;
-    Label *label;
+    Gridlayout *grid;
+    Label *l;
     char *set_str;
     char buf[2048];
 
-    set_str          = gen_window_setting_str();
-    window           = OBJECT_NEW(allocator, Sdl_Window,set_str);
+    set_str = gen_window_setting_str();
+    window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    grid_container   = new_gridlayout(allocator, 0, 0, 600, 600, "grid_container");
+    grid = new_gridlayout(allocator, 0, 0, 600, 600, "grid");
 
-    label            = new_label(allocator,0, 0, 80, 20, "label00");
-    grid_container->add_component(grid_container, label);
+    l = new_label(allocator,0, 0, 80, 20, "label");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label01");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label02");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label03");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label10");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label11");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label12");
+    grid->add_component((Container *)grid, l);
+    l = new_label(allocator,0, 0, 80, 20, "label13");
+    grid->add_component((Container *)grid, l);
 
-    label            = new_label(allocator,0, 0, 80, 20, "label01");
-    grid_container->add_component(grid_container, label);
 
-    label            = new_label(allocator,0, 0, 80, 20, "label10");
-    grid_container->add_component(grid_container, label);
-
-    label            = new_label(allocator,0, 0, 80, 20, "label11");
-    grid_container->add_component(grid_container, label);
-
-    window->add_component(window,grid_container);
+    window->add_component((Container *)window,grid);
 
     window->load_resources(window);
     window->update_window(window);

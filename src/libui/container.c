@@ -102,7 +102,8 @@ static void *__get(Container *obj, char *attrib)
     } else if (strcmp(attrib, "map_type") == 0) {
         return &obj->map_type;
     } else {
-        dbg_str(DBG_WARNNING,"container get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(DBG_WARNNING,
+                "container get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
@@ -131,7 +132,6 @@ static void __update_component_position__(Iterator *iter, void *arg)
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
     c->for_each_component(c,__update_component_position__,add);
 }
 
@@ -145,7 +145,6 @@ static int __update_component_position(void *component,void *arg)
     s->y += add->y;
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
-    dbg_str(DBG_DETAIL,"run at here, label container addr :%p",c);
 
     c->for_each_component(c,__update_component_position__,arg);
 
@@ -194,9 +193,11 @@ static int __add_component(Container *obj, Component *component)
         dbg_str(DBG_WARNNING,"%s is support container add op",((Obj *)obj)->name);
         return -1;
     }
-    dbg_str(DBG_IMPORTANT, "add component name %s, component addr %p", component->name,component);
+    dbg_str(DBG_IMPORTANT, "add component name %s, component addr %p",
+            component->name,component);
     if (strcmp(component->name,"") == 0) {
-        dbg_str(DBG_WARNNING,"component name is NULL, this is vip, add component failed, please check");
+        dbg_str(DBG_WARNNING,
+                "component name is NULL, this is vip, add component failed, please check");
         return -1;
     }
 
@@ -231,7 +232,8 @@ static Component *__search_component(Container *obj, char *key)
     ret  = map->search(map,key,iter);
     if (ret == 1) {
         addr = buffer_to_addr(iter->get_vpointer(iter));
-        dbg_str(DBG_IMPORTANT,"search component %s addr %p",iter->get_kpointer(iter), addr);
+        dbg_str(DBG_IMPORTANT,"search component %s addr %p",
+                iter->get_kpointer(iter), addr);
     } else {
         dbg_str(DBG_DETAIL,"not find component %s",key);
     }
@@ -243,11 +245,15 @@ static int __for_each_component(Container *obj,
                                 void (*func)(Iterator *iter, void *args), void *arg)
 {
     if (obj->map == NULL) {
-        dbg_str(DBG_WARNNING,"%s is not support container", ((Obj *)obj)->name);
+        /*
+         *dbg_str(DBG_WARNNING,"%s is not support container", ((Obj *)obj)->name);
+         */
         return 0;
     }
 
-    dbg_str(DBG_DETAIL,"container for each component, map addr :%p", obj->map);
+    /*
+     *dbg_str(DBG_DETAIL,"container for each component, map addr :%p", obj->map);
+     */
     obj->map->for_each_arg2(obj->map, func, arg);
 
 }

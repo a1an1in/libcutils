@@ -94,8 +94,8 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
 }
 
 void *
-object_find_inherit_func_pointer(char *method_name,
-                                 void *class_name)
+object_find_method_to_inherit(char *method_name,
+                              void *class_name)
 {
     class_info_entry_t *entry;
     object_deamon_t *deamon;
@@ -126,7 +126,7 @@ object_find_inherit_func_pointer(char *method_name,
         parent_class_name = entry[0].type_name;
     }
 
-    return object_find_inherit_func_pointer(method_name,
+    return object_find_method_to_inherit(method_name,
                                             parent_class_name);
 }
 int object_inherit_methods(void *obj,void *class_info,void *parent_class_name)
@@ -146,8 +146,8 @@ int object_inherit_methods(void *obj,void *class_info,void *parent_class_name)
 
     for(i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
         if(entry[i].type == ENTRY_TYPE_IFUNC_POINTER) {
-            method = object_find_inherit_func_pointer(entry[i].value_name,
-                                                      parent_class_name);
+            method = object_find_method_to_inherit(entry[i].value_name,
+                                                   parent_class_name);
             if(method != NULL)
                 set(obj, (char *)entry[i].value_name, method);
         }
@@ -316,7 +316,8 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
             cjson_add_item_to_object(object, entry[i].type_name, item);
             __object_dump(obj, entry[i].type_name, item);
         } else if(entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
-                  entry[i].type == ENTRY_TYPE_VFUNC_POINTER) 
+                  entry[i].type == ENTRY_TYPE_VFUNC_POINTER || 
+                  entry[i].type == ENTRY_TYPE_IFUNC_POINTER) 
         {
         } else {
             value = get(obj,entry[i].value_name);
@@ -338,6 +339,7 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
             } else if(entry[i].type == ENTRY_TYPE_NORMAL_POINTER ||
                       entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
                       entry[i].type == ENTRY_TYPE_VFUNC_POINTER ||
+                      entry[i].type == ENTRY_TYPE_IFUNC_POINTER ||
                       entry[i].type == ENTRY_TYPE_OBJ_POINTER) 
             {
                 unsigned long long d = (unsigned long long) value;
