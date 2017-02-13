@@ -188,7 +188,7 @@ static void __reset_component_position(void *component,void *arg)
 
 }
 
-static int __add_component(Container *obj, Component *component)
+static int __add_component(Container *obj, void *pos, Component *component)
 {
     if (obj->map_type == 0) {
         dbg_str(DBG_WARNNING,"%s is support container add op",((Obj *)obj)->name);

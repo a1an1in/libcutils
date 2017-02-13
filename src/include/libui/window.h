@@ -39,7 +39,7 @@ struct window_s{
     int (*destroy_timer)(Window *window, void *timer);
 
     /*inherit methods*/
-    int (*add_component)(Container *obj, void *component);
+    int (*add_component)(Container *obj, void *pos, void *component);
 
     /*attribs*/
 #define MAX_NAME_LEN 50

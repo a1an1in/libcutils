@@ -19,7 +19,7 @@ struct grid_layout_s{
     void *(*get)(void *obj, char *attrib);
 
 	/*virtual methods reimplement*/
-    int (*add_component)(Container *obj, void *component);
+    int (*add_component)(Container *obj, void *pos, void *component);
 	int (*load_resources)(Component *component, void *window);
 	int (*draw)(Component *component, void *graph);
 

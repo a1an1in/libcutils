@@ -1038,7 +1038,7 @@ void test_ui_text_area()
     object_dump(subject, "Text_Area", buf, 2048);
     dbg_str(DBG_DETAIL,"Text_Area dump: %s",buf);
 
-    container->add_component(container,subject);
+    container->add_component(container, NULL, subject);
     /*
      *container->search_component(container,"text_area");
      */

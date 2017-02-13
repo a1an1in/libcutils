@@ -598,7 +598,7 @@ void test_ui_text_field()
     object_dump(subject, "Text_Field", buf, 2048);
     dbg_str(DBG_DETAIL,"Text_Field dump: %s",buf);
 
-    container->add_component(container,subject);
+    container->add_component(container, NULL, subject);
     dbg_str(DBG_DETAIL,"window container :%p",container);
 
     window->load_resources(window);

@@ -289,7 +289,7 @@ void test_ui_label()
     object_dump(subject, "Label", buf, 2048);
     dbg_str(DBG_DETAIL,"Label dump: %s",buf);
 
-    container->add_component(container,subject);
+    container->add_component(container, NULL, subject);
 
     dbg_str(DBG_DETAIL,"window container :%p",container);
 

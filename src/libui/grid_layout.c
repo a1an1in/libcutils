@@ -179,9 +179,9 @@ static int get_y_axis_of_current_grid(Grid_Layout *obj)
     return y;
 }
 
-static int __add_component(Container *obj, void *component)
+static int __add_component(Container *obj, void *pos, void *component)
 {
-    Grid_Layout *l        = (Grid_Layout *)obj;
+    Grid_Layout *l       = (Grid_Layout *)obj;
     Container *container = (Container *)obj;
     Map *map             = container->map;
     char buffer[8]       = {0};
@@ -423,23 +423,23 @@ void test_ui_grid_layout()
     grid = new_grid_layout(allocator, 0, 0, 600, 600, "grid");
 
     l = new_label(allocator,0, 0, 80, 20, "label00");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label01");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label02");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label03");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label10");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label11");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label12");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label13");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
 
-    window->add_component((Container *)window,grid);
+    window->add_component((Container *)window,NULL, grid);
     window->load_resources(window);
     window->update_window(window);
     window->event->poll_event(window->event, window);

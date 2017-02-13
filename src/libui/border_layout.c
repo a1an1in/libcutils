@@ -155,7 +155,7 @@ static void *__get(Border_Layout *obj, char *attrib)
     return NULL;
 }
 
-static int __add_component(Container *obj, void *component)
+static int __add_component(Container *obj, void *pos, void *component)
 {
     Border_Layout *l        = (Border_Layout *)obj;
     Container *container = (Container *)obj;
@@ -332,23 +332,23 @@ void test_ui_border_layout()
     grid = new_border_layout(allocator, 0, 0, 600, 600, "grid");
 
     l = new_label(allocator,0, 0, 80, 20, "label00");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label01");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label02");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label03");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label10");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label11");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label12");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
     l = new_label(allocator,0, 0, 80, 20, "label13");
-    grid->add_component((Container *)grid, l);
+    grid->add_component((Container *)grid, NULL, l);
 
-    window->add_component((Container *)window,grid);
+    window->add_component((Container *)window, NULL, grid);
     window->load_resources(window);
     window->update_window(window);
     window->event->poll_event(window->event, window);
