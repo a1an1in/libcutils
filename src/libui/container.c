@@ -130,7 +130,8 @@ static void __update_component_position__(Iterator *iter, void *arg)
     s->x += add->x;
     s->y += add->y;
 
-    dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
+    dbg_str(DBG_DETAIL,"class %s, component name %s, position: x =%d, y=%d",
+            ((Obj *)component)->name,component->name, s->x, s->y);
 
     c->for_each_component(c,__update_component_position__,add);
 }

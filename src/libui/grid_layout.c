@@ -29,25 +29,27 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-#include <libui/gridlayout.h>
+#include <libui/grid_layout.h>
 #include <libui/sdl_window.h>
 #include <libui/character.h>
 #include <libui/timer.h>
 #include <miscellany/buffer.h>
 #include <libui/label.h>
 
-static int __construct(Gridlayout *gridlayout,char *init_str)
+static int __construct(Grid_Layout *grid_layout,char *init_str)
 {
-    allocator_t *allocator = ((Obj *)gridlayout)->allocator;
-    Gridlayout *l          = gridlayout;
+    allocator_t *allocator = ((Obj *)grid_layout)->allocator;
+    Grid_Layout *l          = grid_layout;
     uint32_t i;
 
-    dbg_str(DBG_DETAIL,"gridlayout construct");
+    dbg_str(DBG_DETAIL,"grid_layout construct");
 
     l->default_unit_width  = 100;
     l->default_unit_height = 20;
     l->cur_col             = 0;
     l->cur_row             = 0;
+    l->layout_height       = 0;
+    l->layout_width        = 0;
 
     if (l->row_max == 0) { l->row_max = 1;}
     if (l->col_max == 0) { l->col_max = 1;}
@@ -63,12 +65,14 @@ static int __construct(Gridlayout *gridlayout,char *init_str)
                                         l->col_max * sizeof(uint32_t *));
     /*init grid row height*/
     for (i = 0; i < l->row_max; i++) {
-        l->row_height[i] = l->default_unit_height; 
+        l->row_height[i]  = l->default_unit_height;
+        l->layout_height += l->row_height[i];
     }
 
     /*init grid col width*/
     for ( i = 0; i < l->col_max; i++) {
-        l->col_width[i] = l->default_unit_width;
+        l->col_width[i]  = l->default_unit_width;
+        l->layout_width += l->col_width[i];
     }
 
     /*alloc space for grid componets*/
@@ -81,58 +85,58 @@ static int __construct(Gridlayout *gridlayout,char *init_str)
     return 0;
 }
 
-static int __deconstrcut(Gridlayout *gridlayout)
+static int __deconstrcut(Grid_Layout *grid_layout)
 {
-    allocator_t *allocator = ((Obj *)gridlayout)->allocator;
+    allocator_t *allocator = ((Obj *)grid_layout)->allocator;
 
-    dbg_str(DBG_SUC,"gridlayout deconstruct");
+    dbg_str(DBG_SUC,"grid_layout deconstruct");
 
-    allocator_mem_free(allocator, gridlayout->row_height);
-    allocator_mem_free(allocator, gridlayout->col_width);
-    allocator_mem_free(allocator, gridlayout->grid_components);
+    allocator_mem_free(allocator, grid_layout->row_height);
+    allocator_mem_free(allocator, grid_layout->col_width);
+    allocator_mem_free(allocator, grid_layout->grid_components);
 
     return 0;
 }
 
-static int __set(Gridlayout *gridlayout, char *attrib, void *value)
+static int __set(Grid_Layout *grid_layout, char *attrib, void *value)
 {
     if (strcmp(attrib, "set") == 0) {
-        gridlayout->set = value;
+        grid_layout->set = value;
     } else if (strcmp(attrib, "get") == 0) {
-        gridlayout->get = value;
+        grid_layout->get = value;
     } else if (strcmp(attrib, "construct") == 0) {
-        gridlayout->construct = value;
+        grid_layout->construct = value;
     } else if (strcmp(attrib, "deconstruct") == 0) {
-        gridlayout->deconstruct = value;
+        grid_layout->deconstruct = value;
     }
     /*vitual methods*/
     else if (strcmp(attrib, "add_component") == 0) {
-        gridlayout->add_component = value;
+        grid_layout->add_component = value;
     } else if (strcmp(attrib, "draw") == 0) {
-        gridlayout->draw = value;
+        grid_layout->draw = value;
     } else if (strcmp(attrib, "load_resources") == 0) {
-        gridlayout->load_resources = value;
+        grid_layout->load_resources = value;
     }
     /*attribs*/
     else if (strcmp(attrib, "name") == 0) {
-        dbg_str(DBG_SUC,"set gridlayout name");
-        strncpy(gridlayout->name,value,strlen(value));
+        dbg_str(DBG_SUC,"set grid_layout name");
+        strncpy(grid_layout->name,value,strlen(value));
     } else if (strcmp(attrib, "row_max") == 0) {
-        gridlayout->row_max = *((uint32_t *)value);
+        grid_layout->row_max = *((uint32_t *)value);
     } else if (strcmp(attrib, "col_max") == 0) {
-        gridlayout->col_max = *((uint32_t *)value);
+        grid_layout->col_max = *((uint32_t *)value);
     } else if (strcmp(attrib, "hgap") == 0) {
-        gridlayout->hgap = *((uint32_t *)value);
+        grid_layout->hgap = *((uint32_t *)value);
     } else if (strcmp(attrib, "vgap") == 0) {
-        gridlayout->vgap = *((uint32_t *)value);
+        grid_layout->vgap = *((uint32_t *)value);
     } else {
-        dbg_str(DBG_DETAIL,"gridlayout set, not support %s setting",attrib);
+        dbg_str(DBG_DETAIL,"grid_layout set, not support %s setting",attrib);
     }
 
     return 0;
 }
 
-static void *__get(Gridlayout *obj, char *attrib)
+static void *__get(Grid_Layout *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
@@ -145,15 +149,15 @@ static void *__get(Gridlayout *obj, char *attrib)
     } else if (strcmp(attrib, "vgap") == 0) {
         return &obj->vgap;
     } else {
-        dbg_str(DBG_WARNNING,"gridlayout get, \"%s\" getting attrib is not supported",attrib);
+        dbg_str(DBG_WARNNING,"grid_layout get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
     }
     return NULL;
 }
 
-static int get_x_axis_of_current_grid(Gridlayout *obj)
+static int get_x_axis_of_current_grid(Grid_Layout *obj)
 {
-    Gridlayout *l = obj;
+    Grid_Layout *l = obj;
     int i, x;
 
     for ( i = 0, x = 0; i < l->cur_col; i++) {
@@ -163,9 +167,9 @@ static int get_x_axis_of_current_grid(Gridlayout *obj)
     return x;
 }
 
-static int get_y_axis_of_current_grid(Gridlayout *obj)
+static int get_y_axis_of_current_grid(Grid_Layout *obj)
 {
-    Gridlayout *l = obj;
+    Grid_Layout *l = obj;
     int i, y;
 
     for ( i = 0, y = 0; i < l->cur_row; i++) {
@@ -177,7 +181,7 @@ static int get_y_axis_of_current_grid(Gridlayout *obj)
 
 static int __add_component(Container *obj, void *component)
 {
-    Gridlayout *l        = (Gridlayout *)obj;
+    Grid_Layout *l        = (Grid_Layout *)obj;
     Container *container = (Container *)obj;
     Map *map             = container->map;
     char buffer[8]       = {0};
@@ -245,8 +249,39 @@ static void draw_subcomponent(Iterator *iter, void *arg)
 
 static void draw_grids(Component *component, void *graph) 
 {
-    Gridlayout *l = (Gridlayout *)component;
+    Grid_Layout *l = (Grid_Layout *)component;
     Graph *g      = (Graph *)graph;
+    int i;
+    position_t start, end;
+
+    dbg_str(DBG_SUC,"draw_grids");
+
+    /*draw row lines*/
+    g->render_set_color(g,0x0,0x0,0x0,0xff);
+    start.x = 0;
+    start.y = 0;
+    end.x   = l->layout_width;
+    end.y   = 0;
+    g->render_draw_line(g,start.x, start.y, end.x, end.y);
+
+    for (i = 0; i < l->row_max; i++) {
+        start.y += l->row_height[i];
+        end.y   += l->row_height[i];
+        g->render_draw_line(g,start.x, start.y, end.x, end.y);
+    }
+
+    /*draw column lines*/
+    start.x = 0;
+    start.y = 0;
+    end.x   = 0;
+    end.y   = l->layout_height;
+    g->render_draw_line(g,start.x, start.y, end.x, end.y);
+
+    for (i = 0; i < l->row_max; i++) {
+        start.x += l->col_width[i];
+        end.x   += l->col_width[i];
+        g->render_draw_line(g,start.x, start.y, end.x, end.y);
+    }
 }
 
 /*reimplement the virtual func draw() int Component class*/
@@ -264,14 +299,14 @@ static int __draw(Component *component, void *graph)
     container->for_each_component(container, draw_subcomponent, g);
 }
 
-static class_info_entry_t gridlayout_class_info[] = {
+static class_info_entry_t grid_layout_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
     [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",NULL,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
     [7 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
     [8 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
     [9 ] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
@@ -280,7 +315,7 @@ static class_info_entry_t gridlayout_class_info[] = {
     [12] = {ENTRY_TYPE_END},
 
 };
-REGISTER_CLASS("Gridlayout",gridlayout_class_info);
+REGISTER_CLASS("Grid_Layout",grid_layout_class_info);
 
 #if 1
 static void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out)
@@ -325,7 +360,7 @@ void *new_label(allocator_t *allocator, int x, int y, int width, int height, cha
 }
 #endif
 
-char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name, void *out)
+char *gen_grid_layout_setting_str(int x, int y, int width, int height, char *name, void *out)
 {
     char *set_str = NULL;
 
@@ -342,7 +377,7 @@ char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name
                     \"Component\": {\
                         \"name\":\"%s\"\
                     },\
-                    \"Gridlayout\":{\
+                    \"Grid_Layout\":{\
                         \"row_max\":%d,\
                         \"col_max\":%d,\
                         \"hgap\":%d,\
@@ -355,26 +390,26 @@ char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name
     return out;
 }
 
-void *new_gridlayout(allocator_t *allocator, int x, int y, int width, int height, char *name)
+void *new_grid_layout(allocator_t *allocator, int x, int y, int width, int height, char *name)
 {
     char *set_str;
     char buf[2048];
     Container *container;
 
-    gen_gridlayout_setting_str(x, y, width, height, name, buf);
-    container = OBJECT_NEW(allocator, Gridlayout,buf);
+    gen_grid_layout_setting_str(x, y, width, height, name, buf);
+    container = OBJECT_NEW(allocator, Grid_Layout,buf);
 
-    object_dump(container, "Gridlayout", buf, 2048);
-    dbg_str(DBG_DETAIL,"Gridlayout dump: %s",buf);
+    object_dump(container, "Grid_Layout", buf, 2048);
+    dbg_str(DBG_DETAIL,"Grid_Layout dump: %s",buf);
 
     return container;
 }
 
-void test_ui_gridlayout()
+void test_ui_grid_layout()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     Window *window;
-    Gridlayout *grid;
+    Grid_Layout *grid;
     Label *l;
     char *set_str;
     char buf[2048];
@@ -385,7 +420,7 @@ void test_ui_gridlayout()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    grid = new_gridlayout(allocator, 0, 0, 600, 600, "grid");
+    grid = new_grid_layout(allocator, 0, 0, 600, 600, "grid");
 
     l = new_label(allocator,0, 0, 80, 20, "label00");
     grid->add_component((Container *)grid, l);
