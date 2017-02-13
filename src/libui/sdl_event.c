@@ -167,15 +167,15 @@ static int __set(__Event *event, char *attrib, void *value)
 {
     Sdl_Event *e = (Sdl_Event *)event;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         e->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         e->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         e->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         e->deconstruct = value;
-    } else if(strcmp(attrib, "poll_event") == 0) {
+    } else if (strcmp(attrib, "poll_event") == 0) {
         e->poll_event = value;
     } else {
         dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
@@ -186,7 +186,7 @@ static int __set(__Event *event, char *attrib, void *value)
 
 static void * __get(__Event *event, char *attrib)
 {
-    if(strcmp(attrib, "") == 0){ 
+    if (strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"event get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -211,7 +211,7 @@ static int __poll_event(__Event *event,void *window)
      *cur       = container->search_component(container,"text_field");
      */
     cur       = container->search_component(container,"text_area");
-    if(cur == NULL) {
+    if (cur == NULL) {
         dbg_str(DBG_WARNNING,"not found component :%s","text_field");
         return -1;
     }
@@ -250,7 +250,7 @@ static int __poll_event(__Event *event,void *window)
                       *          (e->key.repeat) ? SDL_TRUE : SDL_FALSE);
                       */
 
-                     if((e->key.repeat) ? SDL_TRUE : SDL_FALSE) {
+                     if ((e->key.repeat) ? SDL_TRUE : SDL_FALSE) {
                          break;
                      }
                      switch(e->key.keysym.sym) {
@@ -258,51 +258,51 @@ static int __poll_event(__Event *event,void *window)
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
                               */
-                             if(cur->up_key_down) cur->up_key_down(cur, g); 
+                             if (cur->up_key_down) cur->up_key_down(cur, g); 
                              break;
                          case SDLK_DOWN:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
                               */
-                             if(cur->down_key_down) cur->down_key_down(cur, g); 
+                             if (cur->down_key_down) cur->down_key_down(cur, g); 
                              break;
                          case SDLK_LEFT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
                               */
-                             if(cur->left_key_down) cur->left_key_down(cur, g); 
+                             if (cur->left_key_down) cur->left_key_down(cur, g); 
                              break;
                          case SDLK_RIGHT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
                               */
-                             if(cur->right_key_down) cur->right_key_down(cur, g); 
+                             if (cur->right_key_down) cur->right_key_down(cur, g); 
                              break;
                          case SDLK_PAGEUP:
-                             if(cur->pageup_key_down) cur->pageup_key_down(cur, g); 
+                             if (cur->pageup_key_down) cur->pageup_key_down(cur, g); 
                              break;
                          case SDLK_PAGEDOWN:
-                             if(cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
+                             if (cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
                              break;
                          case SDLK_BACKSPACE:
                              /*
                               *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                               */
-                             if(cur->backspace_key_input) cur->backspace_key_input(cur, g); 
+                             if (cur->backspace_key_input) cur->backspace_key_input(cur, g); 
                              break;
                          case SDLK_j:
-                              if(SDL_GetModState() & KMOD_CTRL) {
-                                  if(cur->one_line_up) cur->one_line_up(cur, g); 
+                              if (SDL_GetModState() & KMOD_CTRL) {
+                                  if (cur->one_line_up) cur->one_line_up(cur, g); 
                               } else{
                                   dbg_str(DBG_IMPORTANT,"key j down");
                               }
                              break;
                          case SDLK_k:
-                              if(SDL_GetModState() & KMOD_CTRL) {
+                              if (SDL_GetModState() & KMOD_CTRL) {
                                   /*
                                    *dbg_str(DBG_IMPORTANT,"ctrl + k");
                                    */
-                                  if(cur->one_line_down) cur->one_line_down(cur, g); 
+                                  if (cur->one_line_down) cur->one_line_down(cur, g); 
                               }
                              break;
                          default:
@@ -341,7 +341,7 @@ static int __poll_event(__Event *event,void *window)
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-                     if(cur->text_key_input) cur->text_key_input(cur,e->text.text[0], g);
+                     if (cur->text_key_input) cur->text_key_input(cur,e->text.text[0], g);
                      /*
                       *dbg_str(DBG_DETAIL,"text:%s",e->text.text);
                       *string->append_char(string,e->text.text[0]);

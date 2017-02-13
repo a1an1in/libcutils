@@ -47,10 +47,10 @@ static int __deconstrcut(Image *image)
     Sdl_Image *i = (Sdl_Image *)image;
     dbg_str(DBG_DETAIL,"sdl image deconstruct start");
 
-    if(i->surface != NULL) {
+    if (i->surface != NULL) {
         SDL_FreeSurface(i->surface);
     }
-    if(i->texture != NULL) {
+    if (i->texture != NULL) {
         SDL_DestroyTexture(i->texture);
     }
     dbg_str(DBG_DETAIL,"sdl image deconstruct end");
@@ -62,15 +62,15 @@ static int __set(Image *image, char *attrib, void *value)
 {
     Sdl_Image *i = (Sdl_Image *)image;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         i->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         i->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         i->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         i->deconstruct = value;
-    } else if(strcmp(attrib, "load_image") == 0) {
+    } else if (strcmp(attrib, "load_image") == 0) {
         i->load_image = value;
     } else {
         dbg_str(OBJ_WARNNING,"image set,  \"%s\" setting is not support",attrib);
@@ -81,7 +81,7 @@ static int __set(Image *image, char *attrib, void *value)
 
 static void * __get(Image *image, char *attrib)
 {
-    if(strcmp(attrib, "") == 0){ 
+    if (strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"image get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

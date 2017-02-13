@@ -54,17 +54,17 @@ static int __set(__Timer *timer, char *attrib, void *value)
 {
     Sdl_Timer *t = (Sdl_Timer *)timer;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         t->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         t->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         t->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         t->deconstruct = value;
-    } else if(strcmp(attrib, "set_timer") == 0) {
+    } else if (strcmp(attrib, "set_timer") == 0) {
         t->set_timer = value;
-    } else if(strcmp(attrib, "reuse") == 0) {
+    } else if (strcmp(attrib, "reuse") == 0) {
         t->reuse = value;
     } else {
         dbg_str(OBJ_WARNNING,"timer set,  \"%s\" setting is not support",attrib);
@@ -75,7 +75,7 @@ static int __set(__Timer *timer, char *attrib, void *value)
 
 static void * __get(__Timer *timer, char *attrib)
 {
-    if(strcmp(attrib, "") == 0){ 
+    if (strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"timer get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -128,7 +128,7 @@ void test_obj_sdl_timer()
     __Timer *timer;
     allocator_t *allocator = allocator_get_default_alloc();
 
-    if( SDL_Init(SDL_INIT_TIMER ) < 0 ) {
+    if ( SDL_Init(SDL_INIT_TIMER ) < 0 ) {
         dbg_str(DBG_ERROR,"SDL_Init");
     }
     timer = OBJECT_NEW(allocator, Sdl_Timer,"");

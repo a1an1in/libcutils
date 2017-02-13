@@ -513,7 +513,7 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
     Window *window = (Window *)ta->window;
     Graph *g       = ((Window *)window)->graph;
 
-    if((ta->cursor_count++ % 2) == 0) {
+    if ((ta->cursor_count++ % 2) == 0) {
         reverse_cursor((Component *)ta,g);
     } else {
         draw_cursor((Component *)ta,g);
@@ -571,11 +571,11 @@ static int __set(Text_Area *ta, char *attrib, void *value)
 {
     if (strcmp(attrib, "set") == 0) {
         ta->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         ta->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         ta->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         ta->deconstruct = value;
     }
     /*vitual methods*/
@@ -697,7 +697,7 @@ static int __draw(Component *component, void *graph)
             c = line_info->head[i];
             draw_character(component,c, graph);
 
-            if(i == 0 && j == ta->start_line) { /*bak cursor info of first char of the screen*/
+            if (i == 0 && j == ta->start_line) { /*bak cursor info of first char of the screen*/
                 c_bak     = line_info->head[0];
                 width_bak = cursor->width;
             }
@@ -740,7 +740,7 @@ static int __text_key_input(Component *component,char c, void *graph)
     from                   = cursor->y / cursor->height;
     to                     = from + disturbed_line_count - 1;
 
-    if(to > line_count_of_a_screen - 1) {
+    if (to > line_count_of_a_screen - 1) {
         to = line_count_of_a_screen - 1;
     }
 
@@ -792,7 +792,7 @@ static int __backspace_key_input(Component *component,void *graph)
     from                   = cursor->y / cursor->height;
     to                     = from + disturbed_line_count - 1;
 
-    if(to > line_count_of_a_screen - 1) {
+    if (to > line_count_of_a_screen - 1) {
         to = line_count_of_a_screen - 1;
     }
 
@@ -887,7 +887,7 @@ static int __pgup_key_down(Component *component,void *graph)
     dbg_str(DBG_DETAIL,"pgup_key_down");
     line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
 
-    if(ta->start_line - line_count_of_a_screen > 0) {
+    if (ta->start_line - line_count_of_a_screen > 0) {
         ta->start_line -= line_count_of_a_screen;
     } else if (ta->start_line > 0) {
         ta->start_line = 0;
@@ -918,7 +918,7 @@ static int __pgdown_key_down(Component *component,void *graph)
     dbg_str(DBG_DETAIL,"pgdown_key_down");
     line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
 
-    if(ta->start_line + line_count_of_a_screen < text->last_line_num ) {
+    if (ta->start_line + line_count_of_a_screen < text->last_line_num ) {
         ta->start_line += line_count_of_a_screen;
     } else {
         return;

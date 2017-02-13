@@ -41,7 +41,7 @@ static int __construct(Font *font,char *init_str)
 
     dbg_str(OBJ_DETAIL,"font construct, font addr:%p",font);
 
-    if(TTF_Init() == -1){
+    if (TTF_Init() == -1){
         dbg_str(DBG_WARNNING,"TTF_Init error");
         return -1;
     }
@@ -54,7 +54,7 @@ static int __deconstrcut(Font *font)
     Sdl_Font *f = (Sdl_Font *)font;
     dbg_str(OBJ_DETAIL,"font deconstruct,font addr:%p",font);
 
-    if(f->ttf_font != NULL) {
+    if (f->ttf_font != NULL) {
         TTF_CloseFont(f->ttf_font);
     }
 
@@ -66,26 +66,26 @@ static int __set(Font *font, char *attrib, void *value)
 {
     Sdl_Font *f = (Sdl_Font *)font;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         f->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         f->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         f->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         f->deconstruct = value;
     }
-    else if(strcmp(attrib, "load_font") == 0) {
+    else if (strcmp(attrib, "load_font") == 0) {
         f->load_font = value;
-    } else if(strcmp(attrib, "unload_font") == 0) {
+    } else if (strcmp(attrib, "unload_font") == 0) {
         f->unload_font = value;
-    } else if(strcmp(attrib, "load_ascii_character") == 0) {
+    } else if (strcmp(attrib, "load_ascii_character") == 0) {
         f->load_ascii_character = value;
-    } else if(strcmp(attrib, "unload_ascii_character") == 0) {
+    } else if (strcmp(attrib, "unload_ascii_character") == 0) {
         f->unload_ascii_character = value;
-    } else if(strcmp(attrib, "get_character_width") == 0) {
+    } else if (strcmp(attrib, "get_character_width") == 0) {
         f->get_character_width = value;
-    } else if(strcmp(attrib, "get_character_height") == 0) {
+    } else if (strcmp(attrib, "get_character_height") == 0) {
         f->get_character_height = value;
     }
     else {
@@ -97,7 +97,7 @@ static int __set(Font *font, char *attrib, void *value)
 
 static void * __get(Font *font, char *attrib)
 {
-    if(strcmp(attrib, "x") == 0){ 
+    if (strcmp(attrib, "x") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"font get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -125,7 +125,7 @@ static int __load_font(Font *font)
      *TTF_SetFontStyle(f->ttf_font, TTF_STYLE_BOLD);
      */
 
-    if(f->ttf_font == NULL) {
+    if (f->ttf_font == NULL) {
     } else {
         dbg_str(DBG_DETAIL,"Sdl_Graph load font");
     }

@@ -52,41 +52,41 @@ static int __move(Component *component)
 
 static int __set(Component *component, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         component->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         component->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         component->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         component->deconstruct = value;
-    } else if(strcmp(attrib, "move") == 0) {
+    } else if (strcmp(attrib, "move") == 0) {
         component->move = value;
-    } else if(strcmp(attrib, "draw") == 0) {
+    } else if (strcmp(attrib, "draw") == 0) {
         component->draw = value;
-    } else if(strcmp(attrib, "load_resources") == 0) {
+    } else if (strcmp(attrib, "load_resources") == 0) {
         component->load_resources = value;
-    } else if(strcmp(attrib, "text_key_input") == 0) {
+    } else if (strcmp(attrib, "text_key_input") == 0) {
         component->text_key_input = value;
-    } else if(strcmp(attrib, "backspace_key_input") == 0) {
+    } else if (strcmp(attrib, "backspace_key_input") == 0) {
         component->backspace_key_input = value;
-    } else if(strcmp(attrib, "up_key_down") == 0) {
+    } else if (strcmp(attrib, "up_key_down") == 0) {
         component->up_key_down = value;
-    } else if(strcmp(attrib, "down_key_down") == 0) {
+    } else if (strcmp(attrib, "down_key_down") == 0) {
         component->down_key_down = value;
-    } else if(strcmp(attrib, "left_key_down") == 0) {
+    } else if (strcmp(attrib, "left_key_down") == 0) {
         component->left_key_down = value;
-    } else if(strcmp(attrib, "right_key_down") == 0) {
+    } else if (strcmp(attrib, "right_key_down") == 0) {
         component->right_key_down = value;
-    } else if(strcmp(attrib, "pageup_key_down") == 0) {
+    } else if (strcmp(attrib, "pageup_key_down") == 0) {
         component->pageup_key_down = value;
-    } else if(strcmp(attrib, "pagedown_key_down") == 0) {
+    } else if (strcmp(attrib, "pagedown_key_down") == 0) {
         component->pagedown_key_down = value;
-    } else if(strcmp(attrib, "one_line_up") == 0) {
+    } else if (strcmp(attrib, "one_line_up") == 0) {
         component->one_line_up = value;
-    } else if(strcmp(attrib, "one_line_down") == 0) {
+    } else if (strcmp(attrib, "one_line_down") == 0) {
         component->one_line_down = value;
-    } else if(strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
     } else {
         dbg_str(DBG_DETAIL,"component set, not support %s setting",attrib);
@@ -97,7 +97,7 @@ static int __set(Component *component, char *attrib, void *value)
 
 static void *__get(Component *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(DBG_WARNNING,"component get, \"%s\" getting attrib is not supported",attrib);
@@ -115,7 +115,7 @@ static void load_subcomponent_resources(Iterator *iter, void *arg)
     addr = (uint8_t *)iter->get_vpointer(iter);
 
     component = (Component *)buffer_to_addr(addr);
-    if(component->load_resources)
+    if (component->load_resources)
         component->load_resources(component, window);
 }
 
@@ -145,7 +145,7 @@ static void draw_subcomponent(Iterator *iter, void *arg)
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
 
-    if(component->draw) component->draw(component, g);
+    if (component->draw) component->draw(component, g);
 }
 
 static int __draw(Component *component, void *graph)

@@ -63,7 +63,7 @@ static int __construct(Gridlayout *gridlayout,char *init_str)
                                         l->col_max * sizeof(uint32_t *));
     /*init grid row height*/
     for (i = 0; i < l->row_max; i++) {
-       l->row_height[i] = l->default_unit_height; 
+        l->row_height[i] = l->default_unit_height; 
     }
 
     /*init grid col width*/
@@ -116,9 +116,9 @@ static int __set(Gridlayout *gridlayout, char *attrib, void *value)
     else if (strcmp(attrib, "name") == 0) {
         dbg_str(DBG_SUC,"set gridlayout name");
         strncpy(gridlayout->name,value,strlen(value));
-    } else if(strcmp(attrib, "row_max") == 0) {
+    } else if (strcmp(attrib, "row_max") == 0) {
         gridlayout->row_max = *((uint32_t *)value);
-    } else if(strcmp(attrib, "col_max") == 0) {
+    } else if (strcmp(attrib, "col_max") == 0) {
         gridlayout->col_max = *((uint32_t *)value);
     } else {
         dbg_str(DBG_DETAIL,"gridlayout set, not support %s setting",attrib);
@@ -131,9 +131,9 @@ static void *__get(Gridlayout *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    } else if(strcmp(attrib, "row_max") == 0) {
+    } else if (strcmp(attrib, "row_max") == 0) {
         return &obj->row_max;
-    } else if(strcmp(attrib, "col_max") == 0) {
+    } else if (strcmp(attrib, "col_max") == 0) {
         return &obj->col_max;
     } else {
         dbg_str(DBG_WARNNING,"gridlayout get, \"%s\" getting attrib is not supported",attrib);
@@ -214,7 +214,7 @@ static int __add_component(Container *obj, void *component)
     }
     
     l->cur_col++;
-    if(l->cur_col > l->col_max - 1) {
+    if (l->cur_col > l->col_max - 1) {
         l->cur_col = 0;
         l->cur_row++;
     }
@@ -340,7 +340,7 @@ void test_ui_gridlayout()
 
     grid = new_gridlayout(allocator, 0, 0, 600, 600, "grid");
 
-    l = new_label(allocator,0, 0, 80, 20, "label");
+    l = new_label(allocator,0, 0, 80, 20, "label00");
     grid->add_component((Container *)grid, l);
     l = new_label(allocator,0, 0, 80, 20, "label01");
     grid->add_component((Container *)grid, l);
@@ -356,7 +356,6 @@ void test_ui_gridlayout()
     grid->add_component((Container *)grid, l);
     l = new_label(allocator,0, 0, 80, 20, "label13");
     grid->add_component((Container *)grid, l);
-
 
     window->add_component((Container *)window,grid);
 

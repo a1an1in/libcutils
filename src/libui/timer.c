@@ -49,17 +49,17 @@ static int __deconstrcut(__Timer *timer)
 
 static int __set(__Timer *timer, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         timer->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         timer->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         timer->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         timer->deconstruct = value;
-    } else if(strcmp(attrib, "set_timer") == 0) {
+    } else if (strcmp(attrib, "set_timer") == 0) {
         timer->set_timer = value;
-    } else if(strcmp(attrib, "reuse") == 0) {
+    } else if (strcmp(attrib, "reuse") == 0) {
         timer->reuse = value;
     } else {
         dbg_str(OBJ_WARNNING,"timer set,  \"%s\" setting is not support",attrib);
@@ -70,7 +70,7 @@ static int __set(__Timer *timer, char *attrib, void *value)
 
 static void * __get(__Timer *timer, char *attrib)
 {
-    if(strcmp(attrib, "") == 0){ 
+    if (strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"timer get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

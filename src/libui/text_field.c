@@ -259,7 +259,7 @@ static uint32_t cursor_timer_callback(uint32_t interval, void* param )
     Window *window = (Window *)ta->window;
     Graph *g       = ((Window *)window)->graph;
 
-    if((ta->cursor_count++ % 2) == 0) {
+    if ((ta->cursor_count++ % 2) == 0) {
         reverse_cursor((Component *)ta,g);
     } else {
         draw_cursor((Component *)ta,g);
@@ -317,11 +317,11 @@ static int __set(Text_Field *ta, char *attrib, void *value)
 {
     if (strcmp(attrib, "set") == 0) {
         ta->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         ta->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         ta->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         ta->deconstruct = value;
     }
     /*vitual methods*/
@@ -416,11 +416,11 @@ static int __draw(Component *component, void *graph)
 
     for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
         c = line_info->head[i];
-        if(cursor->x + cursor->width > s->width) break;
+        if (cursor->x + cursor->width > s->width) break;
 
         draw_character(component,c, graph);
 
-        if(i == 0) { /*bak cursor info of first char of the screen*/
+        if (i == 0) { /*bak cursor info of first char of the screen*/
             c_bak     = line_info->head[0];
             width_bak = cursor->width;
         }
@@ -445,7 +445,7 @@ static int __text_key_input(Component *component,char c, void *graph)
     uint16_t cursor_line     = 0;
     Character *character;
 
-    if(c == '\n') return;
+    if (c == '\n') return;
 
     text->write_char(text,cursor_line, cursor->offset, cursor->x, c, g->font);
 
@@ -454,7 +454,7 @@ static int __text_key_input(Component *component,char c, void *graph)
     cursor->width          = character->width;
 
     /*draw lines disturbed by writing a char*/
-    if(cursor->x + cursor->width < s->width) {
+    if (cursor->x + cursor->width < s->width) {
         move_cursor_right(component);
         cursor_bak             = *cursor;
         ta->draw(component, g);

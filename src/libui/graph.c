@@ -48,59 +48,59 @@ static int __deconstrcut(Graph *graph)
 
 static int __set(Graph *graph, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         graph->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         graph->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         graph->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         graph->deconstruct = value;
     }
-    else if(strcmp(attrib, "move") == 0) {
+    else if (strcmp(attrib, "move") == 0) {
         graph->move = value;
-    } else if(strcmp(attrib, "update_window") == 0) {
+    } else if (strcmp(attrib, "update_window") == 0) {
         graph->update_window = value;
-    } else if(strcmp(attrib, "set_window") == 0) {
+    } else if (strcmp(attrib, "set_window") == 0) {
         graph->set_window = value;
-    } else if(strcmp(attrib, "draw_image") == 0) {
+    } else if (strcmp(attrib, "draw_image") == 0) {
         graph->draw_image = value;
-    } else if(strcmp(attrib, "render_create") == 0) {
+    } else if (strcmp(attrib, "render_create") == 0) {
         graph->render_create = value;
-    } else if(strcmp(attrib, "render_destroy") == 0) {
+    } else if (strcmp(attrib, "render_destroy") == 0) {
         graph->render_destroy = value;
-    } else if(strcmp(attrib, "render_set_color") == 0) {
+    } else if (strcmp(attrib, "render_set_color") == 0) {
         graph->render_set_color = value;
-    } else if(strcmp(attrib, "render_set_font") == 0) {
+    } else if (strcmp(attrib, "render_set_font") == 0) {
         graph->render_set_font = value;
-    } else if(strcmp(attrib, "render_clear") == 0) {
+    } else if (strcmp(attrib, "render_clear") == 0) {
         graph->render_clear = value;
-    } else if(strcmp(attrib, "render_draw_line") == 0) {
+    } else if (strcmp(attrib, "render_draw_line") == 0) {
         graph->render_draw_line = value;
-    } else if(strcmp(attrib, "render_draw_rect") == 0) {
+    } else if (strcmp(attrib, "render_draw_rect") == 0) {
         graph->render_draw_rect = value;
-    } else if(strcmp(attrib, "render_fill_rect") == 0) {
+    } else if (strcmp(attrib, "render_fill_rect") == 0) {
         graph->render_fill_rect = value;
-    } else if(strcmp(attrib, "render_draw_image") == 0) {
+    } else if (strcmp(attrib, "render_draw_image") == 0) {
         graph->render_draw_image = value;
-    } else if(strcmp(attrib, "render_load_image") == 0) {
+    } else if (strcmp(attrib, "render_load_image") == 0) {
         graph->render_load_image = value;
-    } else if(strcmp(attrib, "render_load_text") == 0) {
+    } else if (strcmp(attrib, "render_load_text") == 0) {
         graph->render_load_text = value;
-    } else if(strcmp(attrib, "render_unload_text") == 0) {
+    } else if (strcmp(attrib, "render_unload_text") == 0) {
         graph->render_unload_text = value;
-    } else if(strcmp(attrib, "render_write_text") == 0) {
+    } else if (strcmp(attrib, "render_write_text") == 0) {
         graph->render_write_text = value;
-    } else if(strcmp(attrib, "render_load_character") == 0) {
+    } else if (strcmp(attrib, "render_load_character") == 0) {
         graph->render_load_character = value;
-    } else if(strcmp(attrib, "render_unload_character") == 0) {
+    } else if (strcmp(attrib, "render_unload_character") == 0) {
         graph->render_unload_character = value;
-    } else if(strcmp(attrib, "render_write_character") == 0) {
+    } else if (strcmp(attrib, "render_write_character") == 0) {
         graph->render_write_character = value;
-    } else if(strcmp(attrib, "render_present") == 0) {
+    } else if (strcmp(attrib, "render_present") == 0) {
         graph->render_present = value;
     }
-    else if(strcmp(attrib, "name") == 0) {
+    else if (strcmp(attrib, "name") == 0) {
         strncpy(graph->name,value,strlen(value));
     } else {
         dbg_str(DBG_DETAIL,"graph set, not support %s setting",attrib);
@@ -111,7 +111,7 @@ static int __set(Graph *graph, char *attrib, void *value)
 
 static void *__get(Graph *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(DBG_WARNNING,"graph get, \"%s\" getting attrib is not supported",attrib);

@@ -170,7 +170,7 @@ static void window_load_component_resources(Iterator *iter, void *arg)
 
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
-    if(component->load_resources)
+    if (component->load_resources)
         component->load_resources(component, window);
 }
 

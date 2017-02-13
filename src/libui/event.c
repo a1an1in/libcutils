@@ -49,15 +49,15 @@ static int __deconstrcut(__Event *event)
 
 static int __set(__Event *event, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         event->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         event->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         event->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         event->deconstruct = value;
-    } else if(strcmp(attrib, "poll_event") == 0) {
+    } else if (strcmp(attrib, "poll_event") == 0) {
         event->poll_event = value;
     } else {
         dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
@@ -68,7 +68,7 @@ static int __set(__Event *event, char *attrib, void *value)
 
 static void * __get(__Event *event, char *attrib)
 {
-    if(strcmp(attrib, "") == 0){ 
+    if (strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"event get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

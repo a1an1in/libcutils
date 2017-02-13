@@ -52,59 +52,59 @@ static int __deconstrcut(Sdl_Graph *sdl_grath)
 
 static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         sdl_grath->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         sdl_grath->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         sdl_grath->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         sdl_grath->deconstruct = value;
     }
-    else if(strcmp(attrib, "move") == 0) {/**virtual methods setting start*/
+    else if (strcmp(attrib, "move") == 0) {/**virtual methods setting start*/
         sdl_grath->move = value;
-    } else if(strcmp(attrib, "update_window") == 0) {
+    } else if (strcmp(attrib, "update_window") == 0) {
         sdl_grath->update_window = value;
-    } else if(strcmp(attrib, "set_window") == 0) {
+    } else if (strcmp(attrib, "set_window") == 0) {
         sdl_grath->set_window = value;
-    } else if(strcmp(attrib, "draw_image") == 0) {
+    } else if (strcmp(attrib, "draw_image") == 0) {
         sdl_grath->draw_image = value;
-    } else if(strcmp(attrib, "render_create") == 0) {
+    } else if (strcmp(attrib, "render_create") == 0) {
         sdl_grath->render_create = value;
-    } else if(strcmp(attrib, "render_destroy") == 0) {
+    } else if (strcmp(attrib, "render_destroy") == 0) {
         sdl_grath->render_destroy = value;
-    } else if(strcmp(attrib, "render_set_color") == 0) {
+    } else if (strcmp(attrib, "render_set_color") == 0) {
         sdl_grath->render_set_color = value;
-    } else if(strcmp(attrib, "render_set_font") == 0) {
+    } else if (strcmp(attrib, "render_set_font") == 0) {
         sdl_grath->render_set_font = value;
-    } else if(strcmp(attrib, "render_clear") == 0) {
+    } else if (strcmp(attrib, "render_clear") == 0) {
         sdl_grath->render_clear = value;
-    } else if(strcmp(attrib, "render_draw_line") == 0) {
+    } else if (strcmp(attrib, "render_draw_line") == 0) {
         sdl_grath->render_draw_line = value;
-    } else if(strcmp(attrib, "render_fill_rect") == 0) {
+    } else if (strcmp(attrib, "render_fill_rect") == 0) {
         sdl_grath->render_fill_rect = value;
-    } else if(strcmp(attrib, "render_draw_rect") == 0) {
+    } else if (strcmp(attrib, "render_draw_rect") == 0) {
         sdl_grath->render_draw_rect = value;
-    } else if(strcmp(attrib, "render_draw_image") == 0) {
+    } else if (strcmp(attrib, "render_draw_image") == 0) {
         sdl_grath->render_draw_image = value;
-    } else if(strcmp(attrib, "render_load_image") == 0) {
+    } else if (strcmp(attrib, "render_load_image") == 0) {
         sdl_grath->render_load_image = value;
-    } else if(strcmp(attrib, "render_load_text") == 0) {
+    } else if (strcmp(attrib, "render_load_text") == 0) {
         sdl_grath->render_load_text = value;
-    } else if(strcmp(attrib, "render_unload_text") == 0) {
+    } else if (strcmp(attrib, "render_unload_text") == 0) {
         sdl_grath->render_unload_text = value;
-    } else if(strcmp(attrib, "render_write_text") == 0) {
+    } else if (strcmp(attrib, "render_write_text") == 0) {
         sdl_grath->render_write_text = value;
-    } else if(strcmp(attrib, "render_load_character") == 0) {
+    } else if (strcmp(attrib, "render_load_character") == 0) {
         sdl_grath->render_load_character = value;
-    } else if(strcmp(attrib, "render_unload_character") == 0) {
+    } else if (strcmp(attrib, "render_unload_character") == 0) {
         sdl_grath->render_unload_character = value;
-    } else if(strcmp(attrib, "render_write_character") == 0) {
+    } else if (strcmp(attrib, "render_write_character") == 0) {
         sdl_grath->render_write_character = value;
-    } else if(strcmp(attrib, "render_present") == 0) {
+    } else if (strcmp(attrib, "render_present") == 0) {
         sdl_grath->render_present = value;
     } 
-    else if(strcmp(attrib, "name") == 0) { /**attribs setting start*/
+    else if (strcmp(attrib, "name") == 0) { /**attribs setting start*/
         strncpy(sdl_grath->name,value,strlen(value));
     } else {
         dbg_str(SDL_INTERFACE_DETAIL,"sdl_graph set, not support %s setting",attrib);
@@ -115,7 +115,7 @@ static int __set(Sdl_Graph *sdl_grath, char *attrib, void *value)
 
 static void *__get(Sdl_Graph *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(DBG_WARNNING,"sdl_grath get, \"%s\" getting attrib is not supported",attrib);
@@ -151,7 +151,7 @@ static int __render_create(Sdl_Graph *graph)
     dbg_str(SDL_INTERFACE_DETAIL,"Sdl_Graph render_create");
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1" );
     graph->render = SDL_CreateRenderer( graph->window, -1, 0);
-    if(graph->render == NULL) {
+    if (graph->render == NULL) {
         dbg_str(SDL_INTERFACE_ERROR,"Sdl_Graph render_create, %s", SDL_GetError());
         exit(-1);
     }
@@ -214,11 +214,11 @@ static void *__render_load_image(Sdl_Graph *graph,void *path)
 
     image = OBJECT_NEW(allocator, Sdl_Image,"");
     ((Image *)image)->path->assign(((Image *)image)->path,path);
-    if(image->surface == NULL) {
+    if (image->surface == NULL) {
         image->load_image((Image *)image);
     }
 
-    if(image->surface != NULL) {
+    if (image->surface != NULL) {
         image->texture = SDL_CreateTextureFromSurface(graph->render, image->surface);
         image->width   = image->surface->w;
         image->height  = image->surface->h;
@@ -262,7 +262,7 @@ static void * __render_load_text(Sdl_Graph *graph,void *string,void *font,int r,
                                    ((Text *)text)->content->value,
                                    textColor ); 
 
-    if(surface != NULL) {
+    if (surface != NULL) {
         text->texture = SDL_CreateTextureFromSurface(graph->render, surface);
         text->width = surface->w;
         text->height = surface->h;
@@ -315,7 +315,7 @@ static void * __render_load_character(Sdl_Graph *graph,uint32_t code,void *font,
                                      buf,
                                      character_color); 
 
-    if(surface != NULL) {
+    if (surface != NULL) {
         ((Sdl_Character *)character)->texture = SDL_CreateTextureFromSurface(graph->render, surface);
         character->width   = surface->w;
         character->height  = surface->h;

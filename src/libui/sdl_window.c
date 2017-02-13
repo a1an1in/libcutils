@@ -40,43 +40,43 @@
 static int __set(Window *window, char *attrib, void *value)
 {
     Sdl_Window *w = (Sdl_Window *)window;
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         w->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         w->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         w->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         w->deconstruct = value;
     } 
-    else if(strcmp(attrib, "move") == 0) {
-    } else if(strcmp(attrib, "create_font") == 0) {
+    else if (strcmp(attrib, "move") == 0) {
+    } else if (strcmp(attrib, "create_font") == 0) {
         w->create_font = value;
-    } else if(strcmp(attrib, "destroy_font") == 0) {
+    } else if (strcmp(attrib, "destroy_font") == 0) {
         w->destroy_font = value;
-    } else if(strcmp(attrib, "create_graph") == 0) {
+    } else if (strcmp(attrib, "create_graph") == 0) {
         w->create_graph = value;
-    } else if(strcmp(attrib, "destroy_graph") == 0) {
+    } else if (strcmp(attrib, "destroy_graph") == 0) {
         w->destroy_graph = value;
-    } else if(strcmp(attrib, "create_event") == 0) {
+    } else if (strcmp(attrib, "create_event") == 0) {
         w->create_event = value;
-    } else if(strcmp(attrib, "destroy_event") == 0) {
+    } else if (strcmp(attrib, "destroy_event") == 0) {
         w->destroy_event = value;
-    } else if(strcmp(attrib, "create_background") == 0) {
+    } else if (strcmp(attrib, "create_background") == 0) {
         w->create_background = value;
-    } else if(strcmp(attrib, "destroy_background") == 0) {
+    } else if (strcmp(attrib, "destroy_background") == 0) {
         w->destroy_background = value;
-    } else if(strcmp(attrib, "init_window") == 0) {
+    } else if (strcmp(attrib, "init_window") == 0) {
         w->init_window = value;
-    } else if(strcmp(attrib, "open_window") == 0) {
+    } else if (strcmp(attrib, "open_window") == 0) {
         w->open_window = value;
-    } else if(strcmp(attrib, "close_window") == 0) {
+    } else if (strcmp(attrib, "close_window") == 0) {
         w->close_window = value;
-    } else if(strcmp(attrib, "create_timer") == 0) {
+    } else if (strcmp(attrib, "create_timer") == 0) {
         w->create_timer = value;
-    } else if(strcmp(attrib, "remove_timer") == 0) {
+    } else if (strcmp(attrib, "remove_timer") == 0) {
         w->remove_timer = value;
-    } else if(strcmp(attrib, "destroy_timer") == 0) {
+    } else if (strcmp(attrib, "destroy_timer") == 0) {
         w->destroy_timer = value;
     }
     else {
@@ -88,7 +88,7 @@ static int __set(Window *window, char *attrib, void *value)
 
 static void *__get(Window *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(DBG_WARNNING,"sdl window get, \"%s\" getting attrib is not supported",attrib);
@@ -169,7 +169,7 @@ static int __init_window(Window *window)
     dbg_str(SDL_INTERFACE_DETAIL,"srceen width=%d, height=%d",window->screen_width,window->screen_height);
 
     //Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
+    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0 ) {
         dbg_str(DBG_ERROR,"SDL could not initialize! SDL_Error: %s", SDL_GetError() );
         ret = -1;
     } else {
@@ -180,7 +180,7 @@ static int __init_window(Window *window)
                                          window->screen_width, 
                                          window->screen_height,
                                          SDL_WINDOW_SHOWN);
-        if( w->sdl_window == NULL ) {
+        if ( w->sdl_window == NULL ) {
             dbg_str(DBG_ERROR,"Window could not be created! SDL_Error: %s\n", SDL_GetError() );
             ret = -1;
         } else {
@@ -199,7 +199,7 @@ static int __open_window(Window *window)
 
     dbg_str(SDL_INTERFACE_DETAIL,"sdl window open_window start");
 
-    if(g == NULL) {
+    if (g == NULL) {
         dbg_str(DBG_ERROR,"window graph is NULL, please check");
         return -1;
     } else {
@@ -233,7 +233,7 @@ static int __close_window(Window *window)
     dbg_str(SDL_INTERFACE_DETAIL,"sdl window close_window");
 
     //release screen surface
-    if(g->screen_surface)
+    if (g->screen_surface)
         SDL_FreeSurface( g->screen_surface );
 
     //destroy render

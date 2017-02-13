@@ -47,10 +47,10 @@ static int __deconstrcut(Character *character)
     Sdl_Character *c = (Sdl_Character *)character;
     dbg_str(OBJ_DETAIL,"character deconstruct,character addr:%p",character);
 
-    if(c->surface != NULL){
+    if (c->surface != NULL){
         SDL_FreeSurface(c->surface);
     }
-    if(c->texture != NULL) {
+    if (c->texture != NULL) {
         SDL_DestroyTexture(c->texture);
     }
 
@@ -61,15 +61,15 @@ static int __set(Character *character, char *attrib, void *value)
 {
     Sdl_Character *c = (Sdl_Character *)character;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         c->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         c->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         c->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         c->deconstruct = value;
-    } else if(strcmp(attrib, "load_character") == 0) {
+    } else if (strcmp(attrib, "load_character") == 0) {
         c->load_character = value;
     } else {
         dbg_str(OBJ_WARNNING,"character set,  \"%s\" setting is not support",attrib);
@@ -80,7 +80,7 @@ static int __set(Character *character, char *attrib, void *value)
 
 static void * __get(Character *character, char *attrib)
 {
-    if(strcmp(attrib, "") == 0){ 
+    if (strcmp(attrib, "") == 0){ 
     } else {
         dbg_str(OBJ_WARNNING,"character get, \"%s\" getting attrib is not supported",attrib);
         return NULL;

@@ -52,17 +52,17 @@ static int __move(Button *button)
 
 static int __set(Button *button, char *attrib, void *value)
 {
-	if(strcmp(attrib, "set") == 0) {
+	if (strcmp(attrib, "set") == 0) {
 		button->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
 		button->get = value;
-	} else if(strcmp(attrib, "construct") == 0) {
+	} else if (strcmp(attrib, "construct") == 0) {
 		button->construct = value;
-	} else if(strcmp(attrib, "deconstruct") == 0) {
+	} else if (strcmp(attrib, "deconstruct") == 0) {
 		button->deconstruct = value;
-	} else if(strcmp(attrib, "move") == 0) {
+	} else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
-	} else if(strcmp(attrib, "name") == 0) {
+	} else if (strcmp(attrib, "name") == 0) {
         strncpy(button->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
@@ -73,7 +73,7 @@ static int __set(Button *button, char *attrib, void *value)
 
 static void *__get(Button *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(DBG_WARNNING,"button get, \"%s\" getting attrib is not supported",attrib);
