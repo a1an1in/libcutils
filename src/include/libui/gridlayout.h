@@ -28,6 +28,7 @@ struct gridlayout_s{
 #undef MAX_NAME_LEN
     void *window;
     uint32_t *col_width, *row_height; 
+    uint32_t hgap, vgap;
     uint32_t row_max, col_max, cur_row, cur_col;
     uint32_t default_unit_width, default_unit_height;
 

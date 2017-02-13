@@ -140,8 +140,6 @@ static void draw_subcomponent(Iterator *iter, void *arg)
     uint8_t *addr;
     Graph *g = (Graph *)arg;
 
-    dbg_str(DBG_DETAIL,"draw_subcomponent");
-
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
 

@@ -178,6 +178,8 @@ static int __draw(Component *component, void *graph)
     int dot_width, draw_width;
     char c;
 
+    dbg_str(DBG_DETAIL,"%s draw component", ((Obj *)component)->name);
+
     if (label->text_overflow_flag == 1) {
         character = (Character *)g->font->ascii['.'].character;
         dot_width = character->width;

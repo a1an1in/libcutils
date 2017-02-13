@@ -39,7 +39,7 @@
 static int __construct(Gridlayout *gridlayout,char *init_str)
 {
     allocator_t *allocator = ((Obj *)gridlayout)->allocator;
-    Gridlayout *l = gridlayout;
+    Gridlayout *l          = gridlayout;
     uint32_t i;
 
     dbg_str(DBG_DETAIL,"gridlayout construct");
@@ -89,6 +89,7 @@ static int __deconstrcut(Gridlayout *gridlayout)
 
     allocator_mem_free(allocator, gridlayout->row_height);
     allocator_mem_free(allocator, gridlayout->col_width);
+    allocator_mem_free(allocator, gridlayout->grid_components);
 
     return 0;
 }
@@ -120,6 +121,10 @@ static int __set(Gridlayout *gridlayout, char *attrib, void *value)
         gridlayout->row_max = *((uint32_t *)value);
     } else if (strcmp(attrib, "col_max") == 0) {
         gridlayout->col_max = *((uint32_t *)value);
+    } else if (strcmp(attrib, "hgap") == 0) {
+        gridlayout->hgap = *((uint32_t *)value);
+    } else if (strcmp(attrib, "vgap") == 0) {
+        gridlayout->vgap = *((uint32_t *)value);
     } else {
         dbg_str(DBG_DETAIL,"gridlayout set, not support %s setting",attrib);
     }
@@ -135,6 +140,10 @@ static void *__get(Gridlayout *obj, char *attrib)
         return &obj->row_max;
     } else if (strcmp(attrib, "col_max") == 0) {
         return &obj->col_max;
+    } else if (strcmp(attrib, "hgap") == 0) {
+        return &obj->hgap;
+    } else if (strcmp(attrib, "vgap") == 0) {
+        return &obj->vgap;
     } else {
         dbg_str(DBG_WARNNING,"gridlayout get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -186,8 +195,8 @@ static int __add_component(Container *obj, void *component)
 
     addr_to_buffer(c,(uint8_t *)buffer);
 
-    position.x = get_x_axis_of_current_grid(l);
-    position.y = get_y_axis_of_current_grid(l);
+    position.x = get_x_axis_of_current_grid(l) + l->hgap;
+    position.y = get_y_axis_of_current_grid(l) + l->vgap;
 
     dbg_str(DBG_SUC,"position x=%d, y=%d", position.x, position.y);
     container->update_component_position(c, &position);
@@ -222,6 +231,39 @@ static int __add_component(Container *obj, void *component)
     return 0;
 }
 
+static void draw_subcomponent(Iterator *iter, void *arg) 
+{
+    Component *component;
+    uint8_t *addr;
+    Graph *g = (Graph *)arg;
+
+    addr      = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    if (component->draw) component->draw(component, g);
+}
+
+static void draw_grids(Component *component, void *graph) 
+{
+    Gridlayout *l = (Gridlayout *)component;
+    Graph *g      = (Graph *)graph;
+}
+
+/*reimplement the virtual func draw() int Component class*/
+static int __draw(Component *component, void *graph)
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+
+    dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+
+    /*draw grids*/
+    draw_grids(component, graph);
+
+    /*draw subcomponent*/
+    container->for_each_component(container, draw_subcomponent, g);
+}
+
 static class_info_entry_t gridlayout_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -229,10 +271,13 @@ static class_info_entry_t gridlayout_class_info[] = {
     [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [7 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
-    [8 ] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
-    [9 ] = {ENTRY_TYPE_END},
+    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",NULL,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [8 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
+    [9 ] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
+    [10] = {ENTRY_TYPE_INT32_T,"int","hgap",NULL,sizeof(int)},
+    [11] = {ENTRY_TYPE_INT32_T,"int","vgap",NULL,sizeof(int)},
+    [12] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Gridlayout",gridlayout_class_info);
@@ -299,11 +344,13 @@ char *gen_gridlayout_setting_str(int x, int y, int width, int height, char *name
                     },\
                     \"Gridlayout\":{\
                         \"row_max\":%d,\
-                        \"col_max\":%d\
+                        \"col_max\":%d,\
+                        \"hgap\":%d,\
+                        \"vgap\":%d\
                     }\
                 }";
 
-    sprintf(out, set_str, x, y, width, height,1, name, 4,4);
+    sprintf(out, set_str, x, y, width, height,1, name, 4,4, 5, 2);
 
     return out;
 }
@@ -358,10 +405,8 @@ void test_ui_gridlayout()
     grid->add_component((Container *)grid, l);
 
     window->add_component((Container *)window,grid);
-
     window->load_resources(window);
     window->update_window(window);
-
     window->event->poll_event(window->event, window);
 
     object_destroy(window);
