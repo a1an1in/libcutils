@@ -39,48 +39,28 @@
 static int __construct(Border_Layout *border_layout,char *init_str)
 {
     allocator_t *allocator = ((Obj *)border_layout)->allocator;
-    Border_Layout *l          = border_layout;
+    Border_Layout *l       = border_layout;
     uint32_t i;
 
     dbg_str(DBG_DETAIL,"border_layout construct");
 
-    l->default_unit_width  = 100;
-    l->default_unit_height = 20;
-    l->cur_col             = 0;
-    l->cur_row             = 0;
-    l->layout_height       = 0;
-    l->layout_width        = 0;
+    memset(l->blocks, 0, sizeof(layout_block_t) * BORDER_LAYOUT_MAX); 
 
-    if (l->row_max == 0) { l->row_max = 1;}
-    if (l->col_max == 0) { l->col_max = 1;}
+    l->layout_width_default                = 600;
+    l->layout_height_default               = 600;
+    l->layout_width                        = l->layout_width_default;
+    l->layout_height                       = l->layout_height_default;
 
-    dbg_str(DBG_DETAIL,"row_max = %d, col_max=%d", l->row_max, l->col_max);
-
-    /*alloc grid height and width arrays*/
-    l->row_height = (uint32_t *) 
-                    allocator_mem_alloc(allocator,
-                                        l->row_max * sizeof(uint32_t *));
-    l->col_width  = (uint32_t *)
-                    allocator_mem_alloc(allocator,
-                                        l->col_max * sizeof(uint32_t *));
-    /*init grid row height*/
-    for (i = 0; i < l->row_max; i++) {
-        l->row_height[i]  = l->default_unit_height;
-        l->layout_height += l->row_height[i];
-    }
-
-    /*init grid col width*/
-    for ( i = 0; i < l->col_max; i++) {
-        l->col_width[i]  = l->default_unit_width;
-        l->layout_width += l->col_width[i];
-    }
-
-    /*alloc space for grid componets*/
-    l->grid_components = (Component **) 
-                         allocator_mem_alloc(allocator,
-                                             l->row_max * l->col_max * sizeof(Component *));
-
-    memset(l->grid_components, 0, l->row_max * l->col_max * sizeof(Component *));
+    l->blocks[BORDER_LAYOUT_NORTH].width   = l->layout_width_default;
+    l->blocks[BORDER_LAYOUT_NORTH].height  = l->layout_height / 3;
+    l->blocks[BORDER_LAYOUT_WEST].width    = l->layout_width_default / 3;
+    l->blocks[BORDER_LAYOUT_WEST].height   = l->layout_height / 3;
+    l->blocks[BORDER_LAYOUT_CENTER].width  = l->layout_width_default / 3;
+    l->blocks[BORDER_LAYOUT_CENTER].height = l->layout_height / 3;
+    l->blocks[BORDER_LAYOUT_EAST].width    = l->layout_width_default / 3;
+    l->blocks[BORDER_LAYOUT_EAST].height   = l->layout_height / 3;
+    l->blocks[BORDER_LAYOUT_SOUTH].width   = l->layout_width_default;
+    l->blocks[BORDER_LAYOUT_SOUTH].height  = l->layout_height / 3;
 
     return 0;
 }
@@ -90,10 +70,6 @@ static int __deconstrcut(Border_Layout *border_layout)
     allocator_t *allocator = ((Obj *)border_layout)->allocator;
 
     dbg_str(DBG_SUC,"border_layout deconstruct");
-
-    allocator_mem_free(allocator, border_layout->row_height);
-    allocator_mem_free(allocator, border_layout->col_width);
-    allocator_mem_free(allocator, border_layout->grid_components);
 
     return 0;
 }
@@ -121,10 +97,12 @@ static int __set(Border_Layout *border_layout, char *attrib, void *value)
     else if (strcmp(attrib, "name") == 0) {
         dbg_str(DBG_SUC,"set border_layout name");
         strncpy(border_layout->name,value,strlen(value));
-    } else if (strcmp(attrib, "row_max") == 0) {
-        border_layout->row_max = *((uint32_t *)value);
-    } else if (strcmp(attrib, "col_max") == 0) {
-        border_layout->col_max = *((uint32_t *)value);
+    /*
+     *} else if (strcmp(attrib, "row_max") == 0) {
+     *    border_layout->row_max = *((uint32_t *)value);
+     *} else if (strcmp(attrib, "col_max") == 0) {
+     *    border_layout->col_max = *((uint32_t *)value);
+     */
     } else if (strcmp(attrib, "hgap") == 0) {
         border_layout->hgap = *((uint32_t *)value);
     } else if (strcmp(attrib, "vgap") == 0) {
@@ -140,10 +118,12 @@ static void *__get(Border_Layout *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    } else if (strcmp(attrib, "row_max") == 0) {
-        return &obj->row_max;
-    } else if (strcmp(attrib, "col_max") == 0) {
-        return &obj->col_max;
+    /*
+     *} else if (strcmp(attrib, "row_max") == 0) {
+     *    return &obj->row_max;
+     *} else if (strcmp(attrib, "col_max") == 0) {
+     *    return &obj->col_max;
+     */
     } else if (strcmp(attrib, "hgap") == 0) {
         return &obj->hgap;
     } else if (strcmp(attrib, "vgap") == 0) {
@@ -157,7 +137,7 @@ static void *__get(Border_Layout *obj, char *attrib)
 
 static int __add_component(Container *obj, void *pos, void *component)
 {
-    Border_Layout *l        = (Border_Layout *)obj;
+    Border_Layout *l     = (Border_Layout *)obj;
     Container *container = (Container *)obj;
     Map *map             = container->map;
     char buffer[8]       = {0};
@@ -166,6 +146,20 @@ static int __add_component(Container *obj, void *pos, void *component)
     uint8_t rearrange_comonents_flag = 0;
     position_t position;
 
+    if (strcmp(pos, "North") == 0) {
+        l->blocks[BORDER_LAYOUT_NORTH].component = component;
+    } else if (strcmp(pos, "West") == 0) {
+        l->blocks[BORDER_LAYOUT_WEST].component = component;
+    } else if (strcmp(pos, "Center") == 0) {
+        l->blocks[BORDER_LAYOUT_CENTER].component = component;
+    } else if (strcmp(pos, "East") ==0) {
+        l->blocks[BORDER_LAYOUT_EAST].component = component;
+    } else if (strcmp(pos, "South") == 0) {
+        l->blocks[BORDER_LAYOUT_SOUTH].component = component;
+    } else {
+        dbg_str(DBG_WARNNING,"borderlayout add component, pos par err");
+        return -1;
+    }
 
     return 0;
 }
@@ -185,7 +179,7 @@ static void draw_subcomponent(Iterator *iter, void *arg)
 static void draw_grids(Component *component, void *graph) 
 {
     Border_Layout *l = (Border_Layout *)component;
-    Graph *g      = (Graph *)graph;
+    Graph *g         = (Graph *)graph;
     int i;
     position_t start, end;
 
