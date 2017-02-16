@@ -216,7 +216,6 @@ static class_info_entry_t border_layout_class_info[] = {
     [10] = {ENTRY_TYPE_INT32_T,"int","hgap",NULL,sizeof(int)},
     [11] = {ENTRY_TYPE_INT32_T,"int","vgap",NULL,sizeof(int)},
     [12] = {ENTRY_TYPE_END},
-
 };
 REGISTER_CLASS("Border_Layout",border_layout_class_info);
 

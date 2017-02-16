@@ -37,19 +37,19 @@ static int __set(Iterator *iter, char *attrib, void *value)
 {
     LList_Iterator *li = (LList_Iterator *)iter;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         li->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         li->get = value;
-    } else if(strcmp(attrib, "next") == 0) {
+    } else if (strcmp(attrib, "next") == 0) {
         li->next = value;
-    } else if(strcmp(attrib, "prev") == 0) {
+    } else if (strcmp(attrib, "prev") == 0) {
         li->prev = value;
-    } else if(strcmp(attrib, "equal") == 0) {
+    } else if (strcmp(attrib, "equal") == 0) {
         li->equal = value;
-    } else if(strcmp(attrib, "get_vpointer") == 0) {
+    } else if (strcmp(attrib, "get_vpointer") == 0) {
         li->get_vpointer = value;
-    } else if(strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "name") == 0) {
         strncpy(li->name,value,strlen(value));
     } else {
         dbg_str(OBJ_DETAIL,"li set, not support %s setting",attrib);
@@ -62,7 +62,7 @@ static void *__get(Iterator *iter, char *attrib)
 {
     LList_Iterator *li = (LList_Iterator *)iter;
 
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return li->name;
     } else {
         dbg_str(OBJ_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);

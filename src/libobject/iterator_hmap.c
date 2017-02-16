@@ -53,25 +53,25 @@ static int __set(Iterator *iter, char *attrib, void *value)
 {
     Hmap_Iterator *hiter = (Hmap_Iterator *)iter;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         hiter->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         hiter->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         hiter->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         hiter->deconstruct = value;
-    } else if(strcmp(attrib, "next") == 0) {
+    } else if (strcmp(attrib, "next") == 0) {
         hiter->next = value;
-    } else if(strcmp(attrib, "prev") == 0) {
+    } else if (strcmp(attrib, "prev") == 0) {
         hiter->prev = value;
-    } else if(strcmp(attrib, "equal") == 0) {
+    } else if (strcmp(attrib, "equal") == 0) {
         hiter->equal = value;
-    } else if(strcmp(attrib, "get_vpointer") == 0) {
+    } else if (strcmp(attrib, "get_vpointer") == 0) {
         hiter->get_vpointer = value;
-    } else if(strcmp(attrib, "get_kpointer") == 0) {
+    } else if (strcmp(attrib, "get_kpointer") == 0) {
         hiter->get_kpointer = value;
-    } else if(strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "name") == 0) {
         strncpy(hiter->name,value,strlen(value));
     } else {
         dbg_str(OBJ_DETAIL,"hiter set, not support %s setting",attrib);
@@ -84,7 +84,7 @@ static void *__get(Iterator *iter, char *attrib)
 {
     Hmap_Iterator *hiter = (Hmap_Iterator *)iter;
 
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return hiter->name;
     } else {
         dbg_str(OBJ_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);

@@ -35,18 +35,18 @@
 
 static int string_buf_auto_modulate(String *string, int write_len)
 {
-    if(string->value_max_len == 0) {
+    if (string->value_max_len == 0) {
         string->value_max_len = 100;
-        if(write_len > string->value_max_len) {
+        if (write_len > string->value_max_len) {
             string->value_max_len = write_len;
         }
         string->value = (char *)allocator_mem_alloc(string->obj.allocator,
                                                     string->value_max_len);
-        if(string->value == NULL) {
+        if (string->value == NULL) {
             dbg_str(OBJ_WARNNING,"string assign alloc error");
             return -1;
         }
-    } else if( string->value_max_len > string->value_len &&
+    } else if ( string->value_max_len > string->value_len &&
                string->value_max_len < string->value_len + write_len)
     {
         char *new_buf;
@@ -54,7 +54,7 @@ static int string_buf_auto_modulate(String *string, int write_len)
         string->value_max_len = 2 * string->value_max_len;
         new_buf = (char *)allocator_mem_alloc(string->obj.allocator,
                                               string->value_max_len);
-        if(string->value == NULL) {
+        if (string->value == NULL) {
             dbg_str(OBJ_WARNNING,"string assign alloc error");
             return -1;
         }
@@ -77,7 +77,7 @@ static int __construct(String *string,char *init_str)
 static int __deconstrcut(String *string)
 {
     dbg_str(OBJ_DETAIL,"string deconstruct,string addr:%p",string);
-    if(string->value)
+    if (string->value)
         allocator_mem_free(string->obj.allocator,string->value);
 
     return 0;
@@ -86,26 +86,26 @@ static int __deconstrcut(String *string)
 static int __set(String *string, char *attrib, void *value)
 {
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         string->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         string->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         string->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         string->deconstruct = value;
-    } else if(strcmp(attrib, "pre_alloc") == 0) {
+    } else if (strcmp(attrib, "pre_alloc") == 0) {
         string->pre_alloc = value;
-    } else if(strcmp(attrib, "assign") == 0) {
+    } else if (strcmp(attrib, "assign") == 0) {
         string->assign = value;
-    } else if(strcmp(attrib, "append_char") == 0) {
+    } else if (strcmp(attrib, "append_char") == 0) {
         string->append_char = value;
-    } else if(strcmp(attrib, "replace_char") == 0) {
+    } else if (strcmp(attrib, "replace_char") == 0) {
         string->replace_char = value;
-    } else if(strcmp(attrib, "at") == 0) {
+    } else if (strcmp(attrib, "at") == 0) {
         string->at = value;
     }
-    else if(strcmp(attrib, "name") == 0) {
+    else if (strcmp(attrib, "name") == 0) {
         strncpy(string->name,value,strlen(value));
     } else {
         dbg_str(OBJ_DETAIL,"string set, not support %s setting",attrib);
@@ -116,9 +116,9 @@ static int __set(String *string, char *attrib, void *value)
 
 static void *__get(String *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    } else if(strcmp(attrib, "value") == 0) {
+    } else if (strcmp(attrib, "value") == 0) {
         return obj->value;
     } else {
         dbg_str(OBJ_WARNNING,"string get, \"%s\" getting attrib is not supported",attrib);
@@ -142,7 +142,7 @@ static String *__assign(String *string,char *s)
     int ret;
 
     ret = string_buf_auto_modulate(string, len);
-    if(ret < 0) return string;
+    if (ret < 0) return string;
 
     memset(string->value,0, string->value_max_len);
     strncpy(string->value, s, len);
@@ -157,7 +157,7 @@ static String *__append_char(String *string,char c)
     int ret;
 
     ret = string_buf_auto_modulate(string, 1);
-    if(ret < 0) {
+    if (ret < 0) {
         dbg_str(DBG_WARNNING,"string buf_auto_modulate have problem,please check");
         return string;
     }

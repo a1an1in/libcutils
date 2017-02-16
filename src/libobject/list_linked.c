@@ -41,7 +41,7 @@ static int __construct(List *list,char *init_str)
 
     dbg_str(OBJ_DETAIL,"llist list construct,list addr:%p",list);
 
-    if(list->value_size == 0) {
+    if (list->value_size == 0) {
         value_size = 50;
         dbg_str(DBG_WARNNING,"link list value is zero, we'll set it to default value 50");
     } else {
@@ -68,31 +68,31 @@ static int __set(List *m, char *attrib, void *value)
 {
     Linked_List *list = (Linked_List *)m;
 
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         list->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         list->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         list->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         list->deconstruct = value;
     }
-    else if(strcmp(attrib, "push_back") == 0) {
+    else if (strcmp(attrib, "push_back") == 0) {
         list->push_back = value;
-    } else if(strcmp(attrib, "insert_after") == 0) {
+    } else if (strcmp(attrib, "insert_after") == 0) {
         list->insert_after = value;
-    } else if(strcmp(attrib, "del") == 0) {
+    } else if (strcmp(attrib, "del") == 0) {
         list->del = value;
-    } else if(strcmp(attrib, "for_each") == 0) {
+    } else if (strcmp(attrib, "for_each") == 0) {
         list->for_each = value;
-    } else if(strcmp(attrib, "begin") == 0) {
+    } else if (strcmp(attrib, "begin") == 0) {
         list->begin = value;
-    } else if(strcmp(attrib, "end") == 0) {
+    } else if (strcmp(attrib, "end") == 0) {
         list->end = value;
-    } else if(strcmp(attrib, "destroy") == 0) {
+    } else if (strcmp(attrib, "destroy") == 0) {
         list->destroy = value;
     }
-    else if(strcmp(attrib, "name") == 0) {
+    else if (strcmp(attrib, "name") == 0) {
         strncpy(list->name,value,strlen(value));
     } else {
         dbg_str(OBJ_WARNNING,"list set, not support %s setting",attrib);
@@ -106,7 +106,7 @@ static void *__get(List *obj, char *attrib)
 
     Linked_List *list = (Linked_List *)obj;
 
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return list->name;
     } else {
         dbg_str(OBJ_WARNNING,"llist list get, \"%s\" getting attrib is not supported",attrib);

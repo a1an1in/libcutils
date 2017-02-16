@@ -49,35 +49,35 @@ static int __deconstrcut(Map *map)
 
 static int __set(Map *map, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         map->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         map->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         map->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         map->deconstruct = value;
-    } else if(strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "name") == 0) {
         strncpy(map->name,value,strlen(value));
-    } else if(strcmp(attrib, "insert") == 0) {
+    } else if (strcmp(attrib, "insert") == 0) {
         map->insert = value;
-    } else if(strcmp(attrib, "insert_wb") == 0) {
+    } else if (strcmp(attrib, "insert_wb") == 0) {
         map->insert_wb = value;
-    } else if(strcmp(attrib, "search") == 0) {
+    } else if (strcmp(attrib, "search") == 0) {
         map->search = value;
-    } else if(strcmp(attrib, "del") == 0) {
+    } else if (strcmp(attrib, "del") == 0) {
         map->del = value;
-    } else if(strcmp(attrib, "for_each") == 0) {
+    } else if (strcmp(attrib, "for_each") == 0) {
         dbg_str(DBG_DETAIL,"map set for each:%p",value);
         map->for_each = value;
-    } else if(strcmp(attrib, "for_each_arg2") == 0) {
+    } else if (strcmp(attrib, "for_each_arg2") == 0) {
         dbg_str(DBG_DETAIL,"map set for each:%p",value);
         map->for_each_arg2 = value;
-    } else if(strcmp(attrib, "begin") == 0) {
+    } else if (strcmp(attrib, "begin") == 0) {
         map->begin = value;
-    } else if(strcmp(attrib, "end") == 0) {
+    } else if (strcmp(attrib, "end") == 0) {
         map->end = value;
-    } else if(strcmp(attrib, "destroy") == 0) {
+    } else if (strcmp(attrib, "destroy") == 0) {
         map->destroy = value;
     } else {
         dbg_str(OBJ_DETAIL,"map set, not support %s setting",attrib);
@@ -88,9 +88,9 @@ static int __set(Map *map, char *attrib, void *value)
 
 static void *__get(Map *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    } else if(strcmp(attrib, "for_each") == 0) {
+    } else if (strcmp(attrib, "for_each") == 0) {
         return obj->for_each;
     } else {
         dbg_str(OBJ_WARNNING,"map get, \"%s\" getting attrib is not supported",attrib);
@@ -127,7 +127,7 @@ static void __for_each(Map *map,void (*func)(Iterator *iter))
     cur = map->begin(map);
     end = map->end(map);
 
-    for(; !end->equal(end,cur); cur->next(cur)) {
+    for (; !end->equal(end,cur); cur->next(cur)) {
         func(cur);
     }
 
@@ -143,7 +143,7 @@ static void __for_each_arg2(Map *map,void (*func)(Iterator *iter,void *arg),void
     cur = map->begin(map);
     end = map->end(map);
 
-    for(; !end->equal(end,cur); cur->next(cur)) {
+    for (; !end->equal(end,cur); cur->next(cur)) {
         func(cur, arg);
     }
 

@@ -49,35 +49,35 @@ static int __deconstrcut(List *list)
 
 static int __set(List *list, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         list->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         list->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         list->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         list->deconstruct = value;
 
-    } else if(strcmp(attrib, "push_back") == 0) {
+    } else if (strcmp(attrib, "push_back") == 0) {
         list->push_back = value;
-    } else if(strcmp(attrib, "insert_after") == 0) {
+    } else if (strcmp(attrib, "insert_after") == 0) {
         list->insert_after = value;
-    } else if(strcmp(attrib, "del") == 0) {
+    } else if (strcmp(attrib, "del") == 0) {
         list->del = value;
-    } else if(strcmp(attrib, "for_each") == 0) {
+    } else if (strcmp(attrib, "for_each") == 0) {
         list->for_each = value;
-    } else if(strcmp(attrib, "for_each_arg2") == 0) {
+    } else if (strcmp(attrib, "for_each_arg2") == 0) {
         list->for_each_arg2 = value;
-    } else if(strcmp(attrib, "begin") == 0) {
+    } else if (strcmp(attrib, "begin") == 0) {
         list->begin = value;
-    } else if(strcmp(attrib, "end") == 0) {
+    } else if (strcmp(attrib, "end") == 0) {
         list->end = value;
-    } else if(strcmp(attrib, "destroy") == 0) {
+    } else if (strcmp(attrib, "destroy") == 0) {
         list->destroy = value;
 
-    } else if(strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "name") == 0) {
         strncpy(list->name,value,strlen(value));
-    } else if(strcmp(attrib, "value_size") == 0) {
+    } else if (strcmp(attrib, "value_size") == 0) {
         list->value_size = *(int *)value;
 
     } else {
@@ -89,11 +89,11 @@ static int __set(List *list, char *attrib, void *value)
 
 static void *__get(List *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    } else if(strcmp(attrib, "value_size") == 0) {
+    } else if (strcmp(attrib, "value_size") == 0) {
         return &obj->value_size;
-    } else if(strcmp(attrib, "for_each") == 0) {
+    } else if (strcmp(attrib, "for_each") == 0) {
         return obj->for_each;
     } else {
         dbg_str(OBJ_WARNNING,"list get, \"%s\" getting attrib is not supported",attrib);
@@ -121,7 +121,7 @@ static void __for_each(List *list,void (*func)(Iterator *iter))
     cur = list->begin(list);
     end = list->end(list);
 
-    for(; !end->equal(end,cur); cur->next(cur)) {
+    for (; !end->equal(end,cur); cur->next(cur)) {
         func(cur);
     }
 
@@ -137,7 +137,7 @@ static void __for_each_arg2(List *list,void (*func)(Iterator *iter,void *arg),vo
     cur = list->begin(list);
     end = list->end(list);
 
-    for(; !end->equal(end,cur); cur->next(cur)) {
+    for (; !end->equal(end,cur); cur->next(cur)) {
         func(cur, arg);
     }
 

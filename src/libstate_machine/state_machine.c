@@ -44,7 +44,7 @@ state_machine_t *state_machine_create(allocator_t *allocator)
 
     dbg_str(SM_DETAIL,"state_machine_create");
 
-    if((s = (state_machine_t *)allocator_mem_alloc(allocator,
+    if ((s = (state_machine_t *)allocator_mem_alloc(allocator,
                                                    sizeof(state_machine_t))) == NULL)
     {
         dbg_str(SM_ERROR,"allocator_mem_alloc");
@@ -54,7 +54,7 @@ state_machine_t *state_machine_create(allocator_t *allocator)
 
     s->allocator = allocator;
 
-    if((s->vector = vector_create(s->allocator,0)) == NULL){
+    if ((s->vector = vector_create(s->allocator,0)) == NULL){
         dbg_str(SM_ERROR,"vector_create");
         allocator_mem_free(allocator,s);
         return NULL;
@@ -110,7 +110,7 @@ state_entry_t *state_machine_construct_state_entry(state_machine_t *s,
     e = (state_entry_t *)
         allocator_mem_alloc(s->allocator,sizeof(state_entry_t));
 
-    if(e == NULL){
+    if (e == NULL){
         dbg_str(SM_ERROR,"allocator_mem_alloc");
         return NULL;
     }
@@ -145,7 +145,7 @@ int state_machine_setup_entry_timer(state_machine_t *s,uint8_t state)
     dbg_str(SM_DETAIL,"state_machine_setup_entry_timer,tv_sec=%d tv_usec=%d",
             e->tv.tv_sec,e->tv.tv_usec);
 
-    if(e->timer == NULL)
+    if (e->timer == NULL)
         e->timer = tmr_user(s->allocator,
                             &e->tv,
                             EV_TIMEOUT,
@@ -164,7 +164,7 @@ int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
     e = (state_entry_t *)vector_get(s->vector,state);
 
     dbg_str(SM_DETAIL,"state_machine_stop_entry_timer");
-    if(e->timer != NULL){
+    if (e->timer != NULL){
         dbg_str(SM_DETAIL,"before last event flags=%x,event addr:%p",
                 e->timer->event.ev_flags,&e->timer->event);
         /*
@@ -172,7 +172,7 @@ int state_machine_stop_entry_timer(state_machine_t *s,uint8_t state)
          */
         dbg_str(SM_DETAIL,"last event flags=%x",e->timer->event.ev_flags);
         tmr_user_stop(e->timer);
-    }else{
+    } else {
         dbg_str(DBG_WARNNING,"state_machine_stop_entry_timer,timer is NULL");
     }
 
@@ -194,7 +194,7 @@ state_machine_change_state(state_machine_t *s, int state)
     char command = 'c';//c --> change state
     state_entry_t *e,*le;;
 
-    if(state == s->current_state) return;
+    if (state == s->current_state) return;
 
     s->last_state    = s->current_state;
     s->current_state = state;
@@ -247,8 +247,8 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
 
     state_machine_init(s, 10, base);
 
-    for(i = 0; ; i++){
-        if(strlen(config[i].entry_name) != 0){
+    for (i = 0; ; i++){
+        if (strlen(config[i].entry_name) != 0){
             e = state_machine_construct_state_entry(s,
                                                     config[i].action_callback,
                                                     config[i].process_timer_task_cb,

@@ -49,27 +49,27 @@ static int __deconstrcut(Iterator *iter)
 
 static int __set(Iterator *iter, char *attrib, void *value)
 {
-    if(strcmp(attrib, "set") == 0) {
+    if (strcmp(attrib, "set") == 0) {
         iter->set = value;
-    } else if(strcmp(attrib, "get") == 0) {
+    } else if (strcmp(attrib, "get") == 0) {
         iter->get = value;
-    } else if(strcmp(attrib, "construct") == 0) {
+    } else if (strcmp(attrib, "construct") == 0) {
         iter->construct = value;
-    } else if(strcmp(attrib, "deconstruct") == 0) {
+    } else if (strcmp(attrib, "deconstruct") == 0) {
         iter->deconstruct = value;
-    } else if(strcmp(attrib, "next") == 0) {
+    } else if (strcmp(attrib, "next") == 0) {
         iter->next = value;
-    } else if(strcmp(attrib, "prev") == 0) {
+    } else if (strcmp(attrib, "prev") == 0) {
         iter->prev = value;
-    } else if(strcmp(attrib, "equal") == 0) {
+    } else if (strcmp(attrib, "equal") == 0) {
         iter->equal = value;
-    } else if(strcmp(attrib, "get_vpointer") == 0) {
+    } else if (strcmp(attrib, "get_vpointer") == 0) {
         iter->get_vpointer = value;
-    } else if(strcmp(attrib, "get_kpointer") == 0) {
+    } else if (strcmp(attrib, "get_kpointer") == 0) {
         iter->get_kpointer = value;
-    } else if(strcmp(attrib, "destroy") == 0) {
+    } else if (strcmp(attrib, "destroy") == 0) {
         iter->destroy = value;
-    } else if(strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "name") == 0) {
         strncpy(iter->name,value,strlen(value));
     } else {
         dbg_str(OBJ_DETAIL,"iter set, not support %s setting",attrib);
@@ -80,7 +80,7 @@ static int __set(Iterator *iter, char *attrib, void *value)
 
 static void *__get(Iterator *obj, char *attrib)
 {
-    if(strcmp(attrib, "name") == 0) {
+    if (strcmp(attrib, "name") == 0) {
         return obj->name;
     } else {
         dbg_str(OBJ_WARNNING,"iter get, \"%s\" getting attrib is not supported",attrib);
