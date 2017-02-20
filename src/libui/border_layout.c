@@ -62,6 +62,8 @@ static int __construct(Border_Layout *border_layout,char *init_str)
     l->blocks[BORDER_LAYOUT_SOUTH].width   = l->layout_width_default;
     l->blocks[BORDER_LAYOUT_SOUTH].height  = l->layout_height / 3;
 
+    dbg_str(DBG_DETAIL,"border_layout construct end");
+
     return 0;
 }
 
@@ -146,20 +148,51 @@ static int __add_component(Container *obj, void *pos, void *component)
     uint8_t rearrange_comonents_flag = 0;
     position_t position;
 
-    if (strcmp(pos, "North") == 0) {
+    if (pos == NULL) {
+        dbg_str(DBG_DETAIL,"border layout add component error, please dessignate pos");
+        return -1;
+    }
+
+    if (strncmp(pos, "North", 5) == 0) {
+        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_NORTH].component = component;
-    } else if (strcmp(pos, "West") == 0) {
+        position.x = 0;
+        position.y = 0;
+    } else if (strncmp(pos, "West", 4) == 0) {
+        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_WEST].component = component;
-    } else if (strcmp(pos, "Center") == 0) {
+        position.x = 0;
+        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
+    } else if (strncmp(pos, "Center", 6) == 0) {
+        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_CENTER].component = component;
-    } else if (strcmp(pos, "East") ==0) {
+        position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap;
+        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
+    } else if (strncmp(pos, "East", 4) ==0) {
+        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_EAST].component = component;
-    } else if (strcmp(pos, "South") == 0) {
+        position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap +
+                     l->blocks[BORDER_LAYOUT_CENTER].width + l->hgap;
+        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
+    } else if (strncmp(pos, "South", 5) == 0) {
+        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_SOUTH].component = component;
+        position.x = 0;
+        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap +
+                     l->blocks[BORDER_LAYOUT_WEST].height + l->vgap;
     } else {
+        dbg_str(DBG_DETAIL,"run at here");
         dbg_str(DBG_WARNNING,"borderlayout add component, pos par err");
         return -1;
     }
+
+    dbg_str(DBG_DETAIL,"run at here");
+
+    dbg_str(DBG_SUC,"position x=%d, y=%d", position.x, position.y);
+    container->update_component_position(c, &position);
+
+    addr_to_buffer(c,(uint8_t *)buffer);
+    map->insert(map, c->name, buffer);
 
     return 0;
 }
@@ -176,14 +209,14 @@ static void draw_subcomponent(Iterator *iter, void *arg)
     if (component->draw) component->draw(component, g);
 }
 
-static void draw_grids(Component *component, void *graph) 
+static void draw_border(Component *component, void *graph) 
 {
     Border_Layout *l = (Border_Layout *)component;
     Graph *g         = (Graph *)graph;
     int i;
     position_t start, end;
 
-    dbg_str(DBG_SUC,"draw_grids");
+    dbg_str(DBG_SUC,"draw_border");
 
 }
 
@@ -195,8 +228,8 @@ static int __draw(Component *component, void *graph)
 
     dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
 
-    /*draw grids*/
-    draw_grids(component, graph);
+    /*draw layouts*/
+    draw_border(component, graph);
 
     /*draw subcomponent*/
     container->for_each_component(container, draw_subcomponent, g);
@@ -211,11 +244,9 @@ static class_info_entry_t border_layout_class_info[] = {
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_component",__add_component,sizeof(void *)},
     [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
     [7 ] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [8 ] = {ENTRY_TYPE_INT32_T,"int","row_max",NULL,sizeof(int)},
-    [9 ] = {ENTRY_TYPE_INT32_T,"int","col_max",NULL,sizeof(int)},
-    [10] = {ENTRY_TYPE_INT32_T,"int","hgap",NULL,sizeof(int)},
-    [11] = {ENTRY_TYPE_INT32_T,"int","vgap",NULL,sizeof(int)},
-    [12] = {ENTRY_TYPE_END},
+    [8 ] = {ENTRY_TYPE_INT32_T,"int","hgap",NULL,sizeof(int)},
+    [9 ] = {ENTRY_TYPE_INT32_T,"int","vgap",NULL,sizeof(int)},
+    [10] = {ENTRY_TYPE_END},
 };
 REGISTER_CLASS("Border_Layout",border_layout_class_info);
 
@@ -280,8 +311,6 @@ static char *gen_border_layout_setting_str(int x, int y, int width, int height, 
                         \"name\":\"%s\"\
                     },\
                     \"Border_Layout\":{\
-                        \"row_max\":%d,\
-                        \"col_max\":%d,\
                         \"hgap\":%d,\
                         \"vgap\":%d\
                     }\
@@ -311,7 +340,7 @@ void test_ui_border_layout()
 {
     allocator_t *allocator = allocator_get_default_alloc();
     Window *window;
-    Border_Layout *grid;
+    Border_Layout *layout;
     Label *l;
     char *set_str;
     char buf[2048];
@@ -322,26 +351,20 @@ void test_ui_border_layout()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    grid = new_border_layout(allocator, 0, 0, 600, 600, "grid");
+    layout = new_border_layout(allocator, 0, 0, 600, 600, "layout");
 
     l = new_label(allocator,0, 0, 80, 20, "label00");
-    grid->add_component((Container *)grid, NULL, l);
+    layout->add_component((Container *)layout, "North", l);
     l = new_label(allocator,0, 0, 80, 20, "label01");
-    grid->add_component((Container *)grid, NULL, l);
+    layout->add_component((Container *)layout, "West", l);
     l = new_label(allocator,0, 0, 80, 20, "label02");
-    grid->add_component((Container *)grid, NULL, l);
+    layout->add_component((Container *)layout, "Center", l);
     l = new_label(allocator,0, 0, 80, 20, "label03");
-    grid->add_component((Container *)grid, NULL, l);
+    layout->add_component((Container *)layout, "East", l);
     l = new_label(allocator,0, 0, 80, 20, "label10");
-    grid->add_component((Container *)grid, NULL, l);
-    l = new_label(allocator,0, 0, 80, 20, "label11");
-    grid->add_component((Container *)grid, NULL, l);
-    l = new_label(allocator,0, 0, 80, 20, "label12");
-    grid->add_component((Container *)grid, NULL, l);
-    l = new_label(allocator,0, 0, 80, 20, "label13");
-    grid->add_component((Container *)grid, NULL, l);
+    layout->add_component((Container *)layout, "South", l);
 
-    window->add_component((Container *)window, NULL, grid);
+    window->add_component((Container *)window, NULL, layout);
     window->load_resources(window);
     window->update_window(window);
     window->event->poll_event(window->event, window);
