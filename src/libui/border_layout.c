@@ -99,12 +99,6 @@ static int __set(Border_Layout *border_layout, char *attrib, void *value)
     else if (strcmp(attrib, "name") == 0) {
         dbg_str(DBG_SUC,"set border_layout name");
         strncpy(border_layout->name,value,strlen(value));
-    /*
-     *} else if (strcmp(attrib, "row_max") == 0) {
-     *    border_layout->row_max = *((uint32_t *)value);
-     *} else if (strcmp(attrib, "col_max") == 0) {
-     *    border_layout->col_max = *((uint32_t *)value);
-     */
     } else if (strcmp(attrib, "hgap") == 0) {
         border_layout->hgap = *((uint32_t *)value);
     } else if (strcmp(attrib, "vgap") == 0) {
@@ -120,12 +114,6 @@ static void *__get(Border_Layout *obj, char *attrib)
 {
     if (strcmp(attrib, "name") == 0) {
         return obj->name;
-    /*
-     *} else if (strcmp(attrib, "row_max") == 0) {
-     *    return &obj->row_max;
-     *} else if (strcmp(attrib, "col_max") == 0) {
-     *    return &obj->col_max;
-     */
     } else if (strcmp(attrib, "hgap") == 0) {
         return &obj->hgap;
     } else if (strcmp(attrib, "vgap") == 0) {
@@ -154,39 +142,31 @@ static int __add_component(Container *obj, void *pos, void *component)
     }
 
     if (strncmp(pos, "North", 5) == 0) {
-        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_NORTH].component = component;
         position.x = 0;
         position.y = 0;
     } else if (strncmp(pos, "West", 4) == 0) {
-        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_WEST].component = component;
         position.x = 0;
         position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
     } else if (strncmp(pos, "Center", 6) == 0) {
-        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_CENTER].component = component;
         position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap;
         position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
     } else if (strncmp(pos, "East", 4) ==0) {
-        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_EAST].component = component;
         position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap +
                      l->blocks[BORDER_LAYOUT_CENTER].width + l->hgap;
         position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
     } else if (strncmp(pos, "South", 5) == 0) {
-        dbg_str(DBG_DETAIL,"run at here");
         l->blocks[BORDER_LAYOUT_SOUTH].component = component;
         position.x = 0;
         position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap +
                      l->blocks[BORDER_LAYOUT_WEST].height + l->vgap;
     } else {
-        dbg_str(DBG_DETAIL,"run at here");
         dbg_str(DBG_WARNNING,"borderlayout add component, pos par err");
         return -1;
     }
-
-    dbg_str(DBG_DETAIL,"run at here");
 
     dbg_str(DBG_SUC,"position x=%d, y=%d", position.x, position.y);
     container->update_component_position(c, &position);

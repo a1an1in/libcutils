@@ -39,7 +39,7 @@ void * object_get_func_pointer(void *class_info_addr, char *func_pointer_name)
     int i;
 
     for (i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-        if (     strcmp((char *)entry[i].value_name, func_pointer_name) == 0 && 
+        if (    strcmp((char *)entry[i].value_name, func_pointer_name) == 0 && 
                 entry[i].type == ENTRY_TYPE_FUNC_POINTER) {
             return entry[i].value;
         }
@@ -76,7 +76,7 @@ int object_init_func_pointer(void *obj,void *class_info_addr)
     }
 
     for (i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-        if (     entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
+        if (    entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
                 entry[i].type == ENTRY_TYPE_VFUNC_POINTER)
         {
             /*
@@ -109,7 +109,7 @@ object_find_method_to_inherit(char *method_name,
     entry  = (class_info_entry_t *)object_deamon_search_class(deamon,
                                                               (char *)class_name);
     for (i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-        if (     (entry[i].type == ENTRY_TYPE_FUNC_POINTER ||
+        if (    (entry[i].type == ENTRY_TYPE_FUNC_POINTER ||
                  entry[i].type == ENTRY_TYPE_VFUNC_POINTER) &&
                 strcmp(entry[i].value_name, method_name) == 0)
         {
@@ -177,7 +177,7 @@ object_find_reimplement_func_pointer(char *method_name,
         subclass_name = entry[0].type_name;
     }
     for (i = 0; entry[i].type != ENTRY_TYPE_END; i++) {
-        if (     entry[i].type == ENTRY_TYPE_FUNC_POINTER &&
+        if (    entry[i].type == ENTRY_TYPE_FUNC_POINTER &&
                 strcmp(entry[i].value_name, method_name) == 0)
         {
             if (entry[i].value == NULL) {
@@ -316,8 +316,8 @@ int __object_dump(void *obj, char *type_name, cjson_t *object)
             cjson_add_item_to_object(object, entry[i].type_name, item);
             __object_dump(obj, entry[i].type_name, item);
         } else if (entry[i].type == ENTRY_TYPE_FUNC_POINTER || 
-                  entry[i].type == ENTRY_TYPE_VFUNC_POINTER || 
-                  entry[i].type == ENTRY_TYPE_IFUNC_POINTER) 
+                   entry[i].type == ENTRY_TYPE_VFUNC_POINTER || 
+                   entry[i].type == ENTRY_TYPE_IFUNC_POINTER) 
         {
         } else {
             value = get(obj,entry[i].value_name);
