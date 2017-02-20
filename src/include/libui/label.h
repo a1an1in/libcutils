@@ -1,5 +1,5 @@
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
+#ifndef __LABEL_H__
+#define __LABEL_H__
 
 #include <stdio.h>
 #include <libdbg/debug.h>

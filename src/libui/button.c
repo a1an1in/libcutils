@@ -30,10 +30,61 @@
  * 
  */
 #include <libui/button.h>
+#include <libui/border_layout.h>
+#include <libui/sdl_window.h>
+#include <libui/label.h>
+
+static void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out)
+{
+    char *set_str;
+
+    set_str = "{\
+                    \"Subject\": {\
+                        \"x\":%d,\
+                        \"y\":%d,\
+                        \"width\":%d,\
+                        \"height\":%d\
+                    },\
+                    \"Component\": {\
+                        \"name\": \"%s\"\
+                    },\
+                    \"Label\": {\
+                        \"text_overflow_flag\": 0\
+                    }\
+                }";
+
+    sprintf(out, set_str, x, y, width, height, name);
+
+    return ;
+}
+
+static void *new_label(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    Subject *subject;
+    char *set_str;
+    char buf[2048];
+
+    gen_label_setting_str(x, y, width, height, name, (void *)buf);
+    subject   = OBJECT_NEW(allocator, Label,buf);
+
+    object_dump(subject, "Label", buf, 2048);
+
+    return subject;
+}
 
 static int __construct(Button *button,char *init_str)
 {
+    Container *container = (Container *)button;
+    Subject *subject = (Subject *)button;
+    char buf[2048];
+
 	dbg_str(DBG_SUC,"button construct, button addr:%p",button);
+
+    gen_label_setting_str(subject->x, subject->y, subject->width, subject->height, 
+                          ((Component *)button)->name, (void *)buf);
+    subject   = OBJECT_NEW(((Obj *)button)->allocator, Label,buf);
+
+    container->add_component((Container *)button, NULL, subject);
 
 	return 0;
 }
@@ -41,13 +92,10 @@ static int __construct(Button *button,char *init_str)
 static int __deconstrcut(Button *button)
 {
 	dbg_str(DBG_SUC,"button deconstruct,button addr:%p",button);
+    //..........
+    //release label
 
 	return 0;
-}
-
-static int __move(Button *button)
-{
-	dbg_str(DBG_SUC,"button move");
 }
 
 static int __set(Button *button, char *attrib, void *value)
@@ -62,8 +110,6 @@ static int __set(Button *button, char *attrib, void *value)
 		button->deconstruct = value;
 	} else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
-	} else if (strcmp(attrib, "name") == 0) {
-        strncpy(button->name,value,strlen(value));
 	} else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
 	}
@@ -73,8 +119,7 @@ static int __set(Button *button, char *attrib, void *value)
 
 static void *__get(Button *obj, char *attrib)
 {
-    if (strcmp(attrib, "name") == 0) {
-        return obj->name;
+    if (strcmp(attrib, "") == 0) {
     } else {
         dbg_str(DBG_WARNNING,"button get, \"%s\" getting attrib is not supported",attrib);
         return NULL;
@@ -88,57 +133,121 @@ static class_info_entry_t button_class_info[] = {
 	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-	[6] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-	[7] = {ENTRY_TYPE_END},
+	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
+	[6] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Button",button_class_info);
 
-char *gen_button_setting_str()
+static void gen_button_setting_str(int x, int y, int width, int height, char *name, void *out)
 {
-    cjson_t *root,*b, *c, *e, *s;
     char *set_str;
 
-    root = cjson_create_object();{
-        cjson_add_item_to_object(root, "Button", b = cjson_create_object());{
-            cjson_add_item_to_object(root, "Component", c = cjson_create_object());{
-                cjson_add_item_to_object(root, "Container", e = cjson_create_object());{
-                    cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
-                        cjson_add_number_to_object(s, "x", 1);
-                        cjson_add_number_to_object(s, "y", 25);
-                        cjson_add_number_to_object(s, "width", 5);
-                        cjson_add_number_to_object(s, "height", 125);
-                    }
-                    cjson_add_string_to_object(e, "name", "subject");
-                }
-                cjson_add_string_to_object(c, "name", "container");
-            }
-            cjson_add_string_to_object(c, "name", "component");
-        }
-        cjson_add_string_to_object(b, "name", "button");
-    }
-    set_str = cjson_print(root);
+    set_str = "{\
+                    \"Subject\": {\
+                        \"x\":%d,\
+                        \"y\":%d,\
+                        \"width\":%d,\
+                        \"height\":%d\
+                    },\
+                    \"Container\": {\
+                        \"map_type\":1\
+                    },\
+                    \"Component\": {\
+                        \"name\": \"%s\"\
+                    }\
+                }";
 
-    return set_str;
+    sprintf(out, set_str, x, y, width, height, name);
+
+    return ;
+}
+
+static void *new_button(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    Subject *subject;
+    char *set_str;
+    char buf[2048];
+
+    gen_button_setting_str(x, y, width, height, name, (void *)buf);
+    subject   = OBJECT_NEW(allocator, Button,buf);
+
+    object_dump(subject, "Button", buf, 2048);
+    /*
+     *dbg_str(DBG_DETAIL,"Button dump: %s",buf);
+     */
+
+    return subject;
+}
+
+static char *gen_border_layout_setting_str(int x, int y, int width, int height, char *name, void *out)
+{
+    char *set_str = NULL;
+
+    set_str = "{\
+                    \"Subject\": {\
+                        \"x\":%d,\
+                        \"y\":%d,\
+                        \"width\":%d,\
+                        \"height\":%d\
+                    },\
+                    \"Container\": {\
+                        \"map_type\":%d\
+                    },\
+                    \"Component\": {\
+                        \"name\":\"%s\"\
+                    },\
+                    \"Border_Layout\":{\
+                        \"hgap\":%d,\
+                        \"vgap\":%d\
+                    }\
+                }";
+
+    sprintf(out, set_str, x, y, width, height,1, name, 4,4, 5, 2);
+
+    return out;
+}
+
+static void *new_border_layout(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    char *set_str;
+    char buf[2048];
+    Container *container;
+
+    gen_border_layout_setting_str(x, y, width, height, name, buf);
+    container = OBJECT_NEW(allocator, Border_Layout,buf);
+
+    object_dump(container, "Border_Layout", buf, 2048);
+    dbg_str(DBG_DETAIL,"Border_Layout dump: %s",buf);
+
+    return container;
 }
 
 void test_ui_button()
 {
-    Subject *subject;
-	allocator_t *allocator = allocator_get_default_alloc();
+    allocator_t *allocator = allocator_get_default_alloc();
+    Window *window;
+    Border_Layout *layout;
+    Button *l;
     char *set_str;
     char buf[2048];
 
-    set_str = gen_button_setting_str();
+    set_str = gen_window_setting_str();
+    window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 
-    subject = OBJECT_NEW(allocator, Button,set_str);
+    object_dump(window, "Sdl_Window", buf, 2048);
+    dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    object_dump(subject, "Button", buf, 2048);
-    dbg_str(DBG_DETAIL,"Button dump: %s",buf);
+    layout = new_border_layout(allocator, 0, 0, 600, 600, "layout");
 
-    free(set_str);
+    l = new_button(allocator,0, 0, 100, 50, "button02");
+    layout->add_component((Container *)layout, "Center", l);
 
+    window->add_component((Container *)window, NULL, layout);
+    window->load_resources(window);
+    window->update_window(window);
+    window->event->poll_event(window->event, window);
+
+    object_destroy(window);
 }
-
 
