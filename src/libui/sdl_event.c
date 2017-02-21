@@ -251,37 +251,37 @@ static int __poll_event(__Event *event,void *window)
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
                               */
-                             if (cur->up_key_down) cur->up_key_down(cur, g); 
+                             event->up_key_down(window);
                              break;
                          case SDLK_DOWN:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
                               */
-                             if (cur->down_key_down) cur->down_key_down(cur, g); 
+                             event->down_key_down(window);
                              break;
                          case SDLK_LEFT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
                               */
-                             if (cur->left_key_down) cur->left_key_down(cur, g); 
+                             event->left_key_down(window);
                              break;
                          case SDLK_RIGHT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
                               */
-                             if (cur->right_key_down) cur->right_key_down(cur, g); 
+                             event->right_key_down(window);
                              break;
                          case SDLK_PAGEUP:
-                             if (cur->pageup_key_down) cur->pageup_key_down(cur, g); 
+                             event->pageup_key_down(window);
                              break;
                          case SDLK_PAGEDOWN:
-                             if (cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
+                             event->pagedown_key_down(window);
                              break;
                          case SDLK_BACKSPACE:
                              /*
                               *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                               */
-                             if (cur->backspace_key_input) cur->backspace_key_input(cur, g); 
+                             event->backspace_key_down(window);
                              break;
                          case SDLK_j:
                               if (SDL_GetModState() & KMOD_CTRL) {
@@ -320,11 +320,6 @@ static int __poll_event(__Event *event,void *window)
                                          e->motion.yrel,e->motion.windowID, window);
                      break;
                  case SDL_MOUSEWHEEL: 
-                     /*
-                      *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: wheel scrolled %d in x and %d in y (reversed: %d) in window %d", 
-                      *        e->wheel.x, e->wheel.y, e->wheel.direction, e->wheel.windowID);
-                      */
-
                      event->mouse_wheel(e->wheel.x, e->wheel.y, e->wheel.direction,
                                         e->wheel.windowID, window);
                      break;
@@ -332,11 +327,7 @@ static int __poll_event(__Event *event,void *window)
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-                     if (cur->text_key_input) cur->text_key_input(cur,e->text.text[0], g);
-                     /*
-                      *dbg_str(DBG_DETAIL,"text:%s",e->text.text);
-                      *string->append_char(string,e->text.text[0]);
-                      */
+                     event->text_input(e->text.text[0], window);
                      break;
                  case SDL_FINGERDOWN:
                  case SDL_FINGERUP:
@@ -354,10 +345,6 @@ static int __poll_event(__Event *event,void *window)
          }
     }
 
-    /*
-     *object_dump(string, "String", buf, 2048);
-     *dbg_str(DBG_DETAIL,"String dump: %s",buf);
-     */
     SDL_StopTextInput();
 
     return 0;

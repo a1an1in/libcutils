@@ -22,6 +22,14 @@ struct ui_event_s{
     void (*mouse_wheel)(int x, int y, int direction, int windowid, void *window);
     void (*window_moved)(void *window);
     void (*window_resized)(int data1, int data2, int windowid, void *window);
+    void (*text_input)(char c, void *window);
+    void (*up_key_down)(void *window);
+    void (*down_key_down)(void *window); 
+    void (*left_key_down)(void *window); 
+    void (*right_key_down)(void *window); 
+    void (*pageup_key_down)(void *window); 
+    void (*pagedown_key_down)(void *window); 
+    void (*backspace_key_down)(void *window); 
 
 	/*attribs*/
 };

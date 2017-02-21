@@ -32,6 +32,9 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libui/event.h>
+#include <libui/component.h>
+#include <libui/container.h>
+#include <libui/window.h>
 
 static int __construct(__Event *event,char *init_str)
 {
@@ -70,6 +73,22 @@ static int __set(__Event *event, char *attrib, void *value)
         event->window_moved = value;
     } else if (strcmp(attrib, "window_resized") == 0) {
         event->window_resized = value;
+    } else if (strcmp(attrib, "text_input") == 0) {
+        event->text_input = value;
+    } else if (strcmp(attrib, "up_key_down") == 0) {
+        event->up_key_down = value;
+    } else if (strcmp(attrib, "down_key_down") == 0) {
+        event->down_key_down = value;
+    } else if (strcmp(attrib, "left_key_down") == 0) {
+        event->left_key_down = value;
+    } else if (strcmp(attrib, "right_key_down") == 0) {
+        event->right_key_down = value;
+    } else if (strcmp(attrib, "pageup_key_down") == 0) {
+        event->pageup_key_down = value;
+    } else if (strcmp(attrib, "pagedown_key_down") == 0) {
+        event->pagedown_key_down = value;
+    } else if (strcmp(attrib, "backspace_key_down") == 0) {
+        event->backspace_key_down = value;
     }
     else {
         dbg_str(OBJ_WARNNING,"event set,  \"%s\" setting is not support",attrib);
@@ -121,6 +140,130 @@ static void __window_resized(int data1, int data2, int windowid, void *window)
             data1, data2, windowid);
 }
 
+static void __text_input(char c, void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    dbg_str(DBG_DETAIL,"EVENT: text input %c", c);
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+
+    if (cur->text_key_input) cur->text_key_input(cur,c, g);
+}
+
+static void __up_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->down_key_down) cur->down_key_down(cur, g); 
+
+}
+
+static void __down_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->down_key_down) cur->down_key_down(cur, g); 
+}
+
+static void __left_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->left_key_down) cur->left_key_down(cur, g); 
+}
+
+static void __right_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->right_key_down) cur->right_key_down(cur, g); 
+}
+
+static void __pageup_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->pageup_key_down) cur->pageup_key_down(cur, g); 
+}
+
+static void __pagedown_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
+}
+
+
+static void __backspace_key_down(void *window) 
+{
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->backspace_key_input) cur->backspace_key_input(cur, g); 
+}
+
 static class_info_entry_t event_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Obj","obj",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -133,7 +276,15 @@ static class_info_entry_t event_class_info[] = {
     [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel",__mouse_wheel,sizeof(void *)},
     [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
     [10] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
-    [11] = {ENTRY_TYPE_END},
+    [11] = {ENTRY_TYPE_VFUNC_POINTER,"","text_input",__text_input,sizeof(void *)},
+    [12] = {ENTRY_TYPE_VFUNC_POINTER,"","up_key_down",__up_key_down,sizeof(void *)},
+    [13] = {ENTRY_TYPE_VFUNC_POINTER,"","down_key_down",__down_key_down,sizeof(void *)},
+    [14] = {ENTRY_TYPE_VFUNC_POINTER,"","left_key_down",__left_key_down,sizeof(void *)},
+    [15] = {ENTRY_TYPE_VFUNC_POINTER,"","right_key_down",__right_key_down,sizeof(void *)},
+    [16] = {ENTRY_TYPE_VFUNC_POINTER,"","pageup_key_down",__pageup_key_down,sizeof(void *)},
+    [17] = {ENTRY_TYPE_VFUNC_POINTER,"","pagedown_key_down",__pagedown_key_down,sizeof(void *)},
+    [18] = {ENTRY_TYPE_VFUNC_POINTER,"","backspace_key_down",__backspace_key_down,sizeof(void *)},
+    [19] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("__Event",event_class_info);
