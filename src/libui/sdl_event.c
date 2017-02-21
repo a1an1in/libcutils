@@ -208,21 +208,14 @@ static int __poll_event(__Event *event,void *window)
     Container *container;
     container = (Container *)window;
     /*
-     *cur       = container->search_component(container,"text_field");
+     *cur       = container->search_component(container,"text_area");
+     *if (cur == NULL) {
+     *    dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+     *    return -1;
+     *}
      */
-    cur       = container->search_component(container,"text_area");
-    if (cur == NULL) {
-        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
-        return -1;
-    }
     //<<
     
-    /*
-     *String *string;
-     *char buf[2048];
-     *allocator_t *allocator = ((Obj *)event)->allocator;
-     *string = OBJECT_NEW(allocator, String,NULL);
-     */
 
     SDL_StartTextInput();
 
@@ -235,11 +228,11 @@ static int __poll_event(__Event *event,void *window)
                  case SDL_WINDOWEVENT:
                      switch (e->window.event) {
                          case SDL_WINDOWEVENT_MOVED:
+                             event->window_moved(window);
                              break;
                          case SDL_WINDOWEVENT_RESIZED:
-                             dbg_str(DBG_DETAIL,"SDL EVENT: Window %d resized to %dx%d",
-                                     e->window.windowID, e->window.data1,
-                                     e->window.data2);
+                             event->window_resized(e->window.data1,e->window.data2,
+                                                   e->window.windowID, window);
                              break;
                      }
                      break;
@@ -319,23 +312,21 @@ static int __poll_event(__Event *event,void *window)
                              e->cbutton.which, e->cbutton.button);
                      break;
                  case SDL_MOUSEBUTTONDOWN:
-                     dbg_str(DBG_DETAIL,"SDL EVENT: Mouse: button %d pressed at %d,%d with click count %d in window %d",
-                             e->button.button, e->button.x, e->button.y, e->button.clicks,                         
-                             e->button.windowID); 
+                     event->mouse_button_down(e->button.x, e->button.y, e->button.button,
+                                              e->button.clicks, e->button.windowID, window);
                      break;
                  case SDL_MOUSEMOTION:
-                     /*
-                      *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
-                      *        e->motion.x, e->motion.y,
-                      *        e->motion.xrel, e->motion.yrel,
-                      *        e->motion.windowID);
-                      */
+                     event->mouse_motion(e->motion.x, e->motion.y,e->motion.xrel,
+                                         e->motion.yrel,e->motion.windowID, window);
                      break;
                  case SDL_MOUSEWHEEL: 
                      /*
                       *dbg_str(DBG_DETAIL, "SDL EVENT: Mouse: wheel scrolled %d in x and %d in y (reversed: %d) in window %d", 
                       *        e->wheel.x, e->wheel.y, e->wheel.direction, e->wheel.windowID);
                       */
+
+                     event->mouse_wheel(e->wheel.x, e->wheel.y, e->wheel.direction,
+                                        e->wheel.windowID, window);
                      break;
                  case SDL_TEXTEDITING:
                      print_text("EDIT", e->text.text);

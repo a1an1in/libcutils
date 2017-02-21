@@ -156,7 +156,7 @@ static void gen_button_setting_str(int x, int y, int width, int height, char *na
                     \"Component\": {\
                         \"name\": \"%s\"\
                     }\
-                }";
+               }";
 
     sprintf(out, set_str, x, y, width, height, name);
 
