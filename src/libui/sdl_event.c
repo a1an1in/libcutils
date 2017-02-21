@@ -312,8 +312,13 @@ static int __poll_event(__Event *event,void *window)
                              e->cbutton.which, e->cbutton.button);
                      break;
                  case SDL_MOUSEBUTTONDOWN:
-                     event->mouse_button_down(e->button.x, e->button.y, e->button.button,
-                                              e->button.clicks, e->button.windowID, window);
+                     event->x        = e->button.x;
+                     event->y        = e->button.y;
+                     event->button   = e->button.button;
+                     event->clicks   = e->button.clicks;
+                     event->windowid = e->button.windowID;
+
+                     event->mouse_button_down(event, window);
                      break;
                  case SDL_MOUSEMOTION:
                      event->mouse_motion(e->motion.x, e->motion.y,e->motion.xrel,

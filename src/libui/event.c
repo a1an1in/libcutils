@@ -107,11 +107,35 @@ static void * __get(__Event *event, char *attrib)
     return NULL;
 }
 
-static void __mouse_button_down(int x, int y, int button, int clicks, int windowid, void *window) 
+/*
+ *static void window_load_component_resources(Iterator *iter, void *arg) 
+ *{
+ *    Component *component;
+ *    __Event *event = (__Event *)arg;
+ *    uint8_t *addr;
+ *
+ *    dbg_str(DBG_DETAIL,"window_load_component_resources");
+ *
+ *    addr = (uint8_t *)iter->get_vpointer(iter);
+ *    component = (Component *)buffer_to_addr(addr);
+ *    if (component->load_resources)
+ *        component->load_resources(component, window);
+ *}
+ */
+
+static void __mouse_button_down(__Event *event, void *window) 
 {
+    Container *container = (Container *)window;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *cur;
 
     dbg_str(DBG_DETAIL,"EVENT: Mouse: button %d pressed at %d,%d with click count %d in window %d",
-            button, x, y, clicks,windowid); 
+            event->button, event->x, event->y, event->clicks, event->windowid); 
+
+    /*
+     *container->for_each_component(container, window_load_component_resources, event);
+     */
 }
 
 static void __mouse_motion(int x, int y, int xrel, int yrel, int windowid, void *window) 

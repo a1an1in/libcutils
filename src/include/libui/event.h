@@ -17,7 +17,7 @@ struct ui_event_s{
 
 	/*virtual methods*/
     int (*poll_event)(__Event *event,void *window);
-    void (*mouse_button_down)(int x, int y, int button, int clicks, int windowid, void *window);
+    void (*mouse_button_down)(__Event *event, void *window);
     void (*mouse_motion)(int x, int y, int xrel, int yrel, int windowid, void *window);
     void (*mouse_wheel)(int x, int y, int direction, int windowid, void *window);
     void (*window_moved)(void *window);
@@ -32,6 +32,11 @@ struct ui_event_s{
     void (*backspace_key_down)(void *window); 
 
 	/*attribs*/
+    int x;
+    int y;
+    int button;
+    int clicks;
+    int windowid;
 };
 
 #endif
