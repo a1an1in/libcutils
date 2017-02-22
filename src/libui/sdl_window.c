@@ -309,7 +309,7 @@ char *gen_window_setting_str()
                     cjson_add_string_to_object(e, "name", "Container");
                     cjson_add_number_to_object(e, "map_type", 1);
                 }
-                cjson_add_string_to_object(c, "name", "Component");
+                cjson_add_string_to_object(c, "name", "Window");
             }
             cjson_add_string_to_object(w, "name", "Window");
             cjson_add_number_to_object(w, "screen_width", 600);

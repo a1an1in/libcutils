@@ -29,6 +29,13 @@ struct component_s{
 	int (*pagedown_key_down)(Component *component,void *graph);
 	int (*one_line_up)(Component *component,void *graph);
 	int (*one_line_down)(Component *component,void *graph);
+    
+    void (*mouse_button_down)(Component *component,void *event, void *window);
+    void (*mouse_motion)(Component *component,void *event, void *window);
+    void (*mouse_wheel)(Component *component,void *event, void *window);
+    void (*window_moved)(Component *component,void *event, void *window);
+    void (*window_resized)(Component *component,void *event, void *window);
+
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

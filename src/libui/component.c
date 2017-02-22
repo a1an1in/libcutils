@@ -30,6 +30,8 @@
  * 
  */
 #include <libui/component.h>
+#include <libui/window.h>
+#include <libui/event.h>
 
 static int __construct(Component *component,char *init_str)
 {
@@ -60,7 +62,8 @@ static int __set(Component *component, char *attrib, void *value)
         component->construct = value;
     } else if (strcmp(attrib, "deconstruct") == 0) {
         component->deconstruct = value;
-    } else if (strcmp(attrib, "move") == 0) {
+    }
+    else if (strcmp(attrib, "move") == 0) {
         component->move = value;
     } else if (strcmp(attrib, "draw") == 0) {
         component->draw = value;
@@ -86,7 +89,18 @@ static int __set(Component *component, char *attrib, void *value)
         component->one_line_up = value;
     } else if (strcmp(attrib, "one_line_down") == 0) {
         component->one_line_down = value;
-    } else if (strcmp(attrib, "name") == 0) {
+    } else if (strcmp(attrib, "mouse_button_down") == 0) {
+        component->mouse_button_down = value;
+    } else if (strcmp(attrib, "mouse_motion") == 0) {
+        component->mouse_motion = value;
+    } else if (strcmp(attrib, "mouse_wheel") == 0) {
+        component->mouse_wheel = value;
+    } else if (strcmp(attrib, "window_moved") == 0) {
+        component->window_moved = value;
+    } else if (strcmp(attrib, "window_resized") == 0) {
+        component->window_resized = value;
+    }
+    else if (strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
     } else {
         dbg_str(DBG_DETAIL,"component set, not support %s setting",attrib);
@@ -155,6 +169,209 @@ static int __draw(Component *component, void *graph)
     container->for_each_component(container, draw_subcomponent, g);
 }
 
+static void subcomponent_mouse_button_down(Iterator *iter, void *arg) 
+{
+    Graph *g       = (Graph *)arg;
+    __Event *event = (__Event *)arg;
+    Component *component;
+    uint8_t *addr;
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    if (component->mouse_button_down) component->mouse_button_down(component, event, event->window);
+}
+
+static void __text_key_input(Component *component,char c, void *graph)
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    dbg_str(DBG_DETAIL,"EVENT: text input %c", c);
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+
+    if (cur->text_key_input) cur->text_key_input(cur,c, g);
+}
+
+static void __up_key_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->down_key_down) cur->down_key_down(cur, g); 
+
+}
+
+static void __down_key_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->down_key_down) cur->down_key_down(cur, g); 
+}
+
+static void __left_key_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->left_key_down) cur->left_key_down(cur, g); 
+}
+
+static void __right_key_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->right_key_down) cur->right_key_down(cur, g); 
+}
+
+static void __pageup_key_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->pageup_key_down) cur->pageup_key_down(cur, g); 
+}
+
+static void __pagedown_key_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->pagedown_key_down) cur->pagedown_key_down(cur, g); 
+}
+
+static void __one_line_up(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->one_line_up) cur->one_line_up(cur, g); 
+}
+
+static void __one_line_down(Component *component, void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->one_line_down) cur->one_line_down(cur, g); 
+}
+
+static void __backspace_key_input(Component *component,void *graph) 
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Component *cur;
+
+    cur = container->search_component(container,"text_area");
+    if (cur == NULL) {
+        dbg_str(DBG_WARNNING,"not found component :%s","text_field");
+        return;
+    }
+    if (cur->backspace_key_input) cur->backspace_key_input(cur, g); 
+}
+
+
+static void __mouse_button_down(Component *component,void *event, void *window) 
+{
+    Container *container = (Container *)component;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    __Event *e           = (__Event *)event;
+    Component *cur;
+
+    dbg_str(DBG_DETAIL,"%s process mouse_button_down event: Mouse button %d pressed at %d,%d with click count %d in window %d",
+            component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
+
+    container->for_each_component(container, subcomponent_mouse_button_down, event);
+}
+
+static void __mouse_motion(Component *component,void *event, void *window) 
+{
+    __Event *e           = (__Event *)event;
+
+    /*
+     *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
+     *        e->x, e->y, e->xrel, e->yrel, e->windowid);
+     */
+
+}
+
+static void __mouse_wheel(Component *component,void *event, void *window) 
+{
+    __Event *e           = (__Event *)event;
+
+    dbg_str(DBG_DETAIL, "EVENT: Mouse: wheel scrolled %d in x and %d in y (direction: %d) in window %d", 
+            e->x, e->y, e->direction, e->windowid);
+}
+
+static void __window_moved(Component *component,void *event, void *window) 
+{
+    dbg_str(DBG_DETAIL,"window moved");
+}
+
+static void __window_resized(Component *component,void *event, void *window) 
+{
+    __Event *e           = (__Event *)event;
+
+    dbg_str(DBG_DETAIL,"EVENT: Window %d resized to %dx%d",
+            e->data1, e->data2, e->windowid);
+}
+
 static class_info_entry_t component_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -164,18 +381,23 @@ static class_info_entry_t component_class_info[] = {
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
     [6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",__draw,sizeof(void *)},
     [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_key_input",NULL,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","backspace_key_input",NULL,sizeof(void *)},
-    [10] = {ENTRY_TYPE_VFUNC_POINTER,"","up_key_down",NULL,sizeof(void *)},
-    [11] = {ENTRY_TYPE_VFUNC_POINTER,"","down_key_down",NULL,sizeof(void *)},
-    [12] = {ENTRY_TYPE_VFUNC_POINTER,"","left_key_down",NULL,sizeof(void *)},
-    [13] = {ENTRY_TYPE_VFUNC_POINTER,"","right_key_down",NULL,sizeof(void *)},
-    [14] = {ENTRY_TYPE_VFUNC_POINTER,"","pageup_key_down",NULL,sizeof(void *)},
-    [15] = {ENTRY_TYPE_VFUNC_POINTER,"","pagedown_key_down",NULL,sizeof(void *)},
-    [16] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_up",NULL,sizeof(void *)},
-    [17] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_down",NULL,sizeof(void *)},
-    [18] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [19] = {ENTRY_TYPE_END},
+    [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","text_key_input",__text_key_input,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","backspace_key_input",__backspace_key_input,sizeof(void *)},
+    [10] = {ENTRY_TYPE_VFUNC_POINTER,"","up_key_down",__up_key_down,sizeof(void *)},
+    [11] = {ENTRY_TYPE_VFUNC_POINTER,"","down_key_down",__down_key_down,sizeof(void *)},
+    [12] = {ENTRY_TYPE_VFUNC_POINTER,"","left_key_down",__left_key_down,sizeof(void *)},
+    [13] = {ENTRY_TYPE_VFUNC_POINTER,"","right_key_down",__right_key_down,sizeof(void *)},
+    [14] = {ENTRY_TYPE_VFUNC_POINTER,"","pageup_key_down",__pageup_key_down,sizeof(void *)},
+    [15] = {ENTRY_TYPE_VFUNC_POINTER,"","pagedown_key_down",__pagedown_key_down,sizeof(void *)},
+    [16] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_up",__one_line_up,sizeof(void *)},
+    [17] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_down",__one_line_down,sizeof(void *)},
+    [18] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_button_down",__mouse_button_down,sizeof(void *)},
+    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_motion",__mouse_motion,sizeof(void *)},
+    [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel",__mouse_wheel,sizeof(void *)},
+    [21] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
+    [22] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
+    [23] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [24] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

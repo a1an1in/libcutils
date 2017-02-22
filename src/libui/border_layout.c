@@ -331,7 +331,7 @@ void test_ui_border_layout()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    layout = new_border_layout(allocator, 0, 0, 600, 600, "layout");
+    layout = new_border_layout(allocator, 0, 0, 600, 600, "border_layout");
 
     l = new_label(allocator,0, 0, 80, 20, "label00");
     layout->add_component((Container *)layout, "North", l);

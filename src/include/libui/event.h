@@ -17,26 +17,16 @@ struct ui_event_s{
 
 	/*virtual methods*/
     int (*poll_event)(__Event *event,void *window);
-    void (*mouse_button_down)(__Event *event, void *window);
-    void (*mouse_motion)(int x, int y, int xrel, int yrel, int windowid, void *window);
-    void (*mouse_wheel)(int x, int y, int direction, int windowid, void *window);
-    void (*window_moved)(void *window);
-    void (*window_resized)(int data1, int data2, int windowid, void *window);
-    void (*text_input)(char c, void *window);
-    void (*up_key_down)(void *window);
-    void (*down_key_down)(void *window); 
-    void (*left_key_down)(void *window); 
-    void (*right_key_down)(void *window); 
-    void (*pageup_key_down)(void *window); 
-    void (*pagedown_key_down)(void *window); 
-    void (*backspace_key_down)(void *window); 
 
 	/*attribs*/
-    int x;
-    int y;
+    int x, xrel;
+    int y, yrel;
     int button;
     int clicks;
     int windowid;
+    int data1, data2;
+    int direction;
+    void *window;
 };
 
 #endif

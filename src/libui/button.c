@@ -81,7 +81,7 @@ static int __construct(Button *button,char *init_str)
 	dbg_str(DBG_SUC,"button construct, button addr:%p",button);
 
     gen_label_setting_str(subject->x, subject->y, subject->width, subject->height, 
-                          ((Component *)button)->name, (void *)buf);
+                          "label", (void *)buf);
     subject   = OBJECT_NEW(((Obj *)button)->allocator, Label,buf);
 
     container->add_component((Container *)button, NULL, subject);
@@ -108,9 +108,13 @@ static int __set(Button *button, char *attrib, void *value)
 		button->construct = value;
 	} else if (strcmp(attrib, "deconstruct") == 0) {
 		button->deconstruct = value;
-	} else if (strcmp(attrib, "move") == 0) {
+	} 
+    else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
-	} else {
+    } else if (strcmp(attrib, "button mouse_button_down") == 0) {
+        button->mouse_button_down = value;
+	} 
+    else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
 	}
 
@@ -127,6 +131,14 @@ static void *__get(Button *obj, char *attrib)
     return NULL;
 }
 
+static void __mouse_button_down(Component *component,void *event, void *window) 
+{
+    __Event *e = (__Event *)event;
+
+    dbg_str(DBG_DETAIL,"%s process mouse_button_down event: Mouse button %d pressed at %d,%d with click count %d in window %d",
+            component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
+}
+
 static class_info_entry_t button_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -134,7 +146,8 @@ static class_info_entry_t button_class_info[] = {
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
-	[6] = {ENTRY_TYPE_END},
+    [6] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_button_down",__mouse_button_down,sizeof(void *)},
+	[7] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Button",button_class_info);
@@ -228,7 +241,7 @@ void test_ui_button()
     allocator_t *allocator = allocator_get_default_alloc();
     Window *window;
     Border_Layout *layout;
-    Button *l;
+    Button *button;
     char *set_str;
     char buf[2048];
 
@@ -238,10 +251,10 @@ void test_ui_button()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    layout = new_border_layout(allocator, 0, 0, 600, 600, "layout");
+    layout = new_border_layout(allocator, 0, 0, 600, 600, "border layout");
 
-    l = new_button(allocator,0, 0, 100, 50, "button02");
-    layout->add_component((Container *)layout, "Center", l);
+    button = new_button(allocator,0, 0, 100, 50, "button02");
+    layout->add_component((Container *)layout, "Center", button);
 
     window->add_component((Container *)window, NULL, layout);
     window->load_resources(window);

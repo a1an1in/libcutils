@@ -196,26 +196,13 @@ static void * __get(__Event *event, char *attrib)
 
 static int __poll_event(__Event *event,void *window)
 {
-    int quit     = 0;
-    SDL_Event *e = &((Sdl_Event *)event)->ev;
-    Window *w    = (Window *)window;
-    Graph *g     = w->graph;
-    Component *cur;
+    int quit             = 0;
+    SDL_Event *e         = &((Sdl_Event *)event)->ev;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
+    Component *component = (Component *)window, *cur;
      
     dbg_str(DBG_DETAIL,"sdl event poll");
-
-    //add for test>>
-    Container *container;
-    container = (Container *)window;
-    /*
-     *cur       = container->search_component(container,"text_area");
-     *if (cur == NULL) {
-     *    dbg_str(DBG_WARNNING,"not found component :%s","text_field");
-     *    return -1;
-     *}
-     */
-    //<<
-    
 
     SDL_StartTextInput();
 
@@ -228,11 +215,16 @@ static int __poll_event(__Event *event,void *window)
                  case SDL_WINDOWEVENT:
                      switch (e->window.event) {
                          case SDL_WINDOWEVENT_MOVED:
-                             event->window_moved(window);
+                             event->windowid = e->button.windowID;
+                             event->window   = window;
+                             component->window_moved(component, event, window);
                              break;
                          case SDL_WINDOWEVENT_RESIZED:
-                             event->window_resized(e->window.data1,e->window.data2,
-                                                   e->window.windowID, window);
+                             event->data1    = e->window.data1;
+                             event->data2    = e->window.data2;
+                             event->windowid = e->button.windowID;
+                             event->window   = window;
+                             component->window_resized(component, event, window);
                              break;
                      }
                      break;
@@ -251,41 +243,41 @@ static int __poll_event(__Event *event,void *window)
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
                               */
-                             event->up_key_down(window);
+                             component->up_key_down(component, g);
                              break;
                          case SDLK_DOWN:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
                               */
-                             event->down_key_down(window);
+                             component->down_key_down(component, g);
                              break;
                          case SDLK_LEFT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
                               */
-                             event->left_key_down(window);
+                             component->left_key_down(component, g);
                              break;
                          case SDLK_RIGHT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
                               */
-                             event->right_key_down(window);
+                             component->right_key_down(component, g);
                              break;
                          case SDLK_PAGEUP:
-                             event->pageup_key_down(window);
+                             component->pageup_key_down(component, g);
                              break;
                          case SDLK_PAGEDOWN:
-                             event->pagedown_key_down(window);
+                             component->pagedown_key_down(component, g);
                              break;
                          case SDLK_BACKSPACE:
                              /*
                               *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                               */
-                             event->backspace_key_down(window);
+                             component->backspace_key_input(component, g);
                              break;
                          case SDLK_j:
                               if (SDL_GetModState() & KMOD_CTRL) {
-                                  if (cur->one_line_up) cur->one_line_up(cur, g); 
+                                  component->one_line_up(component, g);
                               } else{
                                   dbg_str(DBG_IMPORTANT,"key j down");
                               }
@@ -295,7 +287,7 @@ static int __poll_event(__Event *event,void *window)
                                   /*
                                    *dbg_str(DBG_IMPORTANT,"ctrl + k");
                                    */
-                                  if (cur->one_line_down) cur->one_line_down(cur, g); 
+                                  component->one_line_down(component, g);
                               }
                              break;
                          default:
@@ -317,22 +309,40 @@ static int __poll_event(__Event *event,void *window)
                      event->button   = e->button.button;
                      event->clicks   = e->button.clicks;
                      event->windowid = e->button.windowID;
+                     event->window   = window;
 
-                     event->mouse_button_down(event, window);
+                     /*
+                      *event->mouse_button_down(event, window);
+                      */
+                     component->mouse_button_down(component, event, window);
                      break;
                  case SDL_MOUSEMOTION:
-                     event->mouse_motion(e->motion.x, e->motion.y,e->motion.xrel,
-                                         e->motion.yrel,e->motion.windowID, window);
+                     event->x        = e->motion.x;
+                     event->xrel     = e->motion.xrel;
+                     event->y        = e->motion.y;
+                     event->yrel     = e->motion.yrel;
+                     event->windowid = e->button.windowID;
+                     event->window   = window;
+
+                     component->mouse_motion(component, event, window);
                      break;
                  case SDL_MOUSEWHEEL: 
-                     event->mouse_wheel(e->wheel.x, e->wheel.y, e->wheel.direction,
-                                        e->wheel.windowID, window);
+                     event->x         = e->wheel.x;
+                     event->y         = e->wheel.y;
+                     event->direction = e->wheel.direction;
+                     event->windowid  = e->button.windowID;
+                     event->window    = window;
+                     component->mouse_wheel(component, event, window);
                      break;
                  case SDL_TEXTEDITING:
                      print_text("EDIT", e->text.text);
                      break;
                  case SDL_TEXTINPUT:
-                     event->text_input(e->text.text[0], window);
+                     event->window   = window;
+                     /*
+                      *event->text_input(e->text.text[0], window);
+                      */
+                     component->text_key_input(component,e->text.text[0], g);
                      break;
                  case SDL_FINGERDOWN:
                  case SDL_FINGERUP:
