@@ -120,7 +120,7 @@ static void *__get(Component *obj, char *attrib)
     return NULL;
 }
 
-static void load_subcomponent_resources(Iterator *iter, void *arg) 
+static void subcomponent_load_resources(Iterator *iter, void *arg) 
 {
     Component *component;
     void *window = (void *)arg;
@@ -138,7 +138,7 @@ static int __load_resources(Component *component,void *window)
     Container *container = (Container *)component;
 
     dbg_str(DBG_SUC,"%s load resources",component->name);
-    container->for_each_component(container, load_subcomponent_resources, window);
+    container->for_each_component(container, subcomponent_load_resources, window);
 
     return 0;
 }
@@ -148,7 +148,7 @@ static int __unload_resources(Component *component,void *window)
     //...........
 }
 
-static void draw_subcomponent(Iterator *iter, void *arg) 
+static void subcomponent_draw(Iterator *iter, void *arg) 
 {
     Component *component;
     uint8_t *addr;
@@ -166,20 +166,7 @@ static int __draw(Component *component, void *graph)
     Graph *g = (Graph *)graph;
     dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
 
-    container->for_each_component(container, draw_subcomponent, g);
-}
-
-static void subcomponent_mouse_button_down(Iterator *iter, void *arg) 
-{
-    Graph *g       = (Graph *)arg;
-    __Event *event = (__Event *)arg;
-    Component *component;
-    uint8_t *addr;
-
-    addr = (uint8_t *)iter->get_vpointer(iter);
-    component = (Component *)buffer_to_addr(addr);
-
-    if (component->mouse_button_down) component->mouse_button_down(component, event, event->window);
+    container->for_each_component(container, subcomponent_draw, g);
 }
 
 static void __text_key_input(Component *component,char c, void *graph)
@@ -325,6 +312,18 @@ static void __backspace_key_input(Component *component,void *graph)
     if (cur->backspace_key_input) cur->backspace_key_input(cur, g); 
 }
 
+static void subcomponent_mouse_button_down(Iterator *iter, void *arg) 
+{
+    Graph *g       = (Graph *)arg;
+    __Event *event = (__Event *)arg;
+    Component *component;
+    uint8_t *addr;
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    if (component->mouse_button_down) component->mouse_button_down(component, event, event->window);
+}
 
 static void __mouse_button_down(Component *component,void *event, void *window) 
 {
@@ -334,7 +333,9 @@ static void __mouse_button_down(Component *component,void *event, void *window)
     __Event *e           = (__Event *)event;
     Component *cur;
 
-    dbg_str(DBG_DETAIL,"%s process mouse_button_down event: Mouse button %d pressed at %d,%d with click count %d in window %d",
+    dbg_str(DBG_DETAIL,
+            "%s process mouse_button_down event: Mouse button %d pressed at %d,"
+            "%d with click count %d in window %d",
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 
     container->for_each_component(container, subcomponent_mouse_button_down, event);

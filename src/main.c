@@ -369,12 +369,6 @@ static int args_process_test_ui_container(void *base,int argc,char **argv)
     return 0;
 }
 
-static int args_process_test_ui_button(void *base,int argc,char **argv)
-{
-    test_ui_button();
-    return 0;
-}
-
 static int args_process_test_string(void *base,int argc,char **argv)
 {
     test_obj_string();
@@ -503,7 +497,14 @@ static int args_process_test_borderlayout(void *base,int argc,char **argv)
     return 0;
 }
 
+static int args_process_test_ui_button(void *base,int argc,char **argv)
+{
+    test_ui_button();
+    return 0;
+}
+
 static cmd_config_t cmds[]={
+    {"Button", args_process_test_ui_button,0, "test", "N/A","test"},
     {"Border", args_process_test_borderlayout,0, "test", "N/A","test"},
     {"Grid", args_process_test_gridlayout,0, "test", "N/A","test"},
     {"Sdl_Timer", args_process_test_sdl_timer,0, "test", "N/A","test"},
@@ -525,7 +526,6 @@ static cmd_config_t cmds[]={
     {"Iter", args_process_test_Iterator,0, "test", "N/A","test"},
     {"Map", args_process_test_Map,0, "test", "N/A","test"},
     {"String", args_process_test_string,0, "test", "N/A","test"},
-    {"Button", args_process_test_ui_button,0, "test", "N/A","test"},
     {"Container", args_process_test_ui_container,0, "test", "N/A","test"},
     {"sdl", args_process_test_sdl,0, "test", "N/A","test"},
     {"json", args_process_test_json,0, "test", "N/A","test"},

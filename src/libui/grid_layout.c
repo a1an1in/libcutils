@@ -317,49 +317,6 @@ static class_info_entry_t grid_layout_class_info[] = {
 };
 REGISTER_CLASS("Grid_Layout",grid_layout_class_info);
 
-#if 1
-static void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out)
-{
-    char *set_str;
-
-    set_str = "{\
-                    \"Subject\": {\
-                        \"x\":%d,\
-                        \"y\":%d,\
-                        \"width\":%d,\
-                        \"height\":%d\
-                    },\
-                    \"Component\": {\
-                        \"name\": \"%s\"\
-                    },\
-                    \"Label\": {\
-                        \"text_overflow_flag\": 0\
-                    }\
-                }";
-
-    sprintf(out, set_str, x, y, width, height, name);
-
-    return ;
-}
-
-void *new_label(allocator_t *allocator, int x, int y, int width, int height, char *name)
-{
-    Subject *subject;
-    char *set_str;
-    char buf[2048];
-
-    gen_label_setting_str(x, y, width, height, name, (void *)buf);
-    subject   = OBJECT_NEW(allocator, Label,buf);
-
-    object_dump(subject, "Label", buf, 2048);
-    /*
-     *dbg_str(DBG_DETAIL,"Label dump: %s",buf);
-     */
-
-    return subject;
-}
-#endif
-
 char *gen_grid_layout_setting_str(int x, int y, int width, int height, char *name, void *out)
 {
     char *set_str = NULL;

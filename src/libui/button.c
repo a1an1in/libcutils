@@ -34,48 +34,10 @@
 #include <libui/sdl_window.h>
 #include <libui/label.h>
 
-static void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out)
-{
-    char *set_str;
-
-    set_str = "{\
-                    \"Subject\": {\
-                        \"x\":%d,\
-                        \"y\":%d,\
-                        \"width\":%d,\
-                        \"height\":%d\
-                    },\
-                    \"Component\": {\
-                        \"name\": \"%s\"\
-                    },\
-                    \"Label\": {\
-                        \"text_overflow_flag\": 0\
-                    }\
-                }";
-
-    sprintf(out, set_str, x, y, width, height, name);
-
-    return ;
-}
-
-static void *new_label(allocator_t *allocator, int x, int y, int width, int height, char *name)
-{
-    Subject *subject;
-    char *set_str;
-    char buf[2048];
-
-    gen_label_setting_str(x, y, width, height, name, (void *)buf);
-    subject   = OBJECT_NEW(allocator, Label,buf);
-
-    object_dump(subject, "Label", buf, 2048);
-
-    return subject;
-}
-
 static int __construct(Button *button,char *init_str)
 {
     Container *container = (Container *)button;
-    Subject *subject = (Subject *)button;
+    Subject *subject     = (Subject *)button;
     char buf[2048];
 
 	dbg_str(DBG_SUC,"button construct, button addr:%p",button);
@@ -135,7 +97,9 @@ static void __mouse_button_down(Component *component,void *event, void *window)
 {
     __Event *e = (__Event *)event;
 
-    dbg_str(DBG_DETAIL,"%s process mouse_button_down event: Mouse button %d pressed at %d,%d with click count %d in window %d",
+    dbg_str(DBG_DETAIL,
+            "%s process mouse_button_down event: Mouse button %d pressed at %d,"
+            "%d with click count %d in window %d",
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 }
 
@@ -193,48 +157,6 @@ static void *new_button(allocator_t *allocator, int x, int y, int width, int hei
     return subject;
 }
 
-static char *gen_border_layout_setting_str(int x, int y, int width, int height, char *name, void *out)
-{
-    char *set_str = NULL;
-
-    set_str = "{\
-                    \"Subject\": {\
-                        \"x\":%d,\
-                        \"y\":%d,\
-                        \"width\":%d,\
-                        \"height\":%d\
-                    },\
-                    \"Container\": {\
-                        \"map_type\":%d\
-                    },\
-                    \"Component\": {\
-                        \"name\":\"%s\"\
-                    },\
-                    \"Border_Layout\":{\
-                        \"hgap\":%d,\
-                        \"vgap\":%d\
-                    }\
-                }";
-
-    sprintf(out, set_str, x, y, width, height,1, name, 4,4, 5, 2);
-
-    return out;
-}
-
-static void *new_border_layout(allocator_t *allocator, int x, int y, int width, int height, char *name)
-{
-    char *set_str;
-    char buf[2048];
-    Container *container;
-
-    gen_border_layout_setting_str(x, y, width, height, name, buf);
-    container = OBJECT_NEW(allocator, Border_Layout,buf);
-
-    object_dump(container, "Border_Layout", buf, 2048);
-    dbg_str(DBG_DETAIL,"Border_Layout dump: %s",buf);
-
-    return container;
-}
 
 void test_ui_button()
 {
@@ -248,8 +170,10 @@ void test_ui_button()
     set_str = gen_window_setting_str();
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 
-    object_dump(window, "Sdl_Window", buf, 2048);
-    dbg_str(DBG_DETAIL,"Window dump: %s",buf);
+    /*
+     *object_dump(window, "Sdl_Window", buf, 2048);
+     *dbg_str(DBG_DETAIL,"Window dump: %s",buf);
+     */
 
     layout = new_border_layout(allocator, 0, 0, 600, 600, "border layout");
 

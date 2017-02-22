@@ -241,27 +241,48 @@ static class_info_entry_t label_class_info[] = {
 };
 REGISTER_CLASS("Label",label_class_info);
 
-char *gen_label_setting_str()
+#if 1
+void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out)
 {
     char *set_str;
 
     set_str = "{\
                     \"Subject\": {\
-                        \"x\":10,\
-                        \"y\":20,\
-                        \"width\":100,\
-                        \"height\":20\
+                        \"x\":%d,\
+                        \"y\":%d,\
+                        \"width\":%d,\
+                        \"height\":%d\
                     },\
                     \"Component\": {\
-                        \"name\": \"label\"\
+                        \"name\": \"%s\"\
                     },\
                     \"Label\": {\
                         \"text_overflow_flag\": 0\
                     }\
                 }";
 
-    return set_str;
+    sprintf(out, set_str, x, y, width, height, name);
+
+    return ;
 }
+
+void *new_label(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    Subject *subject;
+    char *set_str;
+    char buf[2048];
+
+    gen_label_setting_str(x, y, width, height, name, (void *)buf);
+    subject   = OBJECT_NEW(allocator, Label,buf);
+
+    object_dump(subject, "Label", buf, 2048);
+    /*
+     *dbg_str(DBG_DETAIL,"Label dump: %s",buf);
+     */
+
+    return subject;
+}
+#endif
 
 void test_ui_label()
 {
@@ -283,8 +304,7 @@ void test_ui_label()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
-    set_str   = gen_label_setting_str();
-    subject   = OBJECT_NEW(allocator, Label,set_str);
+    subject = new_label(allocator,0, 0, 80, 20, "label");
 
     object_dump(subject, "Label", buf, 2048);
     dbg_str(DBG_DETAIL,"Label dump: %s",buf);
