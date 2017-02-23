@@ -324,7 +324,7 @@ static int __poll_event(__Event *event,void *window)
                      event->windowid = e->button.windowID;
                      event->window   = window;
 
-                     component->mouse_motion(component, event, window);
+                     component->mouse_over(component, event, window);
                      break;
                  case SDL_MOUSEWHEEL: 
                      event->x         = e->wheel.x;

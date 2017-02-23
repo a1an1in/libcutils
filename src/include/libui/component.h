@@ -10,12 +10,13 @@ typedef struct component_s Component;
 struct component_s{
 	Container container;
 
+    /*normal methods*/
 	int (*construct)(Component *component,char *init_str);
 	int (*deconstruct)(Component *component);
 	int (*set)(Component *component, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
 
-	/*virtual methods reimplement*/
+	/*virtual methods*/
 	int (*move)(Component *component);
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *window);
@@ -31,7 +32,7 @@ struct component_s{
 	int (*one_line_down)(Component *component,void *graph);
     
     void (*mouse_button_down)(Component *component,void *event, void *window);
-    void (*mouse_motion)(Component *component,void *event, void *window);
+    void (*mouse_over)(Component *component,void *event, void *window);
     void (*mouse_wheel)(Component *component,void *event, void *window);
     void (*window_moved)(Component *component,void *event, void *window);
     void (*window_resized)(Component *component,void *event, void *window);

@@ -91,8 +91,8 @@ static int __set(Component *component, char *attrib, void *value)
         component->one_line_down = value;
     } else if (strcmp(attrib, "mouse_button_down") == 0) {
         component->mouse_button_down = value;
-    } else if (strcmp(attrib, "mouse_motion") == 0) {
-        component->mouse_motion = value;
+    } else if (strcmp(attrib, "mouse_over") == 0) {
+        component->mouse_over = value;
     } else if (strcmp(attrib, "mouse_wheel") == 0) {
         component->mouse_wheel = value;
     } else if (strcmp(attrib, "window_moved") == 0) {
@@ -341,14 +341,33 @@ static void __mouse_button_down(Component *component,void *event, void *window)
     container->for_each_component(container, subcomponent_mouse_button_down, event);
 }
 
-static void __mouse_motion(Component *component,void *event, void *window) 
+static void subcomponent_mouse_over(Iterator *iter, void *arg) 
 {
+    Graph *g       = (Graph *)arg;
+    __Event *event = (__Event *)arg;
+    Component *component;
+    uint8_t *addr;
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    if (component->mouse_over) component->mouse_over(component, event, event->window);
+}
+
+
+static void __mouse_over(Component *component,void *event, void *window) 
+{
+    Container *container = (Container *)component;
+    Window *w            = (Window *)window;
+    Graph *g             = w->graph;
     __Event *e           = (__Event *)event;
+    Component *cur;
 
     /*
      *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
      *        e->x, e->y, e->xrel, e->yrel, e->windowid);
      */
+    container->for_each_component(container, subcomponent_mouse_over, event);
 
 }
 
@@ -393,7 +412,7 @@ static class_info_entry_t component_class_info[] = {
     [16] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_up",__one_line_up,sizeof(void *)},
     [17] = {ENTRY_TYPE_VFUNC_POINTER,"","one_line_down",__one_line_down,sizeof(void *)},
     [18] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_button_down",__mouse_button_down,sizeof(void *)},
-    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_motion",__mouse_motion,sizeof(void *)},
+    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_over",__mouse_over,sizeof(void *)},
     [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel",__mouse_wheel,sizeof(void *)},
     [21] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
     [22] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},

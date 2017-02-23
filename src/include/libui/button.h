@@ -18,6 +18,7 @@ struct button_s{
 	/*virtual methods reimplement*/
 	int (*move)(Button *button);
     void (*mouse_button_down)(Component *component,void *event, void *window);
+    void (*mouse_over)(Component *component,void *event, void *window);
 };
 
 #endif

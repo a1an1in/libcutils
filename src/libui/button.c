@@ -73,8 +73,10 @@ static int __set(Button *button, char *attrib, void *value)
 	} 
     else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
-    } else if (strcmp(attrib, "button mouse_button_down") == 0) {
+    } else if (strcmp(attrib, "mouse_button_down") == 0) {
         button->mouse_button_down = value;
+    } else if (strcmp(attrib, "mouse_over") == 0) {
+        button->mouse_over = value;
 	} 
     else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
@@ -103,6 +105,16 @@ static void __mouse_button_down(Component *component,void *event, void *window)
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 }
 
+static void __mouse_over(Component *component,void *event, void *window) 
+{
+    __Event *e           = (__Event *)event;
+
+    /*
+     *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
+     *        e->x, e->y, e->xrel, e->yrel, e->windowid);
+     */
+}
+
 static class_info_entry_t button_class_info[] = {
 	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
@@ -111,7 +123,8 @@ static class_info_entry_t button_class_info[] = {
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
     [6] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_button_down",__mouse_button_down,sizeof(void *)},
-	[7] = {ENTRY_TYPE_END},
+    [7] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_over",__mouse_over,sizeof(void *)},
+	[8] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Button",button_class_info);
