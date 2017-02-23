@@ -29,17 +29,18 @@ struct text_area_s{
 	/*virtual methods reimplement*/
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *graph);
-	int (*text_key_input)(Component *component,char c, void *graph);
-	int (*backspace_key_input)(Component *component,void *graph);
-	int (*up_key_down)(Component *component,void *graph);
-	int (*down_key_down)(Component *component,void *graph);
-	int (*left_key_down)(Component *component,void *graph);
-	int (*right_key_down)(Component *component,void *graph);
-	int (*pageup_key_down)(Component *component,void *graph);
-	int (*pagedown_key_down)(Component *component,void *graph);
-	int (*one_line_up)(Component *component,void *graph);
-	int (*one_line_down)(Component *component,void *graph);
 	int (*load_ascii_info)(Component *component,void *graph);
+
+	int (*key_text_pressed)(Component *component,char c, void *graph);
+	int (*key_backspace_pressed)(Component *component,void *graph);
+	int (*key_up_pressed)(Component *component,void *graph);
+	int (*key_down_pressed)(Component *component,void *graph);
+	int (*key_left_pressed)(Component *component,void *graph);
+	int (*key_right_pressed)(Component *component,void *graph);
+	int (*key_pageup_pressed)(Component *component,void *graph);
+	int (*key_pagedown_pressed)(Component *component,void *graph);
+	int (*key_onelineup_pressed)(Component *component,void *graph);
+	int (*key_onelinedown_pressed)(Component *component,void *graph);
 
 #define MAX_NAME_LEN 50
     char name[MAX_NAME_LEN];

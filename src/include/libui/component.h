@@ -20,20 +20,27 @@ struct component_s{
 	int (*move)(Component *component);
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *window);
-	int (*text_key_input)(Component *component,char c, void *graph);
-	int (*backspace_key_input)(Component *component,void *graph);
-	int (*up_key_down)(Component *component,void *graph);
-	int (*down_key_down)(Component *component,void *graph);
-	int (*left_key_down)(Component *component,void *graph);
-	int (*right_key_down)(Component *component,void *graph);
-	int (*pageup_key_down)(Component *component,void *graph);
-	int (*pagedown_key_down)(Component *component,void *graph);
-	int (*one_line_up)(Component *component,void *graph);
-	int (*one_line_down)(Component *component,void *graph);
+
+	int (*key_text_pressed)(Component *component,char c, void *graph);
+	int (*key_backspace_pressed)(Component *component,void *graph);
+	int (*key_up_pressed)(Component *component,void *graph);
+	int (*key_down_pressed)(Component *component,void *graph);
+	int (*key_left_pressed)(Component *component,void *graph);
+	int (*key_right_pressed)(Component *component,void *graph);
+	int (*key_pageup_pressed)(Component *component,void *graph);
+	int (*key_pagedown_pressed)(Component *component,void *graph);
+	int (*key_onelineup_pressed)(Component *component,void *graph);
+	int (*key_onelinedown_pressed)(Component *component,void *graph);
     
-    void (*mouse_button_down)(Component *component,void *event, void *window);
-    void (*mouse_over)(Component *component,void *event, void *window);
-    void (*mouse_wheel)(Component *component,void *event, void *window);
+    void (*mouse_pressed)(Component *component,void *event, void *window);
+    void (*mouse_released)(Component *component,void *event, void *window);
+    void (*mouse_entered)(Component *component,void *event, void *window);
+    void (*mouse_exited)(Component *component,void *event, void *window);
+    void (*mouse_moved)(Component *component,void *event, void *window);
+    void (*mouse_dragged)(Component *component,void *event, void *window);
+    void (*mouse_wheel_moved)(Component *component,void *event, void *window);
+    int  (*is_mouse_entered_component)(Component *component,void *event);
+
     void (*window_moved)(Component *component,void *event, void *window);
     void (*window_resized)(Component *component,void *event, void *window);
 

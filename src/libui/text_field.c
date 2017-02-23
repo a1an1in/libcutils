@@ -329,14 +329,14 @@ static int __set(Text_Field *ta, char *attrib, void *value)
         ta->draw = value;
     } else if (strcmp(attrib, "load_resources") == 0) {
         ta->load_resources = value;
-    } else if (strcmp(attrib, "text_key_input") == 0) {
-        ta->text_key_input = value;
-    } else if (strcmp(attrib, "backspace_key_input") == 0) {
-        ta->backspace_key_input = value;
-    } else if (strcmp(attrib, "left_key_down") == 0) {
-        ta->left_key_down = value;
-    } else if (strcmp(attrib, "right_key_down") == 0) {
-        ta->right_key_down = value;
+    } else if (strcmp(attrib, "key_text_pressed") == 0) {
+        ta->key_text_pressed = value;
+    } else if (strcmp(attrib, "key_backspace_pressed") == 0) {
+        ta->key_backspace_pressed = value;
+    } else if (strcmp(attrib, "key_left_pressed") == 0) {
+        ta->key_left_pressed = value;
+    } else if (strcmp(attrib, "key_right_pressed") == 0) {
+        ta->key_right_pressed = value;
     }
     /*attribs*/
     else if (strcmp(attrib, "name") == 0) {
@@ -435,7 +435,7 @@ static int __draw(Component *component, void *graph)
     g->render_present(g);
 }
 
-static int __text_key_input(Component *component,char c, void *graph)
+static int __key_text_pressed(Component *component,char c, void *graph)
 {
     Graph *g                 = (Graph *)graph;
     Text_Field *ta           = (Text_Field *)component;
@@ -470,7 +470,7 @@ static int __text_key_input(Component *component,char c, void *graph)
     return 0;
 }
 
-static int __backspace_key_input(Component *component,void *graph)
+static int __key_backspace_pressed(Component *component,void *graph)
 {
     Graph *g             = (Graph *)graph;
     Text_Field *ta       = (Text_Field *)component;
@@ -481,7 +481,7 @@ static int __backspace_key_input(Component *component,void *graph)
     char c;
     int ret;
 
-    dbg_str(DBG_DETAIL,"backspace_key_input");
+    dbg_str(DBG_DETAIL,"key_backspace_pressed");
 
     c                    = cursor->c;
 
@@ -504,7 +504,7 @@ static int __backspace_key_input(Component *component,void *graph)
     return 0;
 }
 
-static int __left_key_down(Component *component,void *graph)
+static int __key_left_pressed(Component *component,void *graph)
 {
     Graph *g         = (Graph *)graph;
     Text_Field *ta    = (Text_Field *)component;
@@ -517,7 +517,7 @@ static int __left_key_down(Component *component,void *graph)
     ta->cursor_count = 0;
 }
 
-static int __right_key_down(Component *component,void *graph)
+static int __key_right_pressed(Component *component,void *graph)
 {
     Graph *g         = (Graph *)graph;
     Text_Field *ta    = (Text_Field *)component;
@@ -538,10 +538,10 @@ static class_info_entry_t text_field_class_info[] = {
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
     [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","text_key_input",__text_key_input,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","backspace_key_input",__backspace_key_input,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","left_key_down",__left_key_down,sizeof(void *)},
-    [10] = {ENTRY_TYPE_FUNC_POINTER,"","right_key_down",__right_key_down,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","key_text_pressed",__key_text_pressed,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","key_backspace_pressed",__key_backspace_pressed,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","key_left_pressed",__key_left_pressed,sizeof(void *)},
+    [10] = {ENTRY_TYPE_FUNC_POINTER,"","key_right_pressed",__key_right_pressed,sizeof(void *)},
     [11] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
     [12] = {ENTRY_TYPE_END},
 

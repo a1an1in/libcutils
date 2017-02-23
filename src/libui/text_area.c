@@ -260,7 +260,7 @@ static void move_cursor_up(Component *component)
     } else { //line down
         cursor_t bak  = *cursor;
         bak.y        += bak.height;
-        ta->one_line_down(component, g);
+        ta->key_onelinedown_pressed(component, g);
         *cursor       = bak;
         move_cursor_up(component);
         return ;
@@ -338,7 +338,7 @@ static void move_cursor_down(Component *component)
     }  else { /*last line*/
         cursor_t bak  = *cursor;
         bak.y        -= bak.height;
-        ta->one_line_up(component, g);
+        ta->key_onelineup_pressed(component, g);
         *cursor       = bak;
         move_cursor_down(component);
     }
@@ -583,26 +583,26 @@ static int __set(Text_Area *ta, char *attrib, void *value)
         ta->draw = value;
     } else if (strcmp(attrib, "load_resources") == 0) {
         ta->load_resources = value;
-    } else if (strcmp(attrib, "text_key_input") == 0) {
-        ta->text_key_input = value;
-    } else if (strcmp(attrib, "backspace_key_input") == 0) {
-        ta->backspace_key_input = value;
-    } else if (strcmp(attrib, "up_key_down") == 0) {
-        ta->up_key_down = value;
-    } else if (strcmp(attrib, "down_key_down") == 0) {
-        ta->down_key_down = value;
-    } else if (strcmp(attrib, "left_key_down") == 0) {
-        ta->left_key_down = value;
-    } else if (strcmp(attrib, "right_key_down") == 0) {
-        ta->right_key_down = value;
-    } else if (strcmp(attrib, "pageup_key_down") == 0) {
-        ta->pageup_key_down = value;
-    } else if (strcmp(attrib, "pagedown_key_down") == 0) {
-        ta->pagedown_key_down = value;
-    } else if (strcmp(attrib, "one_line_up") == 0) {
-        ta->one_line_up = value;
-    } else if (strcmp(attrib, "one_line_down") == 0) {
-        ta->one_line_down = value;
+    } else if (strcmp(attrib, "key_text_pressed") == 0) {
+        ta->key_text_pressed = value;
+    } else if (strcmp(attrib, "key_backspace_pressed") == 0) {
+        ta->key_backspace_pressed = value;
+    } else if (strcmp(attrib, "key_up_pressed") == 0) {
+        ta->key_up_pressed = value;
+    } else if (strcmp(attrib, "key_down_pressed") == 0) {
+        ta->key_down_pressed = value;
+    } else if (strcmp(attrib, "key_left_pressed") == 0) {
+        ta->key_left_pressed = value;
+    } else if (strcmp(attrib, "key_right_pressed") == 0) {
+        ta->key_right_pressed = value;
+    } else if (strcmp(attrib, "key_pageup_pressed") == 0) {
+        ta->key_pageup_pressed = value;
+    } else if (strcmp(attrib, "key_pagedown_pressed") == 0) {
+        ta->key_pagedown_pressed = value;
+    } else if (strcmp(attrib, "key_onelineup_pressed") == 0) {
+        ta->key_onelineup_pressed = value;
+    } else if (strcmp(attrib, "key_onelinedown_pressed") == 0) {
+        ta->key_onelinedown_pressed = value;
     }
     /*attribs*/
     else if (strcmp(attrib, "name") == 0) {
@@ -715,7 +715,7 @@ static int __draw(Component *component, void *graph)
     g->render_present(g);
 }
 
-static int __text_key_input(Component *component,char c, void *graph)
+static int __key_text_pressed(Component *component,char c, void *graph)
 {
     Graph *g                 = (Graph *)graph;
     Text_Area *ta            = (Text_Area *)component;
@@ -758,7 +758,7 @@ static int __text_key_input(Component *component,char c, void *graph)
     return 0;
 }
 
-static int __backspace_key_input(Component *component,void *graph)
+static int __key_backspace_pressed(Component *component,void *graph)
 {
     Graph *g                 = (Graph *)graph;
     Text_Area *ta            = (Text_Area *)component;
@@ -772,7 +772,7 @@ static int __backspace_key_input(Component *component,void *graph)
     int from, to;
     int line_count_of_a_screen;
 
-    dbg_str(DBG_DETAIL,"backspace_key_input");
+    dbg_str(DBG_DETAIL,"key_backspace_pressed");
 
     line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
     c                      = cursor->c;
@@ -807,7 +807,7 @@ static int __backspace_key_input(Component *component,void *graph)
     return 0;
 }
 
-static int __up_key_down(Component *component,void *graph)
+static int __key_up_pressed(Component *component,void *graph)
 {
     Graph *g          = (Graph *)graph;
     Text_Area *ta     = (Text_Area *)component;
@@ -823,7 +823,7 @@ static int __up_key_down(Component *component,void *graph)
     return 0;
 }
 
-static int __down_key_down(Component *component,void *graph)
+static int __key_down_pressed(Component *component,void *graph)
 {
     Graph *g         = (Graph *)graph;
     Text_Area *ta    = (Text_Area *)component;
@@ -838,14 +838,14 @@ static int __down_key_down(Component *component,void *graph)
     return 0;
 }
 
-static int __left_key_down(Component *component,void *graph)
+static int __key_left_pressed(Component *component,void *graph)
 {
     Graph *g         = (Graph *)graph;
     Text_Area *ta    = (Text_Area *)component;
     cursor_t *cursor = &ta->cursor;
 
     /*
-     *dbg_str(DBG_DETAIL,"left_key_down");
+     *dbg_str(DBG_DETAIL,"key_left_pressed");
      */
 
     reverse_cursor(component,g);
@@ -855,14 +855,14 @@ static int __left_key_down(Component *component,void *graph)
     ta->cursor_count = 0;
 }
 
-static int __right_key_down(Component *component,void *graph)
+static int __key_right_pressed(Component *component,void *graph)
 {
     Graph *g         = (Graph *)graph;
     Text_Area *ta    = (Text_Area *)component;
     cursor_t *cursor = &ta->cursor;
 
     /*
-     *dbg_str(DBG_DETAIL,"right_key_down");
+     *dbg_str(DBG_DETAIL,"key_right_pressed");
      */
 
     reverse_cursor(component,g);
@@ -872,7 +872,7 @@ static int __right_key_down(Component *component,void *graph)
     ta->cursor_count = 0;
 }
 
-static int __pgup_key_down(Component *component,void *graph)
+static int __key_pageup_pressed(Component *component,void *graph)
 {
     Graph *g               = (Graph *)graph;
     Text_Area *ta          = (Text_Area *)component;
@@ -884,7 +884,7 @@ static int __pgup_key_down(Component *component,void *graph)
     Character *character;
     char c;
 
-    dbg_str(DBG_DETAIL,"pgup_key_down");
+    dbg_str(DBG_DETAIL,"key_pageup_pressed");
     line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
 
     if (ta->start_line - line_count_of_a_screen > 0) {
@@ -892,7 +892,7 @@ static int __pgup_key_down(Component *component,void *graph)
     } else if (ta->start_line > 0) {
         ta->start_line = 0;
     } else {
-        dbg_str(DBG_WARNNING,"pgup_key_down");
+        dbg_str(DBG_WARNNING,"key_pageup_pressed");
         return ;
     }
 
@@ -903,7 +903,7 @@ static int __pgup_key_down(Component *component,void *graph)
     ta->draw(component,graph); 
 }
 
-static int __pgdown_key_down(Component *component,void *graph)
+static int __key_pagedown_pressed(Component *component,void *graph)
 {
     Graph *g               = (Graph *)graph;
     Text_Area *ta          = (Text_Area *)component;
@@ -915,7 +915,7 @@ static int __pgdown_key_down(Component *component,void *graph)
     Character *character;
     char c;
 
-    dbg_str(DBG_DETAIL,"pgdown_key_down");
+    dbg_str(DBG_DETAIL,"key_pagedown_pressed");
     line_count_of_a_screen = ((Subject *)component)->height / ta->char_height;
 
     if (ta->start_line + line_count_of_a_screen < text->last_line_num ) {
@@ -930,7 +930,7 @@ static int __pgdown_key_down(Component *component,void *graph)
     ta->draw(component,graph); 
 }
 
-static int __one_line_up(Component *component,void *graph)
+static int __key_onelineup_pressed(Component *component,void *graph)
 {
     Graph *g         = (Graph *)graph;
     Text_Area *ta    = (Text_Area *)component;
@@ -944,7 +944,7 @@ static int __one_line_up(Component *component,void *graph)
     ta->draw(component,graph); 
 }
 
-static int __one_line_down(Component *component,void *graph)
+static int __key_onelinedown_pressed(Component *component,void *graph)
 {
     Text_Area *ta    = (Text_Area *)component;
     Graph *g         = (Graph *)graph;
@@ -972,16 +972,16 @@ static class_info_entry_t text_area_class_info[] = {
     [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
     [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
     [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","text_key_input",__text_key_input,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","backspace_key_input",__backspace_key_input,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","up_key_down",__up_key_down,sizeof(void *)},
-    [10] = {ENTRY_TYPE_FUNC_POINTER,"","down_key_down",__down_key_down,sizeof(void *)},
-    [11] = {ENTRY_TYPE_FUNC_POINTER,"","left_key_down",__left_key_down,sizeof(void *)},
-    [12] = {ENTRY_TYPE_FUNC_POINTER,"","right_key_down",__right_key_down,sizeof(void *)},
-    [13] = {ENTRY_TYPE_FUNC_POINTER,"","pageup_key_down",__pgup_key_down,sizeof(void *)},
-    [14] = {ENTRY_TYPE_FUNC_POINTER,"","pagedown_key_down",__pgdown_key_down,sizeof(void *)},
-    [15] = {ENTRY_TYPE_FUNC_POINTER,"","one_line_up",__one_line_up,sizeof(void *)},
-    [16] = {ENTRY_TYPE_FUNC_POINTER,"","one_line_down",__one_line_down,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","key_text_pressed",__key_text_pressed,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","key_backspace_pressed",__key_backspace_pressed,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","key_up_pressed",__key_up_pressed,sizeof(void *)},
+    [10] = {ENTRY_TYPE_FUNC_POINTER,"","key_down_pressed",__key_down_pressed,sizeof(void *)},
+    [11] = {ENTRY_TYPE_FUNC_POINTER,"","key_left_pressed",__key_left_pressed,sizeof(void *)},
+    [12] = {ENTRY_TYPE_FUNC_POINTER,"","key_right_pressed",__key_right_pressed,sizeof(void *)},
+    [13] = {ENTRY_TYPE_FUNC_POINTER,"","key_pageup_pressed",__key_pageup_pressed,sizeof(void *)},
+    [14] = {ENTRY_TYPE_FUNC_POINTER,"","key_pagedown_pressed",__key_pagedown_pressed,sizeof(void *)},
+    [15] = {ENTRY_TYPE_FUNC_POINTER,"","key_onelineup_pressed",__key_onelineup_pressed,sizeof(void *)},
+    [16] = {ENTRY_TYPE_FUNC_POINTER,"","key_onelinedown_pressed",__key_onelinedown_pressed,sizeof(void *)},
     [17] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
     [18] = {ENTRY_TYPE_END},
 

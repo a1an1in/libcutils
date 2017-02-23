@@ -73,10 +73,10 @@ static int __set(Button *button, char *attrib, void *value)
 	} 
     else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
-    } else if (strcmp(attrib, "mouse_button_down") == 0) {
-        button->mouse_button_down = value;
-    } else if (strcmp(attrib, "mouse_over") == 0) {
-        button->mouse_over = value;
+    } else if (strcmp(attrib, "mouse_pressed") == 0) {
+        button->mouse_pressed = value;
+    } else if (strcmp(attrib, "mouse_entered") == 0) {
+        button->mouse_entered = value;
 	} 
     else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
@@ -95,17 +95,17 @@ static void *__get(Button *obj, char *attrib)
     return NULL;
 }
 
-static void __mouse_button_down(Component *component,void *event, void *window) 
+static void __mouse_pressed(Component *component,void *event, void *window) 
 {
     __Event *e = (__Event *)event;
 
     dbg_str(DBG_DETAIL,
-            "%s process mouse_button_down event: Mouse button %d pressed at %d,"
+            "%s process mouse_pressed event: Mouse button %d pressed at %d,"
             "%d with click count %d in window %d",
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 }
 
-static void __mouse_over(Component *component,void *event, void *window) 
+static void __mouse_entered(Component *component,void *event, void *window) 
 {
     __Event *e           = (__Event *)event;
 
@@ -122,8 +122,8 @@ static class_info_entry_t button_class_info[] = {
 	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
-    [6] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_button_down",__mouse_button_down,sizeof(void *)},
-    [7] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_over",__mouse_over,sizeof(void *)},
+    [6] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
+    [7] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
 	[8] = {ENTRY_TYPE_END},
 
 };

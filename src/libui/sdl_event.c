@@ -243,41 +243,41 @@ static int __poll_event(__Event *event,void *window)
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_UP, code :%x",e->key.keysym.sym);
                               */
-                             component->up_key_down(component, g);
+                             component->key_up_pressed(component, g);
                              break;
                          case SDLK_DOWN:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_DOWN, code :%x",e->key.keysym.sym);
                               */
-                             component->down_key_down(component, g);
+                             component->key_down_pressed(component, g);
                              break;
                          case SDLK_LEFT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_LEFT, code :%x",e->key.keysym.sym);
                               */
-                             component->left_key_down(component, g);
+                             component->key_left_pressed(component, g);
                              break;
                          case SDLK_RIGHT:
                              /*
                               *dbg_str(DBG_DETAIL,"SDLK_RIGHT, code :%x",e->key.keysym.sym);
                               */
-                             component->right_key_down(component, g);
+                             component->key_right_pressed(component, g);
                              break;
                          case SDLK_PAGEUP:
-                             component->pageup_key_down(component, g);
+                             component->key_pageup_pressed(component, g);
                              break;
                          case SDLK_PAGEDOWN:
-                             component->pagedown_key_down(component, g);
+                             component->key_pagedown_pressed(component, g);
                              break;
                          case SDLK_BACKSPACE:
                              /*
                               *dbg_str(DBG_DETAIL,"BACKSPACE, code :%d",e->key.keysym.sym);
                               */
-                             component->backspace_key_input(component, g);
+                             component->key_backspace_pressed(component, g);
                              break;
                          case SDLK_j:
                               if (SDL_GetModState() & KMOD_CTRL) {
-                                  component->one_line_up(component, g);
+                                  component->key_onelineup_pressed(component, g);
                               } else{
                                   dbg_str(DBG_IMPORTANT,"key j down");
                               }
@@ -287,7 +287,7 @@ static int __poll_event(__Event *event,void *window)
                                   /*
                                    *dbg_str(DBG_IMPORTANT,"ctrl + k");
                                    */
-                                  component->one_line_down(component, g);
+                                  component->key_onelinedown_pressed(component, g);
                               }
                              break;
                          default:
@@ -312,9 +312,9 @@ static int __poll_event(__Event *event,void *window)
                      event->window   = window;
 
                      /*
-                      *event->mouse_button_down(event, window);
+                      *event->mouse_pressed(event, window);
                       */
-                     component->mouse_button_down(component, event, window);
+                     component->mouse_pressed(component, event, window);
                      break;
                  case SDL_MOUSEMOTION:
                      event->x        = e->motion.x;
@@ -324,7 +324,7 @@ static int __poll_event(__Event *event,void *window)
                      event->windowid = e->button.windowID;
                      event->window   = window;
 
-                     component->mouse_over(component, event, window);
+                     component->mouse_entered(component, event, window);
                      break;
                  case SDL_MOUSEWHEEL: 
                      event->x         = e->wheel.x;
@@ -332,7 +332,7 @@ static int __poll_event(__Event *event,void *window)
                      event->direction = e->wheel.direction;
                      event->windowid  = e->button.windowID;
                      event->window    = window;
-                     component->mouse_wheel(component, event, window);
+                     component->mouse_wheel_moved(component, event, window);
                      break;
                  case SDL_TEXTEDITING:
                      print_text("EDIT", e->text.text);
@@ -342,7 +342,7 @@ static int __poll_event(__Event *event,void *window)
                      /*
                       *event->text_input(e->text.text[0], window);
                       */
-                     component->text_key_input(component,e->text.text[0], g);
+                     component->key_text_pressed(component,e->text.text[0], g);
                      break;
                  case SDL_FINGERDOWN:
                  case SDL_FINGERUP:

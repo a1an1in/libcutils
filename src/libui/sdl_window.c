@@ -301,8 +301,8 @@ char *gen_window_setting_str()
                     cjson_add_item_to_object(e, "Subject", s = cjson_create_object());{
                         cjson_add_number_to_object(s, "x", 0);
                         cjson_add_number_to_object(s, "y", 0);
-                        cjson_add_number_to_object(s, "width", 5);
-                        cjson_add_number_to_object(s, "height", 125);
+                        cjson_add_number_to_object(s, "width", 600);
+                        cjson_add_number_to_object(s, "height", 600);
                         cjson_add_number_to_object(s, "x_speed", 1.2);
                         cjson_add_number_to_object(s, "y_speed", 2.3);
                     }
