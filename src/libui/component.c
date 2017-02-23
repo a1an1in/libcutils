@@ -91,16 +91,16 @@ static int __set(Component *component, char *attrib, void *value)
         component->key_onelinedown_pressed = value;
     } else if (strcmp(attrib, "mouse_pressed") == 0) {
         component->mouse_pressed = value;
-    } else if (strcmp(attrib, "mouse_entered") == 0) {
-        component->mouse_entered = value;
+    } else if (strcmp(attrib, "mouse_moved") == 0) {
+        component->mouse_moved = value;
     } else if (strcmp(attrib, "mouse_wheel_moved") == 0) {
         component->mouse_wheel_moved = value;
     } else if (strcmp(attrib, "window_moved") == 0) {
         component->window_moved = value;
     } else if (strcmp(attrib, "window_resized") == 0) {
         component->window_resized = value;
-    } else if (strcmp(attrib, "is_mouse_entered_component") == 0) {
-        component->is_mouse_entered_component = value;
+    } else if (strcmp(attrib, "is_mouse_over_component") == 0) {
+        component->is_mouse_over_component = value;
     }
     else if (strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
@@ -156,7 +156,7 @@ static void subcomponent_draw(Iterator *iter, void *arg)
     uint8_t *addr;
     Graph *g = (Graph *)arg;
 
-    addr = (uint8_t *)iter->get_vpointer(iter);
+    addr      = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
 
     if (component->draw) component->draw(component, g);
@@ -165,7 +165,7 @@ static void subcomponent_draw(Iterator *iter, void *arg)
 static int __draw(Component *component, void *graph)
 {
     Container *container = (Container *)component;
-    Graph *g = (Graph *)graph;
+    Graph *g             = (Graph *)graph;
     dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
 
     container->for_each_component(container, subcomponent_draw, g);
@@ -322,11 +322,11 @@ static void subcomponent_mouse_pressed(Iterator *iter, void *arg)
     Component *component;
     uint8_t *addr;
 
-    addr = (uint8_t *)iter->get_vpointer(iter);
+    addr      = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
-	s = (Subject *)component;
+	s         = (Subject *)component;
 
-    if (component->is_mouse_entered_component(component, event) == 0) {
+    if (component->is_mouse_over_component(component, event) == 0) {
         return;
     }
 
@@ -341,7 +341,7 @@ static void __mouse_pressed(Component *component,void *event, void *window)
     __Event *e           = (__Event *)event;
     Component *cur;
 
-    if (component->is_mouse_entered_component(component, event) == 0) {
+    if (component->is_mouse_over_component(component, event) == 0) {
         return;
     }
 
@@ -355,10 +355,10 @@ static void __mouse_pressed(Component *component,void *event, void *window)
     container->for_each_component(container, subcomponent_mouse_pressed, event);
 }
 
-int  __is_mouse_entered_component(Component *component,void *event)
+int  __is_mouse_over_component(Component *component,void *event)
 {
 	Subject *s = (Subject *)component;
-    __Event *e           = (__Event *)event;
+    __Event *e = (__Event *)event;
 
     /*
      *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
@@ -379,7 +379,7 @@ int  __is_mouse_entered_component(Component *component,void *event)
 
 }
 
-static void subcomponent_mouse_entered(Iterator *iter, void *arg) 
+static void subcomponent_mouse_moved(Iterator *iter, void *arg) 
 {
     Graph *g       = (Graph *)arg;
     __Event *event = (__Event *)arg;
@@ -389,15 +389,15 @@ static void subcomponent_mouse_entered(Iterator *iter, void *arg)
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
 
-    if (component->is_mouse_entered_component(component, event) == 0) {
+    if (component->is_mouse_over_component(component, event) == 0) {
         return;
     }
 
-    if (component->mouse_entered) component->mouse_entered(component, event, event->window);
+    if (component->mouse_moved) component->mouse_moved(component, event, event->window);
 }
 
 
-static void __mouse_entered(Component *component,void *event, void *window) 
+static void __mouse_moved(Component *component,void *event, void *window) 
 {
     Container *container = (Container *)component;
     Window *w            = (Window *)window;
@@ -409,16 +409,16 @@ static void __mouse_entered(Component *component,void *event, void *window)
      *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
      *        e->x, e->y, e->xrel, e->yrel, e->windowid);
      */
-    if (component->is_mouse_entered_component(component, event) == 0) {
+    if (component->is_mouse_over_component(component, event) == 0) {
         return;
     }
-    container->for_each_component(container, subcomponent_mouse_entered, event);
+    container->for_each_component(container, subcomponent_mouse_moved, event);
 
 }
 
 static void __mouse_wheel_moved(Component *component,void *event, void *window) 
 {
-    __Event *e           = (__Event *)event;
+    __Event *e = (__Event *)event;
 
     dbg_str(DBG_DETAIL, "EVENT: Mouse: wheel scrolled %d in x and %d in y (direction: %d) in window %d", 
             e->x, e->y, e->direction, e->windowid);
@@ -431,7 +431,7 @@ static void __window_moved(Component *component,void *event, void *window)
 
 static void __window_resized(Component *component,void *event, void *window) 
 {
-    __Event *e           = (__Event *)event;
+    __Event *e = (__Event *)event;
 
     dbg_str(DBG_DETAIL,"EVENT: Window %d resized to %dx%d",
             e->data1, e->data2, e->windowid);
@@ -457,11 +457,11 @@ static class_info_entry_t component_class_info[] = {
     [16] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelineup_pressed",__key_onelineup_pressed,sizeof(void *)},
     [17] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelinedown_pressed",__key_onelinedown_pressed,sizeof(void *)},
     [18] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
-    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
+    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
     [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel_moved",__mouse_wheel_moved,sizeof(void *)},
     [21] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
     [22] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
-    [23] = {ENTRY_TYPE_VFUNC_POINTER,"","is_mouse_entered_component",__is_mouse_entered_component,sizeof(void *)},
+    [23] = {ENTRY_TYPE_VFUNC_POINTER,"","is_mouse_over_component",__is_mouse_over_component,sizeof(void *)},
     [24] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
     [25] = {ENTRY_TYPE_END},
 

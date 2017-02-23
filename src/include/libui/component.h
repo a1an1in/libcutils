@@ -39,7 +39,7 @@ struct component_s{
     void (*mouse_moved)(Component *component,void *event, void *window);
     void (*mouse_dragged)(Component *component,void *event, void *window);
     void (*mouse_wheel_moved)(Component *component,void *event, void *window);
-    int  (*is_mouse_entered_component)(Component *component,void *event);
+    int  (*is_mouse_over_component)(Component *component,void *event);
 
     void (*window_moved)(Component *component,void *event, void *window);
     void (*window_resized)(Component *component,void *event, void *window);

@@ -311,9 +311,6 @@ static int __poll_event(__Event *event,void *window)
                      event->windowid = e->button.windowID;
                      event->window   = window;
 
-                     /*
-                      *event->mouse_pressed(event, window);
-                      */
                      component->mouse_pressed(component, event, window);
                      break;
                  case SDL_MOUSEMOTION:
@@ -324,7 +321,7 @@ static int __poll_event(__Event *event,void *window)
                      event->windowid = e->button.windowID;
                      event->window   = window;
 
-                     component->mouse_entered(component, event, window);
+                     component->mouse_moved(component, event, window);
                      break;
                  case SDL_MOUSEWHEEL: 
                      event->x         = e->wheel.x;
@@ -332,6 +329,7 @@ static int __poll_event(__Event *event,void *window)
                      event->direction = e->wheel.direction;
                      event->windowid  = e->button.windowID;
                      event->window    = window;
+
                      component->mouse_wheel_moved(component, event, window);
                      break;
                  case SDL_TEXTEDITING:
@@ -339,9 +337,7 @@ static int __poll_event(__Event *event,void *window)
                      break;
                  case SDL_TEXTINPUT:
                      event->window   = window;
-                     /*
-                      *event->text_input(e->text.text[0], window);
-                      */
+
                      component->key_text_pressed(component,e->text.text[0], g);
                      break;
                  case SDL_FINGERDOWN:

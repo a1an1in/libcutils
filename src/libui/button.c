@@ -75,8 +75,14 @@ static int __set(Button *button, char *attrib, void *value)
 		button->move = value;
     } else if (strcmp(attrib, "mouse_pressed") == 0) {
         button->mouse_pressed = value;
+    } else if (strcmp(attrib, "mouse_released") == 0) {
+        button->mouse_released = value;
     } else if (strcmp(attrib, "mouse_entered") == 0) {
         button->mouse_entered = value;
+    } else if (strcmp(attrib, "mouse_exited") == 0) {
+        button->mouse_exited = value;
+    } else if (strcmp(attrib, "mouse_moved") == 0) {
+        button->mouse_moved = value;
 	} 
     else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
@@ -105,9 +111,14 @@ static void __mouse_pressed(Component *component,void *event, void *window)
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 }
 
+static void __mouse_released(Component *component,void *event, void *window) 
+{
+
+}
+
 static void __mouse_entered(Component *component,void *event, void *window) 
 {
-    __Event *e           = (__Event *)event;
+    __Event *e = (__Event *)event;
 
     /*
      *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
@@ -115,16 +126,33 @@ static void __mouse_entered(Component *component,void *event, void *window)
      */
 }
 
+static void __mouse_exited(Component *component,void *event, void *window) 
+{
+
+}
+
+static void __mouse_moved(Component *component,void *event, void *window) 
+{
+    __Event *e = (__Event *)event;
+
+    dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
+            e->x, e->y, e->xrel, e->yrel, e->windowid);
+
+}
+
 static class_info_entry_t button_class_info[] = {
-	[0] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
-	[1] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
-	[2] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-	[3] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[4] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[5] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
-    [6] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
-    [7] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
-	[8] = {ENTRY_TYPE_END},
+	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
+	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
+	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_released",__mouse_released,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_exited",__mouse_exited,sizeof(void *)},
+    [10] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
+	[11] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Button",button_class_info);

@@ -17,8 +17,13 @@ struct button_s{
 
 	/*virtual methods reimplement*/
 	int (*move)(Button *button);
+
     void (*mouse_pressed)(Component *component,void *event, void *window);
+    void (*mouse_released)(Component *component,void *event, void *window);
     void (*mouse_entered)(Component *component,void *event, void *window);
+    void (*mouse_exited)(Component *component,void *event, void *window);
+    void (*mouse_moved)(Component *component,void *event, void *window);
+    void (*mouse_dragged)(Component *component,void *event, void *window);
 };
 
 #endif
