@@ -331,6 +331,7 @@ void test_ui_sdl_window()
 
     set_str = gen_window_setting_str();
 
+    dbg_str(DBG_SUC, "test_ui_sdl_window begin alloc count =%d",allocator->alloc_count);
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
     g       = window->graph;
 
@@ -341,7 +342,9 @@ void test_ui_sdl_window()
     g->render_draw_image(g,0,0,window->background);
     g->render_present(g);
 
-    sleep(2);
+    /*
+     *sleep(2);
+     */
     g->render_clear(g);
     g->render_set_color(g,0xff,0x0,0xff,0xff);
     g->render_draw_line(g,20,0,50,50);
@@ -351,9 +354,12 @@ void test_ui_sdl_window()
      *g->render_fill_rect(g,20,20,100,100);
      */
     g->render_present(g);
-    sleep(5);
+    /*
+     *sleep(5);
+     */
 
     object_destroy(window);
+    dbg_str(DBG_SUC, "test_ui_sdl_window end alloc count =%d",allocator->alloc_count);
 
     free(set_str);
 

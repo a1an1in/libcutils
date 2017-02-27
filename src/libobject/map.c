@@ -131,8 +131,6 @@ static void __for_each(Map *map,void (*func)(Iterator *iter))
         func(cur);
     }
 
-    object_destroy(cur);
-    object_destroy(end);
 }
 
 static void __for_each_arg2(Map *map,void (*func)(Iterator *iter,void *arg),void *arg)
@@ -147,8 +145,6 @@ static void __for_each_arg2(Map *map,void (*func)(Iterator *iter,void *arg),void
         func(cur, arg);
     }
 
-    object_destroy(cur);
-    object_destroy(end);
 }
 
 static Iterator *__begin(Map *map)

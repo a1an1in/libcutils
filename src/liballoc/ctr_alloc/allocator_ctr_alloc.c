@@ -108,28 +108,18 @@ static int __init(allocator_t *allocator)
     return 0;
 }
 
-static void *__alloc(allocator_t *allocator,uint32_t size)
+static void *alloc_huge_slab(allocator_t *allocator,uint32_t size)
+{
+    dbg_str(DBG_DETAIL,"alloc_huge_slab");
+    allocator->alloc_count++;
+
+    return malloc(size);
+}
+
+static void *alloc_normal_slab(allocator_t *allocator,uint32_t size)
 {
     ctr_slab_t *slab_list;
     uint32_t index;
-    ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
-
-    index = slab_get_slab_index(allocator,size);
-    /*
-     *dbg_str(ALLOC_DETAIL,"allocator mem,size=%d,index=%d,slab_array_max_num=%d",
-     *        size,index,allocator->priv.ctr_alloc.slab_array_max_num);
-     */
-    if (size > ctr_alloc->mempool_capacity) {
-        dbg_str(DBG_ERROR,"apply szie excess mempool_capacity");
-        return NULL;
-    }
-
-    if (index >= ctr_alloc->slab_array_max_num) {
-        dbg_str(DBG_ERROR,"apply size:%d too large,max size:%d,excess slab num,"
-                "please assignd by sys malloc,or reconfig ctr_alloc",
-                size,ctr_alloc->slab_array_max_num*ctr_alloc->data_min_size);
-        return NULL;
-    }
 
     if (!(slab_list = slab_detach_front_list_from_free_slabs(allocator,size))) {
         if (!(slab_list = mempool_alloc_slab_list(allocator,size))) {  
@@ -139,6 +129,7 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
     }
 
     slab_attach_list_to_used_slabs(allocator,&slab_list->list_head,size);
+
     allocator->alloc_count++;
 
     dbg_str(ALLOC_IMPORTANT,"ctr_alloc allocator mem,request size=%d,mem addr=%p,"
@@ -147,29 +138,40 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
     return slab_list->mem_addr;
 }
 
-static void __free(allocator_t *allocator,void *addr)
+static void *__alloc(allocator_t *allocator,uint32_t size)
+{
+    uint32_t index;
+    ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
+    void *mem;
+
+    index = slab_get_slab_index(allocator,size);
+    /*
+     *dbg_str(ALLOC_DETAIL,"allocator mem,size=%d,index=%d,slab_array_max_num=%d",
+     *        size,index,allocator->priv.ctr_alloc.slab_array_max_num);
+     */
+    if (size > ctr_alloc->mempool_capacity || index >= ctr_alloc->slab_array_max_num) {
+        dbg_str(DBG_WARNNING,"ctr alloc size = %d, which is too huge, using sys malloc", size);
+        mem = alloc_huge_slab(allocator,size);
+        return mem;
+    }
+
+    mem = alloc_normal_slab(allocator,size);
+
+    return mem;
+}
+
+static free_huge_slab(allocator_t *allocator,void *addr)
+{
+    free(addr);
+    allocator->alloc_count--;
+}
+
+static free_normal_slab(allocator_t *allocator,ctr_slab_t *slab_list)
 {
     ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
-    ctr_slab_t *slab_list;
     struct list_head *new_head;
     struct list_head **free_slabs;
     uint32_t size;
-
-    if (addr == NULL) {
-        dbg_str(ALLOC_DETAIL,"release addr is NULL");
-        return;
-    }
-    slab_list = container_of(addr,ctr_slab_t,data);
-    if (slab_list->stat_flag == 0) {
-        dbg_str(DBG_WARNNING,"this addr has been released");
-        return;
-    }
-
-    /*
-     *dbg_str(ALLOC_DETAIL,"release slab_list:%p",slab_list);
-     *dbg_str(ALLOC_DETAIL,"release mem_addr:%p,addr:%p",slab_list->mem_addr,addr);
-     */
-    allocator->alloc_count--;
 
     new_head = &slab_list->list_head;
     size = slab_list->size;
@@ -183,8 +185,46 @@ static void __free(allocator_t *allocator,void *addr)
                                    new_head,//struct list_head *new_head,
                                    size);//uint32_t size);
 
-    dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p,allocator using count=%d",
-            addr,allocator->alloc_count);
+    allocator->alloc_count--;
+
+}
+
+static void __free(allocator_t *allocator,void *addr)
+{
+    ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
+    ctr_slab_t *slab_list;
+    struct list_head *new_head;
+    struct list_head **free_slabs;
+    uint32_t size;
+    uint32_t index;
+
+    if (addr == NULL) {
+        dbg_str(ALLOC_DETAIL,"release addr is NULL");
+        return;
+    }
+    slab_list = container_of(addr,ctr_slab_t,data);
+    if (slab_list->stat_flag == 0) {
+        dbg_str(DBG_WARNNING,"this addr has been released");
+        return;
+    }
+
+    size = slab_list->size;
+    index = slab_get_slab_index(allocator,size);
+    if (size >= ctr_alloc->mempool_capacity || index >= ctr_alloc->slab_array_max_num) {
+        free_huge_slab(allocator,addr);
+        return;
+    }
+
+    /*
+     *dbg_str(ALLOC_DETAIL,"release slab_list:%p",slab_list);
+     *dbg_str(ALLOC_DETAIL,"release mem_addr:%p,addr:%p",slab_list->mem_addr,addr);
+     */
+
+    free_normal_slab(allocator,slab_list);
+
+    dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p,size =%d, allocator using count=%d",
+            addr,slab_list->data_size, allocator->alloc_count);
+
 }
 
 static void __info(allocator_t *allocator)
@@ -246,5 +286,6 @@ int allocator_ctr_alloc_register() {
     };
     memcpy(&allocator_modules[ALLOCATOR_TYPE_CTR_MALLOC],
            &salloc,sizeof(allocator_module_t));
+
     return 0;
 }

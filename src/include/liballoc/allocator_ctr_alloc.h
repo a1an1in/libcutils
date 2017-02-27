@@ -29,30 +29,25 @@
 typedef struct ctr_mem_pool_head_list{
 	uint32_t size;
 	uint32_t count;
-	/*
-	 *pthread_rwlock_t head_lock;
-	 */
 	sync_lock_t head_lock;    
 	struct list_head list_head;
 }ctr_mempool_head_list_t;
+
 typedef struct ctr_mem_pool{
 	void *start;
 	uint32_t depth;
 	uint32_t min_depth;
 	uint32_t size;
-	//pthread_rwlock_t head_lock;
 	struct list_head list_head;
 }ctr_mempool_t;
 
 typedef struct slab_head_list{
 	uint16_t size;
 	uint32_t count;
-	/*
-	 *pthread_rwlock_t head_lock;
-	 */
 	sync_lock_t head_lock;    
 	struct list_head list_head;
 }ctr_slab_head_list_t;
+
 typedef struct slab{
 	uint16_t size;
 	uint16_t data_size;
@@ -72,5 +67,7 @@ typedef struct ctr_alloc_s{
 	struct list_head **free_slabs;
 	struct list_head **used_slabs;
 }ctr_alloc_t;
+
 int allocator_ctr_alloc_register();
+
 #endif

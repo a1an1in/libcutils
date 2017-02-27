@@ -304,6 +304,7 @@ void test_ui_label()
     object_dump(window, "Sdl_Window", buf, 2048);
     dbg_str(DBG_DETAIL,"Window dump: %s",buf);
 
+    dbg_str(DBG_SUC, "test_ui_label begin alloc count =%d",allocator->alloc_count);
     subject = new_label(allocator,0, 0, 80, 20, "label");
 
     object_dump(subject, "Label", buf, 2048);
@@ -317,6 +318,8 @@ void test_ui_label()
     window->update_window(window);
 
     event->poll_event(event, window);
+
+    dbg_str(DBG_SUC, "test_ui_label end alloc count =%d",allocator->alloc_count);
 
     object_destroy(window);
 }

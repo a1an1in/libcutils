@@ -62,6 +62,7 @@ void slab_init_head_list(struct list_head **hl_head,uint8_t lock_type)
         dbg_str(ALLOC_ERROR,"malloc slab list_head_list");
         return;
     }
+
     sync_lock_init(&head_list->head_lock,lock_type);
     head_list->count = 0;
     INIT_LIST_HEAD(&head_list->list_head);

@@ -36,6 +36,7 @@
 static int __construct(Map *map,char *init_str)
 {
     Hash_Map *h = (Hash_Map *)map;
+    allocator_t *allocator = map->obj.allocator;
 
     if (h->key_size == 0)    { h->key_size = 10;    }
     if (h->value_size == 0)  { h->value_size = 100; }
@@ -44,12 +45,16 @@ static int __construct(Map *map,char *init_str)
     dbg_str(DBG_DETAIL,"hash map construct, key_size=%d,value_size=%d,bucket_size=%d",
             h->key_size,h->value_size,h->bucket_size);
 
-    h->hmap = hash_map_alloc(map->obj.allocator);
+    h->hmap = hash_map_alloc(allocator);
 
     hash_map_init(h->hmap,
                   h->key_size,//uint32_t key_size,
                   h->value_size,
                   h->bucket_size);
+
+
+    map->b = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
+    map->e = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
 
     return 0;
 }
@@ -57,6 +62,8 @@ static int __construct(Map *map,char *init_str)
 static int __deconstrcut(Map *map)
 {
     dbg_str(OBJ_DETAIL,"hash map deconstruct,map addr:%p",map);
+    object_destroy(map->b);
+    object_destroy(map->e);
     hash_map_destroy(((Hash_Map *)map)->hmap);
 
     return 0;
@@ -158,29 +165,22 @@ static int __del(Map *map,Iterator *iter)
 
 static Iterator *__begin(Map *map)
 {
-    Iterator *iter;
-    allocator_t *allocator = map->obj.allocator;
+    Hmap_Iterator *iter = (Hmap_Iterator *)map->b;
 
     dbg_str(OBJ_DETAIL,"Hash Map begin");
 
-    iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
-
-    hash_map_begin(((Hash_Map *)map)->hmap,
-                    &((Hmap_Iterator *)iter)->hash_map_pos);
+    hash_map_begin(((Hash_Map *)map)->hmap, &iter->hash_map_pos);
 
     return iter;
 }
 
 static Iterator *__end(Map *map)
 {
-    Iterator *iter;
-    allocator_t *allocator = map->obj.allocator;
+    Hmap_Iterator *iter = (Hmap_Iterator *)map->e;
 
     dbg_str(OBJ_DETAIL,"Hash Map end");
-    iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
 
-    hash_map_end(((Hash_Map *)map)->hmap,
-                 &((Hmap_Iterator *)iter)->hash_map_pos);
+    hash_map_end(((Hash_Map *)map)->hmap, &iter->hash_map_pos);
 
     return iter;
 }
@@ -229,6 +229,8 @@ void test_obj_hash_map()
     set_str = cjson_print(root);
 
 #if 1
+    dbg_str(DBG_SUC, "hash_map test begin alloc count =%d",allocator->alloc_count);
+
     Map *map;
     map  = OBJECT_NEW(allocator, Hash_Map,set_str);
     iter = OBJECT_NEW(allocator, Hmap_Iterator,set_str);
@@ -261,6 +263,9 @@ void test_obj_hash_map()
 #endif
     object_destroy(map);
     object_destroy(iter);
+
+    dbg_str(DBG_SUC, "hash_map test end alloc count =%d",allocator->alloc_count);
+
     free(set_str);
 }
 

@@ -42,7 +42,8 @@ allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)
         return p;
     }
     p->allocator_type = allocator_type;
-    p->lock_type = lock_type;
+    p->lock_type      = lock_type;
+    p->alloc_count    = 0;
 
     return p;
 }
@@ -55,8 +56,8 @@ void allocator_ctr_init(allocator_t * alloc,
     ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
 
     alloc_p->slab_array_max_num = slab_array_max_num;
-    alloc_p->data_min_size = data_min_size;
-    alloc_p->mempool_capacity = mempool_capacity;
+    alloc_p->data_min_size      = data_min_size;
+    alloc_p->mempool_capacity   = mempool_capacity;
     allocator_modules[alloc->allocator_type].alloc_ops.init(alloc);
 
 }

@@ -71,6 +71,7 @@ static int __construct(String *string,char *init_str)
 {
     dbg_str(OBJ_DETAIL,"string construct, string addr:%p",string);
     string->value = (char *)allocator_mem_alloc(string->obj.allocator, 256);
+    string->value_max_len = 256;
     return 0;
 }
 
@@ -216,6 +217,7 @@ void test_obj_string()
 
     set_str = cjson_print(root);
 
+    dbg_str(DBG_SUC, "test_obj_string begin alloc count =%d",allocator->alloc_count);
     string = OBJECT_NEW(allocator, String,set_str);
 
     string->assign(string,"hello world!");
@@ -228,6 +230,7 @@ void test_obj_string()
     free(set_str);
 
     object_destroy(string);
+    dbg_str(DBG_SUC, "test_obj_string end alloc count =%d",allocator->alloc_count);
 
 }
 
