@@ -37,6 +37,8 @@ static int __construct(Component *component,char *init_str)
 {
     dbg_str(DBG_DETAIL,"component construct, component addr:%p",component);
 
+    component->mouse_entered_flag = 0;
+
     return 0;
 }
 
@@ -93,6 +95,10 @@ static int __set(Component *component, char *attrib, void *value)
         component->mouse_pressed = value;
     } else if (strcmp(attrib, "mouse_moved") == 0) {
         component->mouse_moved = value;
+    } else if (strcmp(attrib, "mouse_entered") == 0) {
+        component->mouse_entered = value;
+    } else if (strcmp(attrib, "mouse_exited") == 0) {
+        component->mouse_exited = value;
     } else if (strcmp(attrib, "mouse_wheel_moved") == 0) {
         component->mouse_wheel_moved = value;
     } else if (strcmp(attrib, "window_moved") == 0) {
@@ -390,7 +396,16 @@ static void subcomponent_mouse_moved(Iterator *iter, void *arg)
     component = (Component *)buffer_to_addr(addr);
 
     if (component->is_mouse_over_component(component, event) == 0) {
+        if (component->mouse_entered_flag == 1) {
+            if (component->mouse_exited) component->mouse_exited(component, event, event->window);
+            component->mouse_entered_flag = 0;
+        }
         return;
+    }
+
+    if (component->mouse_entered_flag == 0) {
+        if (component->mouse_entered) component->mouse_entered(component, event, event->window);
+        component->mouse_entered_flag = 1;
     }
 
     if (component->mouse_moved) component->mouse_moved(component, event, event->window);
@@ -458,12 +473,14 @@ static class_info_entry_t component_class_info[] = {
     [17] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelinedown_pressed",__key_onelinedown_pressed,sizeof(void *)},
     [18] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
     [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
-    [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel_moved",__mouse_wheel_moved,sizeof(void *)},
-    [21] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
-    [22] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
-    [23] = {ENTRY_TYPE_VFUNC_POINTER,"","is_mouse_over_component",__is_mouse_over_component,sizeof(void *)},
-    [24] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [25] = {ENTRY_TYPE_END},
+    [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_entered",NULL,sizeof(void *)},
+    [21] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_exited",NULL,sizeof(void *)},
+    [22] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel_moved",__mouse_wheel_moved,sizeof(void *)},
+    [23] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
+    [24] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
+    [25] = {ENTRY_TYPE_VFUNC_POINTER,"","is_mouse_over_component",__is_mouse_over_component,sizeof(void *)},
+    [26] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [27] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

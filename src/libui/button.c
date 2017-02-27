@@ -116,7 +116,7 @@ static void __mouse_released(Component *component,void *event, void *window)
 
 }
 
-static void __mouse_entered(Component *component,void *event, void *window) 
+static void __mouse_moved(Component *component,void *event, void *window) 
 {
     __Event *e = (__Event *)event;
 
@@ -124,20 +124,23 @@ static void __mouse_entered(Component *component,void *event, void *window)
      *dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
      *        e->x, e->y, e->xrel, e->yrel, e->windowid);
      */
+
+}
+
+static void __mouse_entered(Component *component,void *event, void *window) 
+{
+    __Event *e = (__Event *)event;
+
+    dbg_str(DBG_DETAIL, "EVENT: Mouse entered %s: moved to %d,%d (%d,%d) in window %d",
+            component->name, e->x, e->y, e->xrel, e->yrel, e->windowid);
 }
 
 static void __mouse_exited(Component *component,void *event, void *window) 
 {
-
-}
-
-static void __mouse_moved(Component *component,void *event, void *window) 
-{
     __Event *e = (__Event *)event;
 
-    dbg_str(DBG_DETAIL, "EVENT: Mouse: moved to %d,%d (%d,%d) in window %d",
-            e->x, e->y, e->xrel, e->yrel, e->windowid);
-
+    dbg_str(DBG_DETAIL, "EVENT: Mouse exited %s: moved to %d,%d (%d,%d) in window %d",
+            component->name, e->x, e->y, e->xrel, e->yrel, e->windowid);
 }
 
 static class_info_entry_t button_class_info[] = {
