@@ -84,10 +84,15 @@ default_allocator_constructor()
     CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR=%d,construct default allocator\n",
                       CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
 
+#if 0
     if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
         dbg_str(DBG_ERROR,"proxy_create allocator_creator err");
         exit(1);
     }
+#else 
+    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
+    allocator_ctr_init(allocator, 0, 64, 0);
+#endif
     global_allocator_default = allocator;
 
     return;

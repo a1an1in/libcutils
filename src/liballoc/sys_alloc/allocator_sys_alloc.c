@@ -30,21 +30,23 @@
 #include <string.h>
 #include "liballoc/inc_files.h"
 
-void *sys_alloc_alloc(allocator_t *alloc,uint32_t size)
+static void *__alloc(allocator_t *alloc,uint32_t size)
 {
     return malloc(size);
 }
-void sys_alloc_free(allocator_t *alloc,void *addr)
+
+static void __free(allocator_t *alloc,void *addr)
 {
     free(addr);
 }
+
 int allocator_sys_alloc_register(){
     allocator_module_t salloc = {
         .allocator_type = ALLOCATOR_TYPE_SYS_MALLOC,
         .alloc_ops = {
             .init    = NULL,
-            .alloc   = sys_alloc_alloc,
-            .free    = sys_alloc_free,
+            .alloc   = __alloc,
+            .free    = __free,
             .destroy = NULL,
         }
     };

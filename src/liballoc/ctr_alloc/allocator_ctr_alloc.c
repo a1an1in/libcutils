@@ -47,7 +47,7 @@
 #include "libdbg/debug.h"
 #include "liballoc/inc_files.h"
 
-int ctr_alloc_init(allocator_t *alloc)
+static int __init(allocator_t *alloc)
 {
     ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
     ctr_mempool_t *mempool;
@@ -55,35 +55,36 @@ int ctr_alloc_init(allocator_t *alloc)
     int slab_array_max_num;
     int i;
 
-    dbg_str(ALLOC_DETAIL,"in ctr_alloc_init");
-
-    if(!alloc_p->slab_array_max_num) {
+    if (!alloc_p->slab_array_max_num) {
         alloc_p->slab_array_max_num = SLAB_ARRAY_MAX_NUM;
     }
-    if(!alloc_p->data_min_size){
+    if (!alloc_p->data_min_size){
         alloc_p->data_min_size = 8;
     }
-    if(!alloc_p->mempool_capacity){
+    if (!alloc_p->mempool_capacity){
         alloc_p->mempool_capacity = MEM_POOL_MAX_SIZE;
     }
     alloc->alloc_count = 0;
 
-    dbg_str(ALLOC_DETAIL,"slab_num=%d,data_size=%d,cap=%d",alloc_p->slab_array_max_num,alloc_p->data_min_size,alloc_p->mempool_capacity);
+    dbg_str(ALLOC_DETAIL,"slab_num=%d,data_size=%d,cap=%d",
+            alloc_p->slab_array_max_num,
+            alloc_p->data_min_size,
+            alloc_p->mempool_capacity);
 
     slab_array_max_num = alloc_p->slab_array_max_num;
 
     free_slabs = (struct list_head **)malloc(slab_array_max_num * sizeof(int *));
-    if(free_slabs == NULL){
-        dbg_str(DBG_ERROR,"ctr_alloc_init");
+    if (free_slabs == NULL){
+        dbg_str(DBG_ERROR,"__init");
         return -1;
-    }else{
+    } else {
         alloc_p->used_slabs = free_slabs;
     }
     used_slabs = (struct list_head **)malloc(slab_array_max_num * sizeof(int *));
-    if(used_slabs == NULL){
-        dbg_str(DBG_ERROR,"ctr_alloc_init");
+    if (used_slabs == NULL){
+        dbg_str(DBG_ERROR,"__init");
         return -1;
-    }else{
+    } else {
         alloc_p->free_slabs = used_slabs;
     }
 
@@ -95,19 +96,18 @@ int ctr_alloc_init(allocator_t *alloc)
 
     mempool_init_head_list(&alloc_p->pool,alloc->lock_type);
     mempool = mempool_create_list(alloc);
-    if(mempool == NULL){
+    if (mempool == NULL){
         alloc_p->pool = NULL;
-    }else{
+    } else {
         mempool_attach_list(&mempool->list_head,alloc_p->pool);
     }
 
     mempool_init_head_list(&alloc_p->empty_pool,alloc->lock_type);
 
-    dbg_str(ALLOC_DETAIL,"out ctr_alloc_init");
-
     return 0;
 }
-void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)
+
+static void *__alloc(allocator_t *alloc,uint32_t size)
 {
     ctr_slab_t *slab_list;
     uint32_t index;
@@ -117,18 +117,19 @@ void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)
      *dbg_str(ALLOC_DETAIL,"alloc mem,size=%d,index=%d,slab_array_max_num=%d",
      *        size,index,alloc->priv.ctr_alloc.slab_array_max_num);
      */
-    if(size > alloc->priv.ctr_alloc.mempool_capacity){
+    if (size > alloc->priv.ctr_alloc.mempool_capacity){
         dbg_str(DBG_ERROR,"apply szie excess mempool_capacity");
         return NULL;
     }
-    if(index >= alloc->priv.ctr_alloc.slab_array_max_num){
+    if (index >= alloc->priv.ctr_alloc.slab_array_max_num){
         dbg_str(DBG_ERROR,"apply size:%d too large,max size:%d,excess slab num,"
-                "please assignd by sys malloc,or reconfig ctr_alloc",size,20*8);
+                "please assignd by sys malloc,or reconfig ctr_alloc",
+                size,alloc->priv.ctr_alloc.slab_array_max_num*alloc->priv.ctr_alloc.data_min_size);
         return NULL;
     }
 
-    if(!(slab_list = slab_detach_front_list_from_free_slabs(alloc,size))){
-        if(!(slab_list = mempool_alloc_slab_list(alloc,size))){  
+    if (!(slab_list = slab_detach_front_list_from_free_slabs(alloc,size))){
+        if (!(slab_list = mempool_alloc_slab_list(alloc,size))){  
             dbg_str(DBG_ERROR,"alloc slab list err");
             return NULL;
         }
@@ -140,7 +141,8 @@ void *ctr_alloc_alloc(allocator_t *alloc,uint32_t size)
 
     return slab_list->mem_addr;
 }
-void ctr_alloc_free(allocator_t *alloc,void *addr)
+
+static void __free(allocator_t *alloc,void *addr)
 {
     ctr_slab_t *slab_list;
     struct list_head *new_head;
@@ -148,12 +150,12 @@ void ctr_alloc_free(allocator_t *alloc,void *addr)
     uint32_t size;
     ctr_alloc_t *alloc_p = &alloc->priv.ctr_alloc;
 
-    if(addr == NULL){
+    if (addr == NULL){
         dbg_str(ALLOC_DETAIL,"release addr is NULL");
         return;
     }
     slab_list = container_of(addr,ctr_slab_t,data);
-    if(slab_list->stat_flag == 0){
+    if (slab_list->stat_flag == 0){
         dbg_str(DBG_WARNNING,"this addr has been released");
         return;
     }
@@ -177,7 +179,8 @@ void ctr_alloc_free(allocator_t *alloc,void *addr)
             size);//uint32_t size);
     dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p,alloc using count=%d",addr,alloc->alloc_count);
 }
-void ctr_alloc_info(allocator_t *alloc)
+
+static void __info(allocator_t *alloc)
 {
     int i;
     int slab_array_max_num = alloc->priv.ctr_alloc.slab_array_max_num;
@@ -201,7 +204,8 @@ void ctr_alloc_info(allocator_t *alloc)
     }
     printf("##############################################################################\n");
 }
-void ctr_alloc_destroy(allocator_t *alloc)
+
+static void __destroy(allocator_t *alloc)
 {
     int i;
     int slab_array_max_num = alloc->priv.ctr_alloc.slab_array_max_num;
@@ -226,11 +230,11 @@ int allocator_ctr_alloc_register(){
     allocator_module_t salloc = {
         .allocator_type = ALLOCATOR_TYPE_CTR_MALLOC,
         .alloc_ops = {
-            .init    = ctr_alloc_init,
-            .alloc   = ctr_alloc_alloc,
-            .free    = ctr_alloc_free,
-            .destroy = ctr_alloc_destroy,
-            .info    = ctr_alloc_info
+            .init    = __init,
+            .alloc   = __alloc,
+            .free    = __free,
+            .destroy = __destroy,
+            .info    = __info
         }
     };
     memcpy(&allocator_modules[ALLOCATOR_TYPE_CTR_MALLOC],&salloc,sizeof(allocator_module_t));

@@ -58,7 +58,7 @@ void slab_init_head_list(struct list_head **hl_head,uint8_t lock_type)
     ctr_slab_head_list_t *head_list;
 
     head_list = (ctr_slab_head_list_t *)malloc(sizeof(ctr_slab_head_list_t));
-    if(head_list == NULL){
+    if (head_list == NULL){
         dbg_str(ALLOC_ERROR,"malloc slab list_head_list");
         return;
     }
@@ -105,11 +105,11 @@ ctr_slab_t *slab_detach_front_list(struct list_head *hl_head)
 
     head_list = container_of(hl_head,ctr_slab_head_list_t,list_head);
     sync_lock(&head_list->head_lock,NULL);
-    if(hl_head->next != hl_head){
+    if (hl_head->next != hl_head){
         head_list->count--;
         slab_list = container_of(hl_head->next,ctr_slab_t,list_head);
         list_del(hl_head->next);
-    }else{
+    } else {
         sync_unlock(&head_list->head_lock);
         return NULL;
     }

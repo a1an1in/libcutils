@@ -59,7 +59,7 @@ void mempool_init_head_list(struct list_head **hl_head,uint8_t lock_type)
     ctr_mempool_head_list_t *head_list;
 
     head_list = (ctr_mempool_head_list_t *)malloc(sizeof(ctr_mempool_head_list_t));
-    if(head_list == NULL){
+    if (head_list == NULL){
         dbg_str(ALLOC_ERROR,"malloc mempool list_head_list");
         return;
     }
@@ -165,15 +165,15 @@ ctr_mempool_t *mempool_create_list(allocator_t *alloc)
     void *p;
 
     p = malloc(sizeof(ctr_mempool_t));
-    if(p == NULL){
+    if (p == NULL){
         dbg_str(ALLOC_ERROR,"malloc ctr_mempool_t");
         return p;
-    }else{
+    } else {
         mempool = (ctr_mempool_t *)p;
         dbg_str(ALLOC_DETAIL,"mempool addr:%p,sizeof(p)=%d",mempool,sizeof(mempool));
     }
     p = malloc(alloc_p->mempool_capacity);
-    if(p == NULL){
+    if (p == NULL){
         dbg_str(ALLOC_ERROR,"malloc mem pool err");
         free(mempool);
         return p;
@@ -216,11 +216,11 @@ ctr_mempool_t *mempool_find_appropriate_pool(allocator_t *alloc,uint32_t size)
     sync_lock(&head_list->head_lock,NULL);
     list_for_each_safe(pos, n, hl_head) {
         mempool_list = container_of(pos,ctr_mempool_t,list_head);
-        if(mempool_list->depth >= size + sizeof(ctr_slab_t)){
+        if (mempool_list->depth >= size + sizeof(ctr_slab_t)){
             dbg_str(ALLOC_DETAIL,"find an appropriate_pool");
             sync_unlock(&head_list->head_lock);
             return mempool_list;
-        }else if(mempool_list->depth < mempool_list->min_depth){
+        }else if (mempool_list->depth < mempool_list->min_depth){
             dbg_str(ALLOC_WARNNING,"this mempool is empty");
             sync_unlock(&head_list->head_lock);
             mempool_detach_list(pos,hl_head);
@@ -245,11 +245,11 @@ ctr_slab_t *mempool_alloc_slab_list(allocator_t *alloc,uint32_t size)
 
     dbg_str(ALLOC_DETAIL,"mempool_alloc_slab_list");
 
-    if(!(mempool_list = mempool_find_appropriate_pool(alloc,size))){
+    if (!(mempool_list = mempool_find_appropriate_pool(alloc,size))){
         dbg_str(ALLOC_WARNNING,"not find appropriate_pool,create a new pool");
-        if(mempool_list = mempool_create_list(alloc)){
+        if (mempool_list = mempool_create_list(alloc)){
             mempool_attach_list(&mempool_list->list_head,alloc_p->pool);
-        }else{
+        } else {
             dbg_str(ALLOC_ERROR,"can't create a new mempool_list");
             return NULL;
         }
