@@ -110,10 +110,22 @@ static int __init(allocator_t *allocator)
 
 static void *alloc_huge_slab(allocator_t *allocator,uint32_t size)
 {
+    void *mem = NULL;
+    ctr_slab_t *slab_list;
     dbg_str(DBG_DETAIL,"alloc_huge_slab");
     allocator->alloc_count++;
 
-    return malloc(size);
+    slab_list = malloc(size + sizeof(ctr_slab_t));
+    if (slab_list == NULL) {
+        return NULL;
+    }
+
+    slab_list->data_size = size;
+    slab_list->size      = size;
+    slab_list->slab_size = size + sizeof(ctr_slab_t);
+    slab_list->stat_flag = 1;
+
+    return slab_list->data;
 }
 
 static void *alloc_normal_slab(allocator_t *allocator,uint32_t size)
@@ -132,10 +144,7 @@ static void *alloc_normal_slab(allocator_t *allocator,uint32_t size)
 
     allocator->alloc_count++;
 
-    dbg_str(ALLOC_IMPORTANT,"ctr_alloc allocator mem,request size=%d,mem addr=%p,"
-            "allocator using count=%d",size,slab_list->mem_addr,allocator->alloc_count);
-
-    return slab_list->mem_addr;
+    return slab_list->data;
 }
 
 static void *__alloc(allocator_t *allocator,uint32_t size)
@@ -152,17 +161,19 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
     if (size > ctr_alloc->mempool_capacity || index >= ctr_alloc->slab_array_max_num) {
         dbg_str(DBG_WARNNING,"ctr alloc size = %d, which is too huge, using sys malloc", size);
         mem = alloc_huge_slab(allocator,size);
-        return mem;
+    } else {
+        mem = alloc_normal_slab(allocator,size);
     }
 
-    mem = alloc_normal_slab(allocator,size);
+    dbg_str(ALLOC_IMPORTANT,"ctr_alloc allocator mem,request size=%d,mem addr=%p,"
+            "allocator using count=%d",size,mem,allocator->alloc_count);
 
     return mem;
 }
 
-static free_huge_slab(allocator_t *allocator,void *addr)
+static free_huge_slab(allocator_t *allocator,ctr_slab_t *slab_list)
 {
-    free(addr);
+    free(slab_list);
     allocator->alloc_count--;
 }
 
@@ -211,16 +222,10 @@ static void __free(allocator_t *allocator,void *addr)
     size = slab_list->size;
     index = slab_get_slab_index(allocator,size);
     if (size >= ctr_alloc->mempool_capacity || index >= ctr_alloc->slab_array_max_num) {
-        free_huge_slab(allocator,addr);
-        return;
+        free_huge_slab(allocator,slab_list);
+    } else {
+        free_normal_slab(allocator,slab_list);
     }
-
-    /*
-     *dbg_str(ALLOC_DETAIL,"release slab_list:%p",slab_list);
-     *dbg_str(ALLOC_DETAIL,"release mem_addr:%p,addr:%p",slab_list->mem_addr,addr);
-     */
-
-    free_normal_slab(allocator,slab_list);
 
     dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p,size =%d, allocator using count=%d",
             addr,slab_list->data_size, allocator->alloc_count);

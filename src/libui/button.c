@@ -212,6 +212,7 @@ void test_ui_button()
     char buf[2048];
 
     set_str = gen_window_setting_str();
+    dbg_str(DBG_SUC, "test_ui_button begin alloc count =%d",allocator->alloc_count);
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 
     /*
@@ -219,6 +220,7 @@ void test_ui_button()
      *dbg_str(DBG_DETAIL,"Window dump: %s",buf);
      */
 
+#if 1
     layout = new_border_layout(allocator, 0, 0, 600, 600, "border layout");
 
     button = new_button(allocator,0, 0, 100, 50, "button02");
@@ -228,7 +230,9 @@ void test_ui_button()
     window->load_resources(window);
     window->update_window(window);
     window->event->poll_event(window->event, window);
+#endif
 
     object_destroy(window);
+    dbg_str(DBG_SUC, "test_ui_button end alloc count =%d",allocator->alloc_count);
 }
 
