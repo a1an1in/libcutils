@@ -114,7 +114,7 @@ static int __move(Container *container)
     dbg_str(DBG_DETAIL,"container move");
 }
 
-static void __update_component_position__(Iterator *iter, void *arg) 
+static void subcomponent_update_position(Iterator *iter, void *arg) 
 {
     Component *component;
     Subject *s;
@@ -133,7 +133,7 @@ static void __update_component_position__(Iterator *iter, void *arg)
     dbg_str(DBG_DETAIL,"class %s, component name %s, position: x =%d, y=%d",
             ((Obj *)component)->name,component->name, s->x, s->y);
 
-    c->for_each_component(c,__update_component_position__,add);
+    c->for_each_component(c,subcomponent_update_position,add);
 }
 
 static int __update_component_position(void *component,void *arg) 
@@ -147,12 +147,12 @@ static int __update_component_position(void *component,void *arg)
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    c->for_each_component(c,__update_component_position__,arg);
+    c->for_each_component(c,subcomponent_update_position,arg);
 
 }
 
 
-static void __reset_component_position__(Iterator *iter, void *arg) 
+static void subcomponent_reset_position(Iterator *iter, void *arg) 
 {
     Component *component;
     Subject *s;
@@ -170,7 +170,7 @@ static void __reset_component_position__(Iterator *iter, void *arg)
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    c->for_each_component(c,__reset_component_position__,add);
+    c->for_each_component(c,subcomponent_reset_position,add);
 }
 
 static void __reset_component_position(void *component,void *arg) 
@@ -184,7 +184,7 @@ static void __reset_component_position(void *component,void *arg)
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    c->for_each_component(c,__reset_component_position__,arg);
+    c->for_each_component(c,subcomponent_reset_position,arg);
 
 }
 

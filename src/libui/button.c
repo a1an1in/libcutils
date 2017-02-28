@@ -232,6 +232,7 @@ void test_ui_button()
     window->event->poll_event(window->event, window);
 #endif
 
+    window->unload_resources(window);
     object_destroy(window);
     dbg_str(DBG_SUC, "test_ui_button end alloc count =%d",allocator->alloc_count);
 }

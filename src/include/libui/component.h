@@ -20,6 +20,7 @@ struct component_s{
 	int (*move)(Component *component);
 	int (*draw)(Component *component, void *graph);
 	int (*load_resources)(Component *component, void *window);
+	int (*unload_resources)(Component *component, void *window);
 
 	int (*key_text_pressed)(Component *component,char c, void *graph);
 	int (*key_backspace_pressed)(Component *component,void *graph);
