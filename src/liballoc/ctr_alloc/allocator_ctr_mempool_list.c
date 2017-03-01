@@ -50,10 +50,6 @@
 #include "libdbg/debug.h"
 #include "liballoc/inc_files.h"
 
-void *mempool_release_list(ctr_mempool_t *mempool);
-/*-----------------------------------------------------------------------------
- *  mempool list operation
- *-----------------------------------------------------------------------------*/
 void mempool_init_head_list(struct list_head **hl_head,uint8_t lock_type)
 {
     ctr_mempool_head_list_t *head_list;

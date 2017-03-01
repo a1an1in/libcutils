@@ -25,8 +25,6 @@ struct button_s{
     void (*mouse_exited)(Component *component,void *event, void *window);
     void (*mouse_moved)(Component *component,void *event, void *window);
     void (*mouse_dragged)(Component *component,void *event, void *window);
-
-    Label *label;
 };
 
 #endif

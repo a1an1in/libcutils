@@ -142,7 +142,7 @@ static int __move(Container *container)
     dbg_str(DBG_DETAIL,"container move");
 }
 
-static void subcomponent_update_position(Iterator *iter, void *arg) 
+static void update_subcomponent_position_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     Subject *s;
@@ -150,18 +150,18 @@ static void subcomponent_update_position(Iterator *iter, void *arg)
     uint8_t *addr;
     position_t *add = (position_t *)arg;
 
-    addr      = (uint8_t *)iter->get_vpointer(iter);
-    component = (Component *)buffer_to_addr(addr);
-    s         = (Subject *)component;
-    c         = (Container *)component;
+    addr       = (uint8_t *)iter->get_vpointer(iter);
+    component  = (Component *)buffer_to_addr(addr);
+    s          = (Subject *)component;
+    c          = (Container *)component;
 
-    s->x += add->x;
-    s->y += add->y;
+    s->x      += add->x;
+    s->y      += add->y;
 
     dbg_str(DBG_DETAIL,"class %s, component name %s, position: x =%d, y=%d",
             ((Obj *)component)->name,component->name, s->x, s->y);
 
-    c->for_each_component(c,subcomponent_update_position,add);
+    c->for_each_component(c,update_subcomponent_position_foreach_cb,add);
 }
 
 static int __update_component_position(void *component,void *arg) 
@@ -175,11 +175,11 @@ static int __update_component_position(void *component,void *arg)
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    c->for_each_component(c,subcomponent_update_position,arg);
+    c->for_each_component(c,update_subcomponent_position_foreach_cb,arg);
 
 }
 
-static void subcomponent_reset_position(Iterator *iter, void *arg) 
+static void reset_subcomponent_position_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     Subject *s;
@@ -192,12 +192,12 @@ static void subcomponent_reset_position(Iterator *iter, void *arg)
     s         = (Subject *)component;
     c         = (Container *)component;
 
-    s->x = s->x_bak;
-    s->y = s->y_bak;
+    s->x      = s->x_bak;
+    s->y      = s->y_bak;
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    c->for_each_component(c,subcomponent_reset_position,add);
+    c->for_each_component(c,reset_subcomponent_position_foreach_cb,add);
 }
 
 static void __reset_component_position(void *component,void *arg) 
@@ -211,7 +211,7 @@ static void __reset_component_position(void *component,void *arg)
 
     dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
 
-    c->for_each_component(c,subcomponent_reset_position,arg);
+    c->for_each_component(c,reset_subcomponent_position_foreach_cb,arg);
 
 }
 
@@ -256,7 +256,9 @@ static Component *__search_component(Container *obj, char *key)
         dbg_str(DBG_WARNNING,"%s is support container search op",((Obj *)obj)->name);
         return NULL;
     }
+
     iter = OBJECT_NEW(allocator, Hmap_Iterator,NULL);
+
     ret  = map->search(map,key,iter);
     if (ret == 1) {
         addr = buffer_to_addr(iter->get_vpointer(iter));
@@ -285,6 +287,7 @@ static int __for_each_component(Container *obj,
     obj->map->for_each_arg2(obj->map, func, arg);
 
 }
+
 static class_info_entry_t container_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Subject","subject",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},

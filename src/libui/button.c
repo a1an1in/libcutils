@@ -48,9 +48,6 @@ static int __construct(Button *button,char *init_str)
     label   = OBJECT_NEW(((Obj *)button)->allocator, Label,buf);
 
     container->add_component((Container *)button, NULL, label);
-    /*
-     *button->label = label;
-     */
 
 	return 0;
 }
@@ -58,10 +55,6 @@ static int __construct(Button *button,char *init_str)
 static int __deconstrcut(Button *button)
 {
 	dbg_str(DBG_IMPORTANT,"button deconstruct,button addr:%p",button);
-
-    /*
-     *object_destroy(button->label);
-     */
 
 	return 0;
 }
@@ -112,7 +105,7 @@ static void __mouse_pressed(Component *component,void *event, void *window)
     __Event *e = (__Event *)event;
 
     dbg_str(DBG_DETAIL,
-            "%s process mouse_pressed event: Mouse button %d pressed at %d,"
+            "EVENT: %s process mouse_pressed event: Mouse button %d pressed at %d,"
             "%d with click count %d in window %d",
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 }
@@ -218,7 +211,7 @@ void test_ui_button()
     char buf[2048];
 
     set_str = gen_window_setting_str();
-    dbg_str(DBG_SUC, "test_ui_button begin alloc count =%d",allocator->alloc_count);
+    dbg_str(DBG_DETAIL, "test_ui_button begin alloc count =%d",allocator->alloc_count);
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 
     /*
@@ -226,7 +219,6 @@ void test_ui_button()
      *dbg_str(DBG_DETAIL,"Window dump: %s",buf);
      */
 
-#if 1
     layout = new_border_layout(allocator, 0, 0, 600, 600, "border layout");
 
     button = new_button(allocator,0, 0, 100, 50, "button02");
@@ -236,10 +228,9 @@ void test_ui_button()
     window->load_resources(window);
     window->update_window(window);
     window->event->poll_event(window->event, window);
-#endif
 
     window->unload_resources(window);
     object_destroy(window);
-    dbg_str(DBG_SUC, "test_ui_button end alloc count =%d",allocator->alloc_count);
+    dbg_str(DBG_DETAIL, "test_ui_button end alloc count =%d",allocator->alloc_count);
 }
 
