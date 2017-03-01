@@ -34,7 +34,7 @@
 
 static int __construct(Window *window,char *init_str)
 {
-    dbg_str(DBG_DETAIL,"window construct, window addr:%p",window);
+    dbg_str(DBG_IMPORTANT,"window construct, window addr:%p",window);
 
     window->create_font(window,NULL);
     window->create_graph(window, NULL);
@@ -48,7 +48,7 @@ static int __construct(Window *window,char *init_str)
 
 static int __deconstrcut(Window *window)
 {
-    dbg_str(DBG_DETAIL,"window deconstruct,window addr:%p",window);
+    dbg_str(DBG_IMPORTANT,"window deconstruct,window addr:%p",window);
 
     window->destroy_background(window);
     window->close_window(window);
@@ -180,7 +180,7 @@ static int __load_resources(Window *window)
 {
     Container *container = (Container *)window;
 
-    dbg_str(DBG_DETAIL,"window load_resources");
+    dbg_str(DBG_IMPORTANT,"window load_resources");
 
     window->font->load_ascii_character(window->font,window->graph);
     container->for_each_component(container, subcomponent_load_resources, window);

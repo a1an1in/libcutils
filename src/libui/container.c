@@ -52,10 +52,38 @@ static int __construct(Container *container,char *init_str)
     return 0;
 }
 
+static void release_subcomponent_foreach_cb(Iterator *iter, void *arg) 
+{
+    Component *component;
+    Subject *s;
+    Container *c;
+    uint8_t *addr;
+    position_t *add = (position_t *)arg;
+
+    addr      = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    dbg_str(DBG_DETAIL,"release subcomponent %s",component->name);
+
+    object_destroy(component);
+}
+
+static void release_subcomponents(Container *container) 
+{
+    Component *component = (Component *)container;
+
+    dbg_str(DBG_DETAIL,"%s release subcomponents",component->name);
+
+    container->for_each_component(container,release_subcomponent_foreach_cb,NULL);
+}
+
 static int __deconstrcut(Container *container)
 {
     dbg_str(DBG_DETAIL,"container deconstruct,container addr:%p",container);
-    object_destroy(container->map);
+
+    release_subcomponents(container); 
+    if (container->map != NULL)
+        object_destroy(container->map);
 
     return 0;
 }
@@ -150,7 +178,6 @@ static int __update_component_position(void *component,void *arg)
     c->for_each_component(c,subcomponent_update_position,arg);
 
 }
-
 
 static void subcomponent_reset_position(Iterator *iter, void *arg) 
 {

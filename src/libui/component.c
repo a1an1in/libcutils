@@ -153,9 +153,27 @@ static int __load_resources(Component *component,void *window)
     return 0;
 }
 
+static void subcomponent_unload_resources(Iterator *iter, void *arg) 
+{
+    Component *component;
+    void *window = (void *)arg;
+    uint8_t *addr;
+
+    addr = (uint8_t *)iter->get_vpointer(iter);
+
+    component = (Component *)buffer_to_addr(addr);
+    if (component->unload_resources)
+        component->unload_resources(component, window);
+}
+
 static int __unload_resources(Component *component,void *window)
 {
-    //...........
+    Container *container = (Container *)component;
+
+    dbg_str(DBG_SUC,"%s unload resources",component->name);
+    container->for_each_component(container, subcomponent_unload_resources, window);
+
+    return 0;
 }
 
 static void subcomponent_draw(Iterator *iter, void *arg) 

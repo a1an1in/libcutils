@@ -38,24 +38,30 @@ static int __construct(Button *button,char *init_str)
 {
     Container *container = (Container *)button;
     Subject *subject     = (Subject *)button;
+    Label *label;
     char buf[2048];
 
-	dbg_str(DBG_SUC,"button construct, button addr:%p",button);
+	dbg_str(DBG_IMPORTANT,"button construct, button addr:%p",button);
 
     gen_label_setting_str(subject->x, subject->y, subject->width, subject->height, 
                           "label", (void *)buf);
-    subject   = OBJECT_NEW(((Obj *)button)->allocator, Label,buf);
+    label   = OBJECT_NEW(((Obj *)button)->allocator, Label,buf);
 
-    container->add_component((Container *)button, NULL, subject);
+    container->add_component((Container *)button, NULL, label);
+    /*
+     *button->label = label;
+     */
 
 	return 0;
 }
 
 static int __deconstrcut(Button *button)
 {
-	dbg_str(DBG_SUC,"button deconstruct,button addr:%p",button);
-    //..........
-    //release label
+	dbg_str(DBG_IMPORTANT,"button deconstruct,button addr:%p",button);
+
+    /*
+     *object_destroy(button->label);
+     */
 
 	return 0;
 }

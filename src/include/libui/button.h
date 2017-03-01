@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libui/component.h>
+#include <libui/label.h>
 
 typedef struct button_s Button;
 
@@ -24,6 +25,8 @@ struct button_s{
     void (*mouse_exited)(Component *component,void *event, void *window);
     void (*mouse_moved)(Component *component,void *event, void *window);
     void (*mouse_dragged)(Component *component,void *event, void *window);
+
+    Label *label;
 };
 
 #endif

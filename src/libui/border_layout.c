@@ -42,7 +42,7 @@ static int __construct(Border_Layout *border_layout,char *init_str)
     Border_Layout *l       = border_layout;
     uint32_t i;
 
-    dbg_str(DBG_DETAIL,"border_layout construct");
+    dbg_str(DBG_IMPORTANT,"border_layout construct");
 
     memset(l->blocks, 0, sizeof(layout_block_t) * BORDER_LAYOUT_MAX); 
 
@@ -71,7 +71,7 @@ static int __deconstrcut(Border_Layout *border_layout)
 {
     allocator_t *allocator = ((Obj *)border_layout)->allocator;
 
-    dbg_str(DBG_SUC,"border_layout deconstruct");
+    dbg_str(DBG_IMPORTANT,"border_layout deconstruct");
 
     return 0;
 }

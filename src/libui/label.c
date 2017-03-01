@@ -63,7 +63,7 @@ static int __construct(Label *label,char *init_str)
     allocator_t *allocator = ((Obj *)label)->allocator;
     cursor_t *cursor       = &label->cursor;
 
-    dbg_str(DBG_DETAIL,"label construct");
+    dbg_str(DBG_IMPORTANT,"label construct");
 
     label->string             = OBJECT_NEW(allocator, String, NULL);
     label->string->assign(label->string,"b1234567890");
@@ -86,7 +86,7 @@ static int __construct(Label *label,char *init_str)
 
 static int __deconstrcut(Label *label)
 {
-    dbg_str(DBG_SUC,"label deconstruct");
+    dbg_str(DBG_IMPORTANT,"label deconstruct");
 
     object_destroy(label->string);
 
@@ -161,9 +161,7 @@ static int __unload_resources(Component *component,void *window)
 {
     Graph *g     = ((Window *)window)->graph;
 
-    /*
-     *g->font->unload_ascii_character(g->font,g);
-     */
+    dbg_str(DBG_DETAIL,"%s unload resources",component->name);
 }
 
 static int __draw(Component *component, void *graph)
