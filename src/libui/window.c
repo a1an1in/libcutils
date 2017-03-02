@@ -162,13 +162,14 @@ static int __update_window(Window *window)
 
 }
 
-static void subcomponent_load_resources(Iterator *iter, void *arg) 
+static void
+load_subcomponent_resources_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     Window *window = (Window *)arg;
     uint8_t *addr;
 
-    dbg_str(DBG_DETAIL,"subcomponent_load_resources");
+    dbg_str(DBG_DETAIL,"window load_subcomponent_resources_foreach_cb");
 
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
@@ -183,18 +184,21 @@ static int __load_resources(Window *window)
     dbg_str(DBG_IMPORTANT,"window load_resources");
 
     window->font->load_ascii_character(window->font,window->graph);
-    container->for_each_component(container, subcomponent_load_resources, window);
+
+    container->for_each_component(container, 
+                                  load_subcomponent_resources_foreach_cb, 
+                                  window);
 
     return 0;
 }
 
-static void subcomponent_unload_resources(Iterator *iter, void *arg) 
+static void unload_subcomponent_resources_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     Window *window = (Window *)arg;
     uint8_t *addr;
 
-    dbg_str(DBG_DETAIL,"subcomponent_unload_resources");
+    dbg_str(DBG_DETAIL,"window unload_subcomponent_resources_foreach_cb");
 
     addr = (uint8_t *)iter->get_vpointer(iter);
     component = (Component *)buffer_to_addr(addr);
@@ -209,7 +213,10 @@ static int __unload_resources(Window *window)
     dbg_str(DBG_IMPORTANT,"window unload_resources");
 
     window->font->unload_ascii_character(window->font,window->graph);
-    container->for_each_component(container, subcomponent_unload_resources, window);
+
+    container->for_each_component(container, 
+                                  unload_subcomponent_resources_foreach_cb,
+                                  window);
 
     return 0;
 }

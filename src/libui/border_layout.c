@@ -242,9 +242,6 @@ char *gen_border_layout_setting_str(int x, int y, int width, int height, char *n
                         \"width\":%d,\
                         \"height\":%d\
                     },\
-                    \"Container\": {\
-                        \"map_type\":%d\
-                    },\
                     \"Component\": {\
                         \"name\":\"%s\"\
                     },\
@@ -254,7 +251,7 @@ char *gen_border_layout_setting_str(int x, int y, int width, int height, char *n
                     }\
                 }";
 
-    sprintf(out, set_str, x, y, width, height,1, name, 4,4, 5, 2);
+    sprintf(out, set_str, x, y, width, height, name, 4,4, 5, 2);
 
     return out;
 }

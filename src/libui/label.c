@@ -209,7 +209,9 @@ static int __draw(Component *component, void *graph)
         } 
     }
 
-    if (cursor->x + cursor->width >= draw_width + s->x && label->text_overflow_flag == 1) {
+    if (    cursor->x + cursor->width >= draw_width + s->x &&
+            label->text_overflow_flag == 1)
+    {
         c = '.';
         draw_character(component,c, graph);
         draw_character(component,c, graph);

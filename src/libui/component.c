@@ -130,7 +130,9 @@ static void *__get(Component *obj, char *attrib)
     return NULL;
 }
 
-static void subcomponent_load_resources(Iterator *iter, void *arg) 
+static void 
+load_subcomponent_resources_foreach_cb(Iterator *iter,
+                                       void *arg) 
 {
     Component *component;
     void *window = (void *)arg;
@@ -148,12 +150,15 @@ static int __load_resources(Component *component,void *window)
     Container *container = (Container *)component;
 
     dbg_str(DBG_DETAIL,"%s load resources",component->name);
-    container->for_each_component(container, subcomponent_load_resources, window);
+    container->for_each_component(container, 
+                                  load_subcomponent_resources_foreach_cb, 
+                                  window);
 
     return 0;
 }
 
-static void subcomponent_unload_resources(Iterator *iter, void *arg) 
+static void 
+unload_subcomponent_resources_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     void *window = (void *)arg;
@@ -171,12 +176,14 @@ static int __unload_resources(Component *component,void *window)
     Container *container = (Container *)component;
 
     dbg_str(DBG_DETAIL,"%s unload resources",component->name);
-    container->for_each_component(container, subcomponent_unload_resources, window);
+    container->for_each_component(container,
+                                  unload_subcomponent_resources_foreach_cb, 
+                                  window);
 
     return 0;
 }
 
-static void subcomponent_draw(Iterator *iter, void *arg) 
+static void draw_subcomponent_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     uint8_t *addr;
@@ -194,7 +201,7 @@ static int __draw(Component *component, void *graph)
     Graph *g             = (Graph *)graph;
     dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
 
-    container->for_each_component(container, subcomponent_draw, g);
+    container->for_each_component(container, draw_subcomponent_foreach_cb, g);
 }
 
 static void __key_text_pressed(Component *component,char c, void *graph)
@@ -340,7 +347,9 @@ static void __key_backspace_pressed(Component *component,void *graph)
     if (cur->key_backspace_pressed) cur->key_backspace_pressed(cur, g); 
 }
 
-static void subcomponent_mouse_pressed(Iterator *iter, void *arg) 
+static void 
+process_subcomponent_mouse_pressed_foreach_cb(Iterator *iter,
+                                              void *arg) 
 {
     Graph *g       = (Graph *)arg;
     __Event *event = (__Event *)arg;
@@ -356,7 +365,9 @@ static void subcomponent_mouse_pressed(Iterator *iter, void *arg)
         return;
     }
 
-    if (component->mouse_pressed) component->mouse_pressed(component, event, event->window);
+    if (component->mouse_pressed){
+        component->mouse_pressed(component, event, event->window);
+    } 
 }
 
 static void __mouse_pressed(Component *component,void *event, void *window) 
@@ -378,7 +389,9 @@ static void __mouse_pressed(Component *component,void *event, void *window)
      *        component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
      */
 
-    container->for_each_component(container, subcomponent_mouse_pressed, event);
+    container->for_each_component(container, 
+                                  process_subcomponent_mouse_pressed_foreach_cb,
+                                  event);
 }
 
 int  __is_mouse_over_component(Component *component,void *event)
@@ -405,7 +418,8 @@ int  __is_mouse_over_component(Component *component,void *event)
 
 }
 
-static void subcomponent_mouse_moved(Iterator *iter, void *arg) 
+static void 
+process_subcomponent_mouse_moved_foreach_cb(Iterator *iter, void *arg) 
 {
     Graph *g       = (Graph *)arg;
     __Event *event = (__Event *)arg;
@@ -417,18 +431,24 @@ static void subcomponent_mouse_moved(Iterator *iter, void *arg)
 
     if (component->is_mouse_over_component(component, event) == 0) {
         if (component->mouse_entered_flag == 1) {
-            if (component->mouse_exited) component->mouse_exited(component, event, event->window);
+            if (component->mouse_exited){
+                component->mouse_exited(component, event, event->window);
+            }
             component->mouse_entered_flag = 0;
         }
         return;
     }
 
     if (component->mouse_entered_flag == 0) {
-        if (component->mouse_entered) component->mouse_entered(component, event, event->window);
+        if (component->mouse_entered){
+            component->mouse_entered(component, event, event->window);
+        }
         component->mouse_entered_flag = 1;
     }
 
-    if (component->mouse_moved) component->mouse_moved(component, event, event->window);
+    if (component->mouse_moved) {
+        component->mouse_moved(component, event, event->window);
+    }
 }
 
 
@@ -447,7 +467,9 @@ static void __mouse_moved(Component *component,void *event, void *window)
     if (component->is_mouse_over_component(component, event) == 0) {
         return;
     }
-    container->for_each_component(container, subcomponent_mouse_moved, event);
+    container->for_each_component(container, 
+                                  process_subcomponent_mouse_moved_foreach_cb,
+                                  event);
 
 }
 
@@ -455,7 +477,8 @@ static void __mouse_wheel_moved(Component *component,void *event, void *window)
 {
     __Event *e = (__Event *)event;
 
-    dbg_str(DBG_DETAIL, "EVENT: Mouse: wheel scrolled %d in x and %d in y (direction: %d) in window %d", 
+    dbg_str(DBG_DETAIL,
+            "EVENT: Mouse: wheel scrolled %d in x and %d in y (direction: %d) in window %d", 
             e->x, e->y, e->direction, e->windowid);
 }
 
