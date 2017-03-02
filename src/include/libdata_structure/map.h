@@ -66,7 +66,8 @@ static inline int map_del(map_t *map, map_iterator_t *it)
 
 static inline int map_destroy(map_t *map)
 {
-    return map->map_ops->map_destroy(map);
+    map->map_ops->map_destroy(map);
+    allocator_mem_free(map->allocator, map);
 }
 
 static inline int map_begin(map_t *map, map_iterator_t *it)

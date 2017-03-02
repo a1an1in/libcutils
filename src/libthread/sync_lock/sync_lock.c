@@ -55,7 +55,7 @@
 
 sync_lock_module_t sync_lock_modules[SYNC_LOCK_TYPE_MAX_NUM];
 
-__attribute__((constructor(CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES))) void
+__attribute__((constructor(PRIORITY_SYNC_LOCK_REGISTER_MODULES))) void
 sync_lock_register_modules()
 {
     /*
@@ -64,8 +64,8 @@ sync_lock_register_modules()
     /*
      *memset(&sync_lock_modules[PTHREAD_RWLOCK],0,sizeof(sync_lock_module_t));
      */
-    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES=%d,register sync lock modules\n",
-                      CONSTRUCTOR_PRIORITY_SYNC_LOCK_REGISTER_MODULES);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_SYNC_LOCK_REGISTER_MODULES=%d,register sync lock modules\n",
+                      PRIORITY_SYNC_LOCK_REGISTER_MODULES);
 #ifdef UNIX_LIKE_USER_MODE
     linux_user_mode_pthread_mutex_register();
     linux_user_mode_pthread_rwlock_register();

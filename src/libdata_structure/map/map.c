@@ -23,11 +23,11 @@ map_t * map_alloc(allocator_t *allocator,uint8_t type)
     return map;
 }
 
-__attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES))) void
+__attribute__((constructor(PRIORITY_REGISTER_MAP_MODULES))) void
 register_map_modules()
 {
-    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES=%d,register map_modules\n",
-                      CONSTRUCTOR_PRIORITY_REGISTER_MAP_MODULES);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_REGISTER_MAP_MODULES=%d,register map_modules\n",
+                      PRIORITY_REGISTER_MAP_MODULES);
     hash_map_pk_register();
 
 }

@@ -64,11 +64,10 @@ void allocator_ctr_init(allocator_t * alloc,
 void allocator_destroy(allocator_t * alloc)
 {
     uint8_t allocator_type = alloc->allocator_type;
-    dbg_str(DBG_WARNNING,"allocator_destroy");
+    dbg_str(ALLOC_DETAIL,"allocator_destroy");
     if(allocator_modules[allocator_type].alloc_ops.destroy){
         allocator_modules[allocator_type].alloc_ops.destroy(alloc);
     }
-    dbg_str(DBG_DETAIL,"run at here");
     free(alloc);
 }
 
@@ -77,13 +76,13 @@ allocator_t * allocator_get_default_alloc()
     return global_allocator_default;
 }
 
-void __attribute__((constructor(CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR)))
+void __attribute__((constructor(PRIORITY_DEFAULT_ALLOCATOR)))
 default_allocator_constructor()
 {
     allocator_t *allocator;
 
-    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR=%d,construct default allocator\n",
-                      CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_DEFAULT_ALLOCATOR=%d,construct default allocator\n",
+                      PRIORITY_DEFAULT_ALLOCATOR);
 
 #if 0
     if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
@@ -99,11 +98,17 @@ default_allocator_constructor()
     return;
 }
 
-void __attribute__((destructor(CONSTRUCTOR_PRIORITY_DEFAULT_ALLOCATOR_CONSTRUCTOR)))
+void __attribute__((destructor(PRIORITY_DEFAULT_ALLOCATOR)))
 default_allocator_destructor()
 {
     allocator_t *allocator = allocator_get_default_alloc();
 
+    CONSTRUCTOR_PRINT("DESTRUCTOR PRIORITY_DEFAULT_ALLOCATOR=%d,default allocator destructor, alloc count =%d\n",
+                      PRIORITY_DEFAULT_ALLOCATOR, 
+                      allocator->alloc_count);
+    if (allocator->alloc_count > 0) {
+        dbg_str(DBG_WARNNING, "memory leak, there are %d mem allocs havn't been release!", allocator->alloc_count);
+    }
     allocator_destroy(allocator);
 
     return;

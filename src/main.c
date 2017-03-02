@@ -593,17 +593,19 @@ int main(int argc, char *argv[])
      */
 
     dbg_str(DBG_DETAIL,"main func end");
-    pause();
-    dbg_str(DBG_DETAIL,"main func out,but pause breaked");
+    /*
+     *pause();
+     *dbg_str(DBG_DETAIL,"main func out,but pause breaked");
+     */
 
     return ret;
 }
 #endif
 
-__attribute__((constructor(CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION))) void
+__attribute__((constructor(PRIORITY_PRINT_LIBRARY_VERSION))) void
 print_library_version()
 {
-    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION=%d,%s\n",
-                      CONSTRUCTOR_PRIORITY_PRINT_LIBRARY_VERSION,
+    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_PRINT_LIBRARY_VERSION=%d,%s\n",
+                      PRIORITY_PRINT_LIBRARY_VERSION,
                       LIBRARY_VERSION);
 }

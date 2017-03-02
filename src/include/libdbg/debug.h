@@ -154,9 +154,7 @@ void debugger_destroy(debugger_t *debugger);
 #else
 #endif
 
-/*
- *#define PRINT_CONSTRUCTOR_PRIOR
- */
+#define PRINT_CONSTRUCTOR_PRIOR
 #ifdef PRINT_CONSTRUCTOR_PRIOR
     #define CONSTRUCTOR_PRINT(fmt,args...) printf(fmt,##args)
 #else

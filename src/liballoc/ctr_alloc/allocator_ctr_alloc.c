@@ -75,7 +75,7 @@ static int __init(allocator_t *allocator)
 
     free_slabs = (struct list_head **)malloc(slab_array_max_num * sizeof(int *));
     if (free_slabs == NULL) {
-        dbg_str(DBG_ERROR,"__init");
+        dbg_str(ALLOC_ERROR,"__init");
         return -1;
     } else {
         ctr_alloc->used_slabs = free_slabs;
@@ -83,13 +83,13 @@ static int __init(allocator_t *allocator)
 
     used_slabs = (struct list_head **)malloc(slab_array_max_num * sizeof(int *));
     if (used_slabs == NULL) {
-        dbg_str(DBG_ERROR,"__init");
+        dbg_str(ALLOC_ERROR,"__init");
         return -1;
     } else {
         ctr_alloc->free_slabs = used_slabs;
     }
 
-    dbg_str(DBG_DETAIL,"lock_type=%d",allocator->lock_type);
+    dbg_str(ALLOC_DETAIL,"lock_type=%d",allocator->lock_type);
     for (i = 0; i < slab_array_max_num; i++) {
         slab_init_head_list(&used_slabs[i],allocator->lock_type);
         slab_init_head_list(&free_slabs[i],allocator->lock_type);
@@ -112,7 +112,7 @@ static void *alloc_huge_slab(allocator_t *allocator,uint32_t size)
 {
     void *mem = NULL;
     ctr_slab_t *slab_list;
-    dbg_str(DBG_DETAIL,"alloc_huge_slab");
+    dbg_str(ALLOC_DETAIL,"alloc_huge_slab");
     allocator->alloc_count++;
 
     slab_list = malloc(size + sizeof(ctr_slab_t));
@@ -135,7 +135,7 @@ static void *alloc_normal_slab(allocator_t *allocator,uint32_t size)
 
     if (!(slab_list = slab_detach_front_list_from_free_slabs(allocator,size))) {
         if (!(slab_list = mempool_alloc_slab_list(allocator,size))) {  
-            dbg_str(DBG_ERROR,"allocator slab list err");
+            dbg_str(ALLOC_ERROR,"allocator slab list err");
             return NULL;
         }
     }
@@ -215,7 +215,7 @@ static void __free(allocator_t *allocator,void *addr)
     }
     slab_list = container_of(addr,ctr_slab_t,data);
     if (slab_list->stat_flag == 0) {
-        dbg_str(DBG_WARNNING,"this addr has been released");
+        dbg_str(ALLOC_WARNNING,"this addr has been released");
         return;
     }
 

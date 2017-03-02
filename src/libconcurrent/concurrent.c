@@ -298,6 +298,9 @@ end:
 
 int concurrent_master_destroy_slaves(concurrent_master_t *master)
 {
+    /*
+     *allocator_mem_free(master->allocator, master->slave);
+     */
 }
 
 concurrent_master_t *
@@ -657,7 +660,7 @@ void concurrent_destroy(concurrent_t *c)
 }
 
 #define MAX_PROXY_TASK_SIZE 128
-__attribute__((constructor(CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR))) void
+__attribute__((constructor(PRIORITY_CONCURRENT))) void
 concurrent_constructor()
 {
     allocator_t *allocator;
@@ -665,8 +668,8 @@ concurrent_constructor()
     uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
 
-    CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR=%d,construct concurrent\n",
-                      CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR);
+    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_CONCURRENT=%d,construct concurrent\n",
+                      PRIORITY_CONCURRENT);
 
     if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
         dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
@@ -683,10 +686,13 @@ concurrent_constructor()
     global_concurrent = c;
 }
 
-__attribute__((destructor(CONSTRUCTOR_PRIORITY_CONCURRENT_CONSTRUCTOR_PRIOR))) void 
+__attribute__((destructor(PRIORITY_CONCURRENT))) void 
 concurrent_destructor()
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
+
+    CONSTRUCTOR_PRINT("DESTRUCTOR PRIORITY_CONCURRENT=%d,concurrent destructor\n",
+                      PRIORITY_CONCURRENT);
 
     concurrent_destroy(c);
 }

@@ -54,7 +54,7 @@ llist_t *llist_create(allocator_t *allocator,uint8_t lock_type)
     dbg_str(LINKLIST_IMPORTANT,"llist_create");
     ret = (llist_t *)allocator_mem_alloc(allocator,sizeof(llist_t));
     if(ret == NULL){
-        dbg_str(DBG_ERROR,"allock err");
+        dbg_str(LINKLIST_ERROR,"allock err");
     }
     ret->allocator = allocator;
     ret->lock_type = lock_type;
@@ -70,7 +70,7 @@ int llist_init(llist_t *llist,uint32_t data_size)
     //only assigned head,if without head,llist is hard to distinguish head or end;
     p = (struct list_head *)allocator_mem_alloc(llist->allocator, sizeof(struct list_head));
     if(p == NULL){
-        dbg_str(DBG_ERROR,"allock err");
+        dbg_str(LINKLIST_ERROR,"allock err");
     }
     INIT_LIST_HEAD(p);
     llist_pos_init(&llist->begin,p,llist);
@@ -106,7 +106,7 @@ int llist_delete(llist_t *llist, list_pos_t *pos)
     list_t *p;
 
     if(llist_pos_equal(&llist->begin,&llist->head)){
-        dbg_str(DBG_WARNNING,"llist is null,llist_delete");
+        dbg_str(LINKLIST_WARNNING,"llist is null,llist_delete");
         return -1;
     }
 
@@ -174,7 +174,7 @@ int llist_pop_back(llist_t *llist)
     struct list_head *head = llist->head.list_head_p;
 
     if(llist_pos_equal(&llist->begin,&llist->head)){
-        dbg_str(DBG_WARNNING,"llist is null,llist_pop_back");
+        dbg_str(LINKLIST_WARNNING,"llist is null,llist_pop_back");
         return -1;
     }
 
@@ -200,7 +200,7 @@ list_t *llist_detach_back(llist_t *llist)
     struct list_head *head = llist->head.list_head_p;
 
     if(llist_pos_equal(&llist->begin,&llist->head)){
-        dbg_str(DBG_WARNNING,"llist is null,llist_detach_back");
+        dbg_str(LINKLIST_WARNNING,"llist is null,llist_detach_back");
         return NULL;
     }
 
@@ -231,7 +231,7 @@ int llist_destroy(llist_t *llist)
         llist_delete(llist,&pos);
     }
     if(llist_pos_equal(&llist->head,&llist->begin)){
-        dbg_str(DBG_WARNNING,"llist_destroy,llist is NULL,free llist head");
+        dbg_str(LINKLIST_DETAIL,"llist_destroy,llist is NULL,free llist head");
         allocator_mem_free(llist->allocator,llist->head.list_head_p);
         sync_lock_destroy(&llist->list_lock);
     }

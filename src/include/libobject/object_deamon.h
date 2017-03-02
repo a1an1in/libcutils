@@ -7,13 +7,13 @@
 #include <libobject/class_info.h>
 
 #define REGISTER_CLASS(class_name, class_info) \
-    __attribute__((constructor(CONSTRUCTOR_PRIORITY_REGISTER_CLASS))) static void\
+    __attribute__((constructor(PRIORITY_REGISTER_CLASS))) static void\
     register_class()\
     {\
         object_deamon_t *deamon = object_deamon_get_global_object_deamon();\
         \
-        CONSTRUCTOR_PRINT("CONSTRUCTOR_PRIORITY_REGISTER_CLASS=%d,class name %s\n",\
-                          CONSTRUCTOR_PRIORITY_REGISTER_CLASS, class_name);\
+        CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_REGISTER_CLASS=%d,class name %s\n",\
+                          PRIORITY_REGISTER_CLASS, class_name);\
         \
         object_deamon_register_class(deamon,class_name, class_info);\
     }
