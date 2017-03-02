@@ -76,13 +76,13 @@ allocator_t * allocator_get_default_alloc()
     return global_allocator_default;
 }
 
-void __attribute__((constructor(DEFAULT_ALLOCATOR_ATTRIB_PRIORITY)))
+void __attribute__((constructor(ATTRIB_PRIORITY_DEFAULT_ALLOCATOR)))
 default_allocator_constructor()
 {
     allocator_t *allocator;
 
-    ATTRIB_PRINT("constructor DEFAULT_ALLOCATOR_ATTRIB_PRIORITY=%d,construct default allocator\n",
-                 DEFAULT_ALLOCATOR_ATTRIB_PRIORITY);
+    ATTRIB_PRINT("constructor ATTRIB_PRIORITY_DEFAULT_ALLOCATOR=%d,construct default allocator\n",
+                 ATTRIB_PRIORITY_DEFAULT_ALLOCATOR);
 
 #if 0
     if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
@@ -98,13 +98,13 @@ default_allocator_constructor()
     return;
 }
 
-void __attribute__((destructor(DEFAULT_ALLOCATOR_ATTRIB_PRIORITY)))
+void __attribute__((destructor(ATTRIB_PRIORITY_DEFAULT_ALLOCATOR)))
 default_allocator_destructor()
 {
     allocator_t *allocator = allocator_get_default_alloc();
 
-    ATTRIB_PRINT("destructor DEFAULT_ALLOCATOR_ATTRIB_PRIORITY=%d,default allocator destructor, alloc count =%d\n",
-                 DEFAULT_ALLOCATOR_ATTRIB_PRIORITY, 
+    ATTRIB_PRINT("destructor ATTRIB_PRIORITY_DEFAULT_ALLOCATOR=%d,default allocator destructor, alloc count =%d\n",
+                 ATTRIB_PRIORITY_DEFAULT_ALLOCATOR, 
                  allocator->alloc_count);
     if (allocator->alloc_count > 0) {
         dbg_str(DBG_WARNNING, "memory leak, there are %d mem allocs havn't been release!", allocator->alloc_count);

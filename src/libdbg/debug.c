@@ -294,12 +294,12 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 
 }
 
-int __attribute__((constructor(DEBUGGER_ATTRIB_PRIORITY))) 
+int __attribute__((constructor(ATTRIB_PRIORITY_DEBUGGER))) 
 debugger_constructor()
 {
     char *file_name;
-    ATTRIB_PRINT("constructor DEBUGGER_ATTRIB_PRIORITY=%d, construct debugger\n",
-                 DEBUGGER_ATTRIB_PRIORITY);
+    ATTRIB_PRINT("constructor ATTRIB_PRIORITY_DEBUGGER=%d, construct debugger\n",
+                 ATTRIB_PRIORITY_DEBUGGER);
 
 #ifdef UNIX_LIKE_USER_MODE
     file_name = "/tmp/dbg.ini";
@@ -312,11 +312,11 @@ debugger_constructor()
 
     return 0;
 }
-int  __attribute__((destructor(DEBUGGER_ATTRIB_PRIORITY))) 
+int  __attribute__((destructor(ATTRIB_PRIORITY_DEBUGGER))) 
 debugger_destructor()
 {
-    ATTRIB_PRINT("destructor DEBUGGER_ATTRIB_PRIORITY=%d, debugger destructor\n",
-                 DEBUGGER_ATTRIB_PRIORITY);
+    ATTRIB_PRINT("destructor ATTRIB_PRIORITY_DEBUGGER=%d, debugger destructor\n",
+                 ATTRIB_PRIORITY_DEBUGGER);
     debugger_destroy(debugger_gp);
 }
 

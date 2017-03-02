@@ -602,10 +602,10 @@ int main(int argc, char *argv[])
 }
 #endif
 
-__attribute__((constructor(VERSION_ATTRIB_PRIORITY))) void
+__attribute__((constructor(ATTRIB_PRIORITY_VERSION))) void
 print_library_version()
 {
-    ATTRIB_PRINT("constructor VERSION_ATTRIB_PRIORITY=%d,%s\n",
-                 VERSION_ATTRIB_PRIORITY,
+    ATTRIB_PRINT("constructor ATTRIB_PRIORITY_VERSION=%d,%s\n",
+                 ATTRIB_PRIORITY_VERSION,
                  LIBRARY_VERSION);
 }

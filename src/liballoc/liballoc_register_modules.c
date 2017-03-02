@@ -32,11 +32,11 @@
 extern int allocator_sys_alloc_register();
 extern int allocator_ctr_alloc_register();
 
-__attribute__((constructor(LIBALLOC_REGISTER_MODULES_ATTRIB_PRIORITY))) 
+__attribute__((constructor(ATTRIB_PRIORITY_LIBALLOC_REGISTER_MODULES))) 
 void liballoc_register_modules()
 {
-    ATTRIB_PRINT("constructor LIBALLOC_REGISTER_MODULES_ATTRIB_PRIORITY=%d,register alloc modules\n",
-                 LIBALLOC_REGISTER_MODULES_ATTRIB_PRIORITY);
+    ATTRIB_PRINT("constructor ATTRIB_PRIORITY_LIBALLOC_REGISTER_MODULES=%d,register alloc modules\n",
+                 ATTRIB_PRIORITY_LIBALLOC_REGISTER_MODULES);
     allocator_sys_alloc_register();
     allocator_ctr_alloc_register();
 }

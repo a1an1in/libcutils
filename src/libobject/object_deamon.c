@@ -130,14 +130,14 @@ int object_deamon_destroy(object_deamon_t *object_deamon)
     return 0;
 }
 
-__attribute__((constructor(OBJ_DEAMON_ATTRIB_PRIORITY))) void
+__attribute__((constructor(ATTRIB_PRIORITY_OBJ_DEAMON))) void
 object_deamon_constructor()
 {
     object_deamon_t *object_deamon;
     allocator_t *allocator = allocator_get_default_alloc();
 
-    ATTRIB_PRINT("constructor OBJ_DEAMON_ATTRIB_PRIORITY =%d, run object_deamon\n",
-                 OBJ_DEAMON_ATTRIB_PRIORITY);
+    ATTRIB_PRINT("constructor ATTRIB_PRIORITY_OBJ_DEAMON =%d, run object_deamon\n",
+                 ATTRIB_PRIORITY_OBJ_DEAMON);
 
     object_deamon = object_deamon_alloc(allocator);
     object_deamon_init(object_deamon);
@@ -145,14 +145,14 @@ object_deamon_constructor()
     global_object_deamon = object_deamon;
 }
 
-__attribute__((destructor(OBJ_DEAMON_ATTRIB_PRIORITY))) static void
+__attribute__((destructor(ATTRIB_PRIORITY_OBJ_DEAMON))) static void
 object_deamon_destructor()
 {
     object_deamon_t *object_deamon = object_deamon_get_global_object_deamon();
 
     object_deamon_destroy(object_deamon);
 
-    ATTRIB_PRINT("destructor OBJ_DEAMON_ATTRIB_PRIORITY =%d, alloc count =%d\n",
-                 OBJ_DEAMON_ATTRIB_PRIORITY, object_deamon->allocator->alloc_count);
+    ATTRIB_PRINT("destructor ATTRIB_PRIORITY_OBJ_DEAMON =%d, alloc count =%d\n",
+                 ATTRIB_PRIORITY_OBJ_DEAMON, object_deamon->allocator->alloc_count);
 }
 

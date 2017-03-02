@@ -23,11 +23,11 @@
 extern void console_print_regester();
 extern void log_print_regester();
 
-__attribute__((constructor(LIBDBG_REGISTER_MODULES_ATTRIB_PRIORITY))) 
+__attribute__((constructor(ATTRIB_PRIORITY_LIBDBG_REGISTER_MODULES))) 
 void libdbg_register_modules()
 {
-    ATTRIB_PRINT("constructor LIBDBG_REGISTER_MODULES_ATTRIB_PRIORITY=%d,register libdbg modules\n",
-                 LIBDBG_REGISTER_MODULES_ATTRIB_PRIORITY);
+    ATTRIB_PRINT("constructor ATTRIB_PRIORITY_LIBDBG_REGISTER_MODULES=%d,register libdbg modules\n",
+                 ATTRIB_PRIORITY_LIBDBG_REGISTER_MODULES);
     console_print_regester();
     //network_print_regester();
     log_print_regester();

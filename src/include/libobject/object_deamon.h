@@ -7,13 +7,13 @@
 #include <attrib_priority.h>
 
 #define REGISTER_CLASS(class_name, class_info) \
-    __attribute__((constructor(REGISTER_CLASS_ATTIB_PRIORITY))) static void\
+    __attribute__((constructor(ATTRIB_PRIORITY_REGISTER_CLASS))) static void\
     register_class()\
     {\
         object_deamon_t *deamon = object_deamon_get_global_object_deamon();\
         \
-        ATTRIB_PRINT("constructor REGISTER_CLASS_ATTIB_PRIORITY=%d,class name %s\n",\
-                     REGISTER_CLASS_ATTIB_PRIORITY, class_name);\
+        ATTRIB_PRINT("constructor ATTRIB_PRIORITY_REGISTER_CLASS=%d,class name %s\n",\
+                     ATTRIB_PRIORITY_REGISTER_CLASS, class_name);\
         \
         object_deamon_register_class(deamon,class_name, class_info);\
     }
