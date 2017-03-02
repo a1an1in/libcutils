@@ -251,6 +251,9 @@ void gen_label_setting_str(int x, int y, int width, int height, char *name, void
                         \"width\":%d,\
                         \"height\":%d\
                     },\
+                    \"Container\": {\
+                        \"map_type\":0\
+                    },\
                     \"Component\": {\
                         \"name\": \"%s\"\
                     },\

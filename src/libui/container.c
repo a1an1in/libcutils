@@ -41,6 +41,14 @@ static int __construct(Container *container,char *init_str)
 
     dbg_str(DBG_DETAIL,"container construct, container addr:%p",container);
 
+    //make it support map by default
+    if (container->map_type == 0) {
+        container->map_type = 1;
+    } else if (container->map_type == 1) {
+    } else {
+        container->map_type = 0;
+    }
+
     if (container->map_type == 1) {
         container->map  = (Map *)OBJECT_NEW(allocator, Hash_Map,container->map_construct_str);
         dbg_str(DBG_DETAIL,"map addr %p", container->map);
@@ -115,7 +123,7 @@ static int __set(Container *container, char *attrib, void *value)
         strncpy(container->name,value,strlen(value));
     } else if (strcmp(attrib, "map_type") == 0) {
         container->map_type = *(uint8_t *)value;
-        dbg_str(DBG_SUC,"set map_type =%d", container->map_type);
+        dbg_str(DBG_DETAIL,"%s set map_type =%d",((Obj *)container)->name, container->map_type);
     } else {
         dbg_str(DBG_DETAIL,"container set, not support %s setting",attrib);
     }

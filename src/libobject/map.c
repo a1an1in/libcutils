@@ -68,10 +68,8 @@ static int __set(Map *map, char *attrib, void *value)
     } else if (strcmp(attrib, "del") == 0) {
         map->del = value;
     } else if (strcmp(attrib, "for_each") == 0) {
-        dbg_str(DBG_DETAIL,"map set for each:%p",value);
         map->for_each = value;
     } else if (strcmp(attrib, "for_each_arg2") == 0) {
-        dbg_str(DBG_DETAIL,"map set for each:%p",value);
         map->for_each_arg2 = value;
     } else if (strcmp(attrib, "begin") == 0) {
         map->begin = value;

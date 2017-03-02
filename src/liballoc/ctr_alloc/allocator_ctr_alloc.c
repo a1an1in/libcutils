@@ -159,7 +159,7 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
      *        size,index,allocator->priv.ctr_alloc.slab_array_max_num);
      */
     if (size > ctr_alloc->mempool_capacity || index >= ctr_alloc->slab_array_max_num) {
-        dbg_str(DBG_WARNNING,"ctr alloc size = %d, which is too huge, using sys malloc", size);
+        dbg_str(ALLOC_IMPORTANT,"ctr alloc size = %d, which is too huge, using sys malloc", size);
         mem = alloc_huge_slab(allocator,size);
     } else {
         mem = alloc_normal_slab(allocator,size);

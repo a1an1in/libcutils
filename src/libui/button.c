@@ -170,9 +170,6 @@ static void gen_button_setting_str(int x, int y, int width, int height, char *na
                         \"width\":%d,\
                         \"height\":%d\
                     },\
-                    \"Container\": {\
-                        \"map_type\":1\
-                    },\
                     \"Component\": {\
                         \"name\": \"%s\"\
                     }\

@@ -206,7 +206,7 @@ static int __unload_resources(Window *window)
 {
     Container *container = (Container *)window;
 
-    dbg_str(DBG_DETAIL,"window unload_resources");
+    dbg_str(DBG_IMPORTANT,"window unload_resources");
 
     window->font->unload_ascii_character(window->font,window->graph);
     container->for_each_component(container, subcomponent_unload_resources, window);

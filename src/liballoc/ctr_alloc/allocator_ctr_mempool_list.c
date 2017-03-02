@@ -229,7 +229,7 @@ mempool_find_appropriate_pool(allocator_t *allocator,uint32_t size)
             sync_unlock(&head_list->head_lock);
             return mempool_list;
         } else if (mempool_list->depth < mempool_list->min_depth){
-            dbg_str(ALLOC_WARNNING,"this mempool is empty");
+            dbg_str(ALLOC_DETAIL,"this mempool is empty");
             sync_unlock(&head_list->head_lock);
             mempool_detach_list(pos,hl_head);
             mempool_attach_list(pos,empty_pool_hl_head);
@@ -259,7 +259,7 @@ mempool_alloc_slab_list(allocator_t *allocator,uint32_t size)
     dbg_str(ALLOC_DETAIL,"mempool_alloc_slab_list");
 
     if (!(mempool_list = mempool_find_appropriate_pool(allocator,size))){
-        dbg_str(ALLOC_WARNNING,"not find appropriate_pool,create a new pool");
+        dbg_str(ALLOC_DETAIL,"not find appropriate_pool,create a new pool");
         if (mempool_list = mempool_create_list(allocator)){
             mempool_attach_list(&mempool_list->list_head,ctr_alloc->pool);
         } else {

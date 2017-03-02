@@ -147,7 +147,7 @@ static int __load_resources(Component *component,void *window)
 {
     Container *container = (Container *)component;
 
-    dbg_str(DBG_SUC,"%s load resources",component->name);
+    dbg_str(DBG_DETAIL,"%s load resources",component->name);
     container->for_each_component(container, subcomponent_load_resources, window);
 
     return 0;
@@ -170,7 +170,7 @@ static int __unload_resources(Component *component,void *window)
 {
     Container *container = (Container *)component;
 
-    dbg_str(DBG_SUC,"%s unload resources",component->name);
+    dbg_str(DBG_DETAIL,"%s unload resources",component->name);
     container->for_each_component(container, subcomponent_unload_resources, window);
 
     return 0;
@@ -192,7 +192,7 @@ static int __draw(Component *component, void *graph)
 {
     Container *container = (Container *)component;
     Graph *g             = (Graph *)graph;
-    dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+    dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
 
     container->for_each_component(container, subcomponent_draw, g);
 }

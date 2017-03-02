@@ -168,7 +168,7 @@ static int __add_component(Container *obj, void *pos, void *component)
         return -1;
     }
 
-    dbg_str(DBG_SUC,"position x=%d, y=%d", position.x, position.y);
+    dbg_str(DBG_DETAIL,"position x=%d, y=%d", position.x, position.y);
     container->update_component_position(c, &position);
 
     addr_to_buffer(c,(uint8_t *)buffer);
@@ -177,7 +177,7 @@ static int __add_component(Container *obj, void *pos, void *component)
     return 0;
 }
 
-static void draw_subcomponent(Iterator *iter, void *arg) 
+static void draw_subcomponent_foreach_cb(Iterator *iter, void *arg) 
 {
     Component *component;
     uint8_t *addr;
@@ -196,7 +196,7 @@ static void draw_border(Component *component, void *graph)
     int i;
     position_t start, end;
 
-    dbg_str(DBG_SUC,"draw_border");
+    dbg_str(DBG_DETAIL,"draw_border");
 
 }
 
@@ -206,13 +206,13 @@ static int __draw(Component *component, void *graph)
     Container *container = (Container *)component;
     Graph *g             = (Graph *)graph;
 
-    dbg_str(DBG_SUC,"%s draw", ((Obj *)component)->name);
+    dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
 
     /*draw layouts*/
     draw_border(component, graph);
 
     /*draw subcomponent*/
-    container->for_each_component(container, draw_subcomponent, g);
+    container->for_each_component(container, draw_subcomponent_foreach_cb, g);
 }
 
 static class_info_entry_t border_layout_class_info[] = {
