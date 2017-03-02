@@ -26,17 +26,17 @@
  * 
  */
 #include <stdio.h>
-#include <constructor_priority.h>
 #include <libdbg/debug.h>
+#include <attrib_priority.h>
 
 extern int allocator_sys_alloc_register();
 extern int allocator_ctr_alloc_register();
 
-__attribute__((constructor(PRIORITY_LIBALLOC_REGISTER_MODULES))) 
+__attribute__((constructor(LIBALLOC_REGISTER_MODULES_ATTRIB_PRIORITY))) 
 void liballoc_register_modules()
 {
-    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_LIBALLOC_REGISTER_MODULES=%d,register alloc modules\n",
-                      PRIORITY_LIBALLOC_REGISTER_MODULES);
+    ATTRIB_PRINT("constructor LIBALLOC_REGISTER_MODULES_ATTRIB_PRIORITY=%d,register alloc modules\n",
+                 LIBALLOC_REGISTER_MODULES_ATTRIB_PRIORITY);
     allocator_sys_alloc_register();
     allocator_ctr_alloc_register();
 }

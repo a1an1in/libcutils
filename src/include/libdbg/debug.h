@@ -154,11 +154,13 @@ void debugger_destroy(debugger_t *debugger);
 #else
 #endif
 
-#define PRINT_CONSTRUCTOR_PRIOR
-#ifdef PRINT_CONSTRUCTOR_PRIOR
-    #define CONSTRUCTOR_PRINT(fmt,args...) printf(fmt,##args)
+/*
+ *#define OPEN_ATTRIB_PRINT
+ */
+#ifdef OPEN_ATTRIB_PRINT
+    #define ATTRIB_PRINT(fmt,args...) printf(fmt,##args)
 #else
-    #define CONSTRUCTOR_PRINT(fmt,args...) do{}while(0)
+    #define ATTRIB_PRINT(fmt,args...) do{}while(0)
 #endif
 
 #endif

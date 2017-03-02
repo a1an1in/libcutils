@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libconcurrent/concurrent.h>
-#include <constructor_priority.h>
+#include <attrib_priority.h>
 
 concurrent_t *global_concurrent;
 uint8_t g_slave_amount = 1;
@@ -660,7 +660,7 @@ void concurrent_destroy(concurrent_t *c)
 }
 
 #define MAX_PROXY_TASK_SIZE 128
-__attribute__((constructor(PRIORITY_CONCURRENT))) void
+__attribute__((constructor(CONCURRENT_ATTRIB_PRIORITY))) void
 concurrent_constructor()
 {
     allocator_t *allocator;
@@ -668,8 +668,8 @@ concurrent_constructor()
     uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
 
-    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_CONCURRENT=%d,construct concurrent\n",
-                      PRIORITY_CONCURRENT);
+    ATTRIB_PRINT("constructor CONCURRENT_ATTRIB_PRIORITY=%d,construct concurrent\n",
+                 CONCURRENT_ATTRIB_PRIORITY);
 
     if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
         dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
@@ -686,13 +686,13 @@ concurrent_constructor()
     global_concurrent = c;
 }
 
-__attribute__((destructor(PRIORITY_CONCURRENT))) void 
+__attribute__((destructor(CONCURRENT_ATTRIB_PRIORITY))) void 
 concurrent_destructor()
 {
     concurrent_t *c = concurrent_get_global_concurrent_addr();
 
-    CONSTRUCTOR_PRINT("DESTRUCTOR PRIORITY_CONCURRENT=%d,concurrent destructor\n",
-                      PRIORITY_CONCURRENT);
+    ATTRIB_PRINT("destructor CONCURRENT_ATTRIB_PRIORITY=%d,concurrent destructor\n",
+                 CONCURRENT_ATTRIB_PRIORITY);
 
     concurrent_destroy(c);
 }

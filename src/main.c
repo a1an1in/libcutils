@@ -46,7 +46,7 @@
 #include <unistd.h>
 #include <libdbg/debug.h>
 #include <libargs/cmd_args.h>
-#include <constructor_priority.h>
+#include <attrib_priority.h>
 #include <test.h>
 
 #define LIBRARY_VERSION "libcutils version: 2.3.4.0"
@@ -602,10 +602,10 @@ int main(int argc, char *argv[])
 }
 #endif
 
-__attribute__((constructor(PRIORITY_PRINT_LIBRARY_VERSION))) void
+__attribute__((constructor(VERSION_ATTRIB_PRIORITY))) void
 print_library_version()
 {
-    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_PRINT_LIBRARY_VERSION=%d,%s\n",
-                      PRIORITY_PRINT_LIBRARY_VERSION,
-                      LIBRARY_VERSION);
+    ATTRIB_PRINT("constructor VERSION_ATTRIB_PRIORITY=%d,%s\n",
+                 VERSION_ATTRIB_PRIORITY,
+                 LIBRARY_VERSION);
 }

@@ -46,9 +46,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <constructor_priority.h>
 #include "libdbg/debug.h"
 #include "libdbg/debug_string.h"
+#include <attrib_priority.h>
 
 debugger_t *debugger_gp;
 debugger_module_t debugger_modules[MAX_DEBUGGER_MODULES_NUM];
@@ -294,12 +294,12 @@ debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type)
 
 }
 
-int __attribute__((constructor(PRIORITY_DEBUGGER))) 
+int __attribute__((constructor(DEBUGGER_ATTRIB_PRIORITY))) 
 debugger_constructor()
 {
     char *file_name;
-    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_DEBUGGER=%d, construct debugger\n",
-                      PRIORITY_DEBUGGER);
+    ATTRIB_PRINT("constructor DEBUGGER_ATTRIB_PRIORITY=%d, construct debugger\n",
+                 DEBUGGER_ATTRIB_PRIORITY);
 
 #ifdef UNIX_LIKE_USER_MODE
     file_name = "/tmp/dbg.ini";
@@ -312,11 +312,11 @@ debugger_constructor()
 
     return 0;
 }
-int  __attribute__((destructor(PRIORITY_DEBUGGER))) 
+int  __attribute__((destructor(DEBUGGER_ATTRIB_PRIORITY))) 
 debugger_destructor()
 {
-    CONSTRUCTOR_PRINT("DESTRUCTOR PRIORITY_DEBUGGER=%d, debugger destructor\n",
-                      PRIORITY_DEBUGGER);
+    ATTRIB_PRINT("destructor DEBUGGER_ATTRIB_PRIORITY=%d, debugger destructor\n",
+                 DEBUGGER_ATTRIB_PRIORITY);
     debugger_destroy(debugger_gp);
 }
 

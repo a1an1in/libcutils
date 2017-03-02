@@ -1,5 +1,5 @@
 #include <libdata_structure/map.h>
-#include <constructor_priority.h>
+#include <attrib_priority.h>
 
 map_module_t map_modules[MAP_TYPE_MAX_NUM];
 
@@ -23,11 +23,11 @@ map_t * map_alloc(allocator_t *allocator,uint8_t type)
     return map;
 }
 
-__attribute__((constructor(PRIORITY_REGISTER_MAP_MODULES))) void
+__attribute__((constructor(REGISTER_MAP_MODULES_ATTRIB_PRIORITY))) void
 register_map_modules()
 {
-    CONSTRUCTOR_PRINT("CONSTRUCTOR PRIORITY_REGISTER_MAP_MODULES=%d,register map_modules\n",
-                      PRIORITY_REGISTER_MAP_MODULES);
+    ATTRIB_PRINT("constructor REGISTER_MAP_MODULES_ATTRIB_PRIORITY=%d,register map_modules\n",
+                 REGISTER_MAP_MODULES_ATTRIB_PRIORITY);
     hash_map_pk_register();
 
 }
