@@ -350,8 +350,9 @@ static int args_process_bus_service_debug(void *base,int argc,char **argv)
 
 static int args_process_bus_client_debug(void *base,int argc,char **argv)
 {
-    bus_debug_client();
-    return 0;
+    bus_debug_client(argv[0], argv[1], argv[2]);
+
+    return 3;
 }
 
 
@@ -572,7 +573,7 @@ static cmd_config_t cmds[]={
     {"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
     {"as", args_process_test_as,0, "test", "N/A","array_stack"},
     {"buss_dbg", args_process_bus_service_debug,0, "app", "N/A","bus"},
-    {"busc_dbg", args_process_bus_client_debug,0, "app", "N/A","bus"},
+    {"busc_dbg", args_process_bus_client_debug,3, "app", "N/A","bus"},
     {"buss", args_process_buss,0, "test", "N/A","bus"},
     {"busc", args_process_busc,0, "test", "N/A","bus"},
     {"busd", args_process_busd,0, "app", "N/A","bus"},

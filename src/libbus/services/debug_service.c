@@ -15,15 +15,16 @@ static int set_debug(struct bus_s *bus,
                       int *out_data_len)
 {
     char buffer[] = {1,2,3,4,5,6,7,8,9};
-    int bussiness, sw, level;
+    int db_bussiness, db_switch, db_level;
 
-    dbg_str(DBG_SUC,"run test debug");
+    db_bussiness = blob_get_u32(args[0]);
+    db_switch    = blob_get_u32(args[1]);
+    db_level     = blob_get_u32(args[2]);
 
-    bussiness = blob_get_u32(args[0]);
-    sw        = blob_get_u32(args[1]);
-    level     = blob_get_u32(args[2]);
+    dbg_str(DBG_SUC,"set debug,bussiness=%d, switch=%d, level=%d",
+            db_bussiness, db_switch, db_level);
 
-    dbg_str(DBG_SUC,"set debug,bussiness=%d, switch=%d, level=%d",bussiness, sw, level);
+    debugger_set_business(debugger_gp,db_bussiness, db_switch, db_level);
 
     memcpy(out_data,buffer,sizeof(buffer));
     *out_data_len = sizeof(buffer);
@@ -35,7 +36,7 @@ static const struct bus_method test_methods[] = {
 	BUS_METHOD("set_debug", set_debug, debug_policy),
 };
 
-static struct bus_object test_object = {
+static struct bus_object debug_object = {
 	.name      = (char *)"debug",
 	.methods   = (struct bus_method *)test_methods,
 	.n_methods = ARRAY_SIZE(test_methods),
@@ -58,6 +59,6 @@ void bus_debug_service()
                             deamon_srv, 
                             CLIENT_TYPE_INET_TCP);
 
-	bus_add_object(bus,&test_object);
+	bus_add_object(bus,&debug_object);
 
 }
