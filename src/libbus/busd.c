@@ -81,7 +81,7 @@ busd_t * busd_alloc(allocator_t *allocator)
     busd_t *d;
 
     d = (busd_t *)allocator_mem_alloc(allocator,sizeof(busd_t));
-    if( d == NULL) {
+    if ( d == NULL) {
         dbg_str(BUS_DETAIL,"allocator_mem_alloc");
         return NULL;
     }
@@ -95,9 +95,9 @@ busd_t * busd_alloc(allocator_t *allocator)
 
 int busd_set(busd_t *busd,char *attrib_name, char *value, int value_len)
 {
-    if(!strcmp(attrib_name,"server_sk_type")){
+    if (!strcmp(attrib_name,"server_sk_type")) {
         busd->server_sk_type = value;
-    }else if(!strcmp(attrib_name,"server_host")){
+    }else if (!strcmp(attrib_name,"server_host")) {
         busd->server_host = value;
     }else{
         dbg_str(DBG_WARNNING,"not support attrib setting,please check");
@@ -113,7 +113,7 @@ int busd_init(busd_t *busd,
 {
     int ret; 
 
-    if(busd->server_sk_type == NULL){
+    if (busd->server_sk_type == NULL) {
         busd->server_sk_type = (char *)(&(SERVER_TYPE_UNIX_TCP));
     }
     busd->server_host = server_host;
@@ -126,21 +126,21 @@ int busd_init(busd_t *busd,
                          busd->server_srv,
                          process_server_task_cb,
                          busd);
-    if(busd->server == NULL) {
+    if (busd->server == NULL) {
         dbg_str(BUS_ERROR,"busd_init,create server");
         return -1;
     }
 
     /*create object hash map*/
-    if(busd->key_size == 0) {
+    if (busd->key_size == 0) {
         busd->key_size = 10;
     }
-    if(busd->bucket_size == 0) {
+    if (busd->bucket_size == 0) {
         busd->bucket_size = 20;
     }
 
     busd->obj_hmap = hash_map_alloc(busd->allocator);
-    if(busd->obj_hmap == NULL) {
+    if (busd->obj_hmap == NULL) {
         server_destroy(busd->server);
         return -1;
     }
@@ -198,7 +198,7 @@ busd_create_bus_object(busd_t *busd,char *name, blob_attr_t *attr,int fd)
 
     obj = (struct busd_object *)allocator_mem_alloc(allocator,
                                                     sizeof(struct busd_object));
-    if(obj == NULL) {
+    if (obj == NULL) {
         dbg_str(BUS_ERROR,"allocator_mem_alloc");
         return NULL;
     }
@@ -239,7 +239,7 @@ int busd_reply_add_object(busd_t *busd, int state,char *obj_name, int fd)
     hdr.type = BUSD_REPLY_ADD_OBJECT;
 
     blob = blob_create(allocator);
-    if(blob == NULL) {
+    if (blob == NULL) {
         dbg_str(BUS_WARNNING,"blob_create");
         return -1;
     }
@@ -272,7 +272,7 @@ int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)
     int state = -1;
     dbg_str(BUS_DETAIL,"ubusd_handle_add_object");
 
-    if (attr[BUSD_ID]){
+    if (attr[BUSD_ID]) {
         dbg_str(BUS_DETAIL,"add object id:%d",blob_get_u32(attr[BUSD_ID]));
     }
     if (attr[BUSD_OBJNAME]) {
@@ -282,7 +282,7 @@ int busd_handle_add_object(busd_t *busd,  blob_attr_t **attr,int fd)
     if (attr[BUSD_METHORDS]) {
         dbg_str(BUS_DETAIL,"add object methods");
         obj = busd_create_bus_object(busd,blob_get_string(attr[BUSD_OBJNAME]), attr[BUSD_METHORDS],fd);
-        if(obj != NULL){
+        if (obj != NULL) {
             dbg_str(BUS_DETAIL,"insert obj:%p",obj);
             uint8_t addr_buffer[8];
 
@@ -313,7 +313,7 @@ int busd_reply_lookup_object(busd_t *busd,struct busd_object *obj,int fd)
     hdr.type = BUSD_REPLY_LOOKUP;
 
     blob = blob_create(allocator);
-    if(blob == NULL) {
+    if (blob == NULL) {
         dbg_str(BUS_WARNNING,"blob_create");
         return -1;
     }
@@ -324,7 +324,7 @@ int busd_reply_lookup_object(busd_t *busd,struct busd_object *obj,int fd)
         blob_add_u32(blob, (char *)"id", 1);
         blob_add_table_start(blob, (char *)"methods"); {
             vector_pos_t pos,next;
-            for(    vector_begin(obj->methods, &pos), vector_pos_next(&pos,&next);
+            for (   vector_begin(obj->methods, &pos), vector_pos_next(&pos,&next);
                     !vector_pos_equal(&pos,&obj->methods->end);
                     pos = next, vector_pos_next(&pos,&next))
             {
@@ -365,9 +365,9 @@ int busd_handle_lookup_object(busd_t *busd,  blob_attr_t **attr,int fd)
         hash_map_pos_t pos;
         char *key = blob_get_string(attr[BUSD_OBJNAME]);
         dbg_str(BUS_DETAIL,"lookup object name:%s", key);
-        if(key != NULL) {
+        if (key != NULL) {
             ret = hash_map_search(busd->obj_hmap, key ,&pos);
-            if(ret > 0) {
+            if (ret > 0) {
                 dbg_str(BUS_DETAIL,"obj addr:%p",obj);
                 p = (uint8_t *)hash_map_pos_get_pointer(&pos);
                 obj = (struct busd_object *)buffer_to_addr(p);
@@ -398,7 +398,7 @@ int busd_forward_invoke(busd_t *busd, int src_fd,int dest_fd,char *obj_name, cha
     hdr.type = BUSD_FORWARD_INVOKE;
 
     blob = blob_create(allocator);
-    if(blob == NULL) {
+    if (blob == NULL) {
         dbg_str(BUS_WARNNING,"blob_create");
         return -1;
     }
@@ -447,9 +447,9 @@ int busd_handle_invoke_method(busd_t *busd,  blob_attr_t **attr,int fd)
         obj_name = blob_get_string(attr[BUSD_INVOKE_KEY]);
         dbg_str(BUS_DETAIL,"invoke key:%s",obj_name);
         key = blob_get_string(attr[BUSD_INVOKE_KEY]);
-        if(key != NULL) {
+        if (key != NULL) {
             ret = hash_map_search(busd->obj_hmap, key ,&pos);
-            if(ret > 0) {
+            if (ret > 0) {
                 dbg_str(BUS_DETAIL,"obj addr:%p",obj);
                 p = (uint8_t *)hash_map_pos_get_pointer(&pos);
                 obj = (struct busd_object *)buffer_to_addr(p);
@@ -494,7 +494,7 @@ int busd_reply_invoke(busd_t *busd,char *obj_name,char *method,int state,uint8_t
     hdr.type = BUSD_REPLY_INVOKE;
 
     blob = blob_create(allocator);
-    if(blob == NULL) {
+    if (blob == NULL) {
         dbg_str(BUS_WARNNING,"blob_create");
         return -1;
     }
@@ -580,7 +580,7 @@ static int busd_process_receiving_data_callback(void *task)
     hdr = (bus_reqhdr_t *)t->buffer;
     blob_attr = (blob_attr_t *)(t->buffer + sizeof(bus_reqhdr_t));
 
-    if(hdr->type > __BUS_REQ_LAST) {
+    if (hdr->type > __BUS_REQ_LAST) {
         dbg_str(BUS_WARNNING,"busd receive err proto type");
         return -1;
     } 

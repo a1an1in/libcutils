@@ -54,7 +54,7 @@ bus_t * bus_alloc(allocator_t *allocator)
     bus_t *b;
 
     b = (bus_t *)allocator_mem_alloc(allocator,sizeof(bus_t));
-    if( b == NULL) {
+    if ( b == NULL) {
         dbg_str(BUS_DETAIL,"allocator_mem_alloc");
         return NULL;
     }
@@ -68,7 +68,7 @@ bus_t * bus_alloc(allocator_t *allocator)
 
 int bus_set(bus_t *bus,char *attrib_name, char *value, int value_len)
 {
-    if(!strcmp(attrib_name,"client_sk_type")){
+    if (!strcmp(attrib_name,"client_sk_type")) {
         bus->client_sk_type = value;
     }else{
         dbg_str(BUS_WARNNING,"not support attrib setting,please check");
@@ -82,9 +82,10 @@ int bus_init(bus_t *bus,
              char *server_srv,
              int (*process_client_task_cb)(client_task_t *task))
 {
-    if(bus->client_sk_type == NULL){
+    if (bus->client_sk_type == NULL) {
         bus->client_sk_type = (char *)(&(CLIENT_TYPE_UNIX_TCP));
     }
+
     bus->server_host = server_host;
     bus->server_srv  = server_srv;
 
@@ -96,7 +97,7 @@ int bus_init(bus_t *bus,
                          bus);
 
     bus->blob = blob_create(bus->allocator);
-    if(bus->blob == NULL) {
+    if (bus->blob == NULL) {
         client_destroy(bus->client);
         dbg_str(BUS_WARNNING,"blob_create");
         return -1;
@@ -104,15 +105,15 @@ int bus_init(bus_t *bus,
     blob_init(bus->blob);
 
     /*create object hash map*/
-    if(bus->key_size == 0) {
+    if (bus->key_size == 0) {
         bus->key_size = 10;
     }
-    if(bus->bucket_size == 0) {
+    if (bus->bucket_size == 0) {
         bus->bucket_size = 20;
     }
 
     bus->obj_hmap = hash_map_alloc(bus->allocator);
-    if(bus->obj_hmap == NULL) {
+    if (bus->obj_hmap == NULL) {
         dbg_str(BUS_ERROR,"hash_map_create");
         //.........
         return -1;
@@ -124,15 +125,15 @@ int bus_init(bus_t *bus,
                   bus->bucket_size);
 
     /*create req hash map*/
-    if(bus->req_key_size == 0) {
+    if (bus->req_key_size == 0) {
         bus->req_key_size = 10;
     }
-    if(bus->req_bucket_size == 0) {
+    if (bus->req_bucket_size == 0) {
         bus->req_bucket_size = 20;
     }
 
     bus->req_hmap = hash_map_alloc(bus->allocator);
-    if(bus->req_hmap == NULL) {
+    if (bus->req_hmap == NULL) {
         dbg_str(BUS_ERROR,"hash_map_create");
         //.........
         return -1;
@@ -157,7 +158,7 @@ int bus_send(bus_t *bus,
                       0,//int flags,
                       bus->server_host,//char *dest_id_str, 
                       bus->server_srv);//char *dest_srv_str)
-    if(ret < 0){
+    if (ret < 0) {
         dbg_str(BUS_WARNNING,"bus send err");
     }
 
@@ -168,7 +169,7 @@ int bus_push_args_to_blob(blob_t *blob,struct bus_method *method)
 {
     int i;
 
-    for(i = 0; i < method->n_policy; i++) {
+    for (i = 0; i < method->n_policy; i++) {
         blob_add_u32(blob, method->policy[i].name, method->policy[i].type);
     }
 
@@ -181,7 +182,7 @@ int bus_push_methods_to_blob(blob_t *blob,struct bus_object *obj)
 
     dbg_str(BUS_DETAIL,"bus_push_method_to_blob,n_methods=%d",obj->n_methods);
 
-    for (i = 0; i < obj->n_methods; i++){
+    for (i = 0; i < obj->n_methods; i++) {
         dbg_str(BUS_DETAIL,"push method:%s",obj->methods[i].name);
         blob_add_table_start(blob, obj->methods[i].name);
         bus_push_args_to_blob(blob,&(obj->methods[i]));
@@ -253,7 +254,7 @@ int bus_handle_add_object_reply(bus_t *bus,  blob_attr_t **attr)
 
     dbg_str(BUS_DETAIL,"bus_handle_add_object_reply");
 
-    if (attr[BUS_STATE]){
+    if (attr[BUS_STATE]) {
         state = blob_get_u32(attr[BUS_STATE]);
         dbg_str(BUS_DETAIL,"state=%d",state);
     }
@@ -262,7 +263,7 @@ int bus_handle_add_object_reply(bus_t *bus,  blob_attr_t **attr)
         dbg_str(BUS_DETAIL,"object name:%s",blob_get_string(attr[BUS_OBJNAME]));
     }
 
-    if( state == 1) {
+    if ( state == 1) {
         dbg_str(BUS_SUC,"add obj success");
     } else {
         dbg_str(BUS_ERROR,"add obj failed");
@@ -316,7 +317,7 @@ int bus_handle_lookup_object_reply(bus_t *bus,  blob_attr_t **attr)
 
     dbg_str(BUS_DETAIL,"bus_handle_lookup_object_reply");
 
-    if (attr[BUS_ID]){
+    if (attr[BUS_ID]) {
         dbg_str(BUS_DETAIL,"object id:%d",blob_get_u32(attr[BUS_ID]));
     }
     if (attr[BUS_OBJNAME]) {
@@ -338,8 +339,8 @@ int bus_blob_add_args(blob_t *blob,int argc, bus_method_args_t *args)
 {
     int i;
 
-    for(i = 0; i < argc; i++) {
-        if(args[i].type == ARG_TYPE_STRING) {
+    for (i = 0; i < argc; i++) {
+        if (args[i].type == ARG_TYPE_STRING) {
             blob_add_string(blob, (char *)args[i].name, args[i].value);
         } else if (args[i].type == ARG_TYPE_INT32) {
             blob_add_u32(blob, (char *)args[i].name, atoi(args[i].value));
@@ -436,17 +437,17 @@ int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, bus_method_args
 
     bus_invoke(bus,key, method,argc, args);
 
-    while(req_back->state == 0xffff) {
+    while (req_back->state == 0xffff) {
         sleep(1);
         count++;
-        if(count > 5) {
+        if (count > 5) {
             req_back->state = -99;
             break;
         }
     }
 
-    dbg_str(BUS_DETAIL,"bus_invoke_sync,rev return state =%d",req_back->state);
-    dbg_buf(BUS_DETAIL,"opaque:",req_back->opaque,req_back->opaque_len);
+    dbg_str(BUS_SUC,"bus_invoke_sync,rev return state =%d",req_back->state);
+    dbg_buf(BUS_SUC,"opaque:",req_back->opaque,req_back->opaque_len);
 
     memcpy(out_buf,req_back->opaque,req_back->opaque_len);
     *out_len = req_back->opaque_len;
@@ -470,7 +471,7 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
 
     dbg_str(BUS_SUC,"bus_handle_invoke_reply");
 
-    if (attr[BUS_STATE]){
+    if (attr[BUS_STATE]) {
         state = blob_get_u32(attr[BUS_STATE]);
         dbg_str(BUS_DETAIL,"state:%d",state);
     }
@@ -482,17 +483,17 @@ int bus_handle_invoke_reply(bus_t *bus,  blob_attr_t **attr)
         method_name = blob_get_string(attr[BUS_INVOKE_METHOD]);
         dbg_str(BUS_DETAIL,"method name:%s",method_name);
     }
-    if (attr[BUS_OPAQUE]){
+    if (attr[BUS_OPAQUE]) {
         buffer_len = blob_get_buffer(attr[BUS_OPAQUE],(uint8_t**)&buffer);
         dbg_buf(BUS_DETAIL,"bus_handle_invoke_reply,buffer:",buffer,buffer_len);
     }
 
-    if(method_name != NULL) {
+    if (method_name != NULL) {
         ret = hash_map_search(bus->req_hmap, method_name ,&pos);
-        if(ret > 0) {
+        if (ret > 0) {
             req = (bus_req_t *)hash_map_pos_get_pointer(&pos);
             req->state = state;
-            if(req->opaque_buffer_len < buffer_len) {
+            if (req->opaque_buffer_len < buffer_len) {
                 dbg_str(BUS_WARNNING,"opaque buffer is too small , please check");
             }
             req->opaque_len = buffer_len;
@@ -509,8 +510,8 @@ bus_get_method_handler(bus_object_t *obj,char *method)
 {
     int i;
 
-    for(i = 0; i < obj->n_methods; i++) {
-        if(!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
+    for (i = 0; i < obj->n_methods; i++) {
+        if (!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
             return obj->methods[i].handler;
         }
     }
@@ -523,8 +524,8 @@ bus_get_policy(bus_object_t *obj,char *method)
 {
     int i;
 
-    for(i = 0; i < obj->n_methods; i++) {
-        if(!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
+    for (i = 0; i < obj->n_methods; i++) {
+        if (!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
             return obj->methods[i].policy;
         }
     }
@@ -537,8 +538,8 @@ bus_get_n_policy(bus_object_t *obj,char *method)
 {
     int i;
 
-    for(i = 0; i < obj->n_methods; i++) {
-        if(!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
+    for (i = 0; i < obj->n_methods; i++) {
+        if (!strncmp(obj->methods[i].name,method,sizeof(obj->methods[i].name))) {
             return obj->methods[i].n_policy;
         }
     }
@@ -561,7 +562,7 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
     hdr.type = BUS_REPLY_FORWARD_INVOKE;
 
     blob = blob_create(allocator);
-    if(blob == NULL) {
+    if (blob == NULL) {
         dbg_str(BUS_WARNNING,"blob_create");
         return -1;
     }
@@ -580,7 +581,7 @@ int bus_reply_forward_invoke(bus_t *bus, char *obj_name,char *method_name, int r
 
     tmp_len = buffer_len + blob_get_len((blob_attr_t *)blob->head);
 
-    if(tmp_len > BUS_ADD_OBJECT_MAX_BUFFER_LEN) {
+    if (tmp_len > BUS_ADD_OBJECT_MAX_BUFFER_LEN) {
         dbg_str(BUS_WARNNING,"buffer is too small,please check");
         return -1;
     }
@@ -639,7 +640,7 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
 
     if (method_name != NULL) {
         ret = hash_map_search(bus->obj_hmap, obj_name ,&pos);
-        if(ret > 0) {
+        if (ret > 0) {
             p = (uint8_t *)hash_map_pos_get_pointer(&pos);
             obj = (bus_object_t *)buffer_to_addr(p);
             dbg_str(BUS_DETAIL,"obj addr:%p",obj);
@@ -651,7 +652,7 @@ int bus_handle_forward_invoke(bus_t *bus,  blob_attr_t **attr)
             dbg_str(BUS_DETAIL,"policy addr:%p,size=%d",policy,ARRAY_SIZE(policy));
             blob_parse_to_attr(policy, n_policy, tb, blob_get_data(args), blob_get_data_len(args));
             ret = method(bus,argc,tb,buffer,&buffer_len);
-            if(buffer_len > MAX_BUFFER_LEN) {
+            if (buffer_len > MAX_BUFFER_LEN) {
                 dbg_str(BUS_WARNNING,"buffer is too small,please check");
             } 
             bus_reply_forward_invoke(bus,obj_name,method_name, ret, buffer, buffer_len,src_fd);
@@ -685,7 +686,7 @@ static int bus_process_receiving_data_callback(client_task_t *task)
     hdr = (bus_reqhdr_t *)task->buffer;
     blob_attr = (blob_attr_t *)(task->buffer + sizeof(bus_reqhdr_t));
 
-    if(hdr->type > __BUS_REQ_LAST) {
+    if (hdr->type > __BUS_REQ_LAST) {
         dbg_str(BUS_WARNNING,"bus receive err proto type");
         return -1;
     } 

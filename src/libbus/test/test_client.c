@@ -37,5 +37,8 @@ void test_bus_client()
      */
 
     bus_invoke_sync(bus,"test", "hello",2, args,out,&out_len);
+    dbg_buf(DBG_DETAIL,"return buffer:",out, out_len);
+
+	while(1) sleep(1);
 	
 }
