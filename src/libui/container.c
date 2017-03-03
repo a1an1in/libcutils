@@ -229,8 +229,10 @@ static int __add_component(Container *obj, void *pos, Component *component)
         dbg_str(DBG_WARNNING,"%s is support container add op",((Obj *)obj)->name);
         return -1;
     }
+
     dbg_str(DBG_IMPORTANT, "add component name %s, component addr %p",
             component->name,component);
+
     if (strcmp(component->name,"") == 0) {
         dbg_str(DBG_WARNNING,
                 "component name is NULL, this is vip, add component failed, please check");

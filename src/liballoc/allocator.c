@@ -107,7 +107,7 @@ default_allocator_destructor()
                  ATTRIB_PRIORITY_DEFAULT_ALLOCATOR, 
                  allocator->alloc_count);
     if (allocator->alloc_count > 0) {
-        dbg_str(DBG_WARNNING, "memory leak, there are %d mem allocs havn't been release!", allocator->alloc_count);
+        dbg_str(DBG_WARNNING, "memory leak, there are %d mem allocs havn't been released!", allocator->alloc_count);
     }
     allocator_destroy(allocator);
 

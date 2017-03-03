@@ -160,13 +160,17 @@ int busd_get_object_method(struct busd_object_method * method,
     struct busd_object_method_arg_s arg;
     blob_attr_t *pos,*head;
     uint32_t len;
+    int data_size = sizeof(struct busd_object_method_arg_s);
+    int lock_type = 0;
 
     dbg_str(BUS_DETAIL,"method name:%s",blob_get_name(attr));
     method->name = (char *)allocator_mem_alloc(allocator,strlen(blob_get_name(attr)));
     strncpy(method->name,(char *)blob_get_name(attr),strlen(blob_get_name(attr)));
 
-    method->args = llist_create(allocator,0);
-    llist_init(method->args,sizeof(struct busd_object_method_arg_s));
+    method->args = llist_alloc(allocator);
+    llist_set(method->args,"lock_type",&lock_type);
+    llist_set(method->args,"data_size",&data_size);
+    llist_init(method->args);
 
     head = (blob_attr_t *)blob_get_data(attr);
     len  = blob_get_data_len(attr);

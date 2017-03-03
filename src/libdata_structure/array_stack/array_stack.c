@@ -4,11 +4,14 @@
 #include <libdbg/debug.h>
 #include <libdata_structure/array_stack.h>
 
-array_stack_t *array_stack_create(allocator_t *allocator)
+array_stack_t *array_stack_alloc(allocator_t *allocator)
 {
      array_stack_t *as;
 
-     if( (as = (array_stack_t *)allocator_mem_alloc(allocator,sizeof(array_stack_t))) == NULL ){
+     if( (as = (array_stack_t *)
+               allocator_mem_alloc(allocator,
+                                   sizeof(array_stack_t))) == NULL )
+     {
          dbg_str(DBG_DETAIL,"allocator_mem_alloc");
          return NULL;
      }
@@ -94,7 +97,7 @@ int test_array_stack()
     int p;
     int a;
 
-    as = array_stack_create(allocator);
+    as = array_stack_alloc(allocator);
     array_stack_init(as);
 
     dbg_str(DBG_DETAIL,"as addr:%x",as);

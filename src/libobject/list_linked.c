@@ -38,6 +38,7 @@ static int __construct(List *list,char *init_str)
     llist_t *llist;
     allocator_t *allocator = ((Obj *)list)->allocator;
     int value_size;
+    int lock_type = 0;
 
     dbg_str(OBJ_DETAIL,"llist list construct,list addr:%p",list);
 
@@ -47,8 +48,10 @@ static int __construct(List *list,char *init_str)
     } else {
         value_size = list->value_size;
     }
-    llist = llist_create(allocator,0);
-    llist_init(llist,value_size);
+    llist = llist_alloc(allocator);
+    llist_set(llist,"lock_type",&lock_type);
+    llist_set(llist,"data_size",&value_size);
+    llist_init(llist);
 
     ((Linked_List *)list)->llist = llist;
 

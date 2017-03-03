@@ -72,6 +72,8 @@ static int __set(Button *button, char *attrib, void *value)
 	} 
     else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
+    } else if (strcmp(attrib, "draw") == 0) {
+        button->draw = value;
     } else if (strcmp(attrib, "mouse_pressed") == 0) {
         button->mouse_pressed = value;
     } else if (strcmp(attrib, "mouse_released") == 0) {
@@ -98,6 +100,32 @@ static void *__get(Button *obj, char *attrib)
         return NULL;
     }
     return NULL;
+}
+
+static void draw_subcomponent_foreach_cb(Iterator *iter, void *arg) 
+{
+    Component *component;
+    uint8_t *addr;
+    Graph *g = (Graph *)arg;
+
+    addr      = (uint8_t *)iter->get_vpointer(iter);
+    component = (Component *)buffer_to_addr(addr);
+
+    if (component->draw) component->draw(component, g);
+}
+
+static int __draw(Component *component, void *graph)
+{
+    Container *container = (Container *)component;
+    Graph *g             = (Graph *)graph;
+    Button *button       = (Button *)component;
+    Subject *s           = (Subject *)component;
+
+    dbg_str(DBG_DETAIL,"%s draw", ((Obj *)component)->name);
+
+    g->render_set_color(g,0,0,0,0xff);
+    g->render_draw_rect(g,s->x,s->y,s->width,s->height);
+    container->for_each_component(container, draw_subcomponent_foreach_cb, g);
 }
 
 static void __mouse_pressed(Component *component,void *event, void *window) 
@@ -149,12 +177,13 @@ static class_info_entry_t button_class_info[] = {
 	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
 	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
 	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_released",__mouse_released,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_exited",__mouse_exited,sizeof(void *)},
-    [10] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
-	[11] = {ENTRY_TYPE_END},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_released",__mouse_released,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
+    [10] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_exited",__mouse_exited,sizeof(void *)},
+    [11] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
+	[12] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Button",button_class_info);
@@ -208,7 +237,6 @@ void test_ui_button()
     char buf[2048];
 
     set_str = gen_window_setting_str();
-    dbg_str(DBG_DETAIL, "test_ui_button begin alloc count =%d",allocator->alloc_count);
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
 
     /*
@@ -228,6 +256,5 @@ void test_ui_button()
 
     window->unload_resources(window);
     object_destroy(window);
-    dbg_str(DBG_DETAIL, "test_ui_button end alloc count =%d",allocator->alloc_count);
 }
 

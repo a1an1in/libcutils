@@ -42,6 +42,8 @@ int test_datastructure_link_list()
     struct test t3={3,2};
     struct test t4={4,2};
     int ret = 0;
+    int data_size = sizeof(struct test);
+    int lock_type = 1;
 
     /*
      *allocator = allocator_creator(ALLOCATOR_TYPE_CTR_MALLOC);
@@ -49,8 +51,10 @@ int test_datastructure_link_list()
      *dbg_str(DBG_CONTAINER_DETAIL,"list allocator addr:%p",allocator);
      */
 
-    llist = llist_create(allocator,0);
-    llist_init(llist,sizeof(struct test));
+    llist = llist_alloc(allocator);
+    llist_set(llist,"lock_type",&lock_type);
+    llist_set(llist,"data_size",&data_size);
+    llist_init(llist);
 
     llist_push_front(llist,&t1);
     llist_push_front(llist,&t2);

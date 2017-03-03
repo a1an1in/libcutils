@@ -65,7 +65,7 @@ int blob_init(blob_t *blob)
         blob->tail = blob->head;
     }
 
-    blob->tbl_stack = array_stack_create(allocator);
+    blob->tbl_stack = array_stack_alloc(allocator);
     blob->tbl_stack->step = sizeof(void *);
     array_stack_init(blob->tbl_stack);
 

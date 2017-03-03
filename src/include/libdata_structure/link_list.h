@@ -21,8 +21,9 @@
 #include "libdata_structure/link_list_struct.h"
 #include <libdbg/debug.h>
 
-llist_t *llist_create(allocator_t *allocator,uint8_t lock_type);
-int llist_init(llist_t *llist,uint32_t data_size);
+llist_t *llist_alloc(allocator_t *allocator);
+int llist_set(llist_t *llist,char *attrib,void *value);
+int llist_init(llist_t *llist);
 int llist_insert(llist_t *llist, list_pos_t *pos, void *data);
 int llist_delete(llist_t *llist, list_pos_t *pos);
 int llist_push_back(llist_t *llist,void *data);

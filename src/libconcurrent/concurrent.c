@@ -415,13 +415,17 @@ concurrent_master_init(concurrent_master_t *master,
 {
     int ret = 0;
     int fds[2];
+    int data_size = sizeof(struct concurrent_message_s);
+    int lock_type = 1;
 
     dbg_str(CONCURRENT_DETAIL,"concurrent_master_init");
     master->concurrent_work_type = concurrent_work_type;
     master->slave_amount = slave_amount;
-    master->message_que = llist_create(master->allocator,1);
     master->message_count = 0;
-    llist_init(master->message_que,sizeof(struct concurrent_message_s));
+    master->message_que = llist_alloc(master->allocator);
+    llist_set(master->message_que,"lock_type",&lock_type);
+    llist_set(master->message_que,"data_size",&data_size);
+    llist_init(master->message_que);
 
     // create task admin
     master->task_admin = concurrent_task_admin_create(master->allocator);
@@ -574,6 +578,8 @@ concurrent_init(concurrent_t *c,
                 uint8_t concurrent_lock_type)
 {
     int ret = 0;
+    int data_size = sizeof(struct concurrent_message_s);
+    int lock_type = 1;
 
     dbg_str(CONCURRENT_DETAIL,"concurrent_init");
     c->master = concurrent_master_create(c->allocator);
@@ -586,9 +592,11 @@ concurrent_init(concurrent_t *c,
 
     c->snd_add_new_event_fd  = c->master->snd_add_new_event_fd;
 
-    c->new_ev_que = llist_create(c->allocator,1);
+    c->new_ev_que = llist_alloc(c->allocator);
     c->master->new_ev_que = c->new_ev_que;
-    llist_init(c->new_ev_que,sizeof(struct concurrent_message_s));
+    llist_set(c->new_ev_que,"lock_type",&lock_type);
+    llist_set(c->new_ev_que,"data_size",&data_size);
+    llist_init(c->new_ev_que);
 
     sync_lock_init(&c->concurrent_lock,concurrent_lock_type);
 

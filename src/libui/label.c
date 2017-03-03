@@ -195,10 +195,10 @@ static int __draw(Component *component, void *graph)
      *g->render_clear(g);
      */
     g->render_set_color(g,0,0,0,0xff);
+    g->render_draw_rect(g,s->x,s->y,s->width,label->char_height);
     /*
-     *g->render_draw_rect(g,s->x,s->y,s->width,label->char_height);
+     *g->render_draw_rect(g,s->x,s->y,s->width,s->height);
      */
-    g->render_draw_rect(g,s->x,s->y,s->width,s->height);
 
     cursor->x = s->x; cursor->y = s->y; cursor->width = 0; 
 

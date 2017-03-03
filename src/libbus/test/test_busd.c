@@ -58,5 +58,7 @@ void test_bus_daemon()
                        server_host,
                        server_srv, 
                        SERVER_TYPE_INET_TCP);
+
+    pause();
 }
 
