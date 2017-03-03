@@ -47,6 +47,8 @@
 #include <libdbg/debug.h>
 #include <libargs/cmd_args.h>
 #include <attrib_priority.h>
+#include <libbus/busd.h>
+#include <libbus/bus.h>
 #include <test.h>
 
 #define LIBRARY_VERSION "libcutils version: 2.3.4.0"
@@ -302,8 +304,30 @@ static int args_process_test_blob(void *base,int argc,char **argv)
 
 static int args_process_busd(void *base,int argc,char **argv)
 {
-    test_bus_daemon();
+#if 1
+    allocator_t *allocator = allocator_get_default_alloc();
+    busd_t *busd;
+#if 0
+    char *deamon_host = "bus_server_path";
+    char *deamon_srv = NULL;
+#else
+    char *deamon_host = "127.0.0.1";
+    char *deamon_srv  = "12345";
+#endif
+    
+    dbg_str(BUS_DETAIL,"test_busd_daemon");
+
+    busd = busd_create(allocator,
+                       deamon_host,
+                       deamon_srv, 
+                       SERVER_TYPE_INET_TCP);
+
     return 0;
+#else
+    /*
+     *test_bus_daemon();
+     */
+#endif
 }
 
 static int args_process_busc(void *base,int argc,char **argv)
@@ -317,6 +341,19 @@ static int args_process_buss(void *base,int argc,char **argv)
     test_bus_server();
     return 0;
 }
+
+static int args_process_bus_service_debug(void *base,int argc,char **argv)
+{
+    bus_debug_service();
+    return 0;
+}
+
+static int args_process_bus_client_debug(void *base,int argc,char **argv)
+{
+    bus_debug_client();
+    return 0;
+}
+
 
 static int args_process_test_as(void *base,int argc,char **argv)
 {
@@ -534,6 +571,8 @@ static cmd_config_t cmds[]={
     {"Obj", args_process_test_obj,0, "test", "N/A","obj"},
     {"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
     {"as", args_process_test_as,0, "test", "N/A","array_stack"},
+    {"buss_dbg", args_process_bus_service_debug,0, "app", "N/A","bus"},
+    {"busc_dbg", args_process_bus_client_debug,0, "app", "N/A","bus"},
     {"buss", args_process_buss,0, "test", "N/A","bus"},
     {"busc", args_process_busc,0, "test", "N/A","bus"},
     {"busd", args_process_busd,0, "app", "N/A","bus"},
@@ -593,10 +632,8 @@ int main(int argc, char *argv[])
      */
 
     dbg_str(DBG_DETAIL,"main func end");
-    /*
-     *pause();
-     *dbg_str(DBG_DETAIL,"main func out,but pause breaked");
-     */
+    pause();
+    dbg_str(DBG_DETAIL,"main func out,but pause breaked");
 
     return ret;
 }

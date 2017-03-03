@@ -13,13 +13,15 @@ static int test_hello(struct bus_s *bus,
                       void *out_data,
                       int *out_data_len)
 {
-    printf("run test hello\n");
     char buffer[] = {1,2,3,4,5,6,7,8,9};
     char *content;
     int id;
 
+    dbg_str(DBG_SUC,"run test hello");
+
     id = blob_get_u32(args[0]);
     content = blob_get_string(args[1]);
+
     dbg_str(DBG_DETAIL,"test hello,rcv args id=%d,content=%s",id,content);
 
     memcpy(out_data,buffer,sizeof(buffer));
@@ -58,26 +60,28 @@ void test_bus_server()
     allocator_t *allocator = allocator_get_default_alloc();
     bus_t *bus;
 #if 0
-    char *server_host = "bus_server_path";
-    char *server_srv = NULL;
+    char *deamon_host = "bus_server_path";
+    char *deamon_srv = NULL;
 #else
 	/*
-     *char *server_host = "192.168.20.49";
+     *char *deamon_host = "192.168.20.49";
 	 */
-    char *server_host = "127.0.0.1";
-    char *server_srv = "12345";
+    char *deamon_host = "127.0.0.1";
+    char *deamon_srv  = "12345";
 #endif
 	char buf[1024]    = "hello world!";
 	int buf_len       = strlen(buf);
     
     dbg_str(DBG_DETAIL,"hello policy addr:%p",hello_policy);
     bus = bus_client_create(allocator,
-                            server_host,
-                            server_srv, 
+                            deamon_host,
+                            deamon_srv, 
                             CLIENT_TYPE_INET_TCP);
 
     dbg_str(BUS_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);
 
-	while(1) sleep(1);
+    /*
+	 *while(1) sleep(1);
+     */
 }

@@ -42,23 +42,25 @@ void test_bus_daemon()
     allocator_t *allocator = allocator_get_default_alloc();
     busd_t *busd;
 #if 0
-    char *server_host = "bus_server_path";
-    char *server_srv = NULL;
+    char *deamon_host = "bus_server_path";
+    char *deamon_srv = NULL;
 #else
 	/*
-     *char *server_host = "192.168.20.49";
+     *char *deamon_host = "192.168.20.49";
 	 */
-    char *server_host = "127.0.0.1";
-    char *server_srv = "12345";
+    char *deamon_host = "127.0.0.1";
+    char *deamon_srv  = "12345";
 #endif
     
     dbg_str(BUS_DETAIL,"test_busd_daemon");
 
     busd = busd_create(allocator,
-                       server_host,
-                       server_srv, 
+                       deamon_host,
+                       deamon_srv, 
                        SERVER_TYPE_INET_TCP);
 
-	while(1) sleep(1);
+    /*
+	 *while(1) sleep(1);
+     */
 }
 

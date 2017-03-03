@@ -72,6 +72,8 @@ args_parse_args(args_processor_t *p,int argc, char *argv[])
     cmd_config_t *c; 
     uint8_t args_count;
 
+    dbg_str(DBG_DETAIL, "argc =%d",argc);
+
     for(i = 0; i < argc;){
         c = args_find_entry(p,argv[i]);
         if(c == NULL){
@@ -87,6 +89,7 @@ args_parse_args(args_processor_t *p,int argc, char *argv[])
                         "we'll compute by the default setting");
             }
             i+= c->args_count;
+            dbg_str(ARGS_DETAIL,"args count=%d",args_count);
         }
     }
 
