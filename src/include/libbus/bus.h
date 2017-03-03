@@ -146,7 +146,7 @@ struct bus_s{
 };
 
 
-bus_t * bus_create(allocator_t *allocator);
+bus_t * bus_alloc(allocator_t *allocator);
 int bus_init(bus_t *bus,
              char *server_host,
              char *server_srv,
@@ -159,8 +159,8 @@ int bus_add_object(bus_t *bus,struct bus_object *obj);
 
 int bus_invoke_sync(bus_t *bus,char *key, char *method,int argc, bus_method_args_t *args,char *out_buf,char *out_len);
 
-bus_t * bus_client_create(allocator_t *allocator,
-                          char *server_host,
-                          char *server_srv,
-                          char *socket_type);
+bus_t * bus_create(allocator_t *allocator,
+                   char *server_host,
+                   char *server_srv,
+                   char *socket_type);
 #endif

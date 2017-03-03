@@ -73,10 +73,10 @@ void test_bus_server()
 	int buf_len       = strlen(buf);
     
     dbg_str(DBG_DETAIL,"hello policy addr:%p",hello_policy);
-    bus = bus_client_create(allocator,
-                            deamon_host,
-                            deamon_srv, 
-                            CLIENT_TYPE_INET_TCP);
+    bus = bus_create(allocator,
+                     deamon_host,
+                     deamon_srv, 
+                     CLIENT_TYPE_INET_TCP);
 
     dbg_str(BUS_DETAIL,"bus add object");
 	bus_add_object(bus,&test_object);

@@ -54,10 +54,10 @@ void bus_debug_service()
     char *deamon_srv  = "12345";
 #endif
     
-    bus = bus_client_create(allocator,
-                            deamon_host,
-                            deamon_srv, 
-                            CLIENT_TYPE_INET_TCP);
+    bus = bus_create(allocator,
+                     deamon_host,
+                     deamon_srv, 
+                     CLIENT_TYPE_INET_TCP);
 
 	bus_add_object(bus,&debug_object);
 

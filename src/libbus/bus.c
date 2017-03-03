@@ -708,14 +708,14 @@ static int bus_process_receiving_data_callback(client_task_t *task)
     return 0;
 }
 
-bus_t * bus_client_create(allocator_t *allocator,
-                          char *server_host,
-                          char *server_srv,
-                          char *socket_type)
+bus_t * bus_create(allocator_t *allocator,
+                   char *server_host,
+                   char *server_srv,
+                   char *socket_type)
 {
     bus_t *bus;
     
-    dbg_str(BUS_DETAIL,"bus_client_create");
+    dbg_str(BUS_DETAIL,"bus_create");
     bus = bus_alloc(allocator);
 
     bus_set(bus,"client_sk_type", socket_type, 0);

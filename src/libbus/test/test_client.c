@@ -24,10 +24,10 @@ void test_bus_client()
     
     dbg_str(DBG_DETAIL,"test_bus_client");
 
-    bus = bus_client_create(allocator,
-                            deamon_host,
-                            deamon_srv,
-                            CLIENT_TYPE_INET_TCP);
+    bus = bus_create(allocator,
+                     deamon_host,
+                     deamon_srv,
+                     CLIENT_TYPE_INET_TCP);
     /*
      *bus_lookup(bus, "test");
      */
