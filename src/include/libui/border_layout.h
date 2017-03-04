@@ -49,4 +49,6 @@ struct border_layout_s{
     layout_block_t blocks[BORDER_LAYOUT_MAX];
 };
 
+void *new_border_layout(allocator_t *allocator, int x, int y, int width, int height, char *name);
+
 #endif

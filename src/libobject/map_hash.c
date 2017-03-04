@@ -171,7 +171,7 @@ static Iterator *__begin(Map *map)
 
     hash_map_begin(((Hash_Map *)map)->hmap, &iter->hash_map_pos);
 
-    return iter;
+    return (Iterator *)iter;
 }
 
 static Iterator *__end(Map *map)
@@ -182,7 +182,7 @@ static Iterator *__end(Map *map)
 
     hash_map_end(((Hash_Map *)map)->hmap, &iter->hash_map_pos);
 
-    return iter;
+    return (Iterator *)iter;
 }
 
 static class_info_entry_t hash_map_class_info[] = {

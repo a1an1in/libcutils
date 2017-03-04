@@ -33,6 +33,7 @@
 #include <libui/border_layout.h>
 #include <libui/sdl_window.h>
 #include <libui/label.h>
+#include <miscellany/buffer.h>
 
 static int __construct(Button *button,char *init_str)
 {

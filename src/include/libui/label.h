@@ -36,4 +36,6 @@ struct label_s{
     char text_overflow_flag;
 };
 
+void *new_label(allocator_t *allocator, int x, int y, int width, int height, char *name);
+void gen_label_setting_str(int x, int y, int width, int height, char *name, void *out);
 #endif

@@ -46,6 +46,7 @@
 #include <signal.h>
 #include <libconcurrent/concurrent.h>
 #include <libipc/net/inet_client.h>
+#include <miscellany/net.h>
 
 
 static int process_task_callback(client_task_t *task)

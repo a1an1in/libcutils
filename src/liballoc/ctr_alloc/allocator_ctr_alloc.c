@@ -171,13 +171,15 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
     return mem;
 }
 
-static free_huge_slab(allocator_t *allocator,ctr_slab_t *slab_list)
+static int free_huge_slab(allocator_t *allocator,ctr_slab_t *slab_list)
 {
     free(slab_list);
     allocator->alloc_count--;
+
+    return 0;
 }
 
-static free_normal_slab(allocator_t *allocator,ctr_slab_t *slab_list)
+static int free_normal_slab(allocator_t *allocator,ctr_slab_t *slab_list)
 {
     ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
     struct list_head *new_head;
@@ -198,6 +200,7 @@ static free_normal_slab(allocator_t *allocator,ctr_slab_t *slab_list)
 
     allocator->alloc_count--;
 
+    return 0;
 }
 
 static void __free(allocator_t *allocator,void *addr)

@@ -95,8 +95,20 @@ extern debugger_module_t debugger_modules[MAX_DEBUGGER_MODULES_NUM];
 
 uint8_t debugger_get_level_color(debugger_t *debugger,uint32_t level);
 int debugger_get_business_level(debugger_t *debugger,uint32_t business_num);
-int debugger_dbg_str(debugger_t *debugger,uint32_t dbg_switch,const char *fmt,...);
-int debugger_dbg_buf(debugger_t *debugger, uint32_t dbg_switch,const char* const_str, uint8_t *buf,uint32_t buf_len, const char *fmt,...);
+
+void debugger_set_business(debugger_t *debugger,
+                           uint32_t business_num,
+                           uint8_t on_off,uint8_t debug_level);
+
+int debugger_dbg_str(debugger_t *debugger,
+                     uint32_t dbg_switch,const char *fmt,...);
+
+int debugger_dbg_buf(debugger_t *debugger,
+                     uint32_t dbg_switch,
+                     const char* const_str, 
+                     uint8_t *buf,
+                     uint32_t buf_len, const char *fmt,...);
+
 debugger_t *debugger_creator(char *ini_file_name,uint8_t lock_type);
 void debugger_init(debugger_t *debugger);
 void debugger_destroy(debugger_t *debugger);

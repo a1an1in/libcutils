@@ -778,7 +778,7 @@ static int __key_backspace_pressed(Component *component,void *graph)
     c                      = cursor->c;
 
     ret                    = move_cursor_left(component);
-    if (ret < 1) { return; }
+    if (ret < 1) { return 0;}
 
     cursor_line            = get_row_at_cursor(component);
     disturbed_line_count   = text->delete_char(text,cursor_line ,
@@ -893,7 +893,7 @@ static int __key_pageup_pressed(Component *component,void *graph)
         ta->start_line = 0;
     } else {
         dbg_str(DBG_WARNNING,"key_pageup_pressed");
-        return ;
+        return 0;
     }
 
     cursor->y      = 0;
@@ -921,7 +921,7 @@ static int __key_pagedown_pressed(Component *component,void *graph)
     if (ta->start_line + line_count_of_a_screen < text->last_line_num ) {
         ta->start_line += line_count_of_a_screen;
     } else {
-        return;
+        return 0;
     }
 
     cursor->y      = 0;

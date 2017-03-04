@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <libdbg/debug.h>
 #include <libui/sdl_timer.h>
+#include <unistd.h>
 
 extern int SDL_TimerInit(void);
 extern void SDL_TimerQuit(void);

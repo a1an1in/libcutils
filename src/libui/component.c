@@ -32,6 +32,7 @@
 #include <libui/component.h>
 #include <libui/window.h>
 #include <libui/event.h>
+#include <miscellany/buffer.h>
 
 static int __construct(Component *component,char *init_str)
 {

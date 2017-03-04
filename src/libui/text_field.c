@@ -213,7 +213,7 @@ static int draw_character(Component *component,char c, void *graph)
     character = (Character *)g->font->ascii[c].character;
     if (character->height == 0) {
         dbg_str(DBG_WARNNING,"text list may have problem, draw id=%d, c=%c", c,c);
-        return;
+        return -1;
     }
 
     g->render_write_character(g,cursor->x + s->x, cursor->y + s->y,character);
@@ -412,7 +412,7 @@ static int __draw(Component *component, void *graph)
     cursor->x = 0; cursor->y = 0; cursor->width = 0; 
 
     line_info = (text_line_t *)text->get_text_line_info(text,0);
-    if (line_info == NULL) return;
+    if (line_info == NULL) return -1;
 
     for (i = 0; i < line_info->tail - line_info->head + 1; i++) {
         c = line_info->head[i];
@@ -433,6 +433,8 @@ static int __draw(Component *component, void *graph)
     cursor->width  = width_bak;
 
     g->render_present(g);
+
+    return 0;
 }
 
 static int __key_text_pressed(Component *component,char c, void *graph)
@@ -445,7 +447,7 @@ static int __key_text_pressed(Component *component,char c, void *graph)
     uint16_t cursor_line     = 0;
     Character *character;
 
-    if (c == '\n') return;
+    if (c == '\n') return 0;
 
     text->write_char(text,cursor_line, cursor->offset, cursor->x, c, g->font);
 
@@ -486,7 +488,7 @@ static int __key_backspace_pressed(Component *component,void *graph)
     c                    = cursor->c;
 
     ret                  = move_cursor_left(component);
-    if (ret < 1) { return; }
+    if (ret < 1) { return 0;}
 
     text->delete_char(text,cursor_line, cursor->offset, cursor->x, g->font);
 

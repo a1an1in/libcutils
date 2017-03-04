@@ -45,7 +45,7 @@ draw_character(Component *component,char c, void *graph)
     character = (Character *)g->font->ascii[c].character;
     if (character->height == 0) {
         dbg_str(DBG_WARNNING,"text list may have problem, draw id=%d, c=%c", c,c);
-        return;
+        return -1;
     }
 
     g->render_write_character(g,cursor->x, cursor->y,character);
