@@ -81,6 +81,7 @@ static int __construct(Label *label,char *init_str)
 
     cursor->x                 = 0;
     cursor->y                 = 0;
+    dbg_str(DBG_SUC, "width=%d, height=%d", ((Subject *)label)->width, ((Subject *)label)->height);
 
     return 0;
 }

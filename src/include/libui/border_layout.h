@@ -23,6 +23,8 @@ typedef struct layout_block_s {
     Component *component;
     int width;
     int height;
+    int rel_width;
+    int rel_height;
 }layout_block_t;
 
 struct border_layout_s{
@@ -47,6 +49,10 @@ struct border_layout_s{
     uint32_t layout_width_default, layout_height_default;
 
     layout_block_t blocks[BORDER_LAYOUT_MAX];
+    int width_ratio_of_layout_to_west;
+    int width_ratio_of_layout_to_east;
+    int height_ratio_of_layout_to_north;
+    int height_ratio_of_layout_to_south;
 };
 
 void *new_border_layout(allocator_t *allocator, int x, int y, int width, int height, char *name);

@@ -36,6 +36,39 @@
 #include <miscellany/buffer.h>
 #include <libui/label.h>
 
+static int generate_border_blocks_config(Border_Layout *border_layout)
+{
+    Border_Layout *l       = border_layout;
+
+    l->blocks[BORDER_LAYOUT_NORTH].width   = l->layout_width_default;
+    l->blocks[BORDER_LAYOUT_NORTH].height  = l->layout_height /
+                                             l->height_ratio_of_layout_to_north;
+
+    l->blocks[BORDER_LAYOUT_WEST].width    = l->layout_width_default /
+                                             l->width_ratio_of_layout_to_west;
+    l->blocks[BORDER_LAYOUT_WEST].height   = l->layout_height /
+                                             (10 - l->height_ratio_of_layout_to_north - 
+                                              l->height_ratio_of_layout_to_south);
+
+    l->blocks[BORDER_LAYOUT_CENTER].width  = l->layout_width_default /
+                                             (10 - l->width_ratio_of_layout_to_west -
+                                              l->width_ratio_of_layout_to_east);
+    l->blocks[BORDER_LAYOUT_CENTER].height = l->layout_height /
+                                             (10 - l->height_ratio_of_layout_to_north -
+                                              l->height_ratio_of_layout_to_south);
+
+    l->blocks[BORDER_LAYOUT_EAST].width    = l->layout_width_default /
+                                             l->width_ratio_of_layout_to_east;
+    l->blocks[BORDER_LAYOUT_EAST].height   = l->layout_height / 
+                                             (10 - l->height_ratio_of_layout_to_north -
+                                              l->height_ratio_of_layout_to_south);
+
+    l->blocks[BORDER_LAYOUT_SOUTH].width   = l->layout_width_default;
+    l->blocks[BORDER_LAYOUT_SOUTH].height  = l->layout_height / 
+                                             l->height_ratio_of_layout_to_south;
+
+}
+
 static int __construct(Border_Layout *border_layout,char *init_str)
 {
     allocator_t *allocator = ((Obj *)border_layout)->allocator;
@@ -46,22 +79,17 @@ static int __construct(Border_Layout *border_layout,char *init_str)
 
     memset(l->blocks, 0, sizeof(layout_block_t) * BORDER_LAYOUT_MAX); 
 
-    l->layout_width_default                = 600;
-    l->layout_height_default               = 600;
+    l->layout_width_default                = 30;
+    l->layout_height_default               = 10;
     l->layout_width                        = l->layout_width_default;
     l->layout_height                       = l->layout_height_default;
+    l->width_ratio_of_layout_to_west       = 3;
+    l->width_ratio_of_layout_to_east       = 3;
+    l->height_ratio_of_layout_to_north     = 3;
+    l->height_ratio_of_layout_to_south     = 3;
 
-    l->blocks[BORDER_LAYOUT_NORTH].width   = l->layout_width_default;
-    l->blocks[BORDER_LAYOUT_NORTH].height  = l->layout_height / 3;
-    l->blocks[BORDER_LAYOUT_WEST].width    = l->layout_width_default / 3;
-    l->blocks[BORDER_LAYOUT_WEST].height   = l->layout_height / 3;
-    l->blocks[BORDER_LAYOUT_CENTER].width  = l->layout_width_default / 3;
-    l->blocks[BORDER_LAYOUT_CENTER].height = l->layout_height / 3;
-    l->blocks[BORDER_LAYOUT_EAST].width    = l->layout_width_default / 3;
-    l->blocks[BORDER_LAYOUT_EAST].height   = l->layout_height / 3;
-    l->blocks[BORDER_LAYOUT_SOUTH].width   = l->layout_width_default;
-    l->blocks[BORDER_LAYOUT_SOUTH].height  = l->layout_height / 3;
 
+    dbg_str(DBG_DETAIL,"lgap=%d vgap =%d", l->hgap, l->vgap);
     dbg_str(DBG_DETAIL,"border_layout construct end");
 
     return 0;
@@ -132,9 +160,10 @@ static int __add_component(Container *obj, void *pos, void *component)
     Map *map             = container->map;
     char buffer[8]       = {0};
     Component *c         = (Component *)component;
-    Subject *subject     = (Subject *)c;
+    Subject *s           = (Subject *)c;
     uint8_t rearrange_comonents_flag = 0;
     position_t position;
+    int index;
 
     if (pos == NULL) {
         dbg_str(DBG_DETAIL,"border layout add component error, please dessignate pos");
@@ -142,30 +171,76 @@ static int __add_component(Container *obj, void *pos, void *component)
     }
 
     if (strncmp(pos, "North", 5) == 0) {
-        l->blocks[BORDER_LAYOUT_NORTH].component = component;
-        position.x = 0;
-        position.y = 0;
-    } else if (strncmp(pos, "West", 4) == 0) {
-        l->blocks[BORDER_LAYOUT_WEST].component = component;
-        position.x = 0;
-        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
+        index = BORDER_LAYOUT_NORTH;
+    } else if (strncmp(pos, "West", 4) == 0 ) {
+        index = BORDER_LAYOUT_WEST;
     } else if (strncmp(pos, "Center", 6) == 0) {
-        l->blocks[BORDER_LAYOUT_CENTER].component = component;
-        position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap;
-        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
-    } else if (strncmp(pos, "East", 4) ==0) {
-        l->blocks[BORDER_LAYOUT_EAST].component = component;
-        position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap +
-                     l->blocks[BORDER_LAYOUT_CENTER].width + l->hgap;
-        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
+        index = BORDER_LAYOUT_CENTER;
+    } else if (strncmp(pos, "East", 4) == 0) {
+        index = BORDER_LAYOUT_EAST;
     } else if (strncmp(pos, "South", 5) == 0) {
-        l->blocks[BORDER_LAYOUT_SOUTH].component = component;
-        position.x = 0;
-        position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap +
-                     l->blocks[BORDER_LAYOUT_WEST].height + l->vgap;
+        index = BORDER_LAYOUT_SOUTH;
     } else {
         dbg_str(DBG_WARNNING,"borderlayout add component, pos par err");
         return -1;
+    }
+
+    if (component == NULL) {
+        l->blocks[index].component  = NULL;
+        l->blocks[index].width  = 0;
+        l->blocks[index].height = 0;
+        return 0;
+    }
+
+    l->blocks[index].component  = component;
+    l->blocks[index].width  = s->width + 2 * l->hgap;
+    l->blocks[index].height = s->height + 2 * l->vgap;
+
+    switch (index) {
+        case BORDER_LAYOUT_NORTH:
+            {
+                position.x = l->hgap;
+                position.y = l->vgap;
+            }
+            break;
+        case BORDER_LAYOUT_WEST:
+            {
+                position.x = l->hgap;
+                position.y = l->blocks[BORDER_LAYOUT_NORTH].height +  3 * l->vgap;
+            }
+            break;
+        case BORDER_LAYOUT_CENTER:
+            {
+                position.x = l->blocks[BORDER_LAYOUT_WEST].width + 3 * l->hgap;
+                position.y = l->blocks[BORDER_LAYOUT_NORTH].height + 3 * l->vgap;
+            }
+            break;
+        case BORDER_LAYOUT_EAST:
+            {
+                position.x = l->blocks[BORDER_LAYOUT_WEST].width + 5 * l->hgap +
+                    l->blocks[BORDER_LAYOUT_CENTER].width;
+                position.y = l->blocks[BORDER_LAYOUT_NORTH].height + 3 * l->vgap;
+            
+            }
+            break;
+        case BORDER_LAYOUT_SOUTH:
+            {
+                position.x = l->hgap;
+                position.y = l->blocks[BORDER_LAYOUT_NORTH].height + 5 * l->vgap +
+                    l->blocks[BORDER_LAYOUT_WEST].height;
+            }
+            break;
+        default:
+            return -1;
+            break;
+    }
+
+    if (l->layout_width < l->blocks[index].width) {
+        l->layout_width = l->blocks[index].width;
+    }
+
+    if (l->layout_height < l->blocks[index].height) {
+        l->layout_height = l->blocks[index].height;
     }
 
     dbg_str(DBG_DETAIL,"position x=%d, y=%d", position.x, position.y);
@@ -251,7 +326,7 @@ char *gen_border_layout_setting_str(int x, int y, int width, int height, char *n
                     }\
                 }";
 
-    sprintf(out, set_str, x, y, width, height, name, 4,4, 5, 2);
+    sprintf(out, set_str, x, y, width, height, name, 2,2);
 
     return out;
 }
@@ -290,15 +365,15 @@ void test_ui_border_layout()
 
     layout = new_border_layout(allocator, 0, 0, 600, 600, "border_layout");
 
-    l = new_label(allocator,0, 0, 80, 20, "label00");
+    l = new_label(allocator,0, 0, 80, 18, "label00");
     layout->add_component((Container *)layout, "North", l);
-    l = new_label(allocator,0, 0, 80, 20, "label01");
+    l = new_label(allocator,0, 0, 80, 18, "label01");
     layout->add_component((Container *)layout, "West", l);
-    l = new_label(allocator,0, 0, 80, 20, "label02");
+    l = new_label(allocator,0, 0, 80, 18, "label02");
     layout->add_component((Container *)layout, "Center", l);
-    l = new_label(allocator,0, 0, 80, 20, "label03");
+    l = new_label(allocator,0, 0, 80, 18, "label03");
     layout->add_component((Container *)layout, "East", l);
-    l = new_label(allocator,0, 0, 80, 20, "label10");
+    l = new_label(allocator,0, 0, 80, 18, "label10");
     layout->add_component((Container *)layout, "South", l);
 
     window->add_component((Container *)window, NULL, layout);
