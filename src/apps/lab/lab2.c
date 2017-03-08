@@ -65,10 +65,13 @@ int lab2()
      *p[0][0] = 0;
      *p[0][1] = (void *)1;
      */
-    int (*p)[2][4];
+    /*
+     *int (*p)[2][4];
+     *dbg_str(DBG_DETAIL, "p = %p", p);
+     *dbg_str(DBG_DETAIL, "p + 1 = %p, *(p + 1) =%p", p + 1, *(p + 1));
+     */
+    float a =0.5;
+    int b= 25;
 
-
-    dbg_str(DBG_DETAIL, "p = %p", p);
-    dbg_str(DBG_DETAIL, "p + 1 = %p, *(p + 1) =%p", p + 1, *(p + 1));
-
+    dbg_str(DBG_DETAIL,"a * b=%d", (int)(a*b));
 }

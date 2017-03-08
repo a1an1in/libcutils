@@ -21,8 +21,10 @@ enum border_layout_pos_e{
 
 typedef struct layout_block_s {
     Component *component;
-    float width;
-    float height;
+    int width;
+    int height;
+    int width_bak;
+    int height_bak;
 }layout_block_t;
 
 struct border_layout_s{
@@ -42,8 +44,8 @@ struct border_layout_s{
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
     void *window;
-    float hgap, vgap;
-    float layout_width, layout_height;
+    int hgap, vgap;
+    int layout_width, layout_height;
 
     layout_block_t blocks[BORDER_LAYOUT_MAX];
     float width_ratio_of_west_to_layout;
