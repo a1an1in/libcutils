@@ -300,161 +300,224 @@ static int __add_component(Container *obj, void *pos, void *component)
         return -1;
     }
 
-    if (component == NULL) {
-        l->blocks[index].component  = NULL;
-        l->blocks[index].width  = 0;
-        l->blocks[index].height = 0;
-        return 0;
-    }
-
     if (strncmp(pos, "North", 5) == 0) {
         index = BORDER_LAYOUT_NORTH;
-        l->blocks[index].component  = component;
-
-        if (l->blocks[index].width < s->width + 2 * l->hgap) {
-            l->blocks[index].width  = s->width + 2 * l->hgap;
-        }
-        if (l->blocks[index].height < s->height + 2 * l->vgap) {
-            l->blocks[index].height = s->height + 2 * l->vgap;
-        }
-
-        if (l->layout_width < l->blocks[index].width) {
-            l->layout_width = l->blocks[index].width;
-            size_change_flag = 1;
-        }
-
-        int height, width, h;
-        height = (int)(l->blocks[index].height / l->height_ratio_of_north_to_layout);
-
-        if (l->layout_height < height) {
-            l->layout_height = height;
-            h = (int)(l->layout_height * l->height_ratio_of_north_to_layout);
-            l->blocks[index].height = h;
-            size_change_flag = 1;
-        }
-        if (size_change_flag == 1) {
-            dbg_str(DBG_WARNNING, "run at here");
-        }
     } else if (strncmp(pos, "West", 4) == 0 ) {
         index = BORDER_LAYOUT_WEST;
-
-        l->blocks[index].component  = component;
-
-        if (l->blocks[index].width < s->width + 2 * l->hgap) {
-            l->blocks[index].width  = s->width + 2 * l->hgap;
-        }
-        if (l->blocks[index].height < s->height + 2 * l->vgap) {
-            l->blocks[index].height = s->height + 2 * l->vgap;
-        }
-
-        int height, width, h;
-        width = (int)(l->blocks[index].width / l->width_ratio_of_west_to_layout);
-        height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
-
-        if (l->layout_width < width) {
-            l->layout_width = width;
-            size_change_flag = 1;
-        }
-
-        if (l->layout_height < height) {
-            l->layout_height = height;
-            h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
-            l->blocks[index].height = h;
-            size_change_flag = 1;
-        }
-        if (size_change_flag == 1) {
-            dbg_str(DBG_WARNNING, "run at here");
-        }
     } else if (strncmp(pos, "Center", 6) == 0) {
         index = BORDER_LAYOUT_CENTER;
-
-        l->blocks[index].component  = component;
-        if (l->blocks[index].width < s->width + 2 * l->hgap) {
-            l->blocks[index].width  = s->width + 2 * l->hgap;
-        }
-        if (l->blocks[index].height < s->height + 2 * l->vgap) {
-            l->blocks[index].height = s->height + 2 * l->vgap;
-        }
-
-        int height, width, h;
-        width = (int)(l->blocks[index].width / l->width_ratio_of_center_to_layout);
-        height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
-
-        if (l->layout_width < width) {
-            l->layout_width = width;
-            size_change_flag = 1;
-        }
-
-        if (l->layout_height < height) {
-            l->layout_height = height;
-            h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
-            l->blocks[index].height = h;
-            size_change_flag = 1;
-        }
-        if (size_change_flag == 1) {
-            dbg_str(DBG_WARNNING, "run at here");
-        }
     } else if (strncmp(pos, "East", 4) == 0) {
         index = BORDER_LAYOUT_EAST;
-
-        l->blocks[index].component  = component;
-
-        if (l->blocks[index].width < s->width + 2 * l->hgap) {
-            l->blocks[index].width  = s->width + 2 * l->hgap;
-        }
-        if (l->blocks[index].height < s->height + 2 * l->vgap) {
-            l->blocks[index].height = s->height + 2 * l->vgap;
-        }
-
-        int height, width, h;
-        width = (int)(l->blocks[index].width / l->width_ratio_of_east_to_layout);
-        height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
-
-        if (l->layout_width < width) {
-            l->layout_width = width;
-            size_change_flag = 1;
-        }
-
-        if (l->layout_height < height) {
-            l->layout_height = height;
-            h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
-            l->blocks[index].height = h;
-            size_change_flag = 1;
-        }
-        if (size_change_flag == 1) {
-            dbg_str(DBG_WARNNING, "run at here");
-        }
     } else if (strncmp(pos, "South", 5) == 0) {
         index = BORDER_LAYOUT_SOUTH;
-        l->blocks[index].component  = component;
-
-        if (l->blocks[index].width < s->width + 2 * l->hgap) {
-            l->blocks[index].width  = s->width + 2 * l->hgap;
-        }
-        if (l->blocks[index].height < s->height + 2 * l->vgap) {
-            l->blocks[index].height = s->height + 2 * l->vgap;
-        }
-
-        if (l->layout_width < l->blocks[index].width) {
-            l->layout_width = l->blocks[index].width;
-            size_change_flag = 1;
-        }
-
-        int height, h;
-        height = (int)(l->blocks[index].height / l->height_ratio_of_south_to_layout);
-
-        if (l->layout_height < height) {
-            l->layout_height = height;
-            h = (int)(l->layout_height * l->height_ratio_of_south_to_layout);
-            l->blocks[index].height = h;
-            size_change_flag = 1;
-        }
-        if (size_change_flag == 1) {
-            dbg_str(DBG_WARNNING, "run at here");
-        }
     } else {
         dbg_str(DBG_WARNNING,"borderlayout add component, pos par err");
         return -1;
+    }
+
+    if (component == NULL) {
+        l->blocks[index].component  = NULL;
+
+        switch (index) {
+            case BORDER_LAYOUT_NORTH:
+                l->height_ratio_of_north_to_layout        = 0;
+                l->blocks[BORDER_LAYOUT_NORTH].height_bak = 0;
+                l->blocks[BORDER_LAYOUT_NORTH].height     = 0;
+                l->height_ratio_of_center_to_layout       = (float) (1.0 - l->height_ratio_of_north_to_layout -
+                        l->height_ratio_of_south_to_layout);
+
+                break;
+            case BORDER_LAYOUT_WEST:
+                l->width_ratio_of_west_to_layout          = 0;
+                l->blocks[BORDER_LAYOUT_WEST].width_bak   = 0;
+                l->blocks[BORDER_LAYOUT_WEST].width       = 0;
+                l->width_ratio_of_center_to_layout        = (float) (1.0 - l->width_ratio_of_west_to_layout -
+                        l->width_ratio_of_east_to_layout);
+                break;
+            case BORDER_LAYOUT_CENTER:
+                l->width_ratio_of_center_to_layout        = 0;
+                l->blocks[BORDER_LAYOUT_CENTER].width_bak = 0;
+                l->blocks[BORDER_LAYOUT_CENTER].width     = 0;
+                break;
+            case BORDER_LAYOUT_EAST:
+                l->width_ratio_of_east_to_layout          = 0;
+                l->blocks[BORDER_LAYOUT_EAST].width_bak   = 0;
+                l->blocks[BORDER_LAYOUT_EAST].width       = 0;
+                l->width_ratio_of_center_to_layout        = (float) (1.0 - l->width_ratio_of_west_to_layout -
+                        l->width_ratio_of_east_to_layout);
+                break;
+            case BORDER_LAYOUT_SOUTH:
+                l->height_ratio_of_south_to_layout        = 0;
+                l->blocks[BORDER_LAYOUT_SOUTH].height_bak = 0;
+                l->blocks[BORDER_LAYOUT_SOUTH].height     = 0;
+                l->height_ratio_of_center_to_layout       = (float) (1.0 - l->height_ratio_of_north_to_layout -
+                        l->height_ratio_of_south_to_layout);
+                dbg_str(DBG_SUC,"south set 0");
+                break;
+            default:
+                return -1;
+                break;
+        }
+        return 0;
+    }
+
+    switch (index) {
+        case BORDER_LAYOUT_NORTH:
+            {
+                l->blocks[index].component  = component;
+
+                if (l->blocks[index].width < s->width + 2 * l->hgap) {
+                    l->blocks[index].width  = s->width + 2 * l->hgap;
+                }
+                if (l->blocks[index].height < s->height + 2 * l->vgap) {
+                    l->blocks[index].height = s->height + 2 * l->vgap;
+                }
+
+                if (l->layout_width < l->blocks[index].width) {
+                    l->layout_width = l->blocks[index].width;
+                    size_change_flag = 1;
+                }
+
+                int height, width, h;
+                height = (int)(l->blocks[index].height / l->height_ratio_of_north_to_layout);
+
+                if (l->layout_height < height) {
+                    l->layout_height = height;
+                    h = (int)(l->layout_height * l->height_ratio_of_north_to_layout);
+                    l->blocks[index].height = h;
+                    size_change_flag = 1;
+                }
+                if (size_change_flag == 1) {
+                    dbg_str(DBG_WARNNING, "run at here");
+                }
+            }
+            break;
+        case BORDER_LAYOUT_WEST:
+            {
+                l->blocks[index].component  = component;
+
+                if (l->blocks[index].width < s->width + 2 * l->hgap) {
+                    l->blocks[index].width  = s->width + 2 * l->hgap;
+                }
+                if (l->blocks[index].height < s->height + 2 * l->vgap) {
+                    l->blocks[index].height = s->height + 2 * l->vgap;
+                }
+
+                int height, width, h;
+                width = (int)(l->blocks[index].width / l->width_ratio_of_west_to_layout);
+                height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
+
+                if (l->layout_width < width) {
+                    l->layout_width = width;
+                    size_change_flag = 1;
+                }
+
+                if (l->layout_height < height) {
+                    l->layout_height = height;
+                    h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    l->blocks[index].height = h;
+                    size_change_flag = 1;
+                }
+                if (size_change_flag == 1) {
+                    dbg_str(DBG_WARNNING, "run at here");
+                }
+            }
+            break;
+        case BORDER_LAYOUT_CENTER:
+            {
+                l->blocks[index].component  = component;
+                if (l->blocks[index].width < s->width + 2 * l->hgap) {
+                    l->blocks[index].width  = s->width + 2 * l->hgap;
+                }
+                if (l->blocks[index].height < s->height + 2 * l->vgap) {
+                    l->blocks[index].height = s->height + 2 * l->vgap;
+                }
+
+                int height, width, h;
+                width = (int)(l->blocks[index].width / l->width_ratio_of_center_to_layout);
+                height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
+
+                if (l->layout_width < width) {
+                    l->layout_width = width;
+                    size_change_flag = 1;
+                }
+
+                if (l->layout_height < height) {
+                    l->layout_height = height;
+                    h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    l->blocks[index].height = h;
+                    size_change_flag = 1;
+                }
+                if (size_change_flag == 1) {
+                    dbg_str(DBG_WARNNING, "run at here");
+                }
+            }
+            break;
+        case BORDER_LAYOUT_EAST:
+            {
+                l->blocks[index].component  = component;
+
+                if (l->blocks[index].width < s->width + 2 * l->hgap) {
+                    l->blocks[index].width  = s->width + 2 * l->hgap;
+                }
+                if (l->blocks[index].height < s->height + 2 * l->vgap) {
+                    l->blocks[index].height = s->height + 2 * l->vgap;
+                }
+
+                int height, width, h;
+                width = (int)(l->blocks[index].width / l->width_ratio_of_east_to_layout);
+                height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
+
+                if (l->layout_width < width) {
+                    l->layout_width = width;
+                    size_change_flag = 1;
+                }
+
+                if (l->layout_height < height) {
+                    l->layout_height = height;
+                    h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    l->blocks[index].height = h;
+                    size_change_flag = 1;
+                }
+                if (size_change_flag == 1) {
+                    dbg_str(DBG_WARNNING, "run at here");
+                }
+
+            }
+            break;
+        case BORDER_LAYOUT_SOUTH:
+            {
+                l->blocks[index].component  = component;
+
+                if (l->blocks[index].width < s->width + 2 * l->hgap) {
+                    l->blocks[index].width  = s->width + 2 * l->hgap;
+                }
+                if (l->blocks[index].height < s->height + 2 * l->vgap) {
+                    l->blocks[index].height = s->height + 2 * l->vgap;
+                }
+
+                if (l->layout_width < l->blocks[index].width) {
+                    l->layout_width = l->blocks[index].width;
+                    size_change_flag = 1;
+                }
+
+                int height, h;
+                height = (int)(l->blocks[index].height / l->height_ratio_of_south_to_layout);
+
+                if (l->layout_height < height) {
+                    l->layout_height = height;
+                    h = (int)(l->layout_height * l->height_ratio_of_south_to_layout);
+                    l->blocks[index].height = h;
+                    size_change_flag = 1;
+                }
+                if (size_change_flag == 1) {
+                    dbg_str(DBG_WARNNING, "run at here");
+                }
+            }
+            break;
+        default:
+            return -1;
+            break;
     }
 
     if (size_change_flag == 1) {
@@ -686,16 +749,26 @@ void test_ui_border_layout()
 
     layout = new_border_layout(allocator, 0, 0, 0, 0, "border_layout");
 
+#if 0
     l = new_label(allocator,0, 0, 80, 18, "label00");
     layout->add_component((Container *)layout, "North", l);
     l = new_label(allocator,0, 0, 80, 18, "label01");
     layout->add_component((Container *)layout, "West", l);
     l = new_label(allocator,0, 0, 80, 20, "label02");
     layout->add_component((Container *)layout, "Center", l);
-    l = new_label(allocator,0, 0, 80, 48, "label03");
+    l = new_label(allocator,0, 0, 80, 28, "label03");
     layout->add_component((Container *)layout, "East", l);
-    l = new_label(allocator,0, 0, 80, 48, "label10");
+    l = new_label(allocator,0, 0, 80, 68, "label10");
     layout->add_component((Container *)layout, "South", l);
+#else
+    layout->add_component((Container *)layout, "North", NULL);
+    layout->add_component((Container *)layout, "South", NULL);
+    layout->add_component((Container *)layout, "West", NULL);
+    l = new_label(allocator,0, 0, 80, 20, "label02");
+    layout->add_component((Container *)layout, "Center", l);
+    l = new_label(allocator,0, 0, 80, 28, "label03");
+    layout->add_component((Container *)layout, "East", l);
+#endif
 
 
 
