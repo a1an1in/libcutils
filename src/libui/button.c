@@ -236,6 +236,7 @@ void test_ui_button()
     Button *button;
     char *set_str;
     char buf[2048];
+    Subject *s;
 
     set_str = gen_window_setting_str();
     window  = OBJECT_NEW(allocator, Sdl_Window,set_str);
@@ -248,11 +249,13 @@ void test_ui_button()
     layout = new_border_layout(allocator, 0, 0, 0, 0, "border layout");
 
     button = new_button(allocator,0, 0, 100, 50, "button02");
+    s = (Subject *)button;
+    dbg_str(DBG_SUC, "button x=%d, y=%d",s->x, s->y);
     layout->add_component((Container *)layout, "North", NULL);
-    layout->add_component((Container *)layout, "West", NULL);
     layout->add_component((Container *)layout, "Center", button);
-    layout->add_component((Container *)layout, "East", NULL);
+    dbg_str(DBG_SUC, "button x=%d, y=%d",s->x, s->y);
     layout->add_component((Container *)layout, "South", NULL);
+    dbg_str(DBG_SUC, "button x=%d, y=%d",s->x, s->y);
 
     window->add_component((Container *)window, NULL, layout);
     window->load_resources(window);

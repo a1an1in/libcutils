@@ -181,7 +181,7 @@ static int __update_component_position(void *component,void *arg)
     s->x += add->x;
     s->y += add->y;
 
-    dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d",((Obj *)component)->name, s->x, s->y);
+    dbg_str(DBG_DETAIL,"%s position, x =%d, y=%d, add_x=%d, add_y=%d",((Obj *)component)->name, s->x, s->y, add->x, add->y);
 
     c->for_each_component(c,update_subcomponent_position_foreach_cb,arg);
 

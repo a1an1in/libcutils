@@ -440,7 +440,7 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].height = s->height + 2 * l->vgap;
                 }
 
-                int height, width, h;
+                int height, width, h, w;
                 width = (int)(l->blocks[index].width / l->width_ratio_of_center_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
@@ -452,7 +452,9 @@ static int __add_component(Container *obj, void *pos, void *component)
                 if (l->layout_height < height) {
                     l->layout_height = height;
                     h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    w = (int)(l->layout_width * l->width_ratio_of_center_to_layout);
                     l->blocks[index].height = h;
+                    l->blocks[index].width  = w;
                     size_change_flag = 1;
                 }
                 if (size_change_flag == 1) {
@@ -548,6 +550,7 @@ static int __add_component(Container *obj, void *pos, void *component)
             {
                 position.x = l->blocks[BORDER_LAYOUT_WEST].width + l->hgap;
                 position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
+                dbg_str(DBG_IMPORTANT,"x =%d, y=%d", position.x, position.y);
             }
             break;
         case BORDER_LAYOUT_EAST:
