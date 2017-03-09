@@ -118,8 +118,12 @@ static int bakeup_old_size(Border_Layout *border_layout)
 static int generate_new_size(Border_Layout *border_layout)
 {
     Border_Layout *l       = border_layout;
+    Subject *s             = (Subject *)border_layout;
 
     bakeup_old_size(l);
+
+    s->width                               = l->layout_width;
+    s->height                              = l->layout_height;
 
     l->blocks[BORDER_LAYOUT_NORTH].width   = (int)(l->layout_width);
     l->blocks[BORDER_LAYOUT_NORTH].height  = (int)(l->layout_height *
@@ -193,11 +197,13 @@ static int __construct(Border_Layout *border_layout,char *init_str)
 
     if (s->width == 0) {
         l->layout_width = 30;
+        s->width        = l->layout_width;
     } else {
         l->layout_width = s->width;
     }
     if (s->height == 0) {
         l->layout_height = 10;
+        s->height        = l->layout_height;
     } else {
         l->layout_height = s->height;
     }
@@ -358,6 +364,7 @@ static int __add_component(Container *obj, void *pos, void *component)
                 return -1;
                 break;
         }
+        generate_new_size(l);
         return 0;
     }
 
@@ -627,17 +634,19 @@ static void draw_border(Component *component, void *graph)
      *dbg_str(DBG_SUC, "width=%d, height=%d", l->layout_width, l->layout_height);
      */
 
-	g->render_draw_line(g,
-                        s->x + l->blocks[BORDER_LAYOUT_WEST].width,
-                        s->y + l->blocks[BORDER_LAYOUT_NORTH].height,
-                        s->x + l->blocks[BORDER_LAYOUT_WEST].width,
-                        s->y + l->blocks[BORDER_LAYOUT_NORTH].height + l->blocks[BORDER_LAYOUT_CENTER].height);
+    if (l->blocks[BORDER_LAYOUT_WEST].width != 0)
+        g->render_draw_line(g,
+                            s->x + l->blocks[BORDER_LAYOUT_WEST].width,
+                            s->y + l->blocks[BORDER_LAYOUT_NORTH].height,
+                            s->x + l->blocks[BORDER_LAYOUT_WEST].width,
+                            s->y + l->blocks[BORDER_LAYOUT_NORTH].height + l->blocks[BORDER_LAYOUT_CENTER].height);
 
-	g->render_draw_line(g,
-                        s->x + l->blocks[BORDER_LAYOUT_WEST].width + l->blocks[BORDER_LAYOUT_CENTER].width,
-                        s->y + l->blocks[BORDER_LAYOUT_NORTH].height,
-                        s->x + l->blocks[BORDER_LAYOUT_WEST].width + l->blocks[BORDER_LAYOUT_CENTER].width,
-                        s->y + l->blocks[BORDER_LAYOUT_NORTH].height + l->blocks[BORDER_LAYOUT_CENTER].height);
+    if (l->blocks[BORDER_LAYOUT_EAST].width != 0)
+        g->render_draw_line(g,
+                            s->x + l->blocks[BORDER_LAYOUT_WEST].width + l->blocks[BORDER_LAYOUT_CENTER].width,
+                            s->y + l->blocks[BORDER_LAYOUT_NORTH].height,
+                            s->x + l->blocks[BORDER_LAYOUT_WEST].width + l->blocks[BORDER_LAYOUT_CENTER].width,
+                            s->y + l->blocks[BORDER_LAYOUT_NORTH].height + l->blocks[BORDER_LAYOUT_CENTER].height);
 
     /*
      *dbg_str(DBG_DETAIL, 
@@ -761,13 +770,14 @@ void test_ui_border_layout()
     l = new_label(allocator,0, 0, 80, 68, "label10");
     layout->add_component((Container *)layout, "South", l);
 #else
-    layout->add_component((Container *)layout, "North", NULL);
-    layout->add_component((Container *)layout, "South", NULL);
+    l = new_label(allocator,0, 0, 80, 18, "label00");
+    layout->add_component((Container *)layout, "North", l);
     layout->add_component((Container *)layout, "West", NULL);
     l = new_label(allocator,0, 0, 80, 20, "label02");
     layout->add_component((Container *)layout, "Center", l);
-    l = new_label(allocator,0, 0, 80, 28, "label03");
-    layout->add_component((Container *)layout, "East", l);
+    layout->add_component((Container *)layout, "East", NULL);
+    l = new_label(allocator,0, 0, 80, 68, "label10");
+    layout->add_component((Container *)layout, "South", l);
 #endif
 
 

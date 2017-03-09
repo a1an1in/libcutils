@@ -245,10 +245,14 @@ void test_ui_button()
      *dbg_str(DBG_DETAIL,"Window dump: %s",buf);
      */
 
-    layout = new_border_layout(allocator, 0, 0, 600, 600, "border layout");
+    layout = new_border_layout(allocator, 0, 0, 0, 0, "border layout");
 
     button = new_button(allocator,0, 0, 100, 50, "button02");
+    layout->add_component((Container *)layout, "North", NULL);
+    layout->add_component((Container *)layout, "West", NULL);
     layout->add_component((Container *)layout, "Center", button);
+    layout->add_component((Container *)layout, "East", NULL);
+    layout->add_component((Container *)layout, "South", NULL);
 
     window->add_component((Container *)window, NULL, layout);
     window->load_resources(window);
