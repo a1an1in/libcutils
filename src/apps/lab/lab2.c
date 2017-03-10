@@ -70,8 +70,9 @@ int lab2()
      *dbg_str(DBG_DETAIL, "p = %p", p);
      *dbg_str(DBG_DETAIL, "p + 1 = %p, *(p + 1) =%p", p + 1, *(p + 1));
      */
-    float a =0.5;
-    int b= 25;
-
-    dbg_str(DBG_DETAIL,"a * b=%d", (int)(a*b));
+    /*
+     *float a =0.5;
+     *int b= 25;
+     *dbg_str(DBG_DETAIL,"a * b=%d", (int)(a*b));
+     */
 }

@@ -36,7 +36,7 @@
 #include <miscellany/buffer.h>
 #include <libui/label.h>
 
-static void update_component_position(Border_Layout *border_layout)
+static void modulate_component_position(Border_Layout *border_layout)
 {
     Border_Layout *l       = border_layout;
     Container *container = (Container *)l;
@@ -587,7 +587,7 @@ static int __add_component(Container *obj, void *pos, void *component)
     map->insert(map, c->name, buffer);
 
     if (size_change_flag == 1) {
-        update_component_position(l);
+        modulate_component_position(l);
         size_change_flag = 0;
     }
 
