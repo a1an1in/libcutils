@@ -164,7 +164,7 @@ static int generate_new_size(Border_Layout *border_layout)
             l->blocks[BORDER_LAYOUT_SOUTH].width,
             l->blocks[BORDER_LAYOUT_SOUTH].height);
 
-    printf("run at here\n");
+    printf("bakeup size\n");
     printf( 
             "blocks[BORDER_LAYOUT_NORTH].width_bak=%d, height_bak=%d,\n"
             "blocks[BORDER_LAYOUT_WEST].width_bak=%d, height_bak=%d,\n"
@@ -304,6 +304,11 @@ static int __add_component(Container *obj, void *pos, void *component)
     if (pos == NULL) {
         dbg_str(DBG_DETAIL,"border layout add component error, please dessignate pos");
         return -1;
+    }
+    if (component == NULL) {
+        dbg_str(DBG_DETAIL, "border_layout add null component at %s", pos);
+    } else {
+        dbg_str(DBG_DETAIL, "border_layout add component:%s at %s", c->name, pos);
     }
 
     if (strncmp(pos, "North", 5) == 0) {
