@@ -13,7 +13,7 @@ enum SERVER_WORK_TYPE{
 
 typedef struct concurrent_master_s concurrent_master_t;
 
-typedef struct concurrent_task_admin_s{
+typedef struct concurrent_ta_s{
 	sync_lock_t admin_lock;
 	uint8_t admin_lock_type;
 	uint8_t hmap_lock_type;
@@ -23,7 +23,7 @@ typedef struct concurrent_task_admin_s{
 	uint8_t key_size;
 	uint32_t value_size;
 	uint32_t bucket_size;
-}concurrent_task_admin_t;
+}concurrent_ta_t;
 
 typedef struct concurrent_slave_s{
 	struct event_base *event_base;
@@ -36,7 +36,7 @@ typedef struct concurrent_slave_s{
 	}id;
 	uint8_t work_id;
 	llist_t *message_que;
-	concurrent_task_admin_t *task_admin;
+	concurrent_ta_t *task_admin;
     concurrent_master_t *master;
 }concurrent_slave_t;
 
@@ -67,7 +67,7 @@ typedef struct concurrent_master_s{
 	uint8_t assignment_count;
 	uint8_t slave_amount;
 	uint32_t message_count;
-	concurrent_task_admin_t *task_admin;
+	concurrent_ta_t *task_admin;
 	union{
 		pthread_t tid;
 		pid_t pid;
@@ -91,12 +91,12 @@ typedef struct concurrent_s{
 	sync_lock_t concurrent_lock;
 }concurrent_t;
 
-concurrent_task_admin_t *concurrent_task_admin_create(allocator_t *allocator);
-int concurrent_task_admin_init(concurrent_task_admin_t *task_admin, uint8_t key_size,uint32_t data_size,uint32_t bucket_size, uint8_t admin_lock_type,uint8_t hmap_lock_type);
-int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void *data);
-int concurrent_task_admin_search(concurrent_task_admin_t *task_admin,void *key,hash_map_pos_t *pos);
-int concurrent_task_admin_del(concurrent_task_admin_t *task_admin,hash_map_pos_t *pos);
-int concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin);
+concurrent_ta_t *concurrent_ta_create(allocator_t *allocator);
+int concurrent_ta_init(concurrent_ta_t *task_admin, uint8_t key_size,uint32_t data_size,uint32_t bucket_size, uint8_t admin_lock_type,uint8_t hmap_lock_type);
+int concurrent_ta_add(concurrent_ta_t *task_admin,void *key,void *data);
+int concurrent_ta_search(concurrent_ta_t *task_admin,void *key,hash_map_pos_t *pos);
+int concurrent_ta_del(concurrent_ta_t *task_admin,hash_map_pos_t *pos);
+int concurrent_ta_destroy(concurrent_ta_t *task_admin);
 concurrent_master_t *concurrent_master_create(allocator_t *allocator);
 void *concurrent_slave_thread(void *arg);
 int __concurrent_create_slave(concurrent_master_t *master,uint8_t slave_id);
@@ -109,7 +109,7 @@ int concurrent_master_init(concurrent_master_t *master, uint8_t concurrent_work_
 void concurrent_master_process_event(int fd, short event, void *arg);
 int concurrent_slave_add_new_event(concurrent_slave_t *slave, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *task);
 int concurrent_master_add_new_event(concurrent_master_t *master, int fd,int event_flag, struct event *event, void (*event_handler)(int fd, short event, void *arg), void *arg);
-int concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin, void *key);
+int concurrent_ta_del_by_key(concurrent_ta_t *task_admin, void *key);
 int concurrent_master_choose_slave(concurrent_master_t *master);
 int concurrent_master_add_task_and_message(concurrent_master_t *master, void *task,void *key, void (*work_func)(concurrent_slave_t *slave,void *arg));
 void *concurrent_master_add_task(concurrent_master_t *master, void *task,void *key);

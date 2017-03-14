@@ -286,6 +286,7 @@ int test_unix_tcp_server()
     server = unix_tcp_server(allocator,"test_server_un_path",test_process_task_callback,NULL);
 
     sleep(20);
+
     unix_tcp_server_destroy(server);
 
     return 0;

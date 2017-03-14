@@ -6,7 +6,7 @@
 typedef struct concurrent_task_s{
     uint32_t conn;
     char key[10];
-    concurrent_task_admin_t *task_admin;
+    concurrent_ta_t *task_admin;
 }concurrent_task_t;
 
 void work(concurrent_slave_t *slave,void *arg)
@@ -15,9 +15,9 @@ void work(concurrent_slave_t *slave,void *arg)
     concurrent_task_t *task = (concurrent_task_t *)arg;
 
     dbg_str(DBG_DETAIL,"work done,rev conn =%d,task addr=%p,task key %s",task->conn,task,task->key);
-    concurrent_task_admin_search(slave->task_admin,(void *)task->key,&pos);
+    concurrent_ta_search(slave->task_admin,(void *)task->key,&pos);
     if(pos.hlist_node_p != NULL)
-        concurrent_task_admin_del(slave->task_admin,&pos);
+        concurrent_ta_del(slave->task_admin,&pos);
     dbg_str(DBG_DETAIL,"run at here");
 }
 
@@ -58,13 +58,13 @@ int test_concurrent1()
     dbg_str(DBG_DETAIL,"task1=%p,task2= %p,task3=%p,task4=%p",&task1,&task2,&task3,&task4); 
 
     task = &task1;
-    concurrent_task_admin_add(master->task_admin,(void *)task->key,task);
+    concurrent_ta_add(master->task_admin,(void *)task->key,task);
     task = &task2;
-    concurrent_task_admin_add(master->task_admin,(void *)task->key,task);
+    concurrent_ta_add(master->task_admin,(void *)task->key,task);
     task = &task3;
-    concurrent_task_admin_add(master->task_admin,(void *)task->key,task);
+    concurrent_ta_add(master->task_admin,(void *)task->key,task);
     task = &task4;
-    concurrent_task_admin_add(master->task_admin,(void *)task->key,task);
+    concurrent_ta_add(master->task_admin,(void *)task->key,task);
 
     message = &message1;
     concurrent_master_add_message(master,message);
@@ -82,7 +82,7 @@ int test_concurrent_add_task(concurrent_master_t *master,void *task)
 {
     struct concurrent_message_s message;
 
-    concurrent_task_admin_add(master->task_admin,(void *)(((concurrent_task_t *)task)->key),task);
+    concurrent_ta_add(master->task_admin,(void *)(((concurrent_task_t *)task)->key),task);
     concurrent_master_init_message(&message, work,task,0);
     concurrent_master_add_message(master,&message);
 

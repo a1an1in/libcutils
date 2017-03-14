@@ -46,13 +46,13 @@ concurrent_t *concurrent_get_global_concurrent_addr()
     return global_concurrent;
 }
 
-concurrent_task_admin_t *
-concurrent_task_admin_create(allocator_t *allocator)
+concurrent_ta_t *
+concurrent_ta_create(allocator_t *allocator)
 {
-    concurrent_task_admin_t *task_admin = NULL;
+    concurrent_ta_t *task_admin = NULL;
 
-    task_admin = (concurrent_task_admin_t *)allocator_mem_alloc(allocator,
-                                                                sizeof(concurrent_task_admin_t));
+    task_admin = (concurrent_ta_t *)allocator_mem_alloc(allocator,
+                                                                sizeof(concurrent_ta_t));
     if(task_admin == NULL){
         dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
         exit(1);
@@ -63,12 +63,12 @@ concurrent_task_admin_create(allocator_t *allocator)
 }
 
 int 
-concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
-                           uint8_t key_size,
-                           uint32_t value_size,
-                           uint32_t bucket_size,
-                           uint8_t admin_lock_type,
-                           uint8_t hmap_lock_type)
+concurrent_ta_init(concurrent_ta_t *task_admin,
+                   uint8_t key_size,
+                   uint32_t value_size,
+                   uint32_t bucket_size,
+                   uint8_t admin_lock_type,
+                   uint8_t hmap_lock_type)
 {
     int ret = 0;
 
@@ -93,7 +93,7 @@ concurrent_task_admin_init(concurrent_task_admin_t *task_admin,
     return ret;
 }
 
-int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void *data)
+int concurrent_ta_add(concurrent_ta_t *task_admin,void *key,void *data)
 {
     pair_t *pair;
 
@@ -108,23 +108,23 @@ int concurrent_task_admin_add(concurrent_task_admin_t *task_admin,void *key,void
 }
 
 int 
-concurrent_task_admin_search(concurrent_task_admin_t *task_admin,
-                             void *key,
-                             hash_map_pos_t *pos)
+concurrent_ta_search(concurrent_ta_t *task_admin,
+                     void *key,
+                     hash_map_pos_t *pos)
 {
     return hash_map_search(task_admin->hmap,key,pos);
 }
 
 int 
-concurrent_task_admin_del(concurrent_task_admin_t *task_admin,
-                          hash_map_pos_t *pos)
+concurrent_ta_del(concurrent_ta_t *task_admin,
+                  hash_map_pos_t *pos)
 {
     return hash_map_delete(task_admin->hmap,pos);
 }
 
 int 
-concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
-                                 void *key)
+concurrent_ta_del_by_key(concurrent_ta_t *task_admin,
+                         void *key)
 {
     hash_map_pos_t pos;
     int ret = 0;
@@ -135,7 +135,7 @@ concurrent_task_admin_del_by_key(concurrent_task_admin_t *task_admin,
 }
 
 int 
-concurrent_task_admin_destroy(concurrent_task_admin_t *task_admin)
+concurrent_ta_destroy(concurrent_ta_t *task_admin)
 {
     hash_map_destroy(task_admin->hmap);
     sync_lock_destroy(&task_admin->admin_lock);
@@ -428,8 +428,8 @@ concurrent_master_init(concurrent_master_t *master,
     llist_init(master->message_que);
 
     // create task admin
-    master->task_admin = concurrent_task_admin_create(master->allocator);
-    ret = concurrent_task_admin_init(master->task_admin,
+    master->task_admin = concurrent_ta_create(master->allocator);
+    ret = concurrent_ta_init(master->task_admin,
                                      4,
                                      task_size,
                                      10,//uint32_t bucket_size,
@@ -483,10 +483,10 @@ concurrent_master_add_task(concurrent_master_t *master,
     void *t = NULL;
 
     sync_lock(&master->task_admin->admin_lock,NULL);
-    concurrent_task_admin_add(master->task_admin,key,task);
+    concurrent_ta_add(master->task_admin,key,task);
     master->assignment_count++;
 
-    concurrent_task_admin_search(master->task_admin,key,&pos);
+    concurrent_ta_search(master->task_admin,key,&pos);
     if(pos.hlist_node_p == NULL){
         dbg_str(CONCURRENT_ERROR,"not found key,key=%s",key);
         return NULL;
@@ -545,7 +545,7 @@ concurrent_master_init_message(struct concurrent_message_s *message,
 //there may be some omited,must check carefully later
 int concurrent_master_destroy(concurrent_master_t *master)
 {
-    concurrent_task_admin_destroy(master->task_admin);
+    concurrent_ta_destroy(master->task_admin);
     concurrent_master_destroy_slaves(master);
     llist_destroy(master->message_que);
     //... release event base,master base and slave base??
