@@ -74,6 +74,8 @@ int test_inet_udp_client_send()
                          0,//int flags,
                          "127.0.0.1",//char *host,
                          "1989");//char *client_port,
+
+    inet_client_destroy(cli);
 }
 
 /**
@@ -120,4 +122,5 @@ int test_inet_tcp_client_send()
     inet_tcp_client_send(cli,//client_t *client,
                          buf,//const void *buf,
                          sizeof(buf),0);//socklen_t destlen);
+
 }

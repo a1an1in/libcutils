@@ -62,9 +62,13 @@ static int process_task_callback(client_task_t *task)
 int test_unix_udp_client_recieve()
 {
     allocator_t *allocator = allocator_get_default_alloc();
+    client_t *client;
 
-    unix_udp_client(allocator,
-                    "test_client_unix_path",//char *host,
-                    process_task_callback,
-                    NULL);
+    client = unix_udp_client(allocator,
+                             "test_client_unix_path",//char *host,
+                             process_task_callback,
+                             NULL);
+
+    sleep(10);
+    unix_client_destroy(client);
 }

@@ -62,13 +62,14 @@ static int process_task_callback(client_task_t *task)
 int test_inet_udp_client_recieve()
 {
     allocator_t *allocator = allocator_get_default_alloc();
+    client_t *client;
 
     dbg_str(DBG_DETAIL,"test_inet_udp_client_recieve");
-    inet_udp_client(allocator,
-                    "0.0.0.0",//char *host,
-                    "1989",//char *client_port,
-                    process_task_callback,
-                    NULL);
+    client = inet_udp_client(allocator,
+                             "0.0.0.0",//char *host,
+                             "1989",//char *client_port,
+                             process_task_callback,
+                             NULL);
     /*
      *inet_udp_client(allocator,
      *           "192.168.20.26",//char *host,
@@ -76,4 +77,8 @@ int test_inet_udp_client_recieve()
      *           process_task_callback,
      *           NULL);
      */
+    sleep(10);
+
+    inet_client_destroy(client);
+
 }
