@@ -75,7 +75,7 @@ concurrent_ta_init(concurrent_ta_t *task_admin,
     task_admin->admin_lock_type = admin_lock_type;
     task_admin->hmap_lock_type  = hmap_lock_type;
     task_admin->key_size        = key_size;
-    task_admin->value_size       = value_size;
+    task_admin->value_size      = value_size;
     task_admin->bucket_size     = bucket_size;
 
     /*
@@ -271,14 +271,14 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
     int i = 0, ret = 0;
 
     master->slave = (concurrent_slave_t *)allocator_mem_alloc(master->allocator,
-            sizeof(concurrent_slave_t) * master->slave_amount);
+                    sizeof(concurrent_slave_t) * master->slave_amount);
     if(master->slave == NULL){
         dbg_str(CONCURRENT_ERROR,"alloc slave err");
         ret = -1;
         goto end;
     }
     master->snd_notify_fd = (int *)allocator_mem_alloc(master->allocator,
-            sizeof(int) * master->slave_amount);
+                            sizeof(int) * master->slave_amount);
     if(master->slave == NULL){
         dbg_str(CONCURRENT_ERROR,"alloc snd_notify_fd err");
         ret = -1;
@@ -308,11 +308,11 @@ concurrent_master_create(allocator_t *allocator)
     concurrent_master_t *master;
 
     master = (struct concurrent_master_s *)allocator_mem_alloc(allocator,
-            sizeof(struct concurrent_master_s));
-    master->allocator = allocator;
+                                                               sizeof(struct concurrent_master_s));
+    master->allocator                     = allocator;
     master->concurrent_master_inited_flag = 0;
-    master->concurrent_slave_inited_flag = 0;
-    master->assignment_count = 0;
+    master->concurrent_slave_inited_flag  = 0;
+    master->assignment_count              = 0;
 
     return master;
 }
@@ -419,9 +419,9 @@ concurrent_master_init(concurrent_master_t *master,
 
     dbg_str(CONCURRENT_DETAIL,"concurrent_master_init");
     master->concurrent_work_type = concurrent_work_type;
-    master->slave_amount = slave_amount;
-    master->message_count = 0;
-    master->message_que = llist_alloc(master->allocator);
+    master->slave_amount         = slave_amount;
+    master->message_count        = 0;
+    master->message_que          = llist_alloc(master->allocator);
     llist_set(master->message_que,"lock_type",&lock_type);
     llist_set(master->message_que,"data_size",&data_size);
     llist_init(master->message_que);
@@ -534,8 +534,8 @@ concurrent_master_init_message(struct concurrent_message_s *message,
                                void *task,
                                int32_t message_id)
 {
-    message->work_func = work_func;
-    message->task = task;
+    message->work_func  = work_func;
+    message->task       = task;
     message->message_id = message_id;
 
     return 0;
@@ -588,10 +588,11 @@ concurrent_init(concurrent_t *c,
                            task_size, 
                            slave_amount);
 
-    c->snd_add_new_event_fd  = c->master->snd_add_new_event_fd;
+    c->snd_add_new_event_fd = c->master->snd_add_new_event_fd;
 
-    c->new_ev_que = llist_alloc(c->allocator);
-    c->master->new_ev_que = c->new_ev_que;
+    c->new_ev_que           = llist_alloc(c->allocator);
+    c->master->new_ev_que   = c->new_ev_que;
+
     llist_set(c->new_ev_que,"lock_type",&lock_type);
     llist_set(c->new_ev_que,"data_size",&data_size);
     llist_init(c->new_ev_que);
@@ -659,6 +660,7 @@ concurrent_del_event_of_master(concurrent_t *c,
 
 void concurrent_destroy(concurrent_t *c)
 {
+    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d, before destroy", c->allocator->alloc_count);
     concurrent_master_destroy(c->master);
     llist_destroy(c->new_ev_que);
     allocator_mem_free(c->allocator,c);
@@ -686,6 +688,8 @@ concurrent_constructor()
     allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
     allocator_ctr_init(allocator, 0, 0, 1024);
 
+    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d, before init", c->allocator->alloc_count);
+
     c = concurrent_create(allocator);
 
     concurrent_init(c,
@@ -694,6 +698,7 @@ concurrent_constructor()
                     slave_amount, 
                     lock_type);//uint8_t concurrent_lock_type);
 
+    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d, after init", c->allocator->alloc_count);
     global_concurrent = c;
 }
 
