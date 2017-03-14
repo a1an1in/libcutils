@@ -94,6 +94,7 @@ static void slave_process_conn_bussiness_event_handler(int fd, short event, void
     } else if(data_task->buffer_len== 0){
         dbg_str(DBG_ERROR,"client_event_handler,socket has broken,del client event");
         event_del(task->event);
+        allocator_mem_free(server->allocator,data_task);
         return;
     } 
 
@@ -132,11 +133,12 @@ static int userver_init_task(server_task_t *task,
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
     server_task_t *task = (server_task_t *)arg;
+    server_t *server    = task->server;
 
     dbg_str(NET_DETAIL,"slave_work_function begin,rev conn =%d,task key %s",
             task->fd,task->key);
 
-    task->event = (struct event *)allocator_mem_alloc(slave->allocator,
+    task->event = (struct event *)allocator_mem_alloc(server->allocator,
                                                       sizeof(struct event));
     task->slave = slave;
     concurrent_slave_add_new_event(slave,
@@ -173,13 +175,13 @@ static void unix_tcp_server_listen_event_handler(int fd, short event, void *arg)
     dbg_str(NET_DETAIL,"unix_tcp_server_listen_event_handler,listen_fd=%d,connfd=%d",fd,connfd);
 
     task = (server_task_t *)
-           allocator_mem_alloc(master->allocator,sizeof(server_task_t));
+           allocator_mem_alloc(server->allocator,sizeof(server_task_t));
 
     userver_init_task(task,
                       connfd,//int fd, 
                       key,//void *key, 
                       NULL,//struct event *ev,
-                      master->allocator,
+                      server->allocator,
                       NULL,
                       server);
 
@@ -279,8 +281,12 @@ static int test_process_task_callback(void *task)
 int test_unix_tcp_server()
 {
     allocator_t *allocator = allocator_get_default_alloc();
+    server_t *server;
 
-    unix_tcp_server(allocator,"test_server_un_path",test_process_task_callback,NULL);
+    server = unix_tcp_server(allocator,"test_server_un_path",test_process_task_callback,NULL);
+
+    sleep(20);
+    unix_tcp_server_destroy(server);
 
     return 0;
 }

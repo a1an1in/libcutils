@@ -99,7 +99,6 @@ int test_unix_tcp_client_send()
                          buf,//const void *buf,
                          sizeof(buf),0);//socklen_t destlen);
 
-    sleep(5);
 
     unix_client_destroy(cli);
 

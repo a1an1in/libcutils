@@ -123,4 +123,8 @@ int test_inet_tcp_client_send()
                          buf,//const void *buf,
                          sizeof(buf),0);//socklen_t destlen);
 
+    sleep(10);
+
+    inet_client_destroy(cli);
+
 }
