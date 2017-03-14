@@ -172,14 +172,15 @@ void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_hea
 
 void slab_print_list(ctr_slab_t *slab_list,uint16_t slab_index)
 {
-    dbg_str(ALLOC_DETAIL,
+    dbg_str(DBG_DETAIL,
             "slab info,slab index =%d\t,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,"
-            "slab_start:%p\t,slab_end:%p",
+            "slab_start:%p\t,slab_end:%p, tag:%s",
             slab_index,
             slab_list->size,slab_list->data_size,
             slab_list->slab_size,
             slab_list,
-            (uint8_t*)slab_list +  slab_list->size + sizeof(ctr_slab_t));
+            (uint8_t*)slab_list +  slab_list->size + sizeof(ctr_slab_t),
+            slab_list->tag);
 }
 
 void slab_print_list_for_each(struct list_head *hl_head, uint16_t slab_index)

@@ -199,7 +199,7 @@ int test_tmr_user()
     /*
      *pause();
      */
-    sleep(20);
+    sleep(5);
     
     tmr_user_stop(timer);
     tmr_user_destroy(timer);

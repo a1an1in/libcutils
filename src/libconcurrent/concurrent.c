@@ -57,6 +57,7 @@ concurrent_ta_create(allocator_t *allocator)
         dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
         exit(1);
     }
+    allocator_mem_tag(allocator,task_admin, "task_admin");
     task_admin->allocator = allocator;
 
     return task_admin;
@@ -277,6 +278,8 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
         ret = -1;
         goto end;
     }
+    allocator_mem_tag(master->allocator,master->slave, "master->slave");
+
     master->snd_notify_fd = (int *)allocator_mem_alloc(master->allocator,
                             sizeof(int) * master->slave_amount);
     if(master->slave == NULL){
@@ -284,6 +287,7 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
         ret = -1;
         goto end;
     }
+    allocator_mem_tag(master->allocator,master->snd_notify_fd, "master->snd_notify_fd");
 
     for (i = 0; i < master->slave_amount; i++) {
         ret = __concurrent_master_create_slave(master, i);
@@ -314,6 +318,7 @@ concurrent_master_create(allocator_t *allocator)
     master->concurrent_slave_inited_flag  = 0;
     master->assignment_count              = 0;
 
+    allocator_mem_tag(allocator,master, "master");
     return master;
 }
 /**
@@ -562,6 +567,7 @@ concurrent_create(allocator_t *allocator)
         dbg_str(CONCURRENT_ERROR,"concurrent_create err");
         return NULL;
     }
+    allocator_mem_tag(allocator,c, "concurrent");
     c->allocator= allocator;
     dbg_str(CONCURRENT_DETAIL,"concurrent allocator=%p",allocator);
 
@@ -660,11 +666,14 @@ concurrent_del_event_of_master(concurrent_t *c,
 
 void concurrent_destroy(concurrent_t *c)
 {
-    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d, before destroy", c->allocator->alloc_count);
     concurrent_master_destroy(c->master);
     llist_destroy(c->new_ev_que);
+
     allocator_mem_free(c->allocator,c);
-    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d", c->allocator->alloc_count);
+
+    /*
+     *allocator_mem_info(c->allocator);
+     */
 }
 
 #define MAX_PROXY_TASK_SIZE 128
@@ -686,9 +695,7 @@ concurrent_constructor()
      *}
      */
     allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
-    allocator_ctr_init(allocator, 0, 0, 1024);
-
-    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d, before init", c->allocator->alloc_count);
+    allocator_ctr_init(allocator, 0, 32, 1024);
 
     c = concurrent_create(allocator);
 
@@ -698,7 +705,6 @@ concurrent_constructor()
                     slave_amount, 
                     lock_type);//uint8_t concurrent_lock_type);
 
-    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d, after init", c->allocator->alloc_count);
     global_concurrent = c;
 }
 

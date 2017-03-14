@@ -26,6 +26,7 @@ struct allocator_operations{
 	void (*free)(allocator_t *alloc,void *addr);
 	void (*destroy)(allocator_t * alloc);
 	void (*info)(allocator_t * alloc);
+	void (*tag)(allocator_t *alloc,void *addr, void *tag);
 };
 typedef struct allocator_module{
 	uint8_t allocator_type;
@@ -48,13 +49,20 @@ allocator_mem_free(allocator_t * alloc,void *addr)
 {
 	allocator_modules[alloc->allocator_type].alloc_ops.free(alloc,addr);
 }
+
+static inline void 
+allocator_mem_tag(allocator_t * alloc,void *addr, void *tag)
+{
+    if(allocator_modules[alloc->allocator_type].alloc_ops.tag) {
+        allocator_modules[alloc->allocator_type].alloc_ops.tag(alloc,addr, tag);
+    }
+}
+
 static inline void 
 allocator_mem_info(allocator_t * alloc)
 {
-    /*
-	 *if(allocator_modules[alloc->allocator_type].alloc_ops.info)
-	 *    allocator_modules[alloc->allocator_type].alloc_ops.info(alloc);
-     */
+    if(allocator_modules[alloc->allocator_type].alloc_ops.info)
+        allocator_modules[alloc->allocator_type].alloc_ops.info(alloc);
 }
 allocator_t * allocator_get_default_alloc();
 #endif

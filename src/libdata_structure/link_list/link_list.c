@@ -266,6 +266,8 @@ int llist_destroy(llist_t *llist)
         sync_lock_destroy(&llist->list_lock);
     }
 
+    allocator_mem_free(llist->allocator,llist);
+
     return 0;
 }
 

@@ -48,6 +48,7 @@
 #include <libdbg/debug.h>
 #include "cutils_re.h"
 
+#if 0
 void test_ctr_alloc()
 {
     allocator_t *allocator;
@@ -95,9 +96,39 @@ void test_ctr_alloc()
     for(size = 8,i = 0; i< 20; i++,size += 8){
         p = allocator_mem_alloc(allocator,size);
     }
-    dbg_str(ALLOC_IMPORTANT,"inquire alloc info");
+    dbg_str(ALLOC_WARNNING,"inquire alloc info");
     allocator_mem_info(allocator);
 
     allocator_destroy(allocator);
     dbg_str(ALLOC_DETAIL,"test ctr alloc end");
 }
+#else
+void test_ctr_alloc()
+{
+    allocator_t *allocator;
+    void *p1 ,*p2,*p3, *p4;
+    uint32_t size = 8;
+
+    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
+    allocator_ctr_init(allocator, 0, 0, 1024);
+
+    dbg_str(ALLOC_IMPORTANT,"ctr alloc test begin");
+
+    p1 = allocator_mem_alloc(allocator,7);
+    allocator_mem_tag(allocator,p1, "p1");
+    p2 = allocator_mem_alloc(allocator,8);
+    allocator_mem_tag(allocator,p2, "p2");
+    p3 = allocator_mem_alloc(allocator,20);
+    allocator_mem_tag(allocator,p3, "p3");
+    allocator_mem_free(allocator, p3);
+    /*
+     *p4 = allocator_mem_alloc(allocator,20);
+     *allocator_mem_tag(allocator,p4, "p4");
+     */
+
+    allocator_mem_info(allocator);
+
+    allocator_destroy(allocator);
+    dbg_str(ALLOC_DETAIL,"test ctr alloc end");
+}
+#endif

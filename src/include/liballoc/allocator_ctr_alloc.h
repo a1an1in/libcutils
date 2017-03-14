@@ -49,6 +49,7 @@ typedef struct slab_head_list{
 }ctr_slab_head_list_t;
 
 typedef struct slab{
+    char tag[20];
 	uint16_t size;
 	uint16_t data_size;
 	uint16_t slab_size;

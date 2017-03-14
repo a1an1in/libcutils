@@ -190,6 +190,10 @@ static int free_normal_slab(allocator_t *allocator,ctr_slab_t *slab_list)
     size = slab_list->size;
     free_slabs = ctr_alloc->free_slabs;
 
+    /*
+     *memset(slab_list->tag, 0, sizeof(slab_list->tag));
+     */
+
     slab_detach_list_from_used_slabs(allocator,
                                      new_head,//struct list_head *del_head,
                                      size);//uint32_t size);
@@ -235,25 +239,34 @@ static void __free(allocator_t *allocator,void *addr)
 
 }
 
+static void __tag(allocator_t *allocator,void *addr, void *str)
+{
+    ctr_slab_t *slab_list;
+
+    slab_list = container_of(addr,ctr_slab_t,data);
+
+    strncpy(slab_list->tag, str, sizeof(slab_list->tag));
+}
+
 static void __info(allocator_t *allocator)
 {
     int i;
     int slab_array_max_num = allocator->priv.ctr_alloc.slab_array_max_num;
 
-    printf("##########################-printf allocator mem info##########################");
-    dbg_str(ALLOC_DETAIL,"the mem using, count=%d",allocator->alloc_count);
-    dbg_str(ALLOC_DETAIL,"query pool:");
+    printf("##########################printf allocator mem info##########################\n");
+    dbg_str(DBG_DETAIL,"the mem using, count=%d",allocator->alloc_count);
+    dbg_str(DBG_DETAIL,"query pool:");
     mempool_print_list_for_each(allocator->priv.ctr_alloc.pool);
 
-    dbg_str(ALLOC_DETAIL,"query empty_pool:");
+    dbg_str(DBG_DETAIL,"query empty_pool:");
     mempool_print_list_for_each(allocator->priv.ctr_alloc.empty_pool);
 
-    dbg_str(ALLOC_DETAIL,"query free_slabs:");
+    dbg_str(DBG_DETAIL,"query free_slabs:");
     for(i = 0; i < slab_array_max_num; i++) {
         slab_print_list_for_each(allocator->priv.ctr_alloc.free_slabs[i],i);
     }
 
-    dbg_str(ALLOC_DETAIL,"query used_slabs:");
+    dbg_str(DBG_DETAIL,"query used_slabs:");
     for(i = 0; i < slab_array_max_num; i++) {
         slab_print_list_for_each(allocator->priv.ctr_alloc.used_slabs[i],i);
     }
@@ -289,7 +302,8 @@ int allocator_ctr_alloc_register() {
             .alloc   = __alloc,
             .free    = __free,
             .destroy = __destroy,
-            .info    = __info
+            .info    = __info,
+            .tag     = __tag,
         }
     };
     memcpy(&allocator_modules[ALLOCATOR_TYPE_CTR_MALLOC],
