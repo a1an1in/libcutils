@@ -196,7 +196,11 @@ int test_tmr_user()
 
     tmr_user_reuse(timer);
 
-    pause();
+    /*
+     *pause();
+     */
+    sleep(2);
+    
     tmr_user_stop(timer);
     tmr_user_destroy(timer);
 

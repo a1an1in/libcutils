@@ -52,7 +52,7 @@ concurrent_ta_create(allocator_t *allocator)
     concurrent_ta_t *task_admin = NULL;
 
     task_admin = (concurrent_ta_t *)allocator_mem_alloc(allocator,
-                                                                sizeof(concurrent_ta_t));
+                                                        sizeof(concurrent_ta_t));
     if(task_admin == NULL){
         dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
         exit(1);
@@ -298,9 +298,8 @@ end:
 
 int concurrent_master_destroy_slaves(concurrent_master_t *master)
 {
-    /*
-     *allocator_mem_free(master->allocator, master->slave);
-     */
+    allocator_mem_free(master->allocator, master->slave);
+    allocator_mem_free(master->allocator, master->snd_notify_fd);
 }
 
 concurrent_master_t *
@@ -430,11 +429,11 @@ concurrent_master_init(concurrent_master_t *master,
     // create task admin
     master->task_admin = concurrent_ta_create(master->allocator);
     ret = concurrent_ta_init(master->task_admin,
-                                     4,
-                                     task_size,
-                                     10,//uint32_t bucket_size,
-                                     1,//uint8_t admin_lock_type,
-                                     0);//uint8_t hmap_lock_type)
+                             4,
+                             task_size,
+                             10,//uint32_t bucket_size,
+                             1,//uint8_t admin_lock_type,
+                             0);//uint8_t hmap_lock_type)
 
     if(pipe(fds)) {
         dbg_str(CONCURRENT_ERROR,"cannot create pipe");
@@ -548,7 +547,6 @@ int concurrent_master_destroy(concurrent_master_t *master)
     concurrent_ta_destroy(master->task_admin);
     concurrent_master_destroy_slaves(master);
     llist_destroy(master->message_que);
-    //... release event base,master base and slave base??
     allocator_mem_free(master->allocator,master);
     return 0;
 }
@@ -662,9 +660,9 @@ concurrent_del_event_of_master(concurrent_t *c,
 void concurrent_destroy(concurrent_t *c)
 {
     concurrent_master_destroy(c->master);
-    //del list...
-    //del event of master...
+    llist_destroy(c->new_ev_que);
     allocator_mem_free(c->allocator,c);
+    dbg_str(DBG_WARNNING, "concurrent allocator alloc count=%d", c->allocator->alloc_count);
 }
 
 #define MAX_PROXY_TASK_SIZE 128
@@ -679,10 +677,15 @@ concurrent_constructor()
     ATTRIB_PRINT("constructor ATTRIB_PRIORITY_CONCURRENT=%d,construct concurrent\n",
                  ATTRIB_PRIORITY_CONCURRENT);
 
-    if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
-        dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
-        return;
-    }
+    /*
+     *if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+     *    dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
+     *    return;
+     *}
+     */
+    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
+    allocator_ctr_init(allocator, 0, 0, 1024);
+
     c = concurrent_create(allocator);
 
     concurrent_init(c,
