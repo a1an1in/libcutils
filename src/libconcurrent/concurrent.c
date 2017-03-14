@@ -680,7 +680,6 @@ void concurrent_destroy(concurrent_t *c)
 __attribute__((constructor(ATTRIB_PRIORITY_CONCURRENT))) void
 concurrent_constructor()
 {
-    allocator_t *allocator;
     uint8_t slave_amount = g_slave_amount;
     uint8_t lock_type    = g_concurrent_lock_type;
     concurrent_t *c;
@@ -688,6 +687,8 @@ concurrent_constructor()
     ATTRIB_PRINT("constructor ATTRIB_PRIORITY_CONCURRENT=%d,construct concurrent\n",
                  ATTRIB_PRIORITY_CONCURRENT);
 
+#if 0
+    allocator_t *allocator;
     /*
      *if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
      *    dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
@@ -696,6 +697,10 @@ concurrent_constructor()
      */
     allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
     allocator_ctr_init(allocator, 0, 32, 1024);
+#else
+    allocator_t *allocator = allocator_get_default_alloc();
+#endif
+
 
     c = concurrent_create(allocator);
 
