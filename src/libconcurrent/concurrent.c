@@ -53,7 +53,7 @@ concurrent_ta_create(allocator_t *allocator)
 
     task_admin = (concurrent_ta_t *)allocator_mem_alloc(allocator,
                                                         sizeof(concurrent_ta_t));
-    if(task_admin == NULL){
+    if (task_admin == NULL) {
         dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
         exit(1);
     }
@@ -164,7 +164,7 @@ slave_event_handler_process_message(int fd, short event, void *arg)
     /*
      *dbg_str(CONCURRENT_DETAIL,"slave_event_handler_process_message,fd=%d",fd);
      */
-    if (read(fd, buf, 1) != 1){
+    if (read(fd, buf, 1) != 1) {
         dbg_str(CONCURRENT_WARNNING,"cannot read form pipe");
         return;
     }
@@ -192,7 +192,7 @@ concurrent_slave_thread(void *arg)
             slave->work_id);
 
     slave->event_base = event_base_new();
-    if(slave->event_base == NULL){
+    if (slave->event_base == NULL) {
         dbg_str(CONCURRENT_ERROR,"cannot create slave event_base");
         exit(1);
     }
@@ -242,10 +242,10 @@ __concurrent_master_create_slave(concurrent_master_t *master,uint8_t slave_id)
     slave->task_admin  = master->task_admin;
     slave->master      = master;
 
-    if(master->concurrent_work_type == SERVER_WORK_TYPE_THREAD) {
+    if (master->concurrent_work_type == SERVER_WORK_TYPE_THREAD) {
 
         slave->work_id = slave_id;
-        if(pipe(fds)) {
+        if (pipe(fds)) {
             dbg_str(CONCURRENT_ERROR,"cannot create pipe");
             exit(1);
         }
@@ -273,7 +273,7 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
 
     master->slave = (concurrent_slave_t *)allocator_mem_alloc(master->allocator,
                     sizeof(concurrent_slave_t) * master->slave_amount);
-    if(master->slave == NULL){
+    if (master->slave == NULL) {
         dbg_str(CONCURRENT_ERROR,"alloc slave err");
         ret = -1;
         goto end;
@@ -282,7 +282,7 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
 
     master->snd_notify_fd = (int *)allocator_mem_alloc(master->allocator,
                             sizeof(int) * master->slave_amount);
-    if(master->slave == NULL){
+    if (master->slave == NULL) {
         dbg_str(CONCURRENT_ERROR,"alloc snd_notify_fd err");
         ret = -1;
         goto end;
@@ -336,7 +336,7 @@ master_event_handler_add_new_event(int fd,short event,void *arg)
     struct concurrent_message_s *message;
     char buf[1];          
 
-    if (read(fd, buf, 1) != 1){
+    if (read(fd, buf, 1) != 1) {
         dbg_str(CONCURRENT_WARNNING,"cannot read form pipe");
         return;
     }
@@ -440,7 +440,7 @@ concurrent_master_init(concurrent_master_t *master,
                              1,//uint8_t admin_lock_type,
                              0);//uint8_t hmap_lock_type)
 
-    if(pipe(fds)) {
+    if (pipe(fds)) {
         dbg_str(CONCURRENT_ERROR,"cannot create pipe");
         exit(1);
     }
@@ -491,7 +491,7 @@ concurrent_master_add_task(concurrent_master_t *master,
     master->assignment_count++;
 
     concurrent_ta_search(master->task_admin,key,&pos);
-    if(pos.hlist_node_p == NULL){
+    if (pos.hlist_node_p == NULL) {
         dbg_str(CONCURRENT_ERROR,"not found key,key=%s",key);
         return NULL;
     }
@@ -690,7 +690,7 @@ concurrent_constructor()
 #if 0
     allocator_t *allocator;
     /*
-     *if((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL){
+     *if ((allocator = allocator_create(ALLOCATOR_TYPE_SYS_MALLOC,0) ) == NULL) {
      *    dbg_str(CONCURRENT_ERROR,"proxy_create allocator_create err");
      *    return;
      *}
