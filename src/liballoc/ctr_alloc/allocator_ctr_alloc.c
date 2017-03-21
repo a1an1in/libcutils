@@ -137,7 +137,7 @@ static void *alloc_normal_slab(allocator_t *allocator,uint32_t size)
         if (!(slab_list = mempool_alloc_slab_list(allocator,size))) {  
             dbg_str(ALLOC_ERROR,"allocator slab list err");
             return NULL;
-        }
+        } 
     }
 
     slab_attach_list_to_used_slabs(allocator,&slab_list->list_head,size);
@@ -165,8 +165,9 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
         mem = alloc_normal_slab(allocator,size);
     }
 
-    dbg_str(ALLOC_IMPORTANT,"ctr_alloc allocator mem,request size=%d,mem addr=%p,"
-            "allocator using count=%d",size,mem,allocator->alloc_count);
+    dbg_str(ALLOC_IMPORTANT,
+            "ctr_alloc allocator mem,request size=%d,mem addr=%p,"
+            "allocator using count=%d, mempool_capacity=%d",size,mem,allocator->alloc_count, ctr_alloc->mempool_capacity);
 
     return mem;
 }

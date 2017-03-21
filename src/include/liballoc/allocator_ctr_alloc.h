@@ -35,9 +35,9 @@ typedef struct ctr_mem_pool_head_list{
 
 typedef struct ctr_mem_pool{
 	void *start;
-	uint32_t depth;
-	uint32_t min_depth;
-	uint32_t size;
+	int depth;
+	int min_depth;
+	int size;
 	struct list_head list_head;
 }ctr_mempool_t;
 
