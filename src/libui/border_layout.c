@@ -779,14 +779,10 @@ void test_ui_border_layout()
     layout->add_component((Container *)layout, "South", l);
 #else
     l = new_label(allocator,0, 0, 80, 18, "label00");
-    dbg_str(DBG_DETAIL,"run at here");
     layout->add_component((Container *)layout, "North", l);
     layout->add_component((Container *)layout, "West", NULL);
-    dbg_str(DBG_DETAIL,"run at here");
     l = new_label(allocator,0, 0, 80, 20, "label02");
-    dbg_str(DBG_DETAIL,"run at here");
     layout->add_component((Container *)layout, "Center", l);
-    dbg_str(DBG_DETAIL,"run at here");
     layout->add_component((Container *)layout, "East", NULL);
     l = new_label(allocator,0, 0, 80, 20, "label10");
     layout->add_component((Container *)layout, "South", l);
@@ -796,6 +792,7 @@ void test_ui_border_layout()
     window->load_resources(window);
     window->update_window(window);
     window->event->poll_event(window->event, window);
+    window->unload_resources(window);
 
     object_destroy(window);
 }
