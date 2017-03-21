@@ -28,7 +28,7 @@
 #define _EVSIGNAL_H_
 
 #ifndef evutil_socket_t
-#include "event2/util.h"
+#include "libevent/event2/util.h"
 #endif
 #include <signal.h>
 

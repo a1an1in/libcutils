@@ -26,19 +26,18 @@
 #ifndef _EVENT_UTIL_INTERNAL_H
 #define _EVENT_UTIL_INTERNAL_H
 
-#include "event2/event-config.h"
 #include <errno.h>
 
 /* For EVUTIL_ASSERT */
-#include "log-internal.h"
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef _EVENT_HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
-#include "event2/util.h"
-
-#include "ipv6-internal.h"
+#include "libevent/event2/event-config.h"
+#include "libevent/log-internal.h"
+#include "libevent/event2/util.h"
+#include "libevent/ipv6-internal.h"
 
 #ifdef __cplusplus
 extern "C" {

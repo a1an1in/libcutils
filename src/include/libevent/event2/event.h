@@ -184,7 +184,6 @@
 extern "C" {
 #endif
 
-#include <event2/event-config.h>
 #ifdef _EVENT_HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
@@ -195,7 +194,9 @@ extern "C" {
 #include <stdio.h>
 
 /* For int types. */
-#include <event2/util.h>
+#include <libevent/event2/event-config.h>
+#include <libevent/event2/util.h>
+#include <libevent/event2/event_struct.h>
 
 /**
  * Structure to hold information and state for a Libevent dispatch loop.

@@ -5,9 +5,6 @@
  */
 
 #include <sys/types.h>
-
-#include <event2/event-config.h>
-
 #include <sys/stat.h>
 #include <sys/queue.h>
 #include <unistd.h>
@@ -18,11 +15,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <event.h>
 
-#include <event2/event.h>
-#include <event2/event_struct.h>
-#include <event2/util.h>
+#include <libevent/event2/event-config.h>
+#include <libevent/event2/event.h>
+#include <libevent/event2/util.h>
+#include <libevent/event2/event_compat.h>
+
 #ifdef _EVENT___func__
 #define __func__ _EVENT___func__
 #endif

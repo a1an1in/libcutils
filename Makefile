@@ -20,7 +20,8 @@ CC = gcc
 LD = ld
 export MACROS+=$(MACRO)
 export PROJECT_PATH = $(shell pwd)
-export INCLUDES = -I $(PROJECT_PATH)/src/include -I $(PROJECT_PATH)/src/include/libevent
+#export INCLUDES = -I $(PROJECT_PATH)/src/include -I $(PROJECT_PATH)/src/include/libevent
+export INCLUDES = -I $(PROJECT_PATH)/src/include
 
 #include makefile funtions
 include ./mk/Makefile.funcs

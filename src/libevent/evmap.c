@@ -36,10 +36,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "event-internal.h"
-#include "evmap-internal.h"
-#include "mm-internal.h"
-#include "changelist-internal.h"
+#include "libevent/event-internal.h"
+#include "libevent/evmap-internal.h"
+#include "libevent/mm-internal.h"
+#include "libevent/changelist-internal.h"
 
 /** An entry for an evmap_io list: notes all the events that want to read or
     write on a given fd, and the number of each.

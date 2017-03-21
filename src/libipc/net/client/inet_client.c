@@ -68,7 +68,7 @@ static int setnonblocking(int sockfd)
 static void slave_work_function(concurrent_slave_t *slave,void *arg)
 {
     client_task_t *task = (client_task_t *)arg;
-    client_t *client = task->client;
+    client_t *client    = task->client;
 
     dbg_str(NET_DETAIL,"slave_work_function begin");
 
@@ -115,7 +115,7 @@ static int iclient_release_task(client_task_t *task)
 
 void client_event_handler(int fd, short event, void *arg)
 {
-    client_t *client = (client_t *)arg;
+    client_t *client            = (client_t *)arg;
     concurrent_master_t *master = client->master;
     int connfd;
     struct sockaddr_in cliaddr;
@@ -304,8 +304,8 @@ int inet_udp_client_send(client_t *client,
     char *type = client->type_str;
 
     struct sockaddr_in raddr;
-    raddr.sin_family = AF_INET; 
-    raddr.sin_port = htons(atoi(dest_srv_str));  
+    raddr.sin_family = AF_INET;
+    raddr.sin_port   = htons(atoi(dest_srv_str));
     inet_pton(AF_INET,dest_id_str,&raddr.sin_addr);
 
     ret = __inet_udp_client_send(client,buf,nbytes,flags,
@@ -353,8 +353,8 @@ client_t *inet_tcp_client(allocator_t *allocator,
     int ret;
 
     bzero(&sa_addr, sizeof(sa_addr));
-    sa_addr.sin_family = AF_INET; 
-    sa_addr.sin_port = htons(atoi(server_port));  
+    sa_addr.sin_family = AF_INET;
+    sa_addr.sin_port   = htons(atoi(server_port));
     inet_pton(AF_INET,server_ip,&sa_addr.sin_addr);
 
     if ((user_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {

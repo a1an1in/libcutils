@@ -8,8 +8,6 @@
  * cc -I/usr/local/include -o event-test event-test.c -L/usr/local/lib -levent
  */
 
-#include <event2/event-config.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/queue.h>
@@ -20,7 +18,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <event.h>
+
+#include <libevent/event2/event-config.h>
+#include <libevent/event2/event.h>
 
 static void
 fifo_read(evutil_socket_t fd, short event, void *arg)

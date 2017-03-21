@@ -43,12 +43,12 @@
 #include <sys/param.h>
 #include <sys/syscall.h>
 
-#include "event-internal.h"
-#include "evsignal-internal.h"
-#include "evthread-internal.h"
-#include "log-internal.h"
-#include "evmap-internal.h"
-#include "changelist-internal.h"
+#include "libevent/event-internal.h"
+#include "libevent/evsignal-internal.h"
+#include "libevent/evthread-internal.h"
+#include "libevent/log-internal.h"
+#include "libevent/evmap-internal.h"
+#include "libevent/changelist-internal.h"
 
 struct epollop {
     struct epoll_event *events;

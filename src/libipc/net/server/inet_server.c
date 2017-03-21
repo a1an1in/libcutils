@@ -115,9 +115,9 @@ slave_process_conn_bussiness_event_handler(int fd, short event, void *arg)
         return;
     } 
 
-    data_task->fd = task->fd;
+    data_task->fd        = task->fd;
     data_task->allocator = server->allocator;
-    data_task->server = server;
+    data_task->server    = server;
 
     server->process_task_cb(data_task);
 

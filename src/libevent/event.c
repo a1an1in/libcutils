@@ -39,17 +39,17 @@
 #include <string.h>
 #include <time.h>
 
-#include "event2/event.h"
-#include "event2/event_struct.h"
-#include "event2/event_compat.h"
-#include "event-internal.h"
-#include "evthread-internal.h"
-#include "event2/util.h"
-#include "log-internal.h"
-#include "evmap-internal.h"
-#include "changelist-internal.h"
-#include "ht-internal.h"
-#include "util-internal.h"
+#include "libevent/event2/event.h"
+#include "libevent/event2/event_struct.h"
+#include "libevent/event2/event_compat.h"
+#include "libevent/event-internal.h"
+#include "libevent/evthread-internal.h"
+#include "libevent/event2/util.h"
+#include "libevent/log-internal.h"
+#include "libevent/evmap-internal.h"
+#include "libevent/changelist-internal.h"
+#include "libevent/ht-internal.h"
+#include "libevent/util-internal.h"
 
 #include "libdbg/debug.h"
 

@@ -26,7 +26,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "event2/event-config.h"
 
 #include <sys/types.h>
 #include <sys/time.h>
@@ -40,12 +39,12 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "event-internal.h"
-#include "evsignal-internal.h"
-#include "log-internal.h"
-#include "evmap-internal.h"
-#include "event2/thread.h"
-#include "evthread-internal.h"
+#include "libevent/event2/event-config.h"
+#include "libevent/event-internal.h"
+#include "libevent/evsignal-internal.h"
+#include "libevent/log-internal.h"
+#include "libevent/evmap-internal.h"
+#include "libevent/evthread-internal.h"
 
 struct pollidx {
     int idxplus1;

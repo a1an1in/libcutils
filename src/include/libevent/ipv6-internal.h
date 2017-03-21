@@ -34,8 +34,8 @@
 #ifdef _EVENT_HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
-#include "event2/event-config.h"
-#include "event2/util.h"
+#include "libevent/event2/event-config.h"
+#include "libevent/event2/util.h"
 
 #ifdef __cplusplus
 extern "C" {

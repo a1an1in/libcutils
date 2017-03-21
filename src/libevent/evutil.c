@@ -24,7 +24,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "event2/event-config.h"
 
 #define _GNU_SOURCE
 
@@ -43,12 +42,12 @@
 #include <time.h>
 #include <sys/stat.h>
 
-#include "event2/util.h"
-#include "util-internal.h"
-#include "log-internal.h"
-#include "mm-internal.h"
-
-#include "ipv6-internal.h"
+#include "libevent/event2/event-config.h"
+#include "libevent/event2/util.h"
+#include "libevent/util-internal.h"
+#include "libevent/log-internal.h"
+#include "libevent/mm-internal.h"
+#include "libevent/ipv6-internal.h"
 
 #ifdef WIN32
 #define open _open
