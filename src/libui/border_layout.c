@@ -299,6 +299,7 @@ static int __add_component(Container *obj, void *pos, void *component)
     uint8_t rearrange_comonents_flag = 0;
     position_t position;
     int index;
+    int height, width, h, w;
     int size_change_flag = 0;
 
     if (pos == NULL) {
@@ -390,7 +391,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     size_change_flag = 1;
                 }
 
-                int height, width, h;
                 height = (int)(l->blocks[index].height / l->height_ratio_of_north_to_layout);
 
                 if (l->layout_height < height) {
@@ -398,9 +398,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     h = (int)(l->layout_height * l->height_ratio_of_north_to_layout);
                     l->blocks[index].height = h;
                     size_change_flag = 1;
-                }
-                if (size_change_flag == 1) {
-                    dbg_str(DBG_WARNNING, "run at here");
                 }
             }
             break;
@@ -415,7 +412,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].height = s->height + 2 * l->vgap;
                 }
 
-                int height, width, h;
                 width = (int)(l->blocks[index].width / l->width_ratio_of_west_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
@@ -430,9 +426,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].height = h;
                     size_change_flag = 1;
                 }
-                if (size_change_flag == 1) {
-                    dbg_str(DBG_WARNNING, "run at here");
-                }
             }
             break;
         case BORDER_LAYOUT_CENTER:
@@ -445,7 +438,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].height = s->height + 2 * l->vgap;
                 }
 
-                int height, width, h, w;
                 width = (int)(l->blocks[index].width / l->width_ratio_of_center_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
@@ -462,9 +454,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].width  = w;
                     size_change_flag = 1;
                 }
-                if (size_change_flag == 1) {
-                    dbg_str(DBG_WARNNING, "run at here");
-                }
             }
             break;
         case BORDER_LAYOUT_EAST:
@@ -478,7 +467,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].height = s->height + 2 * l->vgap;
                 }
 
-                int height, width, h;
                 width = (int)(l->blocks[index].width / l->width_ratio_of_east_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
@@ -493,10 +481,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     l->blocks[index].height = h;
                     size_change_flag = 1;
                 }
-                if (size_change_flag == 1) {
-                    dbg_str(DBG_WARNNING, "run at here");
-                }
-
             }
             break;
         case BORDER_LAYOUT_SOUTH:
@@ -515,7 +499,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     size_change_flag = 1;
                 }
 
-                int height, h;
                 height = (int)(l->blocks[index].height / l->height_ratio_of_south_to_layout);
 
                 if (l->layout_height < height) {
@@ -523,9 +506,6 @@ static int __add_component(Container *obj, void *pos, void *component)
                     h = (int)(l->layout_height * l->height_ratio_of_south_to_layout);
                     l->blocks[index].height = h;
                     size_change_flag = 1;
-                }
-                if (size_change_flag == 1) {
-                    dbg_str(DBG_WARNNING, "run at here");
                 }
             }
             break;
@@ -535,6 +515,7 @@ static int __add_component(Container *obj, void *pos, void *component)
     }
 
     if (size_change_flag == 1) {
+        dbg_str(DBG_WARNNING, "border layout size changed, index=%d",index);
         generate_new_size(l);
     }
 
@@ -561,7 +542,7 @@ static int __add_component(Container *obj, void *pos, void *component)
         case BORDER_LAYOUT_EAST:
             {
                 position.x = l->blocks[BORDER_LAYOUT_WEST].width +
-                    l->blocks[BORDER_LAYOUT_CENTER].width + l->hgap;
+                             l->blocks[BORDER_LAYOUT_CENTER].width + l->hgap;
                 position.y = l->blocks[BORDER_LAYOUT_NORTH].height + l->vgap;
             
             }
