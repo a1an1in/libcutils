@@ -165,6 +165,7 @@ static int generate_new_size(Border_Layout *border_layout)
             l->blocks[BORDER_LAYOUT_SOUTH].height);
 
     printf("bakeup size\n");
+
     printf( 
             "blocks[BORDER_LAYOUT_NORTH].width_bak=%d, height_bak=%d,\n"
             "blocks[BORDER_LAYOUT_WEST].width_bak=%d, height_bak=%d,\n"
@@ -290,15 +291,15 @@ static void *__get(Border_Layout *obj, char *attrib)
 
 static int __add_component(Container *obj, void *pos, void *component)
 {
-    Border_Layout *l     = (Border_Layout *)obj;
-    Container *container = (Container *)obj;
-    Map *map             = container->map;
-    char buffer[8]       = {0};
-    Component *c         = (Component *)component;
-    Subject *s           = (Subject *)c;
+    Border_Layout *l                 = (Border_Layout *)obj;
+    Container *container             = (Container *)obj;
+    Map *map                         = container->map;
+    char buffer[8]                   = {0};
+    Component *c                     = (Component *)component;
+    Subject *s                       = (Subject *)c;
     uint8_t rearrange_comonents_flag = 0;
     position_t position;
-    int index;
+    int index = -1;
     int height, width, h, w;
     int size_change_flag = 0;
 
@@ -336,7 +337,7 @@ static int __add_component(Container *obj, void *pos, void *component)
                 l->blocks[BORDER_LAYOUT_NORTH].height_bak = 0;
                 l->blocks[BORDER_LAYOUT_NORTH].height     = 0;
                 l->height_ratio_of_center_to_layout       = (float) (1.0 - l->height_ratio_of_north_to_layout -
-                        l->height_ratio_of_south_to_layout);
+                                                            l->height_ratio_of_south_to_layout);
 
                 break;
             case BORDER_LAYOUT_WEST:
@@ -344,7 +345,7 @@ static int __add_component(Container *obj, void *pos, void *component)
                 l->blocks[BORDER_LAYOUT_WEST].width_bak   = 0;
                 l->blocks[BORDER_LAYOUT_WEST].width       = 0;
                 l->width_ratio_of_center_to_layout        = (float) (1.0 - l->width_ratio_of_west_to_layout -
-                        l->width_ratio_of_east_to_layout);
+                                                            l->width_ratio_of_east_to_layout);
                 break;
             case BORDER_LAYOUT_CENTER:
                 l->width_ratio_of_center_to_layout        = 0;
@@ -356,14 +357,14 @@ static int __add_component(Container *obj, void *pos, void *component)
                 l->blocks[BORDER_LAYOUT_EAST].width_bak   = 0;
                 l->blocks[BORDER_LAYOUT_EAST].width       = 0;
                 l->width_ratio_of_center_to_layout        = (float) (1.0 - l->width_ratio_of_west_to_layout -
-                        l->width_ratio_of_east_to_layout);
+                                                            l->width_ratio_of_east_to_layout);
                 break;
             case BORDER_LAYOUT_SOUTH:
                 l->height_ratio_of_south_to_layout        = 0;
                 l->blocks[BORDER_LAYOUT_SOUTH].height_bak = 0;
                 l->blocks[BORDER_LAYOUT_SOUTH].height     = 0;
                 l->height_ratio_of_center_to_layout       = (float) (1.0 - l->height_ratio_of_north_to_layout -
-                        l->height_ratio_of_south_to_layout);
+                                                            l->height_ratio_of_south_to_layout);
                 dbg_str(DBG_SUC,"south set 0");
                 break;
             default:
@@ -374,138 +375,104 @@ static int __add_component(Container *obj, void *pos, void *component)
         return 0;
     }
 
+    l->blocks[index].component  = component;
+
+    if (l->blocks[index].width < s->width + 2 * l->hgap) {
+        l->blocks[index].width  = s->width + 2 * l->hgap;
+    }
+
+    if (l->blocks[index].height < s->height + 2 * l->vgap) {
+        l->blocks[index].height = s->height + 2 * l->vgap;
+    }
+
     switch (index) {
         case BORDER_LAYOUT_NORTH:
             {
-                l->blocks[index].component  = component;
-
-                if (l->blocks[index].width < s->width + 2 * l->hgap) {
-                    l->blocks[index].width  = s->width + 2 * l->hgap;
-                }
-                if (l->blocks[index].height < s->height + 2 * l->vgap) {
-                    l->blocks[index].height = s->height + 2 * l->vgap;
-                }
+                height = (int)(l->blocks[index].height / l->height_ratio_of_north_to_layout);
 
                 if (l->layout_width < l->blocks[index].width) {
                     l->layout_width = l->blocks[index].width;
                     size_change_flag = 1;
                 }
 
-                height = (int)(l->blocks[index].height / l->height_ratio_of_north_to_layout);
-
                 if (l->layout_height < height) {
-                    l->layout_height = height;
-                    h = (int)(l->layout_height * l->height_ratio_of_north_to_layout);
+                    l->layout_height        = height;
+                    h                       = (int)(l->layout_height * l->height_ratio_of_north_to_layout);
                     l->blocks[index].height = h;
-                    size_change_flag = 1;
+                    size_change_flag        = 1;
                 }
             }
             break;
         case BORDER_LAYOUT_WEST:
             {
-                l->blocks[index].component  = component;
-
-                if (l->blocks[index].width < s->width + 2 * l->hgap) {
-                    l->blocks[index].width  = s->width + 2 * l->hgap;
-                }
-                if (l->blocks[index].height < s->height + 2 * l->vgap) {
-                    l->blocks[index].height = s->height + 2 * l->vgap;
-                }
-
-                width = (int)(l->blocks[index].width / l->width_ratio_of_west_to_layout);
+                width  = (int)(l->blocks[index].width / l->width_ratio_of_west_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
                 if (l->layout_width < width) {
-                    l->layout_width = width;
+                    l->layout_width  = width;
                     size_change_flag = 1;
                 }
 
                 if (l->layout_height < height) {
-                    l->layout_height = height;
-                    h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    l->layout_height        = height;
+                    h                       = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
                     l->blocks[index].height = h;
-                    size_change_flag = 1;
+                    size_change_flag        = 1;
                 }
             }
             break;
         case BORDER_LAYOUT_CENTER:
             {
-                l->blocks[index].component  = component;
-                if (l->blocks[index].width < s->width + 2 * l->hgap) {
-                    l->blocks[index].width  = s->width + 2 * l->hgap;
-                }
-                if (l->blocks[index].height < s->height + 2 * l->vgap) {
-                    l->blocks[index].height = s->height + 2 * l->vgap;
-                }
-
-                width = (int)(l->blocks[index].width / l->width_ratio_of_center_to_layout);
+                width  = (int)(l->blocks[index].width / l->width_ratio_of_center_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
                 if (l->layout_width < width) {
-                    l->layout_width = width;
+                    l->layout_width  = width;
                     size_change_flag = 1;
                 }
 
                 if (l->layout_height < height) {
-                    l->layout_height = height;
-                    h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
-                    w = (int)(l->layout_width * l->width_ratio_of_center_to_layout);
+                    l->layout_height        = height;
+                    h                       = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    w                       = (int)(l->layout_width * l->width_ratio_of_center_to_layout);
                     l->blocks[index].height = h;
                     l->blocks[index].width  = w;
-                    size_change_flag = 1;
+                    size_change_flag        = 1;
                 }
             }
             break;
         case BORDER_LAYOUT_EAST:
             {
-                l->blocks[index].component  = component;
-
-                if (l->blocks[index].width < s->width + 2 * l->hgap) {
-                    l->blocks[index].width  = s->width + 2 * l->hgap;
-                }
-                if (l->blocks[index].height < s->height + 2 * l->vgap) {
-                    l->blocks[index].height = s->height + 2 * l->vgap;
-                }
-
-                width = (int)(l->blocks[index].width / l->width_ratio_of_east_to_layout);
+                width  = (int)(l->blocks[index].width / l->width_ratio_of_east_to_layout);
                 height = (int)(l->blocks[index].height / l->height_ratio_of_center_to_layout);
 
                 if (l->layout_width < width) {
-                    l->layout_width = width;
+                    l->layout_width  = width;
                     size_change_flag = 1;
                 }
 
                 if (l->layout_height < height) {
-                    l->layout_height = height;
-                    h = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
+                    l->layout_height        = height;
+                    h                       = (int)(l->layout_height * l->height_ratio_of_center_to_layout);
                     l->blocks[index].height = h;
-                    size_change_flag = 1;
+                    size_change_flag        = 1;
                 }
             }
             break;
         case BORDER_LAYOUT_SOUTH:
             {
-                l->blocks[index].component  = component;
-
-                if (l->blocks[index].width < s->width + 2 * l->hgap) {
-                    l->blocks[index].width  = s->width + 2 * l->hgap;
-                }
-                if (l->blocks[index].height < s->height + 2 * l->vgap) {
-                    l->blocks[index].height = s->height + 2 * l->vgap;
-                }
-
-                if (l->layout_width < l->blocks[index].width) {
-                    l->layout_width = l->blocks[index].width;
-                    size_change_flag = 1;
-                }
-
                 height = (int)(l->blocks[index].height / l->height_ratio_of_south_to_layout);
 
-                if (l->layout_height < height) {
-                    l->layout_height = height;
-                    h = (int)(l->layout_height * l->height_ratio_of_south_to_layout);
-                    l->blocks[index].height = h;
+                if (l->layout_width < l->blocks[index].width) {
+                    l->layout_width  = l->blocks[index].width;
                     size_change_flag = 1;
+                }
+
+                if (l->layout_height < height) {
+                    l->layout_height        = height;
+                    h                       = (int)(l->layout_height * l->height_ratio_of_south_to_layout);
+                    l->blocks[index].height = h;
+                    size_change_flag        = 1;
                 }
             }
             break;
@@ -551,7 +518,7 @@ static int __add_component(Container *obj, void *pos, void *component)
             {
                 position.x = l->hgap;
                 position.y = l->blocks[BORDER_LAYOUT_NORTH].height +
-                    l->blocks[BORDER_LAYOUT_WEST].height + l->vgap;
+                             l->blocks[BORDER_LAYOUT_WEST].height + l->vgap;
             }
             break;
         default:
@@ -559,9 +526,6 @@ static int __add_component(Container *obj, void *pos, void *component)
             break;
     }
 
-    /*
-     *dbg_str(DBG_DETAIL,"position x=%f, y=%f", position.x, position.y);
-     */
     container->update_component_position(c, &position);
 
     addr_to_buffer(c,(uint8_t *)buffer);
@@ -571,7 +535,6 @@ static int __add_component(Container *obj, void *pos, void *component)
         modulate_component_position(l);
         size_change_flag = 0;
     }
-
 
     return 0;
 }

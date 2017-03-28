@@ -129,6 +129,7 @@ object_find_method_to_inherit(char *method_name,
     return object_find_method_to_inherit(method_name,
                                             parent_class_name);
 }
+
 int object_inherit_methods(void *obj,void *class_info,void *parent_class_name)
 {
     class_info_entry_t *entry = (class_info_entry_t *)class_info;
