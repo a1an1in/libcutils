@@ -57,6 +57,7 @@ static int __move(Component *component)
 
 static int __set(Component *component, char *attrib, void *value)
 {
+    /*normal methods*/
     if (strcmp(attrib, "set") == 0) {
         component->set = value;
     } else if (strcmp(attrib, "get") == 0) {
@@ -65,9 +66,8 @@ static int __set(Component *component, char *attrib, void *value)
         component->construct = value;
     } else if (strcmp(attrib, "deconstruct") == 0) {
         component->deconstruct = value;
-    } else if (strcmp(attrib, "add_event_listener") == 0) {
-        component->add_event_listener = value;
     }
+    /*virtual methods*/
     else if (strcmp(attrib, "move") == 0) {
         component->move = value;
     } else if (strcmp(attrib, "draw") == 0) {
@@ -112,7 +112,14 @@ static int __set(Component *component, char *attrib, void *value)
         component->window_resized = value;
     } else if (strcmp(attrib, "is_mouse_over_component") == 0) {
         component->is_mouse_over_component = value;
+    } 
+    /*inherit methods*/
+    else if (strcmp(attrib, "add_event_listener") == 0) {
+        component->add_event_listener = value;
+    } else if (strcmp(attrib, "add_event_listener_cb") == 0) {
+        component->add_event_listener_cb = value;
     }
+    /*attribs*/
     else if (strcmp(attrib, "name") == 0) {
         strncpy(component->name,value,strlen(value));
     } else {
@@ -135,7 +142,19 @@ static void *__get(Component *obj, char *attrib)
 
 int __add_event_listener(Component *component, event_listener_t *listener)
 {
-    component->listener = listener;
+    /*
+     *component->listener = listener;
+     */
+    memcpy(&component->listener, listener, sizeof(event_listener_t));
+}
+
+int __add_event_listener_cb(Component *component, char *name, void *value)
+{
+    if (strcmp(name, "do_mouse_pressed") == 0) {
+        component->listener.do_mouse_pressed = value;
+    } else {
+        dbg_str(DBG_WARNNING,"add_event_listener_cb %s, not support now", name);
+    }
 }
 
 static void 
@@ -503,37 +522,39 @@ static void __window_resized(Component *component,void *event, void *window)
             e->data1, e->data2, e->windowid);
 }
 
+
 static class_info_entry_t component_class_info[] = {
     [0 ] = {ENTRY_TYPE_OBJ,"Container","container",NULL,sizeof(void *)},
     [1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
     [2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","add_event_listener",__add_event_listener,sizeof(void *)},
-    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-    [6 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
-    [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",__draw,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","unload_resources",__unload_resources,sizeof(void *)},
-    [10] = {ENTRY_TYPE_VFUNC_POINTER,"","key_text_pressed",__key_text_pressed,sizeof(void *)},
-    [11] = {ENTRY_TYPE_VFUNC_POINTER,"","key_backspace_pressed",__key_backspace_pressed,sizeof(void *)},
-    [12] = {ENTRY_TYPE_VFUNC_POINTER,"","key_up_pressed",__key_up_pressed,sizeof(void *)},
-    [13] = {ENTRY_TYPE_VFUNC_POINTER,"","key_down_pressed",__key_down_pressed,sizeof(void *)},
-    [14] = {ENTRY_TYPE_VFUNC_POINTER,"","key_left_pressed",__key_left_pressed,sizeof(void *)},
-    [15] = {ENTRY_TYPE_VFUNC_POINTER,"","key_right_pressed",__key_right_pressed,sizeof(void *)},
-    [16] = {ENTRY_TYPE_VFUNC_POINTER,"","key_pageup_pressed",__key_pageup_pressed,sizeof(void *)},
-    [17] = {ENTRY_TYPE_VFUNC_POINTER,"","key_pagedown_pressed",__key_pagedown_pressed,sizeof(void *)},
-    [18] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelineup_pressed",__key_onelineup_pressed,sizeof(void *)},
-    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelinedown_pressed",__key_onelinedown_pressed,sizeof(void *)},
-    [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
-    [21] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
-    [22] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_entered",NULL,sizeof(void *)},
-    [23] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_exited",NULL,sizeof(void *)},
-    [24] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel_moved",__mouse_wheel_moved,sizeof(void *)},
-    [25] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
-    [26] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
-    [27] = {ENTRY_TYPE_VFUNC_POINTER,"","is_mouse_over_component",__is_mouse_over_component,sizeof(void *)},
-    [28] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
-    [29] = {ENTRY_TYPE_END},
+    [3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+    [4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+    [5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",__move,sizeof(void *)},
+    [6 ] = {ENTRY_TYPE_VFUNC_POINTER,"","draw",__draw,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_VFUNC_POINTER,"","load_resources",__load_resources,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_VFUNC_POINTER,"","unload_resources",__unload_resources,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_VFUNC_POINTER,"","key_text_pressed",__key_text_pressed,sizeof(void *)},
+    [10] = {ENTRY_TYPE_VFUNC_POINTER,"","key_backspace_pressed",__key_backspace_pressed,sizeof(void *)},
+    [11] = {ENTRY_TYPE_VFUNC_POINTER,"","key_up_pressed",__key_up_pressed,sizeof(void *)},
+    [12] = {ENTRY_TYPE_VFUNC_POINTER,"","key_down_pressed",__key_down_pressed,sizeof(void *)},
+    [13] = {ENTRY_TYPE_VFUNC_POINTER,"","key_left_pressed",__key_left_pressed,sizeof(void *)},
+    [14] = {ENTRY_TYPE_VFUNC_POINTER,"","key_right_pressed",__key_right_pressed,sizeof(void *)},
+    [15] = {ENTRY_TYPE_VFUNC_POINTER,"","key_pageup_pressed",__key_pageup_pressed,sizeof(void *)},
+    [16] = {ENTRY_TYPE_VFUNC_POINTER,"","key_pagedown_pressed",__key_pagedown_pressed,sizeof(void *)},
+    [17] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelineup_pressed",__key_onelineup_pressed,sizeof(void *)},
+    [18] = {ENTRY_TYPE_VFUNC_POINTER,"","key_onelinedown_pressed",__key_onelinedown_pressed,sizeof(void *)},
+    [19] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
+    [20] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
+    [21] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_entered",NULL,sizeof(void *)},
+    [22] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_exited",NULL,sizeof(void *)},
+    [23] = {ENTRY_TYPE_VFUNC_POINTER,"","mouse_wheel_moved",__mouse_wheel_moved,sizeof(void *)},
+    [24] = {ENTRY_TYPE_VFUNC_POINTER,"","window_moved",__window_moved,sizeof(void *)},
+    [25] = {ENTRY_TYPE_VFUNC_POINTER,"","window_resized",__window_resized,sizeof(void *)},
+    [26] = {ENTRY_TYPE_VFUNC_POINTER,"","is_mouse_over_component",__is_mouse_over_component,sizeof(void *)},
+    [27] = {ENTRY_TYPE_FUNC_POINTER,"","add_event_listener",__add_event_listener,sizeof(void *)},
+    [28] = {ENTRY_TYPE_FUNC_POINTER,"","add_event_listener_cb",__add_event_listener_cb,sizeof(void *)},
+    [29] = {ENTRY_TYPE_STRING,"char","name",NULL,0},
+    [30] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Component",component_class_info);

@@ -70,8 +70,6 @@ static int __set(Button *button, char *attrib, void *value)
 		button->construct = value;
 	} else if (strcmp(attrib, "deconstruct") == 0) {
 		button->deconstruct = value;
-    } else if (strcmp(attrib, "add_event_listener") == 0) {
-        button->add_event_listener = value;
 	} 
     else if (strcmp(attrib, "move") == 0) {
 		button->move = value;
@@ -87,6 +85,11 @@ static int __set(Button *button, char *attrib, void *value)
         button->mouse_exited = value;
     } else if (strcmp(attrib, "mouse_moved") == 0) {
         button->mouse_moved = value;
+    } 
+    else if (strcmp(attrib, "add_event_listener") == 0) {
+        button->add_event_listener = value;
+    } else if (strcmp(attrib, "add_event_listener_cb") == 0) {
+        button->add_event_listener_cb = value;
 	} 
     else {
 		dbg_str(DBG_DETAIL,"button set, not support %s setting",attrib);
@@ -140,7 +143,7 @@ static void __mouse_pressed(Component *component,void *event, void *window)
             "%d with click count %d in window %d",
             component->name, e->button, e->x, e->y, e->clicks, e->windowid); 
 
-    component->listener->do_mouse_pressed(component, event, window);
+    component->listener.do_mouse_pressed(component, event, window);
 }
 
 static void __mouse_released(Component *component,void *event, void *window) 
@@ -179,17 +182,18 @@ static class_info_entry_t button_class_info[] = {
 	[0 ] = {ENTRY_TYPE_OBJ,"Component","component",NULL,sizeof(void *)},
 	[1 ] = {ENTRY_TYPE_FUNC_POINTER,"","set",__set,sizeof(void *)},
 	[2 ] = {ENTRY_TYPE_FUNC_POINTER,"","get",__get,sizeof(void *)},
-    [3 ] = {ENTRY_TYPE_IFUNC_POINTER,"","add_event_listener",NULL,sizeof(void *)},
-	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
-	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
-	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
-	[7 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
-    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
-    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_released",__mouse_released,sizeof(void *)},
-    [10] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
-    [11] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_exited",__mouse_exited,sizeof(void *)},
-    [12] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
-	[13] = {ENTRY_TYPE_END},
+	[3 ] = {ENTRY_TYPE_FUNC_POINTER,"","construct",__construct,sizeof(void *)},
+	[4 ] = {ENTRY_TYPE_FUNC_POINTER,"","deconstruct",__deconstrcut,sizeof(void *)},
+	[5 ] = {ENTRY_TYPE_FUNC_POINTER,"","move",NULL,sizeof(void *)},
+	[6 ] = {ENTRY_TYPE_FUNC_POINTER,"","draw",__draw,sizeof(void *)},
+    [7 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_pressed",__mouse_pressed,sizeof(void *)},
+    [8 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_released",__mouse_released,sizeof(void *)},
+    [9 ] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_entered",__mouse_entered,sizeof(void *)},
+    [10] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_exited",__mouse_exited,sizeof(void *)},
+    [11] = {ENTRY_TYPE_FUNC_POINTER,"","mouse_moved",__mouse_moved,sizeof(void *)},
+    [12] = {ENTRY_TYPE_IFUNC_POINTER,"","add_event_listener",NULL,sizeof(void *)},
+    [13] = {ENTRY_TYPE_IFUNC_POINTER,"","add_event_listener_cb",NULL,sizeof(void *)},
+	[14] = {ENTRY_TYPE_END},
 
 };
 REGISTER_CLASS("Button",button_class_info);
@@ -286,7 +290,11 @@ void test_ui_button()
     layout = new_border_layout(allocator, 0, 0, 0, 0, "border layout");
 
     button = new_button(allocator,0, 0, 100, 50, "button02");
+#if 0
     button->add_event_listener((Component *)button, &button_listener);
+#else
+    button->add_event_listener_cb((Component *)button, "do_mouse_pressed", __do_mouse_pressed);
+#endif
     layout->add_component((Container *)layout, "North", NULL);
     layout->add_component((Container *)layout, "West", NULL);
     layout->add_component((Container *)layout, "Center", button);

@@ -26,6 +26,7 @@ struct component_s{
 	int (*set)(Component *component, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
     int (*add_event_listener)(Component *component, event_listener_t *listener);
+    int (*add_event_listener_cb)(Component *component, char *name, void *value);
 
 	/*virtual methods*/
 	int (*move)(Component *component);
@@ -61,7 +62,7 @@ struct component_s{
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
     unsigned char mouse_entered_flag;
-    event_listener_t *listener;
+    event_listener_t listener;
 
 };
 
