@@ -651,6 +651,7 @@ static class_info_entry_t border_layout_class_info[] = {
 REGISTER_CLASS("Border_Layout",border_layout_class_info);
 
 
+#if 0
 char *gen_border_layout_setting_str(int x, int y, int width, int height, char *name, void *out)
 {
     char *set_str = NULL;
@@ -692,6 +693,30 @@ void *new_border_layout(allocator_t *allocator, int x, int y, int width, int hei
 
     return container;
 }
+#else
+void *new_border_layout(allocator_t *allocator, int x, int y, int width, int height, char *name)
+{
+    char *set_str;
+    Container *container;
+    char buf[1024] = {0};
+    int vgap = 2, hgap = 2;
+
+    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "x", &x);
+    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "y", &y);
+    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "width", &width);
+    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "height", &height);
+    object_config(buf, 1024, "/Component", OBJECT_STRING, "name", name) ;
+    object_config(buf, 1024, "/Border_Layout", OBJECT_STRING, "hgap", &hgap);
+    object_config(buf, 1024, "/Border_Layout", OBJECT_STRING, "vgap", &vgap);
+
+    dbg_str(DBG_DETAIL,"\n%s",buf);
+
+    container = OBJECT_NEW(allocator, Border_Layout,buf);
+
+    return container;
+}
+#endif
+
 
 void test_ui_border_layout()
 {

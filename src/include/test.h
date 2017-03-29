@@ -76,5 +76,6 @@ extern void test_ui_border_layout();
 extern void test_ui_label();
 extern void test_ui_box();
 extern void test_ui_button();
+extern int test_object_config();
 
 #endif

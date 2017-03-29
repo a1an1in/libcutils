@@ -5,6 +5,13 @@
 #include <libobject/obj.h>
 #include <libjson/cjson.h>
 
+#define OBJECT_FALSE   CJSON_FALSE  
+#define OBJECT_TRUE    CJSON_TRUE   
+#define OBJECT_NULL    CJSON_NULL   
+#define OBJECT_NUMBER  CJSON_NUMBER 
+#define OBJECT_STRING  CJSON_STRING 
+#define OBJECT_ARRAY   CJSON_ARRAY  
+
 void * object_get_set_func_pointer(void *class_info_addr);
 int object_init_func_pointer(void *obj,void *class_info_addr);
 class_info_entry_t * object_get_subclass_info(void *class_info_addr);
@@ -44,6 +51,5 @@ int object_destroy(void *obj);
     }\
     obj;\
 })
-
 
 #endif

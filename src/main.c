@@ -369,6 +369,13 @@ static int args_process_test_miscellany_net(void *base,int argc,char **argv)
     return 0;
 }
 
+static int args_process_test_object_config(void *base,int argc,char **argv)
+{
+    test_object_config();
+
+    return 0;
+}
+
 static int args_process_test_obj(void *base,int argc,char **argv)
 {
     test_obj();
@@ -570,6 +577,7 @@ static cmd_config_t cmds[]={
     {"Enemy", args_process_test_obj_enemy,0, "test", "N/A","obj"},
     {"Subject", args_process_test_obj_subject,0, "test", "N/A","obj"},
     {"Obj", args_process_test_obj,0, "test", "N/A","obj"},
+    {"object_config", args_process_test_object_config,0, "test", "N/A","obj"},
     {"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
     {"as", args_process_test_as,0, "test", "N/A","array_stack"},
     {"buss_dbg", args_process_bus_service_debug,0, "app", "N/A","bus"},

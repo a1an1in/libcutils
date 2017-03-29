@@ -33,6 +33,115 @@
 #include <libdbg/debug.h>
 #include <libobject/object.h>
 
+int str_split(char *str, char *delim, char **out, int *cnt) 
+{
+    int index = 0;
+    char *ptr = NULL;
+
+    while((*(out + index) = strtok_r(str, delim, &ptr)) != NULL) {  
+        str = NULL;  
+        /*
+         *printf("addr:%p, %s\n",out[index], out[index]);  
+         */
+        index++;
+    }  
+
+    return *cnt = index;
+}
+
+int compute_slash_count(char *path)
+{
+    int i, len = strlen(path), cnt = 0;
+
+    for (i = 0; i < len; i++) {
+        if (path[i] == '/') {
+            cnt++;
+        }
+    }
+
+    return cnt;
+}
+
+int object_config(char *config, int len, char *path, int type, char *name, void *value) 
+{
+    allocator_t *allocator = allocator_get_default_alloc();
+    cjson_t *root, *object, *item;
+    char *buf;  
+    char **out;  
+    char *p;
+    int cnt, j, ret = 0;
+
+
+    buf = allocator_mem_alloc(allocator, strlen(path));
+    if (buf == NULL) {
+        dbg_str(OBJ_WARNNING, "oss set alloc err");
+        return -1;
+    }
+    strcpy(buf, path);
+
+    cnt = compute_slash_count(path);
+    out = allocator_mem_alloc(allocator, sizeof(char *) * cnt);
+    if (out == NULL) {
+        dbg_str(OBJ_WARNNING, "oss set alloc err");
+        allocator_mem_free(allocator, buf);
+        return -1;
+    }
+
+    str_split(buf, "/", out, &cnt);
+
+    if (strlen(config) != 0) {
+        object = cjson_parse(config);
+    } else {
+        object = cjson_create_object();
+    }
+
+    root = object;
+
+    for (j = 0; j < cnt; j++)  {     
+        item = cjson_get_object_item(object, out[j]);
+        if (item != NULL) {
+            object = item;
+        } else {
+            item = cjson_create_object();
+            cjson_add_item_to_object(object, out[j],item);
+            object = item;
+        }
+    } 
+
+    switch(type) {
+        case OBJECT_FALSE:
+            break;
+        case OBJECT_NUMBER:
+            cjson_add_number_to_object(item, name, *((int *)value));
+            break;
+        case OBJECT_STRING:
+            cjson_add_string_to_object(item, name, (char *)value);
+            break;
+        default:
+            break;
+    }
+
+
+    p = cjson_print(root);
+
+    if (strlen(p) > len) {
+        dbg_str(OBJ_WARNNING,"config buffer is too small");
+        ret = -1;
+        goto err;
+    } else {
+        strcpy(config, p);
+    }
+
+err:
+end:
+    allocator_mem_free(allocator, buf);
+    allocator_mem_free(allocator, out);
+
+    free(p);
+
+    return ret;
+}
+
 void * object_get_func_pointer(void *class_info_addr, char *func_pointer_name)
 {
     class_info_entry_t *entry = (class_info_entry_t *)class_info_addr;
@@ -263,7 +372,7 @@ static int __object_set(void *obj,
                     /*
                      *set(obj,c->string,&(c->valuedouble));
                      */
-                } else if (c->type & CJSON_STRING) {
+                } else if (c->type & OBJECT_STRING) {
                     set(obj,c->string,c->valuestring);
                 }
             }
@@ -456,3 +565,13 @@ int object_destroy(void *obj)
     return 0;
 }
 
+int test_object_config()
+{
+    char buf[1024] = {0};
+
+    object_config(buf, 1024, "/root/home/worksapce/linux", OBJECT_STRING, "name", "alan") ;
+    object_config(buf, 1024, "/root/home/worksapce/linux", OBJECT_STRING, "width", "128") ;
+    dbg_str(DBG_DETAIL,"\n%s",buf);
+
+    return 0;
+}
