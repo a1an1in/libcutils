@@ -696,24 +696,26 @@ void *new_border_layout(allocator_t *allocator, int x, int y, int width, int hei
 #else
 void *new_border_layout(allocator_t *allocator, int x, int y, int width, int height, char *name)
 {
+#define MAX_BUFFER_LEN 1024
     char *set_str;
     Container *container;
-    char buf[1024] = {0};
+    char buf[MAX_BUFFER_LEN] = {0};
     int vgap = 2, hgap = 2;
 
-    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "x", &x);
-    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "y", &y);
-    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "width", &width);
-    object_config(buf, 1024, "/Subject", OBJECT_NUMBER, "height", &height);
-    object_config(buf, 1024, "/Component", OBJECT_STRING, "name", name) ;
-    object_config(buf, 1024, "/Border_Layout", OBJECT_STRING, "hgap", &hgap);
-    object_config(buf, 1024, "/Border_Layout", OBJECT_STRING, "vgap", &vgap);
+    object_config(buf, MAX_BUFFER_LEN, "/Subject", OBJECT_NUMBER, "x", &x);
+    object_config(buf, MAX_BUFFER_LEN, "/Subject", OBJECT_NUMBER, "y", &y);
+    object_config(buf, MAX_BUFFER_LEN, "/Subject", OBJECT_NUMBER, "width", &width);
+    object_config(buf, MAX_BUFFER_LEN, "/Subject", OBJECT_NUMBER, "height", &height);
+    object_config(buf, MAX_BUFFER_LEN, "/Component", OBJECT_STRING, "name", name) ;
+    object_config(buf, MAX_BUFFER_LEN, "/Border_Layout", OBJECT_NUMBER, "hgap", &hgap);
+    object_config(buf, MAX_BUFFER_LEN, "/Border_Layout", OBJECT_NUMBER, "vgap", &vgap);
 
     dbg_str(DBG_DETAIL,"\n%s",buf);
 
     container = OBJECT_NEW(allocator, Border_Layout,buf);
 
     return container;
+#undef MAX_BUFFER_LEN
 }
 #endif
 

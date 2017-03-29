@@ -71,7 +71,6 @@ int object_config(char *config, int len, char *path, int type, char *name, void 
     char *p;
     int cnt, j, ret = 0;
 
-
     buf = allocator_mem_alloc(allocator, strlen(path));
     if (buf == NULL) {
         dbg_str(OBJ_WARNNING, "oss set alloc err");
@@ -121,7 +120,6 @@ int object_config(char *config, int len, char *path, int type, char *name, void 
             break;
     }
 
-
     p = cjson_print(root);
 
     if (strlen(p) > len) {
@@ -138,6 +136,7 @@ end:
     allocator_mem_free(allocator, out);
 
     free(p);
+    cjson_delete(root);
 
     return ret;
 }
@@ -568,9 +567,10 @@ int object_destroy(void *obj)
 int test_object_config()
 {
     char buf[1024] = {0};
+    int width = 128;
 
     object_config(buf, 1024, "/root/home/worksapce/linux", OBJECT_STRING, "name", "alan") ;
-    object_config(buf, 1024, "/root/home/worksapce/linux", OBJECT_STRING, "width", "128") ;
+    object_config(buf, 1024, "/root/home/worksapce/linux", OBJECT_NUMBER, "width", &width) ;
     dbg_str(DBG_DETAIL,"\n%s",buf);
 
     return 0;

@@ -7,6 +7,16 @@
 
 typedef struct component_s Component;
 
+typedef struct event_listener_s{
+    void (*do_mouse_pressed)(Component *component,void *event, void *window);
+    void (*do_mouse_released)(Component *component,void *event, void *window);
+    void (*do_mouse_entered)(Component *component,void *event, void *window);
+    void (*do_mouse_exited)(Component *component,void *event, void *window);
+    void (*do_mouse_moved)(Component *component,void *event, void *window);
+    void (*do_mouse_dragged)(Component *component,void *event, void *window);
+    void (*do_mouse_wheel_moved)(Component *component,void *event, void *window);
+}event_listener_t;
+
 struct component_s{
 	Container container;
 
@@ -15,6 +25,7 @@ struct component_s{
 	int (*deconstruct)(Component *component);
 	int (*set)(Component *component, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
+    int (*add_event_listener)(Component *component, event_listener_t *listener);
 
 	/*virtual methods*/
 	int (*move)(Component *component);
@@ -50,6 +61,7 @@ struct component_s{
     char name[MAX_NAME_LEN];
 #undef MAX_NAME_LEN
     unsigned char mouse_entered_flag;
+    event_listener_t *listener;
 
 };
 

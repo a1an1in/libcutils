@@ -15,6 +15,7 @@ struct button_s{
 	int (*deconstruct)(Button *button);
 	int (*set)(Button *button, char *attrib, void *value);
     void *(*get)(void *obj, char *attrib);
+    int (*add_event_listener)(Component *component, event_listener_t *listener);
 
 	/*virtual methods reimplement*/
 	int (*move)(Button *button);
