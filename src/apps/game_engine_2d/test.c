@@ -7,7 +7,7 @@
  */
 #include <stdio.h>
 #include <libdbg/debug.h>
-#include <libui/subject.h>
+#include <libobject/ui/subject.h>
 
 typedef struct enemy_s Enemy;
 
