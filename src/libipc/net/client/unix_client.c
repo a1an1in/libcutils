@@ -104,6 +104,7 @@ int uclient_init_task(client_task_t *task,
 static int uclient_release_task(client_task_t *task)
 {
     client_t *client = (client_t *)task->client;
+    allocator_mem_free(client->allocator,task->buffer);
     allocator_mem_free(client->allocator,task);
     return 0;
 }
@@ -141,6 +142,12 @@ void uclient_event_handler(int fd, short event, void *arg)
 
     dbg_str(NET_DETAIL,"client handler allocator=%p",client->allocator);
     task = (client_task_t *)allocator_mem_alloc(client->allocator,sizeof(client_task_t));
+    task->buffer_len = nread;
+    task->buffer = allocator_mem_alloc(client->allocator,task->buffer_len);
+    if (task->buffer == NULL) {
+        dbg_str(DBG_ERROR,"allocator_mem_alloc");
+        exit(1);
+    }
 
     uclient_init_task(task,//client_task_t *task,
                       client->allocator,//allocator_t *allocator,
