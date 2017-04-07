@@ -102,17 +102,24 @@ void test_ctr_alloc()
     allocator_destroy(allocator);
     dbg_str(ALLOC_DETAIL,"test ctr alloc end");
 }
-#else
+#endif 
+
+#if 0
+
 void test_ctr_alloc()
 {
     allocator_t *allocator;
     void *p1 ,*p2,*p3, *p4;
     uint32_t size = 8;
 
-    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
+#if 0
+    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,1);
     allocator_ctr_init(allocator, 0, 0, 1024);
+#else
+    allocator = allocator_get_default_alloc();
+#endif;
 
-    dbg_str(ALLOC_IMPORTANT,"ctr alloc test begin");
+    dbg_str(ALLOC_SUC,"ctr alloc test begin");
 
     p1 = allocator_mem_alloc(allocator,7);
     allocator_mem_tag(allocator,p1, "p1");
@@ -128,7 +135,100 @@ void test_ctr_alloc()
 
     allocator_mem_info(allocator);
 
-    allocator_destroy(allocator);
+    /*
+     *allocator_destroy(allocator);
+     */
     dbg_str(ALLOC_DETAIL,"test ctr alloc end");
 }
+
+#else
+
+void* test_thread1_func_cb(void *arg)                                                                           
+{                                                                                         
+    allocator_t *allocator;
+    void *p1 ,*p2,*p3, *p4;
+    uint32_t size = 8;
+
+    allocator = allocator_get_default_alloc();
+
+    while(1){
+        dbg_str(ALLOC_SUC,"test_thread1_func_cb begin");
+
+        p1 = allocator_mem_alloc(allocator,7);
+        allocator_mem_tag(allocator,p1, "p1");
+        p2 = allocator_mem_alloc(allocator,8);
+        allocator_mem_tag(allocator,p2, "p2");
+        p3 = allocator_mem_alloc(allocator,20);
+        allocator_mem_tag(allocator,p3, "p3");
+        allocator_mem_free(allocator, p1);
+        allocator_mem_free(allocator, p2);
+        allocator_mem_free(allocator, p3);
+
+        dbg_str(ALLOC_SUC,"test_thread1_func_cb end");
+    }
+}                                                                
+
+void* test_thread2_func_cb(void *arg)                                                                           
+{                                                                                         
+    allocator_t *allocator;
+    void *p1 ,*p2,*p3, *p4;
+    uint32_t size = 8;
+
+    allocator = allocator_get_default_alloc();
+
+    while(1){
+        dbg_str(ALLOC_SUC,"test_thread2_func_cb begin");
+
+        p1 = allocator_mem_alloc(allocator,7);
+        allocator_mem_free(allocator, p1);
+        p2 = allocator_mem_alloc(allocator,8);
+        allocator_mem_free(allocator, p2);
+
+        dbg_str(ALLOC_SUC,"test_thread2_func_cb end");
+    }
+}                                                                
+
+void* test_thread3_func_cb(void *arg)                                                                           
+{                                                                                         
+    allocator_t *allocator;
+    void *p1 ,*p2,*p3, *p4;
+    uint32_t size = 8;
+
+    allocator = allocator_get_default_alloc();
+
+    while(1){
+        dbg_str(ALLOC_SUC,"test_thread3_func_cb begin");
+
+        p1 = allocator_mem_alloc(allocator,7);
+        allocator_mem_free(allocator, p1);
+
+        dbg_str(ALLOC_SUC,"test_thread3_func_cb end");
+    }
+}                                                                
+
+void test_ctr_alloc()
+{
+    pthread_t tid1, tid2, tid3;                                     
+    int ret;                                                                     
+
+    ret = pthread_create(&tid1,NULL,test_thread1_func_cb,NULL);                                     
+    if(ret < 0){                                                                 
+        dbg_str(DBG_ERROR,"pthread_create");                                     
+        return ;                                     
+    }                                                  
+
+    ret = pthread_create(&tid2,NULL,test_thread2_func_cb,NULL);                                     
+    if(ret < 0){                                                                 
+        dbg_str(DBG_ERROR,"pthread_create");                                     
+        return ;                                     
+    }                                                  
+
+    ret = pthread_create(&tid3,NULL,test_thread3_func_cb,NULL);                                     
+    if(ret < 0){                                                                 
+        dbg_str(DBG_ERROR,"pthread_create");                                     
+        return ;                                     
+    }                                                  
+    pause();
+}
+
 #endif

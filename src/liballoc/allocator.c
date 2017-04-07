@@ -45,6 +45,8 @@ allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type)
     p->lock_type      = lock_type;
     p->alloc_count    = 0;
 
+    sync_lock_init(&p->head_lock,lock_type);
+
     return p;
 }
 //allocate mem_alloc of container i coded
@@ -90,7 +92,7 @@ default_allocator_constructor()
         exit(1);
     }
 #else 
-    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,0);
+    allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,1);
     allocator_ctr_init(allocator, 0, 64, 0);
 #endif
     global_allocator_default = allocator;

@@ -54,6 +54,7 @@ static int __init(allocator_t *allocator)
     struct list_head **free_slabs,**used_slabs;
     int slab_array_max_num;
     int i;
+    uint8_t lock_type = 0;
 
     if (!ctr_alloc->slab_array_max_num) {
         ctr_alloc->slab_array_max_num = SLAB_ARRAY_MAX_NUM;
@@ -89,13 +90,13 @@ static int __init(allocator_t *allocator)
         ctr_alloc->free_slabs = used_slabs;
     }
 
-    dbg_str(ALLOC_DETAIL,"lock_type=%d",allocator->lock_type);
+    dbg_str(ALLOC_DETAIL,"lock_type=%d",lock_type);
     for (i = 0; i < slab_array_max_num; i++) {
-        slab_init_head_list(&used_slabs[i],allocator->lock_type);
-        slab_init_head_list(&free_slabs[i],allocator->lock_type);
+        slab_init_head_list(&used_slabs[i],lock_type);
+        slab_init_head_list(&free_slabs[i],lock_type);
     }
 
-    mempool_init_head_list(&ctr_alloc->pool,allocator->lock_type);
+    mempool_init_head_list(&ctr_alloc->pool,lock_type);
     mempool = mempool_create_list(allocator);
     if (mempool == NULL) {
         ctr_alloc->pool = NULL;
@@ -103,7 +104,7 @@ static int __init(allocator_t *allocator)
         mempool_attach_list(&mempool->list_head,ctr_alloc->pool);
     }
 
-    mempool_init_head_list(&ctr_alloc->empty_pool,allocator->lock_type);
+    mempool_init_head_list(&ctr_alloc->empty_pool,lock_type);
 
     return 0;
 }
@@ -137,7 +138,7 @@ static void *alloc_normal_slab(allocator_t *allocator,uint32_t size)
         if (!(slab_list = mempool_alloc_slab_list(allocator,size))) {  
             dbg_str(ALLOC_ERROR,"allocator slab list err");
             return NULL;
-        } 
+        }
     }
 
     slab_attach_list_to_used_slabs(allocator,&slab_list->list_head,size);
@@ -153,6 +154,7 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
     ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
     void *mem;
 
+    dbg_str(ALLOC_DETAIL,"ctr alloc begin");
     index = slab_get_slab_index(allocator,size);
     /*
      *dbg_str(ALLOC_DETAIL,"allocator mem,size=%d,index=%d,slab_array_max_num=%d",
@@ -165,9 +167,8 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
         mem = alloc_normal_slab(allocator,size);
     }
 
-    dbg_str(ALLOC_IMPORTANT,
-            "ctr_alloc allocator mem,request size=%d,mem addr=%p,"
-            "allocator using count=%d, mempool_capacity=%d",size,mem,allocator->alloc_count, ctr_alloc->mempool_capacity);
+    dbg_str(ALLOC_IMPORTANT,"ctr_alloc allocator mem,request size=%d,mem addr=%p,"
+            "allocator using count=%d",size,mem,allocator->alloc_count);
 
     return mem;
 }
@@ -217,6 +218,7 @@ static void __free(allocator_t *allocator,void *addr)
     uint32_t size;
     uint32_t index;
 
+    dbg_str(ALLOC_DETAIL,"ctr free begin");
     if (addr == NULL) {
         dbg_str(ALLOC_DETAIL,"release addr is NULL");
         return;
@@ -235,8 +237,8 @@ static void __free(allocator_t *allocator,void *addr)
         free_normal_slab(allocator,slab_list);
     }
 
-    dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p,size =%d, allocator using count=%d",
-            addr,slab_list->data_size, allocator->alloc_count);
+    dbg_str(ALLOC_IMPORTANT,"free ctr mem,free add=%p, allocator using count=%d",
+            addr, allocator->alloc_count);
 
 }
 
