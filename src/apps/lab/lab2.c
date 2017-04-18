@@ -48,6 +48,10 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
+int test()
+{
+}
+
 int lab2()
 {
     /*
@@ -75,4 +79,9 @@ int lab2()
      *int b= 25;
      *dbg_str(DBG_DETAIL,"a * b=%d", (int)(a*b));
      */
+    int ret;
+
+    ret = test();
+
+    printf("ret=%d\n",ret);
 }

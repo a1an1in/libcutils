@@ -22,7 +22,10 @@ static void applying_state_timeoutworkfunc_cb(void *arg)
     tmr_user_t *timer = (tmr_user_t *)arg;
     state_machine_t *s = (state_machine_t *)timer->opaque;
     dbg_str(SM_DETAIL,"applying_state_timeout");
-    state_machine_change_state(s, 4);
+    /*
+     *state_machine_change_state(s, 4);
+     */
+    state_machine_change_state_force(s, 3);
 }
 
 static void applying_state_changing_workfunc_cb(state_machine_t *s,void *opaque)
@@ -32,6 +35,10 @@ static void applying_state_changing_workfunc_cb(state_machine_t *s,void *opaque)
 
 static void waiting_state_timeoutworkfunc_cb(void *arg)
 {
+    tmr_user_t *timer = (tmr_user_t *)arg;
+    state_machine_t *s = (state_machine_t *)timer->opaque;
+
+    state_machine_change_state_force(s, 3);
     dbg_str(SM_DETAIL,"waiting_state_timeout");
 }
 
@@ -85,6 +92,9 @@ void test_state_machine()
     printf("test state_machine\n");
 
     s = state_machine(allocator, entry_config,NULL);
+    /*
+     *state_machine_change_state_force(s, 1);
+     */
     state_machine_change_state(s, 1);
 
 }

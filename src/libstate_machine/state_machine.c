@@ -221,6 +221,7 @@ state_machine_change_state(state_machine_t *s, int state)
 void
 state_machine_change_state_force(state_machine_t *s, int state)
 {
+#if 0
     char command = 'c';//c --> change state
     state_entry_t *e,*le;;
 
@@ -235,6 +236,23 @@ state_machine_change_state_force(state_machine_t *s, int state)
     if (write(s->write_notify_fd, &command, 1) != 1) {
         dbg_str(SM_WARNNING,"concurrent_master_notify_slave,write pipe err");
     }
+#else
+    char command = 'c';//c --> change state
+    state_entry_t *e,*le;;
+
+    s->last_state    = s->current_state;
+    s->current_state = state;
+
+    le = (state_entry_t *)vector_get(s->vector,s->last_state);
+    state_machine_stop_entry_timer(s,s->last_state);
+
+    e = (state_entry_t *)vector_get(s->vector,s->current_state);
+    state_machine_setup_entry_timer(s,s->current_state);
+
+    dbg_str(SM_SUC,"state_machine_change_state,from %s to %s",le->entry_name,e->entry_name);
+
+    e->action_callback(s,s->base);
+#endif
 }
 
 state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base)
