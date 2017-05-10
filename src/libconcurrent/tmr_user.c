@@ -41,10 +41,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include <event2/event-config.h>
-#include <event2/event.h>
-#include <event2/event_struct.h>
-#include <event2/util.h>
+#include <libevent/event2/event-config.h>
+#include <libevent/event2/event.h>
+#include <libevent/event2/event_struct.h>
+#include <libevent/event2/util.h>
 
 #include <libdbg/debug.h>
 #include <libconcurrent/concurrent.h>

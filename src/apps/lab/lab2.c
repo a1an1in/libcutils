@@ -82,6 +82,7 @@ int lab2()
     int ret;
 
     ret = test();
+    while(1);
 
     printf("ret=%d\n",ret);
 }

@@ -270,16 +270,16 @@ static int args_process_lab(void *base,int argc,char **argv)
     /*
      *lab();
      */
-    lab2();
+    /*
+     *lab2();
+     */
     /*
      *lab3();
      */
     /*
      *lab4();
      */
-     /*
-      *lab5();
-      */
+     lab5();
     dbg_str(DBG_DETAIL,"test end");
     return 0;
 }
@@ -370,7 +370,15 @@ static int args_process_test_miscellany_net(void *base,int argc,char **argv)
     return 0;
 }
 
+static int args_process_test_inet_wireless(void *base,int argc,char **argv)
+{
+    test_inet_wireless(argv[0]);
+
+    return 1;
+}
+
 static cmd_config_t cmds[]={
+    {"iw", args_process_test_inet_wireless,1, "test", "N/A","miscellany_net"},
     {"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
     {"as", args_process_test_as,0, "test", "N/A","array_stack"},
     {"buss_dbg", args_process_bus_service_debug,0, "app", "N/A","bus"},
