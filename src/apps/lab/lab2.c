@@ -48,41 +48,14 @@
 #include <libipc/net/unix_client.h>
 #include <sys/un.h>
 
-int test()
+void segment_fault(void)
 {
+    unsigned char *ptr = 0x00;
+    *ptr = 0x1;
 }
 
 int lab2()
 {
-    /*
-     *char p[4][4];
-     */
-
-    /*
-     *p = malloc(sizeof(char *) * 4 * 4);
-     */
-
-    /*
-     *memset(p, 0, sizeof(char *) * 4 * 4);
-     */
-    /*
-     *p[0][0] = 0;
-     *p[0][1] = (void *)1;
-     */
-    /*
-     *int (*p)[2][4];
-     *dbg_str(DBG_DETAIL, "p = %p", p);
-     *dbg_str(DBG_DETAIL, "p + 1 = %p, *(p + 1) =%p", p + 1, *(p + 1));
-     */
-    /*
-     *float a =0.5;
-     *int b= 25;
-     *dbg_str(DBG_DETAIL,"a * b=%d", (int)(a*b));
-     */
-    int ret;
-
-    ret = test();
+    segment_fault();
     while(1);
-
-    printf("ret=%d\n",ret);
 }

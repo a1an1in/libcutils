@@ -26,13 +26,13 @@ export INCLUDES = -I $(PROJECT_PATH)/src/include
 #export CC = $(CC_PATH)/mips-openwrt-linux-uclibc-gcc
 #export LD = $(CC_PATH)/mips-openwrt-linux-uclibc-ld
 
-export CC_PATH = /home/alan/workspace/HOS-R30/HOS-R30/staging_dir/toolchain-arm_cortex-a7_gcc-5.2.0_uClibc-1.0.14_eabi/bin
-export STAGING_DIR=$(CC_PATH):$STAGING_DIR
-export CC = $(CC_PATH)/arm-openwrt-linux-gcc
-export LD = $(CC_PATH)/arm-openwrt-linux-ld
+#export CC_PATH = /home/alan/workspace/HOS-R30/HOS-R30/staging_dir/toolchain-arm_cortex-a7_gcc-5.2.0_uClibc-1.0.14_eabi/bin
+#export STAGING_DIR=$(CC_PATH):$STAGING_DIR
+#export CC = $(CC_PATH)/arm-openwrt-linux-gcc
+#export LD = $(CC_PATH)/arm-openwrt-linux-ld
 
-#export CC = gcc
-#export LD = ld
+export CC = gcc
+export LD = ld
 
 #include makefile funtions
 include ./mk/Makefile.funcs

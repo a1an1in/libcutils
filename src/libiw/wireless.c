@@ -387,17 +387,20 @@ int get_txpower(int skfd, char *if_name,int *txpower)
     return 0;
 }
 
-int test_inet_wireless(char *ifname)
+int test_inet_wireless(char *ifname, void *arg)
 {
     int skfd = 0;
 
-    dbg_str(DBG_DETAIL,"ifname:%s",ifname);
+    dbg_str(DBG_DETAIL,"ifname:%s, arg:%s",ifname, arg);
 
     skfd = iw_sockets_open();
     /*
      *set_maccmd(skfd, ifname,2);
      */
-    set_bandwidth(skfd, ifname, 7);
+    /*
+     *set_bandwidth(skfd, ifname, 7);
+     */
+    set_essid(skfd, ifname, arg);
     iw_sockets_close(skfd);
 
 }
