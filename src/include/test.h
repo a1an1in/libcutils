@@ -45,6 +45,6 @@ extern int lab();
 extern int lab2();
 extern void args_print_help_test_info(args_processor_t *p);
 extern int test_json(void);
-extern int test_inet_wireless(char *ifname, void *arg);
+extern int test_inet_wireless(int argc, char **argv);
 
 #endif

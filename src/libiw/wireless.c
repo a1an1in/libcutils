@@ -387,9 +387,14 @@ int get_txpower(int skfd, char *if_name,int *txpower)
     return 0;
 }
 
-int test_inet_wireless(char *ifname, void *arg)
+/*
+ *int test_inet_wireless(char *ifname, void *arg)
+ */
+int test_inet_wireless(int argc, char **argv)
 {
     int skfd = 0;
+    char *ifname = argv[0];
+    void *arg = argv[1];
 
     dbg_str(DBG_DETAIL,"ifname:%s, arg:%s",ifname, arg);
 

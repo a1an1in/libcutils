@@ -372,7 +372,7 @@ static int args_process_test_miscellany_net(void *base,int argc,char **argv)
 
 static int args_process_test_inet_wireless(void *base,int argc,char **argv)
 {
-    test_inet_wireless(argv[0], argv[1]);
+    test_inet_wireless(argc, argv);
 
     return 2;
 }
