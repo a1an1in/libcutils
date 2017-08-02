@@ -257,19 +257,19 @@ static void __info(allocator_t *allocator)
     int slab_array_max_num = allocator->priv.ctr_alloc.slab_array_max_num;
 
     printf("##########################printf allocator mem info##########################\n");
-    dbg_str(DBG_DETAIL,"the mem using, count=%d",allocator->alloc_count);
-    dbg_str(DBG_DETAIL,"query pool:");
+    dbg_str(ALLOC_VIP,"the mem using, count=%d",allocator->alloc_count);
+    dbg_str(ALLOC_VIP,"query pool:");
     mempool_print_list_for_each(allocator->priv.ctr_alloc.pool);
 
-    dbg_str(DBG_DETAIL,"query empty_pool:");
+    dbg_str(ALLOC_VIP,"query empty_pool:");
     mempool_print_list_for_each(allocator->priv.ctr_alloc.empty_pool);
 
-    dbg_str(DBG_DETAIL,"query free_slabs:");
+    dbg_str(ALLOC_VIP,"query free_slabs:");
     for(i = 0; i < slab_array_max_num; i++) {
         slab_print_list_for_each(allocator->priv.ctr_alloc.free_slabs[i],i);
     }
 
-    dbg_str(DBG_DETAIL,"query used_slabs:");
+    dbg_str(ALLOC_VIP,"query used_slabs:");
     for(i = 0; i < slab_array_max_num; i++) {
         slab_print_list_for_each(allocator->priv.ctr_alloc.used_slabs[i],i);
     }

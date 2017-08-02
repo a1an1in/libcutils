@@ -152,19 +152,23 @@ void* test_thread1_func_cb(void *arg)
     allocator = allocator_get_default_alloc();
 
     while(1){
-        dbg_str(ALLOC_SUC,"test_thread1_func_cb begin");
+        /*
+         *dbg_str(ALLOC_SUC,"test_thread1_func_cb begin");
+         */
 
         p1 = allocator_mem_alloc(allocator,7);
-        allocator_mem_tag(allocator,p1, "p1");
+        allocator_mem_tag(allocator,p1, "t1-p1");
         p2 = allocator_mem_alloc(allocator,8);
-        allocator_mem_tag(allocator,p2, "p2");
+        allocator_mem_tag(allocator,p2, "t1-p2");
         p3 = allocator_mem_alloc(allocator,20);
-        allocator_mem_tag(allocator,p3, "p3");
+        allocator_mem_tag(allocator,p3, "t1-p3");
         allocator_mem_free(allocator, p1);
         allocator_mem_free(allocator, p2);
         allocator_mem_free(allocator, p3);
 
-        dbg_str(ALLOC_SUC,"test_thread1_func_cb end");
+        /*
+         *dbg_str(ALLOC_SUC,"test_thread1_func_cb end");
+         */
     }
 }                                                                
 
@@ -177,14 +181,20 @@ void* test_thread2_func_cb(void *arg)
     allocator = allocator_get_default_alloc();
 
     while(1){
-        dbg_str(ALLOC_SUC,"test_thread2_func_cb begin");
+        /*
+         *dbg_str(ALLOC_SUC,"test_thread2_func_cb begin");
+         */
 
         p1 = allocator_mem_alloc(allocator,7);
+        allocator_mem_tag(allocator,p1, "t3-p1");
         allocator_mem_free(allocator, p1);
         p2 = allocator_mem_alloc(allocator,8);
+        allocator_mem_tag(allocator,p2, "t3-p2");
         allocator_mem_free(allocator, p2);
 
-        dbg_str(ALLOC_SUC,"test_thread2_func_cb end");
+        /*
+         *dbg_str(ALLOC_SUC,"test_thread2_func_cb end");
+         */
     }
 }                                                                
 
@@ -197,19 +207,27 @@ void* test_thread3_func_cb(void *arg)
     allocator = allocator_get_default_alloc();
 
     while(1){
-        dbg_str(ALLOC_SUC,"test_thread3_func_cb begin");
+        /*
+         *dbg_str(ALLOC_SUC,"test_thread3_func_cb begin");
+         */
 
         p1 = allocator_mem_alloc(allocator,7);
+        allocator_mem_tag(allocator,p1, "t3-p1");
         allocator_mem_free(allocator, p1);
 
-        dbg_str(ALLOC_SUC,"test_thread3_func_cb end");
+        /*
+         *dbg_str(ALLOC_SUC,"test_thread3_func_cb end");
+         */
     }
 }                                                                
 
 void test_ctr_alloc()
 {
+    allocator_t *allocator;
     pthread_t tid1, tid2, tid3;                                     
     int ret;                                                                     
+
+    allocator = allocator_get_default_alloc();
 
     ret = pthread_create(&tid1,NULL,test_thread1_func_cb,NULL);                                     
     if(ret < 0){                                                                 
@@ -228,7 +246,10 @@ void test_ctr_alloc()
         dbg_str(DBG_ERROR,"pthread_create");                                     
         return ;                                     
     }                                                  
-    pause();
+    /*
+     *pause();
+     */
+    sleep(5);
 }
 
 #endif

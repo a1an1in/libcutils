@@ -129,12 +129,12 @@ void mempool_print_head_list(struct list_head *hl_head)
 {
     ctr_mempool_head_list_t *head_list;
     head_list = container_of(hl_head,ctr_mempool_head_list_t,list_head);
-    dbg_str(ALLOC_DETAIL,"mempool_print_head_list:mempool count:%d",head_list->count);
+    dbg_str(ALLOC_VIP,"mempool_print_head_list:mempool count:%d",head_list->count);
 }
 
 void mempool_print_list(ctr_mempool_t *mempool_list)
 {
-    dbg_str(ALLOC_DETAIL,"mempool info,start addr:%p,depth:%d,min_depth:%d,"
+    dbg_str(ALLOC_VIP,"mempool info,start addr:%p,depth:%d,min_depth:%d,"
             "mempool_capacity=%d,list_head_addr:%p",
             mempool_list->start,
             mempool_list->depth,
