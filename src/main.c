@@ -122,7 +122,6 @@ static int args_process_test_unix_udp_client_recieve(void *base,int argc,char **
 static int args_process_test_state_machine(void *base,int argc,char **argv)
 {
     test_state_machine();
-    pause();
     return 0;
 }
 

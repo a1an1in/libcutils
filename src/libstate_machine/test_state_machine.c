@@ -97,4 +97,11 @@ void test_state_machine()
      */
     state_machine_change_state(s, 1);
 
+    /*
+     *pause();
+     */
+    sleep(10);
+
+    state_machine_destroy(s);
+
 }

@@ -132,6 +132,7 @@ void
 state_machine_register_state_entry(state_machine_t *s, state_entry_t *e)
 {
     vector_push_back(s->vector,e);
+    allocator_mem_free(s->allocator, e);
 
     return;
 }
@@ -192,7 +193,7 @@ void
 state_machine_change_state(state_machine_t *s, int state)
 {
     char command = 'c';//c --> change state
-    state_entry_t *e,*le;;
+    state_entry_t *e,*le;
 
     if (state == s->current_state) return;
 
@@ -238,7 +239,7 @@ state_machine_change_state_force(state_machine_t *s, int state)
     }
 #else
     char command = 'c';//c --> change state
-    state_entry_t *e,*le;;
+    state_entry_t *e,*le;
 
     s->last_state    = s->current_state;
     s->current_state = state;
@@ -279,5 +280,32 @@ state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *con
     }
 
     return s;
+}
+
+int state_machine_destroy_entry_timers(state_machine_t *s)
+{
+    vector_t *vector = s->vector;
+	vector_pos_t pos,next;
+    state_entry_t *e;
+
+	for(	vector_begin(vector, &pos), vector_pos_next(&pos,&next);
+			!vector_pos_equal(&pos,&vector->end);
+			pos = next, vector_pos_next(&pos,&next))
+	{
+        e = (state_entry_t *)vector_pos_get_pointer(&pos);
+        if (e != NULL) {
+            if (e->timer != NULL)
+                tmr_user_destroy(e->timer);
+        }
+	}
+}
+
+
+
+state_machine_t *state_machine_destroy(state_machine_t * s)
+{
+    state_machine_destroy_entry_timers(s);
+    vector_destroy(s->vector);
+    allocator_mem_free(s->allocator,s);
 }
 
