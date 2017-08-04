@@ -96,14 +96,41 @@ err_alloc_admin:
     return NULL;
 }
 
+void pa_admin_destroy_pa(struct hash_map_s *hmap)
+{
+	hash_map_pos_t pos,next;
+    uint8_t *addr_p;
+    struct protocol_analyzer_s *pa;
+    uint64_t addr = 0;
+    uint8_t i;
+
+	for(	hash_map_begin(hmap,&pos),hash_map_pos_next(&pos,&next); 
+			!hash_map_pos_equal(&pos,&hmap->end);
+			pos = next,hash_map_pos_next(&pos,&next)){
+        addr_p = (uint8_t *)hash_map_pos_get_pointer(&pos);
+
+        for(i = 0; i < sizeof(pa); i++){
+            addr = (addr << 8 | addr_p[i]);
+        }
+        pa = (struct protocol_analyzer_s *)addr;
+        pa_destroy_protocol_analyzer(pa);
+    }
+}
+
 void pa_admin_destroy(pa_admin_t *admin)
 {
     allocator_t *allocator = admin->allocator;;
 
     dbg_str(DBG_VIP,"pa_admin_destroy");
     destroy_pair(admin->pair);
+
+    pa_admin_destroy_pa(admin->hash_map);
+
     hash_map_destroy(admin->hash_map);
+
+    pfs_destroy_protocol_format_set(admin->pfs);
     allocator_mem_free(allocator,admin);
+
 }
 /*
  *向 pa_admin注册协议解析器
@@ -126,6 +153,7 @@ void pa_admin_add_protocol_analyzer(pa_admin_t *admin,void *key,struct protocol_
     make_pair(admin->pair,key,(void *)addr_buffer);
     hash_map_insert_data(admin->hash_map,admin->pair->data);
 }
+
 /*
  *通过key，索引想用的解析器
  * */
@@ -219,9 +247,6 @@ void test_pa_admin()
     }else{
         dbg_str(DBG_DETAIL,"not find pa");
     }
-    /*
-     *dbg_str(DBG_DETAIL,"pfs_destroy_protocol_format_set");
-     *pfs_destroy_protocol_format_set(pfs_p);
-     */
 
+    pa_admin_destroy(pa_admin);
 }

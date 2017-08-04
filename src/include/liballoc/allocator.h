@@ -38,8 +38,10 @@ extern allocator_module_t allocator_modules[ALLOCATOR_TYPE_LAST];
 allocator_t *allocator_create(uint8_t allocator_type,uint8_t lock_type);
 void allocator_destroy(allocator_t * alloc);
 void allocator_ctr_init(allocator_t * alloc, uint32_t slab_array_max_num, uint32_t data_min_size, uint32_t mempool_capacity);
+static inline void allocator_mem_tag(allocator_t * alloc,void *addr, void *tag);
 
-    static inline void *
+#if 0
+static inline void *
 allocator_mem_alloc(allocator_t * alloc,uint32_t size)
 {
     void *ret = NULL;
@@ -50,8 +52,31 @@ allocator_mem_alloc(allocator_t * alloc,uint32_t size)
 
     return ret;
 }
+#else
+static inline void *
+__allocator_mem_alloc(allocator_t * alloc,uint32_t size)
+{
+    void *ret = NULL;
 
-    static inline void 
+    sync_lock(&alloc->head_lock,NULL);
+    ret = allocator_modules[alloc->allocator_type].alloc_ops.alloc(alloc,size);
+    sync_unlock(&alloc->head_lock);
+
+    return ret;
+}
+
+#define allocator_mem_alloc(alloc, size) ({\
+    void *ret = NULL;\
+    ret =  __allocator_mem_alloc(alloc, size);\
+    if (ret != NULL) {\
+        allocator_mem_tag(alloc,ret, __func__);\
+    }\
+    ret;\
+})
+
+#endif
+
+static inline void 
 allocator_mem_free(allocator_t * alloc,void *addr)
 {
     sync_lock(&alloc->head_lock,NULL);
@@ -59,7 +84,7 @@ allocator_mem_free(allocator_t * alloc,void *addr)
     sync_unlock(&alloc->head_lock);
 }
 
-    static inline void 
+static inline void 
 allocator_mem_tag(allocator_t * alloc,void *addr, void *tag)
 {
     sync_lock(&alloc->head_lock,NULL);
@@ -69,7 +94,7 @@ allocator_mem_tag(allocator_t * alloc,void *addr, void *tag)
     sync_unlock(&alloc->head_lock);
 }
 
-    static inline void 
+static inline void 
 allocator_mem_info(allocator_t * alloc)
 {
     if(allocator_modules[alloc->allocator_type].alloc_ops.info)
