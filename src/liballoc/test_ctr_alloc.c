@@ -104,12 +104,13 @@ void test_ctr_alloc()
 }
 #endif 
 
-#if 0
+#if 1
 
 void test_ctr_alloc()
 {
     allocator_t *allocator;
-    void *p1 ,*p2,*p3, *p4;
+    void *p1 ,*p2,*p3, *p4, *p5;
+    void *array[20];
     uint32_t size = 8;
 
 #if 0
@@ -122,18 +123,32 @@ void test_ctr_alloc()
     dbg_str(ALLOC_SUC,"ctr alloc test begin");
 
     p1 = allocator_mem_alloc(allocator,7);
-    allocator_mem_tag(allocator,p1, "p1");
     p2 = allocator_mem_alloc(allocator,8);
-    allocator_mem_tag(allocator,p2, "p2");
     p3 = allocator_mem_alloc(allocator,20);
-    allocator_mem_tag(allocator,p3, "p3");
+    allocator_mem_free(allocator, p1);
+    allocator_mem_free(allocator, p2);
     allocator_mem_free(allocator, p3);
-    /*
-     *p4 = allocator_mem_alloc(allocator,20);
-     *allocator_mem_tag(allocator,p4, "p4");
-     */
 
-    allocator_mem_info(allocator);
+    dbg_str(ALLOC_DETAIL,"batch alloc");
+    int i;
+    for(size = 8,i = 0; i< 20; i++,size += 8){
+        array[i] = allocator_mem_alloc(allocator,size);
+    }
+
+    dbg_str(ALLOC_DETAIL,"batch free");
+    for(i = 0; i< 20; i++){
+        allocator_mem_free(allocator, array[i]);
+    }
+
+    dbg_str(ALLOC_VIP,"alloc huge alloc");
+    p4 = allocator_mem_alloc(allocator,1024 * 2);
+    p5 = allocator_mem_alloc(allocator,1024 * 3);
+    /*
+     *allocator_mem_free(allocator, p4);
+     */
+    /*
+     *allocator_mem_info(allocator);
+     */
 
     /*
      *allocator_destroy(allocator);

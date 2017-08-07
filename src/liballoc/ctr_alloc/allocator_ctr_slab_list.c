@@ -172,15 +172,26 @@ void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_hea
 
 void slab_print_list(ctr_slab_t *slab_list,uint16_t slab_index)
 {
-    dbg_str(ALLOC_VIP,
-            "slab info,slab index =%d\t,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,"
-            "slab_start:%p\t,slab_end:%p, tag:%s",
-            slab_index,
-            slab_list->size,slab_list->data_size,
-            slab_list->slab_size,
-            slab_list,
-            (uint8_t*)slab_list +  slab_list->size + sizeof(ctr_slab_t),
-            slab_list->tag);
+    if (slab_index != 0xffff) {
+        dbg_str(ALLOC_VIP,
+                "slab info,slab index =%d\t,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,"
+                "slab_start:%p\t,slab_end:%p, tag:%s",
+                slab_index,
+                slab_list->size,slab_list->data_size,
+                slab_list->slab_size,
+                slab_list,
+                (uint8_t*)slab_list +  slab_list->size + sizeof(ctr_slab_t),
+                slab_list->tag);
+    } else {
+        dbg_str(ALLOC_VIP,
+                "slab info,alloc size=%d\t,req_size =%d\t,slab_size=%d\t,"
+                "slab_start:%p\t,slab_end:%p, tag:%s",
+                slab_list->size,slab_list->data_size,
+                slab_list->slab_size,
+                slab_list,
+                (uint8_t*)slab_list +  slab_list->size + sizeof(ctr_slab_t),
+                slab_list->tag);
+    }
 }
 
 void slab_print_list_for_each(struct list_head *hl_head, uint16_t slab_index)
@@ -197,4 +208,24 @@ void slab_print_list_for_each(struct list_head *hl_head, uint16_t slab_index)
         slab_print_list(slab_list,slab_index);
     }
     sync_unlock(&head_list->head_lock);
+}
+
+int slab_destroy_used_huge_slabs(struct list_head *hl_head)
+{
+    ctr_slab_head_list_t *head_list;
+    ctr_slab_t *slab_list;
+
+    head_list = container_of(hl_head,ctr_slab_head_list_t,list_head);
+    sync_lock(&head_list->head_lock,NULL);
+    while (hl_head->next != hl_head){
+        slab_list = container_of(hl_head->next,ctr_slab_t,list_head);
+        list_del(hl_head->next);
+        dbg_str(ALLOC_VIP,"free huge slab leaked, size=%d",slab_list->size);
+        free(slab_list);
+    }
+    sync_unlock(&head_list->head_lock);
+
+    slab_release_head_list(hl_head);
+
+    return 0;
 }

@@ -44,8 +44,9 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "libdbg/debug.h"
+#include <liballoc/allocator.h>
 #include "liballoc/inc_files.h"
+#include <libdbg/debug.h>
 
 static int __init(allocator_t *allocator)
 {
@@ -96,6 +97,8 @@ static int __init(allocator_t *allocator)
         slab_init_head_list(&free_slabs[i],lock_type);
     }
 
+    slab_init_head_list(&ctr_alloc->used_huge_slabs,lock_type);
+
     mempool_init_head_list(&ctr_alloc->pool,lock_type);
     mempool = mempool_create_list(allocator);
     if (mempool == NULL) {
@@ -113,6 +116,8 @@ static void *alloc_huge_slab(allocator_t *allocator,uint32_t size)
 {
     void *mem = NULL;
     ctr_slab_t *slab_list;
+    struct list_head *used_huge_slabs = allocator->priv.ctr_alloc.used_huge_slabs;
+
     dbg_str(ALLOC_DETAIL,"alloc_huge_slab");
     allocator->alloc_count++;
 
@@ -125,6 +130,8 @@ static void *alloc_huge_slab(allocator_t *allocator,uint32_t size)
     slab_list->size      = size;
     slab_list->slab_size = size + sizeof(ctr_slab_t);
     slab_list->stat_flag = 1;
+
+    slab_attach_list(&slab_list->list_head,used_huge_slabs);
 
     return slab_list->data;
 }
@@ -175,8 +182,12 @@ static void *__alloc(allocator_t *allocator,uint32_t size)
 
 static int free_huge_slab(allocator_t *allocator,ctr_slab_t *slab_list)
 {
+    struct list_head *used_huge_slabs = allocator->priv.ctr_alloc.used_huge_slabs;
+
+    slab_detach_list(&slab_list->list_head,used_huge_slabs);
     free(slab_list);
     allocator->alloc_count--;
+    dbg_str(ALLOC_SUC,"free_huge_slab, size=%d",slab_list->size);
 
     return 0;
 }
@@ -273,15 +284,19 @@ static void __info(allocator_t *allocator)
     for(i = 0; i < slab_array_max_num; i++) {
         slab_print_list_for_each(allocator->priv.ctr_alloc.used_slabs[i],i);
     }
+
+    dbg_str(ALLOC_VIP,"query used_huge_slabs:");
+    slab_print_list_for_each(allocator->priv.ctr_alloc.used_huge_slabs,0xffff);
     printf("##############################################################################\n");
 }
 
 static void __destroy(allocator_t *allocator)
 {
     int i;
-    int slab_array_max_num        = allocator->priv.ctr_alloc.slab_array_max_num;
-    struct list_head **free_slabs = allocator->priv.ctr_alloc.free_slabs;
-    struct list_head **used_slabs = allocator->priv.ctr_alloc.used_slabs;
+    int slab_array_max_num            = allocator->priv.ctr_alloc.slab_array_max_num;
+    struct list_head **free_slabs     = allocator->priv.ctr_alloc.free_slabs;
+    struct list_head **used_slabs     = allocator->priv.ctr_alloc.used_slabs;
+    struct list_head *used_huge_slabs = allocator->priv.ctr_alloc.used_huge_slabs;
 
     dbg_str(ALLOC_DETAIL,"destroy pool");
     mempool_destroy_lists(allocator->priv.ctr_alloc.pool);
@@ -295,6 +310,9 @@ static void __destroy(allocator_t *allocator)
     }
     free(used_slabs);
     free(free_slabs);
+
+    dbg_str(ALLOC_DETAIL,"destroy used_huge_slabs");
+    slab_destroy_used_huge_slabs(used_huge_slabs);
 }
 
 int allocator_ctr_alloc_register() {

@@ -65,6 +65,7 @@ typedef struct ctr_alloc_s{
 	uint32_t data_min_size;
 	struct list_head *empty_pool;
 	struct list_head *pool;
+	struct list_head *used_huge_slabs;
 	struct list_head **free_slabs;
 	struct list_head **used_slabs;
 }ctr_alloc_t;

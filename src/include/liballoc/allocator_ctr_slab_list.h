@@ -29,5 +29,6 @@ void slab_detach_list_from_used_slabs(allocator_t *alloc,struct list_head *del_h
 void slab_attach_list_to_used_slabs(allocator_t *alloc,struct list_head *new_head,uint32_t size);
 void slab_attach_list_to_free_slabs(allocator_t *alloc,struct list_head *new_head,uint32_t size);
 uint32_t slab_get_slab_index(allocator_t *alloc,uint32_t size);
+int slab_destroy_used_huge_slabs(struct list_head *hl_head);
 #endif
 
