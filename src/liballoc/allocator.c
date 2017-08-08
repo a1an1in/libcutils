@@ -93,7 +93,7 @@ default_allocator_constructor()
     }
 #else 
     allocator = allocator_create(ALLOCATOR_TYPE_CTR_MALLOC,1);
-    allocator_ctr_init(allocator, 0, 64, 0);
+    allocator_ctr_init(allocator, 0, 8, 0);
 #endif
     global_allocator_default = allocator;
 

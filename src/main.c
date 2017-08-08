@@ -266,21 +266,22 @@ static int args_process_test_gserver_of_inet(void *base,int argc,char **argv)
 static int args_process_lab(void *base,int argc,char **argv)
 {
     dbg_str(DBG_DETAIL,"test begin");
+
     /*
      *lab();
      */
-    lab2();
+    /*
+     *lab2();
+     */
     /*
      *lab3();
      */
-    /*
-     *lab4();
-     */
+    lab4(argc, argv);
      /*
       *lab5();
       */
     dbg_str(DBG_DETAIL,"test end");
-    return 0;
+    return 1;
 }
 
 static int args_process_help_test(void *base,int argc,char **argv)
@@ -388,7 +389,7 @@ static cmd_config_t cmds[]={
     {"blob", args_process_test_blob,0, "test", "N/A","bus"},
     {"pa_admin", args_process_test_pa_admin,0, "test", "N/A","help info"},
     {"help_test", args_process_help_test,0, "help", "N/A","help info"},
-    {"lab", args_process_lab,0, "test", "N/A","test simple code"},
+    {"lab", args_process_lab,1, "test", "N/A","test simple code"},
     {"general_inet_server", args_process_test_gserver_of_inet,0, "test", "N/A","test general server of inet tcp"},
     {"general_unix_server", args_process_test_gserver_of_unix,0, "test", "N/A","test general server of unix tcp"},
     {"general_unix_client_rcv", args_process_test_gclient_recv_of_unix_udp,0, "test", "N/A","test general client of unix udp"},

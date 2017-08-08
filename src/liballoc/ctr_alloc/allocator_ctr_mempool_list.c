@@ -209,12 +209,41 @@ void mempool_destroy_lists(struct list_head *hl_head)
     }
 }
 
+#if 0
+
 uint32_t get_real_alloc_mem_size(allocator_t *allocator,uint32_t size)
 {
     int data_min_size = allocator->priv.ctr_alloc.data_min_size;
 
     return (slab_get_slab_index(allocator,size) + 1 ) * data_min_size;
 }
+
+#else
+static inline uint32_t __pow(uint32_t x,uint32_t y)
+{
+
+    uint32_t pow_value = 1;
+    uint32_t i;
+    
+    for(i = 0;i < y; i++)
+        pow_value *= x;
+
+    return pow_value;
+}
+
+uint32_t get_real_alloc_mem_size(allocator_t *allocator,uint32_t size)
+{
+    int data_min_size = allocator->priv.ctr_alloc.data_min_size;
+    int index;
+
+    index = slab_get_slab_index(allocator,size);
+    /*
+     *dbg_str(DBG_DETAIL,"get_real_alloc_mem_size, index=%d, real_size=%d", index, __pow(2, index) * data_min_size);
+     */
+    return __pow(2, index) * data_min_size;
+}
+
+#endif
 
 ctr_mempool_t *
 mempool_find_appropriate_pool(allocator_t *allocator,uint32_t size)
@@ -256,7 +285,7 @@ mempool_alloc_slab_list(allocator_t *allocator,uint32_t size)
     ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
     ctr_slab_t *slab_list;
 
-    dbg_str(ALLOC_DETAIL,"mempool_alloc_slab_list");
+    dbg_str(ALLOC_DETAIL,"mempool_alloc_slab_list, size=%d", size);
 
     if (!(mempool_list = mempool_find_appropriate_pool(allocator,size))){
         dbg_str(ALLOC_DETAIL,"not find appropriate_pool,create a new pool");
@@ -282,6 +311,8 @@ mempool_alloc_slab_list(allocator_t *allocator,uint32_t size)
     slab_list->stat_flag = 1;
     slab_list->slab_size = slab_list->size + sizeof(ctr_slab_t);
 
+    dbg_str(ALLOC_DETAIL,"slab_list, size=%d, data_size=%d, slab_size=%d",
+            slab_list->size,  slab_list->data_size, slab_list->slab_size);
     assert(slab_list->size >= slab_list->data_size);
 
     /*

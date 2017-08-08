@@ -22,7 +22,7 @@
 #include "basic_types.h"
 #include "libdata_structure/list.h"
 
-#define SLAB_ARRAY_MAX_NUM 24
+#define SLAB_ARRAY_MAX_NUM 15 
 #define MEM_POOL_MAX_SIZE 1024*4
 #define MEM_POOL_MIN_DEPTH 8
 
@@ -50,9 +50,9 @@ typedef struct slab_head_list{
 
 typedef struct slab{
     char tag[20];
-	uint16_t size;
-	uint16_t data_size;
-	uint16_t slab_size;
+	uint32_t size;
+	uint32_t data_size;
+	uint32_t slab_size;
 	uint8_t stat_flag;
 	uint8_t *mem_addr;
 	struct list_head list_head;
