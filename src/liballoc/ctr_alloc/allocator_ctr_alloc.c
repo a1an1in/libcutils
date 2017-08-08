@@ -79,7 +79,7 @@ static int __init(allocator_t *allocator)
         /*
          *ctr_alloc->mempool_capacity = MEM_POOL_MAX_SIZE;
          */
-        ctr_alloc->mempool_capacity = __pow(2,ctr_alloc->slab_array_max_num) * ctr_alloc->data_min_size * 2;
+        ctr_alloc->mempool_capacity = __pow(2,ctr_alloc->slab_array_max_num) * ctr_alloc->data_min_size;
     }
     allocator->alloc_count = 0;
 
@@ -139,7 +139,7 @@ static void *alloc_huge_slab(allocator_t *allocator,uint32_t size)
     if (slab_list == NULL) {
         return NULL;
     }
-    dbg_str(ALLOC_WARNNING,"alloc_huge_slab, slab_list addr:%p", slab_list);
+    dbg_str(ALLOC_WARNNING,"alloc_huge_slab, size:%d, slab_list addr:%p", size, slab_list);
 
     slab_list->data_size = size;
     slab_list->size      = size;

@@ -22,7 +22,7 @@
 #include "basic_types.h"
 #include "libdata_structure/list.h"
 
-#define SLAB_ARRAY_MAX_NUM 15 
+#define SLAB_ARRAY_MAX_NUM 12 
 #define MEM_POOL_MAX_SIZE 1024*4
 #define MEM_POOL_MIN_DEPTH 8
 

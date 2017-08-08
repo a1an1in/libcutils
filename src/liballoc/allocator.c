@@ -105,13 +105,19 @@ default_allocator_destructor()
 {
     allocator_t *allocator = allocator_get_default_alloc();
 
-    ATTRIB_PRINT("destructor ATTRIB_PRIORITY_DEFAULT_ALLOCATOR=%d,default allocator destructor, alloc count =%d\n",
+    ATTRIB_PRINT("destructor ATTRIB_PRIORITY_DEFAULT_ALLOCATOR=%d, "
+                 "default allocator destructor, alloc count =%d\n",
                  ATTRIB_PRIORITY_DEFAULT_ALLOCATOR, 
                  allocator->alloc_count);
+
     if (allocator->alloc_count > 0) {
         allocator_mem_info(allocator);
-        dbg_str(DBG_WARNNING, "memory leak, there are %d mem allocs havn't been released!", allocator->alloc_count);
+        dbg_str(DBG_WARNNING,
+                "memory leak, there are %d mem allocs havn't been released! "
+                "if you use default allocator, I'll release for you.", 
+                allocator->alloc_count);
     }
+
     allocator_destroy(allocator);
 
     return;
