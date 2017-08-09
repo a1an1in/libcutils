@@ -194,11 +194,8 @@ void* test_thread1_func_cb(void *arg)
          */
 
         p1 = allocator_mem_alloc(allocator,7);
-        allocator_mem_tag(allocator,p1, "t1-p1");
         p2 = allocator_mem_alloc(allocator,8);
-        allocator_mem_tag(allocator,p2, "t1-p2");
         p3 = allocator_mem_alloc(allocator,20);
-        allocator_mem_tag(allocator,p3, "t1-p3");
         allocator_mem_free(allocator, p1);
         allocator_mem_free(allocator, p2);
         allocator_mem_free(allocator, p3);
@@ -223,10 +220,8 @@ void* test_thread2_func_cb(void *arg)
          */
 
         p1 = allocator_mem_alloc(allocator,7);
-        allocator_mem_tag(allocator,p1, "t3-p1");
         allocator_mem_free(allocator, p1);
         p2 = allocator_mem_alloc(allocator,8);
-        allocator_mem_tag(allocator,p2, "t3-p2");
         allocator_mem_free(allocator, p2);
 
         /*
@@ -249,7 +244,6 @@ void* test_thread3_func_cb(void *arg)
          */
 
         p1 = allocator_mem_alloc(allocator,7);
-        allocator_mem_tag(allocator,p1, "t3-p1");
         allocator_mem_free(allocator, p1);
 
         /*

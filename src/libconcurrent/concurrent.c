@@ -57,7 +57,6 @@ concurrent_ta_create(allocator_t *allocator)
         dbg_str(CONCURRENT_ERROR,"allocc concurrent task admin err");
         exit(1);
     }
-    allocator_mem_tag(allocator,task_admin, "task_admin");
     task_admin->allocator = allocator;
 
     return task_admin;
@@ -278,7 +277,6 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
         ret = -1;
         goto end;
     }
-    allocator_mem_tag(master->allocator,master->slave, "master->slave");
 
     master->snd_notify_fd = (int *)allocator_mem_alloc(master->allocator,
                             sizeof(int) * master->slave_amount);
@@ -287,7 +285,6 @@ int concurrent_master_create_slaves(concurrent_master_t *master)
         ret = -1;
         goto end;
     }
-    allocator_mem_tag(master->allocator,master->snd_notify_fd, "master->snd_notify_fd");
 
     for (i = 0; i < master->slave_amount; i++) {
         ret = __concurrent_master_create_slave(master, i);
@@ -318,7 +315,6 @@ concurrent_master_create(allocator_t *allocator)
     master->concurrent_slave_inited_flag  = 0;
     master->assignment_count              = 0;
 
-    allocator_mem_tag(allocator,master, "master");
     return master;
 }
 /**
@@ -567,7 +563,6 @@ concurrent_create(allocator_t *allocator)
         dbg_str(CONCURRENT_ERROR,"concurrent_create err");
         return NULL;
     }
-    allocator_mem_tag(allocator,c, "concurrent");
     c->allocator= allocator;
     dbg_str(CONCURRENT_DETAIL,"concurrent allocator=%p",allocator);
 
