@@ -48,18 +48,6 @@
 #include "liballoc/inc_files.h"
 #include <libdbg/debug.h>
 
-static inline uint32_t __pow(uint32_t x,uint32_t y)
-{
-
-    uint32_t pow_value = 1;
-    uint32_t i;
-    
-    for(i = 0;i < y; i++)
-        pow_value *= x;
-
-    return pow_value;
-}
-
 static int __init(allocator_t *allocator)
 {
     ctr_alloc_t *ctr_alloc = &allocator->priv.ctr_alloc;
@@ -79,7 +67,7 @@ static int __init(allocator_t *allocator)
         /*
          *ctr_alloc->mempool_capacity = MEM_POOL_MAX_SIZE;
          */
-        ctr_alloc->mempool_capacity = __pow(2,ctr_alloc->slab_array_max_num) * ctr_alloc->data_min_size;
+        ctr_alloc->mempool_capacity = ____pow(2,ctr_alloc->slab_array_max_num) * ctr_alloc->data_min_size;
     }
     allocator->alloc_count = 0;
 

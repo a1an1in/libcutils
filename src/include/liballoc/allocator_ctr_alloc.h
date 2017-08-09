@@ -72,4 +72,16 @@ typedef struct ctr_alloc_s{
 
 int allocator_ctr_alloc_register();
 
+static inline uint32_t ____pow(uint32_t x,uint32_t y)
+{
+
+    uint32_t pow_value = 1;
+    uint32_t i;
+    
+    for(i = 0;i < y; i++)
+        pow_value *= x;
+
+    return pow_value;
+}
+
 #endif

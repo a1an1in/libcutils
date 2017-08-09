@@ -102,9 +102,8 @@ void test_ctr_alloc()
     allocator_destroy(allocator);
     dbg_str(ALLOC_DETAIL,"test ctr alloc end");
 }
-#endif 
 
-#if 1
+#elif 1
 
 void test_ctr_alloc()
 {
@@ -119,7 +118,7 @@ void test_ctr_alloc()
     allocator_ctr_init(allocator, 0, 0, 1024);
 #else
     allocator = allocator_get_default_alloc();
-#endif;
+#endif
 
     dbg_str(ALLOC_SUC,"ctr alloc test begin");
 
@@ -135,6 +134,7 @@ void test_ctr_alloc()
         int i;
         for(size = 8,i = 0; i< 12; i++,size *= 2){
             array[i] = allocator_mem_alloc(allocator,size);
+            dbg_str(DBG_DETAIL,"allocator_mem_alloc, size %d, addr:%p", size, array[i]);
         }
         /*
          *for(size = 8,i = 0; i< 12; i++,size *= 2){
@@ -148,6 +148,7 @@ void test_ctr_alloc()
         dbg_str(ALLOC_DETAIL,"batch free");
         for(i = 0; i< 11; i++){
             allocator_mem_free(allocator, array[i]);
+            dbg_str(DBG_DETAIL,"allocator_mem_free, addr=%p", array[i]);
         }
         /*
          *for(i = 0; i< 12; i++){

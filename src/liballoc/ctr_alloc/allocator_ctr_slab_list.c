@@ -124,24 +124,15 @@ ctr_slab_t *slab_detach_front_list(struct list_head *hl_head)
 }
 
 #if 0
+
 uint32_t slab_get_slab_index(allocator_t *alloc,uint32_t size)
 {
     int data_min_size = alloc->priv.ctr_alloc.data_min_size;
 
     return ((size + data_min_size - 1) / data_min_size) - 1;
 }
+
 #else
-static inline uint32_t __pow(uint32_t x,uint32_t y)
-{
-
-    uint32_t pow_value = 1;
-    uint32_t i;
-    
-    for(i = 0;i < y; i++)
-        pow_value *= x;
-
-    return pow_value;
-}
 
 int slab_get_slab_index(allocator_t *alloc,int size)
 {
@@ -153,8 +144,8 @@ int slab_get_slab_index(allocator_t *alloc,int size)
     min_data_size = alloc->priv.ctr_alloc.data_min_size;
     max_index     = alloc->priv.ctr_alloc.slab_array_max_num;
     for (i = 0; i < max_index; i++) {
-        interger  = size / (__pow(2, i) * min_data_size);
-        remainder = size % (__pow(2, i) * min_data_size);
+        interger  = size / (____pow(2, i) * min_data_size);
+        remainder = size % (____pow(2, i) * min_data_size);
         if (interger == 0 || (interger == 1 && remainder == 0)) {
             return i;
         }
@@ -162,6 +153,7 @@ int slab_get_slab_index(allocator_t *alloc,int size)
 
     return ret;
 }
+
 #endif
 
 ctr_slab_t* slab_detach_front_list_from_free_slabs(allocator_t *alloc,uint32_t size)

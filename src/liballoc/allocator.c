@@ -66,7 +66,9 @@ void allocator_ctr_init(allocator_t * alloc,
 void allocator_destroy(allocator_t * alloc)
 {
     uint8_t allocator_type = alloc->allocator_type;
+
     dbg_str(ALLOC_DETAIL,"allocator_destroy");
+
     if(allocator_modules[allocator_type].alloc_ops.destroy){
         allocator_modules[allocator_type].alloc_ops.destroy(alloc);
     }

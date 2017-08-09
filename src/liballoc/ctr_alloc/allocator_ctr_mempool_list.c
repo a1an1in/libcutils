@@ -219,17 +219,6 @@ uint32_t get_real_alloc_mem_size(allocator_t *allocator,uint32_t size)
 }
 
 #else
-static inline uint32_t __pow(uint32_t x,uint32_t y)
-{
-
-    uint32_t pow_value = 1;
-    uint32_t i;
-    
-    for(i = 0;i < y; i++)
-        pow_value *= x;
-
-    return pow_value;
-}
 
 uint32_t get_real_alloc_mem_size(allocator_t *allocator,uint32_t size)
 {
@@ -240,7 +229,7 @@ uint32_t get_real_alloc_mem_size(allocator_t *allocator,uint32_t size)
     /*
      *dbg_str(DBG_DETAIL,"get_real_alloc_mem_size, index=%d, real_size=%d", index, __pow(2, index) * data_min_size);
      */
-    return __pow(2, index) * data_min_size;
+    return ____pow(2, index) * data_min_size;
 }
 
 #endif
