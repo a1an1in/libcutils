@@ -361,9 +361,7 @@ int test2(void)
     printf("width :%d\n", c->valueint);
 
     cjson_delete(root);
-    /*
-     *printf("%s\n", out);
-     */
+    printf("%s\n", out);
     free(out);
 
     return 0;

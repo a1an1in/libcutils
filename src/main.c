@@ -51,7 +51,7 @@
 #include <libbus/bus.h>
 #include <test.h>
 
-#define LIBRARY_VERSION "libcutils version: 2.4.0.0"
+#define LIBCUTILS_VERSION "libcutils version: 2.4.0.0"
 
 #ifndef MAKELIB
 
@@ -377,7 +377,21 @@ static int args_process_test_inet_wireless(void *base,int argc,char **argv)
     return 2;
 }
 
+static int args_process_test_json(void *base,int argc,char **argv)
+{
+     test_json();  
+     return 0;
+}
+
+static int args_process_test_configurator(void *base,int argc,char **argv)
+{
+     test_configurator();  
+     return 0;
+}
+
 static cmd_config_t cmds[]={
+    {"configurator", args_process_test_configurator,0, "test", "N/A","test"}, 
+    {"json", args_process_test_json,0, "test", "N/A","test"}, 
     {"iw", args_process_test_inet_wireless,2, "test", "N/A","miscellany_net"},
     {"miscellany_net", args_process_test_miscellany_net,0, "test", "N/A","miscellany_net"},
     {"as", args_process_test_as,0, "test", "N/A","array_stack"},
@@ -452,9 +466,9 @@ int main(int argc, char *argv[])
 #endif
 
 __attribute__((constructor(ATTRIB_PRIORITY_VERSION))) void
-print_library_version()
+print_libcutils_version()
 {
     ATTRIB_PRINT("constructor ATTRIB_PRIORITY_VERSION=%d,%s\n",
                  ATTRIB_PRIORITY_VERSION,
-                 LIBRARY_VERSION);
+                 LIBCUTILS_VERSION);
 }
