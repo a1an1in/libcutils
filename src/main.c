@@ -276,10 +276,13 @@ static int args_process_lab(void *base,int argc,char **argv)
     /*
      *lab3();
      */
-    lab4(argc, argv);
+    /*
+     *lab4(argc, argv);
+     */
      /*
       *lab5();
       */
+    lab6(argc, argv);
     dbg_str(DBG_DETAIL,"test end");
     return 1;
 }
