@@ -8,5 +8,8 @@ typedef struct configurator_s{
     int buf_len;
 }configurator_t;
 
+configurator_t *cfg_alloc(allocator_t *allocator);
+int cfg_config(configurator_t * c, const char *path, int type, const char *name, void *value);
+int cfg_destroy(configurator_t * c);
 #endif
 

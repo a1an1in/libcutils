@@ -44,6 +44,8 @@ void
 state_machine_change_state(state_machine_t *s, int state);
 state_machine_t *state_machine(allocator_t *allocator, state_entry_config_t *config,void *base);
 int state_machine_get_cur_state(state_machine_t *s);
+void state_machine_change_state_force(state_machine_t *s, int state);
+state_machine_t *state_machine_destroy(state_machine_t * s);
 void test_state_machine();
 
 #endif

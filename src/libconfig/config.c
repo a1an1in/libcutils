@@ -73,7 +73,7 @@ int cfg_config(configurator_t * c, const char *path, int type, const char *name,
     }
     strcpy(buf, path);
 
-    cnt = compute_slash_count(path);
+    cnt = compute_slash_count((char *)path);
     out = (char **)allocator_mem_alloc(allocator, sizeof(char *) * cnt);
     if (out == NULL) {
         dbg_str(OBJ_WARNNING, "oss set alloc err");
