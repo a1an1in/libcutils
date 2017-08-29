@@ -44,6 +44,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <liballoc/allocator.h>
 #include <libdbg/debug.h>
 #include "cutils_re.h"
